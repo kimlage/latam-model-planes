@@ -162,34 +162,103 @@ Todos esses contornos estão tabelados em `spec_a320.json → cauda_livery` e
 `spec_b789.json → livery_cc_bgk`. Reaproveite a convenção `h`/`c` ao medir um
 avião novo.
 
-**A marca é a mesma em todos os aviões — meça uma vez e reaproveite.** O sash da
-deriva não muda de desenho por tipo, só de escala. As polilinhas `F1..F7` do
-A320 (`spec_a320.json → cauda_livery.fin_fronteiras`) são a geometria canônica:
-aplique-as na convenção `h`/`c` do avião novo em vez de remedir por prosa. Foi
-assim que o 787-9 saiu de um sash aproximado para o desenho certo.
+### O desenho da deriva: bandas de bordo a bordo
+
+O sash é um conjunto de **bandas paralelas que atravessam a deriva inteira, do
+bordo de ataque ao bordo de fuga**, sobre um campo **índigo**. Cada banda é um
+paralelogramo **cinza-voo nas duas pontas e coral no miolo**. Acima da banda
+superior o topo é cinza-voo.
+
+O que **não** é: deriva branca com bandas grossas que morrem no meio da corda.
+Essa era a leitura das polilinhas `F1..F7` herdadas, e o dono reprovou —
+*"o design da faixa lateral tem que ir de ponta a ponta, a espessura das faixas
+tb esta errado"*. As `F1..F7` estão obsoletas; não as use.
+
+A geometria canônica agora é medida, em duas coordenadas lineares:
+
+```
+b = z − 0.24·x     através das bandas
+e = z + 0.25·x     ao longo das bandas
+
+banda inferior:  b ∈ [−6.725, −5.99]   coral onde e ∈ [22.006, 23.332]
+banda superior:  b ∈ [−4.208, −3.35]   coral onde e ∈ [24.913, 26.192]
+b ≥ −3.35 → cinza-voo (cap do topo)   ·   resto → índigo
+```
+
+(referencial do 787-9; `spec_b789.json → cauda_livery.fin_bandas_medidas_2026_08_17`)
+
+**A marca é a mesma em todos os aviões — só muda a escala do fin.** Transfira por
+coordenadas normalizadas `h = (z−z_raiz)/(z_topo−z_raiz)` e
+`c = (x−LE(z))/(TE(z)−LE(z))`: converta o texel do avião novo para `(h,c)`, leve
+esse `(h,c)` de volta ao referencial do 787 e avalie `b`/`e` lá. Foi assim que o
+A320 recebeu o desenho sem remedir nada.
+
+### Retificar a foto é o que destrava a medição
+
+A deriva é **plana**, então uma foto dela é uma homografia — e para teleobjetiva,
+uma afim. Reprojete a foto para o plano `(x,z)` da deriva antes de medir:
+subitamente o desenho vira retângulos e o que era ilegível fica óbvio. Foi o
+passo que resolveu depois de várias tentativas frustradas de ler ângulos e
+espessuras na foto crua.
+
+Determine a afim por duas direções conhecidas (bordo de ataque e corda da ponta)
+mais uma escala. Depois **ajuste os parâmetros por descida coordenada** contra a
+foto classificada em coral/índigo/cinza: no CC-BGP isso levou a concordância de
+91,4% para **92,6%** pixel a pixel. Um número de concordância é o que permite
+dizer "está certo" sem discutir se "parece".
+
+Para achar a inclinação das bandas sem chutar: varra a inclinação `m`, agrupe os
+pixels por `b = z − m·x` e escolha o `m` que **minimiza a impureza de cor por
+faixa**. A banda certa é a que fica de uma cor só.
 
 **Mas a APLICAÇÃO no casco é específica do tipo — nunca extrapole.** O desenho
 da marca na deriva se repete; o que ela faz ao encontrar a fuselagem, não.
 Verificado em fotos das duas matrículas:
 
-| | A320neo PT-TMN | 787-9 CC-BGK |
+| | A320neo PT-TMN | 787-9 CC-BGK / CC-BGP |
 |---|---|---|
-| Fuselagem traseira | índigo desce da deriva e **cobre a porta 2** | **branca**, sem echarpe |
-| Matrícula | **branca dentro do índigo** | **índigo sobre branco** |
+| Fuselagem traseira | índigo desce da deriva e **cobre a porta 2** | **cunha triangular** índigo, fronteira dianteira reta cortando a porta traseira; dorso e ventre brancos |
+| Matrícula | **branca dentro do índigo** | **branca dentro do índigo**, sobre a cunha |
 
-Faz sentido geométrico: no narrowbody a deriva é grande em relação ao casco
-curto e o bloco de cor alcança a fuselagem; no widebody, longo e esbelto, o
-mesmo desenho termina na deriva. Por isso a regra é foto **daquele tipo e
-daquela matrícula** — assumir que o 787 se pinta como o A320 foi exatamente o
-erro que custou horas.
+Nos dois casos o índigo desce até a fuselagem — mas com **formato diferente**, e
+é isso que precisa ser medido por tipo. A regra é foto **daquele tipo e daquela
+matrícula**.
 
-Um detalhe que parece defeito e não é: **existe um triângulo branco no canto
-inferior dianteiro da deriva**, entre a base do swoosh (`F4`) e o topo da massa
-(`F7`) — a massa não toca o bordo de ataque. Não preencha. Quando a prosa de um
-spec discordar da geometria medida do outro avião sobre a marca, **a marca
-ganha**.
+Este ponto teve **duas correções em sentidos opostos**, e as duas valem como
+aviso. Primeiro o spec descrevia uma echarpe que não existia e foram gastas
+horas refinando o formato dela; depois, ao remover, removeu-se **demais** — a
+fuselagem ficou toda branca, quando a foto mostra a cunha claramente. A lição
+não é "a foto ganha" (isso já está na regra 4); é que **corrigir um erro para o
+lado oposto também é errar**. Quando o dono aponta excesso, meça o quanto tirar
+em vez de zerar.
 
-## Reaproveitar a marca entre modelos
+## Confira a PROPORÇÃO do lockup, não só o desenho
+
+Rasterizar do SVG oficial garante a forma de cada glifo, mas **não garante que o
+resultado foi colado na proporção certa**. No 787-9 o lockup da fuselagem estava
+**28% esticado na vertical**: 8,96 m de comprimento por 2,67 m de altura, quando
+o vetor oficial tem proporção **4,30**. O desenho estava perfeito e o conjunto,
+errado — e o efeito colateral era a marca invadindo a fileira de janelas.
+
+A verificação é aritmética e leva segundos, mas **tem uma pegadinha: os texels da
+textura `(x,θ)` não são quadrados**. Converta para metros antes de dividir:
+
+```
+metros por coluna = comprimento_fuselagem / largura_da_textura
+metros por linha  = 2π·raio            / altura_da_textura
+proporção = (n_colunas · m_por_coluna) / (n_linhas · m_por_linha)
+```
+
+Compare com a proporção do bbox de tinta do próprio SVG. Se divergir, corrija a
+dimensão que estiver errada e **ancore no lado que já está certo** — no 787 a
+âncora foi o topo, o que de quebra tirou a marca de cima das janelas.
+
+Ao reescalar tinta já rasterizada, use **média de área**, nunca vizinho mais
+próximo: com nearest as letras saem serrilhadas e o dono vê. E limpe a franja
+anti-aliasing da versão antiga, senão fica um fantasma — mas **restrinja a
+limpeza ao bbox da própria marca**. Limpar "tudo que tem saturação" numa faixa
+larga apagou pedaços dos contornos das portas, que também são levemente
+tingidos.
 
 É a mesma marca — então deve ser literalmente a mesma geometria. Importe do
 `.blend` já pronto com `bpy.data.libraries.load` em vez de reimportar o SVG e

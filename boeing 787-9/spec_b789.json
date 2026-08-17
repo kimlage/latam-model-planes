@@ -535,11 +535,49 @@
   "echarpe_regiao_dianteira_2026-08-17": "A primeira correcao angular so tratou x>=55 e deixou x 47-55 intacto — justamente a regiao que o dono estava olhando, entao para ele 'nao mudou nada'. Ele estava certo. A bombordo o indigo descia a 109-110 graus (z=-0.50), 0.5 m ABAIXO da matricula; o spec da a faixa 'z 0..-0.5' e adotei o topo dela (z~0, 92 graus). Estibordo de 77 para 72 graus. LICAO DE PROCESSO: ao corrigir por faixa de x, renderizar do MESMO angulo do print do dono antes e depois — medir a textura nao basta, porque a medida pode melhorar numa regiao que ele nao esta vendo.",
   "matricula_exige_o_mergulho_2026-08-17": "Ao subir o limite da echarpe para 92 graus em toda a extensao, a matricula CC-BGK de bombordo (letras BRANCAS dentro do indigo, medidas em z -0.16..+0.53) ficou com metade do contorno sobre fundo branco. O 'desce mais' do spec original nao era enfeite: existe PARA envolver a matricula. Restaurado como mergulho local. Cuidado com a metrica: contar 'pixels brancos vizinhos de indigo' deu falso positivo porque o contorno branco da porta 4 entra na mesma janela — a checagem que decidiu foi exportar a regiao da textura e OLHAR.",
   "echarpe_nao_existe_2026-08-17": "ERRO DE RAIZ, e o mais caro da sessao. O spec descrevia uma echarpe indigo descendo da deriva pelo casco ate o tailcone. Esse texto atravessou fotogrametria, medicao do 3-view a 600 dpi, dois workflows de pesquisa e uma rodada de verificacao adversarial sem ser questionado, e foi refinado por horas (limite por z -> limite angular -> mergulho local para preservar a matricula). A foto ar-ar do CC-BGK mostrou que a fuselagem e toda branca. Todo o refino foi ajuste fino da coisa errada. LICAO GRAVADA COMO REGRA 0 DO PROJETO: buscar e olhar foto da matricula e o PRIMEIRO passo, antes do documento do fabricante e antes de qualquer spec — e prosa nunca substitui a foto, mesmo prosa que veio de medicao.",
-  "cunha_traseira_2026-08-17": "Sequencia de erros que vale registrar. (1) O spec original tinha uma echarpe percorrendo o casco ate o tailcone; isso nao existe. (2) Ao ver a foto ar-ar do dono, apaguei TODO o indigo do casco — sobre-correcao: a foto de cima esconde a cunha, que fica no flanco/baixo. (3) Voltei a pintar usando medicao automatica por limiar de cor, que falha porque a DERIVA tambem e indigo e se sobrepoe ao casco na vista lateral. (4) A calibracao da foto pelo vao nariz-cauda errava 14% (aviao em angulo); calibrar pelo passo das janelas resolveu. LICAO: para pintura, medir a foto por limiar de cor nao funciona quando duas pecas tem a MESMA cor e se sobrepoem na projecao — ler a fronteira A OLHO no crop ampliado e mais confiavel. E calibrar sempre por uma cota repetida (passo de janela), nunca pelo comprimento total."
+  "cunha_traseira_2026-08-17": "Sequencia de erros que vale registrar. (1) O spec original tinha uma echarpe percorrendo o casco ate o tailcone; isso nao existe. (2) Ao ver a foto ar-ar do dono, apaguei TODO o indigo do casco — sobre-correcao: a foto de cima esconde a cunha, que fica no flanco/baixo. (3) Voltei a pintar usando medicao automatica por limiar de cor, que falha porque a DERIVA tambem e indigo e se sobrepoe ao casco na vista lateral. (4) A calibracao da foto pelo vao nariz-cauda errava 14% (aviao em angulo); calibrar pelo passo das janelas resolveu. LICAO: para pintura, medir a foto por limiar de cor nao funciona quando duas pecas tem a MESMA cor e se sobrepoem na projecao — ler a fronteira A OLHO no crop ampliado e mais confiavel. E calibrar sempre por uma cota repetida (passo de janela), nunca pelo comprimento total.",
+  "deriva_2026-08-17": "Sash refeito por retificacao da foto: bandas de bordo a bordo, indigo dominante, coral no miolo e cinza nas pontas. Antes: deriva branca com bandas grossas interrompidas. Tambem corrigida a marca LATAM da fuselagem (estava esticada 28% na vertical -> proporcao oficial 4.30, e agora nao invade a fileira de janelas) e removidos matricula fantasma e lockup fantasma da textura."
  },
  "pendencias": {
   "rr_na_nacelle": "Distintivo Rolls-Royce: NAO e do casco, vive na nacelle, que precisa de UV proprio em torno do eixo do motor. Geometria ja apurada para quando houver: caixa 0.43 m (x) x 0.698 m (arco), razao 1.624, x 22.085-22.515, theta_centro 0 graus +-10 (face externa dos dois motores), raio local 1.504 m, z -2.055..-2.745. Desenhar em espaco de ARCO, nao em angulo linear. Cores #0F059E e #FFFFFF.",
   "vetados_por_falta_de_fonte": "Nao pintar sem fonte nova: (a) portas estaticas e cantoneiras vermelhas do nariz — duas pesquisas discordam em ~8 m e a citacao normativa estava errada; (b) mastro/escorrido do dreno DIANTEIRO — conflito de estacao e de lado; (c) marcacoes de cut-in — o proprio ARFF da Boeing diz 'NOT MARKED ON ALL AIRPLANES' e nenhuma foto LATAM as mostra; (d) juntas de barril da fuselagem — invisiveis na pele pintada (composito unido por splice straps pelo lado interno) e estacoes desconhecidas.",
   "nao_desenhar_no_787": "Rebites, lap joints longitudinais e quilting NAO existem num 787: o barril e peca unica de composito. Uma malha de rebites transforma o 787 num 767. O que faz o casco parecer 787 e o REFLEXO limpo, nao panel lines. Linhas de painel de verdade so na carenagem ventral (x 22-35.5), que e aparafusada."
+ },
+ "cauda_livery": {
+  "fin_bandas_medidas_2026_08_17": {
+   "fonte": "Medido na foto ref_CC-BGP_wikimedia.jpg RETIFICADA para o plano da deriva por transformada afim (2026-08-17). Ajuste por descida coordenada contra a foto classificada: 92.6% de concordancia pixel a pixel dentro do contorno.",
+   "modelo": "Bandas paralelas atravessando a deriva DE BORDO A BORDO sobre campo indigo. Cada banda e um paralelogramo: cinza-voo nas duas pontas, coral no miolo. NAO e deriva branca com bandas grossas.",
+   "coordenadas": "b = z - 0.24*x (atraves das bandas) ; e = z + 0.25*x (ao longo das bandas). x,z em metros no referencial da aeronave.",
+   "banda_inferior": {
+    "b": [
+     -6.725,
+     -5.99
+    ],
+    "coral_em_e": [
+     22.006,
+     23.332
+    ]
+   },
+   "banda_superior": {
+    "b": [
+     -4.208,
+     -3.35
+    ],
+    "coral_em_e": [
+     24.913,
+     26.192
+    ]
+   },
+   "acima_da_superior": "b >= -3.35 -> cinza-voo (cap do topo)",
+   "resto": "indigo #2A0088",
+   "filete_bordo_ataque": "cinza-voo, 0.30 m perpendicular ao BA, a partir de z=3.2",
+   "cores": {
+    "indigo": "#2A0088",
+    "coral": "#ED1651",
+    "cinza_voo": "#C8CACC"
+   },
+   "uv": "Deriva usa projecao planar (x,z) nos DOIS lados: u=0.060606*x-2.818182 ; v=0.095238*z-0.142857 (imagens FinSashE/FinSashD 2048x2048, conteudo identico).",
+   "nota": "Substitui as polilinhas F1..F7 herdadas do A320, que produziam deriva branca com bandas grossas que nao chegavam aos bordos."
+  }
  }
 }

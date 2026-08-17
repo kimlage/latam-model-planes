@@ -486,7 +486,43 @@
    "porta2": "quase toda dentro do indigo: folha indigo + contorno branco 0.05-0.06 m"
   },
   "matricula_atual": "PT-TMN INDIGO sobre BRANCO x27.00-28.80 z0.52-0.89 (altura 0.40); titulo 'AIRBUS A320neo' acima x27.0-29.3 z1.22-1.39 (2016-2020 era branca DENTRO do wrap x30.2-32.0 — variacao documentada)",
-  "hstab": "extradorso INDIGO (arranjo atual/foto do dono; 2016-2020 era cinza claro), intradorso branco, BA metal"
+  "hstab": "extradorso INDIGO (arranjo atual/foto do dono; 2016-2020 era cinza claro), intradorso branco, BA metal",
+  "fin_bandas_medidas_2026_08_17": {
+   "fonte": "Medido na foto ref_CC-BGP_wikimedia.jpg RETIFICADA para o plano da deriva por transformada afim (2026-08-17). Ajuste por descida coordenada contra a foto classificada: 92.6% de concordancia pixel a pixel dentro do contorno.",
+   "modelo": "Bandas paralelas atravessando a deriva DE BORDO A BORDO sobre campo indigo. Cada banda e um paralelogramo: cinza-voo nas duas pontas, coral no miolo. NAO e deriva branca com bandas grossas.",
+   "coordenadas": "b = z - 0.24*x (atraves das bandas) ; e = z + 0.25*x (ao longo das bandas). x,z em metros no referencial da aeronave.",
+   "banda_inferior": {
+    "b": [
+     -6.725,
+     -5.99
+    ],
+    "coral_em_e": [
+     22.006,
+     23.332
+    ]
+   },
+   "banda_superior": {
+    "b": [
+     -4.208,
+     -3.35
+    ],
+    "coral_em_e": [
+     24.913,
+     26.192
+    ]
+   },
+   "acima_da_superior": "b >= -3.35 -> cinza-voo (cap do topo)",
+   "resto": "indigo #2A0088",
+   "filete_bordo_ataque": "cinza-voo, 0.22 m perpendicular ao BA, a partir de z=2.2",
+   "cores": {
+    "indigo": "#2A0088",
+    "coral": "#ED1651",
+    "cinza_voo": "#C8CACC"
+   },
+   "uv": "Deriva A320: u=0.125*x-3.425 ; v=0.142857*z-0.2 (x=8u+27.4, z=7v+1.4).",
+   "nota": "Substitui as polilinhas F1..F7 herdadas do A320, que produziam deriva branca com bandas grossas que nao chegavam aos bordos.",
+   "transferencia": "Desenho transferido do 787-9 por coordenadas normalizadas da deriva (h,c): h=(z-1.55)/6.5 ; c=(x-LE)/(TE-LE), LE(z)=0.8393*z+26.7730, TE(z)=34.60+0.0538462*(z-1.55). E a MESMA marca, so muda a escala do fin."
+  }
  },
  "ventre_real": {
   "fonte": "workflow de pesquisa 2026-08-15 (aviationhunt antenna map + AMM/ACAP)",
@@ -507,5 +543,8 @@
  },
  "verificacoes": {
   "livery_vs_foto_2026-08-17": "CONFERIDO contra foto do proprio PT-TMN (ref_PT-TMN_wikimedia.jpg, Wikimedia Commons, Rafael Luiz, 2016-09-19): o modelo esta CERTO. O indigo desce mesmo da deriva sobre a fuselagem traseira cobrindo a porta 2, e a matricula PT-TMN e BRANCA dentro do indigo. Tailcone claro. IMPORTANTE: isso NAO vale para o 787-9, cuja fuselagem e toda branca e a matricula e indigo sobre branco — a aplicacao da livery no casco e especifica do tipo, so o desenho da deriva se repete."
+ },
+ "correcoes": {
+  "deriva_2026-08-17": "Sash refeito com o desenho medido no 787-9 e transferido por (h,c). As polilinhas F1..F7 anteriores davam deriva branca com bandas grossas; a foto do PT-TMN mostra deriva indigo dominante com bandas finas de bordo a bordo."
  }
 }
