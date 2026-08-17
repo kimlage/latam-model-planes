@@ -246,8 +246,13 @@ espaços diferentes** — foi não perceber isso que custou quatro rodadas.
 
 `θ` é medido a partir da crista; `z = centro_z(x) + raio(x)·cos θ`.
 
-**787-9:** `x ≥ 48,77 + 0,992·z` ; `θ ≤ 117,0 − 5,2·(x − 48,70)` ; `x ≤ 60,5`
-**A320neo:** `x ≥ 27,39 + 0,8393·z` ; `θ ≤ 101,4 − 7,58·(x − 29,11)` ; `x ≤ 35,6`
+**787-9:** `x ≥ 48,77 + 0,992·z` ; `θ ≤ 117,0 − 5,2·(x − 48,70)` ; `x ≤ 57,14 + 0,3858·z`
+**A320neo:** `x ≥ 27,39 + 0,8393·z` ; `θ ≤ 101,4 − 7,58·(x − 29,11)` ; `x ≤ 34,52 + 0,0538·z`
+
+O limite traseiro é a **própria reta do bordo de fuga da deriva**: o índigo para na
+projeção do BF, e dali para trás ficam a carenagem da raiz do BF e o cone de cauda,
+ambos brancos. Cortar por um `x` constante deixa índigo por cima da carenagem — foi
+o defeito que o dono apontou com o resto já aprovado.
 
 ### Erro 1 — modelar a fronteira inferior como reta em (x,z)
 
@@ -294,12 +299,13 @@ fora da mancha, pinte-a **índigo sobre branco** — é variante legítima da LA
 em vez de tentar recortá-la e recolá-la. Recorte com limiar sempre quebra o
 glifo ou arrasta linha de painel junto.
 
-### Ainda aberto
+### Erro 5 — cortar a cunha por um `x` constante atrás
 
-A junção **raiz do bordo de fuga da deriva × estabilizador × cone de cauda** não
-está resolvida: é onde a carenagem dorsal, a raiz do estabilizador e o fim da
-cunha se encontram, e nas fotos aparece uma carenagem clara que o modelo não
-reproduz. O limite traseiro `x ≤ x_tras` é escolha, não medição.
+O índigo não termina numa estação; termina na **reta do bordo de fuga da deriva**.
+Atrás dela existe a carenagem clara da raiz do BF, que continua no cone de cauda.
+Com corte em `x` constante o índigo invade essa carenagem e a junção
+deriva × estabilizador × cone fica errada — foi o último defeito apontado, com o
+resto da cauda já aprovado. Confira esse canto com zoom, sempre.
 
 ## Confira a PROPORÇÃO do lockup, não só o desenho
 

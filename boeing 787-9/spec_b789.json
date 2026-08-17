@@ -613,15 +613,15 @@
    "modelo": "CORTE PLANO no espaco da aeronave, nao reta na textura UV.",
    "fronteira_dianteira": "x = 48.77 + 0.992*z  — paralela ao BA RETO da deriva, deslocada 0.86 m (=0.10*H) para TRAS. Cruza a crista em x = 51.72.",
    "limite_inferior": "NAO MEDIDO. Rastreado com confianca so ate z ~ -1.9; abaixo disso a barriga esta em sombra em todas as fotos. Modelo atual corta em z=-1.9.",
-   "limite_traseiro": "x = 60.5 (tailcone branco, bico da APU metalico).",
+   "limite_traseiro": "x <= 57.14 + 0.3858*z  — a MESMA reta do bordo de fuga da deriva. O indigo para na projecao do BF; dali para tras fica a carenagem clara da raiz do BF e o cone de cauda, ambos BRANCOS. Visivel na foto do CC-BGP em (995..1105, 315..395). O 'x <= 60.5' anterior era escolha minha e deixava indigo por cima da carenagem.",
    "matricula": "letras BRANCAS sobre o indigo",
    "UV": "Em textura (x,theta) esse plano NAO e uma reta: x_front(theta) = x0 + k*(centro_z(x)+raio(x)*cos(theta)), resolver por ponto fixo (4 iteracoes). Tracar reta em (x,theta) erra ate 0.9 m na cintura.",
    "SUBSTITUI": "x = 57.0 - 5.0*(theta/180), que punha a fronteira ~5 m atras e dava a volta pelo ventre.",
    "fronteira_inferior": "MEDIDA COLUNA A COLUNA na foto do CC-BGP e convertida para angulo a partir da crista: theta_max(x) = 117.0 - 5.2*(x - 48.70) graus, limitado a [0,180]. O indigo vai da crista ate theta_max. No bordo dianteiro desce a ~117 graus (bem abaixo da meia-largura, quase na quilha) e estreita para tras. Calibracao: passo de janela 0.61 m -> 17.21 px/m; ancora x=50.1 na raiz do BA sobre a crista. Conferido em duas estacoes: x=52.9 -> u=0.545 medido 0.55.",
    "metodo": "Teste POR TEXEL, sem iteracao: cada texel conhece x e theta, logo z = centro_z(x)+raio(x)*cos(theta). indigo <=> x >= 48.77+0.992*z E z >= 0.286*x-15.90 E x <= 60.5. Resolver a fronteira por LINHA da textura serrilha a borda e cria ilhas soltas.",
    "camadas": "Aplicar cor de BASE so nos texels chapados (branco puro ou indigo puro) e preservar a camada de DETALHE intacta: contornos de porta e linhas de painel passam a ler por cima do indigo. Pintar 'so onde ja era branco' deixa buraco em cada linha de painel.",
-   "modelo_completo": "indigo  <=>  x >= 48.77 + 0.992*z   E   theta <= 117.0 - 5.2*(x-48.70)   E   x <= 60.5",
-   "A320": "mesma lei escalada pelo raio da fuselagem: theta_max(x) = 101.4 - 7.58*(x - 29.11); fronteira dianteira x = 27.39 + 0.8393*z ; x <= 35.6",
+   "modelo_completo": "indigo <=> x >= 48.77+0.992*z  E  theta <= 117.0-5.2*(x-48.70)  E  x <= 57.14+0.3858*z",
+   "A320": "theta_max(x)=101.4-7.58*(x-29.11) ; x >= 27.39+0.8393*z ; x <= 34.52+0.0538*z (BF da deriva)",
    "SUBSTITUI_2": "As tentativas por reta unica (corte horizontal, 16 graus, reta do estabilizador) todas produziam cunha pequena demais. A fronteira nao e uma reta em (x,z): e uma reta em (x,theta)."
   }
  }
