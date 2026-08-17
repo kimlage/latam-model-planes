@@ -1,0 +1,38 @@
+# ---------------------------------------------------------------------------
+# Material de terceiros que NAO pode ser redistribuido sob a licenca do projeto.
+# Veja NOTICE.md para as fontes e como obter cada item.
+# ---------------------------------------------------------------------------
+
+# Documentos dimensionais dos fabricantes (Airbus ACAP / Boeing APR).
+# Sao gratuitos no site do fabricante, mas com direitos reservados.
+A320_ACAP_airbus.pdf
+**/B787_APR_boeing.pdf
+
+# Rasterizacoes e recortes derivados desses documentos
+acap*.png
+apr*.png
+**/apr*.png
+insp_*.png
+**/insp_*.png
+
+# Fotos de referencia de terceiros (sem metadados de autoria/licenca registrados)
+ref_*.jpg
+**/ref_*.jpg
+comparacao_com_foto.png
+**/comparacao_com_foto.png
+
+# Vetores de marca registrada (LATAM, Airbus, Boeing)
+latam_logo_indigo.svg
+airbus_a320neo_logo.svg
+dreamliner_logo.svg
+
+# ---------------------------------------------------------------------------
+# Arquivos de trabalho
+# ---------------------------------------------------------------------------
+*.blend1
+*.blend2
+debug_*.png
+**/A320neo_voo.blend
+.DS_Store
+__pycache__/
+*.pyc

@@ -1,0 +1,511 @@
+{
+ "fonte": "Airbus ACAP AC_A320 Jun/24 (CAD vetorial medido a 600-1200dpi) + SRM/AMM frames + fotogrametria JetPhotos (PT-TMN/CC-BHB)",
+ "datum": "x=0 na ponta do nariz (STA2540); z=0 no meio da secao constante; unidades m",
+ "dimensoes_gerais": {
+  "comprimento": 37.57,
+  "envergadura_sharklets": 35.8,
+  "altura": 11.76,
+  "fuselagem_largura": 3.95,
+  "fuselagem_altura": 4.14,
+  "entre_eixos": 12.64,
+  "bitola": 7.59
+ },
+ "cavernas_nariz": [
+  {
+   "fr": 0,
+   "x": 0.0,
+   "nota": "ponta do radome, z=-0.722"
+  },
+  {
+   "fr": 1,
+   "x": 0.96,
+   "crown": 0.225,
+   "keel": -1.594,
+   "H": 1.819,
+   "W": 1.881
+  },
+  {
+   "fr": 2,
+   "x": 1.31,
+   "crown": 0.374,
+   "keel": -1.709,
+   "H": 2.083,
+   "W": 2.21
+  },
+  {
+   "fr": 3,
+   "x": 1.55,
+   "crown": 0.599,
+   "keel": -1.776,
+   "H": 2.375,
+   "W": 2.401
+  },
+  {
+   "fr": 4,
+   "x": 1.79,
+   "crown": 0.843,
+   "keel": -1.834,
+   "H": 2.677,
+   "W": 2.582
+  },
+  {
+   "fr": 5,
+   "x": 2.006,
+   "crown": 1.05,
+   "keel": -1.879,
+   "H": 2.929,
+   "W": 2.738
+  },
+  {
+   "fr": 6,
+   "x": 2.222,
+   "crown": 1.201,
+   "keel": -1.918,
+   "H": 3.119,
+   "W": 2.876
+  },
+  {
+   "fr": 7,
+   "x": 2.427,
+   "crown": 1.315,
+   "keel": -1.95,
+   "H": 3.265,
+   "W": 3.002
+  },
+  {
+   "fr": 8,
+   "x": 2.654,
+   "crown": 1.425,
+   "keel": -1.983,
+   "H": 3.408,
+   "W": 3.133
+  },
+  {
+   "fr": 9,
+   "x": 2.854,
+   "crown": 1.506,
+   "keel": -2.007,
+   "H": 3.513,
+   "W": 3.237
+  },
+  {
+   "fr": 10,
+   "x": 3.054,
+   "crown": 1.579,
+   "keel": -2.026,
+   "H": 3.605,
+   "W": 3.335
+  },
+  {
+   "fr": 11,
+   "x": 3.254,
+   "crown": 1.646,
+   "keel": -2.044,
+   "H": 3.69,
+   "W": 3.424
+  },
+  {
+   "fr": 12,
+   "x": 3.513,
+   "crown": 1.726,
+   "keel": -2.06,
+   "H": 3.786,
+   "W": 3.53
+  },
+  {
+   "fr": 13,
+   "x": 3.846,
+   "crown": 1.815,
+   "keel": -2.073,
+   "H": 3.888,
+   "W": 3.65
+  },
+  {
+   "fr": 16,
+   "x": 5.0,
+   "crown": 2.05,
+   "keel": -2.077,
+   "H": 4.12,
+   "W": 3.89
+  },
+  {
+   "fr": 20,
+   "x": 5.96,
+   "crown": 2.066,
+   "keel": -2.077,
+   "H": 4.143,
+   "W": 3.915
+  },
+  {
+   "fr": 24,
+   "x": 6.96,
+   "crown": 2.07,
+   "keel": -2.07,
+   "H": 4.14,
+   "W": 3.95,
+   "nota": "inicio da secao constante (ate FR64, x=24.16)"
+  }
+ ],
+ "radome": {
+  "x_fr1": 0.96,
+  "diametro": 1.85,
+  "centro_z": -0.684,
+  "ponta_z": -0.722
+ },
+ "secao_mestre_meia_largura": {
+  "descricao": "profundidade abaixo da crista (m) -> meia-largura (m), ja normalizada x1.0095; versao densa PCHIP em hull_smooth.json",
+  "tabela": [
+   [
+    0.096,
+    0.613
+   ],
+   [
+    0.222,
+    0.915
+   ],
+   [
+    0.378,
+    1.171
+   ],
+   [
+    0.566,
+    1.396
+   ],
+   [
+    0.753,
+    1.566
+   ],
+   [
+    0.941,
+    1.699
+   ],
+   [
+    1.129,
+    1.801
+   ],
+   [
+    1.317,
+    1.879
+   ],
+   [
+    1.504,
+    1.936
+   ],
+   [
+    1.692,
+    1.974
+   ],
+   [
+    1.88,
+    1.991
+   ],
+   [
+    1.974,
+    1.994
+   ],
+   [
+    2.51,
+    1.921
+   ]
+  ],
+  "nota": "max largura ~0.08-0.10 ACIMA do meio; ombros +14% vs elipse; tuck suave embaixo — NAO e elipse"
+ },
+ "lobo_superior_pinca_v10": {
+  "formula": "y_sup *= 1 - 0.46*g(x)*smoothstep(frac_up)^1.6",
+  "g": "smoothstep((x-1.45)/1.1) * (1 - smoothstep((x-3.1)/1.9))",
+  "validacao": "vista frontal ACAP: vidros frontais chegam a y=+-0.05 no poste central; borda externa +-0.86 em z=0.9/x=2.8"
+ },
+ "parabrisa_lado_esq": {
+  "fonte": "ACAP 1200dpi calibrado; olho do piloto x=2.41-2.66, z=+0.84",
+  "no1_frontal": [
+   [
+    1.37,
+    0.44
+   ],
+   [
+    1.81,
+    0.89
+   ],
+   [
+    2.2,
+    0.89
+   ],
+   [
+    2.03,
+    0.46
+   ]
+  ],
+  "no2_deslizante": [
+   [
+    2.13,
+    0.46
+   ],
+   [
+    2.29,
+    0.885
+   ],
+   [
+    2.59,
+    0.885
+   ],
+   [
+    2.59,
+    0.355
+   ]
+  ],
+  "no3_kick": [
+   [
+    2.67,
+    0.37
+   ],
+   [
+    2.67,
+    0.88
+   ],
+   [
+    3.08,
+    0.82
+   ],
+   [
+    3.22,
+    0.64
+   ],
+   [
+    2.98,
+    0.36
+   ]
+  ],
+  "poste_m": 0.09,
+  "selo_m": 0.045,
+  "aplicacao": "mascara UV (x,theta) no shader do casco: NoseMask R=moldura, G=vidro; poste = |y|<0.045"
+ },
+ "janelas_cabine": {
+  "z_cinto": [
+   0.52,
+   0.86
+  ],
+  "pitch_m": 0.515,
+  "primeira_x": 6.08,
+  "abertura": [
+   0.229,
+   0.312
+  ],
+  "aro_borracha_mm": 18,
+  "recuo_mm": 8
+ },
+ "portas": {
+  "pax": {
+   "abertura": [
+    0.81,
+    1.85
+   ],
+   "folha_modelada": [
+    0.89,
+    1.93
+   ],
+   "raio_canto": 0.15,
+   "sulco_mm": 9,
+   "janela_porta": [
+    0.3,
+    0.36
+   ],
+   "faixa_far_mm": 50,
+   "porta1_x": 5.04,
+   "porta2_x": 29.64
+  },
+  "overwing_tipo3": {
+   "folha": [
+    0.51,
+    0.91
+   ],
+   "x": [
+    14.43,
+    15.66
+   ],
+   "sulco_mm": 7
+  },
+  "carga_lado_direito": {
+   "fwd": [
+    8.16,
+    1.82,
+    1.24
+   ],
+   "aft": [
+    22.69,
+    1.82,
+    1.23
+   ],
+   "bulk": [
+    26.29,
+    0.95,
+    0.89
+   ],
+   "nota": "topo ~nivel do piso (cz ~-1.17)"
+  }
+ },
+ "trem": {
+  "nariz_x": 5.07,
+  "principal_x": 17.71,
+  "bitola": 7.59,
+  "roda_principal_diam": 1.17,
+  "roda_nariz_diam": 0.76
+ },
+ "motor_pw1100g": {
+  "inlet_x": 11.14,
+  "y": 5.75,
+  "nacelle_diametro": 2.6,
+  "fan_diametro": 2.06,
+  "clearance_solo": 0.48,
+  "sem_chevrons": true,
+  "nota": "LATAM neo e EXCLUSIVAMENTE PW1100G-GTF (pesquisa 2026-08-15; pedido 2013 + acordo 2023). Fan cowl branco, lip metalico polido, bocal+tailcone longo inconel. PENDENTE: alongar tailcone vs LEAP"
+ },
+ "carenagem_ventral": {
+  "x": [
+   10.9,
+   23.4
+  ],
+  "fundo_z": -2.45,
+  "meia_largura_max": 1.95,
+  "superelipse_n": 2.6
+ },
+ "cauda_livery": {
+  "fonte": "workflow fotogrametrico 2026-08-16 (JetPhotos PT-TMN 1920px, calibracao dupla porta2/nariz, ±0.15m) + foto de referencia do dono (arranjo atual)",
+  "fin_convencao": "h=(z-1.55)/6.5; c=(x-LE(z))/(TE(z)-LE(z)); TE reta (34.60,1.55)->(34.95,8.05); polylines [c->h] port; ESTIBORDO = MESMA imagem em (x,z) (espelhado, alturas coincidem no BF; a fita NAO da a volta pelo BA)",
+  "fin_fronteiras": {
+   "F0_filete_BA": "faixa branca continua de 0.30 m ao longo de todo o bordo de ataque (existe SIM, mas fina — nao os 11.5% da corda de antes)",
+   "F1_base_cap": "[0,0.900]->[1,0.835]",
+   "F2_base_coral_sup": "[0,0.720]->[0.5,0.755]->[1,0.790] (cunha: espessa no BA, fina no BF; gap branco abaixo so de c0-0.5)",
+   "F3_topo_swoosh": "[0,0.570]->[0.15,0.630]->[0.30,0.700]->[0.50,0.755]->[1,0.790]",
+   "F4_base_swoosh": "[0,0.190]->[0.18,0.250]->[0.35,0.300]->[0.50,0.340]->[0.575,0.360]->[0.75,0.420]->[1,0.500]",
+   "F5_topo_coral_central": "c>=0.575: [0.575,0.360]->[1,0.310]; antes disso coral toca o swoosh direto",
+   "F6_base_coral_central": "[0.18,0.250]->[0.50,0.165]->[0.53,0.150]; depois segue F7 (contato direto)",
+   "F7_topo_massa": "[0.32,0.0]->[0.50,0.140]->[0.75,0.210]->[1,0.270]; massa nao toca o BA"
+  },
+  "echarpe_casco": {
+   "nota": "NAO e wrap circunferencial: echarpe diagonal ~44-50 graus com ponta em (27.60,-1.20); ventre/keel BRANCOS; tailcone todo branco; anel APU metal",
+   "x_front(z)": [
+    [
+     2.05,
+     31.3
+    ],
+    [
+     1.55,
+     30.1
+    ],
+    [
+     1.43,
+     30.04
+    ],
+    [
+     1.1,
+     29.57
+    ],
+    [
+     0.78,
+     29.27
+    ],
+    [
+     0.46,
+     28.99
+    ],
+    [
+     0.13,
+     28.73
+    ],
+    [
+     -0.19,
+     28.45
+    ],
+    [
+     -0.51,
+     28.17
+    ],
+    [
+     -0.84,
+     27.89
+    ],
+    [
+     -1.05,
+     27.69
+    ],
+    [
+     -1.2,
+     27.6
+    ]
+   ],
+   "x_rear(z)": [
+    [
+     2.05,
+     35.4
+    ],
+    [
+     1.8,
+     35.3
+    ],
+    [
+     1.32,
+     34.25
+    ],
+    [
+     1.0,
+     33.17
+    ],
+    [
+     0.67,
+     32.16
+    ],
+    [
+     0.35,
+     31.7
+    ],
+    [
+     0.0,
+     30.82
+    ],
+    [
+     -0.3,
+     30.06
+    ],
+    [
+     -0.51,
+     29.61
+    ],
+    [
+     -0.84,
+     28.58
+    ],
+    [
+     -1.05,
+     28.02
+    ],
+    [
+     -1.2,
+     27.6
+    ]
+   ],
+   "porta2": "quase toda dentro do indigo: folha indigo + contorno branco 0.05-0.06 m"
+  },
+  "matricula_atual": "PT-TMN INDIGO sobre BRANCO x27.00-28.80 z0.52-0.89 (altura 0.40); titulo 'AIRBUS A320neo' acima x27.0-29.3 z1.22-1.39 (2016-2020 era branca DENTRO do wrap x30.2-32.0 — variacao documentada)",
+  "hstab": "extradorso INDIGO (arranjo atual/foto do dono; 2016-2020 era cinza claro), intradorso branco, BA metal"
+ },
+ "ventre_real": {
+  "fonte": "workflow de pesquisa 2026-08-15 (aviationhunt antenna map + AMM/ACAP)",
+  "pintura": "fuselagem TODA branca por baixo; carenagem ventral + intradorso de asas/estab/flap-track fairings em cinza Airbus FS16515/BAC707 (#9FA4A9); radome branco levemente mais fosco",
+  "componentes_modelados": "DME1 x3.3 | ATC1/2 x4.35/4.95 | TCAS oval x6.5 | dreno fwd x8.55 | ram-air packs x13 + saidas x16.2 | DME2 x15 na carenagem | placas RA x21.8-23.4 | beacon vermelho inferior x24.6 | VHF2 x24.15 | dreno aft x27.6 | outflow valve LADO DIREITO x28.6 z-1.25 | entrada APU no fundo do tailcone x34.5",
+  "weathering": "frota jovem = leve: leque de spray do trem do nariz (x6-14, 12-16%), escorridos tan dos drenos (1-3m), grime nas portas do trem — pintado em LiveryTex/Fac com fac fracionario"
+ },
+ "texturas_do_blend": {
+  "LiveryTex+LiveryFac": "marcas oficiais rasterizadas em (x,theta) 4096x1024; mascara em imagem SEPARADA Non-Color (alfa de float nao sobrevive pack/reload)",
+  "NoseMask": "para-brisa (R=moldura, G=vidro)",
+  "PanelBump": "juncoes circunferenciais + lap joints, bump 2.2mm",
+  "FinSashE/FinSashD": "sash da deriva por lado (nao espelhado)"
+ },
+ "construcao": {
+  "casco": "gaiola esparsa nas cavernas + subsurf render 3; compensacao radial x1.0064 (encolhimento Catmull-Clark 32-gon); curvas PCHIP (hull_smooth.json)",
+  "ponta": "lei sqrt ajustada por minimos quadrados (r=0.90*sqrt(x+0.025), w=0.943*sqrt(x-0.015)) misturada por smoothstep 0.9-1.5",
+  "portas_janelas": "geometria analitica sobre a superficie v10 (funcao y_of com pinca e COMP), offsets em relevo"
+ },
+ "verificacoes": {
+  "livery_vs_foto_2026-08-17": "CONFERIDO contra foto do proprio PT-TMN (ref_PT-TMN_wikimedia.jpg, Wikimedia Commons, Rafael Luiz, 2016-09-19): o modelo esta CERTO. O indigo desce mesmo da deriva sobre a fuselagem traseira cobrindo a porta 2, e a matricula PT-TMN e BRANCA dentro do indigo. Tailcone claro. IMPORTANTE: isso NAO vale para o 787-9, cuja fuselagem e toda branca e a matricula e indigo sobre branco — a aplicacao da livery no casco e especifica do tipo, so o desenho da deriva se repete."
+ }
+}

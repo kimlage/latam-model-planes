@@ -1,0 +1,545 @@
+{
+ "fonte": "Boeing APR D6-58333 Rev P (medicao pixel validada por 4 cotas oficiais, erro <0.5%) + fotogrametria CC-BGK (JetPhotos 925579/649345/10820421); workflow b789-latam-spec 2026-08-16",
+ "datum": "x=0 ponta do nariz; z=0 centro da secao constante; eixo ~4.88 m AGL; atitude estatica -0.52 graus (ignorada no modelo, pose nivelada)",
+ "dimensoes_gerais": {
+  "comprimento": 62.81,
+  "envergadura": 60.12,
+  "altura": 17.02,
+  "fuselagem_largura": 5.77,
+  "fuselagem_altura": 5.94,
+  "entre_eixos": 25.83,
+  "bitola": 9.8
+ },
+ "secao_mestre": "elipse a=2.885 (y) x b=2.97 (z), quase circular; secao plena x 10.0-44.5",
+ "nariz_estacoes": [
+  [
+   0.0,
+   -1.16,
+   -1.16,
+   0.0
+  ],
+  [
+   0.25,
+   -0.61,
+   -1.8,
+   0.56
+  ],
+  [
+   0.5,
+   -0.4,
+   -1.98,
+   0.74
+  ],
+  [
+   0.75,
+   -0.12,
+   -2.1,
+   0.92
+  ],
+  [
+   1.0,
+   0.12,
+   -2.18,
+   1.04
+  ],
+  [
+   1.5,
+   0.49,
+   -2.35,
+   1.28
+  ],
+  [
+   2.0,
+   0.92,
+   -2.47,
+   1.52
+  ],
+  [
+   2.5,
+   1.34,
+   -2.54,
+   1.7
+  ],
+  [
+   3.0,
+   1.65,
+   -2.65,
+   1.87
+  ],
+  [
+   3.5,
+   1.89,
+   -2.71,
+   2.0
+  ],
+  [
+   4.0,
+   2.07,
+   -2.78,
+   2.13
+  ],
+  [
+   5.0,
+   2.38,
+   -2.87,
+   2.35
+  ],
+  [
+   6.0,
+   2.62,
+   -2.96,
+   2.59
+  ],
+  [
+   7.0,
+   2.74,
+   -2.97,
+   2.71
+  ],
+  [
+   8.0,
+   2.87,
+   -2.97,
+   2.82
+  ],
+  [
+   9.0,
+   2.93,
+   -2.97,
+   2.86
+  ],
+  [
+   10.0,
+   2.97,
+   -2.97,
+   2.885
+  ]
+ ],
+ "nariz_estacoes_formato": "[x, crown_z, keel_z, meia_largura]",
+ "cauda": [
+  [
+   46,
+   0.0,
+   2.93
+  ],
+  [
+   48,
+   0.09,
+   2.76
+  ],
+  [
+   50,
+   0.24,
+   2.55
+  ],
+  [
+   52,
+   0.34,
+   2.3
+  ],
+  [
+   54,
+   0.47,
+   2.0
+  ],
+  [
+   56,
+   0.56,
+   1.65
+  ],
+  [
+   58,
+   0.61,
+   1.25
+  ],
+  [
+   60,
+   0.85,
+   0.85
+  ],
+  [
+   61,
+   0.97,
+   0.66
+  ],
+  [
+   62,
+   1.3,
+   0.35
+  ],
+  [
+   62.81,
+   1.66,
+   0.05
+  ]
+ ],
+ "cauda_formato": "[x, centro_z, raio]; secao da cauda levemente achatada lateralmente (w=0.96r)",
+ "parabrisa_4_vidros": {
+  "fonte": "Medido na VISTA FRONTAL do APR p.21 @600dpi, auto-calibrada por ajuste de circulo na fuselagem (r=143.68px -> 20.079 mm/px; altura implicada 5.940 m vs 5.94 oficial). Substitui os poligonos anteriores, que vinham da projecao lateral e levavam z ate 1.87 - contaminado pela linha do crown.",
+  "metodo": "Poligonos dados em (|y|, z). O gate longitudinal e 1.32<=x<=3.66; o acoplamento com a secao do casco produz sozinho o V em planta (perto do nariz o crown esta dentro da faixa de z; mais atras ele sobe e sai).",
+  "vidro_interno_yz": [
+   [
+    0.215,
+    0.355
+   ],
+   [
+    0.576,
+    0.355
+   ],
+   [
+    0.837,
+    0.44
+   ],
+   [
+    0.837,
+    0.8
+   ],
+   [
+    0.777,
+    0.885
+   ],
+   [
+    0.416,
+    0.885
+   ],
+   [
+    0.115,
+    0.8
+   ],
+   [
+    0.115,
+    0.44
+   ]
+  ],
+  "vidro_externo_yz": [
+   [
+    1.219,
+    0.355
+   ],
+   [
+    1.48,
+    0.355
+   ],
+   [
+    1.5,
+    0.44
+   ],
+   [
+    1.5,
+    0.52
+   ],
+   [
+    1.159,
+    0.84
+   ],
+   [
+    1.118,
+    0.885
+   ],
+   [
+    1.038,
+    0.885
+   ],
+   [
+    1.018,
+    0.56
+   ],
+   [
+    1.078,
+    0.44
+   ]
+  ],
+  "montante_central_y": 0.115,
+  "montante_meio_y": [
+   0.837,
+   1.018
+  ],
+  "gate_x": [
+   1.32,
+   3.66
+  ],
+  "aplicacao": "mascara UV (x,theta) no shader do casco: NoseMask R=moldura, G=vidro. Expandir os poligonos ~0.03 m (metade da espessura do traco do desenho), arredondar cantos ~0.05 m por abertura morfologica, vedacao ~0.065 m por dilatacao, e supersample 4x - sem AA a moldura serrilha.",
+  "nota": "flush, sem molduras salientes; olho do piloto z+0.60 y+-0.53"
+ },
+ "portas_pax": {
+  "centros_x": [
+   6.3,
+   18.36,
+   35.43,
+   49.66
+  ],
+  "recorte": [
+   1.02,
+   1.9
+  ],
+  "soleira_z": -0.3,
+  "nota": "4 pares L/R; porta 4 na secao afilada"
+ },
+ "portas_carga": {
+  "fwd_x": 11.0,
+  "aft_x": 43.31,
+  "abertura": [
+   2.69,
+   1.7
+  ],
+  "centro_z": -1.3,
+  "bulk": {
+   "x": 47.75,
+   "lado": "esquerdo",
+   "dim": [
+    0.9,
+    1.1
+   ]
+  }
+ },
+ "janelas_pax": {
+  "abertura": [
+   0.27,
+   0.47
+  ],
+  "pitch": 0.61,
+  "centro_z": 0.8,
+  "faixa_x": [
+   7.5,
+   48.0
+  ]
+ },
+ "asa": {
+  "le_raiz": [
+   21.78,
+   2.885
+  ],
+  "sweep_le_formula": "x_LE = 21.78 + 0.695*(y-2.885)",
+  "te_raiz_x": 34.0,
+  "te_interno_graus": 4.0,
+  "te_quebra_y": 11.51,
+  "te_externo_graus": 23.0,
+  "raked_tip": {
+   "semi_span": 30.06,
+   "le_x": 40.69,
+   "extremo_x": 43.36
+  },
+  "diedro_estatico_graus": 7,
+  "raiz_z_le": -0.3,
+  "raiz_z_te": -1.2,
+  "carenagem_ventral": {
+   "x": [
+    22,
+    35.5
+   ],
+   "meia_larg_max": 3.15,
+   "fundo_z": -4.0
+  },
+  "le_formula_medida": "x_LE = 19.959 + 0.6914*y  (34.7 graus), valida ate y=27.2; alem disso ponta raked medida ponto a ponto",
+  "te_formula_medida": "x_TE = 33.802 + 0.0700*y ate y=11.51; depois 29.711 + 0.4253*y ate y=27.2; ponta raked medida",
+  "planform_medido": "b789_asa_planform.json (52 estacoes, APR p.21 @600dpi)",
+  "carenagens_flap": {
+   "n_por_semiasa": 3,
+   "y": [
+    8.88,
+    14.75,
+    19.16
+   ],
+   "x_extremo_traseiro": [
+    35.2,
+    37.2,
+    39.0
+   ],
+   "nota": "dobradica simples (drop hinge), nao trilhos Fowler: sao cunhas curtas de ~0.7-0.8 m atras do BF, nao canoas como no 777"
+  },
+  "superficies_de_comando": {
+   "fonte": "3-view do APR medido por agente de pesquisa + verificacao adversarial; y em metros, c = fracao da corda local",
+   "bordo_fuga": [
+    {
+     "nome": "flap interno",
+     "y": [
+      3.13,
+      9.17
+     ],
+     "c": [
+      0.885,
+      0.825
+     ],
+     "confianca": "alta"
+    },
+    {
+     "nome": "flaperon",
+     "y": [
+      9.17,
+      11.27
+     ],
+     "c": [
+      0.759,
+      0.707
+     ],
+     "confianca": "alta (fica atras do motor, y=9.91 cai dentro)"
+    },
+    {
+     "nome": "flap externo",
+     "y": [
+      11.27,
+      22.64
+     ],
+     "c": [
+      0.829,
+      0.742
+     ],
+     "confianca": "alta"
+    },
+    {
+     "nome": "aileron externo",
+     "y": [
+      22.64,
+      26.95
+     ],
+     "c": [
+      0.827,
+      0.751
+     ],
+     "confianca": "alta-media"
+    }
+   ],
+   "spoilers_extradorso": {
+    "quebras_y": [
+     3.63,
+     6.41,
+     9.17,
+     11.27,
+     13.68,
+     15.95,
+     18.2,
+     20.5
+    ],
+    "c": [
+     [
+      0.81,
+      0.72
+     ],
+     [
+      0.71,
+      0.65
+     ]
+    ],
+    "nota": "7 por asa pelo FCOM (3 internos + 4 externos ao flaperon); o desenho so resolve 2 no grupo interno. NAO ha spoiler na frente do flaperon."
+   },
+   "slats": {
+    "quebras_y": [
+     3.8,
+     8.9,
+     10.8,
+     14.8,
+     18.8,
+     22.8,
+     26.9
+    ],
+    "c": [
+     0.12,
+     0.15
+    ],
+    "nota": "y com confianca media-alta; a FRACAO DE CORDA e valor TIPICO de transporte, NAO medida — o desenho traca o slat com largura constante em pixels, o que e estilizacao. Corte do pilone (sem slat) entre y 8.9 e 10.8.",
+    "confianca_c": "baixa"
+   },
+   "aplicacao": "textura AsaLinhas (Non-Color, UV planar 'UVAsa' em x 18..46 / y -32..32): canal R = linhas dos dois lados, canal G = so extradorso, mascarado no shader por normal.z"
+  }
+ },
+ "motor_trent1000": {
+  "inlet_x": 20.8,
+  "cl_y": 9.91,
+  "cl_z": -2.4,
+  "fan_od": 3.7,
+  "fan_diam": 2.85,
+  "chevrons_x": 25.6,
+  "core_x": 26.7,
+  "plug_x": 27.0,
+  "chevrons": "12-14 dentes serrilhados no BF do fan sleeve, cor da nacelle (branco)",
+  "livery": "fan cowl branco, logo RR no alto dianteiro, lip prata, core cinza, bocal metal escuro"
+ },
+ "trem": {
+  "nariz_x": 5.41,
+  "principal_x": 31.24,
+  "bitola": 9.8,
+  "nariz_rodas": {
+   "diam": 1.016,
+   "larg": 0.406,
+   "gap": 0.72
+  },
+  "principal_bogie": {
+   "entre_eixos": 1.52,
+   "entre_rodas": 1.51,
+   "pneu_diam": 1.372,
+   "pneu_larg": 0.533
+  },
+  "solo_z": -4.88
+ },
+ "empenagem": {
+  "deriva": {
+   "dorsal_x": 47.5,
+   "raiz_le": [
+    50.1,
+    2.97
+   ],
+   "raiz_te": [
+    58.7,
+    3.2
+   ],
+   "topo_le": [
+    60.2,
+    11.6
+   ],
+   "topo_te": [
+    62.3,
+    11.6
+   ]
+  },
+  "estab": {
+   "cl_le_x": 52.7,
+   "cl_te_x": 59.3,
+   "raiz_z": 0.55,
+   "semi_span": 9.905,
+   "tip_le_x": 61.6,
+   "tip_te_x": 62.7,
+   "diedro_graus": 8,
+   "cor": "branco"
+  }
+ },
+ "livery_cc_bgk": {
+  "titulos": "LATAM indigo x 9.7-16.6 (letras 0.90 alt, z 1.1-2.0); simbolo coral+indigo SEMPRE do lado do nariz: x 7.5-9.25, z 0.5-2.3 (1.8 alto); esq = simbolo+LATAM, dir = LATAM+simbolo",
+  "fin_bandas_h": {
+   "fonte": "Polilinhas MEDIDAS do A320neo aprovado (spec_a320.json -> cauda_livery.fin_fronteiras), aplicadas na convencao (h,c) do 787. A marca e a MESMA nos dois avioes — so muda a escala do fin — entao a geometria medida com mais cuidado vale para os dois. A descricao em prosa que estava aqui gerava um sash com a base da massa subindo demais e sem o triangulo branco inferior.",
+   "convencao": "h=(z-2.97)/8.63 ; c=(x-LE(h))/(TE(h)-LE(h)) com LE=50.1+10.1h e TE=58.7+3.6h",
+   "F1_base_cap": "[0,0.900]->[1,0.835]",
+   "F2_base_coral_sup": "[0,0.720]->[0.5,0.755]->[1,0.790]",
+   "F3_topo_swoosh": "[0,0.570]->[0.15,0.630]->[0.30,0.700]->[0.50,0.755]->[1,0.790]",
+   "F4_base_swoosh": "[0,0.190]->[0.18,0.250]->[0.35,0.300]->[0.50,0.340]->[0.575,0.360]->[0.75,0.420]->[1,0.500]",
+   "F5_topo_coral_central": "c>=0.575: [0.575,0.360]->[1,0.310]",
+   "F6_base_coral_central": "[0.18,0.250]->[0.50,0.165]->[0.53,0.150]",
+   "F7_topo_massa": "[0.32,0.0]->[0.50,0.140]->[0.75,0.210]->[1,0.270] — a massa NAO toca o bordo de ataque",
+   "filete_ba": "0.30 m branco continuo do bordo de ataque, raiz ao topo"
+  },
+  "echarpe": "CUNHA TRIANGULAR na fuselagem traseira, unida a deriva — NAO e wrap nem faixa que percorre o casco. Modelada por duas diagonais em (x, theta), theta em graus a partir da crista: fronteira DIANTEIRA x = 57.0 - 5.0*(theta/180)  (mais a re na crista, mais a vante na quilha); fronteira TRASEIRA  x = 61.6 - 4.6*(theta/180). Fora disso o casco e BRANCO, inclusive a crista a vante de x~57 e o cone atras. Cone da APU metalico nos ultimos ~2 m. Fonte: foto ref_CC-BGP_wikimedia.jpg, com escala calibrada pelo PASSO DAS JANELAS (0.61 m) e nao pelo vao nariz-cauda — a calibracao por nariz-cauda errava 14% porque o aviao esta em angulo na foto.",
+  "matricula": "CC-BGK em letras BRANCAS SOBRE O INDIGO da cunha, x ~54-58, na parte alta. CORRIGIDO duas vezes: nao e indigo sobre branco (erro meu de leitura de uma foto ar-ar, onde a cunha fica escondida pelo angulo).",
+  "titulos_extras": "DREAMLINER: caixa de tinta x 44.85-48.21, altura de maiuscula 0.241 m, centro das letras z = -0.04 +-0.08 (CORRIGIDO: o spec antigo dizia z~0.3 e letra 0.55 m — 0.631 m e o BLOCO inteiro com a crescente, provavelmente a origem do erro). Bombordo o D fica a vante (x=44.85), estibordo o D a re (x=48.21). A arte tem que vir do dreamliner_logo.svg rasterizado como mesh: preencher a caixa com retangulo deixa o modelo PIOR. Razao largura/cap 13.95. Cor cinza-prata #B7BCC1 (nao medida com precisao). BOEING 787-9: NAO pintado — nao existe vetor livre da marcacao completa (o Boeing wordmark cobre so as letras; os digitos 787-9 teriam de ser redesenhados). Se for pintar: x 45.75-48.16, centro z=+1.23+-0.08, cap 0.137 m.",
+  "barriga": "SEM wordmark. Simbolo LATAM na barriga: POSICAO EM DISPUTA — o spec diz x~17-22 (+-2) e uma pesquisa posterior diz x 10.5-12.8; a segunda cavalga a porta de carga dianteira (x=11.00), a primeira nao tem foto vertical que a confirme. Pintado em x 17-22 (largura 3.12, ponta coral para o nariz) seguindo o spec, mas NAO VERIFICADO: precisa de foto por baixo antes de virar cota.",
+  "asas": "cinza Boeing flight-gray ~#C8CACC extradorso+intradorso, raked tip SEM cor de marca; estab branco; fuselagem ~#F5F6F8",
+  "cores": "indigo #1B0088, coral #E8114B"
+ },
+ "confianca": "ALTA: cotas oficiais, portas, trem, motor x/y, bandas do fin (ordem), assimetria da matricula, DREAMLINER; MEDIA: estacoes nariz/cauda (+-0.1), parabrisa (+-0.15-0.3), echarpe (+-1), simbolo barriga (+-2); BAIXA: porta bulk, crown sob deriva",
+ "correcoes": {
+  "nariz_largura_2026-08-16": "A gaiola do casco tinha um afilamento espurio na largura do nariz: max|y|/meia_largura_spec ia de 0.911 em x=0.25 subindo linearmente a 1.000 em x=5 (o barril estava correto em COMP=1.0064). Crown e keel estavam certos, entao nenhum render denunciava. Corrigido escalando so y anel por anel; erro mediano contra o spec caiu de 1.2 cm para 0.4 cm.",
+  "asa_bordo_de_fuga_2026-08-16": "O spec dizia te_raiz_x=33.0 com 11 graus no trecho interno. Medicao propria no APR p.21 @600dpi (confirmada por um agente de pesquisa independente) da x=33.80+0.0700*y, ou seja ~4 graus e raiz em 34.00 — a corda de raiz era 11.22 e passou para 12.05 m (7% curta). Bordo de ataque conferido e CORRETO (34.7 vs 34.8 do spec). Asa reconstruida a partir do planform medido; carenagens de flap eram 2 por asa em y=5.6/8.6 e passaram para 3 em y=8.88/14.75/19.16.",
+  "junta_do_radome": "Junta circunferencial do radome em x=1.11 (topo) a 1.39 (base), inclinada — medida na fig. 5.4.3 do APR calibrada por duas cotas oficiais (controle: ponta do nariz cai em x=-0.05). E a linha circunferencial mais visivel da fuselagem e vale desenhar.",
+  "dreamliner_z_2026-08-16": "Pintado estava centrado em z=+0.30; o correto e z=-0.04 (bloco de 0.631 m com as letras centradas nele, confirmado medindo o mesh do dreamliner_logo.svg). Deslocado 19-20 linhas de textura por lado.",
+  "sash_da_deriva_2026-08-16": "O triangulo branco no canto inferior DIANTEIRO da deriva e LEGITIMO — fica entre a base do swoosh (F4) e o topo da massa (F7), e o A320 aprovado tem o mesmo. Cheguei a preenche-lo com indigo por leitura errada de um feedback; desfeito. Licao: quando a prosa do spec e a geometria medida do outro aviao discordarem sobre a MARCA, a marca ganha — ela e a mesma nos dois.",
+  "echarpe_do_cone_2026-08-16": "A echarpe estava com a borda inferior quase constante em v de x=51 a 61, o que projeta uma cunha branca de borda reta no cone. Corrigido: borda em z=-0.50 ate x=53 (spec) e subindo depois como potencia 1.35 ate zc+0.30r, fazendo a fita afinar em ponta e deixando o cone branco com o cone da APU metalico.",
+  "echarpe_limite_angular_2026-08-17": "Limitar a echarpe por z NAO funciona no tailcone: o cone afina, entao um z fixo corresponde a um angulo cada vez maior e o indigo acaba envolvendo a barriga. Media antes: 50-54% da circunferencia entre x=51 e 60, descendo a 107-116 graus da crista — o dono chamou de 'azul a mais'. Corrigido com limite ANGULAR decrescente; agora vai de 52% em x=52 a 19% em x=61, sempre acima da meia-altura a partir de x=55.",
+  "echarpe_regiao_dianteira_2026-08-17": "A primeira correcao angular so tratou x>=55 e deixou x 47-55 intacto — justamente a regiao que o dono estava olhando, entao para ele 'nao mudou nada'. Ele estava certo. A bombordo o indigo descia a 109-110 graus (z=-0.50), 0.5 m ABAIXO da matricula; o spec da a faixa 'z 0..-0.5' e adotei o topo dela (z~0, 92 graus). Estibordo de 77 para 72 graus. LICAO DE PROCESSO: ao corrigir por faixa de x, renderizar do MESMO angulo do print do dono antes e depois — medir a textura nao basta, porque a medida pode melhorar numa regiao que ele nao esta vendo.",
+  "matricula_exige_o_mergulho_2026-08-17": "Ao subir o limite da echarpe para 92 graus em toda a extensao, a matricula CC-BGK de bombordo (letras BRANCAS dentro do indigo, medidas em z -0.16..+0.53) ficou com metade do contorno sobre fundo branco. O 'desce mais' do spec original nao era enfeite: existe PARA envolver a matricula. Restaurado como mergulho local. Cuidado com a metrica: contar 'pixels brancos vizinhos de indigo' deu falso positivo porque o contorno branco da porta 4 entra na mesma janela — a checagem que decidiu foi exportar a regiao da textura e OLHAR.",
+  "echarpe_nao_existe_2026-08-17": "ERRO DE RAIZ, e o mais caro da sessao. O spec descrevia uma echarpe indigo descendo da deriva pelo casco ate o tailcone. Esse texto atravessou fotogrametria, medicao do 3-view a 600 dpi, dois workflows de pesquisa e uma rodada de verificacao adversarial sem ser questionado, e foi refinado por horas (limite por z -> limite angular -> mergulho local para preservar a matricula). A foto ar-ar do CC-BGK mostrou que a fuselagem e toda branca. Todo o refino foi ajuste fino da coisa errada. LICAO GRAVADA COMO REGRA 0 DO PROJETO: buscar e olhar foto da matricula e o PRIMEIRO passo, antes do documento do fabricante e antes de qualquer spec — e prosa nunca substitui a foto, mesmo prosa que veio de medicao.",
+  "cunha_traseira_2026-08-17": "Sequencia de erros que vale registrar. (1) O spec original tinha uma echarpe percorrendo o casco ate o tailcone; isso nao existe. (2) Ao ver a foto ar-ar do dono, apaguei TODO o indigo do casco — sobre-correcao: a foto de cima esconde a cunha, que fica no flanco/baixo. (3) Voltei a pintar usando medicao automatica por limiar de cor, que falha porque a DERIVA tambem e indigo e se sobrepoe ao casco na vista lateral. (4) A calibracao da foto pelo vao nariz-cauda errava 14% (aviao em angulo); calibrar pelo passo das janelas resolveu. LICAO: para pintura, medir a foto por limiar de cor nao funciona quando duas pecas tem a MESMA cor e se sobrepoem na projecao — ler a fronteira A OLHO no crop ampliado e mais confiavel. E calibrar sempre por uma cota repetida (passo de janela), nunca pelo comprimento total."
+ },
+ "pendencias": {
+  "rr_na_nacelle": "Distintivo Rolls-Royce: NAO e do casco, vive na nacelle, que precisa de UV proprio em torno do eixo do motor. Geometria ja apurada para quando houver: caixa 0.43 m (x) x 0.698 m (arco), razao 1.624, x 22.085-22.515, theta_centro 0 graus +-10 (face externa dos dois motores), raio local 1.504 m, z -2.055..-2.745. Desenhar em espaco de ARCO, nao em angulo linear. Cores #0F059E e #FFFFFF.",
+  "vetados_por_falta_de_fonte": "Nao pintar sem fonte nova: (a) portas estaticas e cantoneiras vermelhas do nariz — duas pesquisas discordam em ~8 m e a citacao normativa estava errada; (b) mastro/escorrido do dreno DIANTEIRO — conflito de estacao e de lado; (c) marcacoes de cut-in — o proprio ARFF da Boeing diz 'NOT MARKED ON ALL AIRPLANES' e nenhuma foto LATAM as mostra; (d) juntas de barril da fuselagem — invisiveis na pele pintada (composito unido por splice straps pelo lado interno) e estacoes desconhecidas.",
+  "nao_desenhar_no_787": "Rebites, lap joints longitudinais e quilting NAO existem num 787: o barril e peca unica de composito. Uma malha de rebites transforma o 787 num 767. O que faz o casco parecer 787 e o REFLEXO limpo, nao panel lines. Linhas de painel de verdade so na carenagem ventral (x 22-35.5), que e aparafusada."
+ }
+}

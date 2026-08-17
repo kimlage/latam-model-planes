@@ -1,0 +1,37 @@
+{
+  "_comentario": "Config real do 787-9 (Boeing APR D6-58333 Rev P, p.21 @600dpi). As ancoras foram medidas a mao em crops ampliados (insp_nariz.png, insp_cauda.png, insp_frontal.png) — esse e o passo que nao da para automatizar. Rode a partir da pasta da aeronave.",
+  "fonte": "Boeing APR D6-58333 Rev P p.21 @600dpi; ancoras por inspecao",
+  "imagem": "apr600_p21-021.png",
+  "mascara": "linhas",
+  "saida": "b789_curves.json",
+
+  "ancoras": {
+    "x_nariz": 867,
+    "y_nariz": 4210,
+    "x_cauda": 3893,
+    "y_solo": 4378,
+    "cota_m": 62.0,
+    "_nota_cota": "62.00 m e a cota do SOLO entre as projecoes verticais do nariz e da ponta do tailcone — NAO e o comprimento total (62.81). Calibrar com ela e correto; usar 62.00 como comprimento nao e."
+  },
+
+  "lateral": {
+    "y0": 3940,
+    "y1": 4368,
+    "_nota": "inclui o crown (~3990) e exclui a linha do solo (4378)",
+    "vaos_keel": [[4.0, 8.0], [16.5, 34.0]],
+    "vaos_crown": [[20.0, 30.0]]
+  },
+
+  "topo": {
+    "y0": 2190,
+    "y1": 2470,
+    "ate_x_nariz": 20.0,
+    "de_x_cauda": 44.0,
+    "_nota_cauda": "no topo o estabilizador atravessa a banda da cauda: a meia-largura extraida ali e inutil. Use w = 0.96*rz a partir do raio lateral."
+  },
+
+  "secao_constante": [36.0, 44.0],
+  "sanidade": { "H": 5.94, "W": 5.77 },
+  "passo": 4,
+  "amostrar": [0.5, 1, 2, 3, 5, 8, 12, 16, 46, 50, 54, 58, 61]
+}
