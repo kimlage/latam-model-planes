@@ -232,6 +232,75 @@ não é "a foto ganha" (isso já está na regra 4); é que **corrigir um erro pa
 lado oposto também é errar**. Quando o dono aponta excesso, meça o quanto tirar
 em vez de zerar.
 
+## A écharpe do casco — o modelo, e os quatro jeitos de errar
+
+A mancha índigo da fuselagem traseira é a **mesma massa** do índigo da raiz da
+deriva, descendo para o casco. Duas fronteiras a definem, e **elas vivem em
+espaços diferentes** — foi não perceber isso que custou quatro rodadas.
+
+```
+índigo ⟺ x ≥ x0 + k·z              (fronteira DIANTEIRA — reta no plano (x,z))
+      E  θ ≤ θ0 − r·(x − xr)        (fronteira INFERIOR — reta no plano (x,θ))
+      E  x ≤ x_tras
+```
+
+`θ` é medido a partir da crista; `z = centro_z(x) + raio(x)·cos θ`.
+
+**787-9:** `x ≥ 48,77 + 0,992·z` ; `θ ≤ 117,0 − 5,2·(x − 48,70)` ; `x ≤ 60,5`
+**A320neo:** `x ≥ 27,39 + 0,8393·z` ; `θ ≤ 101,4 − 7,58·(x − 29,11)` ; `x ≤ 35,6`
+
+### Erro 1 — modelar a fronteira inferior como reta em (x,z)
+
+Foi tentada três vezes: corte horizontal, 16° medidos em foto, e a reta do
+estabilizador. **As três dão cunha pequena demais.** A fronteira inferior é
+reta em **(x, θ)**, não em (x, z). No bordo dianteiro ela desce a ~117° da
+crista — bem abaixo da meia-largura, quase na quilha — e estreita para trás.
+Qualquer reta em (x,z) para por volta de 90° e a cunha fica raquítica.
+
+Como medir: varra a foto **coluna a coluna**; em cada coluna ache a silhueta do
+casco (topo e base) e a borda inferior do índigo; converta para
+`u = (y_ind − y_topo)/(y_base − y_topo)` e daí `θ = acos(1 − 2u)`. Ajuste `θ(x)`.
+Sai uma reta limpa. Calibre `x` pelo **passo das janelas**, nunca pelo vão
+nariz-cauda.
+
+### Erro 2 — a fronteira dianteira não é o bordo de ataque
+
+Ela é **paralela** ao BA reto da deriva, deslocada ~0,10·H para trás
+(0,86 m no 787, 0,62 m no A320). E o BA reto do 787 é **45,2°**, não os 40,5°
+que o spec trazia — 40,5° é a corda da carenagem dorsal curva. Ver
+`extrair-cotas`.
+
+### Erro 3 — desenhar a fronteira como reta na textura (x,θ)
+
+Um corte plano `x = x0 + k·z` **não é uma reta** em UV. Traçar reta ali erra até
+0,9 m na cintura. E **não resolva o `x` da fronteira uma vez por linha** da
+textura: isso serrilha a borda e cria ilhas de índigo soltas, porque a linha
+inteira é aceita ou descartada. Cada texel já conhece o próprio `x` e `θ`, logo
+o próprio `z` — o teste é direto e vetorizado, sem iteração nenhuma.
+
+### Erro 4 — pintar "só onde já era branco"
+
+Deixa buraco em cada linha de painel e contorno de porta. A `LiveryTex` mistura
+duas camadas: **base** (branco/índigo) e **marcações** (matrícula, portas,
+painéis). Ao mover a fronteira, aplique a cor de base **só nos texels chapados**
+(branco puro ou índigo puro) e deixe a camada de marcação intacta — os contornos
+passam a ler por cima do índigo, como no avião real.
+
+Não tente reconstruir por modulação relativa (`orig / base`): amplifica o ruído
+da textura e duplica marcações que estavam quase invisíveis. Tentado, piorou.
+
+**Matrícula:** letras brancas sobre o índigo. Se a fronteira mudar e ela cair
+fora da mancha, pinte-a **índigo sobre branco** — é variante legítima da LATAM —
+em vez de tentar recortá-la e recolá-la. Recorte com limiar sempre quebra o
+glifo ou arrasta linha de painel junto.
+
+### Ainda aberto
+
+A junção **raiz do bordo de fuga da deriva × estabilizador × cone de cauda** não
+está resolvida: é onde a carenagem dorsal, a raiz do estabilizador e o fim da
+cunha se encontram, e nas fotos aparece uma carenagem clara que o modelo não
+reproduz. O limite traseiro `x ≤ x_tras` é escolha, não medição.
+
 ## Confira a PROPORÇÃO do lockup, não só o desenho
 
 Rasterizar do SVG oficial garante a forma de cada glifo, mas **não garante que o

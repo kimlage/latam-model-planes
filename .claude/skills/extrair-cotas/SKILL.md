@@ -157,6 +157,30 @@ duas peças compartilham a cor, amplie o recorte e **leia a fronteira a olho** �
 é mais confiável do que qualquer limiar, e mais rápido do que descobrir isso
 depois de cinco iterações.
 
+**Dois pontos não definem um bordo de ataque curvo.** O spec do 787-9 dava a
+deriva como `raiz_le=(50,10; 2,97) → topo_le=(60,20; 11,60)`, ou 40,5°. Medido
+no desenho oficial a 600 dpi, o **trecho reto** do BA é `x = 47,91 + 0,9920·z`,
+ou seja **45,2°** — e abaixo de z≈5,5 o BA curva *para a frente* virando
+carenagem dorsal. Os dois pontos do spec eram a **corda** dessa curva. Todo
+resultado derivado dali (inclusive transferência entre tipos por razão de
+tangentes) sai contaminado. Ao tabelar uma superfície, grave o **trecho reto
+como reta** e a carenagem como curva separada, nunca os dois como um segmento.
+
+**Cheque ELEVAÇÃO da câmera, não só guinada.** Guinada é a armadilha conhecida;
+elevação é a esquecida. Com a câmera fora do eixo em `e`, cada ponto da pele é
+deslocado por `w(z)·sen(e)`, onde `w` é a meia-largura local — zero na crista,
+~2,9 m na cintura. Isso **encurva** a projeção de qualquer fronteira no casco
+(mas não na deriva, que está em y=0) e desloca a medida em até 0,44 m com
+só 8,5°. Teste barato: a distância crista→linha das janelas tem valor conhecido
+pelo desenho; se der menos, a câmera está abaixo do eixo. Alternativa: a
+separação vertical dos dois bogies do trem principal (bitola conhecida).
+
+**Escolha o espaço certo antes de ajustar a reta.** Uma fronteira de tinta pode
+ser reta em `(x,z)`, em `(x,θ)`, ou em nenhum dos dois. A cunha traseira do 787
+é reta em `(x,θ)` e três ajustes sucessivos em `(x,z)` deram resultados
+plausíveis e todos errados. Antes de ajustar, meça em **dois espaços** e veja em
+qual o resíduo desaba.
+
 **Use perfil quase puro.** No meio da fuselagem a projeção é quase ortográfica.
 Perto do nariz e da cauda a perspectiva já morde — declare incerteza maior lá.
 

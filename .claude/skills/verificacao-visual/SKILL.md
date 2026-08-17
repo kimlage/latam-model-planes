@@ -79,6 +79,18 @@ Cada item aqui é um erro real que chegou até o dono. Se você não conseguir d
 - janelas brancas ou espelhadas em vez de vidro escuro
 - janelas ou portas ausentes num lado só
 
+**Cauda — a região que mais reprovou**
+- cunha índigo do casco pequena demais (fronteira inferior modelada como reta
+  em `(x,z)` em vez de `(x,θ)` — ver `livery-latam`)
+- fronteira serrilhada ou com ilhas de índigo soltas (resolvida por linha da
+  textura em vez de por texel)
+- buraco na pintura em cima de linha de painel e contorno de porta (pintou "só
+  onde já era branco")
+- matrícula quebrada ou duplicada depois de mover a fronteira
+- **junção raiz do BF da deriva × estabilizador × cone de cauda** — confira
+  esse canto especificamente, com zoom; é onde três peças se encontram e onde
+  o dono apontou defeito com o resto já aprovado
+
 **Livery**
 - marca desenhada com fonte parecida em vez do SVG oficial
 - sash da deriva com filete do bordo de ataque largo demais
