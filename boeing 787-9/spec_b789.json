@@ -489,7 +489,16 @@
    "topo_te": [
     62.3,
     11.6
-   ]
+   ],
+   "CORRECAO_2026-08-17": {
+    "BA_reto": "x = 47.91 + 0.9920*z  (45.2 graus). Valido z~5.5..11.2.",
+    "carenagem_dorsal": "abaixo de z~5.5 o BA curva PARA A FRENTE e encosta na crista em x~50.1. Os pontos antigos raiz_le=[50.1,2.97] e topo_le=[60.2,11.6] sao a CORDA que inclui a carenagem (40.5 graus) — NAO usar como direcao do BA.",
+    "BF": "x = 57.14 + 0.3858*z  (68.9 graus). O BF antigo dava 66.8 graus.",
+    "ponta_z": 11.567,
+    "raiz_z": 2.97,
+    "H_exposta": 8.6,
+    "fonte": "Boeing APR D6-58333 Rev P a 600 dpi, medido por 3 agentes independentes (45.31/45.6/45.2) + 2 fotos de perfil puro 6000px."
+   }
   },
   "estab": {
    "cl_le_x": 52.7,
@@ -536,7 +545,8 @@
   "matricula_exige_o_mergulho_2026-08-17": "Ao subir o limite da echarpe para 92 graus em toda a extensao, a matricula CC-BGK de bombordo (letras BRANCAS dentro do indigo, medidas em z -0.16..+0.53) ficou com metade do contorno sobre fundo branco. O 'desce mais' do spec original nao era enfeite: existe PARA envolver a matricula. Restaurado como mergulho local. Cuidado com a metrica: contar 'pixels brancos vizinhos de indigo' deu falso positivo porque o contorno branco da porta 4 entra na mesma janela — a checagem que decidiu foi exportar a regiao da textura e OLHAR.",
   "echarpe_nao_existe_2026-08-17": "ERRO DE RAIZ, e o mais caro da sessao. O spec descrevia uma echarpe indigo descendo da deriva pelo casco ate o tailcone. Esse texto atravessou fotogrametria, medicao do 3-view a 600 dpi, dois workflows de pesquisa e uma rodada de verificacao adversarial sem ser questionado, e foi refinado por horas (limite por z -> limite angular -> mergulho local para preservar a matricula). A foto ar-ar do CC-BGK mostrou que a fuselagem e toda branca. Todo o refino foi ajuste fino da coisa errada. LICAO GRAVADA COMO REGRA 0 DO PROJETO: buscar e olhar foto da matricula e o PRIMEIRO passo, antes do documento do fabricante e antes de qualquer spec — e prosa nunca substitui a foto, mesmo prosa que veio de medicao.",
   "cunha_traseira_2026-08-17": "Sequencia de erros que vale registrar. (1) O spec original tinha uma echarpe percorrendo o casco ate o tailcone; isso nao existe. (2) Ao ver a foto ar-ar do dono, apaguei TODO o indigo do casco — sobre-correcao: a foto de cima esconde a cunha, que fica no flanco/baixo. (3) Voltei a pintar usando medicao automatica por limiar de cor, que falha porque a DERIVA tambem e indigo e se sobrepoe ao casco na vista lateral. (4) A calibracao da foto pelo vao nariz-cauda errava 14% (aviao em angulo); calibrar pelo passo das janelas resolveu. LICAO: para pintura, medir a foto por limiar de cor nao funciona quando duas pecas tem a MESMA cor e se sobrepoem na projecao — ler a fronteira A OLHO no crop ampliado e mais confiavel. E calibrar sempre por uma cota repetida (passo de janela), nunca pelo comprimento total.",
-  "deriva_2026-08-17": "Sash refeito por retificacao da foto: bandas de bordo a bordo, indigo dominante, coral no miolo e cinza nas pontas. Antes: deriva branca com bandas grossas interrompidas. Tambem corrigida a marca LATAM da fuselagem (estava esticada 28% na vertical -> proporcao oficial 4.30, e agora nao invade a fileira de janelas) e removidos matricula fantasma e lockup fantasma da textura."
+  "deriva_2026-08-17": "Sash refeito por retificacao da foto: bandas de bordo a bordo, indigo dominante, coral no miolo e cinza nas pontas. Antes: deriva branca com bandas grossas interrompidas. Tambem corrigida a marca LATAM da fuselagem (estava esticada 28% na vertical -> proporcao oficial 4.30, e agora nao invade a fileira de janelas) e removidos matricula fantasma e lockup fantasma da textura.",
+  "workflow_geometria_2026-08-17": "Workflow de 9 agentes (5 medicoes + 3 verificacoes adversariais + sintese), ~2.4M tokens. Achou tres erros que a medicao solo nao pegou: (1) o BA da deriva no spec era a corda da carenagem dorsal, nao o BA; (2) o angulo das bandas era 13.5 e o real e 20.4; (3) a echarpe do casco e um corte PLANO paralelo ao BA deslocado 0.86 m, nao um wrap circunferencial. Confianca alta. Em aberto: limite inferior e traseiro da echarpe, e a borda superior da banda superior (cinza sobre cinza, invisivel)."
  },
  "pendencias": {
   "rr_na_nacelle": "Distintivo Rolls-Royce: NAO e do casco, vive na nacelle, que precisa de UV proprio em torno do eixo do motor. Geometria ja apurada para quando houver: caixa 0.43 m (x) x 0.698 m (arco), razao 1.624, x 22.085-22.515, theta_centro 0 graus +-10 (face externa dos dois motores), raio local 1.504 m, z -2.055..-2.745. Desenhar em espaco de ARCO, nao em angulo linear. Cores #0F059E e #FFFFFF.",
@@ -578,6 +588,35 @@
    },
    "uv": "Deriva usa projecao planar (x,z) nos DOIS lados: u=0.060606*x-2.818182 ; v=0.095238*z-0.142857 (imagens FinSashE/FinSashD 2048x2048, conteudo identico).",
    "nota": "Substitui as polilinhas F1..F7 herdadas do A320, que produziam deriva branca com bandas grossas que nao chegavam aos bordos."
+  },
+  "fin_bandas_2026-08-17": {
+   "modelo": "Duas bandas retas atravessando a deriva DE BORDO A BORDO, sobre campo indigo. Cada banda e um envelope cinza-voo com miolo CORAL (paralelogramo cortado nas duas pontas). Acima da banda superior, cap cinza-voo ate a ponta.",
+   "angulo": "dz/dx = 0.372 (20.4 graus). ANGULO ABSOLUTO — igual no 787 e no A320. NAO e paralelo ao bordo de ataque (as bandas CRUZAM o BA).",
+   "bandas_c": {
+    "c = z - 0.372*x": "",
+    "inferior": [
+     -16.49,
+     -15.46
+    ],
+    "superior": [
+     -12.88,
+     -11.86
+    ]
+   },
+   "cortes_de_ponta": "segunda familia de retas, dz/dx = -0.21 (-11.9 graus). e = z + 0.21*x ; coral inferior e in [16.35,18.49] ; coral superior e in [20.83,23.05]",
+   "medidas": "espessura perpendicular da banda 0.96 +-0.03 ; vao indigo 2.42 +-0.06 ; periodo 3.38 ; cap cinza da ponta 1.25 ; massa indigo da raiz 2.09. Soma = 7.72 m contra 7.68 m de vao da planta: fecha em 0.5%.",
+   "filete_BA": "cinza-voo, 0.28..0.44 m perpendicular, alargando para baixo",
+   "regra_entre_tipos": "marcar as posicoes em zeta (fracao da altura exposta medida AO LONGO do BA) e tracar a 20.4 graus. Normalizar por distancia perpendicular/H NAO unifica (erra 20%).",
+   "SUBSTITUI": "b = z - 0.24*x (13.5 graus), que estava errado por dezenas de sigmas."
+  },
+  "echarpe_casco_2026-08-17": {
+   "modelo": "CORTE PLANO no espaco da aeronave, nao reta na textura UV.",
+   "fronteira_dianteira": "x = 48.77 + 0.992*z  — paralela ao BA RETO da deriva, deslocada 0.86 m (=0.10*H) para TRAS. Cruza a crista em x = 51.72.",
+   "limite_inferior": "NAO MEDIDO. Rastreado com confianca so ate z ~ -1.9; abaixo disso a barriga esta em sombra em todas as fotos. Modelo atual corta em z=-1.9.",
+   "limite_traseiro": "NAO MEDIDO por ninguem. Modelo atual termina em x=59.0 (tailcone branco, bico da APU metalico).",
+   "matricula": "letras BRANCAS sobre o indigo",
+   "UV": "Em textura (x,theta) esse plano NAO e uma reta: x_front(theta) = x0 + k*(centro_z(x)+raio(x)*cos(theta)), resolver por ponto fixo (4 iteracoes). Tracar reta em (x,theta) erra ate 0.9 m na cintura.",
+   "SUBSTITUI": "x = 57.0 - 5.0*(theta/180), que punha a fronteira ~5 m atras e dava a volta pelo ventre."
   }
  }
 }
