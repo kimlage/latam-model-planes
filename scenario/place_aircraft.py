@@ -12,7 +12,12 @@ What it does, and what it deliberately does not do
   177.424 deg true track, and parents the aircraft pivot and the take-off camera
   to it. The animation curves of the aircraft are NOT touched: the placement is
   entirely in the parent transform.
-* Reframes the camera by sliding it OUTWARD ALONG ITS OWN SIGHT LINE. For each
+* Reframes the camera by sliding it OUTWARD ALONG ITS OWN SIGHT LINE. NOTE:
+  this reframe is what the shipped v1 clip used and it is why that clip is
+  uncomfortable to watch - see ``takeoff_camera.py``, which replaces the camera
+  action outright and is the step that now produces the delivered animation.
+  Preserved here because the placement half of this script is still the entry
+  point for putting a new aircraft on 17R. For each
   frame the aim point Q is recovered as the point on the camera ray closest to
   the aircraft pivot, and the camera is moved to Q + k*(C - Q) horizontally,
   keeping its height. Because Q stays on the ray, the azimuth curve

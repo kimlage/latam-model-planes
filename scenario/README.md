@@ -313,26 +313,97 @@ The classic failure is modelling the range far too large.
 
 ---
 
-## 8. Rendering the take-off animation
+## 8. Shooting and rendering the take-off animation
+
+The camera is not hand-keyed. `takeoff_camera.py` builds the whole move from a
+handful of control curves, extends the aircraft action past its shipped frame
+140, prints the shot's numbers and saves a new `.blend`:
 
 ```bash
-# 140 frames, 960x540, Cycles 64 samples, motion blur shutter 0.15
-blender -b "airbus A320neo/A320neo_scl.blend" -P - <<'PY'
+blender -b "airbus A320neo/A320neo_scl.blend" -P scenario/takeoff_camera.py \
+    -- --out "airbus A320neo/A320neo_scl_v2.blend"
+
+# the same module runs without Blender, to tune the geometry in a second
+# instead of a minute (needs an ac_curve.json export of the aircraft action)
+python3 scenario/takeoff_camera.py
+```
+
+The move: a low dolly beside the roll, then a hand-over at frame ~100 to an
+**orbit flown in the aircraft's own coordinates** — distance, relative bearing,
+elevation above it. The reveal is bought with angle, not distance: the camera
+climbs faster than the aeroplane and swings 21° forward around it while the
+lens opens 37 → 21 mm. Full reasoning, and the measurements that forced each
+choice, are in the module docstring.
+
+### Judging the move with numbers, not adjectives
+
+`camera_metrics.py` measures whether a move is comfortable to watch:
+
+```bash
+blender -b "airbus A320neo/A320neo_scl_v2.blend" -P scenario/camera_metrics.py
+```
+
+**Degrees per second is the wrong unit.** What the eye reads is how much of the
+frame width the world crosses per second — `angular rate / horizontal FOV`. The
+first SCL cut kept a pan curve that was fine at 35 mm and put a 140 mm lens on
+it; the curve never changed but the image got 3.7× faster. Rules of thumb from
+this project: **below ~0.5 frame-widths/s reads as calm, above ~1.0
+disorients.** The script ray-casts a grid of screen points into the scene and
+re-projects them one frame later, so the number is measured, not inferred. It
+also reports the nearest scenery inside the frustum (a camera flying through
+the tree line at 12 m is a different defect from a fast pan, and needs a
+different fix), the projected pixel width of the light masts, and the
+aircraft's smallest margin to the frame edge.
+
+| | first SCL cut | this one |
+|---|---|---|
+| screen flow, central band, median | **1.66 w/s** | **0.10 w/s** |
+| frames above 1.0 w/s | 114 of 139 | 0 of 239 |
+| worst single probe in frame | 41.1 w/s | 0.90 w/s |
+| nearest scenery in frame | 12 m — a tree | 53 m — grass |
+| worst foreground parallax | 582 °/s | 38 °/s |
+| aircraft margin to frame edge | 5.34% | 12.26% |
+
+### Rendering
+
+```bash
+# 240 frames, 960x540, Cycles 96 samples on Metal, 180 deg shutter (0.50)
+blender -b "airbus A320neo/A320neo_scl_v2.blend" -P - <<'PY'
 import bpy, os
-scn = bpy.context.scene
+prefs = bpy.context.preferences.addons["cycles"].preferences
+prefs.compute_device_type = "METAL"; prefs.get_devices()
+for d in prefs.devices: d.use = (d.type == "METAL")
+bpy.context.scene.cycles.device = "GPU"
 out = "/tmp/frames_scl/"; os.makedirs(out, exist_ok=True)
-scn.render.filepath = out
-scn.render.image_settings.file_format = 'PNG'
+bpy.context.scene.render.filepath = out
+bpy.context.scene.render.image_settings.file_format = 'PNG'
 bpy.ops.render.render(animation=True)
 PY
 
 # GIF: 800 px wide, 25 fps
 ffmpeg -y -framerate 25 -start_number 1 -i /tmp/frames_scl/%04d.png \
   -vf "scale=800:-1:flags=lanczos,split[a][b];\
-[a]palettegen=max_colors=200:stats_mode=diff[p];\
-[b][p]paletteuse=dither=bayer:bayer_scale=3:diff_mode=rectangle" \
-  -loop 0 "airbus A320neo/a320_scl.gif"
+[a]palettegen=max_colors=144:stats_mode=diff[p];\
+[b][p]paletteuse=dither=none:diff_mode=rectangle" \
+  -loop 0 "airbus A320neo/a320_scl_v2.gif"
 ```
+
+**A 180° shutter (0.50) is affordable only because the pan slowed down.** The
+first cut had to drop to 0.15 — at 0.40 the background smeared ~26 px at the
+one frame that has to be readable — and then had thin, high-contrast geometry
+stepping ~68 px between frames with 10 px of blur behind it. That is what makes
+light masts *strobe*; it is not aliasing (they are 2.2–10.4 px wide there, not
+sub-pixel) and it is not the GIF dither — measured, the dither choice moves the
+flicker score by under 1%. Here the background crosses at most 0.27
+frame-widths/s, the masts step 8.6 px, and the shutter covers half of it.
+
+**144 colours and `dither=none` are a size decision, measured.** 240 frames at
+800 px is 23.4 MB with `sierra2_4a`/256 and 16.4 MB with a subtle
+`bayer_scale=5`/160; `none`/144 lands at 14.68 MB, inside the 15 MB budget,
+with no ordered-dither pattern that could crawl. It costs a little banding in
+the sky gradient, which is the honest trade. It costs nothing in flicker: the
+finished GIF measures 35.47 flickering px per 10 k against 35.76 for the source
+PNGs — quantisation removes a hair of variation rather than adding any.
 
 **Use 25 fps, not 24.** A GIF delay is an integer number of centiseconds. 25 fps is
 exactly 4 cs for every frame; 24 fps is 4.1666… cs, and every encoder resolves that by
@@ -341,7 +412,7 @@ every Graphic Control Extension should carry the same delay:
 
 ```bash
 python3 - <<'PY'
-d = open("airbus A320neo/a320_scl.gif", "rb").read()
+d = open("airbus A320neo/a320_scl_v2.gif", "rb").read()
 delays = {d[i+4] | (d[i+5] << 8) for i in range(len(d)-6)
           if d[i] == 0x21 and d[i+1] == 0xF9 and d[i+2] == 0x04}
 print("delays (cs):", delays)      # must be a single value, {4}

@@ -14,12 +14,17 @@ Two aircraft finished:
 | **Boeing 787-9 Dreamliner** | CC-BGK | [`boeing 787-9/B789_LATAM.blend`](boeing%20787-9/B789_LATAM.blend) | 62.81 m |
 | **Airbus A320neo** | PT-TMN | [`airbus A320neo/A320neo_LATAM.blend`](airbus%20A320neo/A320neo_LATAM.blend) | 37.57 m |
 
-![A320neo taking off: ground run, rotation, gear retracting, climb-out](airbus%20A320neo/a320_decolagem_v2.gif)
+![A320neo departing RWY 17R at Santiago, the camera arcing up and around into an aerial view of the LATAM base](airbus%20A320neo/a320_scl_v2.gif)
 
-*A320neo takeoff — the camera orbits while the aircraft accelerates, rotates about
-the main gear, lifts off and retracts the gear. There is also an
-[orbit-in-place clip](airbus%20A320neo/a320_voo.gif) and a
-[first camera pass](airbus%20A320neo/a320_decolagem.gif) kept for comparison.*
+*A320neo departing 17R at Santiago — 240 frames, 9.6 s. The camera tracks low
+beside the ground run, then hands over to an orbit flown in the aircraft's own
+coordinates: it climbs faster than the aeroplane and swings forward around it,
+opening the LATAM maintenance base, the apron, the tower and both parallel
+runways out below, with the Andes across the top. The move is measured rather
+than eyeballed — see [§8 of the scenery manual](scenario/README.md). Earlier
+clips kept for comparison: the [first SCL camera](airbus%20A320neo/a320_scl.gif),
+a [no-scenery pass](airbus%20A320neo/a320_decolagem_v2.gif) and an
+[orbit-in-place clip](airbus%20A320neo/a320_voo.gif).*
 
 ---
 
@@ -184,7 +189,10 @@ Two facts that are easy to get backwards and expensive to fix:
 blender -b --factory-startup -P scenario/build_scenery.py -- --terrain   # ~6 s
 blender -b --factory-startup -P scenario/build_scenery.py -- --field     # ~2 s
 blender -b "airbus A320neo/A320neo_decolagem.blend" -P scenario/place_aircraft.py \
-    -- --out "airbus A320neo/A320neo_scl.blend"
+    -- --out "airbus A320neo/A320neo_scl.blend"                          # place
+blender -b "airbus A320neo/A320neo_scl.blend" -P scenario/takeoff_camera.py \
+    -- --out "airbus A320neo/A320neo_scl_v2.blend"                       # shoot
+blender -b "airbus A320neo/A320neo_scl_v2.blend" -P scenario/camera_metrics.py   # judge
 ```
 
 ## Reproducing
