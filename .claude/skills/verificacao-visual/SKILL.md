@@ -1,133 +1,141 @@
 ---
 name: verificacao-visual
-description: O gate de qualidade do projeto — renderizar os 6 ângulos canônicos, montar a folha de contato, comparar contra as fotos de referência e só então declarar um avião pronto. Use SEMPRE antes de entregar, mostrar ou dizer que algo está concluído, e sempre que a pergunta for sobre estado ou qualidade: "está pronto?", "como ficou?", "verifica o modelo", "gera os renders", "compara com a foto", "o que mudou". Use também quando o dono reclamar de qualidade sem apontar o defeito — a folha de contato é a forma de achar o defeito. Traz a checklist dos erros que já passaram despercebidos.
+description: The project's quality gate — render the 6 canonical angles, build the contact sheet, compare against the reference photos, and only then declare an aircraft finished. Use ALWAYS before delivering, showing or saying that something is done, and whenever the question is about status or quality: "is it ready?", "how did it turn out?", "check the model", "generate the renders", "compare it with the photo", "what changed". Use it as well when the owner complains about quality without pointing at the defect — the contact sheet is how you find the defect. Brings the checklist of the errors that have slipped through before.
 ---
 
-# Verificação visual
+# Visual verification
 
-Este gate existe porque a falha mais cara do projeto não foi geométrica: foi
-declarar pronto sem olhar. O dono cobrou isso mais de uma vez — *"tenha certeza
-de realmente conseguir fazer a verificacao final visual"*, e depois *"o criterio
-de qualidade está muitooo baixo. vc nao olhou oq esta fazendo"*.
+This gate exists because the project's most expensive failure was not
+geometric: it was declaring something done without looking. The owner called
+this out more than once — *"tenha certeza de realmente conseguir fazer a
+verificacao final visual"* [make sure you can actually do the final visual
+verification], and later *"o criterio de qualidade está muitooo baixo. vc nao
+olhou oq esta fazendo"* [the quality bar is waaay too low. you didn't look at
+what you're doing].
 
-A regra é simples: **nada é entregue sem passar por aqui, e "passar por aqui"
-significa você abrir as imagens e olhar** — não gerar os arquivos e presumir.
+The rule is simple: **nothing ships without passing through here, and "passing
+through here" means you open the images and look** — not generate the files and
+assume.
 
-## Rodar
+## Running it
 
-Renderize os seis ângulos canônicos e monte a folha:
+Render the six canonical angles and build the sheet:
 
 ```bash
 python3 verificacao_visual.py "airbus A320neo"
 ```
 
-O script está na raiz e espera estes arquivos na pasta da aeronave:
+The script is at the root and expects these files in the aircraft's folder:
 
-| Arquivo | Ângulo | Para que serve |
+| File | Angle | What it is for |
 |---|---|---|
-| `render_frontal.png` | 3/4 frontal | proporção do nariz, para-brisa, motores |
-| `render_nariz.png` | close do nariz | vidros, contorno da porta 1, radome |
-| `render_perfil.png` | perfil puro | comparação direta com a foto de referência |
-| `render_hero.png` | 3/4 clássico | leitura geral, é o que vende ou entrega o modelo |
-| `render_cauda.png` | cauda | sash, echarpe, matrícula, estabilizadores |
-| `render_frente_baixa.png` | frente baixa | ventre, carenagem, trem, nacelles |
+| `render_frontal.png` | front 3/4 | nose proportion, windshield, engines |
+| `render_nariz.png` | nose close-up | glass, door 1 outline, radome |
+| `render_perfil.png` | pure side profile | direct comparison with the reference photo |
+| `render_hero.png` | classic 3/4 | overall read; this is what sells or delivers the model |
+| `render_cauda.png` | tail | fin sash, hull sash, registration, stabilizers |
+| `render_frente_baixa.png` | low front | belly, fairing, landing gear, nacelles |
 
-Saída: `verificacao_visual.png` na pasta da aeronave.
+Output: `verificacao_visual.png` in the aircraft's folder.
 
-Para renderizar com segurança (a fila de render tem uma corrida conhecida), veja
-`blender-mcp` — em especial o `wait`, que evita ler o render anterior.
+To render safely (the render queue has a known race), see `blender-mcp` — in
+particular `wait`, which stops you reading the previous render.
 
-## Comparar, não admirar
+## Compare, do not admire
 
-Abra a folha **lado a lado com as fotos de referência da matrícula**. O objetivo
-não é achar bonito; é achar a divergência. Para cada painel, pergunte o que
-mudaria se você sobrepusesse a foto.
+Open the sheet **side by side with the reference photos of the registration**.
+The goal is not to find it pretty; it is to find the divergence. For each panel,
+ask what would change if you overlaid the photo.
 
-**Se você não tem a foto, pare e busque agora** — `WebSearch` pela matrícula,
-JetPhotos, Planespotters, Wikimedia. Comparar o render com a *descrição* de um
-spec não é comparar com nada: a descrição pode estar errada, e nesse caso o
-gate aprova o erro com convicção. Foi o que aconteceu com a echarpe do 787-9,
-refinada por horas contra um texto que descrevia uma pintura inexistente.
+**If you do not have the photo, stop and go find it now** — `WebSearch` for the
+registration, JetPhotos, Planespotters, Wikimedia. Comparing the render with the
+*description* in a spec is comparing it with nothing: the description may be
+wrong, and in that case the gate approves the error with full confidence. That
+is exactly what happened with the 787-9 sash, refined for hours against a text
+describing paint that did not exist.
 
-Vale medir quando a dúvida é de proporção: recorte o mesmo trecho do render e da
-foto na mesma escala e compare. É mais rápido do que discutir se "parece" certo.
+It is worth measuring when the doubt is about proportion: crop the same stretch
+from the render and from the photo at the same scale and compare. That is faster
+than arguing about whether it "looks" right.
 
-## Checklist — os defeitos que já passaram
+## Checklist — the defects that have slipped through
 
-Cada item aqui é um erro real que chegou até o dono. Se você não conseguir dizer
-"conferi e está ok" para todos, ainda não está pronto.
+Every item here is a real error that reached the owner. If you cannot say "I
+checked it and it is fine" for all of them, it is not ready yet.
 
-**Nariz**
-- amassado ou ondulado sob a tinta brilhante (gaiola densa demais — ver
+**Nose**
+- dented or rippled under the glossy paint (cage too dense — see
   `casco-parametrico`)
-- achatado, sem o lobo superior pinçado — o para-brisa não "vira para a frente"
-- para-brisa com posição ou tamanho errado em relação à ponta
+- flattened, without the pinched upper lobe — the windshield does not "turn
+  forward"
+- windshield in the wrong position or the wrong size relative to the tip
 
-**Corpo**
-- cintura fantasma no barril (halo de cota na extração)
-- barril ondulando em vez de seção constante
-- transição visível entre nariz, barril e cauda
+**Body**
+- phantom waist on the barrel (dimension halo in the extraction)
+- barrel rippling instead of constant section
+- visible transition between nose, barrel and tail
 
-**Peças conectadas**
-- asa, deriva, estabilizador ou pylon com fresta na raiz
-- trem "voando" — perna curta demais, sem entrar no poço
-- qualquer elemento visivelmente descolado da carroceria
+**Connected parts**
+- wing, fin, stabilizer or pylon with a gap at the root
+- "floating" landing gear — leg too short, not entering the bay
+- any element visibly detached from the body
 
-**Superfície e detalhes**
-- porta lendo "pela metade" (só os arcos de cima e de baixo)
-- porta enterrada pelo encolhimento do subsurf
-- janelas brancas ou espelhadas em vez de vidro escuro
-- janelas ou portas ausentes num lado só
+**Surface and details**
+- door reading "half there" (only the top and bottom arcs)
+- door buried by the subsurf shrinkage
+- windows white or mirrored instead of dark glass
+- windows or doors missing on one side only
 
-**Cauda — a região que mais reprovou**
-- cunha índigo do casco pequena demais (fronteira inferior modelada como reta
-  em `(x,z)` em vez de `(x,θ)` — ver `livery-latam`)
-- fronteira serrilhada ou com ilhas de índigo soltas (resolvida por linha da
-  textura em vez de por texel)
-- buraco na pintura em cima de linha de painel e contorno de porta (pintou "só
-  onde já era branco")
-- matrícula quebrada ou duplicada depois de mover a fronteira
-- **junção raiz do BF da deriva × estabilizador × cone de cauda** — confira
-  esse canto especificamente, com zoom; é onde três peças se encontram e onde
-  o dono apontou defeito com o resto já aprovado
+**Tail — the region that has failed the most**
+- indigo hull wedge too small (lower boundary modelled as a straight line in
+  `(x,z)` instead of `(x,θ)` — see `livery-latam`)
+- jagged boundary or loose islands of indigo (fixed by working per texture line
+  instead of per texel)
+- hole in the paint over a panel line and a door outline (painted "only where it
+  was already white")
+- registration broken or duplicated after moving the boundary
+- **junction of the fin TE root × stabilizer × tailcone** — check that corner
+  specifically, zoomed in; it is where three parts meet and where the owner
+  pointed out a defect with everything else already approved
 
 **Livery**
-- marca desenhada com fonte parecida em vez do SVG oficial
-- sash da deriva com filete do bordo de ataque largo demais
-- echarpe traseira como wrap circunferencial em vez de diagonal
-- ventre ou tailcone índigo quando deveriam ser brancos
-- matrícula no padrão errado para aquela matrícula/época
+- brand drawn with a lookalike font instead of the official SVG
+- fin sash with the leading-edge fillet too wide
+- rear sash as a circumferential wrap instead of a diagonal
+- belly or tailcone in indigo when they should be white
+- registration in the wrong style for that registration/period
 
 **Render**
-- branco estourado (use `#E6E7EA`, exposição controlada)
-- superfície com roughness constante lendo como plástico
+- blown-out white (use `#E6E7EA`, controlled exposure)
+- surface with constant roughness reading as plastic
 
-## Quando o dono aponta um defeito
+## When the owner points out a defect
 
-Três coisas que funcionaram melhor que responder rápido:
+Three things that worked better than answering fast:
 
-**Reproduza o defeito no seu render antes de mexer.** Se você não consegue ver o
-que ele viu, você vai consertar outra coisa. Renderize o mesmo ângulo da
-captura que ele mandou.
+**Reproduce the defect in your own render before touching anything.** If you
+cannot see what he saw, you will fix something else. Render the same angle as
+the screenshot he sent.
 
-**E renderize esse mesmo ângulo de novo depois — antes de dizer que corrigiu.**
-Medir o artefato (textura, malha, spec) prova que *alguma coisa* mudou, não que
-mudou onde ele está olhando. No 787-9 uma correção da echarpe melhorou os
-números de x=55 para trás e deixou x 47–55 intacto; a medição ficou ótima e o
-dono respondeu "não mudou nada" — porque a região dele era justamente a que
-sobrou. Um par antes/depois com a **mesma câmera e a mesma luz** é a única
-evidência que vale, e é barato: dois renders de 320–900 px.
+**And render that same angle again afterwards — before saying you fixed it.**
+Measuring the artifact (texture, mesh, spec) proves that *something* changed,
+not that it changed where he is looking. On the 787-9 a sash correction improved
+the numbers from x=55 aft and left x 47–55 untouched; the measurement looked
+great and the owner replied *"não mudou nada"* [nothing changed] — because his
+region was precisely the one left over. A before/after pair with the **same
+camera and the same light** is the only evidence that counts, and it is cheap:
+two renders at 320–900 px.
 
-**Ataque a causa, não o sintoma.** "O bico está amassado" foi tratado três vezes
-adensando a malha, e piorou nas três. A causa era o método, não a resolução.
+**Attack the cause, not the symptom.** *"O bico está amassado"* [the nose is
+dented] was addressed three times by densifying the mesh, and got worse all
+three times. The cause was the method, not the resolution.
 
-**Feche o ciclo com evidência.** Depois da correção, renderize o mesmo ângulo e
-compare com o anterior. Dizer "corrigi" sem mostrar o antes e depois é o que
-gera a próxima rodada de frustração.
+**Close the loop with evidence.** After the fix, render the same angle and
+compare it with the previous one. Saying "fixed" without showing the before and
+after is what generates the next round of frustration.
 
-## Depois do gate
+## After the gate
 
-Quando a folha estiver aprovada, atualize o `spec_<tipo>.json` com o que foi
-aprendido no ciclo e registre no `README.md` o que mudou. O modelo é
-reconstruível a partir do spec; o que não estiver escrito lá se perde na próxima
-refação.
+Once the sheet is approved, update `spec_<type>.json` with what the cycle
+taught and record in `README.md` what changed. The model is rebuildable from the
+spec; whatever is not written there is lost at the next rebuild.

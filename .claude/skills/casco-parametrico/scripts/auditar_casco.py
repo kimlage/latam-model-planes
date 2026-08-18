@@ -1,25 +1,25 @@
-"""Audita a geometria de uma aeronave contra o seu spec, dentro do Blender.
+"""Audits an aircraft's geometry against its spec, inside Blender.
 
-Cole em `execute_blender_code` e chame `auditar("<pasta da aeronave>")`.
+Paste it into `execute_blender_code` and call `auditar("<aircraft folder>")`.
 
-Faz três checagens que pegam classes diferentes de defeito:
+It runs three checks that catch different classes of defect:
 
-1. **Gaiola vs spec, estação por estação.** Compara `max|y|`, crown e keel de
-   cada anel de controle com o spec. O resultado esperado é `COMP` (1.0064) em
-   toda a extensão. Onde não for, o erro está na GAIOLA — e essa é a única
-   forma de distinguir isso de encolhimento do subsurf, que é o suspeito óbvio
-   e quase sempre inocente. Foi assim que se achou um afilamento espúrio de
-   10,5% na largura do nariz do 787-9 que nenhum render denunciava.
+1. **Cage vs spec, station by station.** Compares `max|y|`, crown and keel of
+   each control ring against the spec. The expected result is `COMP` (1.0064)
+   over the whole length. Where it is not, the error is in the CAGE — and this
+   is the only way to tell that apart from subsurf shrinkage, which is the
+   obvious suspect and almost always innocent. That is how a spurious 10.5%
+   taper in the width of the 787-9 nose was found, one that no render revealed.
 
-2. **Superfície avaliada por raycast.** Confirma que o que o Cycles vê bate com
-   o spec depois do subsurf.
+2. **Surface evaluated by raycast.** Confirms that what Cycles sees matches the
+   spec after the subsurf.
 
-3. **Peças soltas.** Mede a folga entre cada peça pendurada e a superfície que
-   deveria segurá-la. Carenagem de trilho de flap flutuando 0,77 m abaixo da
-   asa foi achada assim.
+3. **Detached parts.** Measures the gap between each hanging part and the
+   surface that should be holding it. A flap track fairing floating 0.77 m below
+   the wing was found this way.
 
-Nenhuma delas aparece num render — por isso rodar isto depois de qualquer
-reconstrução vale mais do que mais um ângulo de câmera.
+None of these show up in a render — which is why running this after any rebuild
+is worth more than one more camera angle.
 """
 import json
 import os
@@ -33,10 +33,10 @@ COMP = 1.0064
 
 
 def _estacoes(spec):
-    """Normaliza os dois formatos de spec do repositorio -> [(x, crown, keel, w2)]."""
-    if "nariz_estacoes" in spec:                      # formato 787
+    """Normalizes the repository's two spec formats -> [(x, crown, keel, w2)]."""
+    if "nariz_estacoes" in spec:                      # 787 format
         return [tuple(r) for r in spec["nariz_estacoes"] if len(r) >= 4]
-    out = []                                          # formato A320 (cavernas_nariz)
+    out = []                                          # A320 format (cavernas_nariz)
     for c in spec.get("cavernas_nariz", []):
         if all(k in c for k in ("x", "crown", "keel", "W")):
             out.append((c["x"], c["crown"], c["keel"], c["W"] / 2.0))
@@ -61,14 +61,15 @@ def auditar(pasta, obj="Fuselagem", tol_gaiola=0.02, tol_sup=0.06):
     V = np.array([[v.co.x, v.co.y, v.co.z] for v in fus.data.vertices])
 
     print(f"\n--- 1) gaiola vs spec (esperado {COMP:.4f} em tudo) ---")
-    # Razao so faz sentido quando o valor de referencia nao e quase zero: o crown
-    # cruza z=0 no nariz e la a razao explode sem nenhum defeito real. Julgue
-    # sempre pelo erro em METROS, com tolerancia absoluta + relativa.
+    # A ratio only makes sense when the reference value is not near zero: the
+    # crown crosses z=0 in the nose and the ratio blows up there with no real
+    # defect. Always judge by the error in METRES, with an absolute + relative
+    # tolerance.
     def desvio(medido, esperado):
         erro = abs(medido - esperado * COMP)
         limite = max(0.02, tol_gaiola * abs(esperado))
         r = medido / esperado if abs(esperado) > 1e-6 else COMP
-        return erro / limite, r          # >1 significa fora
+        return erro / limite, r          # >1 means out of tolerance
 
     ruins = []
     for x, cr, kl, w2 in est:
@@ -109,15 +110,15 @@ def auditar(pasta, obj="Fuselagem", tol_gaiola=0.02, tol_sup=0.06):
         print(f"  erro mediano {med*100:.1f} cm | maximo {erros[0][0]*100:.1f} cm")
 
     print("\n--- 3) pecas soltas (a raiz penetra a peca de apoio?) ---")
-    # Raycast "para cima" nao serve: uma perna de trem esta legitimamente abaixo
-    # do casco, e um ponto DENTRO de uma malha fechada tambem devolve um hit.
-    # O teste certo e o sinal da distancia ao ponto mais proximo da superficie
-    # de apoio: negativo = dentro (preso), positivo = folga.
-    # So os membros ESTRUTURAIS primarios, com a raiz declarada explicitamente.
-    # Sub-pecas (rodas, eixos, tesouras) prendem no proprio conjunto, nao no
-    # casco — checa-las automaticamente so gera ruido. E "raiz = vertices mais
-    # altos" nao vale para a asa, cujo topo e a PONTA: por isso cada entrada diz
-    # de que lado fica a raiz.
+    # Raycasting "upwards" is no good: a gear leg is legitimately below the hull,
+    # and a point INSIDE a closed mesh also returns a hit. The right test is the
+    # sign of the distance to the closest point on the supporting surface:
+    # negative = inside (attached), positive = gap.
+    # Only the primary STRUCTURAL members, with the root declared explicitly.
+    # Sub-parts (wheels, axles, torque links) attach to their own assembly, not
+    # to the hull — checking them automatically only generates noise. And "the
+    # root is the highest vertices" does not hold for the wing, whose top is the
+    # TIP: hence each entry states which side the root is on.
     LIGACOES = [
         ("Asas",               obj,                "y_min"),
         ("Deriva",             obj,                "z_min"),

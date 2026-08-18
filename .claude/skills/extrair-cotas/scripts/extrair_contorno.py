@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
-"""Extrai crown/keel/meia-largura do 3-view de um ACAP/APR rasterizado.
+"""Extracts crown/keel/half-width from the 3-view of a rasterized ACAP/APR.
 
-Generalização dos extratores que funcionaram no A320 (preenchimento amarelo,
-Airbus) e no 787-9 (line art, Boeing). Uso típico:
+A generalization of the extractors that worked on the A320 (yellow fill, Airbus)
+and on the 787-9 (line art, Boeing). Typical usage:
 
     python3 extrair_contorno.py config.json
 
-O JSON de configuração descreve as âncoras medidas À MÃO em crops ampliados —
-elas são o único passo que não dá para automatizar, porque cada desenho tem um
-enquadramento diferente. Veja `exemplo_config.json` ao lado.
+The configuration JSON describes the anchors measured BY HAND on enlarged crops
+— they are the one step that cannot be automated, because every drawing has a
+different framing. See `exemplo_config.json` next to this file.
 
-O script NÃO decide nada sozinho: ele aplica a receita e imprime as cotas de
-sanidade para você comparar com o documento. Se a sanidade não bater dentro de
-~1%, as âncoras estão erradas — corrija as âncoras, não o resultado.
+The script decides nothing on its own: it applies the recipe and prints the
+sanity dimensions for you to compare against the document. If the sanity check
+does not match to within ~1%, the anchors are wrong — fix the anchors, not the
+result.
 """
 import json
 import sys
@@ -22,25 +23,25 @@ from PIL import Image
 
 try:
     from scipy.signal import medfilt, savgol_filter
-except ImportError:  # scipy é opcional; degrada para mediana simples
+except ImportError:  # scipy is optional; degrades to a plain median
     medfilt = None
     savgol_filter = None
 
 
-# ---------------------------------------------------------------- máscaras
+# ---------------------------------------------------------------- masks
 
 def mask_linhas(img, limiar=128):
-    """Desenho a traço (Boeing): pixel escuro é contorno."""
+    """Line art (Boeing): a dark pixel is outline."""
     return np.asarray(img.convert("L")).astype(np.uint8) < limiar
 
 
 def mask_preenchimento_amarelo(img, dr_db=15, r_min=170):
-    """Silhueta preenchida de amarelo (Airbus ACAP): R alto e R-B grande.
+    """Yellow-filled silhouette (Airbus ACAP): high R and a large R-B.
 
-    Pega o miolo do avião em vez do traço, o que evita capturar as linhas de
-    cota. Em compensação, os halos brancos ao redor das setas de cota mordem a
-    silhueta e criam 'cinturas' fantasma — daí a monotonicidade obrigatória
-    mais abaixo.
+    It picks up the aircraft's interior instead of the stroke, which avoids
+    capturing the dimension lines. In exchange, the white halos around the
+    dimension arrows bite into the silhouette and create phantom 'waists' —
+    hence the mandatory monotonicity further down.
     """
     a = np.asarray(img.convert("RGB")).astype(np.int16)
     return (a[:, :, 0] - a[:, :, 2] > dr_db) & (a[:, :, 0] > r_min)
@@ -49,10 +50,11 @@ def mask_preenchimento_amarelo(img, dr_db=15, r_min=170):
 MASCARAS = {"linhas": mask_linhas, "amarelo": mask_preenchimento_amarelo}
 
 
-# ---------------------------------------------------------------- limpeza
+# ---------------------------------------------------------------- cleanup
 
 def limpar(y, k=21, tol=15):
-    """Tira outliers (linhas de cota cruzando a banda) sem achatar a curva."""
+    """Removes outliers (dimension lines crossing the band) without flattening
+    the curve."""
     if medfilt is None:
         return y
     med = medfilt(y, k)
@@ -66,10 +68,10 @@ def suavizar(y, janela=13, ordem=3):
 
 
 def pontear(xm, y, vaos):
-    """Interpola por cima de trechos onde outra peça encosta no contorno.
+    """Interpolates over stretches where another part touches the outline.
 
-    Asa, nacelle, trem e estabilizador cruzam a banda da fuselagem e puxam o
-    contorno para longe. Melhor interpolar o vão do que acreditar no pixel.
+    Wing, nacelle, gear and stabilizer cross the fuselage band and pull the
+    outline away. Better to interpolate the gap than to trust the pixel.
     """
     ok = np.ones(len(xm), bool)
     for a, b in vaos:
@@ -79,10 +81,10 @@ def pontear(xm, y, vaos):
     return np.interp(xm, xm[ok], y[ok])
 
 
-# ---------------------------------------------------------------- extração
+# ---------------------------------------------------------------- extraction
 
 def banda(mask, x0, x1, y0, y1):
-    """Primeiro e último pixel marcado em cada coluna dentro da faixa."""
+    """First and last marked pixel in each column within the band."""
     sub = mask[y0:y1, :]
     xs, topo, base = [], [], []
     for c in range(x0, x1 + 1):
@@ -108,14 +110,14 @@ def main(cfg_path):
     def x_m(px):
         return (px - x_nariz) * escala
 
-    # ---- vista lateral: crown e keel
+    # ---- side view: crown and keel
     lat = cfg["lateral"]
     xs, crown_px, keel_px = banda(mask, x_nariz, x_cauda, lat["y0"], lat["y1"])
     xm = x_m(xs)
     crown_px = pontear(xm, limpar(crown_px), lat.get("vaos_crown", []))
     keel_px = pontear(xm, limpar(keel_px), lat.get("vaos_keel", []))
 
-    # datum vertical: meio da seção constante
+    # vertical datum: the middle of the constant section
     c0, c1 = cfg["secao_constante"]
     sel = (xm > c0) & (xm < c1)
     crown_ref, keel_ref = np.median(crown_px[sel]), np.median(keel_px[sel])
@@ -125,7 +127,7 @@ def main(cfg_path):
     def z_m(py):
         return (z_mid - py) * escala
 
-    # ---- vista de topo: meia-largura
+    # ---- top view: half-width
     top = cfg["topo"]
     xs_t, esq, dir_ = banda(mask, x_nariz, x_cauda, top["y0"], top["y1"])
     xm_t = x_m(xs_t)
@@ -134,9 +136,9 @@ def main(cfg_path):
     hw = limpar(np.maximum(np.abs(cl - esq), np.abs(dir_ - cl)), 21, 12)
     W = 2 * np.median(hw[sel_t]) * escala
 
-    # monotonicidade: a largura só cresce indo para trás no nariz e só
-    # diminui indo para trás na cauda. Sem isso, um halo de cota vira uma
-    # cintura fantasma no casco (aconteceu no A320: w=0.22 m em x≈6).
+    # monotonicity: the width only grows going aft in the nose and only shrinks
+    # going aft in the tail. Without this, a dimension halo becomes a phantom
+    # waist in the hull (it happened on the A320: w=0.22 m at x≈6).
     lim_nariz = top.get("ate_x_nariz", c0)
     lim_cauda = top.get("de_x_cauda", c1)
     sel_n = xm_t < lim_nariz
@@ -144,19 +146,20 @@ def main(cfg_path):
     w_nariz = np.maximum.accumulate(hw[sel_n]) * escala
     w_cauda = np.maximum.accumulate(hw[sel_c][::-1])[::-1] * escala
 
-    # ---- sanidade e normalização
+    # ---- sanity and normalization
     #
-    # A medida nunca sai exata, e os dois desvios têm causa conhecida:
-    # em máscara de traço, o contorno é a BORDA EXTERNA do risco dos dois
-    # lados, então a altura sai alguns por cento a mais; em máscara de
-    # preenchimento, os halos das cotas mordem a silhueta e a largura sai
-    # um pouco a menos. Nos dois casos o desenho está certo e a leitura
-    # tem viés de escala — então normalize cada eixo pela razão doc/medido
-    # em vez de mexer nas âncoras.
+    # The measurement never comes out exact, and both deviations have a known
+    # cause: with a line mask, the outline is the OUTER EDGE of the stroke on
+    # both sides, so the height comes out a few per cent too large; with a fill
+    # mask, the dimension halos bite into the silhouette and the width comes out
+    # slightly too small. In both cases the drawing is right and the reading has
+    # a scale bias — so normalize each axis by the doc/measured ratio instead of
+    # touching the anchors.
     #
-    # Erro grande (>4%) é outra coisa: aí é âncora errada de verdade — foi
-    # o que aconteceu quando a banda lateral do 787 colou fuselagem com
-    # estabilizador e a "cauda" saiu em 79 m. Nesse caso volte aos crops.
+    # A large error (>4%) is something else: that is a genuinely wrong anchor —
+    # which is what happened when the 787 side band glued the fuselage to the
+    # stabilizer and the "tail" came out at 79 m. In that case, go back to the
+    # crops.
     H_doc, W_doc = cfg["sanidade"]["H"], cfg["sanidade"]["W"]
     kz, ky = H_doc / H, W_doc / W
     print(f"H medida {H:.3f} m -> doc {H_doc}  (fator z x{kz:.4f})")
@@ -182,7 +185,7 @@ def main(cfg_path):
     saida = {
         "fonte": cfg["fonte"],
         "escala_mm_px": round(escala * 1000, 3),
-        "datum": "x=0 na ponta do nariz; z=0 no centro da secao constante",
+        "datum": "x=0 at the nose tip; z=0 at the centre of the constant section",
         "sanidade": {"H_medida": round(H, 3), "W_medida": round(W, 3),
                      "H_doc": H_doc, "W_doc": W_doc,
                      "fator_z": round(kz, 4), "fator_y": round(ky, 4),
@@ -201,7 +204,7 @@ def main(cfg_path):
         json.dump(saida, f, indent=1)
     print("gravado", cfg["saida"])
 
-    # amostra para conferir contra o desenho a olho
+    # a sample to eyeball against the drawing
     for q in cfg.get("amostrar", [1, 2, 4, 8, 12]):
         i = int(np.argmin(np.abs(xm - q)))
         j = int(np.argmin(np.abs(xm_t - q)))

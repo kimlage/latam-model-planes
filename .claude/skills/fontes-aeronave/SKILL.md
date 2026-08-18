@@ -1,169 +1,180 @@
 ---
 name: fontes-aeronave
-description: Levantar as fontes de um avião antes de modelar — documento dimensional oficial do fabricante (Airbus ACAP / Boeing APR), fotos de referência da matrícula LATAM específica, e CAD/modelos 3D abertos que sirvam de referência de blocking. Use SEMPRE que precisar de dimensões, desenhos cotados, fotos de referência ou modelos existentes de uma aeronave: "acha as medidas do 777", "onde tem o desenho do 767", "tem CAD pronto desse avião?", "preciso de fotos da cauda", "quais as dimensões reais". Use também antes de começar qualquer avião novo e sempre que o modelo estiver divergindo da realidade e a causa puder ser falta de dado. Cobre licenciamento — o que pode virar malha e o que só pode virar referência.
+description: Gather the sources for an aircraft before modelling — the manufacturer's official dimensional document (Airbus ACAP / Boeing APR), reference photos of the specific LATAM registration, and open CAD/3D models usable as a blocking reference. Use ALWAYS when you need dimensions, dimensioned drawings, reference photos or existing models of an aircraft: "find the 777 measurements", "where is the 767 drawing", "is there ready-made CAD for this aircraft?", "I need photos of the tail", "what are the real dimensions". Also use before starting any new aircraft, and whenever the model is diverging from reality and the cause may be missing data. Covers licensing — what may become mesh and what may only become reference.
 ---
 
-# Fontes de uma aeronave
+# Sources for an aircraft
 
-Modelo fiel começa em documento, não em Blender. Esta skill é sobre conseguir
-o dado — e sobre não se contaminar com fonte que não pode ser usada.
+A faithful model starts in a document, not in Blender. This skill is about
+getting the data — and about not contaminating yourself with a source you are
+not allowed to use.
 
-## Passo zero: olhe o avião
+## Step zero: look at the aircraft
 
-**Antes de qualquer outra coisa, busque fotos da matrícula real e olhe.** Não é
-a etapa de validação no fim do pipeline — é a primeira, e leva um minuto:
-`WebSearch` por "<companhia> <tipo> <matrícula>", ou JetPhotos / Planespotters /
-Wikimedia Commons. Se o dono já mandou uma foto, essa é a fonte de maior
-autoridade que existe no projeto.
+**Before anything else, find photos of the real registration and look at
+them.** This is not the validation step at the end of the pipeline — it is the
+first one, and it takes a minute: `WebSearch` for "<airline> <type>
+<registration>", or JetPhotos / Planespotters / Wikimedia Commons. If the owner
+already sent a photo, that is the highest-authority source that exists in the
+project.
 
-O motivo é concreto. No 787-9 o `spec_b789.json` descrevia uma echarpe índigo
-descendo da deriva pelo casco até o tailcone. Esse texto atravessou
-fotogrametria, medição de desenho a 600 dpi, dois workflows de pesquisa e uma
-rodada de verificação adversarial — e ninguém pegou. Foram gastas horas
-refinando o formato dessa echarpe: limitando por z, depois por ângulo, depois
-com mergulho local para não apagar a matrícula. **A primeira foto do Google
-mostrou que a fuselagem do CC-BGK é inteiramente branca e o índigo só existe na
-deriva.** A echarpe não existia. Todo aquele refino foi ajuste fino da coisa
-errada.
+The reason is concrete. On the 787-9, `spec_b789.json` described an indigo sash
+running down from the fin, along the hull, to the tailcone. That text made it
+through photogrammetry, drawing measurement at 600 dpi, two research workflows
+and a round of adversarial verification — and nobody caught it. Hours were
+spent refining the shape of that sash: limiting it by z, then by angle, then
+with a local dip so it would not erase the registration. **The first photo on
+Google showed that the fuselage of CC-BGK is entirely white and the indigo
+exists only on the fin.** The sash did not exist. All that refinement was fine
+tuning of the wrong thing.
 
-Duas consequências que valem para qualquer aeronave nova:
+Two consequences that hold for any new aircraft:
 
-- **Prosa não substitui foto**, mesmo quando a prosa veio de medição. Uma
-  descrição textual é uma leitura de segunda mão; a foto é o avião.
-- **Quando spec e foto discordarem, a foto ganha** — e o spec é corrigido na
-  hora, com o motivo escrito, senão o erro volta na próxima aeronave que
-  derivar dele.
+- **Prose is not a substitute for a photo**, even when the prose came from
+  measurement. A textual description is a second-hand reading; the photo is the
+  aircraft.
+- **When spec and photo disagree, the photo wins** — and the spec is corrected
+  right then, with the reason written down, or the error comes back on the next
+  aircraft derived from it.
 
-O inventário já levantado e verificado das 12 variantes da frota LATAM está em
-[FONTES-FROTA.md](FONTES-FROTA.md): URL oficial por tipo, status de
-verificação, CAD aberto útil e estratégia recomendada. **Comece sempre por ele.**
-Se a aeronave pedida está lá, a pesquisa já foi feita — só confirme que a URL
-ainda responde e siga. Se não está, pesquise e **acrescente a linha ao arquivo**,
-porque o próximo avião vai precisar.
+The inventory already gathered and verified for the 12 variants of the LATAM
+fleet is in [FONTES-FROTA.md](FONTES-FROTA.md): official URL per type,
+verification status, useful open CAD and recommended strategy. **Always start
+there.** If the requested aircraft is in it, the research is already done — just
+confirm the URL still responds and move on. If it is not, research it and **add
+the row to the file**, because the next aircraft will need it.
 
-## A hierarquia das fontes
+## The hierarchy of sources
 
-Nem toda fonte tem o mesmo peso. Misturar níveis é como o modelo fica errado.
+Not every source carries the same weight. Mixing levels is how the model ends
+up wrong.
 
-**1. Documento dimensional do fabricante — a verdade.**
-Airbus publica o *ACAP* (Aircraft Characteristics — Airport & Maintenance
-Planning); Boeing publica o equivalente como *Airplane Characteristics /
-APR* (ex.: D6-58333 para o 787). Ambos são públicos, gratuitos e trazem
-3-views cotados em CAD vetorial, além de posições de portas, trem, motores e
-envelopes de visibilidade do cockpit. Toda cota do modelo deve rastrear até
-aqui.
+**1. Manufacturer's dimensional document — the truth.**
+Airbus publishes the *ACAP* (Aircraft Characteristics — Airport & Maintenance
+Planning); Boeing publishes the equivalent as *Airplane Characteristics /
+APR* (e.g. D6-58333 for the 787). Both are public, free, and carry dimensioned
+3-views in vector CAD, plus positions for doors, landing gear, engines and
+cockpit visibility envelopes. Every dimension in the model must trace back to
+here.
 
-**2. SRM/AMM e tabelas de cavernas (FR/STA) — estrutura interna.**
-Dão o espaçamento real das cavernas, que é o que faz o casco ficar liso pelo
-motivo certo (ver `casco-parametrico`). Nem sempre disponível; quando estiver,
-vale muito.
+**2. SRM/AMM and frame tables (FR/STA) — internal structure.**
+They give the real frame spacing, which is what makes the hull smooth for the
+right reason (see `casco-parametrico`). Not always available; when it is, it is
+worth a lot.
 
-**3. Fotos da matrícula específica — a pintura e o acabamento.**
-O ACAP não diz onde a echarpe índigo cruza a porta 2. Isso se mede em foto.
+**3. Photos of the specific registration — the paint and the finish.**
+The ACAP does not say where the indigo sash crosses door 2. That is measured in
+a photo.
 
-**4. CAD/modelos abertos — só blocking e conferência de silhueta.**
-Nunca malha-base. Ver "Licenças" abaixo.
+**4. Open CAD/models — blocking and silhouette checking only.**
+Never a base mesh. See "Licenses" below.
 
-## Baixar o documento oficial
+## Downloading the official document
 
-Os PDFs passam de 10 MB — WebFetch não dá conta. Baixe com `curl` direto para a
-pasta da aeronave:
+The PDFs are over 10 MB — WebFetch cannot handle them. Download with `curl`
+straight into the aircraft's folder:
 
 ```bash
-curl -L -o "boeing 787-9/B787_APR_boeing.pdf" "<url-do-APR>"
+curl -L -o "boeing 787-9/B787_APR_boeing.pdf" "<apr-url>"
 ```
 
-Notas de estabilidade que já custaram tempo: a Airbus migrou a família A320 para
-o CDN `mediaassets` (as URLs rotacionam — o ponto de entrada estável é a página
-*Aircraft Characteristics* do site da Airbus); a Boeing moveu os ACAPs para
-`content/dam/boeing/v2/airports/acaps/` e os caminhos antigos dão 404. Se um link
-do FONTES-FROTA.md quebrar, procure pela página de entrada, não pelo arquivo.
+Stability notes that have already cost time: Airbus moved the A320 family to
+the `mediaassets` CDN (the URLs rotate — the stable entry point is the *Aircraft
+Characteristics* page on the Airbus site); Boeing moved the ACAPs to
+`content/dam/boeing/v2/airports/acaps/` and the old paths return 404. If a link
+in FONTES-FROTA.md breaks, look for the landing page, not for the file.
 
-Confirme que baixou o que esperava antes de gastar tempo rasterizando: tamanho
-plausível, e o Read do PDF nas páginas de 3-view mostrando o avião certo.
+Confirm you downloaded what you expected before spending time rasterizing:
+plausible size, and a Read of the PDF on the 3-view pages showing the right
+aircraft.
 
-Um único documento costuma cobrir a família inteira (o AC_A320 cobre ceo e neo
-com blocos "ON A/C"; o D6-58333 cobre -8/-9/-10 com 3-views separados). Mas a
-família A320 tem **um documento por membro** — o AC_A320 não cobre A319 nem
-A321.
+A single document usually covers a whole family (AC_A320 covers ceo and neo
+with "ON A/C" blocks; D6-58333 covers -8/-9/-10 with separate 3-views). But the
+A320 family has **one document per member** — AC_A320 covers neither the A319
+nor the A321.
 
-## Fotos de referência
+## Reference photos
 
-Peça ou busque fotos da **matrícula que vai ser replicada**, não do tipo em
-geral. A livery LATAM mudou entre 2016 e hoje, e o mesmo avião tem variações
-documentadas: o PT-TMN saiu de fábrica com a matrícula em letras brancas dentro
-do índigo e hoje voa com matrícula índigo sobre branco. Quando a foto do dono
-divergir do que você achou na internet, **a foto do dono manda** — é ela que
-define o alvo.
+Ask for or find photos of the **registration that is going to be replicated**,
+not of the type in general. The LATAM livery changed between 2016 and today,
+and the same aircraft has documented variations: PT-TMN left the factory with
+its registration in white letters inside the indigo and today flies with the
+registration in indigo over white. When the owner's photo disagrees with what
+you found on the internet, **the owner's photo rules** — it is what defines the
+target.
 
-O que uma boa fonte de foto precisa ter, em ordem de utilidade:
+What a good photo source needs, in order of usefulness:
 
-- **perfil puro, resolução alta** (JetPhotos em 1920 px serve): é onde a
-  fotogrametria funciona, porque a projeção é quase ortográfica no meio da
-  fuselagem;
-- **ângulo elevado** (de terminal ou passarela): mostra o dorso, onde a echarpe
-  nasce;
-- **vista de baixo, em decolagem**: única maneira de resolver o ventre, que
-  quase nunca aparece;
-- **close do nariz e da cauda**: para para-brisa e sash.
+- **pure side profile, high resolution** (JetPhotos at 1920 px will do): that is
+  where photogrammetry works, because the projection is nearly orthographic at
+  mid-fuselage;
+- **elevated angle** (from a terminal or jet bridge): shows the crown, where the
+  sash begins;
+- **view from below, on takeoff**: the only way to resolve the belly, which
+  almost never appears;
+- **close-ups of nose and tail**: for windshield and fin sash.
 
-Registre a URL de cada foto usada numa medição, dentro do `spec_*.json` — quando
-alguém questionar uma cota daqui a um mês, a resposta precisa estar no arquivo.
+Record the URL of every photo used in a measurement inside `spec_*.json` — when
+someone questions a dimension a month from now, the answer has to be in the
+file.
 
-Para medir a partir dessas fotos (calibração, incerteza, o que é confiável e o
-que não é), veja `extrair-cotas`, seção de fotogrametria.
+For how to measure from those photos (calibration, uncertainty, what is
+trustworthy and what is not), see `extrair-cotas`, photogrammetry section.
 
-## CAD e modelos 3D existentes
+## Existing CAD and 3D models
 
-Eles são úteis — mas para uma coisa só: **conferir se você entendeu a forma**.
-Silhueta, onde o trem recolhe, como o pylon encontra a asa, proporção do
-raked wingtip. Nunca para virar a malha do modelo.
+They are useful — but for one thing only: **checking that you understood the
+shape**. Silhouette, where the gear retracts, how the pylon meets the wing, the
+proportion of the raked wingtip. Never to become the model's mesh.
 
-Duas razões. A primeira é fidelidade: modelo de terceiro carrega os erros do
-terceiro, e você não tem como saber quais são sem conferir contra o ACAP — e
-se você vai conferir tudo contra o ACAP, modele a partir do ACAP. A segunda é
-licença.
+Two reasons. The first is fidelity: someone else's model carries someone else's
+errors, and you have no way of knowing which ones without checking against the
+ACAP — and if you are going to check everything against the ACAP, model from
+the ACAP. The second is licensing.
 
-Fontes que aparecem com frequência e como tratá-las:
+Sources that come up often and how to treat them:
 
-| Fonte | Licença típica | Como usar |
+| Source | Typical license | How to use |
 |---|---|---|
-| FlightGear (GitHub) | GPL — viral | Referência de blocking de trem/portas/cockpit. Nunca copiar malha. |
-| Sketchfab | loteria de selos CC (muitos NC/ND) | Conferência de silhueta, **depois de checar o selo do modelo específico**. |
-| GrabCAD | não-comercial, sem redistribuição | Só olhar. Qualidade irregular. |
-| OpenVSP Airshow | geometria paramétrica limpa | Excelente cross-check independente das curvas extraídas do raster. |
-| CGTrader "free" | royalty-free, uso pessoal | Prototipar aplicação de livery, no máximo. |
+| FlightGear (GitHub) | GPL — viral | Blocking reference for gear/doors/cockpit. Never copy the mesh. |
+| Sketchfab | a lottery of CC badges (many NC/ND) | Silhouette checking, **after checking the badge on that specific model**. |
+| GrabCAD | non-commercial, no redistribution | Look only. Uneven quality. |
+| OpenVSP Airshow | clean parametric geometry | Excellent independent cross-check of the curves extracted from the raster. |
+| CGTrader "free" | royalty-free, personal use | Prototyping livery application, at most. |
 
-Uso pessoal não é bloqueado por nada disso, mas o projeto tem destino de
-portfólio e vídeo. Malha contaminada por GPL ou NC hoje vira problema de
-publicação depois, e não dá para "descontaminar" um casco. A regra do projeto é
-simples e vale a pena manter: **ACAP como fonte de verdade dimensional; abertos
-só como referência de blocking/silhueta, nunca como malha-base.**
+Personal use is not blocked by any of this, but the project is headed for a
+portfolio and a video. A mesh contaminated by GPL or NC today becomes a
+publication problem later, and there is no way to "decontaminate" a hull. The
+project rule is simple and worth keeping: **ACAP as the dimensional source of
+truth; open assets only as blocking/silhouette reference, never as a base
+mesh.**
 
-## Delegar a pesquisa a agentes
+## Delegating the research to agents
 
-O que funcionou muito bem foi rodar a pesquisa como workflow de agentes em
-paralelo com **schema estruturado de saída** — cada agente devolve um objeto
-com números, não prosa. O ganho não é velocidade: é que o schema força o agente
-a entregar coordenadas em metros no referencial da aeronave, em vez de
-"o para-brisa é bem inclinado".
+What worked very well was running the research as a workflow of parallel agents
+with a **structured output schema** — each agent returns an object with
+numbers, not prose. The gain is not speed: it is that the schema forces the
+agent to deliver coordinates in metres in the aircraft's reference frame,
+instead of "the windshield is quite raked".
 
-O que faz um schema render:
+What makes a schema pay off:
 
-- **declare o referencial no próprio texto do campo** — "x=0 na ponta do nariz
-  indo para trás, z=0 na meia-altura da seção constante, metros";
-- **peça polígonos, não adjetivos** — `corners_xz: [[x,z], ...]` fechando o
-  contorno;
-- **peça a validação junto** — um campo pedindo com quais cotas conhecidas o
-  resultado foi cruzado, e a incerteza estimada;
-- **peça o que distingue este avião de um parecido** — "o que faz ler como A320
-  e não 737" extrai o detalhe que a prosa genérica esconde.
+- **declare the reference frame in the field text itself** — "x=0 at the nose
+  tip, growing aft, z=0 at the mid-height of the constant section, metres";
+- **ask for polygons, not adjectives** — `corners_xz: [[x,z], ...]` closing the
+  outline;
+- **ask for the validation alongside** — a field asking which known dimensions
+  the result was cross-checked against, and the estimated uncertainty;
+- **ask what distinguishes this aircraft from a similar one** — "what makes it
+  read as an A320 and not a 737" extracts the detail that generic prose hides.
 
-Esses workflows entregaram a geometria calibrada do para-brisa do A320, a tabela
-de cavernas FR1–FR12, a fotogrametria completa da cauda do PT-TMN e a livery
-medida do CC-BGK. Foi assim que o `spec_*.json` de cada avião nasceu.
+These workflows delivered the calibrated windshield geometry of the A320, the
+FR1–FR12 frame table, the complete photogrammetry of the PT-TMN tail and the
+measured livery of CC-BGK. That is how the `spec_*.json` of each aircraft was
+born.
 
-Confie, mas confira: um workflow entregou "comprimento 62,00 m" para o 787-9
-porque leu a cota do solo em vez do comprimento total — o valor certo é 62,81 m
-até a ponta do tailcone, em z=+1,66. Todo número que vier de agente passa pelo
-mesmo teste de sanidade das cotas oficiais descrito em `extrair-cotas`.
+Trust, but verify: one workflow delivered "length 62.00 m" for the 787-9
+because it read the ground dimension instead of the overall length — the right
+value is 62.81 m to the tip of the tailcone, at z=+1.66. Every number coming
+from an agent goes through the same sanity test against official dimensions
+described in `extrair-cotas`.

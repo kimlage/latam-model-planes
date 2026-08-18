@@ -1,24 +1,24 @@
 #!/usr/bin/env python3
-"""Folha de contato para verificação visual final de um modelo de aeronave.
+"""Contact sheet for the final visual verification of an aircraft model.
 
-Uso: python3 verificacao_visual.py "airbus A320neo"
+Usage: python3 verificacao_visual.py "airbus A320neo"
 
-Junta os renders canônicos (frontal, nariz, perfil, hero, cauda, frente baixa)
-numa única imagem rotulada, para conferência lado a lado com as fotos de
-referência antes de dar o modelo por pronto. Parte do fluxo padrão do projeto
-(ver README.md / pipeline de aeronaves).
+Joins the canonical renders (front, nose, side profile, hero, tail, low front)
+into a single labelled image, for side-by-side checking against the reference
+photos before calling the model finished. Part of the project's standard flow
+(see README.md / aircraft pipeline).
 """
 import sys
 import os
 from PIL import Image, ImageDraw
 
 VISTAS = [
-    ("render_frontal.png", "FRONTAL 3/4 (ref: foto Airbus F-WNEO)"),
-    ("render_nariz.png", "NARIZ CLOSE"),
-    ("render_perfil.png", "PERFIL (ref: foto PT-TMN)"),
+    ("render_frontal.png", "FRONT 3/4 (ref: photo Airbus F-WNEO)"),
+    ("render_nariz.png", "NOSE CLOSE-UP"),
+    ("render_perfil.png", "SIDE PROFILE (ref: photo PT-TMN)"),
     ("render_hero.png", "HERO 3/4"),
-    ("render_cauda.png", "CAUDA (sash/wrap)"),
-    ("render_frente_baixa.png", "FRENTE BAIXA (barriga/motores)"),
+    ("render_cauda.png", "TAIL (fin sash / hull wedge)"),
+    ("render_frente_baixa.png", "LOW FRONT (belly / engines)"),
 ]
 
 def main(pasta):

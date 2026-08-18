@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-# Operação do Blender com o addon MCP para este projeto.
+# Driving Blender with the MCP addon for this project.
 #
-#   blender_mcp.sh start   "<caminho.blend>"   sobe o Blender com o servidor MCP
-#   blender_mcp.sh restart "<caminho.blend>"   mata e sobe de novo (após travar)
-#   blender_mcp.sh status                       o servidor está ouvindo?
-#   blender_mcp.sh marca                        imprime o marco de tempo (use ANTES de renderizar)
-#   blender_mcp.sh wait "<render.png>" [s] [marco]  espera o render FINAL com margem
+#   blender_mcp.sh start   "<path.blend>"    starts Blender with the MCP server
+#   blender_mcp.sh restart "<path.blend>"    kills it and starts again (after a hang)
+#   blender_mcp.sh status                       is the server listening?
+#   blender_mcp.sh marca                        prints the timestamp (use BEFORE rendering)
+#   blender_mcp.sh wait "<render.png>" [s] [mark]  waits for the FINAL render, with margin
 #
-# O `wait` existe por um motivo específico: depois de um timeout de socket os
-# renders enfileirados escrevem no MESMO arquivo, um atrás do outro. Quem lê o
-# arquivo assim que ele aparece pega o render intermediário — foi o que produziu
-# três diagnósticos falsos de "casco preto" quando o material estava correto.
+# The `wait` exists for a specific reason: after a socket timeout the queued
+# renders write to the SAME file, one after another. Whoever reads the file as
+# soon as it shows up gets the intermediate render — that is what produced three
+# false "black hull" diagnoses while the material was correct.
 set -euo pipefail
 
 PORT=9876
@@ -41,8 +41,8 @@ case "${1:-}" in
     ;;
 
   restart)
-    # Reabrir descarta tudo que não foi salvo. Se o Blender ainda responde,
-    # salve antes via MCP (bpy.ops.wm.save_mainfile) em vez de matar direto.
+    # Reopening discards everything unsaved. If Blender still answers, save
+    # through MCP first (bpy.ops.wm.save_mainfile) instead of killing it outright.
     pgrep -x Blender >/dev/null && pkill -x Blender || true
     sleep 3
     subir "$2"
@@ -58,9 +58,9 @@ case "${1:-}" in
     ;;
 
   marca)
-    # Pegue o marco ANTES de disparar o render e passe-o para o `wait`. Sem isso,
-    # se o render terminar antes de você começar a esperar, o `wait` fica preso
-    # aguardando uma escrita que nunca vem.
+    # Take the mark BEFORE firing the render and pass it to `wait`. Without it,
+    # if the render finishes before you start waiting, `wait` gets stuck waiting
+    # for a write that never comes.
     date +%s
     ;;
 
@@ -68,14 +68,14 @@ case "${1:-}" in
     alvo="$2"
     margem="${3:-20}"
     inicio="${4:-$(date +%s)}"
-    # 1) esperar o arquivo ser tocado depois do marco
+    # 1) wait for the file to be touched after the mark
     while :; do
       if [ -f "$alvo" ] && [ "$(stat -f %m "$alvo")" -ge "$inicio" ]; then break; fi
       sleep 4
     done
     echo "primeira escrita detectada; aguardando ${margem}s de margem…"
     sleep "$margem"
-    # 2) e então esperar o arquivo parar de mudar (fila esvaziada)
+    # 2) and then wait for the file to stop changing (queue drained)
     anterior=""
     while :; do
       atual="$(stat -f '%m %z' "$alvo")"

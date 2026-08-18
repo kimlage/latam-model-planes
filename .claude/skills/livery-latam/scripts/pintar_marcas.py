@@ -1,23 +1,23 @@
-"""Pinta marcações na textura UV (x,θ) do casco a partir de uma lista de itens.
+"""Paints markings into the hull's UV (x,θ) texture from a list of items.
 
-Roda dentro do Blender (cole em `execute_blender_code`, ou importe). Serve para
-tudo que é retangular ou faixa: antenas, drenos, portas de poço, marcações
-operacionais e manchas de weathering. Marca com desenho próprio (logotipo,
-matrícula) continua vindo de mesh rasterizado — ver o SKILL.md.
+Runs inside Blender (paste it into `execute_blender_code`, or import it). It
+covers everything rectangular or stripe-shaped: antennas, drains, bay doors,
+operational markings and weathering stains. Marks with their own artwork (logo,
+registration) still come from a rasterized mesh — see the SKILL.md.
 
-Cada item é um dict:
+Each item is a dict:
 
     {"nome": "dreno fwd", "tipo": "dreno",
-     "x_m": [8.4, 8.7],          # faixa longitudinal (obrigatório)
-     "z_m": [-2.9, -2.6],        # faixa vertical  — use um OU outro
-     "y_m": [],                  # faixa lateral
+     "x_m": [8.4, 8.7],          # longitudinal band (required)
+     "z_m": [-2.9, -2.6],        # vertical band — use one OR the other
+     "y_m": [],                  # lateral band
      "cor_hex": "#2A2C2E",
      "lados": "ambos",           # esquerdo | direito | ambos | barriga
-     "intensidade": 1.0}         # 1 = opaco; weathering fica em 0.08-0.35
+     "intensidade": 1.0}         # 1 = opaque; weathering sits at 0.08-0.35
 
-O acoplamento com a seção do casco faz o resto: um item definido por z aparece
-onde aquela altura existir, e um definido por y idem. Weathering com
-intensidade fracionária tinge sem cobrir, que é como sujeira se comporta.
+The coupling with the hull section does the rest: an item defined by z shows up
+wherever that height exists, and one defined by y likewise. Weathering with a
+fractional intensity tints without covering, which is how dirt behaves.
 """
 import json
 import math
@@ -25,7 +25,7 @@ import math
 import bpy
 import numpy as np
 
-SS = 2                      # supersample; 2 basta para faixas, 4 para bordas finas
+SS = 2                      # supersample; 2 is enough for stripes, 4 for fine edges
 
 
 def _srgb(hx):
@@ -34,7 +34,7 @@ def _srgb(hx):
 
 
 def perfil_do_spec(spec):
-    """Arrays (x, zc, rz, ry) cobrindo nariz + barril + cauda."""
+    """Arrays (x, zc, rz, ry) covering nose + barrel + tail."""
     nz = np.array(spec["nariz_estacoes"], float)
     cd = np.array(spec["cauda"], float)
     PX = list(nz[:, 0]); PZC = list((nz[:, 1] + nz[:, 2]) / 2)
@@ -54,7 +54,7 @@ def perfil_do_spec(spec):
 
 def pintar(itens, spec, comprimento_uv, tex="LiveryTex", fac="LiveryFac",
            margem=1.0, verbose=True):
-    """Compõe os itens sobre a livery existente. Não apaga o que já está lá."""
+    """Composites the items over the existing livery. Erases nothing already there."""
     PX, PZC, PRZ, PRY = perfil_do_spec(spec)
     imT, imF = bpy.data.images[tex], bpy.data.images[fac]
     W, H = imT.size
@@ -65,7 +65,7 @@ def pintar(itens, spec, comprimento_uv, tex="LiveryTex", fac="LiveryFac",
     x0 = max(0.0, min(xs_all) - margem)
     x1 = min(comprimento_uv, max(xs_all) + margem)
     i0, i1 = int(x0 / comprimento_uv * W), min(W, int(x1 / comprimento_uv * W) + 1)
-    j0, j1 = 0, H                       # v inteiro: itens de barriga cruzam a costura
+    j0, j1 = 0, H                       # full v: belly items cross the seam
     w, h = (i1 - i0) * SS, (j1 - j0) * SS
 
     xs = (np.arange(w) + 0.5) / SS / W * comprimento_uv + i0 / W * comprimento_uv

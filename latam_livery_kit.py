@@ -1,32 +1,40 @@
-"""Kit reutilizável da livery LATAM para os modelos Blender da pasta
-"Latam Airlines Model Planes".
+"""Reusable LATAM livery kit for the Blender models in the
+"Latam Airlines Model Planes" folder.
 
-Uso: rodar dentro do Blender (ou via MCP execute_blender_code) com
-`exec(open(".../latam_livery_kit.py").read())` e chamar as funções.
+Usage: run inside Blender (or via MCP execute_blender_code) with
+`exec(open(".../latam_livery_kit.py").read())` and call the functions.
 
-Ativos oficiais na raiz do projeto (Wikimedia Commons):
-- latam_logo_indigo.svg  — lockup oficial LATAM (símbolo coral #ED1651 + wordmark #2A0088)
-- airbus_a320neo_logo.svg — logotipo oficial "AIRBUS A320neo"
+Official assets at the project root (Wikimedia Commons):
+- latam_logo_indigo.svg  — official LATAM lockup (coral symbol #ED1651 + wordmark #2A0088)
+- airbus_a320neo_logo.svg — official "AIRBUS A320neo" logotype
 
-Diretriz do projeto: réplica fiel dos aviões reais da LATAM — marca exata
-(SVG oficial, nunca fonte aproximada) e aplicação igual à da frota
-(referência: foto do PT-TMN):
-- Fuselagem Eurowhite; lockup grande acima da linha de janelas, atrás da porta 1.
-- Cauda: deriva BRANCA com o próprio símbolo oficial ampliado (porção superior,
-  faixas cruzando a corda com o vinco) + massa índigo na base fluindo para o
-  wrap índigo da fuselagem traseira (porta traseira DENTRO do wrap, contorno claro).
-- Matrícula branca pequena no topo do wrap, junto à base da deriva.
-- Sharklets: índigo por fora (filete branco no bordo de ataque), branco+coral por dentro.
-- Nacelles brancas, lip metálico, liner esverdeado, exaustão titânio.
-- Marca gigante na barriga (lê-se de baixo, nariz à esquerda).
-- Asas/estabilizadores cinza Airbus (#C9CDD2); belly fairing cinza.
+Project directive: a faithful replica of the real LATAM aircraft — exact brand
+(official SVG, never a lookalike font) and application identical to the fleet's
+(reference: photo of PT-TMN):
+- Eurowhite fuselage; large lockup above the window line, behind door 1.
+- Tail: INDIGO fin carrying parallel bands that cross it edge to edge, each band
+  flight-gray at both ends with a coral core, plus a flight-gray cap at the tip.
+  (The older reading -- white fin, thick bands, F1..F7 polylines -- is obsolete;
+  see the livery-latam skill.)
+- Rear fuselage: a triangular indigo wedge continuous with the indigo mass at the
+  fin root. It is NOT a circumferential wrap: it is bounded by three surfaces,
+  and they do not all live in the same space --
+      x >= 48.77 + 0.992*z          forward, parallel to the straight fin LE
+      theta <= 117.0 - 5.2*(x-48.70) lower, a straight line in (x,theta)
+      x <= 57.14 + 0.3858*z         rear, the fin trailing-edge line
+  (787-9 frame; the A320neo triple is in spec_a320.json). Belly and tailcone white.
+- White registration on the indigo wedge.
+- Sharklets: indigo outboard (white fillet on the leading edge), white+coral inboard.
+- White nacelles, metallic lip, greenish liner, titanium exhaust.
+- Giant mark on the belly (read from below, nose to the left).
+- Wings/stabilizers in Airbus grey (#C9CDD2); grey belly fairing.
 """
 import bpy
 import bmesh
 import math
 import mathutils
 
-# ---------------------------------------------------------------- paleta
+# ---------------------------------------------------------------- palette
 PALETA = {
     "LATAM_Indigo": ("#2A0088", 0.30, 0.0, 0.5),
     "LATAM_Coral": ("#ED1651", 0.30, 0.0, 0.5),
@@ -43,7 +51,7 @@ PALETA = {
     "Pneu": ("#1C1D1E", 0.85, 0.0, 0.0),
 }
 
-# cores sRGB para texturas (rasterização)
+# sRGB colours for textures (rasterization)
 COR_TEX = {"branco": (0.969, 0.976, 0.980),
            "coral": (0.929, 0.086, 0.318),
            "indigo": (0.165, 0.000, 0.533)}
@@ -59,7 +67,7 @@ def hex_to_linear(h):
 
 
 def criar_paleta():
-    """Cria/atualiza todos os materiais da paleta. Retorna dict nome->material."""
+    """Creates/updates every material in the palette. Returns dict name->material."""
     mats = {}
     for nome, (hx, rough, metal, coat) in PALETA.items():
         m = bpy.data.materials.get(nome) or bpy.data.materials.new(nome)
@@ -75,11 +83,11 @@ def criar_paleta():
     return mats
 
 
-# ------------------------------------------------- SVG -> malhas 2D planas
+# ------------------------------------------------- SVG -> flat 2D meshes
 def importar_svg_2_camadas(filepath):
-    """Importa um SVG e devolve (mesh_indigo, mesh_coral) PLANOS (z=0),
-    normalizados com origem no canto inferior esquerdo, SEM escala aplicada.
-    Classifica cada curva pela cor de preenchimento (R>B = coral)."""
+    """Imports an SVG and returns (mesh_indigo, mesh_coral) FLAT (z=0),
+    normalized with the origin at the lower-left corner, with NO scale applied.
+    Classifies each curve by its fill colour (R>B = coral)."""
     before = set(bpy.data.objects)
     bpy.ops.import_curve.svg(filepath=filepath)
     imported = [o for o in bpy.data.objects if o not in before]
@@ -138,9 +146,9 @@ def importar_svg_2_camadas(filepath):
 
 def decal_logo(nome, mesh, material, alvo, loc, rot, escala, eixo='Y',
                positivo=True, offset=0.012, colecao=None):
-    """Cria um decal shrinkwrap de uma malha 2D plana sobre `alvo`.
-    A camada índigo deve usar offset MAIOR que a coral (ordem de pintura do SVG:
-    índigo por cima, ex.: 0.016 vs 0.010)."""
+    """Creates a shrinkwrap decal from a flat 2D mesh onto `alvo`.
+    The indigo layer must use a LARGER offset than the coral one (SVG painting
+    order: indigo on top, e.g. 0.016 vs 0.010)."""
     me = mesh.copy()
     for v in me.vertices:
         v.co = v.co * escala
@@ -160,18 +168,18 @@ def decal_logo(nome, mesh, material, alvo, loc, rot, escala, eixo='Y',
     return obj
 
 
-# ------------------------------------------------- cauda: sash rasterizado
+# ------------------------------------------------- tail: rasterized sash
 def raster_sash_deriva(img_nome, mesh_indigo, mesh_coral, dominio, transform,
                        flood=None, tamanho=2048):
-    """Gera a textura da deriva rasterizando o símbolo oficial ampliado.
-    dominio = (X0, X1, Z0, Z1) em metros no plano da deriva (planar UV por Y).
-    transform = (SX, SZ, S): simbolo_local*(S) + (SX, SZ).
-      Calibração do A320neo (deriva ~6,5 m de altura, corda raiz ~6,4 m):
-      S ≈ 1,62x a altura da deriva; topo do símbolo ~0,15*S acima da ponta;
-      vincos caindo ~60% da corda média. Valores usados: SX=26.0, SZ=-5.9, S=10.5
-      com domínio (27.4, 35.4, 1.4, 8.4).
-    flood = (z0, slope, x_ref): pinta índigo onde Z <= z0 + slope*(X - x_ref)
-      (massa da base que emenda no wrap; usado (1.9, 0.536, 29.5))."""
+    """Generates the fin texture by rasterizing the enlarged official symbol.
+    dominio = (X0, X1, Z0, Z1) in metres in the fin plane (planar UV along Y).
+    transform = (SX, SZ, S): local_symbol*(S) + (SX, SZ).
+      A320neo calibration (fin ~6.5 m tall, root chord ~6.4 m):
+      S ≈ 1.62x the fin height; top of the symbol ~0.15*S above the tip;
+      creases falling ~60% of the mean chord. Values used: SX=26.0, SZ=-5.9, S=10.5
+      with domain (27.4, 35.4, 1.4, 8.4).
+    flood = (z0, slope, x_ref): paints indigo where Z <= z0 + slope*(X - x_ref)
+      (the base mass that joins the wrap; used (1.9, 0.536, 29.5))."""
     import numpy as np
     W = H = tamanho
     X0, X1, Z0, Z1 = dominio
@@ -205,8 +213,8 @@ def raster_sash_deriva(img_nome, mesh_indigo, mesh_coral, dominio, transform,
             for k in range(3):
                 sub[..., k] = np.where(mask, cor[k], sub[..., k])
 
-    raster(mesh_coral, COR_TEX["coral"])    # coral primeiro
-    raster(mesh_indigo, COR_TEX["indigo"])  # índigo por cima (ordem do SVG)
+    raster(mesh_coral, COR_TEX["coral"])    # coral first
+    raster(mesh_indigo, COR_TEX["indigo"])  # indigo on top (SVG order)
 
     if flood:
         z0, slope, xref = flood
@@ -226,7 +234,7 @@ def raster_sash_deriva(img_nome, mesh_indigo, mesh_coral, dominio, transform,
 
 
 def uv_planar_deriva(obj, dominio):
-    """UV planar (projeção por Y) para aplicar a textura do sash nos dois lados."""
+    """Planar UV (projection along Y) to apply the sash texture on both sides."""
     X0, X1, Z0, Z1 = dominio
     me = obj.data
     uv = me.uv_layers.get("UVMap") or me.uv_layers.new(name="UVMap")
@@ -236,11 +244,11 @@ def uv_planar_deriva(obj, dominio):
     return uv
 
 
-# ------------------------------------------------- detalhes parametrizados
+# ------------------------------------------------- parameterized details
 def fileira_janelas(nome, alvo, x_inicio, z, n, passo=0.533, w=0.23, h=0.33,
                     colecao=None):
-    """Fileira de janelas de passageiros (decal + array + mirror + shrinkwrap).
-    Passo real A320: 533 mm."""
+    """Row of passenger windows (decal + array + mirror + shrinkwrap).
+    Real A320 pitch: 533 mm."""
     bm = bmesh.new()
     verts = []
     rad, nseg = 0.10, 3
@@ -279,8 +287,8 @@ def fileira_janelas(nome, alvo, x_inicio, z, n, passo=0.533, w=0.23, h=0.33,
 
 def moldura_porta(nome, alvo, cx, cz, w, h, borda=0.04, espelhar=True,
                   lado_y=-2.6, colecao=None):
-    """Moldura de porta (aro fino) shrinkwrap. espelhar=False p/ portas de carga
-    (só lado direito: lado_y positivo + projeção negativa)."""
+    """Door frame (thin ring) by shrinkwrap. espelhar=False for cargo doors
+    (right side only: positive lado_y + negative projection)."""
     bm = bmesh.new()
 
     def rrect(w_, h_, rad, nseg=3):
@@ -321,7 +329,7 @@ def moldura_porta(nome, alvo, cx, cz, w, h, borda=0.04, espelhar=True,
 
 
 def luzes_navegacao(colecao, pos_esq, pos_dir, pos_beacon=None, pos_cauda=None):
-    """Vermelha à esquerda, verde à direita (objetos separados — mirror trocaria a cor)."""
+    """Red to port, green to starboard (separate objects — a mirror would swap the colour)."""
     def emissivo(nome, hx):
         m = bpy.data.materials.get(nome) or bpy.data.materials.new(nome)
         m.use_nodes = True

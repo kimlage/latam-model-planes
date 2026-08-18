@@ -1,14 +1,14 @@
-"""Construtor de casco paramétrico — gaiola esparsa + Catmull-Clark.
+"""Parametric hull builder — sparse cage + Catmull-Clark.
 
-Roda dentro do Blender (cole em `execute_blender_code` via MCP, ou
-`blender arquivo.blend --python casco.py`). Destilado do código que produziu os
-cascos aprovados do A320neo (v9/v10) e do 787-9 (v3).
+Runs inside Blender (paste it into `execute_blender_code` via MCP, or
+`blender file.blend --python casco.py`). Distilled from the code that produced
+the approved hulls of the A320neo (v9/v10) and the 787-9 (v3).
 
-A ideia central: os vértices NÃO descrevem a superfície, descrevem a gaiola de
-controle. Quem descreve a superfície é o subsurf. Ver o SKILL.md ao lado para
-por que isso importa.
+The central idea: the vertices do NOT describe the surface, they describe the
+control cage. What describes the surface is the subsurf. See the SKILL.md next
+to this file for why that matters.
 
-Uso mínimo:
+Minimal usage:
 
     aneis = aneis_de_spec(json.load(open("spec_b789.json")))
     fus = construir_casco(aneis, nome="Fuselagem", material="LATAM_Branco")
@@ -19,11 +19,11 @@ import math
 import bpy
 import bmesh
 
-SEG = 32          # segmentos por anel
-COMP = 1.0064     # compensa o encolhimento do Catmull-Clark num anel de 32 lados
+SEG = 32          # segments per ring
+COMP = 1.0064     # compensates Catmull-Clark shrinkage on a 32-sided ring
 
 
-# ---------------------------------------------------------------- seções
+# ---------------------------------------------------------------- sections
 
 def smoothstep(t):
     t = max(0.0, min(1.0, t))
@@ -31,20 +31,19 @@ def smoothstep(t):
 
 
 def secao_eliptica(theta, rz, ry):
-    """Seção elíptica simples — barril e cauda."""
+    """Plain elliptical section — barrel and tail."""
     return ry * math.sin(theta), rz * math.cos(theta)
 
 
 def secao_ovoide(theta, rz, ry, perfil_mestre, altura_ref, mistura=1.0):
-    """Seção de ovo: lobo inferior cheio, ombros altos.
+    """Egg-shaped section: full lower lobe, high shoulders.
 
-    `perfil_mestre(profundidade_abaixo_da_crista) -> meia_largura_normalizada`,
-    tabelado a partir do desenho frontal. É isso que faz a seção ter os ombros
-    ~14% mais largos que a elipse e a largura máxima ligeiramente ACIMA da
-    meia-altura — a diferença entre um casco que lê como avião de verdade e um
-    tubo.
+    `perfil_mestre(depth_below_the_crown) -> normalized_half_width`, tabulated
+    from the front-view drawing. This is what gives the section shoulders ~14%
+    wider than the ellipse and its maximum width slightly ABOVE mid-height — the
+    difference between a hull that reads as a real aircraft and a tube.
 
-    `mistura` faz a transição suave do círculo (ponta do nariz) para o ovo.
+    `mistura` makes the smooth transition from the circle (nose tip) to the egg.
     """
     ct = math.cos(theta)
     z = rz * ct
@@ -57,14 +56,14 @@ def secao_ovoide(theta, rz, ry, perfil_mestre, altura_ref, mistura=1.0):
 
 def pinca_lobo_superior(x, cos_theta, sobe_em, sobe_ao_longo_de,
                         desce_em, desce_ao_longo_de, forca, expoente):
-    """Estreita o lobo SUPERIOR na zona do cockpit.
+    """Pinches the UPPER lobe in the cockpit zone.
 
-    Sem isso o para-brisa não 'vira para a frente' e o nariz lê como bico de
-    pato. Só se aplica acima da meia-altura (cos_theta > 0).
+    Without it the windshield does not 'turn forward' and the nose reads as a
+    duck bill. It only applies above mid-height (cos_theta > 0).
 
-    Os seis parâmetros são os do spec — não os derive de outra coisa, porque
-    eles foram ajustados contra a vista frontal do desenho. Valores do A320neo
-    (spec_a320.json -> lobo_superior_pinca_v10):
+    The six parameters come from the spec — do not derive them from anything
+    else, because they were tuned against the front view of the drawing. A320neo
+    values (spec_a320.json -> lobo_superior_pinca_v10):
 
         pinca_lobo_superior(x, ct, 1.45, 1.1, 3.1, 1.9, forca=0.46, expoente=1.6)
     """
@@ -75,17 +74,17 @@ def pinca_lobo_superior(x, cos_theta, sobe_em, sobe_ao_longo_de,
     return 1.0 - forca * g * (smoothstep(cos_theta) ** expoente)
 
 
-# ---------------------------------------------------------------- gaiola
+# ---------------------------------------------------------------- cage
 
 def aneis_de_spec(spec, passo_barril=3.0):
-    """Monta a lista de anéis (x, zc, rz, ry) a partir de um spec_<tipo>.json.
+    """Builds the list of rings (x, zc, rz, ry) from a spec_<type>.json.
 
-    Espera `nariz_estacoes` = [[x, crown, keel, meia_largura], ...] e
-    `cauda` = [[x, centro_z, raio], ...] — formato do spec_b789.json.
+    Expects `nariz_estacoes` = [[x, crown, keel, meia_largura], ...] and
+    `cauda` = [[x, centro_z, raio], ...] — the spec_b789.json format.
 
-    O barril entra com anéis IDÊNTICOS espaçados regularmente. Isso não é
-    desperdício: é o que garante seção constante de verdade. Amostrar o barril
-    de dados extraídos faz ele ondular sob a tinta brilhante.
+    The barrel goes in as IDENTICAL rings at regular spacing. That is not waste:
+    it is what guarantees a genuinely constant section. Sampling the barrel from
+    extracted data makes it ripple under the glossy paint.
     """
     aneis = []
     for x, crown, keel, w2 in spec["nariz_estacoes"][1:]:
@@ -106,10 +105,11 @@ def aneis_de_spec(spec, passo_barril=3.0):
 def construir_casco(aneis, nome="Fuselagem", material=None, colecao="01_Estrutura",
                     ponta_frente=None, ponta_tras=None, forma=None,
                     subsurf_render=3, subsurf_view=2):
-    """Loft dos anéis + tampas em ponta + subsurf.
+    """Loft of the rings + tip caps + subsurf.
 
-    `forma(x, theta, zc, rz, ry) -> (y, z)` permite trocar a seção por estação
-    (ovo no nariz, elipse no barril e na cauda). Sem ela, tudo vira elipse.
+    `forma(x, theta, zc, rz, ry) -> (y, z)` allows swapping the section per
+    station (egg in the nose, ellipse in the barrel and the tail). Without it,
+    everything becomes an ellipse.
     """
     bm = bmesh.new()
     anelverts = []
@@ -148,8 +148,9 @@ def construir_casco(aneis, nome="Fuselagem", material=None, colecao="01_Estrutur
 
     ob = bpy.data.objects.get(nome)
     if ob:
-        # Trocar o mesh preserva o objeto — e com ele modificadores, alvos de
-        # shrinkwrap e qualquer referência por nome espalhada em outros scripts.
+        # Swapping the mesh preserves the object — and with it modifiers,
+        # shrinkwrap targets and any reference by name scattered across other
+        # scripts.
         antigo = ob.data
         ob.data = me
         bpy.data.meshes.remove(antigo)
@@ -175,14 +176,15 @@ def construir_casco(aneis, nome="Fuselagem", material=None, colecao="01_Estrutur
 # ---------------------------------------------------------------- UV
 
 def uv_cilindrica(me, aneis, comprimento_uv, nome="UVMap"):
-    """UV (x, θ) — a base de toda a livery pintada em textura.
+    """UV (x, θ) — the basis of the whole livery painted into a texture.
 
-    u = x/comprimento, v = (θ+π)/2π medido em torno do CENTRO DA SEÇÃO naquele
-    x (não do eixo z=0), senão a cauda, que sobe, distorce a textura.
+    u = x/length, v = (θ+π)/2π measured around the CENTRE OF THE SECTION at that
+    x (not around the z=0 axis), otherwise the tail, which rises, distorts the
+    texture.
 
-    O passo final costura o wrap: faces que cruzam v=0/1 precisam ter os
-    vértices do lado baixo empurrados para +1, ou aparece uma faixa espelhada
-    da textura inteira na barriga.
+    The final pass stitches the wrap: faces crossing v=0/1 need the vertices on
+    the low side pushed to +1, or a mirrored band of the whole texture shows up
+    on the belly.
     """
     xs = [a[0] for a in aneis]
     zcs = [a[1] for a in aneis]
@@ -209,16 +211,16 @@ def uv_cilindrica(me, aneis, comprimento_uv, nome="UVMap"):
     return uv
 
 
-# ---------------------------------------------------------------- perfis
+# ---------------------------------------------------------------- profiles
 
 def naca_espessura(c, t):
-    """Meia-espessura NACA de 4 dígitos em c∈[0,1], para lofts de asa/deriva."""
+    """NACA 4-digit half-thickness at c∈[0,1], for wing/fin lofts."""
     return 5 * t * (0.2969 * math.sqrt(max(c, 1e-6)) - 0.126 * c
                     - 0.3516 * c * c + 0.2843 * c ** 3 - 0.1015 * c ** 4)
 
 
 def secao_aerofolio(le, corda, offset_z, queda, t_max, n=16):
-    """Contorno fechado de um aerofólio: extradorso LE→TE, intradorso TE→LE."""
+    """Closed outline of an aerofoil: upper surface LE→TE, lower surface TE→LE."""
     pts = []
     for i in range(n):
         c = i / (n - 1)
@@ -232,11 +234,11 @@ def secao_aerofolio(le, corda, offset_z, queda, t_max, n=16):
 
 
 def validar_por_raycast(ob, sondas):
-    """Confere que a superfície está onde o desenho diz.
+    """Checks that the surface is where the drawing says it is.
 
-    `sondas` = [(origem, direcao, esperado_m), ...]. Depois de qualquer
-    reconstrução, algumas sondas custam segundos e pegam casco furado, normal
-    invertida ou escala errada antes de gastar um render.
+    `sondas` = [(origin, direction, expected_m), ...]. After any rebuild, a few
+    probes cost seconds and catch a punctured hull, an inverted normal or a
+    wrong scale before you spend a render.
     """
     from mathutils import Vector
     for origem, direcao, esperado in sondas:

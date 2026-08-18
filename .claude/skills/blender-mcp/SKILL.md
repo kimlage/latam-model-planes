@@ -1,106 +1,109 @@
 ---
 name: blender-mcp
-description: Operar o Blender via addon MCP neste projeto sem perder trabalho nem tirar conclusão errada — subir/reiniciar o servidor, sobreviver a timeout de socket em execuções longas, evitar a corrida de arquivo de render que faz você ler o render anterior, e as regras de salvamento. Use SEMPRE que estiver executando código no Blender, renderizando, ou quando algo estranho acontecer: "o Blender travou", "não recebeu resposta", "o render está preto", "sumiu o objeto", "reiniciei o computador", "o servidor caiu". Leia ANTES de diagnosticar qualquer resultado de render inesperado — vários "bugs" deste projeto eram artefato de operação, não de modelagem.
+description: Drive Blender through the MCP addon in this project without losing work or drawing the wrong conclusion — start/restart the server, survive socket timeouts on long runs, avoid the render-file race that makes you read the previous render, and the saving rules. Use ALWAYS when running code in Blender, rendering, or when something strange happens: "Blender froze", "no data received", "the render is black", "the object disappeared", "I restarted the computer", "the server went down". Read it BEFORE diagnosing any unexpected render result — several "bugs" in this project were operational artifacts, not modelling ones.
 ---
 
-# Operar o Blender via MCP
+# Driving Blender through MCP
 
-O addon MCP escuta na porta **9876** e executa Python arbitrário dentro do
-Blender. É rápido de usar e tem três comportamentos que enganam. Todos os três
-já produziram diagnóstico falso e retrabalho neste projeto.
+The MCP addon listens on port **9876** and runs arbitrary Python inside Blender.
+It is quick to use and has three behaviours that mislead you. All three have
+already produced a false diagnosis and rework in this project.
 
-`scripts/blender_mcp.sh` encapsula a parte operacional:
+`scripts/blender_mcp.sh` wraps the operational side:
 
 ```bash
 .claude/skills/blender-mcp/scripts/blender_mcp.sh start "airbus A320neo/A320neo_LATAM.blend"
 .claude/skills/blender-mcp/scripts/blender_mcp.sh status
-T=$(.claude/skills/blender-mcp/scripts/blender_mcp.sh marca)   # ANTES de renderizar
+T=$(.claude/skills/blender-mcp/scripts/blender_mcp.sh marca)   # BEFORE rendering
 .claude/skills/blender-mcp/scripts/blender_mcp.sh wait "airbus A320neo/render_perfil.png" 20 "$T"
 ```
 
-Pegue o marco **antes** de disparar o render. Um lote de 6 ângulos leva ~2,5 min
-e frequentemente termina antes de você voltar a esperar por ele; um waiter que
-só olha para o futuro fica preso aguardando uma escrita que já aconteceu. O
-mesmo vale para `find -newermt` com tempo relativo: `-newermt '1 minute ago'`
-avaliado depois do lote enxerga só os últimos arquivos e faz parecer que o
-render travou.
+Take the timestamp **before** firing the render. A batch of 6 angles takes about
+2.5 min and often finishes before you get back to waiting for it; a waiter that
+only looks forward in time gets stuck waiting for a write that already happened.
+The same goes for `find -newermt` with a relative time: `-newermt '1 minute ago'`
+evaluated after the batch sees only the last files and makes it look as if the
+render hung.
 
-## Armadilha 1 — "No data received" não quer dizer que falhou
+## Trap 1 — "No data received" does not mean it failed
 
-Render longo estoura o timeout do socket. O que você recebe é um erro; o que
-está acontecendo dentro do Blender é a execução seguindo normalmente até o fim.
+A long render blows the socket timeout. What you get back is an error; what is
+happening inside Blender is the run continuing normally to the end.
 
-Se você reagir ao erro reenviando o comando, agora há **dois** renders na fila,
-os dois escrevendo no mesmo arquivo. Foi assim que nasceu a armadilha 2.
+If you react to the error by resending the command, there are now **two**
+renders in the queue, both writing to the same file. That is how trap 2 was
+born.
 
-Depois de um timeout: não reenvie. Verifique o efeito colateral (o arquivo, ou
-um `print` que você deixou no código) e siga a partir do estado real.
+After a timeout: do not resend. Check the side effect (the file, or a `print`
+you left in the code) and carry on from the real state.
 
-## Armadilha 2 — a corrida do arquivo de render
+## Trap 2 — the render-file race
 
-Renders enfileirados escrevem no mesmo caminho, um atrás do outro. Um waiter
-ingênuo — "o arquivo existe, então leia" — pega o **primeiro** deles, que é o
-render antigo, feito com o grafo de material anterior.
+Queued renders write to the same path, one after another. A naive waiter — "the
+file exists, so read it" — picks up the **first** one, which is the old render,
+made with the previous material graph.
 
-Isso custou três diagnósticos falsos de "casco preto" enquanto o material estava
-correto — provado depois por renders de teste de 320 px, todos brancos.
+That cost three false "black hull" diagnoses while the material was correct —
+later proved by 320 px test renders, all white.
 
-A defesa está no `wait` do script: espera a primeira escrita posterior ao início,
-aplica uma margem de 15–25 s, e depois espera o arquivo **parar de mudar** em
-tamanho e mtime. Só então lê.
+The defence is in the script's `wait`: it waits for the first write after the
+start time, applies a 15–25 s margin, and then waits for the file to **stop
+changing** in size and mtime. Only then does it read.
 
-Complemento barato: renderize a 320 px para responder perguntas binárias ("o
-material está preto ou não?"). Segundos em vez de minutos, e isola material de
-geometria antes de gastar um render bom.
+A cheap complement: render at 320 px to answer binary questions ("is the
+material black or not?"). Seconds instead of minutes, and it isolates material
+from geometry before you spend a good render.
 
-## Armadilha 3 — estado que não sobrevive ao reload
+## Trap 3 — state that does not survive a reload
 
-**`matrix_world` de objeto oculto vem obsoleto.** Depois de reabrir o `.blend`,
-objetos com `hide_viewport` podem devolver matriz identidade. Antes de qualquer
-código que leia posição de objeto oculto (rasterizar decals, por exemplo),
-revele temporariamente e chame `bpy.context.view_layer.update()`. O sintoma é
-cruel: nada falha, só o resultado sai errado — títulos somem da textura e a
-contagem de pixels pintados cai sem nenhum erro.
+**A hidden object's `matrix_world` comes back stale.** After reopening the
+`.blend`, objects with `hide_viewport` may return the identity matrix. Before
+any code that reads the position of a hidden object (rasterizing decals, for
+example), reveal it temporarily and call
+`bpy.context.view_layer.update()`. The symptom is cruel: nothing fails, the
+result simply comes out wrong — titles vanish from the texture and the count of
+painted pixels drops with no error at all.
 
-**Malha sem usuário some no purge.** Malhas de apoio (glyphs de matrícula,
-alvos temporários) são coletadas quando ninguém as referencia. Se você vai
-depender delas depois de um reload, marque `use_fake_user = True`.
+**A mesh with no user disappears on purge.** Support meshes (registration
+glyphs, temporary targets) get collected when nothing references them. If you
+are going to depend on them after a reload, set `use_fake_user = True`.
 
-**Crash no meio da execução deixa o arquivo pela metade.** Um script que apaga
-antes de recriar, interrompido no meio, salva o estado apagado. Prefira criar o
-novo e só então remover o antigo; e salve com `bpy.ops.wm.save_mainfile()` ao
-fim de cada bloco que deu certo — o `.blend1` é o único backup que existe.
+**A crash mid-run leaves the file half-done.** A script that deletes before
+recreating, interrupted halfway, saves the deleted state. Prefer creating the
+new one and only then removing the old; and save with
+`bpy.ops.wm.save_mainfile()` at the end of every block that worked — the
+`.blend1` is the only backup there is.
 
-## Subir e reiniciar
+## Starting and restarting
 
 ```bash
-/Applications/Blender.app/Contents/MacOS/Blender "<caminho.blend>" \
+/Applications/Blender.app/Contents/MacOS/Blender "<path.blend>" \
   --python-expr "import bpy; bpy.ops.preferences.addon_enable(module='blender_mcp_addon'); bpy.ops.blendermcp.start_server()"
 ```
 
-O `start` do script confere antes se a porta já está ocupada e não sobe uma
-segunda instância — duas instâncias disputando o mesmo `.blend` corrompem o
-arquivo.
+The script's `start` checks first whether the port is already taken and does not
+bring up a second instance — two instances fighting over the same `.blend`
+corrupt the file.
 
-Reiniciar descarta tudo que não foi salvo. Se o Blender ainda responde ao MCP,
-salve por lá antes de matar o processo. Se travou de vez, `restart` mata e sobe
-de novo — e você perde desde o último `save_mainfile`, o que é mais um argumento
-para salvar cedo e com frequência.
+Restarting discards everything unsaved. If Blender still answers MCP, save
+through it before killing the process. If it is fully hung, `restart` kills it
+and brings it back up — and you lose everything since the last `save_mainfile`,
+which is one more argument for saving early and often.
 
-Depois de reinício da máquina, o Blender não volta sozinho: a primeira coisa a
-fazer numa sessão nova é `status`, e `start` se estiver fechado.
+After a machine restart, Blender does not come back on its own: the first thing
+to do in a new session is `status`, and `start` if it is closed.
 
-## Higiene do código enviado
+## Hygiene for the code you send
 
-**Imprima o que dá para conferir.** Contagem de pixels pintados, número de
-vértices, cotas medidas por raycast. Como o socket pode cair, o `print` é
-frequentemente a única evidência do que aconteceu — e é o que permite comparar
-entre execuções ("os pixels pintados caíram de 250444 para 192238" é um sinal
-de que algo sumiu).
+**Print whatever can be checked.** Painted pixel counts, vertex counts,
+dimensions measured by raycast. Since the socket may drop, the `print` is often
+the only evidence of what happened — and it is what lets you compare across runs
+("painted pixels fell from 250444 to 192238" is a sign that something
+disappeared).
 
-**Um bloco, um assunto.** Blocos longos que fazem geometria, material e render
-juntos são difíceis de retomar depois de um timeout, porque você não sabe até
-onde foi.
+**One block, one subject.** Long blocks that do geometry, material and render
+together are hard to resume after a timeout, because you do not know how far
+they got.
 
-**Renderize por último, e salve antes.** Se o render estourar o socket, o
-trabalho já está no disco.
+**Render last, and save first.** If the render blows the socket, the work is
+already on disk.

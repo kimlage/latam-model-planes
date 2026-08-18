@@ -1,145 +1,151 @@
 ---
 name: nova-aeronave
-description: Pipeline completo para construir (ou retomar) a réplica 3D de uma aeronave da frota LATAM no Blender — do documento oficial do fabricante até o modelo aprovado no gate visual. Use SEMPRE que o pedido envolver começar, continuar, derivar ou refinar um avião deste repositório: "vamos fazer o 767-300ER", "constrói o A321neo", "duplica o A320 pro A319", "continua o 787", "por que o modelo está diferente da foto". Também use quando alguém perguntar como o projeto funciona ou qual a ordem das etapas. Esta skill é o roteador — ela decide qual das skills específicas (fontes-aeronave, extrair-cotas, casco-parametrico, livery-latam, verificacao-visual, blender-mcp) entra em cada fase.
+description: Complete pipeline for building (or resuming) the 3D replica of a LATAM fleet aircraft in Blender — from the manufacturer's official document to a model approved at the visual gate. Use ALWAYS when the request involves starting, continuing, deriving or refining an aircraft in this repository: "let's build the 767-300ER", "model the A321neo", "duplicate the A320 into an A319", "continue the 787", "why does the model look different from the photo". Also use when someone asks how the project works or what the order of the steps is. This skill is the router — it decides which of the specific skills (fontes-aeronave, extrair-cotas, casco-parametrico, livery-latam, verificacao-visual, blender-mcp) takes over in each phase.
 ---
 
-# Nova aeronave — pipeline do projeto
+# New aircraft — the project pipeline
 
-Este repositório existe para uma coisa: réplicas que um engenheiro da LATAM
-reconheceria como o avião dele. A régua não é "parece um avião" — é
-"as cotas batem com o documento do fabricante e a pintura bate com a foto
-daquela matrícula".
+This repository exists for one thing: replicas that a LATAM engineer would
+recognize as their own aircraft. The bar is not "it looks like an airplane" — it
+is "the dimensions match the manufacturer's document and the paint matches the
+photo of that registration".
 
-Duas aeronaves já passaram por esse pipeline (A320neo/PT-TMN e 787-9/CC-BGK).
-Quase todo o custo delas foi retrabalho por pular etapa. A ordem abaixo é o
-resultado desse retrabalho — siga-a mesmo quando parecer mais rápido modelar
-"no olho".
+Two aircraft have already been through this pipeline (A320neo/PT-TMN and
+787-9/CC-BGK). Almost all of their cost was rework caused by skipping a step.
+The order below is the result of that rework — follow it even when modelling
+"by eye" looks faster.
 
-## A regra zero: olhe o avião antes de tudo
+## Rule zero: look at the aircraft before anything else
 
-Antes do documento, antes do spec, antes de abrir o Blender: **busque fotos da
-matrícula real e olhe**. Um minuto de `WebSearch` ou JetPhotos. Se o dono
-mandou foto, ela é a fonte de maior autoridade do projeto.
+Before the document, before the spec, before opening Blender: **find photos of
+the real registration and look at them**. One minute of `WebSearch` or
+JetPhotos. If the owner sent a photo, that is the highest-authority source in
+the project.
 
-Isso não é a validação do fim — é o ponto de partida, e existe porque já falhou
-de forma cara: o spec do 787-9 descrevia uma echarpe índigo no casco que
-simplesmente **não existe** no avião real. A descrição sobreviveu a
-fotogrametria, medição de desenho, dois workflows de pesquisa e verificação
-adversarial. A primeira foto do Google resolveu em segundos.
+This is not end-of-line validation — it is the starting point, and it exists
+because it already failed expensively: the 787-9 spec described an indigo sash
+on the hull that simply **does not exist** on the real aircraft. That
+description survived photogrammetry, drawing measurement, two research
+workflows and adversarial verification. The first photo on Google settled it in
+seconds.
 
-Ver o avião é o que permite acertar o detalhe fino — e o que impede de passar
-horas refinando cuidadosamente algo que não deveria estar ali. Detalhe em
-`fontes-aeronave`.
+Seeing the aircraft is what lets you get the fine detail right — and what stops
+you from spending hours carefully refining something that should not be there
+at all. Details in `fontes-aeronave`.
 
-## A regra que organiza tudo: dado antes de malha
+## The rule that organizes everything: data before mesh
 
-Nunca modele antes de ter número. Se a cota existe num documento oficial,
-buscá-la custa minutos; descobrir depois que o casco inteiro está errado custa
-horas e uma rodada de frustração do dono do projeto. Toda vez que o modelo
-divergiu da foto, a causa foi a mesma: alguém estimou onde havia dado.
+Never model before you have a number. If the dimension exists in an official
+document, looking it up costs minutes; finding out later that the whole hull is
+wrong costs hours plus a round of frustration from the project owner. Every
+time the model diverged from the photo, the cause was the same: someone
+estimated where data was available.
 
-Quando o dado não existir em documento (aplicação da livery, tom exato,
-desgaste), meça em foto por fotogrametria — também é dado, com incerteza
-declarada. O que não vale é chutar.
+When the data does not exist in a document (livery application, exact shade,
+weathering), measure it in a photo by photogrammetry — that is data too, with a
+declared uncertainty. What is not acceptable is guessing.
 
-## As seis fases
+## The six phases
 
-### 1. Fontes — antes de abrir o Blender
-Levantar o documento dimensional oficial (Airbus ACAP / Boeing APR), as fotos
-da matrícula específica que vai ser replicada, e o que existe de CAD aberto
-como referência de blocking.
+### 1. Sources — before opening Blender
+Obtain the official dimensional document (Airbus ACAP / Boeing APR), the photos
+of the specific registration to be replicated, and whatever open CAD exists as
+a blocking reference.
 
-→ Use **`fontes-aeronave`**. O inventário já pronto dos 12 tipos da frota está
-em [FONTES-FROTA.md](FONTES-FROTA.md) — comece por ele.
+→ Use **`fontes-aeronave`**. The ready-made inventory of the 12 fleet types is
+in [FONTES-FROTA.md](FONTES-FROTA.md) — start there.
 
-Antes de tratar a aeronave como nova, verifique se ela não é derivada de uma já
-construída. A frota tem muita célula compartilhada (A320ceo/neo, A321ceo/neo,
-767-300ER/-300F/-300BCF, 787-8/-9). Derivar por stretch/plug paramétrico de um
-casco validado é mais rápido e mais fiel do que extrair do zero — mas valide o
-derivado contra o 3-view próprio dele, porque portas, trem e ponta de asa mudam.
+Before treating the aircraft as new, check whether it is a derivative of one
+already built. The fleet shares a lot of airframe (A320ceo/neo, A321ceo/neo,
+767-300ER/-300F/-300BCF, 787-8/-9). Deriving by parametric stretch/plug from a
+validated hull is faster and more faithful than extracting from scratch — but
+validate the derivative against its own 3-view, because doors, gear and wingtip
+change.
 
-### 2. Extração — desenho cotado vira números
-Rasterizar as vistas do PDF a 600 dpi, calibrar por uma cota impressa, extrair
-crown/keel/meia-largura, e gravar `<aeronave>/<tipo>_curves.json` +
-`spec_<tipo>.json`.
+### 2. Extraction — the dimensioned drawing becomes numbers
+Rasterize the PDF views at 600 dpi, calibrate against a printed dimension,
+extract crown/keel/half-width, and write `<aircraft>/<type>_curves.json` +
+`spec_<type>.json`.
 
 → Use **`extrair-cotas`**.
 
-O `spec_*.json` é o artefato mais valioso do repositório: é ele que sobrevive a
-qualquer refação do modelo. Trate-o como a fonte da verdade e mantenha-o
-atualizado quando medir algo novo.
+The `spec_*.json` is the most valuable artifact in the repository: it is what
+survives any rebuild of the model. Treat it as the source of truth and keep it
+up to date whenever you measure something new.
 
-### 3. Casco e estrutura — a geometria
-Gaiola de controle esparsa nas cavernas reais + subsurf Catmull-Clark, seções
-ovoides no nariz, asas/empenagem por loft NACA, raízes enterradas no corpo.
+### 3. Hull and structure — the geometry
+Sparse control cage on the real frames + Catmull-Clark subsurf, ovoid sections
+in the nose, wings/empennage by NACA loft, roots buried inside the body.
 
 → Use **`casco-parametrico`**.
 
-### 4. Livery — a marca
-Vetores oficiais da marca (nunca fonte parecida), aplicação medida na foto da
-matrícula, pintura como textura UV `(x,θ)` — não como casca 3D.
+### 4. Livery — the brand
+Official brand vectors (never a lookalike font), application measured on the
+photo of the registration, paint as a UV texture `(x,θ)` — not as a 3D shell.
 
 → Use **`livery-latam`**.
 
-### 5. Detalhes — o avião inteiro
-Portas, janelas, trem, motores, antenas, ventre. O dono já reprovou modelo com
-"vários elementos desconectados da carroceria" e "trens de pouso fora voando":
-o critério é o avião completo e conexo, não o casco pintado.
+### 5. Details — the whole aircraft
+Doors, windows, landing gear, engines, antennas, belly. The owner has already
+rejected a model with "vários elementos desconectados da carroceria"
+[several elements disconnected from the body] and "trens de pouso fora voando"
+[landing gear floating outside]: the criterion is the complete, connected
+aircraft, not the painted hull.
 
-Coberto por `casco-parametrico` (geometria analítica sobre a superfície) e
-`livery-latam` (contornos e marcações pintadas na textura).
+Covered by `casco-parametrico` (analytic geometry on the surface) and
+`livery-latam` (outlines and markings painted into the texture).
 
-### 6. Gate visual — só então está pronto
-Renderizar os 6 ângulos canônicos, montar a folha de contato e **olhar**,
-comparando com as fotos de referência.
+### 6. Visual gate — only then is it done
+Render the 6 canonical angles, build the contact sheet and **look**, comparing
+against the reference photos.
 
-→ Use **`verificacao-visual`**. Nada é entregue sem passar por aqui.
+→ Use **`verificacao-visual`**. Nothing ships without passing through here.
 
-Em qualquer fase que envolva falar com o Blender, **`blender-mcp`** tem as
-armadilhas operacionais (timeout de socket, corrida de arquivo de render,
-matriz obsoleta) que já causaram diagnósticos falsos caros.
+In any phase that involves talking to Blender, **`blender-mcp`** has the
+operational traps (socket timeout, render-file race, stale matrix) that have
+already caused expensive false diagnoses.
 
-## Estrutura de pastas
+## Folder structure
 
-Uma pasta por aeronave, na raiz do repositório, com o nome comercial em
-minúsculas (`airbus A320neo/`, `boeing 787-9/`). Dentro:
+One folder per aircraft, at the repository root, named after the commercial
+designation in lower case (`airbus A320neo/`, `boeing 787-9/`). Inside:
 
-| Arquivo | O que é |
+| File | What it is |
 |---|---|
-| `<TIPO>_LATAM.blend` | o modelo |
-| `spec_<tipo>.json` | especificação de engenharia — a fonte da verdade |
-| `<tipo>_curves.json` | contornos crus extraídos do desenho |
-| `<tipo>_hull_smooth.json` | curvas densificadas (PCHIP) prontas para loft |
-| `extract_<tipo>.py` | o script de extração daquele desenho, com as âncoras |
-| `<DOC>_<fabricante>.pdf` | o documento oficial |
-| `render_*.png` | os 6 ângulos canônicos |
-| `insp_*.png` | crops de inspeção usados para ancorar/medir |
-| `verificacao_visual.png` | a folha de contato do gate |
+| `<TIPO>_LATAM.blend` | the model |
+| `spec_<tipo>.json` | engineering specification — the source of truth |
+| `<tipo>_curves.json` | raw outlines extracted from the drawing |
+| `<tipo>_hull_smooth.json` | densified curves (PCHIP) ready for lofting |
+| `extract_<tipo>.py` | the extraction script for that drawing, with its anchors |
+| `<DOC>_<fabricante>.pdf` | the official document |
+| `render_*.png` | the 6 canonical angles |
+| `insp_*.png` | inspection crops used to anchor/measure |
+| `verificacao_visual.png` | the gate's contact sheet |
 
-Compartilhado na raiz: `latam_livery_kit.py`, os SVGs oficiais da marca,
+Shared at the root: `latam_livery_kit.py`, the official brand SVGs,
 `verificacao_visual.py`, `FONTES-FROTA.md`, `README.md`.
 
-## Reaproveitar entre aviões
+## Reusing work between aircraft
 
-O segundo avião custou uma fração do primeiro porque reaproveitou. Ao começar
-um novo, duplique o `.blend` de um já pronto: materiais, câmeras, cenário e
-mundo vêm juntos, e as câmeras só precisam ser reescaladas pela razão de
-comprimento (787/A320 = ×1,672). As marcas oficiais podem ser importadas do
-outro blend com `bpy.data.libraries.load` — é a mesma marca, então é literalmente
-a mesma geometria, sem risco de divergir.
+The second aircraft cost a fraction of the first because it reused. When
+starting a new one, duplicate the `.blend` of a finished aircraft: materials,
+cameras, set and world come along, and the cameras only need rescaling by the
+length ratio (787/A320 = ×1.672). The official brand marks can be imported from
+the other blend with `bpy.data.libraries.load` — it is the same brand, so it is
+literally the same geometry, with no risk of drift.
 
-## Quando aparecer spec melhor
+## When a better spec turns up
 
-Diretriz do dono: **spec melhor achada → refinar o que já existe.** Se a
-pesquisa encontrar um documento mais novo ou mais preciso de uma aeronave já
-construída (ex.: ACAP A320 Rev 46 de jul/2026 substituindo o Jun/24 usado),
-diffe os desenhos e ajuste o modelo. Não deixe o modelo antigo divergir da
-melhor fonte disponível só porque "já estava pronto".
+Owner's directive: **better spec found → refine what already exists.** If
+research turns up a newer or more precise document for an aircraft already
+built (e.g. ACAP A320 Rev 46 from Jul/2026 replacing the Jun/24 in use), diff
+the drawings and adjust the model. Do not let the old model diverge from the
+best available source just because it "was already finished".
 
-## Um aviso sobre ritmo
+## A word about pace
 
-O ciclo real é: construir → renderizar → olhar → o dono aponta o defeito →
-corrigir. Você vai fazer muitas voltas. As voltas caras são as que gastam uma
-rodada inteira para descobrir algo que um render de 320 px teria mostrado.
-Renderize barato e cedo, olhe você mesmo antes de mostrar, e só chame o dono
-quando tiver algo que você mesmo aprovaria.
+The real cycle is: build → render → look → the owner points out the defect →
+fix. You will go around many times. The expensive laps are the ones that burn a
+whole round to discover something a 320 px render would have shown. Render
+cheap and early, look at it yourself before showing it, and only call the owner
+when you have something you would approve yourself.
