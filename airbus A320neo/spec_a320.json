@@ -542,7 +542,13 @@
   "portas_janelas": "geometria analitica sobre a superficie v10 (funcao y_of com pinca e COMP), offsets em relevo"
  },
  "verificacoes": {
-  "livery_vs_foto_2026-08-17": "CONFERIDO contra foto do proprio PT-TMN (ref_PT-TMN_wikimedia.jpg, Wikimedia Commons, Rafael Luiz, 2016-09-19): o modelo esta CERTO. O indigo desce mesmo da deriva sobre a fuselagem traseira cobrindo a porta 2, e a matricula PT-TMN e BRANCA dentro do indigo. Tailcone claro. IMPORTANTE: isso NAO vale para o 787-9, cuja fuselagem e toda branca e a matricula e indigo sobre branco — a aplicacao da livery no casco e especifica do tipo, so o desenho da deriva se repete."
+  "livery_vs_foto_2026-08-17": "CONFERIDO contra foto do proprio PT-TMN (ref_PT-TMN_wikimedia.jpg, Wikimedia Commons, Rafael Luiz, 2016-09-19): o modelo esta CERTO. O indigo desce mesmo da deriva sobre a fuselagem traseira cobrindo a porta 2, e a matricula PT-TMN e BRANCA dentro do indigo. Tailcone claro. IMPORTANTE: isso NAO vale para o 787-9, cuja fuselagem e toda branca e a matricula e indigo sobre branco — a aplicacao da livery no casco e especifica do tipo, so o desenho da deriva se repete.",
+  "tailstrike_2026-08-18": {
+   "achado": "Rotating about the main-gear contact point (17.71, 0, -3.670), the model allows only 7.75 deg of pitch before something touches the runway. The real A320 tailstrike angle is about 11.7 deg with the gear compressed.",
+   "limitante": "Belly_DrenoAft (aft drain mast) at x=27.83. The fuselage keel alone would allow 9.93 deg.",
+   "acao": "Both numbers are below reality, so this is worth checking: the aft drain mast may sit too low or too far aft, AND the main gear leg may be modelled short. Measured while building the takeoff animation, not yet fixed.",
+   "metodo": "Evaluated mesh, rotating every vertex about the main-gear contact point and finding the first z<=runway. Cheap and worth running on every aircraft."
+  }
  },
  "correcoes": {
   "deriva_2026-08-17": "Sash refeito com o desenho medido no 787-9 e transferido por (h,c). As polilinhas F1..F7 anteriores davam deriva branca com bandas grossas; a foto do PT-TMN mostra deriva indigo dominante com bandas finas de bordo a bordo."

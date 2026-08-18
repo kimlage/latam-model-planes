@@ -105,6 +105,14 @@ checked it and it is fine" for all of them, it is not ready yet.
 - belly or tailcone in indigo when they should be white
 - registration in the wrong style for that registration/period
 
+**Geometry checks that no render shows**
+- **tailstrike angle**: rotate the evaluated mesh about the main-gear contact
+  point and find the first vertex reaching the runway. The A320neo model allows
+  only 7.75° (limited by the aft drain mast) against ~11.7° on the real
+  aircraft — a gear leg that is too short, or a belly fitting too low, hides
+  here and never shows up in a static render. Cheap to run, worth running on
+  every aircraft.
+
 **Render**
 - blown-out white (use `#E6E7EA`, controlled exposure)
 - surface with constant roughness reading as plastic

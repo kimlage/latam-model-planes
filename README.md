@@ -14,7 +14,11 @@ Two aircraft finished:
 | **Boeing 787-9 Dreamliner** | CC-BGK | [`boeing 787-9/B789_LATAM.blend`](boeing%20787-9/B789_LATAM.blend) | 62.81 m |
 | **Airbus A320neo** | PT-TMN | [`airbus A320neo/A320neo_LATAM.blend`](airbus%20A320neo/A320neo_LATAM.blend) | 37.57 m |
 
-![A320neo in flight, orbiting camera, gear retracting](airbus%20A320neo/a320_voo.gif)
+![A320neo taking off: ground run, rotation, gear retracting, climb-out](airbus%20A320neo/a320_decolagem.gif)
+
+*A320neo takeoff — the camera orbits while the aircraft accelerates, rotates about
+the main gear, lifts off and retracts the gear. There is also an
+[orbit-in-place clip](airbus%20A320neo/a320_voo.gif) from an earlier pass.*
 
 ---
 
