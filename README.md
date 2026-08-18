@@ -1,54 +1,55 @@
-# Réplicas 3D da frota LATAM
+# LATAM fleet — 3D replicas
 
-![Boeing 787-9 e Airbus A320neo da LATAM, renderizados em vários ângulos](capa.png)
+![Boeing 787-9 and Airbus A320neo in LATAM livery, rendered from several angles](capa.png)
 
-Modelos 3D em Blender de aeronaves da LATAM Airlines, construídos com um
-critério único: **as cotas têm que bater com o documento do fabricante e a
-pintura tem que bater com a foto daquela matrícula**. Não é "parece um avião" —
-é um engenheiro da LATAM reconhecer o avião dele.
+Blender models of LATAM Airlines aircraft, built to one standard: **the
+dimensions have to match the manufacturer's document, and the paint has to match
+a photograph of that specific registration**. The bar is not "it looks like an
+airliner" — it is a LATAM engineer recognising their own aircraft.
 
-Dois aviões prontos:
+Two aircraft finished:
 
-| Aeronave | Matrícula | Arquivo | Comprimento |
+| Aircraft | Registration | File | Length |
 |---|---|---|---|
-| **Boeing 787-9 Dreamliner** | CC-BGK | [`boeing 787-9/B789_LATAM.blend`](boeing%20787-9/B789_LATAM.blend) | 62,81 m |
-| **Airbus A320neo** | PT-TMN | [`airbus A320neo/A320neo_LATAM.blend`](airbus%20A320neo/A320neo_LATAM.blend) | 37,57 m |
+| **Boeing 787-9 Dreamliner** | CC-BGK | [`boeing 787-9/B789_LATAM.blend`](boeing%20787-9/B789_LATAM.blend) | 62.81 m |
+| **Airbus A320neo** | PT-TMN | [`airbus A320neo/A320neo_LATAM.blend`](airbus%20A320neo/A320neo_LATAM.blend) | 37.57 m |
 
-![A320neo em voo, câmera orbital, trem recolhendo](airbus%20A320neo/a320_voo.gif)
+![A320neo in flight, orbiting camera, gear retracting](airbus%20A320neo/a320_voo.gif)
 
 ---
 
-## Por que este repositório existe
+## Why this repository exists
 
-Modelar avião "no olho" é rápido e dá errado. Este projeto é a tentativa oposta:
-**nenhuma malha antes de existir número**. Toda dimensão rastreia até um
-documento oficial do fabricante (Airbus *ACAP*, Boeing *Airplane
-Characteristics*), e o que o documento não traz — como a livery é aplicada, onde
-a cunha índigo cruza a porta, o tom exato — é medido por fotogrametria em fotos
-da matrícula específica, com a incerteza registrada.
+Modelling an aircraft by eye is fast and comes out wrong. This project is the
+opposite bet: **no mesh before there is a number**. Every dimension traces back
+to an official manufacturer document (Airbus *ACAP*, Boeing *Airplane
+Characteristics*), and whatever the document does not carry — how the livery is
+applied, where the indigo wedge crosses the door, the exact shade — is measured
+photogrammetrically from photographs of that registration, with the uncertainty
+written down.
 
-O resultado prático é que **o modelo é reconstruível**. Se o `.blend` sumir, o
-`spec_<tipo>.json` de cada aeronave contém a especificação de engenharia
-completa — estações do nariz, seção mestre, polígonos do para-brisa, portas,
-janelas, planform da asa, empenagem, motor, trem — e os scripts reconstroem a
-partir dele.
+The practical payoff is that **the model is reconstructible**. If the `.blend`
+disappears, each aircraft's `spec_<type>.json` holds the complete engineering
+specification — nose stations, master section, windshield polygons, doors,
+windows, wing planform, empennage, engine, landing gear — and the scripts
+rebuild from it.
 
-## As seis fases
+## The six phases
 
-1. **Fontes** — documento dimensional oficial, fotos da matrícula, CAD aberto só
-   como conferência de silhueta. → skill `fontes-aeronave`
-2. **Extração** — rasterizar as vistas a 600 dpi, calibrar por cota impressa,
-   extrair crown/keel/meia-largura → `curves.json` + `spec_<tipo>.json`.
+1. **Sources** — official dimensional document, photographs of the registration,
+   open CAD only as a silhouette cross-check. → skill `fontes-aeronave`
+2. **Extraction** — rasterise the views at 600 dpi, calibrate on a printed
+   dimension, extract crown/keel/half-width → `curves.json` + `spec_<type>.json`.
    → skill `extrair-cotas`
-3. **Casco** — gaiola de controle esparsa **nas cavernas reais** + subsurf
-   Catmull-Clark. Gaiola densa é o que produz nariz amassado; a esparsa é o que
-   deixa liso. → skill `casco-parametrico`
-4. **Livery** — vetores oficiais da marca, aplicação medida na foto, pintura como
-   textura UV em `(x, θ)` — nunca como casca 3D. → skill `livery-latam`
-5. **Detalhes** — portas, janelas, trem, motores, antenas, ventre. O critério é o
-   avião completo e conexo, não o casco pintado.
-6. **Gate visual** — 6 ângulos canônicos, folha de contato, comparação com a
-   foto. → skill `verificacao-visual`
+3. **Hull** — a sparse control cage **on the real frame stations** plus a
+   Catmull-Clark subsurf. A dense cage is what produces a dented nose; the sparse
+   one is what makes it smooth. → skill `casco-parametrico`
+4. **Livery** — official brand vectors, application measured from the photo,
+   paint as a UV texture in `(x, θ)` — never as a 3D shell. → skill `livery-latam`
+5. **Details** — doors, windows, gear, engines, antennas, belly. The standard is
+   a complete, connected aircraft, not a painted hull.
+6. **Visual gate** — six canonical angles, contact sheet, comparison against the
+   photo. → skill `verificacao-visual`
 
 ```bash
 python3 verificacao_visual.py "boeing 787-9"
@@ -56,117 +57,124 @@ python3 verificacao_visual.py "boeing 787-9"
 
 ## Skills
 
-O pipeline está codificado como skills em [`.claude/skills/`](.claude/skills/) —
-cada uma carrega as armadilhas que já custaram retrabalho.
+The pipeline is encoded as skills under [`.claude/skills/`](.claude/skills/) —
+each one carries the traps that already cost rework.
 
-| Skill | Fase |
+| Skill | Phase |
 |---|---|
-| [`nova-aeronave`](.claude/skills/nova-aeronave/SKILL.md) | roteador: pipeline ponta a ponta de um avião novo ou derivado |
-| [`fontes-aeronave`](.claude/skills/fontes-aeronave/SKILL.md) | ACAP/APR oficial, fotos da matrícula, CAD aberto e licenças |
-| [`extrair-cotas`](.claude/skills/extrair-cotas/SKILL.md) | desenho e foto → `curves.json` + `spec_<tipo>.json` |
-| [`casco-parametrico`](.claude/skills/casco-parametrico/SKILL.md) | casco, asas, empenagem e detalhes no Blender |
-| [`livery-latam`](.claude/skills/livery-latam/SKILL.md) | marca oficial, pintura como textura UV, sash, materiais |
-| [`blender-mcp`](.claude/skills/blender-mcp/SKILL.md) | operação do Blender via MCP: timeouts, corrida de render |
-| [`verificacao-visual`](.claude/skills/verificacao-visual/SKILL.md) | gate de qualidade: 6 ângulos, folha de contato, checklist |
+| [`nova-aeronave`](.claude/skills/nova-aeronave/SKILL.md) | router: end-to-end pipeline for a new or derived aircraft |
+| [`fontes-aeronave`](.claude/skills/fontes-aeronave/SKILL.md) | official ACAP/APR, registration photos, open CAD and licensing |
+| [`extrair-cotas`](.claude/skills/extrair-cotas/SKILL.md) | drawing and photo → `curves.json` + `spec_<type>.json` |
+| [`casco-parametrico`](.claude/skills/casco-parametrico/SKILL.md) | hull, wings, empennage and details in Blender |
+| [`livery-latam`](.claude/skills/livery-latam/SKILL.md) | official mark, paint as UV texture, tail sash, materials |
+| [`blender-mcp`](.claude/skills/blender-mcp/SKILL.md) | driving Blender over MCP: timeouts, render-file race |
+| [`verificacao-visual`](.claude/skills/verificacao-visual/SKILL.md) | quality gate: 6 angles, contact sheet, checklist |
 
-[`FONTES-FROTA.md`](FONTES-FROTA.md) traz o inventário das 12 variantes da frota:
-documento oficial verificado por tipo, CAD aberto útil e estratégia recomendada.
+[`FONTES-FROTA.md`](FONTES-FROTA.md) is the inventory of the fleet's 12
+variants: verified official document per type, useful open CAD, recommended
+strategy.
 
-## Referencial
+## Coordinate frame
 
-Todo o repositório usa o mesmo — misturar referencial é a forma mais fácil de
-produzir um avião torto:
+The whole repository uses one frame — mixing frames is the easiest way to
+produce a crooked aircraft:
 
-- **x = 0 na ponta do nariz**, crescendo para trás, em metros
-- **z = 0 na meia-altura da seção constante**, positivo para cima
-- **y = 0 no plano de simetria**, positivo para estibordo
+- **x = 0 at the nose tip**, increasing aft, in metres
+- **z = 0 at mid-height of the constant section**, positive up
+- **y = 0 on the symmetry plane**, positive to starboard
 
-Cuidado com os *data* do fabricante: as *stations* da Airbus são medidas a partir
-de um X0 que fica 2540 mm à frente do nariz (`x = STA − 2540`), e a mesma família
-mistura unidades entre SRM e AMM.
+Watch out for manufacturer datums: Airbus stations are measured from an X0 that
+sits 2540 mm ahead of the nose tip (`x = STA − 2540`), and the same family mixes
+units between the SRM and the AMM.
 
-## Paleta LATAM
+## LATAM palette
 
-| Cor | Hex | Onde |
+| Colour | Hex | Where |
 |---|---|---|
-| Branco | `#E6E7EA` | fuselagem |
-| Índigo | `#2A0088` | deriva, wordmark, cunha traseira |
-| Coral | `#ED1651` | bandas da deriva, símbolo |
-| Cinza-voo | `#C8CACC` | bandas claras da deriva, filete do bordo de ataque |
+| White | `#E6E7EA` | fuselage |
+| Indigo | `#2A0088` | fin, wordmark, rear wedge |
+| Coral | `#ED1651` | fin bands, symbol |
+| Flight gray | `#C8CACC` | light fin bands, leading-edge fillet |
 
-## Regras de fidelidade (não negociar)
+## Fidelity rules (non-negotiable)
 
-**0. Olhe o avião antes de modelar.** Buscar fotos da matrícula real é o primeiro
-passo — antes do ACAP, antes do spec, antes de qualquer pesquisa. Não é a
-validação do fim: é a partida, e custa um minuto. **Nenhuma descrição em prosa
-substitui ver o avião**, nem quando veio de fotogrametria, nem quando passou por
-verificação adversarial. No 787-9 o spec descrevia uma echarpe índigo descendo
-pelo casco até o tailcone; horas de fotogrametria, medição de desenho e revisão
-por agentes não pegaram o erro — a primeira foto do Google resolveu em segundos.
+**0. Look at the aircraft before modelling.** Finding photographs of the real
+registration is the first step — before the ACAP, before the spec, before any
+research. It is not the validation at the end; it is the starting point, and it
+costs a minute. **No prose description substitutes for seeing the aircraft**, not
+even when the prose came from photogrammetry, not even when it survived
+adversarial review. On the 787-9 the spec described an indigo sash running down
+the hull to the tailcone; hours of photogrammetry, drawing measurement and agent
+review missed the error — the first photo on Google settled it in seconds.
 
-**1.** Marca exata: importar os vetores oficiais — nunca aproximar com fonte
-parecida.
+**1.** Exact mark: import the official vectors — never approximate with a
+lookalike font.
 
-**2.** Aplicação igual à frota — conferida na foto, não na descrição.
+**2.** Application as flown — checked against the photo, not against the
+description.
 
-**3.** Geometria pelo documento do fabricante: dimensões, portas, trem, motores.
+**3.** Geometry from the manufacturer's document: dimensions, doors, gear,
+engines.
 
-**4.** Quando spec e foto discordarem, **a foto ganha** — e o spec é corrigido na
-mesma hora, com o motivo escrito, senão o erro volta na próxima aeronave que
-derivar dele.
+**4.** When spec and photo disagree, **the photo wins** — and the spec is
+corrected on the spot, with the reason written down, or the error comes back on
+the next aircraft derived from it.
 
-**5.** Nada é entregue sem passar pelo gate visual, e "passar pelo gate" significa
-**abrir as imagens e olhar** — não gerar os arquivos e presumir.
+**5.** Nothing ships without passing the visual gate, and "passing the gate"
+means **opening the images and looking** — not generating the files and assuming.
 
-## Como o desenho da deriva foi resolvido
+## How the tail was solved
 
-Vale como exemplo do método, porque foi o ponto que mais resistiu. O sash da
-LATAM é um conjunto de **bandas paralelas que atravessam a deriva de bordo a
-bordo**, cada uma cinza nas duas pontas e coral no miolo, sobre um campo índigo.
-Versões anteriores tinham a deriva branca com bandas grossas — errado.
+Worth recording as an example of the method, because it is the part that
+resisted longest. The LATAM sash is a set of **parallel bands crossing the fin
+edge to edge**, each one flight-gray at both ends with a coral core, over an
+indigo field. Earlier versions had a white fin with thick bands — wrong.
 
-A geometria saiu de uma foto do CC-BGP **retificada para o plano da deriva** por
-uma transformação afim, o que transforma o problema em leitura direta em `(x, z)`:
+The geometry came out of a photograph of CC-BGP **rectified onto the plane of
+the fin** by an affine transform, which turns the problem into direct reading in
+`(x, z)`. Band slope `dz/dx = 0.372` (20.4°), band thickness 0.96 m
+perpendicular, indigo gap 2.42 m, period 3.38 m. A closure test that needs no
+calibration at all: the zones summed along the band normal
+(2.09 + 0.96 + 2.42 + 0.96 + 1.25 = 7.68 m) only fit the fin planform at 20.4°.
+
+The rear-fuselage indigo is bounded by three surfaces, and **they do not all
+live in the same space** — missing that cost four rounds:
 
 ```
-b = z − 0.24·x     (coordenada através das bandas)
-e = z + 0.25·x     (coordenada ao longo das bandas)
-
-banda inferior:  b ∈ [−6.725, −5.99]   coral onde e ∈ [22.006, 23.332]
-banda superior:  b ∈ [−4.208, −3.35]   coral onde e ∈ [24.913, 26.192]
-acima da superior: cinza-voo   ·   entre e abaixo: índigo
+indigo ⟺ x ≥ 48.77 + 0.992·z          (forward: parallel to the straight LE, +0.86 m)
+      ∧  θ ≤ 117.0 − 5.2·(x − 48.70)   (lower: a straight line in (x, θ), not (x, z))
+      ∧  x ≤ 57.14 + 0.3858·z          (rear: the fin trailing-edge line)
 ```
 
-Ajustado por descida coordenada contra a foto classificada, o modelo chega a
-**92,6% de concordância** pixel a pixel dentro do contorno da deriva. O mesmo
-desenho foi transferido para o A320 por coordenadas normalizadas da deriva
-`(h, c)` — é a mesma marca, só muda a escala.
+Three traps worth carrying to any photo measurement:
 
-Duas armadilhas que valem para qualquer medição em foto:
+- **Never calibrate on the aircraft's overall length.** A slight yaw shortens the
+  nose-to-tail span; on one CC-BGP photo that was a 14% error — and because the
+  error is a scale factor, it displaces *every* measurement plausibly. Use window
+  pitch, which is a repeated dimension.
+- **Check camera ELEVATION, not just yaw.** With the camera off-axis by `e`,
+  every skin point is displaced by `w(z)·sin(e)`, where `w` is the local
+  half-width — zero at the crown, ~2.9 m at the waist. That bends the projection
+  of any boundary on the hull by up to 0.44 m at only 8.5°.
+- **Colour thresholds cannot separate same-coloured parts that overlap in
+  projection.** Measuring the rear wedge by "which pixels are indigo" failed
+  repeatedly because the fin is also indigo and covers the hull in side view.
 
-- **Nunca calibre pelo comprimento total do avião.** Basta o avião estar
-  levemente angulado para o vão nariz-cauda encurtar. Numa foto do CC-BGP isso
-  errou 14% — e como o erro é uma escala, ele desloca *todas* as medidas de forma
-  plausível. Use o passo das janelas, que é uma cota repetida.
-- **Limiar de cor não separa peças da mesma cor que se sobrepõem na projeção.**
-  Medir a cunha traseira por "quais pixels são índigo" falhou repetidamente
-  porque a deriva também é índigo e cobre o casco na vista lateral.
+## Reproducing
 
-## Reproduzir
+Blender 5.2+. Open the aircraft's `.blend` and render — textures and materials
+are packed into the file.
 
-Blender 5.2+. Abra o `.blend` da aeronave e renderize — texturas e materiais vêm
-empacotados no arquivo.
+To run the pipeline from scratch you need the manufacturer documents and the
+brand vectors, which are **not in this repository** for licensing reasons.
+[`NOTICE.md`](NOTICE.md) lists each one and where to get it.
 
-Para rodar o pipeline do zero você precisa dos documentos do fabricante e dos
-vetores de marca, que **não estão neste repositório** por questão de licença.
-[`NOTICE.md`](NOTICE.md) lista cada um e onde obter.
+## Licence
 
-## Licença
+- Code, skills and engineering data: **[MIT](LICENSE)**
+- 3D models, renders and animations: **[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)**
 
-- Código, skills e dados de engenharia: **[MIT](LICENSE)**
-- Modelos 3D, renders e animações: **[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)**
-
-**LATAM**, **Airbus**, **Boeing** e **Dreamliner** são marcas registradas de seus
-titulares. Projeto independente e não comercial, **sem vínculo, patrocínio ou
-endosso** de nenhuma dessas empresas. Detalhes e material de terceiros excluído:
-[`NOTICE.md`](NOTICE.md).
+**LATAM**, **Airbus**, **Boeing** and **Dreamliner** are trademarks of their
+respective owners. This is an independent, non-commercial project with **no
+affiliation, sponsorship or endorsement** from any of them. Details and excluded
+third-party material: [`NOTICE.md`](NOTICE.md).
