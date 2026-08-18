@@ -1,0 +1,861 @@
+{
+ "site": {
+  "lat": -33.39,
+  "lon": -70.79,
+  "elev_m": 474,
+  "runway_true_track_deg": 177.423,
+  "timezone": "America/Santiago; CLT UTC-4, CLST UTC-3 (DST first Sat Sep -> first Sat Apr)"
+ },
+ "algorithm": "NOAA solar position (Meeus), apparent elevation incl. refraction; validated against published solar noon 12:47 and max altitude 33.1 deg on 21 Jun",
+ "days": {
+  "2026-01-15": {
+   "date": "2026-01-15",
+   "label": "midsummer",
+   "utc_offset": -3,
+   "samples": [
+    {
+     "local": "06:15",
+     "elev": -7.05,
+     "az": 121.09,
+     "deg_off_17R_nose": 56.3,
+     "side": "port/east"
+    },
+    {
+     "local": "06:30",
+     "elev": -4.31,
+     "az": 118.87,
+     "deg_off_17R_nose": 58.6,
+     "side": "port/east"
+    },
+    {
+     "local": "06:45",
+     "elev": -1.42,
+     "az": 116.72,
+     "deg_off_17R_nose": 60.7,
+     "side": "port/east"
+    },
+    {
+     "local": "07:00",
+     "elev": 1.54,
+     "az": 114.65,
+     "deg_off_17R_nose": 62.8,
+     "side": "port/east"
+    },
+    {
+     "local": "07:15",
+     "elev": 4.25,
+     "az": 112.65,
+     "deg_off_17R_nose": 64.8,
+     "side": "port/east"
+    },
+    {
+     "local": "07:30",
+     "elev": 7.1,
+     "az": 110.69,
+     "deg_off_17R_nose": 66.7,
+     "side": "port/east"
+    },
+    {
+     "local": "07:45",
+     "elev": 10.01,
+     "az": 108.78,
+     "deg_off_17R_nose": 68.6,
+     "side": "port/east"
+    },
+    {
+     "local": "08:00",
+     "elev": 12.97,
+     "az": 106.91,
+     "deg_off_17R_nose": 70.5,
+     "side": "port/east"
+    },
+    {
+     "local": "08:15",
+     "elev": 15.96,
+     "az": 105.07,
+     "deg_off_17R_nose": 72.4,
+     "side": "port/east"
+    },
+    {
+     "local": "19:30",
+     "elev": 15.97,
+     "az": 255.04,
+     "deg_off_17R_nose": 77.6,
+     "side": "starboard/west"
+    },
+    {
+     "local": "19:45",
+     "elev": 12.97,
+     "az": 253.2,
+     "deg_off_17R_nose": 75.8,
+     "side": "starboard/west"
+    },
+    {
+     "local": "20:00",
+     "elev": 10.01,
+     "az": 251.33,
+     "deg_off_17R_nose": 73.9,
+     "side": "starboard/west"
+    },
+    {
+     "local": "20:15",
+     "elev": 7.1,
+     "az": 249.43,
+     "deg_off_17R_nose": 72.0,
+     "side": "starboard/west"
+    },
+    {
+     "local": "20:30",
+     "elev": 4.25,
+     "az": 247.48,
+     "deg_off_17R_nose": 70.1,
+     "side": "starboard/west"
+    },
+    {
+     "local": "20:45",
+     "elev": 1.54,
+     "az": 245.47,
+     "deg_off_17R_nose": 68.0,
+     "side": "starboard/west"
+    },
+    {
+     "local": "21:00",
+     "elev": -1.43,
+     "az": 243.4,
+     "deg_off_17R_nose": 66.0,
+     "side": "starboard/west"
+    },
+    {
+     "local": "21:15",
+     "elev": -4.33,
+     "az": 241.26,
+     "deg_off_17R_nose": 63.8,
+     "side": "starboard/west"
+    },
+    {
+     "local": "21:30",
+     "elev": -7.08,
+     "az": 239.05,
+     "deg_off_17R_nose": 61.6,
+     "side": "starboard/west"
+    }
+   ],
+   "events": [
+    {
+     "event": "sunrise",
+     "local": "06:51",
+     "az": 115.89
+    },
+    {
+     "event": "sunset",
+     "local": "20:55",
+     "az": 244.1
+    }
+   ],
+   "solar_noon": {
+    "local": "13:53",
+    "elev": 77.64,
+    "az": 359.61
+   },
+   "declination_deg": -21.045,
+   "eq_of_time_min": -9.45
+  },
+  "2026-02-20": {
+   "date": "2026-02-20",
+   "label": "late summer",
+   "utc_offset": -3,
+   "samples": [
+    {
+     "local": "07:00",
+     "elev": -5.56,
+     "az": 106.93,
+     "deg_off_17R_nose": 70.5,
+     "side": "port/east"
+    },
+    {
+     "local": "07:15",
+     "elev": -2.48,
+     "az": 104.8,
+     "deg_off_17R_nose": 72.6,
+     "side": "port/east"
+    },
+    {
+     "local": "07:30",
+     "elev": 0.85,
+     "az": 102.72,
+     "deg_off_17R_nose": 74.7,
+     "side": "port/east"
+    },
+    {
+     "local": "07:45",
+     "elev": 3.7,
+     "az": 100.68,
+     "deg_off_17R_nose": 76.7,
+     "side": "port/east"
+    },
+    {
+     "local": "08:00",
+     "elev": 6.71,
+     "az": 98.65,
+     "deg_off_17R_nose": 78.8,
+     "side": "port/east"
+    },
+    {
+     "local": "08:15",
+     "elev": 9.77,
+     "az": 96.65,
+     "deg_off_17R_nose": 80.8,
+     "side": "port/east"
+    },
+    {
+     "local": "08:30",
+     "elev": 12.86,
+     "az": 94.64,
+     "deg_off_17R_nose": 82.8,
+     "side": "port/east"
+    },
+    {
+     "local": "08:45",
+     "elev": 15.97,
+     "az": 92.62,
+     "deg_off_17R_nose": 84.8,
+     "side": "port/east"
+    },
+    {
+     "local": "19:15",
+     "elev": 14.58,
+     "az": 266.67,
+     "deg_off_17R_nose": 89.2,
+     "side": "starboard/west"
+    },
+    {
+     "local": "19:30",
+     "elev": 11.47,
+     "az": 264.66,
+     "deg_off_17R_nose": 87.2,
+     "side": "starboard/west"
+    },
+    {
+     "local": "19:45",
+     "elev": 8.39,
+     "az": 262.66,
+     "deg_off_17R_nose": 85.2,
+     "side": "starboard/west"
+    },
+    {
+     "local": "20:00",
+     "elev": 5.34,
+     "az": 260.65,
+     "deg_off_17R_nose": 83.2,
+     "side": "starboard/west"
+    },
+    {
+     "local": "20:15",
+     "elev": 2.38,
+     "az": 258.63,
+     "deg_off_17R_nose": 81.2,
+     "side": "starboard/west"
+    },
+    {
+     "local": "20:30",
+     "elev": -0.62,
+     "az": 256.57,
+     "deg_off_17R_nose": 79.1,
+     "side": "starboard/west"
+    },
+    {
+     "local": "20:45",
+     "elev": -3.91,
+     "az": 254.48,
+     "deg_off_17R_nose": 77.1,
+     "side": "starboard/west"
+    },
+    {
+     "local": "21:00",
+     "elev": -6.95,
+     "az": 252.33,
+     "deg_off_17R_nose": 74.9,
+     "side": "starboard/west"
+    }
+   ],
+   "events": [
+    {
+     "event": "sunrise",
+     "local": "07:26",
+     "az": 103.27
+    },
+    {
+     "event": "sunset",
+     "local": "20:29",
+     "az": 256.71
+    }
+   ],
+   "solar_noon": {
+    "local": "13:57",
+    "elev": 67.36,
+    "az": 359.9
+   },
+   "declination_deg": -10.768,
+   "eq_of_time_min": -13.7
+  },
+  "2026-03-21": {
+   "date": "2026-03-21",
+   "label": "March equinox",
+   "utc_offset": -3,
+   "samples": [
+    {
+     "local": "07:15",
+     "elev": -7.5,
+     "az": 94.62,
+     "deg_off_17R_nose": 82.8,
+     "side": "port/east"
+    },
+    {
+     "local": "07:30",
+     "elev": -4.34,
+     "az": 92.53,
+     "deg_off_17R_nose": 84.9,
+     "side": "port/east"
+    },
+    {
+     "local": "07:45",
+     "elev": -1.03,
+     "az": 90.45,
+     "deg_off_17R_nose": 87.0,
+     "side": "port/east"
+    },
+    {
+     "local": "08:00",
+     "elev": 2.13,
+     "az": 88.39,
+     "deg_off_17R_nose": 89.0,
+     "side": "port/east"
+    },
+    {
+     "local": "08:15",
+     "elev": 5.12,
+     "az": 86.31,
+     "deg_off_17R_nose": 91.1,
+     "side": "port/east"
+    },
+    {
+     "local": "08:30",
+     "elev": 8.19,
+     "az": 84.21,
+     "deg_off_17R_nose": 93.2,
+     "side": "port/east"
+    },
+    {
+     "local": "08:45",
+     "elev": 11.27,
+     "az": 82.08,
+     "deg_off_17R_nose": 95.3,
+     "side": "port/east"
+    },
+    {
+     "local": "09:00",
+     "elev": 14.34,
+     "az": 79.9,
+     "deg_off_17R_nose": 97.5,
+     "side": "port/east"
+    },
+    {
+     "local": "18:45",
+     "elev": 13.32,
+     "az": 279.57,
+     "deg_off_17R_nose": 102.1,
+     "side": "starboard/west"
+    },
+    {
+     "local": "19:00",
+     "elev": 10.24,
+     "az": 277.42,
+     "deg_off_17R_nose": 100.0,
+     "side": "starboard/west"
+    },
+    {
+     "local": "19:15",
+     "elev": 7.16,
+     "az": 275.3,
+     "deg_off_17R_nose": 97.9,
+     "side": "starboard/west"
+    },
+    {
+     "local": "19:30",
+     "elev": 4.11,
+     "az": 273.22,
+     "deg_off_17R_nose": 95.8,
+     "side": "starboard/west"
+    },
+    {
+     "local": "19:45",
+     "elev": 1.17,
+     "az": 271.15,
+     "deg_off_17R_nose": 93.7,
+     "side": "starboard/west"
+    },
+    {
+     "local": "20:00",
+     "elev": -2.21,
+     "az": 269.09,
+     "deg_off_17R_nose": 91.7,
+     "side": "starboard/west"
+    },
+    {
+     "local": "20:15",
+     "elev": -5.42,
+     "az": 267.02,
+     "deg_off_17R_nose": 89.6,
+     "side": "starboard/west"
+    }
+   ],
+   "events": [
+    {
+     "event": "sunrise",
+     "local": "07:49",
+     "az": 89.9
+    },
+    {
+     "event": "sunset",
+     "local": "19:52",
+     "az": 270.19
+    }
+   ],
+   "solar_noon": {
+    "local": "13:50",
+    "elev": 56.19,
+    "az": 0.11
+   },
+   "declination_deg": 0.401,
+   "eq_of_time_min": -7.1
+  },
+  "2026-06-21": {
+   "date": "2026-06-21",
+   "label": "June solstice / winter",
+   "utc_offset": -4,
+   "samples": [
+    {
+     "local": "07:15",
+     "elev": -6.78,
+     "az": 66.37,
+     "deg_off_17R_nose": 111.1,
+     "side": "port/east"
+    },
+    {
+     "local": "07:30",
+     "elev": -3.9,
+     "az": 64.42,
+     "deg_off_17R_nose": 113.0,
+     "side": "port/east"
+    },
+    {
+     "local": "07:45",
+     "elev": -0.9,
+     "az": 62.42,
+     "deg_off_17R_nose": 115.0,
+     "side": "port/east"
+    },
+    {
+     "local": "08:00",
+     "elev": 1.88,
+     "az": 60.35,
+     "deg_off_17R_nose": 117.1,
+     "side": "port/east"
+    },
+    {
+     "local": "08:15",
+     "elev": 4.44,
+     "az": 58.21,
+     "deg_off_17R_nose": 119.2,
+     "side": "port/east"
+    },
+    {
+     "local": "08:30",
+     "elev": 7.01,
+     "az": 55.98,
+     "deg_off_17R_nose": 121.4,
+     "side": "port/east"
+    },
+    {
+     "local": "08:45",
+     "elev": 9.54,
+     "az": 53.66,
+     "deg_off_17R_nose": 123.8,
+     "side": "port/east"
+    },
+    {
+     "local": "09:00",
+     "elev": 12.0,
+     "az": 51.23,
+     "deg_off_17R_nose": 126.2,
+     "side": "port/east"
+    },
+    {
+     "local": "09:15",
+     "elev": 14.39,
+     "az": 48.7,
+     "deg_off_17R_nose": 128.7,
+     "side": "port/east"
+    },
+    {
+     "local": "16:15",
+     "elev": 14.4,
+     "az": 311.31,
+     "deg_off_17R_nose": 133.9,
+     "side": "starboard/west"
+    },
+    {
+     "local": "16:30",
+     "elev": 12.01,
+     "az": 308.78,
+     "deg_off_17R_nose": 131.4,
+     "side": "starboard/west"
+    },
+    {
+     "local": "16:45",
+     "elev": 9.55,
+     "az": 306.35,
+     "deg_off_17R_nose": 128.9,
+     "side": "starboard/west"
+    },
+    {
+     "local": "17:00",
+     "elev": 7.02,
+     "az": 304.03,
+     "deg_off_17R_nose": 126.6,
+     "side": "starboard/west"
+    },
+    {
+     "local": "17:15",
+     "elev": 4.45,
+     "az": 301.8,
+     "deg_off_17R_nose": 124.4,
+     "side": "starboard/west"
+    },
+    {
+     "local": "17:30",
+     "elev": 1.89,
+     "az": 299.65,
+     "deg_off_17R_nose": 122.2,
+     "side": "starboard/west"
+    },
+    {
+     "local": "17:45",
+     "elev": -0.89,
+     "az": 297.58,
+     "deg_off_17R_nose": 120.2,
+     "side": "starboard/west"
+    },
+    {
+     "local": "18:00",
+     "elev": -3.88,
+     "az": 295.58,
+     "deg_off_17R_nose": 118.2,
+     "side": "starboard/west"
+    },
+    {
+     "local": "18:15",
+     "elev": -6.77,
+     "az": 293.64,
+     "deg_off_17R_nose": 116.2,
+     "side": "starboard/west"
+    }
+   ],
+   "events": [
+    {
+     "event": "sunrise",
+     "local": "07:49",
+     "az": 61.88
+    },
+    {
+     "event": "sunset",
+     "local": "17:42",
+     "az": 297.99
+    }
+   ],
+   "solar_noon": {
+    "local": "12:45",
+    "elev": 33.2,
+    "az": 0.01
+   },
+   "declination_deg": 23.438,
+   "eq_of_time_min": -1.86
+  },
+  "2026-09-23": {
+   "date": "2026-09-23",
+   "label": "September equinox",
+   "utc_offset": -3,
+   "samples": [
+    {
+     "local": "07:00",
+     "elev": -7.28,
+     "az": 95.06,
+     "deg_off_17R_nose": 82.4,
+     "side": "port/east"
+    },
+    {
+     "local": "07:15",
+     "elev": -4.12,
+     "az": 92.97,
+     "deg_off_17R_nose": 84.5,
+     "side": "port/east"
+    },
+    {
+     "local": "07:30",
+     "elev": -0.76,
+     "az": 90.91,
+     "deg_off_17R_nose": 86.5,
+     "side": "port/east"
+    },
+    {
+     "local": "07:45",
+     "elev": 2.34,
+     "az": 88.84,
+     "deg_off_17R_nose": 88.6,
+     "side": "port/east"
+    },
+    {
+     "local": "08:00",
+     "elev": 5.35,
+     "az": 86.78,
+     "deg_off_17R_nose": 90.6,
+     "side": "port/east"
+    },
+    {
+     "local": "08:15",
+     "elev": 8.43,
+     "az": 84.69,
+     "deg_off_17R_nose": 92.7,
+     "side": "port/east"
+    },
+    {
+     "local": "08:30",
+     "elev": 11.51,
+     "az": 82.56,
+     "deg_off_17R_nose": 94.9,
+     "side": "port/east"
+    },
+    {
+     "local": "08:45",
+     "elev": 14.6,
+     "az": 80.4,
+     "deg_off_17R_nose": 97.0,
+     "side": "port/east"
+    },
+    {
+     "local": "18:30",
+     "elev": 13.86,
+     "az": 278.88,
+     "deg_off_17R_nose": 101.5,
+     "side": "starboard/west"
+    },
+    {
+     "local": "18:45",
+     "elev": 10.77,
+     "az": 276.72,
+     "deg_off_17R_nose": 99.3,
+     "side": "starboard/west"
+    },
+    {
+     "local": "19:00",
+     "elev": 7.69,
+     "az": 274.6,
+     "deg_off_17R_nose": 97.2,
+     "side": "starboard/west"
+    },
+    {
+     "local": "19:15",
+     "elev": 4.63,
+     "az": 272.51,
+     "deg_off_17R_nose": 95.1,
+     "side": "starboard/west"
+    },
+    {
+     "local": "19:30",
+     "elev": 1.66,
+     "az": 270.44,
+     "deg_off_17R_nose": 93.0,
+     "side": "starboard/west"
+    },
+    {
+     "local": "19:45",
+     "elev": -1.62,
+     "az": 268.37,
+     "deg_off_17R_nose": 90.9,
+     "side": "starboard/west"
+    },
+    {
+     "local": "20:00",
+     "elev": -4.86,
+     "az": 266.29,
+     "deg_off_17R_nose": 88.9,
+     "side": "starboard/west"
+    }
+   ],
+   "events": [
+    {
+     "event": "sunrise",
+     "local": "07:33",
+     "az": 90.49
+    },
+    {
+     "event": "sunset",
+     "local": "19:40",
+     "az": 269.06
+    }
+   ],
+   "solar_noon": {
+    "local": "13:36",
+    "elev": 56.89,
+    "az": 359.76
+   },
+   "declination_deg": -0.241,
+   "eq_of_time_min": 7.66
+  },
+  "2026-12-21": {
+   "date": "2026-12-21",
+   "label": "December solstice / summer",
+   "utc_offset": -3,
+   "samples": [
+    {
+     "local": "06:00",
+     "elev": -6.17,
+     "az": 123.44,
+     "deg_off_17R_nose": 54.0,
+     "side": "port/east"
+    },
+    {
+     "local": "06:15",
+     "elev": -3.49,
+     "az": 121.23,
+     "deg_off_17R_nose": 56.2,
+     "side": "port/east"
+    },
+    {
+     "local": "06:30",
+     "elev": -0.5,
+     "az": 119.11,
+     "deg_off_17R_nose": 58.3,
+     "side": "port/east"
+    },
+    {
+     "local": "06:45",
+     "elev": 2.18,
+     "az": 117.06,
+     "deg_off_17R_nose": 60.4,
+     "side": "port/east"
+    },
+    {
+     "local": "07:00",
+     "elev": 4.87,
+     "az": 115.07,
+     "deg_off_17R_nose": 62.3,
+     "side": "port/east"
+    },
+    {
+     "local": "07:15",
+     "elev": 7.67,
+     "az": 113.15,
+     "deg_off_17R_nose": 64.3,
+     "side": "port/east"
+    },
+    {
+     "local": "07:30",
+     "elev": 10.54,
+     "az": 111.27,
+     "deg_off_17R_nose": 66.2,
+     "side": "port/east"
+    },
+    {
+     "local": "07:45",
+     "elev": 13.46,
+     "az": 109.44,
+     "deg_off_17R_nose": 68.0,
+     "side": "port/east"
+    },
+    {
+     "local": "19:30",
+     "elev": 14.96,
+     "az": 251.48,
+     "deg_off_17R_nose": 74.1,
+     "side": "starboard/west"
+    },
+    {
+     "local": "19:45",
+     "elev": 12.02,
+     "az": 249.67,
+     "deg_off_17R_nose": 72.2,
+     "side": "starboard/west"
+    },
+    {
+     "local": "20:00",
+     "elev": 9.13,
+     "az": 247.82,
+     "deg_off_17R_nose": 70.4,
+     "side": "starboard/west"
+    },
+    {
+     "local": "20:15",
+     "elev": 6.29,
+     "az": 245.92,
+     "deg_off_17R_nose": 68.5,
+     "side": "starboard/west"
+    },
+    {
+     "local": "20:30",
+     "elev": 3.53,
+     "az": 243.96,
+     "deg_off_17R_nose": 66.5,
+     "side": "starboard/west"
+    },
+    {
+     "local": "20:45",
+     "elev": 0.95,
+     "az": 241.95,
+     "deg_off_17R_nose": 64.5,
+     "side": "starboard/west"
+    },
+    {
+     "local": "21:00",
+     "elev": -2.05,
+     "az": 239.86,
+     "deg_off_17R_nose": 62.4,
+     "side": "starboard/west"
+    },
+    {
+     "local": "21:15",
+     "elev": -4.81,
+     "az": 237.7,
+     "deg_off_17R_nose": 60.3,
+     "side": "starboard/west"
+    },
+    {
+     "local": "21:30",
+     "elev": -7.45,
+     "az": 235.45,
+     "deg_off_17R_nose": 58.0,
+     "side": "starboard/west"
+    }
+   ],
+   "events": [
+    {
+     "event": "sunrise",
+     "local": "06:32",
+     "az": 118.83
+    },
+    {
+     "event": "sunset",
+     "local": "20:52",
+     "az": 240.98
+    }
+   ],
+   "solar_noon": {
+    "local": "13:41",
+    "elev": 80.05,
+    "az": 0.44
+   },
+   "declination_deg": -23.438,
+   "eq_of_time_min": 1.86
+  }
+ }
+}

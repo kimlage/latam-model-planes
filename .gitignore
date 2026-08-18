@@ -36,3 +36,23 @@ debug_*.png
 .DS_Store
 __pycache__/
 *.pyc
+
+# ---------------------------------------------------------------------------
+# Cenario SCL: raw elevation tiles (~1.5 GB). Reproduce with cenario/fetch_dem.sh
+# The derived heightfields under cenario/terreno/ ARE committed.
+# ---------------------------------------------------------------------------
+cenario/dem/
+cenario/dem_cop/
+cenario/dem_cop_hgt/
+cenario/dem_srtm_clean/
+cenario/terreno/_fine_profile.npy
+
+# ---------------------------------------------------------------------------
+# SCL scenario: third-party reference photographs. They are properly credited in
+# cenario/scl_referencias.md, but they are CC BY-SA — share-alike conflicts with
+# this repo's CC BY 4.0 asset licence, so we cite them instead of shipping them.
+# Same rule as the aircraft reference photos. Overlays built on map tiles too.
+# ---------------------------------------------------------------------------
+cenario/refs/*.jpg
+cenario/refs/*.jpeg
+cenario/refs/_mapa_*.png

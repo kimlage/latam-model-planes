@@ -50,6 +50,38 @@ Creative Commons licences require. **Lesson folded into the pipeline:** every ne
 photograph enters with its URL, author and licence recorded in the aircraft's
 `spec_*.json`.
 
+## Elevation and geographic data (the SCL scenario)
+
+The terrain under `cenario/` is derived from open data. The raw DEM tiles
+(~1.5 GB) are **not** in the repository — `cenario/fetch_dem.sh` re-downloads
+them. Full detail in [`cenario/TERRENO.md`](cenario/TERRENO.md).
+
+| Source | Used for | Licence |
+|---|---|---|
+| **Copernicus DEM GLO-30** (WorldDEM-30) | primary elevation, all heightfields | Free & Open licence, adaptation expressly permitted — notices below |
+| **SRTM v3 1 arcsec** (NASA/USGS) | independent control DEM | Public domain |
+| **OurAirports** | SCEL runway thresholds, headings, elevations | Public domain |
+| **GeoNames** | peak names and elevations | CC BY 4.0 |
+| **OpenStreetMap** | peak and volcano names | ODbL 1.0 |
+
+The Copernicus data here is **modified** (resampled into a local metric frame),
+so its licence requires these two notices to travel with any redistribution:
+
+> produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus
+> Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European
+> Union and ESA; all rights reserved
+
+> The organisations in charge of the Copernicus programme by law or by
+> delegation do not incur any liability for any use of the Copernicus
+> WorldDEM-30
+
+GeoNames attribution: *this product uses data from GeoNames
+(https://www.geonames.org), licensed under CC BY 4.0*.
+OpenStreetMap attribution: *© OpenStreetMap contributors*. Note that ODbL is
+**share-alike**: derived databases distributed from the OSM-sourced peak names
+carry that obligation. Each entry in `cenario/refs/gazetteer.json` records which
+of the two gazetteers it came from, in its `src` field.
+
 ## What the models contain
 
 The `.blend` files carry the livery textures packed in, including the marks

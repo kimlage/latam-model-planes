@@ -1,0 +1,848 @@
+{
+ "referencial": {
+  "origem_lat": -33.3760915,
+  "origem_lon": -70.7867106,
+  "descricao": "cabeceira da pista 17L (threshold), inicio da corrida de decolagem",
+  "eixos": "x=leste, y=norte, z=cima, metros",
+  "m_por_grau_lat": 110911.1,
+  "m_por_grau_lon": 93054.7,
+  "elevacao_aerodromo_m": 474,
+  "fonte_geometria": "OpenStreetMap (ODbL) via Overpass, extraido 2026-08-18"
+ },
+ "pistas": [
+  {
+   "ref": "17L/35R",
+   "comprimento_osm_m": "3748",
+   "extremo_A_xy": [
+    145.1,
+    -3200.7
+   ],
+   "extremo_B_xy": [
+    0.0,
+    0.0
+   ],
+   "comprimento_segmento_m": 3204.0,
+   "rumo_A_para_B_deg": 357.4,
+   "superficie": "asphalt"
+  },
+  {
+   "ref": "17R/35L",
+   "comprimento_osm_m": "3800",
+   "extremo_A_xy": [
+    -1583.5,
+    458.6
+   ],
+   "extremo_B_xy": [
+    -1413.1,
+    -3337.6
+   ],
+   "comprimento_segmento_m": 3799.9,
+   "rumo_A_para_B_deg": 177.43,
+   "superficie": "asphalt"
+  },
+  {
+   "ref": "17L/35R",
+   "comprimento_osm_m": null,
+   "extremo_A_xy": [
+    169.0,
+    -3742.2
+   ],
+   "extremo_B_xy": [
+    145.1,
+    -3200.7
+   ],
+   "comprimento_segmento_m": 542.0,
+   "rumo_A_para_B_deg": 357.48,
+   "superficie": null
+  }
+ ],
+ "torres": [
+  {
+   "nome": "Torre de Control SCL",
+   "centro_xy": [
+    -676.5,
+    -1778.8
+   ],
+   "planta_m": [
+    15.9,
+    15.8
+   ],
+   "altura_osm_m": "60",
+   "niveis": "10",
+   "operador": "DGAC"
+  },
+  {
+   "nome": "Torre de Control FACh",
+   "centro_xy": [
+    -570.3,
+    -184.7
+   ],
+   "planta_m": [
+    18.7,
+    17.8
+   ],
+   "altura_osm_m": "15",
+   "niveis": "3",
+   "operador": null
+  }
+ ],
+ "hangares": [
+  {
+   "nome": "Base de Operaciones y Mantenimiento LATAM Airlines",
+   "osm_id": 57120904,
+   "centro_xy": [
+    -660.0,
+    -1313.0
+   ],
+   "caixa_m": [
+    161.9,
+    123.1
+   ],
+   "azimute_eixo_longo_deg": 177.6,
+   "area_m2": 13447
+  },
+  {
+   "nome": "ENAER",
+   "osm_id": 237260778,
+   "centro_xy": [
+    -460.0,
+    -574.5
+   ],
+   "caixa_m": [
+    95.4,
+    69.1
+   ],
+   "azimute_eixo_longo_deg": 148.4,
+   "area_m2": 6151
+  },
+  {
+   "nome": "Base de Mantenimiento Sky Airline",
+   "osm_id": 237260771,
+   "centro_xy": [
+    -822.4,
+    -1659.3
+   ],
+   "caixa_m": [
+    95.5,
+    93.1
+   ],
+   "azimute_eixo_longo_deg": 88.3,
+   "area_m2": 5721
+  },
+  {
+   "nome": "LATAM",
+   "osm_id": 245330358,
+   "centro_xy": [
+    -626.6,
+    -1251.6
+   ],
+   "caixa_m": [
+    88.5,
+    81.7
+   ],
+   "azimute_eixo_longo_deg": 88.0,
+   "area_m2": 5381
+  },
+  {
+   "nome": null,
+   "osm_id": 1421909867,
+   "centro_xy": [
+    -980.8,
+    -968.2
+   ],
+   "caixa_m": [
+    81.9,
+    55.5
+   ],
+   "azimute_eixo_longo_deg": 177.9,
+   "area_m2": 4548
+  },
+  {
+   "nome": "ENAER",
+   "osm_id": 237260781,
+   "centro_xy": [
+    -371.4,
+    -973.5
+   ],
+   "caixa_m": [
+    60.3,
+    58.3
+   ],
+   "azimute_eixo_longo_deg": 177.5,
+   "area_m2": 3515
+  },
+  {
+   "nome": "Transporte Aéreo El Litoral",
+   "osm_id": 237260782,
+   "centro_xy": [
+    -357.8,
+    -1205.0
+   ],
+   "caixa_m": [
+    70.3,
+    50.1
+   ],
+   "azimute_eixo_longo_deg": 178.4,
+   "area_m2": 3441
+  },
+  {
+   "nome": "Aerocardal",
+   "osm_id": 1051978486,
+   "centro_xy": [
+    -766.4,
+    -1240.0
+   ],
+   "caixa_m": [
+    93.0,
+    36.8
+   ],
+   "azimute_eixo_longo_deg": 177.9,
+   "area_m2": 3424
+  },
+  {
+   "nome": null,
+   "osm_id": 1304736445,
+   "centro_xy": [
+    -982.2,
+    -1039.5
+   ],
+   "caixa_m": [
+    59.8,
+    48.0
+   ],
+   "azimute_eixo_longo_deg": 86.4,
+   "area_m2": 2867
+  },
+  {
+   "nome": "Hangar B",
+   "osm_id": 53256895,
+   "centro_xy": [
+    -578.2,
+    -8.6
+   ],
+   "caixa_m": [
+    58.3,
+    49.1
+   ],
+   "azimute_eixo_longo_deg": 178.0,
+   "area_m2": 2861
+  },
+  {
+   "nome": "Aviasur Terminal 1",
+   "osm_id": 1304736441,
+   "centro_xy": [
+    -969.2,
+    -1251.4
+   ],
+   "caixa_m": [
+    78.8,
+    35.7
+   ],
+   "azimute_eixo_longo_deg": 87.1,
+   "area_m2": 2814
+  },
+  {
+   "nome": "Hangar D",
+   "osm_id": 53256897,
+   "centro_xy": [
+    -585.2,
+    146.2
+   ],
+   "caixa_m": [
+    57.5,
+    48.7
+   ],
+   "azimute_eixo_longo_deg": 177.3,
+   "area_m2": 2795
+  },
+  {
+   "nome": "Hangar C",
+   "osm_id": 53256896,
+   "centro_xy": [
+    -581.9,
+    68.6
+   ],
+   "caixa_m": [
+    57.6,
+    48.2
+   ],
+   "azimute_eixo_longo_deg": 178.0,
+   "area_m2": 2774
+  },
+  {
+   "nome": null,
+   "osm_id": 188255129,
+   "centro_xy": [
+    -686.6,
+    -217.6
+   ],
+   "caixa_m": [
+    65.9,
+    42.0
+   ],
+   "azimute_eixo_longo_deg": 58.9,
+   "area_m2": 2760
+  },
+  {
+   "nome": "Hangar G",
+   "osm_id": 53256899,
+   "centro_xy": [
+    -447.3,
+    230.0
+   ],
+   "caixa_m": [
+    56.5,
+    47.2
+   ],
+   "azimute_eixo_longo_deg": 87.4,
+   "area_m2": 2666
+  },
+  {
+   "nome": "Hangar E",
+   "osm_id": 53256898,
+   "centro_xy": [
+    -530.0,
+    226.5
+   ],
+   "caixa_m": [
+    56.5,
+    47.0
+   ],
+   "azimute_eixo_longo_deg": 87.8,
+   "area_m2": 2659
+  },
+  {
+   "nome": null,
+   "osm_id": 188255132,
+   "centro_xy": [
+    -750.1,
+    -259.8
+   ],
+   "caixa_m": [
+    53.5,
+    43.3
+   ],
+   "azimute_eixo_longo_deg": 58.4,
+   "area_m2": 2308
+  },
+  {
+   "nome": "Los Cedros Aviación",
+   "osm_id": 237260777,
+   "centro_xy": [
+    -361.5,
+    -1081.2
+   ],
+   "caixa_m": [
+    49.4,
+    45.1
+   ],
+   "azimute_eixo_longo_deg": 177.5,
+   "area_m2": 2112
+  },
+  {
+   "nome": "Hangar A",
+   "osm_id": 53256900,
+   "centro_xy": [
+    -575.0,
+    -84.5
+   ],
+   "caixa_m": [
+    50.3,
+    41.9
+   ],
+   "azimute_eixo_longo_deg": 88.0,
+   "area_m2": 2105
+  },
+  {
+   "nome": null,
+   "osm_id": 237260770,
+   "centro_xy": [
+    -355.9,
+    -1138.1
+   ],
+   "caixa_m": [
+    51.1,
+    41.8
+   ],
+   "azimute_eixo_longo_deg": 177.8,
+   "area_m2": 2089
+  },
+  {
+   "nome": null,
+   "osm_id": 611328740,
+   "centro_xy": [
+    -563.6,
+    -749.9
+   ],
+   "caixa_m": [
+    48.0,
+    46.0
+   ],
+   "azimute_eixo_longo_deg": 177.4,
+   "area_m2": 1885
+  },
+  {
+   "nome": null,
+   "osm_id": 237260773,
+   "centro_xy": [
+    -350.3,
+    -1436.0
+   ],
+   "caixa_m": [
+    44.8,
+    38.5
+   ],
+   "azimute_eixo_longo_deg": 177.5,
+   "area_m2": 1726
+  },
+  {
+   "nome": "Aviasur",
+   "osm_id": 237261105,
+   "centro_xy": [
+    -534.8,
+    -1776.1
+   ],
+   "caixa_m": [
+    49.7,
+    33.6
+   ],
+   "azimute_eixo_longo_deg": 177.4,
+   "area_m2": 1658
+  },
+  {
+   "nome": "Aviasur",
+   "osm_id": 237261104,
+   "centro_xy": [
+    -537.6,
+    -1722.3
+   ],
+   "caixa_m": [
+    49.3,
+    33.3
+   ],
+   "azimute_eixo_longo_deg": 177.4,
+   "area_m2": 1643
+  },
+  {
+   "nome": "Santiago FBO",
+   "osm_id": 245330369,
+   "centro_xy": [
+    -357.7,
+    -1260.5
+   ],
+   "caixa_m": [
+    45.1,
+    37.1
+   ],
+   "azimute_eixo_longo_deg": 87.6,
+   "area_m2": 1551
+  },
+  {
+   "nome": "American Airlines",
+   "osm_id": 611327703,
+   "centro_xy": [
+    -1071.9,
+    -1295.9
+   ],
+   "caixa_m": [
+    45.7,
+    32.9
+   ],
+   "azimute_eixo_longo_deg": 87.7,
+   "area_m2": 1503
+  },
+  {
+   "nome": "Aviasur",
+   "osm_id": 607798137,
+   "centro_xy": [
+    -578.3,
+    -1794.3
+   ],
+   "caixa_m": [
+    40.1,
+    37.5
+   ],
+   "azimute_eixo_longo_deg": 87.9,
+   "area_m2": 1490
+  },
+  {
+   "nome": "Aerocardal",
+   "osm_id": 459613371,
+   "centro_xy": [
+    -764.2,
+    -1309.7
+   ],
+   "caixa_m": [
+    38.7,
+    37.8
+   ],
+   "azimute_eixo_longo_deg": 177.9,
+   "area_m2": 1436
+  },
+  {
+   "nome": "Jetex Santiago",
+   "osm_id": 245330362,
+   "centro_xy": [
+    -351.7,
+    -1298.8
+   ],
+   "caixa_m": [
+    42.1,
+    34.1
+   ],
+   "azimute_eixo_longo_deg": 86.9,
+   "area_m2": 1359
+  },
+  {
+   "nome": "Hangar F",
+   "osm_id": 611333327,
+   "centro_xy": [
+    -488.7,
+    228.2
+   ],
+   "caixa_m": [
+    47.2,
+    26.4
+   ],
+   "azimute_eixo_longo_deg": 177.5,
+   "area_m2": 1239
+  },
+  {
+   "nome": null,
+   "osm_id": 237260775,
+   "centro_xy": [
+    -764.3,
+    -1349.7
+   ],
+   "caixa_m": [
+    33.8,
+    29.4
+   ],
+   "azimute_eixo_longo_deg": 87.6,
+   "area_m2": 993
+  }
+ ],
+ "terminais": [
+  {
+   "nome": "Terminal 2 Internacional",
+   "centro_xy": [
+    -636.2,
+    -2802.3
+   ],
+   "caixa_m": [
+    367.0,
+    309.2
+   ],
+   "azimute_deg": 87.3,
+   "area_m2": 49725,
+   "inaugurado": "2022-02-28"
+  },
+  {
+   "nome": "Terminal 1 Nacional",
+   "centro_xy": [
+    -669.0,
+    -2276.5
+   ],
+   "caixa_m": [
+    479.6,
+    96.9
+   ],
+   "azimute_deg": 87.7,
+   "area_m2": 35977,
+   "inaugurado": "1994-02-14"
+  },
+  {
+   "nome": "Espigón C \"Isla de Pascua\"",
+   "centro_xy": [
+    -942.1,
+    -2644.9
+   ],
+   "caixa_m": [
+    296.1,
+    103.0
+   ],
+   "azimute_deg": 87.4,
+   "area_m2": 18474,
+   "inaugurado": "2018-12-18"
+  },
+  {
+   "nome": "Espigón E \"Lagos\"",
+   "centro_xy": [
+    -925.5,
+    -3000.5
+   ],
+   "caixa_m": [
+    295.9,
+    100.9
+   ],
+   "azimute_deg": 87.3,
+   "area_m2": 18408,
+   "inaugurado": "2019-09-12"
+  },
+  {
+   "nome": "Espigón F \"Patagonia\"",
+   "centro_xy": [
+    -356.7,
+    -2974.0
+   ],
+   "caixa_m": [
+    240.2,
+    101.5
+   ],
+   "azimute_deg": 87.5,
+   "area_m2": 15110,
+   "inaugurado": "2024"
+  },
+  {
+   "nome": "Espigón D \"Desierto de Atacama\"",
+   "centro_xy": [
+    -371.2,
+    -2617.7
+   ],
+   "caixa_m": [
+    237.6,
+    102.3
+   ],
+   "azimute_deg": 87.5,
+   "area_m2": 14942,
+   "inaugurado": "2021-07"
+  },
+  {
+   "nome": "Espigón B \"Valle Central\"",
+   "centro_xy": [
+    -370.5,
+    -2262.7
+   ],
+   "caixa_m": [
+    210.2,
+    93.7
+   ],
+   "azimute_deg": 87.9,
+   "area_m2": 9406,
+   "inaugurado": "1994-02-14"
+  },
+  {
+   "nome": "Espigón A \"Costa\"",
+   "centro_xy": [
+    -1007.4,
+    -2283.1
+   ],
+   "caixa_m": [
+    199.1,
+    81.4
+   ],
+   "azimute_deg": 87.3,
+   "area_m2": 8494,
+   "inaugurado": "2024-09"
+  },
+  {
+   "nome": "Conexión T1M-T2C",
+   "centro_xy": [
+    -884.3,
+    -2453.2
+   ],
+   "caixa_m": [
+    315.8,
+    34.9
+   ],
+   "azimute_deg": 177.7,
+   "area_m2": 7175,
+   "inaugurado": "2018-12-18"
+  },
+  {
+   "nome": "Conexión T1-T2D",
+   "centro_xy": [
+    -480.1,
+    -2444.5
+   ],
+   "caixa_m": [
+    295.1,
+    27.5
+   ],
+   "azimute_deg": 176.9,
+   "area_m2": 4620,
+   "inaugurado": null
+  }
+ ],
+ "patios": [
+  {
+   "nome": null,
+   "ref": null,
+   "centro_xy": [
+    -680.2,
+    -2359.7
+   ],
+   "caixa_m": [
+    890.9,
+    420.3
+   ],
+   "area_m2": 120313
+  },
+  {
+   "nome": null,
+   "ref": "RAMP W",
+   "centro_xy": [
+    -929.6,
+    -3381.5
+   ],
+   "caixa_m": [
+    407.4,
+    255.1
+   ],
+   "area_m2": 103162
+  },
+  {
+   "nome": null,
+   "ref": null,
+   "centro_xy": [
+    -585.7,
+    -135.7
+   ],
+   "caixa_m": [
+    629.2,
+    364.5
+   ],
+   "area_m2": 93236
+  },
+  {
+   "nome": "Plataforma LATAM",
+   "ref": "RAMP LATAM",
+   "centro_xy": [
+    -561.1,
+    -1272.1
+   ],
+   "caixa_m": [
+    471.7,
+    307.2
+   ],
+   "area_m2": 82617
+  },
+  {
+   "nome": null,
+   "ref": null,
+   "centro_xy": [
+    -336.3,
+    -2794.2
+   ],
+   "caixa_m": [
+    279.6,
+    214.0
+   ],
+   "area_m2": 59099
+  },
+  {
+   "nome": null,
+   "ref": null,
+   "centro_xy": [
+    -1011.5,
+    -2462.8
+   ],
+   "caixa_m": [
+    290.1,
+    205.2
+   ],
+   "area_m2": 56071
+  },
+  {
+   "nome": null,
+   "ref": null,
+   "centro_xy": [
+    -227.6,
+    -3436.1
+   ],
+   "caixa_m": [
+    542.7,
+    89.8
+   ],
+   "area_m2": 48180
+  },
+  {
+   "nome": null,
+   "ref": null,
+   "centro_xy": [
+    -957.2,
+    -2758.8
+   ],
+   "caixa_m": [
+    253.4,
+    151.3
+   ],
+   "area_m2": 38036
+  },
+  {
+   "nome": null,
+   "ref": null,
+   "centro_xy": [
+    -950.7,
+    -2898.4
+   ],
+   "caixa_m": [
+    253.7,
+    128.3
+   ],
+   "area_m2": 32125
+  },
+  {
+   "nome": null,
+   "ref": null,
+   "centro_xy": [
+    -942.4,
+    -3119.3
+   ],
+   "caixa_m": [
+    254.3,
+    123.0
+   ],
+   "area_m2": 30875
+  },
+  {
+   "nome": null,
+   "ref": null,
+   "centro_xy": [
+    -324.4,
+    -3085.5
+   ],
+   "caixa_m": [
+    217.0,
+    153.2
+   ],
+   "area_m2": 29897
+  },
+  {
+   "nome": "Plataforma Papa",
+   "ref": "RAMP P",
+   "centro_xy": [
+    -822.7,
+    -1346.1
+   ],
+   "caixa_m": [
+    275.0,
+    153.9
+   ],
+   "area_m2": 27552
+  }
+ ],
+ "cordilheira": {
+  "metodo": "perfil de horizonte calculado do DEM SRTM 30 m (OpenTopoData) a partir da origem, com correcao de curvatura terrestre e refracao k=0.13",
+  "setor_amostrado_azimute_deg": [
+   40,
+   140
+  ],
+  "passo_azimute_deg": 2,
+  "alcance_amostrado_km": [
+   3,
+   109.4
+  ],
+  "crista_angulo_min_deg": 1.95,
+  "crista_angulo_max_deg": 4.89,
+  "crista_angulo_medio_deg": 3.46,
+  "ponto_mais_alto": {
+   "azimute_deg": 74,
+   "angulo_elevacao_deg": 4.89,
+   "distancia_km": 55.5,
+   "cume_m": 5432,
+   "identificacao": "Cerro El Plomo (5424 m em cartas oficiais)"
+  },
+  "arquivo_perfil": "skyline_leste_17L.csv"
+ }
+}

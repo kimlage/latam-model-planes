@@ -1,0 +1,224 @@
+{
+ "_what": "AIP-verified corrections to the SCL scene geometry. Produced by an independent geometric audit of cenario/scl_osm.json and cenario/terreno/*. Values here OVERRIDE the corresponding fields in scl_osm.json and terreno_meta.json where they differ.",
+ "_source": {
+  "primary": "AIP-Chile / DGAC - SCEL AERODROME CHART (ADC-AYUDAS VISUALES), AMDT 99, 15 MAYO 2025",
+  "primary_url": "https://aipchile.dgac.gob.cl/dasa/aip_chile_con_contenido/aipmap/SCEL/SCEL%20ADC%20RET.pdf",
+  "secondary": "DGAC IFIS aerodrome record for SCEL (runway dimensions, aerodrome elevation)",
+  "secondary_url": "https://aipchile.dgac.gob.cl/designador/SCEL",
+  "threshold_elevations": "AIP-Chile SCEL IAC2 (ILS Z RWY 17R) and IAC6 - THR 17R elev 1551 ft, THR 17L elev 1550 ft",
+  "licence": "Chilean State aeronautical information (DGAC). Official data, quoted as fact for engineering use; charts are not redistributed in this repository - only the numbers and the URLs.",
+  "audited_on": "2026-08-18"
+ },
+ "reference_frame": {
+  "origin_lat": -33.3760915,
+  "origin_lon": -70.7867106,
+  "note": "Unchanged from scl_osm.json (OSM threshold node 2451905265). The AIP 17L threshold falls 1.2 m from it, so the origin is confirmed correct to within 1.2 m and is NOT moved.",
+  "axes": "x=East, y=North, z=Up, metres, exact WGS84 ENU"
+ },
+ "magnetic_variation": {
+  "value_deg_east": 0.9,
+  "epoch": 2023,
+  "source": "ADC chart, 'VAR 0.9 E 2023'",
+  "consequence": "True runway bearing 177.42 deg minus 0.9 deg E variation = 176.5 deg magnetic, which would round to designator 18/36. The 17/35 designation is LEGACY, retained from when the easterly variation was several degrees larger. Do not try to derive the designator from today's variation, and do not use magnetic headings anywhere in the scene."
+ },
+ "aerodrome_elevation_m_amsl": {
+  "value": 474.0,
+  "source": "DGAC IFIS, '474 m / 1555 ft'",
+  "resolves": "The OurAirports (1555 ft) vs Wikipedia (1575 ft) disagreement. OurAirports is correct; Wikipedia's 1575 ft is wrong. The terrain datum z=0 at 474.0 m AMSL is CONFIRMED.",
+  "threshold_elevations_ft": {
+   "17L": 1550,
+   "17R": 1551
+  },
+  "dem_check": "Copernicus GLO-30 reads 472.0 m at the 17L threshold; AIP publishes 1550 ft = 472.4 m. Agreement 0.4 m."
+ },
+ "runways": [
+  {
+   "designation": "17L/35R",
+   "length_m": 3750,
+   "width_m": 55.0,
+   "surface": "ASPH",
+   "pcr": "PCR 560 F/B/X/T",
+   "width_source": "DGAC IFIS: '17L/35R 3.750 x 55 ASPH'. CLOSES the open width question - 55 m is correct, NOT 45 m.",
+   "true_bearing_deg": {
+    "17L": 177.416,
+    "35R": 357.416
+   },
+   "chart_direccion_deg": {
+    "17L": 177,
+    "35R": 357
+   },
+   "thresholds_aip": {
+    "17L": {
+     "lat": -33.376081,
+     "lon": -70.786708,
+     "xy_m": [
+      0.21,
+      1.21
+     ]
+    },
+    "35R": {
+     "lat": -33.404889,
+     "lon": -70.785158,
+     "xy_m": [
+      144.4,
+      -3193.96
+     ]
+    }
+   },
+   "thr_to_thr_m": 3198.4,
+   "displaced_threshold_35R_m": 548.8,
+   "displaced_threshold_source": "AIP 35R threshold to the mapped pavement end. Agrees with OurAirports 1800 ft = 548.6 m to 0.2 m. Supersedes the 542.0 m in scl_osm.json.",
+   "pavement_end_south_xy_m": [
+    169.14,
+    -3742.2
+   ]
+  },
+  {
+   "designation": "17R/35L",
+   "length_m": 3800,
+   "width_m": 45.0,
+   "surface": "ASPH",
+   "pcr": "PCR 1120 F/D/X/T",
+   "width_source": "DGAC IFIS: '17R/35L 3.800 x 45 ASPH'",
+   "true_bearing_deg": {
+    "17R": 177.424,
+    "35L": 357.424
+   },
+   "chart_direccion_deg": {
+    "17R": 177,
+    "35L": 357
+   },
+   "thresholds_aip": {
+    "17R": {
+     "lat": -33.37195,
+     "lon": -70.803717,
+     "xy_m": [
+      -1582.57,
+      459.21
+     ]
+    },
+    "35L": {
+     "lat": -33.406181,
+     "lon": -70.801881,
+     "xy_m": [
+      -1411.15,
+      -3337.32
+     ]
+    }
+   },
+   "thr_to_thr_m": 3800.4,
+   "displaced_threshold_m": 0.0,
+   "displaced_threshold_source": "AIP threshold-to-threshold measures 3800.4 m against a published 3800 m runway, so both thresholds sit at the pavement ends. The 'ASSUMED zero, not verified' caveat in scl_osm.json is now VERIFIED."
+  }
+ ],
+ "parallel_separation_m": {
+  "value": 1560.5,
+  "source": "perpendicular distance from the AIP 17L/35R centreline to both AIP 17R/35L thresholds (1560.5 and 1560.4)",
+  "agrees_with": "OSM 1560.0 m (0.5 m apart) - CONFIRMED by an independent official source",
+  "refutes": "1551.3 m recomputed from OurAirports coordinates"
+ },
+ "aerodrome_reference_point": {
+  "lat": -33.394442,
+  "lon": -70.793803,
+  "xy_m": [
+   -659.82,
+   -2035.26
+  ],
+  "source": "ADC chart, 33 23 39,99 S / 70 47 37,69 W",
+  "correction": "terreno/terreno_meta.json carries an ARP at xy (83.7, -1874.8), taken from OurAirports. That point is 762 m away and sits ON the 17L centreline - it is the pre-2005 single-runway ARP. Use the value here."
+ },
+ "corrections_to_apply": [
+  {
+   "file": "cenario/terreno/terreno_meta.json + cenario/lib/frame.py",
+   "field": "reference_points_enu.35L",
+   "wrong": [
+    -1414.57,
+    -3416.37
+   ],
+   "right": [
+    -1411.15,
+    -3337.32
+   ],
+   "error_m": 79.7,
+   "why": "frame.py took all four runway ends from OurAirports. Its 35L latitude is 0.00071 deg too far south, which stretches 17R/35L to 3885.5 m against a published 3800 m. The sibling OSM task had already caught and discarded this OurAirports error; frame.py kept it."
+  },
+  {
+   "file": "cenario/terreno/terreno_meta.json + cenario/lib/frame.py",
+   "field": "reference_points_enu.35R",
+   "wrong": [
+    139.07,
+    -3749.31
+   ],
+   "right": [
+    144.4,
+    -3193.96
+   ],
+   "error_m": 548.8,
+   "why": "That point is the south PAVEMENT END, not the 35R threshold. The real 35R landing threshold is 548.8 m north of it. Anything that paints '35R' markings or sets a touchdown point from this field lands half a kilometre out."
+  },
+  {
+   "file": "cenario/terreno/terreno_meta.json + cenario/lib/frame.py",
+   "field": "reference_points_enu.ARP",
+   "wrong": [
+    83.73,
+    -1874.82
+   ],
+   "right": [
+    -659.82,
+    -2035.26
+   ],
+   "error_m": 762.0,
+   "why": "pre-2005 single-runway ARP from OurAirports"
+  },
+  {
+   "file": "cenario/terreno/terreno_meta.json",
+   "field": "frame.origin_lat/lon",
+   "wrong": [
+    -33.376099,
+    -70.786697
+   ],
+   "right": [
+    -33.3760915,
+    -70.7867106
+   ],
+   "error_m": 1.51,
+   "why": "The two deliverables sit in frames offset by 1.51 m (1.27 m east, 0.83 m south). Harmless for rendering but they must be one frame. Adopt the OSM/AIP-confirmed origin; the AIP 17L threshold is 1.2 m from it versus 2.3 m from the OurAirports one."
+  },
+  {
+   "file": "cenario/scl_osm.json",
+   "field": "runways[0].width_m",
+   "wrong": null,
+   "right": 55.0,
+   "error_m": null,
+   "why": "Now published: DGAC gives 55 m for 17L/35R. The file's suggested working value of 45 m for both runways would have made the departure runway 10 m too narrow."
+  },
+  {
+   "file": "cenario/scl_osm.json",
+   "field": "runways[1].width_m",
+   "wrong": null,
+   "right": 45.0,
+   "error_m": null,
+   "why": "DGAC gives 45 m for 17R/35L."
+  },
+  {
+   "file": "cenario/scl_osm.json",
+   "field": "runways[0].ends.35R.displaced_threshold_m",
+   "wrong": 542.0,
+   "right": 548.8,
+   "error_m": 6.8,
+   "why": "AIP threshold coordinate, agreeing with OurAirports 1800 ft to 0.2 m"
+  }
+ ],
+ "confirmed_no_change_needed": {
+  "true_bearings": "AIP-derived 177.416 / 177.424 vs the file's 177.415 / 177.422 - agree to 0.002 deg",
+  "17L_threshold_origin": "AIP falls 1.2 m from the OSM node used as scene origin",
+  "17R_threshold": "AIP falls 1.3 m from the OSM pavement end",
+  "35L_threshold": "AIP falls 1.5 m from the OSM pavement end",
+  "17R_35L_length": "AIP thr-to-thr 3800.4 m vs published 3800 and OSM 3800.0",
+  "parallel_separation": "AIP 1560.5 vs OSM 1560.0",
+  "aerodrome_elevation": "AIP 474 m confirms the terrain datum",
+  "latam_mro_projection": "recomputed independently: 1287.0 m along the 17L roll, 647.3 m to the right of the centreline - reproduces the file exactly",
+  "heightfield_horizon": "an independent ray-cast of the three delivered .npy tiers reproduces the published horizon profile to 0.027 deg rms / 0.064 deg max over all 72 azimuths",
+  "tier_stitching": "no datum offset between tiers: 30m vs 60m mean -0.01 m, 60m vs 180m mean +0.08 m"
+ }
+}

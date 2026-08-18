@@ -1,0 +1,530 @@
+{
+ "_about": "Operational data for a take-off from SCEL (Santiago). Companion to scl_operacao.md.",
+ "_sources": {
+  "survey": "AIP-CHILE VOL I, AD 2 SCEL, AMDT NR 67, 06 AUG 2026 (DGAC Chile) - sections AD 2.2, 2.8, 2.9, 2.12, 2.13, 2.14, 2.20, 2.21 and the SCEL ADC chart AMDT 102 / 14 MAY 2026",
+  "markings_measured": "Esri World Imagery, rectified along the RWY 17R axis at 0.25 m/px and measured (see scl_operacao.md 'measured' column). Imagery used for measurement only; not redistributed.",
+  "standard": "ICAO Annex 14 Vol I, 8th ed. (2018), Chapter 5"
+ },
+ "frame": {
+  "origin": "RWY 17R threshold - the point where a LATAM departure lines up",
+  "origin_lat": -33.37195,
+  "origin_lon": -70.8037167,
+  "origin_elev_m_amsl": 472.7,
+  "axes": "x = East, y = North, z = up, metres (local ENU tangent plane, WGS84)",
+  "metres_per_degree_lat": 110911.094,
+  "metres_per_degree_lon": 93059.125,
+  "takeoff_unit_vector_xy": [
+   0.0449603,
+   -0.9989888
+  ],
+  "true_track_deg": 177.423,
+  "transform_to_the_17L_frame_used_by_scl_osm_json": {
+   "note": "scl_osm.json / lib/frame.py put the origin on the RWY 17L threshold. To convert a point from that frame into this one, add the offset below.",
+   "add_xy_m": [
+    1582.57,
+    -459.34
+   ],
+   "their_origin_vs_AIP_17L_threshold_m": 1.23
+  }
+ },
+ "runways": {
+  "17R/35L": {
+   "dimensions_m": [
+    3800,
+    45
+   ],
+   "surface": "ASPH",
+   "strength": "PCR 1120 F/D/X/T",
+   "strip_m": [
+    3920,
+    300
+   ],
+   "resa": true,
+   "slope_pct": 0.0,
+   "stopway": null,
+   "clearway": null,
+   "true_bearing_deg": {
+    "17R": 177.423,
+    "35L": 357.423
+   },
+   "published_bearing_deg": {
+    "17R": {
+     "geo": 177,
+     "mag": 176
+    },
+    "35L": {
+     "geo": 357,
+     "mag": 356
+    }
+   },
+   "thresholds": {
+    "17R": {
+     "lat": -33.37195,
+     "lon": -70.8037167,
+     "xy": [
+      0.0,
+      0.0
+     ],
+     "thr_elev_m": 472.7,
+     "declared_m": {
+      "TORA": 3800,
+      "TODA": 3800,
+      "ASDA": 3800,
+      "LDA": 3800
+     }
+    },
+    "35L": {
+     "lat": -33.4061806,
+     "lon": -70.8018806,
+     "xy": [
+      170.87,
+      -3796.55
+     ],
+     "thr_elev_m": 472.4,
+     "declared_m": {
+      "TORA": 3800,
+      "TODA": 3800,
+      "ASDA": 3800,
+      "LDA": 3800
+     }
+    }
+   }
+  },
+  "17L/35R": {
+   "dimensions_m": [
+    3750,
+    55
+   ],
+   "surface": "ASPH",
+   "strength": "PCR 560 F/B/X/T",
+   "strip_m": [
+    3870,
+    300
+   ],
+   "resa": true,
+   "slope_pct": 0.0,
+   "stopway": null,
+   "clearway": null,
+   "true_bearing_deg": {
+    "17L": 177.415,
+    "35R": 357.415
+   },
+   "published_bearing_deg": {
+    "17L": {
+     "geo": 177,
+     "mag": 176
+    },
+    "35R": {
+     "geo": 357,
+     "mag": 356
+    }
+   },
+   "thresholds": {
+    "17L": {
+     "lat": -33.3760806,
+     "lon": -70.7867083,
+     "xy": [
+      1582.78,
+      -458.12
+     ],
+     "thr_elev_m": 472.4,
+     "declared_m": {
+      "TORA": 3750,
+      "TODA": 3750,
+      "ASDA": 3750,
+      "LDA": 3750
+     }
+    },
+    "35R": {
+     "lat": -33.4048889,
+     "lon": -70.7851583,
+     "xy": [
+      1727.02,
+      -3653.29
+     ],
+     "thr_elev_m": 473.9,
+     "displaced_threshold_m": 550,
+     "declared_m": {
+      "TORA": 3750,
+      "TODA": 3750,
+      "ASDA": 3750,
+      "LDA": 3200
+     }
+    }
+   }
+  },
+  "_centreline_separation_m": 1560.8
+ },
+ "arp": {
+  "lat": -33.3944417,
+  "lon": -70.7938028,
+  "xy": [
+   922.58,
+   -2494.58
+  ],
+  "elev_m": 474.0
+ },
+ "runway_in_use": {
+  "rule": "AIP AD 2.20 1.1-1.5: the runways in use are 17L and 17R. Segregated mode is applied preferentially: RWY 17L for arrivals, RWY 17R for departures. 17L/17R are used with up to 10 kt tailwind. A request for 35R/35L is subject to ATC delay.",
+  "departure_runway": "17R",
+  "arrival_runway": "17L (CAT IIIB)",
+  "night_exception": "AIP AD 2.21 1.1: use of RWY 17R/35L is restricted 00:00-06:00 LMT (exceptions: ICAO Annex 16 Chapter 14 aircraft; landings without reverse; operational-safety cases). Departures in that window therefore go from 17L.",
+  "night_exception_2": "AIP AD 2.21 1.2: Chapter 3 aircraft above 50,000 kg MTOW may not take off between 22:00 and 07:00 LMT, on either runway."
+ },
+ "markings_rwy_17R_measured_m": {
+  "_method": "Esri World Imagery rectified on the 17R axis, 0.25 m sampling; distances are from the published threshold; imagery georeferencing bias is about 2 m.",
+  "threshold_stripes": {
+   "count": 12,
+   "start_from_thr": 6,
+   "length": 30.2,
+   "width": 1.75,
+   "gap": 1.8,
+   "central_gap": 4.0,
+   "outer_edge_from_centreline": 22.25,
+   "icao": "Annex 14 Table in 5.2.4.5: 12 stripes for a 45 m runway; 5.2.4.6: >=30 m long, ~1.80 m wide, ~1.80 m gaps, 2x gap at the centre"
+  },
+  "designation": {
+   "pattern": "ICAO Annex 14 Fig. 5-2 (B), stacked: the letter R nearer the threshold, the number 17 beyond it",
+   "letter_R_from_thr": [
+    45.8,
+    55.0
+   ],
+   "number_17_from_thr": [
+    62,
+    72
+   ],
+   "character_height": 9.0,
+   "icao": "Fig. 5-2 (B): 12 m after the threshold stripes, letter 9 m, 6 m gap, number 9 m"
+  },
+  "centreline": {
+   "stripe": 30.0,
+   "gap": 30.0,
+   "period": 60.0,
+   "width_required": 0.9,
+   "measured_over": "8 consecutive periods between 1438 m and 1888 m from THR 17R; 59.75-60.25 m",
+   "icao": "5.2.3.3 period 50-75 m, stripe >= max(gap, 30 m); 5.2.3.4 width >= 0.90 m on CAT II/III"
+  },
+  "aiming_point": {
+   "from_thr": [
+    383.2,
+    428.5
+   ],
+   "length": 45.3,
+   "stripe_width": 6.0,
+   "inner_edges_from_centreline": 9.25,
+   "lateral_spacing_inner": 18.5,
+   "icao": "Table 5-1 col 5 (LDA >= 2400 m): 400 m from threshold, 45-60 m long, 6-10 m wide, 18-22.5 m spacing"
+  },
+  "touchdown_zone": {
+   "pattern": "Annex 14 Fig. 5-5 (B) - three stripes per mark",
+   "pairs_from_thr": [
+    150,
+    300,
+    600,
+    750,
+    900
+   ],
+   "deleted_pair": 450,
+   "mark_length": 23.8,
+   "icao": "5.2.6.4: pairs every 150 m, six pairs for LDA >= 2400 m, delete any pair within 50 m of the aiming point"
+  },
+  "side_stripe": {
+   "width": 1.0,
+   "outer_edge_from_centreline": 22.5,
+   "icao": "5.2.7.5: >= 0.90 m on runways 30 m or wider"
+  },
+  "distance_remaining": {
+   "present": false,
+   "note": "ICAO has no painted distance-remaining marking and none is painted at SCEL. AIP AD 2.9 lists only: designators, centre line, edge, touchdown zone, aiming point, signs, NO ENTRY."
+  }
+ },
+ "lighting": {
+  "_source": "AIP AD 2.14, AMDT NR 67",
+  "17R": {
+   "approach": "ALSF-2",
+   "thr_lights": "green",
+   "papi": {
+    "slope_deg": 3.0,
+    "side": "LEFT"
+   },
+   "tdz_lights": false,
+   "centreline": "3200 m every 15 m white, then red to 3800 m",
+   "edge": "not published separately for this direction",
+   "other": [
+    "RCLL",
+    "REDL",
+    "REIL",
+    "TCLL",
+    "RTHL"
+   ]
+  },
+  "17L": {
+   "approach": "ALSF-2",
+   "thr_lights": "green",
+   "papi": {
+    "slope_deg": 3.0,
+    "side": "LEFT"
+   },
+   "tdz_lights": true,
+   "centreline": "white LIH to 2600 m; white/red 2500-3150 m; red 3150-3750 m (as published; the 2600/2500 pair is inconsistent in the AIP)",
+   "edge": "3750 m every 60 m white LIH",
+   "other": [
+    "RCLL",
+    "REDL",
+    "TDZL",
+    "REIL",
+    "RTHL"
+   ]
+  },
+  "35R": {
+   "approach": "SSALS",
+   "thr_lights": "green",
+   "papi": {
+    "slope_deg": 3.0,
+    "side": "LEFT"
+   },
+   "tdz_lights": false,
+   "edge": "600 m red every 60 m; 3200 m white every 60 m LIH",
+   "other": [
+    "RCLL",
+    "REDL",
+    "REIL",
+    "RTHL"
+   ]
+  },
+  "35L": {
+   "approach": null,
+   "papi": {
+    "slope_deg": 3.0,
+    "side": "LEFT"
+   },
+   "tdz_lights": false,
+   "centreline": "3200 m every 15 m white, then red to 3800 m",
+   "edge": "3800 m every 50 m",
+   "other": [
+    "REIL",
+    "RCLL",
+    "REDL",
+    "RTHL"
+   ]
+  },
+  "abn": "TWR aerodrome beacon, flashing white every 10 s, H24",
+  "taxiway": "edge and centre-line lighting, or lit and retro-reflective markers plus centre-line lighting (AD 2.15)"
+ },
+ "taxiways": {
+  "widths_m": {
+   "default": 23,
+   "ALFA": 36,
+   "TANGO": 23
+  },
+  "surface": {
+   "ALFA": "CONC, PCR 740 R/D/W/T",
+   "TANGO": "ASPH, PCR 1120 F/D/W/T"
+  },
+  "apron": {
+   "surface": "CONC",
+   "strength": "PCR 770 R/D/W/T"
+  },
+  "lvp_pink_spots": "LVP position markings (pink spots) are painted WEST of the centre line of TWY ZULU, ALFA, PAPA and KILO: a black alphanumeric on a 3 m pink disc, bounded by a black ring and an outer white ring (AD 2.9 item 5).",
+  "stations_on_rwy_17R_axis_m_from_THR_17R": {
+   "V1": -61.1,
+   "V": -76.1,
+   "R": 1746.4,
+   "U": 2144.1,
+   "W": 2858.1,
+   "Y": 3705.2
+  },
+  "stations_on_rwy_17L_axis_m_from_THR_17R_datum": {
+   "A_north": 476.4,
+   "D": 1722.8,
+   "C": 2167.9,
+   "B": 2518.8,
+   "A1": 3667.9,
+   "A_south": 4188.7
+  },
+  "note": "THR 17L sits 528.8 m down-field of THR 17R along the 17R axis; subtract 528.8 to get distances from the 17L threshold."
+ },
+ "standard_taxi_routes": {
+  "_source": "AIP AD 2 SCEL-46..48, section 14.3 - applies only when 17L/17R are in use",
+  "departures": {
+   "north stands -> 17L": [
+    "G",
+    "K",
+    "T",
+    "A"
+   ],
+   "east stands -> 17L": [
+    "K",
+    "T",
+    "A"
+   ],
+   "west stands -> 17L": [
+    "P",
+    "T",
+    "A"
+   ],
+   "north stands -> 17R": [
+    "G",
+    "P",
+    "T",
+    "Z",
+    "V or V1"
+   ],
+   "east stands -> 17R": [
+    "K",
+    "T",
+    "Z",
+    "V or V1"
+   ],
+   "west stands -> 17R": [
+    "P",
+    "T",
+    "Z",
+    "V or V1"
+   ]
+  },
+  "arrivals_vacating": {
+   "17L": [
+    "C",
+    "B",
+    "A1"
+   ],
+   "17R": [
+    "U",
+    "W",
+    "Y"
+   ]
+  },
+  "stand_groups": {
+   "north": "A14, A14A/B, A15, A15A/B, 16-25",
+   "east": "cargo 41-47; Concourse D (D1-D6B); Concourse F (F1-F6B); 26, 27, 28",
+   "west": "cargo W1-W9B, V1, V2; Concourse C (C1A-C5B); Concourse E (E1A-E6B); A12, A12A/B, A13, A13A/B"
+  },
+  "yield_rules": "Aircraft taxiing on TWY ALFA give way to traffic vacating RWY 17L via BRAVO or CHARLIE; aircraft on TWY ZULU give way to traffic vacating RWY 17R via UNIFORM or WHISKY (AD 2 13.1).",
+  "mrot": "Minimum Runway Occupancy Time is in force: an aircraft at the holding point must be ready to line up and start the take-off immediately; otherwise the clearance is cancelled and it is sent off at the first taxiway."
+ },
+ "facilities_xy_m": {
+  "_frame": "x east / y north from THR 17R; 'along' = distance down the 17R take-off axis, 'east' = metres east of the 17R centre line",
+  "LATAM Base de Operaciones y Mantenimiento": {
+   "xy": [
+    924.1,
+    -1774.0
+   ],
+   "along": 1790.6,
+   "east": 844.5
+  },
+  "Plataforma LATAM (MRO apron)": {
+   "xy": [
+    1022.1,
+    -1731.8
+   ],
+   "along": 1776.0,
+   "east": 944.7
+  },
+  "Base de Mantenimiento Sky Airline": {
+   "xy": [
+    760.3,
+    -2119.8
+   ],
+   "along": 2151.5,
+   "east": 663.9
+  },
+  "Terminal 1 Nacional": {
+   "xy": [
+    920.4,
+    -2741.2
+   ],
+   "along": 2779.8,
+   "east": 796.2
+  },
+  "Terminal 2 Internacional": {
+   "xy": [
+    934.0,
+    -3231.8
+   ],
+   "along": 3270.6,
+   "east": 787.7
+  },
+  "Espigon C Isla de Pascua": {
+   "xy": [
+    623.4,
+    -3111.1
+   ],
+   "along": 3135.9,
+   "east": 482.9
+  },
+  "Espigon D Desierto de Atacama": {
+   "xy": [
+    1210.9,
+    -3076.1
+   ],
+   "along": 3127.4,
+   "east": 1071.4
+  },
+  "Espigon E Lagos": {
+   "xy": [
+    651.2,
+    -3458.2
+   ],
+   "along": 3484.0,
+   "east": 495.0
+  },
+  "Espigon F Patagonia": {
+   "xy": [
+    1224.2,
+    -3433.7
+   ],
+   "along": 3485.3,
+   "east": 1068.6
+  },
+  "LATAM Cargo": {
+   "xy": [
+    531.4,
+    -4132.0
+   ],
+   "along": 4150.9,
+   "east": 344.6
+  },
+  "Engine run-up Test Area": {
+   "note": "north of TWY PAPA, marked 'Test Area' on the SCEL ADC; full-power runs are not allowed on the apron (AD 2.21)"
+  }
+ },
+ "navaids": {
+  "PDH VOR/DME": {
+   "freq_mhz": 117.2,
+   "note": "Pudahuel; the 17R runway track is radial 177 of PDH"
+  },
+  "AMB VOR/DME": {
+   "freq_mhz": 116.1
+  },
+  "ILS 17L": {
+   "loc": "IUEL 110.3",
+   "gp_mhz": 335.0,
+   "dme_ch": 40
+  },
+  "ILS 17R": {
+   "gp_mhz": 331.7,
+   "dme_ch": 48
+  },
+  "ILS 35L": {
+   "loc": "IMER 111.1"
+  }
+ },
+ "sid_first_segment": {
+  "_source": "AIP-CHILE SCEL SID charts (SID1..SID12), aipmap/SCEL",
+  "common": "Every 17R departure climbs straight ahead on the runway track (TR 176-177 deg, PDH R177).",
+  "recommended_sids": [
+   "DILOK 7B / 5A",
+   "GUVOL 6B / 4A",
+   "DONTI 5B"
+  ],
+  "dilok_guvol_profile": "Climb on TR 177 deg to 4000 ft, then turn RIGHT (west) direct SEKSU - TEPOK - TEMUS - TINGO - EL680 - DILOK/GUVOL.",
+  "why": "The recommended SIDs deliberately buy track miles to gain altitude before crossing the Andes (airline route manual).",
+  "geometry_for_the_scene": "4000 ft = 1219 m AMSL = 745 m above the field; at a typical narrowbody climb that is roughly 5-7 km straight south of the threshold before the first turn, and the turn is to the RIGHT, away from the cordillera."
+ },
+ "magnetic": {
+  "aip_variation": "VAR 0.9 deg E (2023), SCEL ADC AMDT 102",
+  "wmm_2026_6": 0.227,
+  "note": "Declination at SCEL is now essentially zero, so true and magnetic tracks coincide within a degree. The 17/35 designation dates from when the easterly declination was large enough for a true track of 177.4 deg to round to 17."
+ }
+}

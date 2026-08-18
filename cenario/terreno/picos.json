@@ -1,0 +1,1793 @@
+{
+  "observer": {
+    "lat": -33.376099,
+    "lon": -70.786697,
+    "height_m_amsl": 477.0,
+    "desc": "RWY 17L threshold, SCEL"
+  },
+  "gazetteers": [
+    "GeoNames (CC BY 4.0)",
+    "OpenStreetMap (ODbL)"
+  ],
+  "skyline_peaks": [
+    {
+      "confidence": "probable",
+      "azimuth_deg": 1.8,
+      "elev_deg": 1.035,
+      "name": "Cerro Colunquén",
+      "source": "geonames",
+      "gazetteer_ele_m": 1839.0,
+      "dem_height_m": 1840.7,
+      "dist_km": 61.26,
+      "lat": -32.82533,
+      "lon": -70.7661,
+      "match_offset_m": 1245.0
+    },
+    {
+      "confidence": "uncertain",
+      "azimuth_deg": 7.1,
+      "elev_deg": 1.291,
+      "name": "El Litral",
+      "source": "geonames",
+      "gazetteer_ele_m": 834.0,
+      "dem_height_m": 1005.9,
+      "dist_km": 22.0,
+      "lat": -33.17972,
+      "lon": -70.75747,
+      "match_offset_m": 1681.0
+    },
+    {
+      "confidence": "probable",
+      "azimuth_deg": 11.9,
+      "elev_deg": 1.099,
+      "name": "Riscos Colorados",
+      "source": "geonames",
+      "gazetteer_ele_m": 948.0,
+      "dem_height_m": 975.1,
+      "dist_km": 23.92,
+      "lat": -33.16555,
+      "lon": -70.7337,
+      "match_offset_m": 1026.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 14.3,
+      "elev_deg": 1.464,
+      "name": "Cerro Algarrobo",
+      "source": "osm",
+      "gazetteer_ele_m": 1945.0,
+      "dem_height_m": 1949.5,
+      "dist_km": 50.72,
+      "lat": -32.93393,
+      "lon": -70.65243,
+      "match_offset_m": 22.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 18.8,
+      "elev_deg": 1.839,
+      "name": "Cerro Chivato",
+      "source": "osm",
+      "gazetteer_ele_m": 2262.0,
+      "dem_height_m": 2248.2,
+      "dist_km": 49.86,
+      "lat": -32.95141,
+      "lon": -70.61446,
+      "match_offset_m": 25.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 21.8,
+      "elev_deg": 2.022,
+      "name": "Cerro Cobre de Chacabuco",
+      "source": "geonames",
+      "gazetteer_ele_m": 2352.0,
+      "dem_height_m": 2358.4,
+      "dist_km": 48.68,
+      "lat": -32.96938,
+      "lon": -70.59287,
+      "match_offset_m": 28.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 25.0,
+      "elev_deg": 1.849,
+      "name": "Cerro El Padre",
+      "source": "osm",
+      "gazetteer_ele_m": 4085.0,
+      "dem_height_m": 4054.6,
+      "dist_km": 92.62,
+      "lat": -32.62033,
+      "lon": -70.36867,
+      "match_offset_m": 43.0
+    },
+    {
+      "confidence": "uncertain",
+      "azimuth_deg": 25.9,
+      "elev_deg": 1.851,
+      "name": "Cerro Punta Redonda",
+      "source": "geonames",
+      "gazetteer_ele_m": 3861.0,
+      "dem_height_m": 3946.4,
+      "dist_km": 90.12,
+      "lat": -32.64617,
+      "lon": -70.36618,
+      "match_offset_m": 2286.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 28.1,
+      "elev_deg": 1.938,
+      "name": "Cerro Piedras Negras",
+      "source": "osm",
+      "gazetteer_ele_m": 3776.0,
+      "dem_height_m": 3744.8,
+      "dist_km": 82.72,
+      "lat": -32.71903,
+      "lon": -70.37014,
+      "match_offset_m": 77.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 29.0,
+      "elev_deg": 1.935,
+      "name": "Alto de las Minas",
+      "source": "osm",
+      "gazetteer_ele_m": 3622.0,
+      "dem_height_m": 3619.6,
+      "dist_km": 80.04,
+      "lat": -32.74571,
+      "lon": -70.3717,
+      "match_offset_m": 29.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 30.8,
+      "elev_deg": 1.962,
+      "name": "Cerro Falso Tordillo",
+      "source": "osm",
+      "gazetteer_ele_m": 4583.0,
+      "dem_height_m": 4608.1,
+      "dist_km": 100.4,
+      "lat": -32.59915,
+      "lon": -70.23781,
+      "match_offset_m": 236.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 35.7,
+      "elev_deg": 2.783,
+      "name": "Cerro Los Azules de Vilcuya",
+      "source": "osm",
+      "gazetteer_ele_m": 3446.0,
+      "dem_height_m": 3443.6,
+      "dist_km": 56.52,
+      "lat": -32.96273,
+      "lon": -70.4331,
+      "match_offset_m": 92.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 38.4,
+      "elev_deg": 3.248,
+      "name": "Cerro Colocolán",
+      "source": "geonames",
+      "gazetteer_ele_m": 2536.0,
+      "dem_height_m": 2532.7,
+      "dist_km": 34.76,
+      "lat": -33.13085,
+      "lon": -70.55478,
+      "match_offset_m": 95.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 39.7,
+      "elev_deg": 3.23,
+      "name": "Cerro Canto del Gallo",
+      "source": "geonames",
+      "gazetteer_ele_m": 2444.0,
+      "dem_height_m": 2448.6,
+      "dist_km": 33.56,
+      "lat": -33.14362,
+      "lon": -70.5564,
+      "match_offset_m": 99.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 41.0,
+      "elev_deg": 3.194,
+      "name": "Cerro Yaretas",
+      "source": "osm",
+      "gazetteer_ele_m": 3539.0,
+      "dem_height_m": 3543.2,
+      "dist_km": 51.66,
+      "lat": -33.02486,
+      "lon": -70.42309,
+      "match_offset_m": 48.0
+    },
+    {
+      "confidence": "uncertain",
+      "azimuth_deg": 45.9,
+      "elev_deg": 3.594,
+      "name": "Cerro Los Azules",
+      "source": "geonames",
+      "gazetteer_ele_m": 3618.0,
+      "dem_height_m": 3749.2,
+      "dist_km": 49.42,
+      "lat": -33.06616,
+      "lon": -70.40577,
+      "match_offset_m": 2297.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 53.8,
+      "elev_deg": 4.19,
+      "name": "Cordón de los Españoles",
+      "source": "geonames",
+      "gazetteer_ele_m": 3293.0,
+      "dem_height_m": 3331.2,
+      "dist_km": 37.62,
+      "lat": -33.17581,
+      "lon": -70.46044,
+      "match_offset_m": 516.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 60.4,
+      "elev_deg": 4.049,
+      "name": "Cerro Los Ángeles",
+      "source": "osm",
+      "gazetteer_ele_m": 3622.0,
+      "dem_height_m": 3599.4,
+      "dist_km": 42.36,
+      "lat": -33.18726,
+      "lon": -70.39082,
+      "match_offset_m": 471.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 63.0,
+      "elev_deg": 4.159,
+      "name": "Cerro Negro",
+      "source": "geonames",
+      "gazetteer_ele_m": 4876.0,
+      "dem_height_m": 4901.3,
+      "dist_km": 57.68,
+      "lat": -33.13933,
+      "lon": -70.23461,
+      "match_offset_m": 72.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 66.1,
+      "elev_deg": 4.567,
+      "name": "Cerro La Paloma",
+      "source": "osm",
+      "gazetteer_ele_m": 4910.0,
+      "dem_height_m": 4908.8,
+      "dist_km": 53.04,
+      "lat": -33.18172,
+      "lon": -70.26552,
+      "match_offset_m": 36.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 67.5,
+      "elev_deg": 4.667,
+      "name": "Cerro Altar",
+      "source": "osm",
+      "gazetteer_ele_m": 5180.0,
+      "dem_height_m": 5152.2,
+      "dist_km": 54.72,
+      "lat": -33.18655,
+      "lon": -70.24332,
+      "match_offset_m": 24.0
+    },
+    {
+      "confidence": "probable",
+      "azimuth_deg": 71.7,
+      "elev_deg": 4.769,
+      "name": "Cerro Fickenscher",
+      "source": "osm",
+      "gazetteer_ele_m": 5352.0,
+      "dem_height_m": 5337.8,
+      "dist_km": 55.68,
+      "lat": -33.21754,
+      "lon": -70.2183,
+      "match_offset_m": 1349.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 74.0,
+      "elev_deg": 4.904,
+      "name": "Cerro Plomo",
+      "source": "geonames",
+      "gazetteer_ele_m": 5424.0,
+      "dem_height_m": 5424.8,
+      "dist_km": 55.2,
+      "lat": -33.23793,
+      "lon": -70.21604,
+      "match_offset_m": 673.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 78.2,
+      "elev_deg": 4.037,
+      "name": "Cerro Bismarck",
+      "source": "geonames",
+      "gazetteer_ele_m": 4635.0,
+      "dem_height_m": 4635.4,
+      "dist_km": 55.86,
+      "lat": -33.27196,
+      "lon": -70.19841,
+      "match_offset_m": 44.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 79.2,
+      "elev_deg": 3.984,
+      "name": "Cerro Pintor",
+      "source": "osm",
+      "gazetteer_ele_m": 4180.0,
+      "dem_height_m": 4198.4,
+      "dist_km": 50.86,
+      "lat": -33.28921,
+      "lon": -70.24909,
+      "match_offset_m": 11.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 80.6,
+      "elev_deg": 3.918,
+      "name": "Cerro La Parva",
+      "source": "osm",
+      "gazetteer_ele_m": 4047.0,
+      "dem_height_m": 4054.5,
+      "dist_km": 49.74,
+      "lat": -33.30191,
+      "lon": -70.25856,
+      "match_offset_m": 21.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 85.0,
+      "elev_deg": 3.541,
+      "name": "Cerro Klatt",
+      "source": "osm",
+      "gazetteer_ele_m": 4182.0,
+      "dem_height_m": 4188.1,
+      "dist_km": 56.42,
+      "lat": -33.3304,
+      "lon": -70.18159,
+      "match_offset_m": 12.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 90.0,
+      "elev_deg": 3.559,
+      "name": "Cerro Laguna",
+      "source": "osm",
+      "gazetteer_ele_m": 4120.0,
+      "dem_height_m": 4109.6,
+      "dist_km": 55.04,
+      "lat": -33.37469,
+      "lon": -70.19384,
+      "match_offset_m": 67.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 91.9,
+      "elev_deg": 3.671,
+      "name": "Cerro Capitán del Quempo",
+      "source": "osm",
+      "gazetteer_ele_m": 4157.0,
+      "dem_height_m": 4157.4,
+      "dist_km": 54.2,
+      "lat": -33.3909,
+      "lon": -70.2031,
+      "match_offset_m": 17.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 92.7,
+      "elev_deg": 3.546,
+      "name": "Cerro Sargento del Quempo",
+      "source": "geonames",
+      "gazetteer_ele_m": 4131.0,
+      "dem_height_m": 4092.0,
+      "dist_km": 54.98,
+      "lat": -33.39799,
+      "lon": -70.19498,
+      "match_offset_m": 76.0
+    },
+    {
+      "confidence": "probable",
+      "azimuth_deg": 95.4,
+      "elev_deg": 3.418,
+      "name": "Cordón de Quempo",
+      "source": "geonames",
+      "gazetteer_ele_m": 3874.0,
+      "dem_height_m": 4004.5,
+      "dist_km": 55.5,
+      "lat": -33.42166,
+      "lon": -70.19121,
+      "match_offset_m": 1414.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 99.8,
+      "elev_deg": 3.808,
+      "name": "Cerro de la Provincia",
+      "source": "geonames",
+      "gazetteer_ele_m": 2737.0,
+      "dem_height_m": 2733.1,
+      "dist_km": 32.78,
+      "lat": -33.4258,
+      "lon": -70.43856,
+      "match_offset_m": 378.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 104.4,
+      "elev_deg": 3.858,
+      "name": "Morro Tambor",
+      "source": "osm",
+      "gazetteer_ele_m": 2893.0,
+      "dem_height_m": 2875.7,
+      "dist_km": 34.36,
+      "lat": -33.45245,
+      "lon": -70.4279,
+      "match_offset_m": 18.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 110.8,
+      "elev_deg": 4.455,
+      "name": "Cerro San Ramón",
+      "source": "osm",
+      "gazetteer_ele_m": 3253.0,
+      "dem_height_m": 3247.5,
+      "dist_km": 34.5,
+      "lat": -33.48581,
+      "lon": -70.43886,
+      "match_offset_m": 19.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 113.1,
+      "elev_deg": 4.203,
+      "name": "Cerro de Ramón",
+      "source": "geonames",
+      "gazetteer_ele_m": 3141.0,
+      "dem_height_m": 3139.9,
+      "dist_km": 35.08,
+      "lat": -33.49941,
+      "lon": -70.43863,
+      "match_offset_m": 792.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 114.3,
+      "elev_deg": 4.252,
+      "name": "Punta de Damas",
+      "source": "osm",
+      "gazetteer_ele_m": 3149.0,
+      "dem_height_m": 3154.6,
+      "dist_km": 34.88,
+      "lat": -33.50474,
+      "lon": -70.44376,
+      "match_offset_m": 12.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 117.6,
+      "elev_deg": 3.561,
+      "name": "Morro de las Bayas",
+      "source": "osm",
+      "gazetteer_ele_m": 2655.0,
+      "dem_height_m": 2656.7,
+      "dist_km": 33.76,
+      "lat": -33.51637,
+      "lon": -70.46391,
+      "match_offset_m": 18.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 121.3,
+      "elev_deg": 3.314,
+      "name": "Cerro Tarapacá",
+      "source": "osm",
+      "gazetteer_ele_m": 2472.0,
+      "dem_height_m": 2481.7,
+      "dist_km": 33.3,
+      "lat": -33.53134,
+      "lon": -70.47966,
+      "match_offset_m": 30.0
+    },
+    {
+      "confidence": "probable",
+      "azimuth_deg": 125.3,
+      "elev_deg": 2.639,
+      "name": "Cerro Bandera",
+      "source": "osm",
+      "gazetteer_ele_m": 2244.0,
+      "dem_height_m": 2125.5,
+      "dist_km": 34.04,
+      "lat": -33.55268,
+      "lon": -70.48684,
+      "match_offset_m": 981.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 127.3,
+      "elev_deg": 2.142,
+      "name": "Cerro Manchado",
+      "source": "osm",
+      "gazetteer_ele_m": 5385.0,
+      "dem_height_m": 5329.5,
+      "dist_km": 108.24,
+      "lat": -33.96262,
+      "lon": -69.8529,
+      "match_offset_m": 83.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 129.3,
+      "elev_deg": 2.463,
+      "name": "Morro Purgatorio",
+      "source": "geonames",
+      "gazetteer_ele_m": 2440.0,
+      "dem_height_m": 2448.5,
+      "dist_km": 42.9,
+      "lat": -33.62,
+      "lon": -70.4281,
+      "match_offset_m": 61.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 132.7,
+      "elev_deg": 2.085,
+      "name": "Cerro Diablo",
+      "source": "osm",
+      "gazetteer_ele_m": 4190.0,
+      "dem_height_m": 4146.2,
+      "dist_km": 86.64,
+      "lat": -33.90271,
+      "lon": -70.09663,
+      "match_offset_m": 104.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 136.9,
+      "elev_deg": 2.344,
+      "name": "Alto de La Yareta",
+      "source": "geonames",
+      "gazetteer_ele_m": 2534.0,
+      "dem_height_m": 2546.2,
+      "dist_km": 46.86,
+      "lat": -33.68339,
+      "lon": -70.44058,
+      "match_offset_m": 10.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 139.5,
+      "elev_deg": 2.247,
+      "name": "Cerro Punta Horizonte",
+      "source": "osm",
+      "gazetteer_ele_m": 3200.0,
+      "dem_height_m": 3222.6,
+      "dist_km": 63.04,
+      "lat": -33.8065,
+      "lon": -70.34349,
+      "match_offset_m": 27.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 143.1,
+      "elev_deg": 2.398,
+      "name": "Cerro Euskadi",
+      "source": "osm",
+      "gazetteer_ele_m": 3615.0,
+      "dem_height_m": 3603.6,
+      "dist_km": 67.26,
+      "lat": -33.85915,
+      "lon": -70.34925,
+      "match_offset_m": 74.0
+    },
+    {
+      "confidence": "uncertain",
+      "azimuth_deg": 146.6,
+      "elev_deg": 2.218,
+      "name": "Cerro San Pedro Nolasco",
+      "source": "geonames",
+      "gazetteer_ele_m": 3185.0,
+      "dem_height_m": 3567.8,
+      "dist_km": 70.9,
+      "lat": -33.90781,
+      "lon": -70.36369,
+      "match_offset_m": 2021.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 149.6,
+      "elev_deg": 2.105,
+      "name": "Cerro Morado",
+      "source": "osm",
+      "gazetteer_ele_m": 2732.0,
+      "dem_height_m": 2718.5,
+      "dist_km": 55.28,
+      "lat": -33.80462,
+      "lon": -70.48388,
+      "match_offset_m": 84.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 156.0,
+      "elev_deg": 1.619,
+      "name": "Cerro Alto Rodeillo",
+      "source": "osm",
+      "gazetteer_ele_m": 2778.0,
+      "dem_height_m": 2798.6,
+      "dist_km": 70.2,
+      "lat": -33.95258,
+      "lon": -70.47707,
+      "match_offset_m": 43.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 161.0,
+      "elev_deg": 1.407,
+      "name": "Cerro Pabellones",
+      "source": "geonames",
+      "gazetteer_ele_m": 2490.0,
+      "dem_height_m": 2491.2,
+      "dist_km": 68.8,
+      "lat": -33.96101,
+      "lon": -70.54378,
+      "match_offset_m": 97.0
+    },
+    {
+      "confidence": "uncertain",
+      "azimuth_deg": 163.7,
+      "elev_deg": 1.022,
+      "name": "Nevado Mañke",
+      "source": "osm",
+      "gazetteer_ele_m": 4480.0,
+      "dem_height_m": 4470.8,
+      "dist_km": 144.16,
+      "lat": -34.61993,
+      "lon": -70.34447,
+      "match_offset_m": 1932.0
+    },
+    {
+      "confidence": "uncertain",
+      "azimuth_deg": 165.0,
+      "elev_deg": 1.164,
+      "name": "Torres del Brujo",
+      "source": "osm",
+      "gazetteer_ele_m": 4920.0,
+      "dem_height_m": 4934.7,
+      "dist_km": 146.8,
+      "lat": -34.6509,
+      "lon": -70.37128,
+      "match_offset_m": 2367.0
+    },
+    {
+      "confidence": "probable",
+      "azimuth_deg": 168.0,
+      "elev_deg": 0.921,
+      "name": "Cerro Chena",
+      "source": "geonames",
+      "gazetteer_ele_m": 933.0,
+      "dem_height_m": 920.0,
+      "dist_km": 24.92,
+      "lat": -33.59535,
+      "lon": -70.73075,
+      "match_offset_m": 1121.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 170.5,
+      "elev_deg": 1.0,
+      "name": "Cerro San Jorge",
+      "source": "osm",
+      "gazetteer_ele_m": 945.0,
+      "dem_height_m": 947.6,
+      "dist_km": 24.58,
+      "lat": -33.59416,
+      "lon": -70.74289,
+      "match_offset_m": 5.0
+    },
+    {
+      "confidence": "probable",
+      "azimuth_deg": 175.2,
+      "elev_deg": 0.511,
+      "name": "Alto de la Laguna",
+      "source": "osm",
+      "gazetteer_ele_m": 3032.0,
+      "dem_height_m": 3042.2,
+      "dist_km": 139.14,
+      "lat": -34.62322,
+      "lon": -70.65944,
+      "match_offset_m": 1436.0
+    },
+    {
+      "confidence": "uncertain",
+      "azimuth_deg": 180.9,
+      "elev_deg": 0.994,
+      "name": "Portezuelo Enjalma",
+      "source": "geonames",
+      "gazetteer_ele_m": 1906.0,
+      "dem_height_m": 1936.1,
+      "dist_km": 66.62,
+      "lat": -33.97528,
+      "lon": -70.79805,
+      "match_offset_m": 2268.0
+    },
+    {
+      "confidence": "uncertain",
+      "azimuth_deg": 182.4,
+      "elev_deg": 1.051,
+      "name": "Cerro Planchón",
+      "source": "geonames",
+      "gazetteer_ele_m": 1975.0,
+      "dem_height_m": 1974.7,
+      "dist_km": 65.6,
+      "lat": -33.96566,
+      "lon": -70.81649,
+      "match_offset_m": 2318.0
+    },
+    {
+      "confidence": "probable",
+      "azimuth_deg": 185.2,
+      "elev_deg": 1.147,
+      "name": "Cerro Las Sierrecillas",
+      "source": "osm",
+      "gazetteer_ele_m": 2062.0,
+      "dem_height_m": 2068.8,
+      "dist_km": 65.06,
+      "lat": -33.9589,
+      "lon": -70.85064,
+      "match_offset_m": 1042.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 188.4,
+      "elev_deg": 0.864,
+      "name": "Morro Los Lunes",
+      "source": "osm",
+      "gazetteer_ele_m": 1839.0,
+      "dem_height_m": 1839.4,
+      "dist_km": 68.86,
+      "lat": -33.98881,
+      "lon": -70.89582,
+      "match_offset_m": 57.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 190.8,
+      "elev_deg": 1.15,
+      "name": "Morro de los Toros Muertos",
+      "source": "geonames",
+      "gazetteer_ele_m": 2147.0,
+      "dem_height_m": 2152.9,
+      "dist_km": 67.82,
+      "lat": -33.97527,
+      "lon": -70.92454,
+      "match_offset_m": 87.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 194.2,
+      "elev_deg": 1.256,
+      "name": "Cerro Cantillana",
+      "source": "geonames",
+      "gazetteer_ele_m": 2278.0,
+      "dem_height_m": 2276.9,
+      "dist_km": 67.76,
+      "lat": -33.96685,
+      "lon": -70.96697,
+      "match_offset_m": 35.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 202.0,
+      "elev_deg": 2.679,
+      "name": "Cerro Lo Aguirre",
+      "source": "osm",
+      "gazetteer_ele_m": 991.0,
+      "dem_height_m": 983.6,
+      "dist_km": 10.66,
+      "lat": -33.465,
+      "lon": -70.82976,
+      "match_offset_m": 28.0
+    },
+    {
+      "confidence": "uncertain",
+      "azimuth_deg": 216.0,
+      "elev_deg": 1.941,
+      "name": "Cerro El Aguilucho",
+      "source": "geonames",
+      "gazetteer_ele_m": 914.0,
+      "dem_height_m": 1126.9,
+      "dist_km": 18.48,
+      "lat": -33.51053,
+      "lon": -70.90388,
+      "match_offset_m": 771.0
+    },
+    {
+      "confidence": "uncertain",
+      "azimuth_deg": 221.5,
+      "elev_deg": 2.218,
+      "name": "Puntilla de las Barras",
+      "source": "geonames",
+      "gazetteer_ele_m": 540.0,
+      "dem_height_m": 1092.3,
+      "dist_km": 15.46,
+      "lat": -33.4802,
+      "lon": -70.89717,
+      "match_offset_m": 2354.0
+    },
+    {
+      "confidence": "probable",
+      "azimuth_deg": 233.5,
+      "elev_deg": 1.16,
+      "name": "Cuesta de Lo Prado",
+      "source": "geonames",
+      "gazetteer_ele_m": 794.0,
+      "dem_height_m": 860.9,
+      "dist_km": 17.88,
+      "lat": -33.47167,
+      "lon": -70.94169,
+      "match_offset_m": 589.0
+    },
+    {
+      "confidence": "uncertain",
+      "azimuth_deg": 238.7,
+      "elev_deg": 1.865,
+      "name": "Cerro San Francisco",
+      "source": "geonames",
+      "gazetteer_ele_m": 900.0,
+      "dem_height_m": 1070.0,
+      "dist_km": 17.56,
+      "lat": -33.45805,
+      "lon": -70.94847,
+      "match_offset_m": 904.0
+    },
+    {
+      "confidence": "uncertain",
+      "azimuth_deg": 247.3,
+      "elev_deg": 3.381,
+      "name": "Cerro Macho Quemado",
+      "source": "geonames",
+      "gazetteer_ele_m": 857.0,
+      "dem_height_m": 1255.5,
+      "dist_km": 12.98,
+      "lat": -33.42109,
+      "lon": -70.91575,
+      "match_offset_m": 2125.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 255.2,
+      "elev_deg": 4.993,
+      "name": "Cerro Bustamante",
+      "source": "geonames",
+      "gazetteer_ele_m": 1865.0,
+      "dem_height_m": 1872.9,
+      "dist_km": 15.78,
+      "lat": -33.41225,
+      "lon": -70.9511,
+      "match_offset_m": 72.0
+    },
+    {
+      "confidence": "uncertain",
+      "azimuth_deg": 273.1,
+      "elev_deg": 3.509,
+      "name": "Cerro Quitasol",
+      "source": "geonames",
+      "gazetteer_ele_m": 852.0,
+      "dem_height_m": 1217.7,
+      "dist_km": 11.92,
+      "lat": -33.37023,
+      "lon": -70.9149,
+      "match_offset_m": 1441.0
+    },
+    {
+      "confidence": "uncertain",
+      "azimuth_deg": 282.8,
+      "elev_deg": 3.437,
+      "name": "Morro de Arena",
+      "source": "geonames",
+      "gazetteer_ele_m": 1283.0,
+      "dem_height_m": 1729.7,
+      "dist_km": 20.38,
+      "lat": -33.3353,
+      "lon": -71.00067,
+      "match_offset_m": 1504.0
+    },
+    {
+      "confidence": "uncertain",
+      "azimuth_deg": 285.6,
+      "elev_deg": 3.147,
+      "name": "Cerro del Durazno",
+      "source": "geonames",
+      "gazetteer_ele_m": 1647.0,
+      "dem_height_m": 1659.6,
+      "dist_km": 20.96,
+      "lat": -33.32521,
+      "lon": -71.00403,
+      "match_offset_m": 2480.0
+    },
+    {
+      "confidence": "uncertain",
+      "azimuth_deg": 299.9,
+      "elev_deg": 4.423,
+      "name": "Alto de Lipangue",
+      "source": "geonames",
+      "gazetteer_ele_m": 1985.0,
+      "dem_height_m": 1976.7,
+      "dist_km": 19.06,
+      "lat": -33.29051,
+      "lon": -70.9645,
+      "match_offset_m": 2035.0
+    },
+    {
+      "confidence": "uncertain",
+      "azimuth_deg": 302.1,
+      "elev_deg": 4.286,
+      "name": "Portezuelo del Durazno",
+      "source": "geonames",
+      "gazetteer_ele_m": 1700.0,
+      "dem_height_m": 1848.6,
+      "dist_km": 18.0,
+      "lat": -33.28995,
+      "lon": -70.95078,
+      "match_offset_m": 1851.0
+    },
+    {
+      "confidence": "probable",
+      "azimuth_deg": 307.8,
+      "elev_deg": 3.061,
+      "name": "Portezuelo del Copado",
+      "source": "geonames",
+      "gazetteer_ele_m": 1752.0,
+      "dem_height_m": 1797.8,
+      "dist_km": 23.96,
+      "lat": -33.24384,
+      "lon": -70.99032,
+      "match_offset_m": 1425.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 310.2,
+      "elev_deg": 3.271,
+      "name": "Cerro Trincaco",
+      "source": "osm",
+      "gazetteer_ele_m": 1386.0,
+      "dem_height_m": 1396.2,
+      "dist_km": 15.78,
+      "lat": -33.28441,
+      "lon": -70.91639,
+      "match_offset_m": 20.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 315.1,
+      "elev_deg": 3.41,
+      "name": "Cerro Roble Alto",
+      "source": "geonames",
+      "gazetteer_ele_m": 2190.0,
+      "dem_height_m": 2188.2,
+      "dist_km": 27.82,
+      "lat": -33.19866,
+      "lon": -70.99779,
+      "match_offset_m": 76.0
+    },
+    {
+      "confidence": "uncertain",
+      "azimuth_deg": 322.6,
+      "elev_deg": 3.22,
+      "name": "Cerro Las Petacas",
+      "source": "geonames",
+      "gazetteer_ele_m": 1997.0,
+      "dem_height_m": 2111.0,
+      "dist_km": 28.08,
+      "lat": -33.17531,
+      "lon": -70.96999,
+      "match_offset_m": 2081.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 331.5,
+      "elev_deg": 2.234,
+      "name": "Cerro Chape",
+      "source": "geonames",
+      "gazetteer_ele_m": 1227.0,
+      "dem_height_m": 1231.3,
+      "dist_km": 18.72,
+      "lat": -33.22808,
+      "lon": -70.88275,
+      "match_offset_m": 30.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 334.6,
+      "elev_deg": 1.832,
+      "name": "Cerro del Roble",
+      "source": "geonames",
+      "gazetteer_ele_m": 2222.0,
+      "dem_height_m": 2215.2,
+      "dist_km": 49.16,
+      "lat": -32.97644,
+      "lon": -71.0128,
+      "match_offset_m": 592.0
+    },
+    {
+      "confidence": "uncertain",
+      "azimuth_deg": 335.9,
+      "elev_deg": 1.563,
+      "name": "Morro El Fuerte",
+      "source": "geonames",
+      "gazetteer_ele_m": 1187.0,
+      "dem_height_m": 1000.4,
+      "dist_km": 18.34,
+      "lat": -33.22548,
+      "lon": -70.86722,
+      "match_offset_m": 1912.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 341.2,
+      "elev_deg": 1.573,
+      "name": "Cerro Garfio",
+      "source": "geonames",
+      "gazetteer_ele_m": 1960.0,
+      "dem_height_m": 1958.7,
+      "dist_km": 48.18,
+      "lat": -32.96572,
+      "lon": -70.95316,
+      "match_offset_m": 23.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 344.3,
+      "elev_deg": 1.469,
+      "name": "Cerro El Maqui",
+      "source": "osm",
+      "gazetteer_ele_m": 1864.0,
+      "dem_height_m": 1860.3,
+      "dist_km": 47.84,
+      "lat": -32.96175,
+      "lon": -70.92548,
+      "match_offset_m": 25.0
+    },
+    {
+      "confidence": "probable",
+      "azimuth_deg": 347.3,
+      "elev_deg": 0.951,
+      "name": "Cerro Los Corredores",
+      "source": "geonames",
+      "gazetteer_ele_m": 1428.0,
+      "dem_height_m": 1482.5,
+      "dist_km": 50.2,
+      "lat": -32.93554,
+      "lon": -70.90498,
+      "match_offset_m": 913.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 352.0,
+      "elev_deg": 1.057,
+      "name": "Cerro Colorado Chico",
+      "source": "geonames",
+      "gazetteer_ele_m": 1565.0,
+      "dem_height_m": 1570.6,
+      "dist_km": 50.02,
+      "lat": -32.93052,
+      "lon": -70.8613,
+      "match_offset_m": 87.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 355.5,
+      "elev_deg": 0.966,
+      "name": "Cerro Calvario",
+      "source": "geonames",
+      "gazetteer_ele_m": 2127.0,
+      "dem_height_m": 2126.9,
+      "dist_km": 75.02,
+      "lat": -32.70335,
+      "lon": -70.84961,
+      "match_offset_m": 170.0
+    },
+    {
+      "confidence": "confirmed",
+      "azimuth_deg": 357.6,
+      "elev_deg": 1.177,
+      "name": "Cerro Alto de Huechún",
+      "source": "osm",
+      "gazetteer_ele_m": 1474.0,
+      "dem_height_m": 1466.7,
+      "dist_km": 42.24,
+      "lat": -32.99648,
+      "lon": -70.80567,
+      "match_offset_m": 13.0
+    }
+  ],
+  "notable_summits": [
+    {
+      "name": "Cerro Aconcagua",
+      "gazetteer_ele_m": 6961.0,
+      "dem_height_m": 6906.8,
+      "source": "osm",
+      "lat": -32.65315,
+      "lon": -70.01132,
+      "gazetteer_lat": -32.6531487,
+      "gazetteer_lon": -70.0119607,
+      "snap_offset_m": 60.0,
+      "azimuth_deg": 42.2,
+      "dist_km": 108.1,
+      "summit_elev_deg": 2.979,
+      "blocking_elev_deg": 3.154,
+      "margin_deg": -0.175,
+      "marginal": true,
+      "refraction_sensitivity": {
+        "k=0.00": {
+          "visible": false,
+          "margin_deg": -0.209
+        },
+        "k=0.13": {
+          "visible": false,
+          "margin_deg": -0.175
+        },
+        "k=0.25": {
+          "visible": false,
+          "margin_deg": -0.144
+        }
+      },
+      "visible": false
+    },
+    {
+      "name": "Cerro Tupungato",
+      "gazetteer_ele_m": 6570.0,
+      "dem_height_m": 6568.0,
+      "source": "geonames",
+      "lat": -33.35871,
+      "lon": -69.77022,
+      "gazetteer_lat": -33.35871,
+      "gazetteer_lon": -69.77022,
+      "snap_offset_m": 0.0,
+      "azimuth_deg": 89.1,
+      "dist_km": 94.4,
+      "summit_elev_deg": 3.321,
+      "blocking_elev_deg": 3.441,
+      "margin_deg": -0.12,
+      "marginal": true,
+      "refraction_sensitivity": {
+        "k=0.00": {
+          "visible": false,
+          "margin_deg": -0.143
+        },
+        "k=0.13": {
+          "visible": false,
+          "margin_deg": -0.12
+        },
+        "k=0.25": {
+          "visible": false,
+          "margin_deg": -0.099
+        }
+      },
+      "visible": false
+    },
+    {
+      "name": "Cerro Marmolejo",
+      "gazetteer_ele_m": 6109.0,
+      "dem_height_m": 6101.8,
+      "source": "osm",
+      "lat": -33.73479,
+      "lon": -69.87782,
+      "gazetteer_lat": -33.7347928,
+      "gazetteer_lon": -69.8778212,
+      "snap_offset_m": 0.0,
+      "azimuth_deg": 115.6,
+      "dist_km": 93.2,
+      "summit_elev_deg": 3.089,
+      "blocking_elev_deg": 3.976,
+      "margin_deg": -0.887,
+      "marginal": false,
+      "refraction_sensitivity": {
+        "k=0.00": {
+          "visible": false,
+          "margin_deg": -0.921
+        },
+        "k=0.13": {
+          "visible": false,
+          "margin_deg": -0.887
+        },
+        "k=0.25": {
+          "visible": false,
+          "margin_deg": -0.856
+        }
+      },
+      "visible": false
+    },
+    {
+      "name": "Cerro Polleras",
+      "gazetteer_ele_m": 5993.0,
+      "dem_height_m": 5980.0,
+      "source": "osm",
+      "lat": -33.24529,
+      "lon": -69.91942,
+      "gazetteer_lat": -33.2447489,
+      "gazetteer_lon": -69.9174803,
+      "snap_offset_m": 190.0,
+      "azimuth_deg": 80.0,
+      "dist_km": 81.9,
+      "summit_elev_deg": 3.523,
+      "blocking_elev_deg": 3.798,
+      "margin_deg": -0.275,
+      "marginal": false,
+      "refraction_sensitivity": {
+        "k=0.00": {
+          "visible": false,
+          "margin_deg": -0.294
+        },
+        "k=0.13": {
+          "visible": false,
+          "margin_deg": -0.275
+        },
+        "k=0.25": {
+          "visible": false,
+          "margin_deg": -0.258
+        }
+      },
+      "visible": false
+    },
+    {
+      "name": "Nevado Juncal",
+      "gazetteer_ele_m": 5965.0,
+      "dem_height_m": 5921.0,
+      "source": "osm",
+      "lat": -33.04562,
+      "lon": -70.0862,
+      "gazetteer_lat": -33.0456202,
+      "gazetteer_lon": -70.0861967,
+      "snap_offset_m": 0.0,
+      "azimuth_deg": 60.8,
+      "dist_km": 74.8,
+      "summit_elev_deg": 3.868,
+      "blocking_elev_deg": 3.987,
+      "margin_deg": -0.119,
+      "marginal": true,
+      "refraction_sensitivity": {
+        "k=0.00": {
+          "visible": false,
+          "margin_deg": -0.143
+        },
+        "k=0.13": {
+          "visible": false,
+          "margin_deg": -0.119
+        },
+        "k=0.25": {
+          "visible": false,
+          "margin_deg": -0.097
+        }
+      },
+      "visible": false
+    },
+    {
+      "name": "Volcán San José",
+      "gazetteer_ele_m": 5856.0,
+      "dem_height_m": 5852.5,
+      "source": "geonames",
+      "lat": -33.78849,
+      "lon": -69.89579,
+      "gazetteer_lat": -33.78849,
+      "gazetteer_lon": -69.89579,
+      "snap_offset_m": 0.0,
+      "azimuth_deg": 119.3,
+      "dist_km": 94.4,
+      "summit_elev_deg": 2.889,
+      "blocking_elev_deg": 3.388,
+      "margin_deg": -0.499,
+      "marginal": false,
+      "refraction_sensitivity": {
+        "k=0.00": {
+          "visible": false,
+          "margin_deg": -0.535
+        },
+        "k=0.13": {
+          "visible": false,
+          "margin_deg": -0.499
+        },
+        "k=0.25": {
+          "visible": false,
+          "margin_deg": -0.466
+        }
+      },
+      "visible": false
+    },
+    {
+      "name": "Volcán Tupungatito",
+      "gazetteer_ele_m": 5650.0,
+      "dem_height_m": 5925.1,
+      "source": "geonames",
+      "lat": -33.42442,
+      "lon": -69.79774,
+      "gazetteer_lat": -33.42442,
+      "gazetteer_lon": -69.7958,
+      "snap_offset_m": 180.0,
+      "azimuth_deg": 93.6,
+      "dist_km": 91.9,
+      "summit_elev_deg": 3.03,
+      "blocking_elev_deg": 3.455,
+      "margin_deg": -0.425,
+      "marginal": false,
+      "refraction_sensitivity": {
+        "k=0.00": {
+          "visible": false,
+          "margin_deg": -0.446
+        },
+        "k=0.13": {
+          "visible": false,
+          "margin_deg": -0.425
+        },
+        "k=0.25": {
+          "visible": false,
+          "margin_deg": -0.405
+        }
+      },
+      "visible": false
+    },
+    {
+      "name": "Cerro El Plomo",
+      "gazetteer_ele_m": 5424.0,
+      "dem_height_m": 5435.7,
+      "source": "osm",
+      "lat": -33.23684,
+      "lon": -70.2138,
+      "gazetteer_lat": -33.2368382,
+      "gazetteer_lon": -70.2144495,
+      "snap_offset_m": 60.0,
+      "azimuth_deg": 73.9,
+      "dist_km": 55.4,
+      "summit_elev_deg": 4.893,
+      "blocking_elev_deg": 4.878,
+      "margin_deg": 0.015,
+      "marginal": true,
+      "refraction_sensitivity": {
+        "k=0.00": {
+          "visible": true,
+          "margin_deg": 0.015
+        },
+        "k=0.13": {
+          "visible": true,
+          "margin_deg": 0.015
+        },
+        "k=0.25": {
+          "visible": true,
+          "margin_deg": 0.015
+        }
+      },
+      "visible": true
+    },
+    {
+      "name": "Cerro Altar",
+      "gazetteer_ele_m": 5180.0,
+      "dem_height_m": 5146.6,
+      "source": "osm",
+      "lat": -33.18622,
+      "lon": -70.2434,
+      "gazetteer_lat": -33.1867594,
+      "gazetteer_lon": -70.243396,
+      "snap_offset_m": 60.0,
+      "azimuth_deg": 67.5,
+      "dist_km": 54.7,
+      "summit_elev_deg": 4.661,
+      "blocking_elev_deg": 4.562,
+      "margin_deg": 0.099,
+      "marginal": true,
+      "refraction_sensitivity": {
+        "k=0.00": {
+          "visible": true,
+          "margin_deg": 0.099
+        },
+        "k=0.13": {
+          "visible": true,
+          "margin_deg": 0.099
+        },
+        "k=0.25": {
+          "visible": true,
+          "margin_deg": 0.099
+        }
+      },
+      "visible": true
+    },
+    {
+      "name": "Cerro Leonera",
+      "gazetteer_ele_m": 4954.0,
+      "dem_height_m": 5110.3,
+      "source": "osm",
+      "lat": -33.23721,
+      "lon": -70.22839,
+      "gazetteer_lat": -33.2469528,
+      "gazetteer_lon": -70.241326,
+      "snap_offset_m": 1614.0,
+      "azimuth_deg": 73.6,
+      "dist_km": 54.1,
+      "summit_elev_deg": 4.679,
+      "blocking_elev_deg": 4.598,
+      "margin_deg": 0.081,
+      "marginal": true,
+      "refraction_sensitivity": {
+        "k=0.00": {
+          "visible": true,
+          "margin_deg": 0.081
+        },
+        "k=0.13": {
+          "visible": true,
+          "margin_deg": 0.081
+        },
+        "k=0.25": {
+          "visible": true,
+          "margin_deg": 0.082
+        }
+      },
+      "visible": true
+    },
+    {
+      "name": "Cerro La Paloma",
+      "gazetteer_ele_m": 4910.0,
+      "dem_height_m": 4912.8,
+      "source": "osm",
+      "lat": -33.18306,
+      "lon": -70.26335,
+      "gazetteer_lat": -33.1819788,
+      "gazetteer_lon": -70.2652878,
+      "snap_offset_m": 216.0,
+      "azimuth_deg": 66.3,
+      "dist_km": 53.2,
+      "summit_elev_deg": 4.56,
+      "blocking_elev_deg": 4.408,
+      "margin_deg": 0.152,
+      "marginal": true,
+      "refraction_sensitivity": {
+        "k=0.00": {
+          "visible": true,
+          "margin_deg": 0.152
+        },
+        "k=0.13": {
+          "visible": true,
+          "margin_deg": 0.152
+        },
+        "k=0.25": {
+          "visible": true,
+          "margin_deg": 0.152
+        }
+      },
+      "visible": true
+    },
+    {
+      "name": "Nevado El Plomo",
+      "gazetteer_ele_m": 4841.0,
+      "dem_height_m": 5366.3,
+      "source": "geonames",
+      "lat": -33.23225,
+      "lon": -70.22298,
+      "gazetteer_lat": -33.23333,
+      "gazetteer_lon": -70.23333,
+      "snap_offset_m": 967.0,
+      "azimuth_deg": 73.2,
+      "dist_km": 54.8,
+      "summit_elev_deg": 4.885,
+      "blocking_elev_deg": 4.609,
+      "margin_deg": 0.276,
+      "marginal": false,
+      "refraction_sensitivity": {
+        "k=0.00": {
+          "visible": true,
+          "margin_deg": 0.276
+        },
+        "k=0.13": {
+          "visible": true,
+          "margin_deg": 0.276
+        },
+        "k=0.25": {
+          "visible": true,
+          "margin_deg": 0.276
+        }
+      },
+      "visible": true
+    },
+    {
+      "name": "Cerro Bismarck",
+      "gazetteer_ele_m": 4650.0,
+      "dem_height_m": 4676.6,
+      "source": "osm",
+      "lat": -33.26233,
+      "lon": -70.20481,
+      "gazetteer_lat": -33.272065,
+      "gazetteer_lon": -70.198343,
+      "snap_offset_m": 1235.0,
+      "azimuth_deg": 77.0,
+      "dist_km": 55.5,
+      "summit_elev_deg": 4.107,
+      "blocking_elev_deg": 3.986,
+      "margin_deg": 0.121,
+      "marginal": true,
+      "refraction_sensitivity": {
+        "k=0.00": {
+          "visible": true,
+          "margin_deg": 0.121
+        },
+        "k=0.13": {
+          "visible": true,
+          "margin_deg": 0.121
+        },
+        "k=0.25": {
+          "visible": true,
+          "margin_deg": 0.121
+        }
+      },
+      "visible": true
+    },
+    {
+      "name": "Cerro Punta Negra",
+      "gazetteer_ele_m": 4548.0,
+      "dem_height_m": 4608.2,
+      "source": "geonames",
+      "lat": -33.56639,
+      "lon": -70.06789,
+      "gazetteer_lat": -33.56639,
+      "gazetteer_lon": -70.06724,
+      "snap_offset_m": 60.0,
+      "azimuth_deg": 107.8,
+      "dist_km": 69.9,
+      "summit_elev_deg": 3.106,
+      "blocking_elev_deg": 4.096,
+      "margin_deg": -0.991,
+      "marginal": false,
+      "refraction_sensitivity": {
+        "k=0.00": {
+          "visible": false,
+          "margin_deg": -1.012
+        },
+        "k=0.13": {
+          "visible": false,
+          "margin_deg": -0.991
+        },
+        "k=0.25": {
+          "visible": false,
+          "margin_deg": -0.971
+        }
+      },
+      "visible": false
+    },
+    {
+      "name": "Cerro La Campana",
+      "gazetteer_ele_m": 4380.0,
+      "dem_height_m": 4362.8,
+      "source": "geonames",
+      "lat": -33.59304,
+      "lon": -70.06233,
+      "gazetteer_lat": -33.59575,
+      "gazetteer_lon": -70.06298,
+      "snap_offset_m": 306.0,
+      "azimuth_deg": 110.0,
+      "dist_km": 71.4,
+      "summit_elev_deg": 2.836,
+      "blocking_elev_deg": 4.341,
+      "margin_deg": -1.505,
+      "marginal": false,
+      "refraction_sensitivity": {
+        "k=0.00": {
+          "visible": false,
+          "margin_deg": -1.526
+        },
+        "k=0.13": {
+          "visible": false,
+          "margin_deg": -1.505
+        },
+        "k=0.25": {
+          "visible": false,
+          "margin_deg": -1.485
+        }
+      },
+      "visible": false
+    },
+    {
+      "name": "Cerro San Ramón",
+      "gazetteer_ele_m": 3253.0,
+      "dem_height_m": 3246.2,
+      "source": "osm",
+      "lat": -33.48567,
+      "lon": -70.43874,
+      "gazetteer_lat": -33.4856706,
+      "gazetteer_lon": -70.4387401,
+      "snap_offset_m": 0.0,
+      "azimuth_deg": 110.8,
+      "dist_km": 34.5,
+      "summit_elev_deg": 4.452,
+      "blocking_elev_deg": 4.263,
+      "margin_deg": 0.189,
+      "marginal": true,
+      "refraction_sensitivity": {
+        "k=0.00": {
+          "visible": true,
+          "margin_deg": 0.189
+        },
+        "k=0.13": {
+          "visible": true,
+          "margin_deg": 0.189
+        },
+        "k=0.25": {
+          "visible": true,
+          "margin_deg": 0.19
+        }
+      },
+      "visible": true
+    },
+    {
+      "name": "Cerro Provincia",
+      "gazetteer_ele_m": 2751.0,
+      "dem_height_m": 2735.5,
+      "source": "osm",
+      "lat": -33.42646,
+      "lon": -70.43552,
+      "gazetteer_lat": -33.4264597,
+      "gazetteer_lon": -70.4348721,
+      "snap_offset_m": 60.0,
+      "azimuth_deg": 99.8,
+      "dist_km": 33.1,
+      "summit_elev_deg": 3.777,
+      "blocking_elev_deg": 3.792,
+      "margin_deg": -0.016,
+      "marginal": true,
+      "refraction_sensitivity": {
+        "k=0.00": {
+          "visible": false,
+          "margin_deg": -0.016
+        },
+        "k=0.13": {
+          "visible": false,
+          "margin_deg": -0.016
+        },
+        "k=0.25": {
+          "visible": false,
+          "margin_deg": -0.016
+        }
+      },
+      "visible": false
+    },
+    {
+      "name": "Cerro El Roble",
+      "gazetteer_ele_m": 2222.0,
+      "dem_height_m": 2214.8,
+      "source": "osm",
+      "lat": -32.97649,
+      "lon": -71.01309,
+      "gazetteer_lat": -32.9764861,
+      "gazetteer_lon": -71.0130863,
+      "snap_offset_m": 0.0,
+      "azimuth_deg": 334.6,
+      "dist_km": 49.2,
+      "summit_elev_deg": 1.832,
+      "blocking_elev_deg": 1.689,
+      "margin_deg": 0.142,
+      "marginal": true,
+      "refraction_sensitivity": {
+        "k=0.00": {
+          "visible": true,
+          "margin_deg": 0.124
+        },
+        "k=0.13": {
+          "visible": true,
+          "margin_deg": 0.142
+        },
+        "k=0.25": {
+          "visible": true,
+          "margin_deg": 0.159
+        }
+      },
+      "visible": true
+    },
+    {
+      "name": "Cerro Manquehue",
+      "gazetteer_ele_m": 1635.0,
+      "dem_height_m": 1631.5,
+      "source": "osm",
+      "lat": -33.3508,
+      "lon": -70.58222,
+      "gazetteer_lat": -33.3508017,
+      "gazetteer_lon": -70.5822167,
+      "snap_offset_m": 0.0,
+      "azimuth_deg": 81.6,
+      "dist_km": 19.2,
+      "summit_elev_deg": 3.367,
+      "blocking_elev_deg": 2.874,
+      "margin_deg": 0.493,
+      "marginal": false,
+      "refraction_sensitivity": {
+        "k=0.00": {
+          "visible": true,
+          "margin_deg": 0.493
+        },
+        "k=0.13": {
+          "visible": true,
+          "margin_deg": 0.493
+        },
+        "k=0.25": {
+          "visible": true,
+          "margin_deg": 0.493
+        }
+      },
+      "visible": true
+    },
+    {
+      "name": "Cerro Renca",
+      "gazetteer_ele_m": 905.0,
+      "dem_height_m": 897.2,
+      "source": "osm",
+      "lat": -33.3906,
+      "lon": -70.71104,
+      "gazetteer_lat": -33.3905979,
+      "gazetteer_lon": -70.7110436,
+      "snap_offset_m": 0.0,
+      "azimuth_deg": 102.9,
+      "dist_km": 7.2,
+      "summit_elev_deg": 3.309,
+      "blocking_elev_deg": 2.631,
+      "margin_deg": 0.679,
+      "marginal": false,
+      "refraction_sensitivity": {
+        "k=0.00": {
+          "visible": true,
+          "margin_deg": 0.678
+        },
+        "k=0.13": {
+          "visible": true,
+          "margin_deg": 0.679
+        },
+        "k=0.25": {
+          "visible": true,
+          "margin_deg": 0.679
+        }
+      },
+      "visible": true
+    },
+    {
+      "name": "Cerro San Cristóbal",
+      "gazetteer_ele_m": 880.0,
+      "dem_height_m": 878.1,
+      "source": "osm",
+      "lat": -33.42034,
+      "lon": -70.6299,
+      "gazetteer_lat": -33.4203441,
+      "gazetteer_lon": -70.6298962,
+      "snap_offset_m": 0.0,
+      "azimuth_deg": 108.7,
+      "dist_km": 15.4,
+      "summit_elev_deg": 1.435,
+      "blocking_elev_deg": 2.706,
+      "margin_deg": -1.271,
+      "marginal": false,
+      "refraction_sensitivity": {
+        "k=0.00": {
+          "visible": false,
+          "margin_deg": -1.277
+        },
+        "k=0.13": {
+          "visible": false,
+          "margin_deg": -1.271
+        },
+        "k=0.25": {
+          "visible": false,
+          "margin_deg": -1.265
+        }
+      },
+      "visible": false
+    }
+  ]
+}

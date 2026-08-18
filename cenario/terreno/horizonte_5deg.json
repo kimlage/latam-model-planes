@@ -1,0 +1,767 @@
+{
+  "observer": {
+    "lat": -33.376099,
+    "lon": -70.786697,
+    "enu": [
+      0.0,
+      0.0,
+      5.0
+    ],
+    "eye_height_m": 5.0,
+    "height_m_amsl_copernicus": 477.0,
+    "height_m_amsl_srtm": 483.2,
+    "aerodrome_surface_m_amsl": {
+      "copernicus": 472.0,
+      "srtm": 478.2,
+      "published": 474.0
+    },
+    "desc": "RWY 17L threshold, SCEL - the scene origin"
+  },
+  "method": {
+    "radial_step_m": 20.0,
+    "max_range_km": 160.0,
+    "earth_radius_m": 6369657.4,
+    "refraction_coefficient": 0.13,
+    "effective_radius_m": 7321445.3,
+    "angle": "apparent elevation angle on a spherical Earth of effective radius R/(1-k); positive = above the astronomical horizon",
+    "azimuth": "degrees true, 0 = North, 90 = East, clockwise",
+    "min_range_m": 3000.0,
+    "min_range_rationale": "the aerodrome is graded flat and a surface DEM there carries buildings, not terrain; near_field_max_elev_deg records what this exclusion removes"
+  },
+  "near_field": {
+    "max_elev_deg": 0.6208,
+    "max_object_m_above_observer": 17.6,
+    "azimuths_where_it_exceeds_the_horizon": 0,
+    "note": "compared per azimuth, not max-vs-min: the excluded near field never forms the skyline at any azimuth, so cutting it removes nothing from the silhouette. The ~18 m objects it contains are terminal buildings in the surface model, not terrain."
+  },
+  "dem": {
+    "primary": "Copernicus DEM GLO-30",
+    "control": "SRTM v3 1 arcsec, despiked"
+  },
+  "agreement": {
+    "max_abs_diff_deg": 0.0488,
+    "rms_diff_deg": 0.0135
+  },
+  "profile": [
+    {
+      "azimuth_deg": 0.0,
+      "elev_deg": 0.7862,
+      "elev_deg_no_refraction": 0.7508,
+      "elev_deg_srtm_control": 0.7718,
+      "dist_km": 60.52,
+      "height_m_amsl": 1557.9,
+      "lat": -32.83171,
+      "lon": -70.7867
+    },
+    {
+      "azimuth_deg": 5.0,
+      "elev_deg": 1.0185,
+      "elev_deg_no_refraction": 1.0048,
+      "elev_deg_srtm_control": 1.0211,
+      "dist_km": 23.46,
+      "height_m_amsl": 931.7,
+      "lat": -33.16587,
+      "lon": -70.76473
+    },
+    {
+      "azimuth_deg": 10.0,
+      "elev_deg": 1.0161,
+      "elev_deg_no_refraction": 1.0025,
+      "elev_deg_srtm_control": 1.0183,
+      "dist_km": 23.34,
+      "height_m_amsl": 928.3,
+      "lat": -33.16934,
+      "lon": -70.74314
+    },
+    {
+      "azimuth_deg": 15.0,
+      "elev_deg": 1.2418,
+      "elev_deg_no_refraction": 1.2133,
+      "elev_deg_srtm_control": 1.2337,
+      "dist_km": 48.66,
+      "height_m_amsl": 1693.8,
+      "lat": -32.95324,
+      "lon": -70.65169
+    },
+    {
+      "azimuth_deg": 20.0,
+      "elev_deg": 1.7587,
+      "elev_deg_no_refraction": 1.7288,
+      "elev_deg_srtm_control": 1.7616,
+      "dist_km": 51.08,
+      "height_m_amsl": 2224.2,
+      "lat": -32.9442,
+      "lon": -70.59944
+    },
+    {
+      "azimuth_deg": 25.0,
+      "elev_deg": 1.8489,
+      "elev_deg_no_refraction": 1.7947,
+      "elev_deg_srtm_control": 1.8497,
+      "dist_km": 92.62,
+      "height_m_amsl": 4054.6,
+      "lat": -32.62033,
+      "lon": -70.36867
+    },
+    {
+      "azimuth_deg": 30.0,
+      "elev_deg": 1.881,
+      "elev_deg_no_refraction": 1.8619,
+      "elev_deg_srtm_control": 1.8802,
+      "dist_km": 32.58,
+      "height_m_amsl": 1619.7,
+      "lat": -33.12218,
+      "lon": -70.61174
+    },
+    {
+      "azimuth_deg": 35.0,
+      "elev_deg": 2.6471,
+      "elev_deg_no_refraction": 2.6146,
+      "elev_deg_srtm_control": 2.6406,
+      "dist_km": 55.44,
+      "height_m_amsl": 3251.3,
+      "lat": -32.96713,
+      "lon": -70.44577
+    },
+    {
+      "azimuth_deg": 40.0,
+      "elev_deg": 3.1838,
+      "elev_deg_no_refraction": 3.1641,
+      "elev_deg_srtm_control": 3.1841,
+      "dist_km": 33.58,
+      "height_m_amsl": 2422.6,
+      "lat": -33.1445,
+      "lon": -70.55481
+    },
+    {
+      "azimuth_deg": 45.0,
+      "elev_deg": 3.2529,
+      "elev_deg_no_refraction": 3.2227,
+      "elev_deg_srtm_control": 3.2475,
+      "dist_km": 51.44,
+      "height_m_amsl": 3582.8,
+      "lat": -33.0483,
+      "lon": -70.39636
+    },
+    {
+      "azimuth_deg": 50.0,
+      "elev_deg": 3.4734,
+      "elev_deg_no_refraction": 3.4456,
+      "elev_deg_srtm_control": 3.4779,
+      "dist_km": 47.28,
+      "height_m_amsl": 3500.8,
+      "lat": -33.10212,
+      "lon": -70.39779
+    },
+    {
+      "azimuth_deg": 55.0,
+      "elev_deg": 4.0752,
+      "elev_deg_no_refraction": 4.0533,
+      "elev_deg_srtm_control": 4.0696,
+      "dist_km": 37.08,
+      "height_m_amsl": 3213.9,
+      "lat": -33.18436,
+      "lon": -70.46024
+    },
+    {
+      "azimuth_deg": 60.0,
+      "elev_deg": 4.0439,
+      "elev_deg_no_refraction": 4.0189,
+      "elev_deg_srtm_control": 4.0442,
+      "dist_km": 42.56,
+      "height_m_amsl": 3611.1,
+      "lat": -33.18405,
+      "lon": -70.39055
+    },
+    {
+      "azimuth_deg": 65.0,
+      "elev_deg": 4.3324,
+      "elev_deg_no_refraction": 4.3017,
+      "elev_deg_srtm_control": 4.3087,
+      "dist_km": 52.04,
+      "height_m_amsl": 4607.0,
+      "lat": -33.17724,
+      "lon": -70.27982
+    },
+    {
+      "azimuth_deg": 70.0,
+      "elev_deg": 4.3782,
+      "elev_deg_no_refraction": 4.3443,
+      "elev_deg_srtm_control": 4.3665,
+      "dist_km": 57.48,
+      "height_m_amsl": 5106.7,
+      "lat": -33.19791,
+      "lon": -70.20607
+    },
+    {
+      "azimuth_deg": 75.0,
+      "elev_deg": 4.6268,
+      "elev_deg_no_refraction": 4.5943,
+      "elev_deg_srtm_control": 4.6158,
+      "dist_km": 55.24,
+      "height_m_amsl": 5159.2,
+      "lat": -33.24617,
+      "lon": -70.2128
+    },
+    {
+      "azimuth_deg": 80.0,
+      "elev_deg": 3.8002,
+      "elev_deg_no_refraction": 3.7708,
+      "elev_deg_srtm_control": 3.8105,
+      "dist_km": 50.0,
+      "height_m_amsl": 3970.8,
+      "lat": -33.29687,
+      "lon": -70.25678
+    },
+    {
+      "azimuth_deg": 85.0,
+      "elev_deg": 3.5413,
+      "elev_deg_no_refraction": 3.5081,
+      "elev_deg_srtm_control": 3.5311,
+      "dist_km": 56.42,
+      "height_m_amsl": 4188.1,
+      "lat": -33.3304,
+      "lon": -70.18159
+    },
+    {
+      "azimuth_deg": 90.0,
+      "elev_deg": 3.5594,
+      "elev_deg_no_refraction": 3.527,
+      "elev_deg_srtm_control": 3.5519,
+      "dist_km": 55.04,
+      "height_m_amsl": 4109.6,
+      "lat": -33.37469,
+      "lon": -70.19384
+    },
+    {
+      "azimuth_deg": 95.0,
+      "elev_deg": 3.3522,
+      "elev_deg_no_refraction": 3.3196,
+      "elev_deg_srtm_control": 3.3381,
+      "dist_km": 55.46,
+      "height_m_amsl": 3937.4,
+      "lat": -33.41816,
+      "lon": -70.19129
+    },
+    {
+      "azimuth_deg": 100.0,
+      "elev_deg": 3.7418,
+      "elev_deg_no_refraction": 3.7222,
+      "elev_deg_srtm_control": 3.7374,
+      "dist_km": 33.22,
+      "height_m_amsl": 2725.8,
+      "lat": -33.42749,
+      "lon": -70.43409
+    },
+    {
+      "azimuth_deg": 105.0,
+      "elev_deg": 3.6882,
+      "elev_deg_no_refraction": 3.6679,
+      "elev_deg_srtm_control": 3.6871,
+      "dist_km": 34.44,
+      "height_m_amsl": 2778.9,
+      "lat": -33.45576,
+      "lon": -70.42803
+    },
+    {
+      "azimuth_deg": 110.0,
+      "elev_deg": 4.333,
+      "elev_deg_no_refraction": 4.3126,
+      "elev_deg_srtm_control": 4.3253,
+      "dist_km": 34.6,
+      "height_m_amsl": 3181.6,
+      "lat": -33.48205,
+      "lon": -70.43605
+    },
+    {
+      "azimuth_deg": 115.0,
+      "elev_deg": 4.0512,
+      "elev_deg_no_refraction": 4.0307,
+      "elev_deg_srtm_control": 4.0439,
+      "dist_km": 35.34,
+      "height_m_amsl": 3066.3,
+      "lat": -33.50997,
+      "lon": -70.44116
+    },
+    {
+      "azimuth_deg": 120.0,
+      "elev_deg": 3.2808,
+      "elev_deg_no_refraction": 3.261,
+      "elev_deg_srtm_control": 3.2684,
+      "dist_km": 33.76,
+      "height_m_amsl": 2490.8,
+      "lat": -33.52754,
+      "lon": -70.47122
+    },
+    {
+      "azimuth_deg": 125.0,
+      "elev_deg": 2.5831,
+      "elev_deg_no_refraction": 2.5632,
+      "elev_deg_srtm_control": 2.5735,
+      "dist_km": 33.96,
+      "height_m_amsl": 2088.3,
+      "lat": -33.55095,
+      "lon": -70.48644
+    },
+    {
+      "azimuth_deg": 130.0,
+      "elev_deg": 2.2262,
+      "elev_deg_no_refraction": 2.2006,
+      "elev_deg_srtm_control": 2.2042,
+      "dist_km": 43.76,
+      "height_m_amsl": 2309.5,
+      "lat": -33.62859,
+      "lon": -70.42456
+    },
+    {
+      "azimuth_deg": 135.0,
+      "elev_deg": 2.2563,
+      "elev_deg_no_refraction": 2.229,
+      "elev_deg_srtm_control": 2.2533,
+      "dist_km": 46.56,
+      "height_m_amsl": 2460.2,
+      "lat": -33.67174,
+      "lon": -70.43085
+    },
+    {
+      "azimuth_deg": 140.0,
+      "elev_deg": 2.1725,
+      "elev_deg_no_refraction": 2.135,
+      "elev_deg_srtm_control": 2.1694,
+      "dist_km": 63.98,
+      "height_m_amsl": 3184.8,
+      "lat": -33.81617,
+      "lon": -70.34145
+    },
+    {
+      "azimuth_deg": 145.0,
+      "elev_deg": 2.1057,
+      "elev_deg_no_refraction": 2.0659,
+      "elev_deg_srtm_control": 2.0926,
+      "dist_km": 68.0,
+      "height_m_amsl": 3294.3,
+      "lat": -33.87643,
+      "lon": -70.36413
+    },
+    {
+      "azimuth_deg": 150.0,
+      "elev_deg": 2.0858,
+      "elev_deg_no_refraction": 2.0532,
+      "elev_deg_srtm_control": 2.0776,
+      "dist_km": 55.68,
+      "height_m_amsl": 2717.5,
+      "lat": -33.80948,
+      "lon": -70.48531
+    },
+    {
+      "azimuth_deg": 155.0,
+      "elev_deg": 1.6432,
+      "elev_deg_no_refraction": 1.6086,
+      "elev_deg_srtm_control": 1.6402,
+      "dist_km": 59.02,
+      "height_m_amsl": 2408.6,
+      "lat": -33.85696,
+      "lon": -70.51652
+    },
+    {
+      "azimuth_deg": 160.0,
+      "elev_deg": 1.2846,
+      "elev_deg_no_refraction": 1.2439,
+      "elev_deg_srtm_control": 1.2761,
+      "dist_km": 69.6,
+      "height_m_amsl": 2369.2,
+      "lat": -33.96414,
+      "lon": -70.52853
+    },
+    {
+      "azimuth_deg": 165.0,
+      "elev_deg": 1.1642,
+      "elev_deg_no_refraction": 1.0782,
+      "elev_deg_srtm_control": 1.1658,
+      "dist_km": 146.8,
+      "height_m_amsl": 4934.7,
+      "lat": -34.6509,
+      "lon": -70.37128
+    },
+    {
+      "azimuth_deg": 170.0,
+      "elev_deg": 0.7698,
+      "elev_deg_no_refraction": 0.7555,
+      "elev_deg_srtm_control": 0.753,
+      "dist_km": 24.46,
+      "height_m_amsl": 846.6,
+      "lat": -33.59277,
+      "lon": -70.74083
+    },
+    {
+      "azimuth_deg": 175.0,
+      "elev_deg": 0.5017,
+      "elev_deg_no_refraction": 0.421,
+      "elev_deg_srtm_control": 0.4963,
+      "dist_km": 137.9,
+      "height_m_amsl": 2984.2,
+      "lat": -34.61174,
+      "lon": -70.65535
+    },
+    {
+      "azimuth_deg": 180.0,
+      "elev_deg": 0.8021,
+      "elev_deg_no_refraction": 0.7615,
+      "elev_deg_srtm_control": 0.7986,
+      "dist_km": 69.36,
+      "height_m_amsl": 1776.9,
+      "lat": -34.0,
+      "lon": -70.7867
+    },
+    {
+      "azimuth_deg": 185.0,
+      "elev_deg": 1.1455,
+      "elev_deg_no_refraction": 1.1075,
+      "elev_deg_srtm_control": 1.1396,
+      "dist_km": 64.86,
+      "height_m_amsl": 2061.6,
+      "lat": -33.95729,
+      "lon": -70.848
+    },
+    {
+      "azimuth_deg": 190.0,
+      "elev_deg": 1.0467,
+      "elev_deg_no_refraction": 1.0068,
+      "elev_deg_srtm_control": 1.0476,
+      "dist_km": 68.18,
+      "height_m_amsl": 2040.6,
+      "lat": -33.98,
+      "lon": -70.91512
+    },
+    {
+      "azimuth_deg": 195.0,
+      "elev_deg": 1.1917,
+      "elev_deg_no_refraction": 1.155,
+      "elev_deg_srtm_control": 1.1905,
+      "dist_km": 62.64,
+      "height_m_amsl": 2048.5,
+      "lat": -33.92023,
+      "lon": -70.96244
+    },
+    {
+      "azimuth_deg": 200.0,
+      "elev_deg": 2.208,
+      "elev_deg_no_refraction": 2.2016,
+      "elev_deg_srtm_control": 2.1978,
+      "dist_km": 10.76,
+      "height_m_amsl": 899.8,
+      "lat": -33.46704,
+      "lon": -70.82638
+    },
+    {
+      "azimuth_deg": 205.0,
+      "elev_deg": 2.2033,
+      "elev_deg_no_refraction": 2.1974,
+      "elev_deg_srtm_control": 2.1545,
+      "dist_km": 10.12,
+      "height_m_amsl": 873.4,
+      "lat": -33.45859,
+      "lon": -70.83281
+    },
+    {
+      "azimuth_deg": 210.0,
+      "elev_deg": 1.1607,
+      "elev_deg_no_refraction": 1.1542,
+      "elev_deg_srtm_control": 1.1383,
+      "dist_km": 11.14,
+      "height_m_amsl": 711.2,
+      "lat": -33.46287,
+      "lon": -70.84675
+    },
+    {
+      "azimuth_deg": 215.0,
+      "elev_deg": 1.5452,
+      "elev_deg_no_refraction": 1.5343,
+      "elev_deg_srtm_control": 1.547,
+      "dist_km": 18.58,
+      "height_m_amsl": 1001.9,
+      "lat": -33.51295,
+      "lon": -70.90167
+    },
+    {
+      "azimuth_deg": 220.0,
+      "elev_deg": 1.9111,
+      "elev_deg_no_refraction": 1.9024,
+      "elev_deg_srtm_control": 1.9129,
+      "dist_km": 14.9,
+      "height_m_amsl": 989.4,
+      "lat": -33.47873,
+      "lon": -70.88998
+    },
+    {
+      "azimuth_deg": 225.0,
+      "elev_deg": 1.816,
+      "elev_deg_no_refraction": 1.8057,
+      "elev_deg_srtm_control": 1.8003,
+      "dist_km": 17.56,
+      "height_m_amsl": 1054.9,
+      "lat": -33.48772,
+      "lon": -70.92062
+    },
+    {
+      "azimuth_deg": 230.0,
+      "elev_deg": 1.1297,
+      "elev_deg_no_refraction": 1.1195,
+      "elev_deg_srtm_control": 1.1286,
+      "dist_km": 17.36,
+      "height_m_amsl": 840.0,
+      "lat": -33.47639,
+      "lon": -70.93011
+    },
+    {
+      "azimuth_deg": 235.0,
+      "elev_deg": 1.0412,
+      "elev_deg_no_refraction": 1.0307,
+      "elev_deg_srtm_control": 1.053,
+      "dist_km": 17.92,
+      "height_m_amsl": 824.7,
+      "lat": -33.46845,
+      "lon": -70.94498
+    },
+    {
+      "azimuth_deg": 240.0,
+      "elev_deg": 1.6676,
+      "elev_deg_no_refraction": 1.6573,
+      "elev_deg_srtm_control": 1.6592,
+      "dist_km": 17.46,
+      "height_m_amsl": 1006.2,
+      "lat": -33.45452,
+      "lon": -70.94972
+    },
+    {
+      "azimuth_deg": 245.0,
+      "elev_deg": 2.521,
+      "elev_deg_no_refraction": 2.5126,
+      "elev_deg_srtm_control": 2.5052,
+      "dist_km": 14.4,
+      "height_m_amsl": 1125.3,
+      "lat": -33.43076,
+      "lon": -70.92736
+    },
+    {
+      "azimuth_deg": 250.0,
+      "elev_deg": 3.7635,
+      "elev_deg_no_refraction": 3.7551,
+      "elev_deg_srtm_control": 3.7563,
+      "dist_km": 14.34,
+      "height_m_amsl": 1434.6,
+      "lat": -33.42013,
+      "lon": -70.93192
+    },
+    {
+      "azimuth_deg": 255.0,
+      "elev_deg": 4.9912,
+      "elev_deg_no_refraction": 4.9819,
+      "elev_deg_srtm_control": 4.966,
+      "dist_km": 15.8,
+      "height_m_amsl": 1874.3,
+      "lat": -33.41277,
+      "lon": -70.95116
+    },
+    {
+      "azimuth_deg": 260.0,
+      "elev_deg": 4.7735,
+      "elev_deg_no_refraction": 4.7643,
+      "elev_deg_srtm_control": 4.7654,
+      "dist_km": 15.56,
+      "height_m_amsl": 1793.3,
+      "lat": -33.40029,
+      "lon": -70.9518
+    },
+    {
+      "azimuth_deg": 265.0,
+      "elev_deg": 4.5321,
+      "elev_deg_no_refraction": 4.5232,
+      "elev_deg_srtm_control": 4.5278,
+      "dist_km": 15.04,
+      "height_m_amsl": 1684.9,
+      "lat": -33.38779,
+      "lon": -70.94811
+    },
+    {
+      "azimuth_deg": 270.0,
+      "elev_deg": 4.2991,
+      "elev_deg_no_refraction": 4.2912,
+      "elev_deg_srtm_control": 4.2567,
+      "dist_km": 13.26,
+      "height_m_amsl": 1486.1,
+      "lat": -33.37602,
+      "lon": -70.92953
+    },
+    {
+      "azimuth_deg": 275.0,
+      "elev_deg": 3.0983,
+      "elev_deg_no_refraction": 3.0916,
+      "elev_deg_srtm_control": 3.0515,
+      "dist_km": 11.48,
+      "height_m_amsl": 1107.5,
+      "lat": -33.36704,
+      "lon": -70.90987
+    },
+    {
+      "azimuth_deg": 280.0,
+      "elev_deg": 2.8986,
+      "elev_deg_no_refraction": 2.8873,
+      "elev_deg_srtm_control": 2.8833,
+      "dist_km": 19.1,
+      "height_m_amsl": 1469.2,
+      "lat": -33.3461,
+      "lon": -70.98924
+    },
+    {
+      "azimuth_deg": 285.0,
+      "elev_deg": 3.1407,
+      "elev_deg_no_refraction": 3.1285,
+      "elev_deg_srtm_control": 3.1305,
+      "dist_km": 20.8,
+      "height_m_amsl": 1648.2,
+      "lat": -33.32749,
+      "lon": -71.00299
+    },
+    {
+      "azimuth_deg": 290.0,
+      "elev_deg": 3.4765,
+      "elev_deg_no_refraction": 3.4639,
+      "elev_deg_srtm_control": 3.4887,
+      "dist_km": 21.28,
+      "height_m_amsl": 1801.0,
+      "lat": -33.31045,
+      "lon": -71.00193
+    },
+    {
+      "azimuth_deg": 295.0,
+      "elev_deg": 4.1369,
+      "elev_deg_no_refraction": 4.1251,
+      "elev_deg_srtm_control": 4.1331,
+      "dist_km": 20.1,
+      "height_m_amsl": 1958.8,
+      "lat": -33.29953,
+      "lon": -70.98275
+    },
+    {
+      "azimuth_deg": 300.0,
+      "elev_deg": 4.4136,
+      "elev_deg_no_refraction": 4.4023,
+      "elev_deg_srtm_control": 4.4069,
+      "dist_km": 19.06,
+      "height_m_amsl": 1973.4,
+      "lat": -33.29025,
+      "lon": -70.96432
+    },
+    {
+      "azimuth_deg": 305.0,
+      "elev_deg": 3.508,
+      "elev_deg_no_refraction": 3.4972,
+      "elev_deg_srtm_control": 3.4913,
+      "dist_km": 18.22,
+      "height_m_amsl": 1616.9,
+      "lat": -33.28199,
+      "lon": -70.94729
+    },
+    {
+      "azimuth_deg": 310.0,
+      "elev_deg": 3.1757,
+      "elev_deg_no_refraction": 3.1664,
+      "elev_deg_srtm_control": 3.1912,
+      "dist_km": 15.8,
+      "height_m_amsl": 1370.9,
+      "lat": -33.28468,
+      "lon": -70.91693
+    },
+    {
+      "azimuth_deg": 315.0,
+      "elev_deg": 3.4067,
+      "elev_deg_no_refraction": 3.3904,
+      "elev_deg_srtm_control": 3.4076,
+      "dist_km": 27.82,
+      "height_m_amsl": 2186.5,
+      "lat": -33.19897,
+      "lon": -70.99816
+    },
+    {
+      "azimuth_deg": 320.0,
+      "elev_deg": 3.1958,
+      "elev_deg_no_refraction": 3.1789,
+      "elev_deg_srtm_control": 3.1938,
+      "dist_km": 28.72,
+      "height_m_amsl": 2137.4,
+      "lat": -33.17804,
+      "lon": -70.9851
+    },
+    {
+      "azimuth_deg": 325.0,
+      "elev_deg": 2.9817,
+      "elev_deg_no_refraction": 2.9656,
+      "elev_deg_srtm_control": 2.9909,
+      "dist_km": 27.38,
+      "height_m_amsl": 1954.8,
+      "lat": -33.17424,
+      "lon": -70.95547
+    },
+    {
+      "azimuth_deg": 330.0,
+      "elev_deg": 1.98,
+      "elev_deg_no_refraction": 1.9692,
+      "elev_deg_srtm_control": 1.9752,
+      "dist_km": 18.34,
+      "height_m_amsl": 1134.1,
+      "lat": -33.23319,
+      "lon": -70.88531
+    },
+    {
+      "azimuth_deg": 335.0,
+      "elev_deg": 1.6326,
+      "elev_deg_no_refraction": 1.6039,
+      "elev_deg_srtm_control": 1.6403,
+      "dist_km": 49.06,
+      "height_m_amsl": 2040.2,
+      "lat": -32.97595,
+      "lon": -71.00901
+    },
+    {
+      "azimuth_deg": 340.0,
+      "elev_deg": 1.2843,
+      "elev_deg_no_refraction": 1.2564,
+      "elev_deg_srtm_control": 1.2878,
+      "dist_km": 47.74,
+      "height_m_amsl": 1703.2,
+      "lat": -32.97245,
+      "lon": -70.96177
+    },
+    {
+      "azimuth_deg": 345.0,
+      "elev_deg": 1.3896,
+      "elev_deg_no_refraction": 1.3612,
+      "elev_deg_srtm_control": 1.3867,
+      "dist_km": 48.56,
+      "height_m_amsl": 1816.4,
+      "lat": -32.95411,
+      "lon": -70.92143
+    },
+    {
+      "azimuth_deg": 350.0,
+      "elev_deg": 0.8144,
+      "elev_deg_no_refraction": 0.8018,
+      "elev_deg_srtm_control": 0.8109,
+      "dist_km": 21.54,
+      "height_m_amsl": 815.0,
+      "lat": -33.18528,
+      "lon": -70.8269
+    },
+    {
+      "azimuth_deg": 355.0,
+      "elev_deg": 0.9246,
+      "elev_deg_no_refraction": 0.881,
+      "elev_deg_srtm_control": 0.9178,
+      "dist_km": 74.64,
+      "height_m_amsl": 2062.6,
+      "lat": -32.70724,
+      "lon": -70.85624
+    }
+  ]
+}
