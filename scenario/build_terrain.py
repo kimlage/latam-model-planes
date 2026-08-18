@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.join(HERE, "lib"))
 from srtm import Mosaic
 import frame as F
 
-OUT = os.path.join(HERE, "terreno")
+OUT = os.path.join(HERE, "terrain")
 os.makedirs(OUT, exist_ok=True)
 
 
@@ -80,17 +80,17 @@ def main():
     S = 60.0
     x0 = np.floor(min(cl) / S) * S; x1 = np.ceil(max(cl) / S) * S
     y0 = np.floor(min(cn) / S) * S; y1 = np.ceil(max(cn) / S) * S
-    grids["terreno_scl_60m"] = build(dem, enu, x0, x1, y0, y1, S, "60m")
+    grids["terrain_scl_60m"] = build(dem, enu, x0, x1, y0, y1, S, "60m")
 
     # Near field around the aerodrome, 30 m.
-    grids["terreno_scl_perto_30m"] = build(dem, enu, -15000, 15000, -15000, 15000,
+    grids["terrain_scl_near_30m"] = build(dem, enu, -15000, 15000, -15000, 15000,
                                            30.0, "30m")
 
     # Far field, 180 m. The southern skyline sits 70-150 km out, well beyond the
     # required box, so without this tier the horizon south of the field is simply
     # missing. West is capped at 110 km by the DEM tiles - beyond that is Pacific,
     # filled at sea level.
-    grids["terreno_scl_longe_180m"] = build(dem, enu, -110000, 150000,
+    grids["terrain_scl_far_180m"] = build(dem, enu, -110000, 150000,
                                             -150000, 150000, 180.0, "180m",
                                             fill_sea=True)
 
@@ -154,7 +154,7 @@ def main():
                      lat=F.ARP["lat"], lon=F.ARP["lon"])
     meta["reference_points_enu"] = rw
 
-    with open(os.path.join(OUT, "terreno_meta.json"), "w") as f:
+    with open(os.path.join(OUT, "terrain_meta.json"), "w") as f:
         json.dump(meta, f, indent=2)
     print(json.dumps(meta["grids"], indent=2)[:2000])
     print("\nreference points (ENU m):")

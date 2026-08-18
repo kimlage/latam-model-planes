@@ -165,6 +165,28 @@ Three traps worth carrying to any photo measurement:
   projection.** Measuring the rear wedge by "which pixels are indigo" failed
   repeatedly because the fin is also indigo and covers the hull in side view.
 
+## The SCL scenery
+
+Santiago (SCL / SCEL) is built once, in [`scenario/`](scenario/), and **linked**
+into each aircraft file rather than copied — so a fix to the airport fixes it for
+every aircraft. `scenario/README.md` is the manual: reference frame, anchor
+Empties, how to link it from a new aircraft, which numbers are surveyed and which
+are estimates, and the licences.
+
+Two facts that are easy to get backwards and expensive to fix:
+
+- **Departures are from RWY 17R, not 17L.** Segregated mode, 17L arrivals /
+  17R departures. On a 17R departure every named feature is on the **left**.
+- **The OSM "Hangar A…G" cluster is FACh/ENAER**, not LATAM. The LATAM base is
+  the block around (−660, −1310) in the scene frame.
+
+```bash
+blender -b --factory-startup -P scenario/build_scenery.py -- --terrain   # ~6 s
+blender -b --factory-startup -P scenario/build_scenery.py -- --field     # ~2 s
+blender -b "airbus A320neo/A320neo_decolagem.blend" -P scenario/place_aircraft.py \
+    -- --out "airbus A320neo/A320neo_scl.blend"
+```
+
 ## Reproducing
 
 Blender 5.2+. Open the aircraft's `.blend` and render — textures and materials

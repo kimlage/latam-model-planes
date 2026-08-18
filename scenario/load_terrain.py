@@ -3,8 +3,8 @@
 
 Run inside Blender (Scripting tab, or via the blender-mcp addon):
 
-    import sys; sys.path.append("<...>/cenario")
-    import carregar_terreno as t
+    import sys; sys.path.append("<...>/scenario")
+    import load_terrain as t
     t.build_all()
 
 Coordinates are the scene's local metric frame (see lib/frame.py):
@@ -14,14 +14,14 @@ x East, y North, z Up, metres, origin at the RWY 17L threshold, z = 0 at
 import os, json
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-TERRENO = os.path.join(HERE, "terreno")
+TERRAIN = os.path.join(HERE, "terrain")
 
 
 def _meta():
-    return json.load(open(os.path.join(TERRENO, "terreno_meta.json")))
+    return json.load(open(os.path.join(TERRAIN, "terrain_meta.json")))
 
 
-def build(name="terreno_scl_60m", stride=1, obj_name=None, mask_inner=None):
+def build(name="terrain_scl_60m", stride=1, obj_name=None, mask_inner=None):
     """Create a mesh from one heightfield.
 
     stride      decimates (2 = half resolution)
@@ -31,7 +31,7 @@ def build(name="terreno_scl_60m", stride=1, obj_name=None, mask_inner=None):
     import bpy, numpy as np
 
     m = _meta()["grids"][name]
-    z = np.load(os.path.join(TERRENO, m["file"]))[::stride, ::stride]
+    z = np.load(os.path.join(TERRAIN, m["file"]))[::stride, ::stride]
     ny, nx = z.shape
     step = m["step_m"] * stride
     x0, y0 = m["x_min_m"], m["y_min_m"]
@@ -92,21 +92,21 @@ def fix_camera_clipping(far_m=250000.0, near_m=1.0):
 def build_all(stride_mid=1):
     """Three tiers, coarse to fine, each ringing the next.
 
-      Andes_terreno_longe  180 m, +-150 km : closes the horizon in every
+      SCL_Terrain_Far  180 m, +-150 km : closes the horizon in every
                                              direction (the southern skyline
                                              sits 70-150 km out)
-      Andes_terreno        60 m            : the required box, the Andes wall
-      SCL_terreno_proximo  30 m, +-15 km   : the aerodrome surroundings
+      SCL_Terrain_Mid        60 m            : the required box, the Andes wall
+      SCL_Terrain_Near  30 m, +-15 km   : the aerodrome surroundings
     """
     m = _meta()["grids"]
-    g60 = m["terreno_scl_60m"]; g30 = m["terreno_scl_perto_30m"]
-    far = build("terreno_scl_longe_180m", obj_name="Andes_terreno_longe",
+    g60 = m["terrain_scl_60m"]; g30 = m["terrain_scl_near_30m"]
+    far = build("terrain_scl_far_180m", obj_name="SCL_Terrain_Far",
                 mask_inner=(g60["x_min_m"], g60["x_max_m"],
                             g60["y_min_m"], g60["y_max_m"]))
-    mid = build("terreno_scl_60m", stride=stride_mid, obj_name="Andes_terreno",
+    mid = build("terrain_scl_60m", stride=stride_mid, obj_name="SCL_Terrain_Mid",
                 mask_inner=(g30["x_min_m"], g30["x_max_m"],
                             g30["y_min_m"], g30["y_max_m"]))
-    near = build("terreno_scl_perto_30m", obj_name="SCL_terreno_proximo")
+    near = build("terrain_scl_near_30m", obj_name="SCL_Terrain_Near")
     fix_camera_clipping()
     return far, mid, near
 

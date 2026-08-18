@@ -1,5 +1,5 @@
 {
- "_what": "AIP-verified corrections to the SCL scene geometry. Produced by an independent geometric audit of cenario/scl_osm.json and cenario/terreno/*. Values here OVERRIDE the corresponding fields in scl_osm.json and terreno_meta.json where they differ.",
+ "_what": "AIP-verified corrections to the SCL scene geometry. Produced by an independent geometric audit of scenario/scl_osm.json and scenario/terrain/*. Values here OVERRIDE the corresponding fields in scl_osm.json and terrain_meta.json where they differ.",
  "_source": {
   "primary": "AIP-Chile / DGAC - SCEL AERODROME CHART (ADC-AYUDAS VISUALES), AMDT 99, 15 MAYO 2025",
   "primary_url": "https://aipchile.dgac.gob.cl/dasa/aip_chile_con_contenido/aipmap/SCEL/SCEL%20ADC%20RET.pdf",
@@ -125,11 +125,11 @@
    -2035.26
   ],
   "source": "ADC chart, 33 23 39,99 S / 70 47 37,69 W",
-  "correction": "terreno/terreno_meta.json carries an ARP at xy (83.7, -1874.8), taken from OurAirports. That point is 762 m away and sits ON the 17L centreline - it is the pre-2005 single-runway ARP. Use the value here."
+  "correction": "terrain/terrain_meta.json carries an ARP at xy (83.7, -1874.8), taken from OurAirports. That point is 762 m away and sits ON the 17L centreline - it is the pre-2005 single-runway ARP. Use the value here."
  },
  "corrections_to_apply": [
   {
-   "file": "cenario/terreno/terreno_meta.json + cenario/lib/frame.py",
+   "file": "scenario/terrain/terrain_meta.json + scenario/lib/frame.py",
    "field": "reference_points_enu.35L",
    "wrong": [
     -1414.57,
@@ -143,7 +143,7 @@
    "why": "frame.py took all four runway ends from OurAirports. Its 35L latitude is 0.00071 deg too far south, which stretches 17R/35L to 3885.5 m against a published 3800 m. The sibling OSM task had already caught and discarded this OurAirports error; frame.py kept it."
   },
   {
-   "file": "cenario/terreno/terreno_meta.json + cenario/lib/frame.py",
+   "file": "scenario/terrain/terrain_meta.json + scenario/lib/frame.py",
    "field": "reference_points_enu.35R",
    "wrong": [
     139.07,
@@ -157,7 +157,7 @@
    "why": "That point is the south PAVEMENT END, not the 35R threshold. The real 35R landing threshold is 548.8 m north of it. Anything that paints '35R' markings or sets a touchdown point from this field lands half a kilometre out."
   },
   {
-   "file": "cenario/terreno/terreno_meta.json + cenario/lib/frame.py",
+   "file": "scenario/terrain/terrain_meta.json + scenario/lib/frame.py",
    "field": "reference_points_enu.ARP",
    "wrong": [
     83.73,
@@ -171,7 +171,7 @@
    "why": "pre-2005 single-runway ARP from OurAirports"
   },
   {
-   "file": "cenario/terreno/terreno_meta.json",
+   "file": "scenario/terrain/terrain_meta.json",
    "field": "frame.origin_lat/lon",
    "wrong": [
     -33.376099,
@@ -185,7 +185,7 @@
    "why": "The two deliverables sit in frames offset by 1.51 m (1.27 m east, 0.83 m south). Harmless for rendering but they must be one frame. Adopt the OSM/AIP-confirmed origin; the AIP 17L threshold is 1.2 m from it versus 2.3 m from the OurAirports one."
   },
   {
-   "file": "cenario/scl_osm.json",
+   "file": "scenario/scl_osm.json",
    "field": "runways[0].width_m",
    "wrong": null,
    "right": 55.0,
@@ -193,7 +193,7 @@
    "why": "Now published: DGAC gives 55 m for 17L/35R. The file's suggested working value of 45 m for both runways would have made the departure runway 10 m too narrow."
   },
   {
-   "file": "cenario/scl_osm.json",
+   "file": "scenario/scl_osm.json",
    "field": "runways[1].width_m",
    "wrong": null,
    "right": 45.0,
@@ -201,7 +201,7 @@
    "why": "DGAC gives 45 m for 17R/35L."
   },
   {
-   "file": "cenario/scl_osm.json",
+   "file": "scenario/scl_osm.json",
    "field": "runways[0].ends.35R.displaced_threshold_m",
    "wrong": 542.0,
    "right": 548.8,

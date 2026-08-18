@@ -17,14 +17,18 @@ DATUM_M = 474.0            # z = 0 plane, metres AMSL (SCEL elevation 1555 ft)
 
 FT = 0.3048
 
-# SCEL runway ends, from OurAirports (public domain), derived from AIP Chile.
+# SCEL runway ends, from the AIP-Chile SCEL aerodrome chart.
 RUNWAYS = {
-    "17L": dict(lat=-33.376099,      lon=-70.786697,      elev_ft=1550, hdg_true=178.0),
-    "35R": dict(lat=-33.409901,      lon=-70.785202,      elev_ft=1555, hdg_true=358.0),
-    "17R": dict(lat=-33.371898651,   lon=-70.803703308,   elev_ft=1551, hdg_true=177.0),
-    "35L": dict(lat=-33.406898499,   lon=-70.801902771,   elev_ft=1550, hdg_true=357.0),
+    # Survey values from AIP-Chile SCEL ADC (see ../scl_aip_corrections.json).
+    # They replaced OurAirports coordinates on 2026-08-18: those had 35L 79.7 m
+    # too far south, gave the 35R PAVEMENT END instead of its landing threshold
+    # (548.8 m out) and an ARP 762 m off, from before the second runway opened.
+    "17L": dict(lat=-33.376081,  lon=-70.786708,  elev_ft=1550, hdg_true=177.416),
+    "35R": dict(lat=-33.404889,  lon=-70.785158,  elev_ft=1550, hdg_true=357.416),
+    "17R": dict(lat=-33.371950,  lon=-70.803717,  elev_ft=1551, hdg_true=177.424),
+    "35L": dict(lat=-33.406181,  lon=-70.801881,  elev_ft=1551, hdg_true=357.424),
 }
-ARP = dict(lat=-33.393001556, lon=-70.785797119, elev_ft=1555)   # aerodrome ref point
+ARP = dict(lat=-33.394442, lon=-70.793803, elev_ft=1555)   # aerodrome ref point (AIP ADC)
 
 
 def enu():

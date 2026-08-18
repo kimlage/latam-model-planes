@@ -7,11 +7,11 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = os.path.join(HERE, "terreno")
+OUT = os.path.join(HERE, "terrain")
 
 prof = np.load(os.path.join(OUT, "_fine_profile.npy"))
 az, ang, dist, hgt = prof[0], prof[1], prof[2], prof[3]
-pk = json.load(open(os.path.join(OUT, "picos.json")))
+pk = json.load(open(os.path.join(OUT, "peaks.json")))
 
 fig, axes = plt.subplots(2, 1, figsize=(17, 9.5))
 
@@ -62,6 +62,6 @@ for n in named:
                 arrowprops=dict(arrowstyle="-", lw=.6, color="#8a97a3"))
 
 plt.tight_layout()
-plt.savefig(os.path.join(OUT, "horizonte_silhueta.png"), dpi=125,
+plt.savefig(os.path.join(OUT, "horizon_silhouette.png"), dpi=125,
             facecolor="white")
-print("wrote", os.path.join(OUT, "horizonte_silhueta.png"))
+print("wrote", os.path.join(OUT, "horizon_silhouette.png"))

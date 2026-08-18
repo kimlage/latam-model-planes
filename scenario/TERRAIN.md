@@ -45,7 +45,7 @@ metres too tall.
 17L→35R measures **3751.9 m** in this frame against a published 12,303 ft
 (3749.9 m) — 2 m, which is the frame checking out.
 
-> **Note on the shared origin.** `refs/_medidas_osm_local.json`, produced by the
+> **Note on the shared origin.** `refs/_osm_local_measurements.json`, produced by the
 > airport-layout work, uses the same 17L threshold from OSM geometry:
 > -33.3760915, -70.7867106. That is **1.4 m** from the origin used here (mine comes
 > from the AIP via OurAirports). Both use the same 474 m datum. 1.4 m is 20× below
@@ -61,9 +61,9 @@ Regular grids, **float32 `.npy`**, z in metres above the 474 m datum.
 
 | file | size (cols × rows) | step | extent (km) | z range (m) |
 |---|---|---|---|---|
-| `terreno/terreno_scl_perto_30m.npy` | 1001 × 1001 | **30 m** | x -15.0..15.0, y -15.0..15.0 | -150 .. 1327 |
-| `terreno/terreno_scl_60m.npy` | 2185 × 1671 | **60 m** | x -38.7..92.3, y -47.5..52.7 | -655 .. 5148 |
-| `terreno/terreno_scl_longe_180m.npy` | 1445 × 1668 | **180 m** | x -110.0..149.9, y -150.0..150.1 | -3194 .. 5477 |
+| `terrain/terrain_scl_near_30m.npy` | 1001 × 1001 | **30 m** | x -15.0..15.0, y -15.0..15.0 | -150 .. 1327 |
+| `terrain/terrain_scl_60m.npy` | 2185 × 1671 | **60 m** | x -38.7..92.3, y -47.5..52.7 | -655 .. 5148 |
+| `terrain/terrain_scl_far_180m.npy` | 1445 × 1668 | **180 m** | x -110.0..149.9, y -150.0..150.1 | -3194 .. 5477 |
 
 Three tiers because one grid cannot do both jobs. The 60 m grid covers the
 requested box and carries the Andes wall. The 180 m tier exists because **the
@@ -72,16 +72,16 @@ horizon south of the field is simply missing (see §5). The 30 m tier is the
 aerodrome's immediate surroundings.
 
 Each `.npy` has a **16-bit PNG twin** for displacement workflows. The PNG is
-row-flipped (row 0 = north) and its decode scale is in `terreno_meta.json`:
+row-flipped (row 0 = north) and its decode scale is in `terrain_meta.json`:
 `z_m = png/65535 × (z_max − z_min) + z_min`.
 
-All extents, ranges and decode constants: **`terreno/terreno_meta.json`**.
+All extents, ranges and decode constants: **`terrain/terrain_meta.json`**.
 
 ### Building it in Blender
 
 ```python
-import sys; sys.path.append(".../cenario")
-import carregar_terreno as t
+import sys; sys.path.append(".../scenario")
+import load_terrain as t
 t.build_all()
 ```
 
@@ -93,14 +93,14 @@ scene.
 
 ## 3. The horizon profile
 
-`terreno/horizonte_5deg.json` — elevation angle of the horizon at every **5° of
+`terrain/horizon_5deg.json` — elevation angle of the horizon at every **5° of
 azimuth**, 0–355° (72 entries), as required. Each entry also carries the distance,
 the summit height, its lat/lon, the no-refraction variant, and the SRTM control value.
 
-`terreno/horizonte_fino_0p1deg.csv` — the same at **0.1°** (3600 entries), for
+`terrain/horizon_fine_0p1deg.csv` — the same at **0.1°** (3600 entries), for
 building the actual silhouette.
 
-`terreno/horizonte_silhueta.png` — the profile drawn, with peaks labelled. **Check
+`terrain/horizon_silhouette.png` — the profile drawn, with peaks labelled. **Check
 this against a photograph.**
 
 Method: spherical Earth, radius 6 375 397 m (Gaussian at the origin latitude), with
@@ -131,7 +131,7 @@ it is real: it is close, not high. The Andes read as Andes because they are a
 
 ## 4. Which peaks appear, and where
 
-`terreno/picos.json` — 85 named summits matched along the skyline (55 confirmed,
+`terrain/peaks.json` — 85 named summits matched along the skyline (55 confirmed,
 11 probable, 19 uncertain), plus explicit line-of-sight tests on the notable ones.
 
 Confidence is graded, not asserted: **confirmed** = gazetteer within 800 m of the
@@ -185,13 +185,13 @@ front of them. Aconcagua misses by 0.175°, Tupungato by 0.120° — margins of 
 of intervening ridge, beyond DEM error. Changing the refraction coefficient from 0
 to 0.25 (a strong Santiago inversion) moves these margins by only ~0.03°, so the
 conclusion is not an artefact of the refraction assumption. Every margin and its
-sensitivity is in `picos.json`.
+sensitivity is in `peaks.json`.
 
 ---
 
 ## 5. Checks
 
-Nothing above is asserted without a check. These are reproducible via `verificar.py`.
+Nothing above is asserted without a check. These are reproducible via `verify.py`.
 
 **The required sanity check.** Aerodrome reads **472.0 m** (Copernicus) and
 **478.2 m** (SRTM) against a published **474.0 m** — a ±4 m spread, normal for a
@@ -211,7 +211,7 @@ skyline — the 60 m grid alone was wrong by up to **0.979°** at azimuth 165°,
 because the horizon there is 147 km away and the requested box stops at 47 km.
 The 180 m far tier fixed it.
 
-**A third, independent skyline.** `refs/_skyline_leste_dem.csv`, computed separately
+**A third, independent skyline.** `refs/_east_skyline_dem.csv`, computed separately
 by the airport-layout work, agrees with this one over 40–140° to **0.096° rms**
 (max 0.242°). This profile runs ~0.06° higher on average, consistent with its finer
 radial sampling catching crests the coarser scan steps past.
@@ -231,11 +231,11 @@ therefore the primary source; SRTM is the control.
 
 ```bash
 ./fetch_dem.sh            # downloads both DEMs (~900 MB), normalises, despikes
-python3 build_terreno.py  # heightfields + metadata
-python3 horizonte.py      # horizon profiles, both DEMs
-python3 picos.py          # peak identification + line-of-sight
-python3 silhueta.py       # the silhouette drawing
-python3 verificar.py      # checks in §5
+python3 build_terrain.py  # heightfields + metadata
+python3 horizon.py      # horizon profiles, both DEMs
+python3 peaks.py          # peak identification + line-of-sight
+python3 silhouette.py       # the silhouette drawing
+python3 verify.py      # checks in §5
 ```
 
 Raw DEM tiles are **not committed** (~1.5 GB); `fetch_dem.sh` reproduces them byte

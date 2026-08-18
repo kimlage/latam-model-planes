@@ -1,8 +1,8 @@
 {
- "_about": "Operational data for a take-off from SCEL (Santiago). Companion to scl_operacao.md.",
+ "_about": "Operational data for a take-off from SCEL (Santiago). Companion to scl_operations.md.",
  "_sources": {
   "survey": "AIP-CHILE VOL I, AD 2 SCEL, AMDT NR 67, 06 AUG 2026 (DGAC Chile) - sections AD 2.2, 2.8, 2.9, 2.12, 2.13, 2.14, 2.20, 2.21 and the SCEL ADC chart AMDT 102 / 14 MAY 2026",
-  "markings_measured": "Esri World Imagery, rectified along the RWY 17R axis at 0.25 m/px and measured (see scl_operacao.md 'measured' column). Imagery used for measurement only; not redistributed.",
+  "markings_measured": "Esri World Imagery, rectified along the RWY 17R axis at 0.25 m/px and measured (see scl_operations.md 'measured' column). Imagery used for measurement only; not redistributed.",
   "standard": "ICAO Annex 14 Vol I, 8th ed. (2018), Chapter 5"
  },
  "frame": {

@@ -5,7 +5,7 @@
 #   Copernicus DEM GLO-30 -> dem_cop/   (primary)
 #   SRTM v3 1 arcsec      -> dem/       (independent control)
 #
-# Then run:  python3 build_terreno.py && python3 horizonte.py && python3 picos.py
+# Then run:  python3 build_terrain.py && python3 horizon.py && python3 peaks.py
 set -euo pipefail
 cd "$(dirname "$0")"
 mkdir -p dem dem_cop

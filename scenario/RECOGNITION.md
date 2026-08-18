@@ -1,12 +1,12 @@
 # Would a LATAM SCL employee recognise this? — skeptic's pass
 
-Reviewed: `scl_osm.json`, `TERRENO.md` + `terreno/`, `scl_referencias.md`, `scl_operacao.md`.
+Reviewed: `scl_osm.json`, `TERRAIN.md` + `terrain/`, `scl_references.md`, `scl_operations.md`.
 Own photographic check: 8 images opened and read directly (5 newly downloaded).
 Date: 2026-08-18.
 
 **Verdict: not as currently specified.** The geometry, the terrain and the operational
 data are good. But the document that defines the *framing* of the scene —
-`scl_referencias.md` — puts the aeroplane on the wrong runway, and therefore puts the
+`scl_references.md` — puts the aeroplane on the wrong runway, and therefore puts the
 whole airport on the wrong side of the aircraft. Build to it as written and the employee
 sees their own base mirrored. Fix that one thing and the scene becomes buildable.
 
@@ -14,7 +14,7 @@ sees their own base mirrored. Fix that one thing and the scene becomes buildable
 
 ## 1. The blocking error: wrong departure runway
 
-`scl_referencias.md` §1 states the departure is from **17L**, and builds its entire
+`scl_references.md` §1 states the departure is from **17L**, and builds its entire
 landmark table on "everything passes on the RIGHT". Its cited source is an OPSGROUP blog
 post titled *"Temporary Runway Changes"*, read as a general rule.
 
@@ -27,9 +27,9 @@ It is not a general rule. It is the **00:00–07:00 noise-abatement exception**.
 > (https://planning.simfest.co.uk/rim/SCEL.pdf), which also gives
 > "The primary landing runway is 17L which is CAT IIIB capable."
 
-This corroborates `scl_operacao.md` §1, which cites AIP-CHILE AD 2 SCEL §1.2 directly:
-segregated mode, **17L ARR / 17R DEP**. Two independent sources agree. `scl_operacao.md`
-is right; `scl_referencias.md` is wrong.
+This corroborates `scl_operations.md` §1, which cites AIP-CHILE AD 2 SCEL §1.2 directly:
+segregated mode, **17L ARR / 17R DEP**. Two independent sources agree. `scl_operations.md`
+is right; `scl_references.md` is wrong.
 
 **Consequence, computed in the project frame:**
 
@@ -53,7 +53,7 @@ rotation — better cinematically than the 1287 m figure it replaces.
 
 Secondary: the two docs place the MRO 25–40 m apart along-track. `scl_osm.json` records
 that **no threshold node exists for 17R in OSM** and that zero displacement was *assumed*;
-`scl_operacao.md` had the AIP. Take the AIP figure and reconcile once.
+`scl_operations.md` had the AIP. Take the AIP figure and reconcile once.
 
 ---
 
@@ -88,7 +88,7 @@ wrongness.
 ## 3. What makes recognition happen, in order of weight
 
 **1. The Andes wall — shape and angular scale.** Best-covered element in the project.
-`terreno/` is validated against two independent DEMs and a sibling's independent
+`terrain/` is validated against two independent DEMs and a sibling's independent
 calculation. The 2–5° angular band is the number that stops the classic error of modelling
 the range too large. Cerro El Plomo (az 74°, 55 km) and the Sierra de Ramón wall (az 108–111°,
 34 km) are the anchors; Aconcagua and Tupungato are correctly excluded as blocked.
@@ -115,7 +115,7 @@ contrast, and the cordillera is **completely invisible** — a flat grey wall. I
 low contrast. This needs an extinction coefficient with a stated visibility, not an
 adjective.
 
-**4. The bare ochre infield.** Covered well by `scl_operacao.md` §7 and confirmed in every
+**4. The bare ochre infield.** Covered well by `scl_operations.md` §7 and confirmed in every
 photo I opened. Cheap, high-impact, and a green European infield would break the scene
 instantly.
 
@@ -130,7 +130,7 @@ buildings extracted, 4 have a height tag. At 914 m lateral in a moving shot this
 less than items 2–4, but it is the thing the employee is most entitled to be picky about.
 
 **6. The control tower silhouette.** One usable photo, and the description in
-`scl_referencias.md` §3.3 undersells it. Looking at `apron_panoramio_2011.jpg` myself: the
+`scl_references.md` §3.3 undersells it. Looking at `apron_panoramio_2011.jpg` myself: the
 identity is a **pronounced outward-flaring conical collar** under the cab, much more
 dramatic than "cabine mais larga que o fuste", plus a dark shaft with a lighter vertical
 strip, a small mid-height balcony, and the horizontal-bar radar on the roof deck. Height is
@@ -163,7 +163,7 @@ Newly downloaded (Wikimedia Commons API, geosearch + text search):
 `FIDAE 2022 - BugWarp (34).jpg` (CC BY-SA 4.0).
 Held in scratch only, not copied into the repo.
 
-One claim I corrected from my own reading: `scl_referencias.md` §3.5 gives the cordillera
+One claim I corrected from my own reading: `scl_references.md` §3.5 gives the cordillera
 as uniformly "azul-acinzentada pálida, muito dessaturada". The sunset photograph shows the
 opposite mode — warm pink alpenglow, high contrast, full relief detail. Both are real; the
 scene has to pick one, and the ops doc's late-afternoon recommendation lands squarely in

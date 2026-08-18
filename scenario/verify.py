@@ -15,11 +15,11 @@ import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "lib"))
-OUT = os.path.join(HERE, "terreno")
+OUT = os.path.join(HERE, "terrain")
 
 
 def grid_sampler(name):
-    m = json.load(open(os.path.join(OUT, "terreno_meta.json")))["grids"][name]
+    m = json.load(open(os.path.join(OUT, "terrain_meta.json")))["grids"][name]
     z = np.load(os.path.join(OUT, m["file"])).astype(np.float64)
     x0, y0, s = m["x_min_m"], m["y_min_m"], m["step_m"]
     ny, nx = z.shape
@@ -37,12 +37,12 @@ def grid_sampler(name):
 
 
 def main():
-    prof = json.load(open(os.path.join(OUT, "horizonte_5deg.json")))
+    prof = json.load(open(os.path.join(OUT, "horizon_5deg.json")))
     obs_amsl = prof["observer"]["height_m_amsl_copernicus"]
     z_obs = obs_amsl - 474.0                       # observer in frame units
 
-    s60, m = grid_sampler("terreno_scl_60m")
-    s180, _ = grid_sampler("terreno_scl_longe_180m")
+    s60, m = grid_sampler("terrain_scl_60m")
+    s180, _ = grid_sampler("terrain_scl_far_180m")
     r = np.arange(3000.0, 150000.0, 30.0)
 
     def combined(x, y):

@@ -106,7 +106,7 @@ the wind, sets the direction. **By mid-afternoon the southerly is established at
 afternoon scene points it at roughly 150–210°, i.e. almost straight down the
 runway; a 07:00 scene should show it limp.
 
-Full data: `scl_operacao_vento.json`.
+Full data: `scl_operations_wind.json`.
 
 ---
 
@@ -418,7 +418,7 @@ For an anchor with a real photograph: the Commons image
 carries an EXIF time of 17:34 local, which computes to **sun elevation 6,5°,
 azimuth 290,2°**. That is what this light actually looks like on this airfield.
 
-Full per-minute tables: `scl_operacao_sol.json`.
+Full per-minute tables: `scl_operations_sun.json`.
 
 ### If you want the morning instead
 
@@ -558,7 +558,7 @@ are recorded; no image is copied into this repository.
 
 | File | Contents |
 |---|---|
-| `scl_operacao.md` | this document |
-| `scl_operacao_pista.json` | AIP survey data, declared distances, lighting, measured marking geometry, taxiway stations on the runway axes, standardised taxi routes, facility positions, SID first segment, frame transform to the 17L frame |
-| `scl_operacao_sol.json` | per-date solar tables: sunrise/sunset with azimuth, solar noon, declination, equation of time, and 15-minute samples through the golden-hour band with the angle off the 17R nose |
-| `scl_operacao_vento.json` | 3-year SCEL METAR climatology: runway-preference split, direction histogram, hour-by-hour diurnal cycle, monthly temperatures |
+| `scl_operations.md` | this document |
+| `scl_operations_runway.json` | AIP survey data, declared distances, lighting, measured marking geometry, taxiway stations on the runway axes, standardised taxi routes, facility positions, SID first segment, frame transform to the 17L frame |
+| `scl_operations_sun.json` | per-date solar tables: sunrise/sunset with azimuth, solar noon, declination, equation of time, and 15-minute samples through the golden-hour band with the angle off the 17R nose |
+| `scl_operations_wind.json` | 3-year SCEL METAR climatology: runway-preference split, direction histogram, hour-by-hour diurnal cycle, monthly temperatures |

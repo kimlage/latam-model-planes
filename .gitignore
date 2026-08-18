@@ -38,21 +38,31 @@ __pycache__/
 *.pyc
 
 # ---------------------------------------------------------------------------
-# Cenario SCL: raw elevation tiles (~1.5 GB). Reproduce with cenario/fetch_dem.sh
-# The derived heightfields under cenario/terreno/ ARE committed.
+# SCL scenario: raw elevation tiles (~1.5 GB). Reproduce with scenario/fetch_dem.sh
+# The derived heightfields under scenario/terrain/ ARE committed.
 # ---------------------------------------------------------------------------
-cenario/dem/
-cenario/dem_cop/
-cenario/dem_cop_hgt/
-cenario/dem_srtm_clean/
-cenario/terreno/_fine_profile.npy
+scenario/dem/
+scenario/dem_cop/
+scenario/dem_cop_hgt/
+scenario/dem_srtm_clean/
+scenario/terrain/_fine_profile.npy
 
 # ---------------------------------------------------------------------------
 # SCL scenario: third-party reference photographs. They are properly credited in
-# cenario/scl_referencias.md, but they are CC BY-SA — share-alike conflicts with
+# scenario/scl_references.md, but they are CC BY-SA — share-alike conflicts with
 # this repo's CC BY 4.0 asset licence, so we cite them instead of shipping them.
 # Same rule as the aircraft reference photos. Overlays built on map tiles too.
 # ---------------------------------------------------------------------------
-cenario/refs/*.jpg
-cenario/refs/*.jpeg
-cenario/refs/_mapa_*.png
+scenario/refs/*.jpg
+scenario/refs/*.jpeg
+scenario/refs/_map_*.png
+
+# ---------------------------------------------------------------------------
+# SCL scenery: the terrain .blend is 130 MB of mesh generated in ~6 s from the
+# committed heightfields. Rebuild it with
+#   blender -b --factory-startup -P scenario/build_scenery.py -- --terrain
+# ---------------------------------------------------------------------------
+scenario/scl_terrain.blend
+
+# SCL scenery: render outputs from render_checks.py
+scenario/checks/

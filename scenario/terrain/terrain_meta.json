@@ -1,0 +1,167 @@
+{
+ "frame": {
+  "origin_lat": -33.376099,
+  "origin_lon": -70.786697,
+  "origin_desc": "threshold of RWY 17L, SCEL - start of the takeoff roll (south flow)",
+  "datum_m_amsl": 474.0,
+  "datum_desc": "z = 0 at 474.0 m AMSL (published SCEL aerodrome elevation, 1555 ft)",
+  "axes": "x=East, y=North, z=Up; metres; WGS84 local ENU tangent frame",
+  "note": "z already contains the Earth-curvature drop: a point 90 km away sits ~600 m lower than a flat-plane approximation would put it. This is correct and required for the Andes silhouette."
+ },
+ "dem": {
+  "primary": "Copernicus DEM GLO-30 (WorldDEM-30), 1 arcsec, EGM2008 orthometric",
+  "control": "SRTM v3 1 arcsec (NASA/USGS), EGM96 orthometric"
+ },
+ "grids": {
+  "terrain_scl_60m": {
+   "file": "terrain_scl_60m.npy",
+   "dtype": "float32",
+   "shape": [
+    1671,
+    2185
+   ],
+   "step_m": 60.0,
+   "x_min_m": -38700.0,
+   "x_max_m": 92340.0,
+   "y_min_m": -47460.0,
+   "y_max_m": 52740.0,
+   "row_order": "row 0 = y_min (south); column 0 = x_min (west)",
+   "z_min_m": -655.2415161132812,
+   "z_max_m": 5148.35791015625,
+   "z_units": "metres above the 474 m datum",
+   "lat_range": [
+    -33.80397247936562,
+    -32.89690940301558
+   ],
+   "lon_range": [
+    -71.20462938205408,
+    -69.79003270841775
+   ],
+   "nan_nodes": 0,
+   "png": {
+    "file": "terrain_scl_60m.png",
+    "bitdepth": 16,
+    "decode": "z_m = png/65535 * (z_max_png - z_min_png) + z_min_png",
+    "z_min_png": -655.2415161132812,
+    "z_max_png": 5148.35791015625,
+    "row_order": "PNG row 0 = y_max (north), i.e. flipped vs the .npy"
+   }
+  },
+  "terrain_scl_near_30m": {
+   "file": "terrain_scl_near_30m.npy",
+   "dtype": "float32",
+   "shape": [
+    1001,
+    1001
+   ],
+   "step_m": 30.0,
+   "x_min_m": -15000.0,
+   "x_max_m": 15000.0,
+   "y_min_m": -15000.0,
+   "y_max_m": 15000.0,
+   "row_order": "row 0 = y_min (south); column 0 = x_min (west)",
+   "z_min_m": -150.42274475097656,
+   "z_max_m": 1326.6484375,
+   "z_units": "metres above the 474 m datum",
+   "lat_range": [
+    -33.51133129911015,
+    -33.240764144214076
+   ],
+   "lon_range": [
+    -70.94812702665018,
+    -70.62526565439558
+   ],
+   "nan_nodes": 0,
+   "png": {
+    "file": "terrain_scl_near_30m.png",
+    "bitdepth": 16,
+    "decode": "z_m = png/65535 * (z_max_png - z_min_png) + z_min_png",
+    "z_min_png": -150.42274475097656,
+    "z_max_png": 1326.6484375,
+    "row_order": "PNG row 0 = y_max (north), i.e. flipped vs the .npy"
+   }
+  },
+  "terrain_scl_far_180m": {
+   "file": "terrain_scl_far_180m.npy",
+   "dtype": "float32",
+   "shape": [
+    1668,
+    1445
+   ],
+   "step_m": 180.0,
+   "x_min_m": -110000.0,
+   "x_max_m": 149920.0,
+   "y_min_m": -150000.0,
+   "y_max_m": 150060.0,
+   "row_order": "row 0 = y_min (south); column 0 = x_min (west)",
+   "z_min_m": -3194.1181640625,
+   "z_max_m": 5477.29150390625,
+   "z_units": "metres above the 474 m datum",
+   "lat_range": [
+    -34.72838403928028,
+    -32.01323878811813
+   ],
+   "lon_range": [
+    -71.98771508051063,
+    -69.15018850178606
+   ],
+   "nan_nodes": 0,
+   "png": {
+    "file": "terrain_scl_far_180m.png",
+    "bitdepth": 16,
+    "decode": "z_m = png/65535 * (z_max_png - z_min_png) + z_min_png",
+    "z_min_png": -3194.1181640625,
+    "z_max_png": 5477.29150390625,
+    "row_order": "PNG row 0 = y_max (north), i.e. flipped vs the .npy"
+   }
+  }
+ },
+ "reference_points_enu": {
+  "17L": {
+   "x_m": 0.21,
+   "y_m": 1.21,
+   "z_m": -2.0,
+   "lat": -33.376081,
+   "lon": -70.786708,
+   "hdg_true": 177.416,
+   "source": "AIP-Chile SCEL ADC (see scl_aip_corrections.json)"
+  },
+  "35R": {
+   "x_m": 144.4,
+   "y_m": -3193.96,
+   "z_m": -0.8,
+   "lat": -33.404889,
+   "lon": -70.785158,
+   "hdg_true": 357.416,
+   "source": "AIP-Chile SCEL ADC (see scl_aip_corrections.json)",
+   "note": "AIP LANDING threshold. It is displaced 548.8 m inside the pavement; the south pavement end is at (169.14, -3742.20)."
+  },
+  "17R": {
+   "x_m": -1582.57,
+   "y_m": 459.21,
+   "z_m": -2.21,
+   "lat": -33.37195,
+   "lon": -70.803717,
+   "hdg_true": 177.424,
+   "source": "AIP-Chile SCEL ADC (see scl_aip_corrections.json)"
+  },
+  "35L": {
+   "x_m": -1411.15,
+   "y_m": -3337.32,
+   "z_m": -3.03,
+   "lat": -33.406181,
+   "lon": -70.801881,
+   "hdg_true": 357.424,
+   "source": "AIP-Chile SCEL ADC (see scl_aip_corrections.json)"
+  },
+  "ARP": {
+   "x_m": -659.82,
+   "y_m": -2035.26,
+   "z_m": -1.36,
+   "lat": -33.394442,
+   "lon": -70.793803,
+   "source": "AIP-Chile SCEL ADC"
+  }
+ },
+ "_corrections_applied": "Runway ends and ARP replaced with the AIP-Chile survey values on 2026-08-18. The previous values came from OurAirports and were wrong by 79.7 m (35L), 548.8 m (35R, which was the pavement end, not the threshold) and 762 m (ARP). See scl_aip_corrections.json."
+}

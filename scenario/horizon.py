@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.join(HERE, "lib"))
 from srtm import Mosaic
 import frame as F
 
-OUT = os.path.join(HERE, "terreno")
+OUT = os.path.join(HERE, "terrain")
 os.makedirs(OUT, exist_ok=True)
 
 # Gaussian mean radius of curvature at the origin latitude (WGS84)
@@ -187,10 +187,10 @@ def main():
                        rms_diff_deg=round(float(np.sqrt((diff ** 2).mean())), 4)),
         profile=rows,
     )
-    with open(os.path.join(OUT, "horizonte_5deg.json"), "w") as f:
+    with open(os.path.join(OUT, "horizon_5deg.json"), "w") as f:
         json.dump(meta, f, indent=2)
 
-    with open(os.path.join(OUT, "horizonte_fino_0p1deg.csv"), "w") as f:
+    with open(os.path.join(OUT, "horizon_fine_0p1deg.csv"), "w") as f:
         f.write("azimuth_deg,elev_deg,dist_km,height_m_amsl,lat,lon\n")
         for i, a in enumerate(azf):
             f.write("%.1f,%.4f,%.3f,%.1f,%.5f,%.5f\n"

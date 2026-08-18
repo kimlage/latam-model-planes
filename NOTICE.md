@@ -52,9 +52,9 @@ photograph enters with its URL, author and licence recorded in the aircraft's
 
 ## Elevation and geographic data (the SCL scenario)
 
-The terrain under `cenario/` is derived from open data. The raw DEM tiles
-(~1.5 GB) are **not** in the repository — `cenario/fetch_dem.sh` re-downloads
-them. Full detail in [`cenario/TERRENO.md`](cenario/TERRENO.md).
+The terrain under `scenario/` is derived from open data. The raw DEM tiles
+(~1.5 GB) are **not** in the repository — `scenario/fetch_dem.sh` re-downloads
+them. Full detail in [`scenario/TERRAIN.md`](scenario/TERRAIN.md).
 
 | Source | Used for | Licence |
 |---|---|---|
@@ -79,8 +79,24 @@ GeoNames attribution: *this product uses data from GeoNames
 (https://www.geonames.org), licensed under CC BY 4.0*.
 OpenStreetMap attribution: *© OpenStreetMap contributors*. Note that ODbL is
 **share-alike**: derived databases distributed from the OSM-sourced peak names
-carry that obligation. Each entry in `cenario/refs/gazetteer.json` records which
+carry that obligation. Each entry in `scenario/refs/gazetteer.json` records which
 of the two gazetteers it came from, in its `src` field.
+
+### The airport mesh is an OSM derivative — ODbL, share-alike
+
+`scenario/scl_field.blend` is generated directly from `scenario/scl_osm.json`:
+every building footprint, taxiway centreline, apron polygon, stand and jet-bridge
+position in that file comes from OpenStreetMap. A mesh built straight from an
+ODbL database is a **derived database**, so redistributing `scl_field.blend` — or
+renders of it, or an aircraft file that links it — carries both obligations:
+
+> Airport geometry © OpenStreetMap contributors, ODbL 1.0
+> (https://opendatacommons.org/licenses/odbl/1-0/)
+
+and share-alike on the derived geodata. The runway survey itself (thresholds,
+widths, declared distances, marking geometry) comes from **AIP-Chile / DGAC** and
+is quoted as fact; no chart is redistributed. Full breakdown in
+[`scenario/README.md`](scenario/README.md) §6.
 
 ## What the models contain
 

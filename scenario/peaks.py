@@ -15,7 +15,7 @@ from srtm import Mosaic
 import frame as F
 import horizonte as H
 
-OUT = os.path.join(HERE, "terreno")
+OUT = os.path.join(HERE, "terrain")
 
 
 def geodesic(lat, lon):
@@ -168,7 +168,7 @@ def main():
         skyline_peaks=skyline,
         notable_summits=vis,
     )
-    json.dump(res, open(os.path.join(OUT, "picos.json"), "w"),
+    json.dump(res, open(os.path.join(OUT, "peaks.json"), "w"),
               ensure_ascii=False, indent=2)
 
     print("\n=== NAMED SUMMITS ON THE SKYLINE (by azimuth) ===")

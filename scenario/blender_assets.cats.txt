@@ -1,0 +1,9 @@
+# This is an Asset Catalog Definition file for Blender.
+VERSION 1
+
+b1f0a5c2-9d3e-4a71-8c55-5c1a7e2d0011:SCL Scenery:SCL Scenery
+b1f0a5c2-9d3e-4a71-8c55-5c1a7e2d0012:SCL Scenery/Collections:Collections
+b1f0a5c2-9d3e-4a71-8c55-5c1a7e2d0013:SCL Scenery/Furniture:Furniture
+b1f0a5c2-9d3e-4a71-8c55-5c1a7e2d0014:SCL Scenery/Markings:Markings
+b1f0a5c2-9d3e-4a71-8c55-5c1a7e2d0015:SCL Scenery/Aircraft:Aircraft
+b1f0a5c2-9d3e-4a71-8c55-5c1a7e2d0016:SCL Scenery/Materials:Materials
