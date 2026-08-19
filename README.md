@@ -14,23 +14,23 @@ Two aircraft finished:
 | **Boeing 787-9 Dreamliner** | CC-BGK | [`boeing 787-9/B789_LATAM.blend`](boeing%20787-9/B789_LATAM.blend) | 62.81 m |
 | **Airbus A320neo** | PT-TMN | [`airbus A320neo/A320neo_LATAM.blend`](airbus%20A320neo/A320neo_LATAM.blend) | 37.57 m |
 
-![A320neo departing RWY 17R at Santiago, seen head-on as the camera flies formation and cranes up around its starboard bow](airbus%20A320neo/a320_scl_v10.gif)
+![A320neo departing RWY 17R at Santiago, seen head-on as the camera flies formation and cranes up around its starboard bow](airbus%20A320neo/a320_scl_v11.gif)
 
 *A320neo departing 17R at Santiago — 240 frames, 9.6 s. The camera flies
 formation in the aircraft's own coordinate frame from the first frame to the
-last: the jet closes head-on through the ground run, rotates 300 m from the
-lens, and the camera cranes up around its starboard bow — closing instead of
-receding — while the terminals slide past below, the LATAM base enters over
-the aircraft's shoulder and the cordillera rotates into the frame. The move
-is measured rather than eyeballed — see [§8 of the scenery
+last, opening 130 m off the nose with the jet at 42% of the frame — titles,
+nose and gear legible — through the rotation, then craning up and away so
+the terminals, the LATAM base and the cordillera open around it. The move is
+measured rather than eyeballed — see [§8 of the scenery
 manual](scenario/README.md).*
 
-![Drone orbit of the LATAM maintenance base at SCL](scenario/scl_base_v1.gif)
+![Drone orbit of the LATAM maintenance base at SCL](scenario/scl_base_v2.gif)
 
 *The second clip: one continuous drone orbit of the LATAM maintenance base —
-the official lockup on the ops building, the hangar, and the fleet parked on
-Plataforma LATAM, with the Andes pinned across the top. Constant angular
-rate, no hand-over ([`scenario/base_flyover.py`](scenario/base_flyover.py)).*
+the official lockup on the ops building, the hangar, the fleet parked on
+Plataforma LATAM and the assembled PT-TMN at its stand, with the Andes
+pinned across the top. Constant angular rate, no hand-over
+([`scenario/base_flyover.py`](scenario/base_flyover.py)).*
 
 *The version history is kept in the repository: every `a320_scl_v*.gif` is
 one improvement round over the one before — ground weathering, buildings,
