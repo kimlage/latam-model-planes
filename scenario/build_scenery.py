@@ -424,6 +424,166 @@ def mat(name, color, rough=0.85, metal=0.0, hazy=True, emit=None):
     return m
 
 
+def _nm(nt, op, a=None, b=None):
+    """One Math node; a/b may be sockets or constants. Returns the output socket."""
+    n = nt.nodes.new("ShaderNodeMath")
+    n.operation = op
+    for i, v in enumerate((a, b)):
+        if v is None:
+            continue
+        if isinstance(v, (int, float)):
+            n.inputs[i].default_value = v
+        else:
+            nt.links.new(v, n.inputs[i])
+    return n.outputs[0]
+
+
+def _smooth(nt, x, lo, hi, out_lo=0.0, out_hi=1.0):
+    """Smoothstep Map Range on socket x."""
+    n = nt.nodes.new("ShaderNodeMapRange")
+    n.interpolation_type = "SMOOTHERSTEP"
+    n.inputs["From Min"].default_value = lo
+    n.inputs["From Max"].default_value = hi
+    n.inputs["To Min"].default_value = out_lo
+    n.inputs["To Max"].default_value = out_hi
+    nt.links.new(x, n.inputs["Value"])
+    return n.outputs["Result"]
+
+
+def aged_pavement_material(name, base, aged, stain, patch_scale, rough=0.86):
+    """Weathered taxiway / apron pavement.
+
+    refs/aerial_2014.jpg shows the paved surfaces as a patchwork of repair
+    shades, far lighter than fresh asphalt, with darker stains along the used
+    lanes. Patch scale and amplitudes are read qualitatively off that photo -
+    they are not measurements."""
+    m = bpy.data.materials.new(name)
+    m.use_nodes = True
+    nt = m.node_tree
+    for n in list(nt.nodes):
+        nt.nodes.remove(n)
+    out = nt.nodes.new("ShaderNodeOutputMaterial"); out.location = (800, 0)
+    bsdf = nt.nodes.new("ShaderNodeBsdfPrincipled"); bsdf.location = (480, 0)
+    bsdf.inputs["Roughness"].default_value = rough
+    geo = nt.nodes.new("ShaderNodeNewGeometry"); geo.location = (-900, 0)
+    n1 = nt.nodes.new("ShaderNodeTexNoise")          # repair patches
+    n1.inputs["Scale"].default_value = patch_scale
+    n1.inputs["Detail"].default_value = 3.0
+    nt.links.new(geo.outputs["Position"], n1.inputs["Vector"])
+    mix1 = nt.nodes.new("ShaderNodeMixRGB")
+    mix1.inputs["Color1"].default_value = (*base, 1.0)
+    mix1.inputs["Color2"].default_value = (*aged, 1.0)
+    nt.links.new(_smooth(nt, n1.outputs["Fac"], 0.34, 0.66), mix1.inputs["Fac"])
+    n2 = nt.nodes.new("ShaderNodeTexNoise")          # traffic stains, ~10 m
+    n2.inputs["Scale"].default_value = 0.10
+    n2.inputs["Detail"].default_value = 2.0
+    nt.links.new(geo.outputs["Position"], n2.inputs["Vector"])
+    mix2 = nt.nodes.new("ShaderNodeMixRGB")
+    mix2.inputs["Color2"].default_value = (*stain, 1.0)
+    nt.links.new(mix1.outputs[0], mix2.inputs["Color1"])
+    nt.links.new(_smooth(nt, n2.outputs["Fac"], 0.58, 0.80, 0.0, 0.45),
+                 mix2.inputs["Fac"])
+    nt.links.new(mix2.outputs[0], bsdf.inputs["Base Color"])
+    grp = nt.nodes.new("ShaderNodeGroup"); grp.node_tree = haze_group()
+    grp.location = (640, 0)
+    nt.links.new(bsdf.outputs[0], grp.inputs[0])
+    nt.links.new(grp.outputs[0], out.inputs["Surface"])
+    m.diffuse_color = (*base, 1.0)
+    return m
+
+
+def runway_material(name, thr_a, thr_b, a_end):
+    """Weathered runway asphalt with rubber deposits about the centreline.
+
+    refs/aerial_2014.jpg and takeoff_scl_a320.jpg show the pavement far from
+    uniform: aged grey patches, and a dark rubber band that thickens over the
+    touchdown zones roughly 100-900 m in from each threshold, streaked along
+    the runway by the tyre paths. The lateral profile is a gaussian of sigma
+    ~5 m; amplitudes are read qualitatively off the photographs, not measured."""
+    m = bpy.data.materials.new(name)
+    m.use_nodes = True
+    nt = m.node_tree
+    for n in list(nt.nodes):
+        nt.nodes.remove(n)
+    out = nt.nodes.new("ShaderNodeOutputMaterial"); out.location = (1000, 0)
+    bsdf = nt.nodes.new("ShaderNodeBsdfPrincipled"); bsdf.location = (700, 0)
+
+    ox, oy = thr_a
+    ux, uy, _ = unit(thr_a[0], thr_a[1], thr_b[0], thr_b[1])
+    geo = nt.nodes.new("ShaderNodeNewGeometry"); geo.location = (-1200, 0)
+    sep = nt.nodes.new("ShaderNodeSeparateXYZ")
+    nt.links.new(geo.outputs["Position"], sep.inputs[0])
+    X, Y = sep.outputs["X"], sep.outputs["Y"]
+    dx = _nm(nt, "SUBTRACT", X, ox)
+    dy = _nm(nt, "SUBTRACT", Y, oy)
+    a = _nm(nt, "ADD", _nm(nt, "MULTIPLY", dx, ux), _nm(nt, "MULTIPLY", dy, uy))
+    l = _nm(nt, "ADD", _nm(nt, "MULTIPLY", dx, -uy), _nm(nt, "MULTIPLY", dy, ux))
+
+    # lateral gaussian about the centreline, sigma ~5 m
+    lg = _nm(nt, "MULTIPLY", l, 0.2)
+    gauss = _nm(nt, "EXPONENT",
+                _nm(nt, "MULTIPLY", _nm(nt, "MULTIPLY", lg, lg), -1.0))
+
+    # touchdown-zone thickening from both ends over a light full-length band
+    tdz_a = _nm(nt, "MULTIPLY", _smooth(nt, a, 60.0, 260.0),
+                _smooth(nt, a, 650.0, 1500.0, 1.0, 0.0))
+    ar = _nm(nt, "SUBTRACT", a_end, a)
+    tdz_b = _nm(nt, "MULTIPLY", _smooth(nt, ar, 60.0, 260.0),
+                _smooth(nt, ar, 650.0, 1500.0, 1.0, 0.0))
+    amp = _nm(nt, "ADD", 0.22,
+              _nm(nt, "MULTIPLY", _nm(nt, "ADD", tdz_a, tdz_b), 0.78))
+
+    # tyre streaks: noise squashed ~75:1 along track
+    cmb = nt.nodes.new("ShaderNodeCombineXYZ")
+    nt.links.new(_nm(nt, "MULTIPLY", a, 0.006), cmb.inputs[0])
+    nt.links.new(_nm(nt, "MULTIPLY", l, 0.45), cmb.inputs[1])
+    n_st = nt.nodes.new("ShaderNodeTexNoise")
+    n_st.inputs["Scale"].default_value = 1.0
+    n_st.inputs["Detail"].default_value = 4.0
+    nt.links.new(cmb.outputs[0], n_st.inputs["Vector"])
+    streak = _smooth(nt, n_st.outputs["Fac"], 0.32, 0.68, 0.25, 1.0)
+
+    rub = _nm(nt, "MINIMUM", 1.0,
+              _nm(nt, "MULTIPLY", _nm(nt, "MULTIPLY", gauss, amp),
+                  _nm(nt, "MULTIPLY", streak, 1.15)))
+
+    # aged asphalt base: repair patches at ~250 m, fine mottle at ~8 m
+    n_big = nt.nodes.new("ShaderNodeTexNoise")
+    n_big.inputs["Scale"].default_value = 0.004
+    n_big.inputs["Detail"].default_value = 3.0
+    nt.links.new(geo.outputs["Position"], n_big.inputs["Vector"])
+    mix_b = nt.nodes.new("ShaderNodeMixRGB")
+    mix_b.inputs["Color1"].default_value = (0.060, 0.063, 0.060, 1.0)
+    mix_b.inputs["Color2"].default_value = (0.108, 0.106, 0.098, 1.0)
+    nt.links.new(_smooth(nt, n_big.outputs["Fac"], 0.35, 0.65),
+                 mix_b.inputs["Fac"])
+    n_fine = nt.nodes.new("ShaderNodeTexNoise")
+    n_fine.inputs["Scale"].default_value = 0.12
+    n_fine.inputs["Detail"].default_value = 2.0
+    nt.links.new(geo.outputs["Position"], n_fine.inputs["Vector"])
+    mix_f = nt.nodes.new("ShaderNodeMixRGB")
+    mix_f.inputs["Color2"].default_value = (0.085, 0.086, 0.081, 1.0)
+    nt.links.new(mix_b.outputs[0], mix_f.inputs["Color1"])
+    nt.links.new(_nm(nt, "MULTIPLY", n_fine.outputs["Fac"], 0.30),
+                 mix_f.inputs["Fac"])
+
+    mix_r = nt.nodes.new("ShaderNodeMixRGB")
+    mix_r.inputs["Color2"].default_value = (0.016, 0.016, 0.017, 1.0)
+    nt.links.new(mix_f.outputs[0], mix_r.inputs["Color1"])
+    nt.links.new(rub, mix_r.inputs["Fac"])
+    nt.links.new(mix_r.outputs[0], bsdf.inputs["Base Color"])
+    # rubber is smoother than weathered asphalt
+    nt.links.new(_nm(nt, "SUBTRACT", 0.82, _nm(nt, "MULTIPLY", rub, 0.25)),
+                 bsdf.inputs["Roughness"])
+
+    grp = nt.nodes.new("ShaderNodeGroup"); grp.node_tree = haze_group()
+    grp.location = (840, 0)
+    nt.links.new(bsdf.outputs[0], grp.inputs[0])
+    nt.links.new(grp.outputs[0], out.inputs["Surface"])
+    m.diffuse_color = (0.075, 0.078, 0.075, 1.0)
+    return m
+
+
 def soil_material(name, base, dark, scrub, scale=0.0016):
     """Bare ochre infield. scl_operations.md section 7: dry ochre-to-reddish soil
     with darker ploughed-looking patches, no turf anywhere inside the fence. A
@@ -461,7 +621,25 @@ def soil_material(name, base, dark, scrub, scale=0.0016):
     ramp.color_ramp.elements[1].position = 0.72
     nt.links.new(n2.outputs["Fac"], ramp.inputs["Fac"])
     nt.links.new(ramp.outputs["Color"], mix2.inputs["Factor"])
-    nt.links.new(mix2.outputs[0], bsdf.inputs["Base Color"])
+    # mid-scale mottle (~20 m): dry scrub tufts, the texture the low camera
+    # actually sees beside the runway. Multiplies brightness 0.84..1.10.
+    n3 = nt.nodes.new("ShaderNodeTexNoise"); n3.location = (-700, -520)
+    n3.inputs["Scale"].default_value = scale * 30000.0
+    n3.inputs["Detail"].default_value = 3.0
+    nt.links.new(map1.outputs["Vector"], n3.inputs["Vector"])
+    lum = nt.nodes.new("ShaderNodeMapRange"); lum.location = (-380, -520)
+    lum.inputs["To Min"].default_value = 0.84
+    lum.inputs["To Max"].default_value = 1.10
+    nt.links.new(n3.outputs["Fac"], lum.inputs["Value"])
+    lc = nt.nodes.new("ShaderNodeCombineColor"); lc.location = (-140, -520)
+    for i in range(3):
+        nt.links.new(lum.outputs["Result"], lc.inputs[i])
+    mix3 = nt.nodes.new("ShaderNodeMixRGB"); mix3.location = (100, 0)
+    mix3.blend_type = "MULTIPLY"
+    mix3.inputs["Fac"].default_value = 1.0
+    nt.links.new(mix2.outputs[0], mix3.inputs["Color1"])
+    nt.links.new(lc.outputs[0], mix3.inputs["Color2"])
+    nt.links.new(mix3.outputs[0], bsdf.inputs["Base Color"])
     grp = nt.nodes.new("ShaderNodeGroup"); grp.node_tree = haze_group()
     grp.location = (620, 0)
     nt.links.new(bsdf.outputs[0], grp.inputs[0])
@@ -477,15 +655,23 @@ def palette():
     return dict(
         asphalt=mat("SCL_Asphalt", (0.058, 0.062, 0.058), 0.78),
         shoulder=mat("SCL_AsphaltShoulder", (0.095, 0.093, 0.085), 0.88),
-        concrete=mat("SCL_Concrete", (0.235, 0.230, 0.215), 0.84),
-        taxi=mat("SCL_TaxiwayAsphalt", (0.070, 0.073, 0.070), 0.84),
+        concrete=aged_pavement_material("SCL_Concrete",
+                                        (0.225, 0.220, 0.205),
+                                        (0.268, 0.264, 0.248),
+                                        (0.150, 0.148, 0.140), 0.022, 0.84),
+        taxi=aged_pavement_material("SCL_TaxiwayAsphalt",
+                                    (0.092, 0.094, 0.090),
+                                    (0.142, 0.140, 0.130),
+                                    (0.058, 0.060, 0.058), 0.017, 0.84),
         white=mat("SCL_MarkingWhite", (0.520, 0.520, 0.500), 0.65),
         yellow=mat("SCL_MarkingYellow", (0.400, 0.260, 0.020), 0.70),
         red=mat("SCL_MarkingRed", (0.320, 0.030, 0.020), 0.70),
-        soil=soil_material("SCL_Soil", (0.205, 0.138, 0.078),
-                           (0.128, 0.082, 0.045), (0.098, 0.098, 0.052)),
-        soil_dark=soil_material("SCL_SoilOutfield", (0.175, 0.122, 0.070),
-                                (0.105, 0.072, 0.042), (0.082, 0.092, 0.045),
+        # refs/aerial_2014.jpg: the summer infield is pale straw with
+        # red-brown dry-vegetation patches, not saturated chocolate.
+        soil=soil_material("SCL_Soil", (0.232, 0.180, 0.100),
+                           (0.148, 0.090, 0.050), (0.118, 0.112, 0.058)),
+        soil_dark=soil_material("SCL_SoilOutfield", (0.192, 0.150, 0.086),
+                                (0.116, 0.078, 0.046), (0.095, 0.100, 0.052),
                                 scale=0.0009),
         scrub=mat("SCL_Scrub", (0.062, 0.062, 0.030), 0.95),
         farm=mat("SCL_Farmland", (0.070, 0.085, 0.035), 0.94),
@@ -681,11 +867,21 @@ def build_field():
     bm_to_object(bm, "SCL_FieldSurround", P["soil_dark"], c_ground)
 
     # ---- runways ----------------------------------------------------------
-    bmp, bms, bmm = bmesh.new(), bmesh.new(), bmesh.new()
-    build_runway(bmp, bms, bmm, THR_17R, THR_35L, W_17R, "17R", "35L")
-    build_runway(bmp, bms, bmm, THR_17L, THR_35R, W_17L, "17L", "35R",
+    # One pavement object per runway: the rubber/weathering shader needs the
+    # runway's own along/lateral frame baked into its material constants.
+    bmp1, bmp2 = bmesh.new(), bmesh.new()
+    bms, bmm = bmesh.new(), bmesh.new()
+    build_runway(bmp1, bms, bmm, THR_17R, THR_35L, W_17R, "17R", "35L")
+    build_runway(bmp2, bms, bmm, THR_17L, THR_35R, W_17L, "17L", "35R",
                  disp_b=548.8, pave_end_b=END_35R_PAVE)
-    bm_to_object(bmp, "SCL_RunwayPavement", P["asphalt"], c_run)
+    _, _, L_17R = unit(*THR_17R, *THR_35L)
+    _, _, L_17L = unit(*THR_17L, *END_35R_PAVE)
+    bm_to_object(bmp1, "SCL_RunwayPavement_17R",
+                 runway_material("SCL_Runway_17R35L", THR_17R, THR_35L, L_17R),
+                 c_run)
+    bm_to_object(bmp2, "SCL_RunwayPavement_17L",
+                 runway_material("SCL_Runway_17L35R", THR_17L, THR_35R, L_17L),
+                 c_run)
     bm_to_object(bms, "SCL_RunwayShoulders", P["shoulder"], c_run)
     bm_to_object(bmm, "SCL_RunwayMarkings", P["white"], c_run)
 
@@ -883,7 +1079,9 @@ def build_buildings(d, P, c_bldg, c_latam, c_term, c_tower):
     bm_to_object(bm_roof, "SCL_Buildings_Canopies", P["roof_light"], c_bldg)
     bm_to_object(bm_fach, "SCL_Hangars_FACh", P["roof_navy"], c_bldg)
     bm_to_object(bm_hangar, "SCL_Hangars_Other", P["roof_light"], c_bldg)
-    bm_to_object(bm_sky, "SCL_Hangar_SkyAirline", P["roof_maroon"], c_bldg)
+    # refs/aerial_2014.jpg + hangar_sky_2021.jpg: the Sky hangar is pale grey
+    # steel like its neighbours; the old maroon read as a magenta box on film.
+    bm_to_object(bm_sky, "SCL_Hangar_SkyAirline", P["roof_light"], c_bldg)
     bm_to_object(bm_latam, "SCL_LATAM_Buildings", P["roof_light"], c_latam)
 
     # terminals: T2 gets its undulating roof, everything else a flat slab

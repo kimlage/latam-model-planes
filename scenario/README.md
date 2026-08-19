@@ -189,6 +189,11 @@ Other inferences, all visible in the render:
   belong to.
 - **Colours.** Read qualitatively off the reference photographs, never sampled
   numerically (`scl_operations.md` §9).
+- **Pavement weathering.** The rubber band about each runway centreline (gaussian,
+  sigma ~5 m, thickened 100–900 m in from each threshold), the aged repair patches
+  on runway/taxiway/apron and the traffic stains are all read qualitatively off
+  `refs/aerial_2014.jpg` and `takeoff_scl_a320.jpg`. Their amplitudes and scales
+  are inference, not measurement.
 
 ### Divergences left standing, not silently split
 
