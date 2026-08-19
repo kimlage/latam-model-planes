@@ -246,10 +246,19 @@ HEIGHT = [(1, 7.5), (60, 8.5), (85, 12.0), (110, 22.0), (150, 45.0),
 # would put the camera INSIDE the west tree line (nearest tree e = -114.5;
 # at psi -20 the camera sits at e = -128 ten metres up - the v1 disaster).
 # The swing around the bow waits for the altitude that clears the trees.
-ORBIT = [(1, 400.0, -13.5, 1.8), (60, 362.0, -14.0, 1.9),
-         (100, 315.0, -16.0, 2.6), (140, 270.0, -22.0, 6.0),
-         (180, 240.0, -30.0, 12.0), (210, 222.0, -38.0, 17.0),
-         (240, 205.0, -45.0, 21.5), (275, 192.0, -52.0, 26.5)]
+# v5: START CLOSE. The owner's brief after v10: the aircraft's details are
+# the main thing, show them in close-up BEFORE the base. The orbit now
+# opens at 130 m - the jet fills ~41% of the frame at 50 mm, titles and
+# nose legible - and the reveal is bought by opening the distance while
+# the crane climbs, instead of closing it. During the roll the camera sits
+# over the scrub band (e ~ -45) but 8-10 m up: the 0.4 m tufts streak
+# below the frame edge under motion blur as ground rush, not as the tree
+# line disaster - a 25 px tuft cannot wipe the frame the way an 18 m
+# poplar did.
+ORBIT = [(1, 130.0, -20.0, 3.2), (60, 135.0, -21.0, 3.4),
+         (100, 150.0, -22.0, 3.9), (140, 185.0, -26.0, 6.5),
+         (180, 215.0, -32.0, 12.0), (210, 235.0, -39.0, 17.0),
+         (240, 250.0, -46.0, 21.5), (275, 260.0, -53.0, 26.5)]
 ORBIT_BLEND = (-10, -5)   # w = 1 from frame 1: the orbit is the shot
 
 # Formation flight is not a rail: a real chase drone drifts. Two slow
@@ -267,14 +276,14 @@ ORBIT_EPS = [(p[0], p[3]) for p in ORBIT]
 # opens through the crane so the climb reads as the world widening, not as a
 # zoom-out. The pan-rate gain of the long end lives only where the pan is
 # near zero.
-LENS = [(1, 55.0), (70, 56.0), (100, 54.0), (140, 45.0), (180, 36.0),
-        (210, 31.0), (240, 28.0), (275, 26.0)]
+LENS = [(1, 50.0), (70, 50.0), (100, 48.0), (140, 40.0), (180, 33.0),
+        (210, 30.0), (240, 28.0), (275, 26.0)]
 
 # Where the aircraft sits in frame. Nearly centred for the head-on approach,
 # then easing left of centre so the reveal - the terminals sliding past, the
 # base behind, the cordillera - opens into the right half of the frame.
-SCREEN_U = [(1, 0.52), (70, 0.50), (120, 0.46), (180, 0.43), (240, 0.41),
-            (275, 0.40)]
+SCREEN_U = [(1, 0.55), (70, 0.53), (120, 0.48), (180, 0.43), (240, 0.40),
+            (275, 0.38)]
 
 # Tilt is NOT driven off the aircraft. The Andes crest line is pinned to the
 # frame instead, and the aircraft is allowed to float against it. That is the
