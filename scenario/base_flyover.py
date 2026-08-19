@@ -1,8 +1,18 @@
 #!/usr/bin/env python3
 """The second clip: a drone orbit of the LATAM maintenance base.
 
-    blender -b --factory-startup scenario/scl_field.blend \\
+    blender -b "airbus A320neo/A320neo_scl.blend" \\
         -P scenario/base_flyover.py -- --out scenario/scl_base_flyover.blend
+
+It runs on the PLACED take-off file, not on the bare field: that file
+already carries the fully assembled PT-TMN (rig, gear hinges, livery) with
+the scenery linked. The aircraft is frozen at frame 1 - on its wheels, gear
+down - and its placement empty is swung 180 deg about the pivot and moved
+to a stand on Plataforma LATAM, 40 m south of the hangar doors, nose north
+like the proxy rows. Linking the model's sub-collections was tried first
+and failed structurally: the parts hang from parent empties that live
+outside those collections, so an instance disassembles into a fin sticking
+out of the apron.
 
 Why this shot is built the way it is
 ------------------------------------
@@ -21,7 +31,8 @@ Geometry (world frame, metres):
   in the west half the whole time, so the 15 deg sun stays behind it, the
   SIGN faces it (west facade), and the cordillera is the permanent backdrop
 - radius 420 -> 375 m, height 112 -> 137 m: a gentle push-in and rise;
-  depression to the centre grows 14.9 -> 20.1 deg
+  depression to the centre grows 14.9 -> 20.1 deg. A 340 m orbit was tried
+  and rejected: it crops the sign and fills the frame with hangar roof
 - lens 30 mm, fixed: a drone does not zoom
 - aim: azimuth dead on the centre (the base holds u = 0.5); elevation runs
   -8 -> -10 deg, which keeps the base at v ~ 0.3 and the Andes crest inside
@@ -67,8 +78,8 @@ def main():
     out = argv[argv.index("--out") + 1] if "--out" in argv else \
         os.path.join(HERE, "scl_base_flyover.blend")
 
-    # terrain, linked exactly as render_checks does
-    if os.path.exists(TERRAIN):
+    # terrain, only when running on the bare field file
+    if os.path.exists(TERRAIN) and "SCL_Terrain" not in bpy.data.collections:
         with bpy.data.libraries.load(TERRAIN, link=True) as (src, dst):
             dst.collections = [c for c in src.collections if c == "SCL_Terrain"]
         for c in dst.collections:
@@ -78,6 +89,79 @@ def main():
             ob.instance_type = "COLLECTION"
             ob.instance_collection = c
             bpy.context.scene.collection.objects.link(ob)
+
+    # The hero: freeze the assembled PT-TMN at frame 1 and park it at the
+    # base. Rotation is 180.000 deg exactly (357.424 - 177.424), applied
+    # about the PIVOT's world position, not the empty's origin.
+    piv = bpy.data.objects.get("AviaoPivo")
+    rig = bpy.data.objects.get("SCL_Placement")
+    if piv is not None and rig is not None:
+        bpy.context.scene.frame_set(1)
+        bpy.context.view_layer.update()
+        for ob in bpy.data.objects:
+            if ob.animation_data and ob.animation_data.action \
+                    and ob.name != "CamBase":
+                loc, rot = ob.location[:], ob.rotation_euler[:]
+                ob.animation_data_clear()
+                ob.location, ob.rotation_euler = loc, rot
+        # By the hangar doors, nose north - broadside to the west camera.
+        # Plataforma Papa was tried as a foreground stand and taught the
+        # vertical-FOV lesson: ground closer than ~240 m of track passes
+        # BELOW the frame (depression > el + vfov/2). A white fuselage
+        # 400 m away in haze will never pop off pale concrete; the hero is
+        # an honest detail for the viewer who looks, not the subject.
+        stand = (-560.0, -1330.0)
+        rig.rotation_euler.z += math.pi        # 357.424 - 177.424, exactly
+        bpy.context.view_layer.update()
+
+        # Self-verifying placement: evaluate the real world envelope of the
+        # aircraft meshes and put the WHEELS on the apron and the CENTRE on
+        # the stand, instead of trusting any convention about the rig.
+        import mathutils
+
+        def hero_meshes():
+            # only render-visible meshes riding the rig NEAR the pivot: the
+            # hierarchy also carries livery-raster support meshes parked
+            # hundreds of metres away, which poison a naive envelope
+            pw = piv.matrix_world.translation
+            out = []
+            for ob in bpy.data.objects:
+                if ob.type != "MESH" or ob.hide_render:
+                    continue
+                p = ob
+                while p is not None:
+                    if p is rig:
+                        c = ob.matrix_world.translation
+                        if (c - pw).length < 80.0:
+                            out.append(ob)
+                        break
+                    p = p.parent
+            return out
+
+        def envelope():
+            dg = bpy.context.evaluated_depsgraph_get()
+            lo = mathutils.Vector((1e9, 1e9, 1e9))
+            hi = mathutils.Vector((-1e9, -1e9, -1e9))
+            for ob in hero_meshes():
+                mw = ob.evaluated_get(dg).matrix_world
+                for c in ob.bound_box:
+                    w = mw @ mathutils.Vector(c)
+                    lo = mathutils.Vector(map(min, lo, w))
+                    hi = mathutils.Vector(map(max, hi, w))
+            return lo, hi
+
+        lo, hi = envelope()
+        rig.location.x += stand[0] - (lo.x + hi.x) * 0.5
+        rig.location.y += stand[1] - (lo.y + hi.y) * 0.5
+        rig.location.z += 0.06 - lo.z          # wheels onto the apron
+        bpy.context.view_layer.update()
+        lo, hi = envelope()
+        print("hero PT-TMN parked: x %.1f..%.1f y %.1f..%.1f z %.2f..%.2f"
+              % (lo.x, hi.x, lo.y, hi.y, lo.z, hi.z))
+
+        old_cam = bpy.data.objects.get("CamDecolagem")
+        if old_cam is not None:
+            bpy.data.objects.remove(old_cam, do_unlink=True)
 
     cd = bpy.data.cameras.new("CamBase")
     cd.lens = LENS
