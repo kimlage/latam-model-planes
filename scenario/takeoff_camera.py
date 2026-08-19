@@ -238,10 +238,26 @@ HEIGHT = [(1, 7.5), (60, 8.5), (85, 12.0), (110, 22.0), (150, 45.0),
 # final knot, and a camera that slams to a halt on the last frame reads as a
 # lurch. Overshooting the knot leaves the move still travelling when the
 # clip ends, decelerating gently rather than braking.
-ORBIT = [(100, 284.0, -21.5, 0.8), (140, 262.0, -26.0, 6.0),
-         (180, 238.0, -32.0, 12.0), (210, 218.0, -38.0, 17.0),
-         (240, 200.0, -44.0, 21.5), (275, 186.0, -51.0, 26.5)]
-ORBIT_BLEND = (88, 128)   # frames over which the dolly hands over to the orbit
+# v4: the orbit owns the WHOLE shot - there is no dolly phase and no
+# hand-over. The residual stiffness the owner still saw in v3 lived in the
+# seam between the two coordinate frames; a camera that flies formation in
+# the aircraft's own frame from frame 1 has no seam to read. During the
+# ground roll psi stays shallow (-13.5 deg) because a wider angle at 400 m
+# would put the camera INSIDE the west tree line (nearest tree e = -114.5;
+# at psi -20 the camera sits at e = -128 ten metres up - the v1 disaster).
+# The swing around the bow waits for the altitude that clears the trees.
+ORBIT = [(1, 400.0, -13.5, 1.8), (60, 362.0, -14.0, 1.9),
+         (100, 315.0, -16.0, 2.6), (140, 270.0, -22.0, 6.0),
+         (180, 240.0, -30.0, 12.0), (210, 222.0, -38.0, 17.0),
+         (240, 205.0, -45.0, 21.5), (275, 192.0, -52.0, 26.5)]
+ORBIT_BLEND = (-10, -5)   # w = 1 from frame 1: the orbit is the shot
+
+# Formation flight is not a rail: a real chase drone drifts. Two slow
+# sinusoids on the camera position - amplitudes about a metre, periods 7.3
+# and 5.1 s, well under one cycle per reveal - break the CG-perfect line
+# without registering in the flow metrics.
+SWAY_E = (1.2, 7.3, 0.9)     # amplitude m, period s, phase rad
+SWAY_H = (0.5, 5.1, 2.1)
 ORBIT_D = [(p[0], p[1]) for p in ORBIT]
 ORBIT_PSI = [(p[0], p[2]) for p in ORBIT]
 ORBIT_EPS = [(p[0], p[3]) for p in ORBIT]
@@ -310,6 +326,12 @@ def camera_path(ac_s, ac_h, nframes=FRAME_END):
             continue
         b = orbit_point(f, ac_s[f - 1], ac_h[f - 1])
         out.append(tuple(x + (y - x) * w for x, y in zip(a, b)))
+    # drone drift: slow positional sway, honest formation-flight texture
+    t = [f / 25.0 for f in range(1, nframes + 1)]
+    out = [(s,
+            e + SWAY_E[0] * math.sin(2 * math.pi * tt / SWAY_E[1] + SWAY_E[2]),
+            h + SWAY_H[0] * math.sin(2 * math.pi * tt / SWAY_H[1] + SWAY_H[2]))
+           for (s, e, h), tt in zip(out, t)]
     return out
 
 
