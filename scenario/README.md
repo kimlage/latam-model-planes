@@ -178,7 +178,9 @@ Other inferences, all visible in the render:
   **inferred**. The only evidence is a small distant night crop showing a white LATAM
   wordmark with the coral brandmark to its left, high on a facade over 2–3 lit office
   floors. Facade colour and cladding remain unconfirmed — `scl_references.md` §7.2.
-  The wordmark geometry here is a block stand-in, not the official SVG outline.
+  The wordmark and brandmark are the official SVG outlines (`latam_logo_indigo.svg`,
+  via `latam_livery_kit.importar_svg_2_camadas`), white and coral per the night crop,
+  at the same inferred 5.5 m cap height.
 - **Hangar doors** on the south face of the LATAM hangar, two ~45 m bays. The central
   roof joint visible on satellite supports two bays; the door face is inferred from
   where the apron is.
@@ -193,7 +195,9 @@ Other inferences, all visible in the render:
   sigma ~5 m, thickened 100–900 m in from each threshold), the aged repair patches
   on runway/taxiway/apron and the traffic stains are all read qualitatively off
   `refs/aerial_2014.jpg` and `takeoff_scl_a320.jpg`. Their amplitudes and scales
-  are inference, not measurement.
+  are inference, not measurement. The same applies to the paint wear on the
+  runway/taxiway markings and to the 5.5 m sliding-door panel width on the LATAM
+  hangar (8 leaves across a ~45 m bay).
 
 ### Divergences left standing, not silently split
 

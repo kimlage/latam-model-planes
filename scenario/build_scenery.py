@@ -591,6 +591,42 @@ def runway_material(name, thr_a, thr_b, a_end):
     return m
 
 
+def worn_marking_material(name, base):
+    """Runway/taxiway paint, worn: fresh titanium-white paint exists nowhere on
+    a pavement that gets 200 movements a day. Large soft patches lose up to a
+    third of the paint; a fine 3 m speckle breaks the remaining edges."""
+    m = bpy.data.materials.new(name)
+    m.use_nodes = True
+    nt = m.node_tree
+    for n in list(nt.nodes):
+        nt.nodes.remove(n)
+    out = nt.nodes.new("ShaderNodeOutputMaterial"); out.location = (800, 0)
+    bsdf = nt.nodes.new("ShaderNodeBsdfPrincipled"); bsdf.location = (480, 0)
+    bsdf.inputs["Roughness"].default_value = 0.70
+    geo = nt.nodes.new("ShaderNodeNewGeometry"); geo.location = (-900, 0)
+    n1 = nt.nodes.new("ShaderNodeTexNoise")
+    n1.inputs["Scale"].default_value = 0.010          # ~100 m wear patches
+    n1.inputs["Detail"].default_value = 2.0
+    nt.links.new(geo.outputs["Position"], n1.inputs["Vector"])
+    w1 = _smooth(nt, n1.outputs["Fac"], 0.30, 0.70, 0.65, 1.0)
+    n2 = nt.nodes.new("ShaderNodeTexNoise")
+    n2.inputs["Scale"].default_value = 0.35           # ~3 m speckle
+    n2.inputs["Detail"].default_value = 2.0
+    nt.links.new(geo.outputs["Position"], n2.inputs["Vector"])
+    w2 = _smooth(nt, n2.outputs["Fac"], 0.25, 0.75, 0.82, 1.02)
+    w = _nm(nt, "MULTIPLY", w1, w2)
+    lc = nt.nodes.new("ShaderNodeCombineColor")
+    for i, ch in enumerate(base):
+        nt.links.new(_nm(nt, "MULTIPLY", w, ch), lc.inputs[i])
+    nt.links.new(lc.outputs[0], bsdf.inputs["Base Color"])
+    grp = nt.nodes.new("ShaderNodeGroup"); grp.node_tree = haze_group()
+    grp.location = (640, 0)
+    nt.links.new(bsdf.outputs[0], grp.inputs[0])
+    nt.links.new(grp.outputs[0], out.inputs["Surface"])
+    m.diffuse_color = (*base, 1.0)
+    return m
+
+
 def soil_material(name, base, dark, scrub, scale=0.0016, strips=False):
     """Bare ochre infield. scl_operations.md section 7: dry ochre-to-reddish soil
     with darker ploughed-looking patches, no turf anywhere inside the fence. A
@@ -694,8 +730,9 @@ def palette():
                                     (0.092, 0.094, 0.090),
                                     (0.142, 0.140, 0.130),
                                     (0.058, 0.060, 0.058), 0.017, 0.84),
-        white=mat("SCL_MarkingWhite", (0.520, 0.520, 0.500), 0.65),
-        yellow=mat("SCL_MarkingYellow", (0.400, 0.260, 0.020), 0.70),
+        white=worn_marking_material("SCL_MarkingWhite", (0.520, 0.520, 0.500)),
+        yellow=worn_marking_material("SCL_MarkingYellow",
+                                     (0.400, 0.260, 0.020)),
         red=mat("SCL_MarkingRed", (0.320, 0.030, 0.020), 0.70),
         # refs/aerial_2014.jpg: the summer infield is pale straw with
         # red-brown dry-vegetation patches, not saturated chocolate.
@@ -1387,46 +1424,33 @@ def build_latam_signage(P, c_latam):
     bm_to_object(bm, "SCL_LATAM_SignBand",
                  mat("SCL_LATAM_SignBand", (0.021, 0.020, 0.048), 0.45), c_latam)
 
-    # wordmark, 5.5 m cap height, sitting just under the parapet
-    letters = {
-        "L": [(0.00, 0.00, 1.00, 5.50), (0.00, 0.00, 3.30, 1.00)],
-        "A": [(0.00, 0.00, 1.00, 5.50), (2.66, 0.00, 3.66, 5.50),
-              (0.00, 2.38, 3.66, 3.38)],
-        "T": [(0.00, 4.50, 4.03, 5.50), (1.51, 0.00, 2.52, 5.50)],
-        "M": [(0.00, 0.00, 1.00, 5.50), (3.58, 0.00, 4.58, 5.50),
-              (1.00, 3.12, 2.19, 5.50), (2.39, 3.12, 3.58, 5.50)],
-    }
-    widths = {"L": 3.30, "A": 3.66, "T": 4.03, "M": 4.58}
-    zs = z_top - 7.2
-    total = sum(widths[c] for c in "LATAM") + 4 * 1.2
-    y = (y0 + y1) * 0.5 + total * 0.5 - 4.0
-    bm = bmesh.new()
-    for ch in "LATAM":
-        for (a, b, c_, dd) in letters[ch]:
-            v = [bm.verts.new((x_face - 0.6, y - a, zs + b)),
-                 bm.verts.new((x_face - 0.6, y - c_, zs + b)),
-                 bm.verts.new((x_face - 0.6, y - c_, zs + dd)),
-                 bm.verts.new((x_face - 0.6, y - a, zs + dd))]
-            try:
-                bm.faces.new(v)
-            except ValueError:
-                pass
-        y -= widths[ch] + 1.2
-    bm_to_object(bm, "SCL_LATAM_Wordmark", P["latam_white"], c_latam)
+    # wordmark + brandmark from the OFFICIAL SVG lockup, 5.5 m cap height.
+    # The old block stand-in is retired: latam_livery_kit imports the SVG and
+    # splits it into an indigo layer (the wordmark, white on this sign per the
+    # night crop) and the coral brandmark, keeping the official lockup
+    # arrangement — brandmark to the viewer's left, exactly as photographed.
+    sys.path.insert(0, ROOT)
+    import latam_livery_kit as kit
+    me_word, me_brand = kit.importar_svg_2_camadas(
+        os.path.join(ROOT, "latam_logo_indigo.svg"))
 
-    bm = bmesh.new()                # coral brandmark, four raking strokes
-    yb = (y0 + y1) * 0.5 + total * 0.5 + 2.5
-    for i in range(4):
-        ya = yb + i * 2.3
-        v = [bm.verts.new((x_face - 0.6, ya, zs + 0.4 + i * 0.9)),
-             bm.verts.new((x_face - 0.6, ya + 1.28, zs + 0.4 + i * 0.9)),
-             bm.verts.new((x_face - 0.6, ya + 1.28, zs + 5.2 - i * 0.6)),
-             bm.verts.new((x_face - 0.6, ya, zs + 5.2 - i * 0.6))]
-        try:
-            bm.faces.new(v)
-        except ValueError:
-            pass
-    bm_to_object(bm, "SCL_LATAM_Brandmark", P["latam_coral"], c_latam)
+    word_y = [v.co.y for v in me_word.vertices]
+    s = 5.5 / (max(word_y) - min(word_y))          # wordmark cap = 5.5 m
+    all_x = [v.co.x for me in (me_word, me_brand) for v in me.vertices]
+    lockup_w = (max(all_x) - min(all_x)) * s
+    y_north = (y0 + y1) * 0.5 + lockup_w * 0.5     # centred on the facade
+    zs = z_top - 7.2 - min(word_y) * s             # wordmark base as before
+    for me, mat_, nm in ((me_word, P["latam_white"], "SCL_LATAM_Wordmark"),
+                         (me_brand, P["latam_coral"], "SCL_LATAM_Brandmark")):
+        bm = bmesh.new()
+        bm.from_mesh(me)
+        # SVG x advances with the text; the facade is read looking +X, so the
+        # text runs -Y (southward). SVG y maps straight to z.
+        for v in bm.verts:
+            v.co = Vector((x_face - 0.6, y_north - v.co.x * s,
+                           zs + v.co.y * s))
+        bm_to_object(bm, nm, mat_, c_latam)
+        bpy.data.meshes.remove(me)
 
     # hangar doors on the south face of the LATAM hangar (y = -1291), which is
     # the face onto Plataforma LATAM. Two bays: the satellite image shows a
@@ -1441,7 +1465,32 @@ def build_latam_signage(P, c_latam):
             bm.faces.new(v)
         except ValueError:
             pass
-    bm_to_object(bm, "SCL_LATAM_HangarDoors", P["wall_grey"], c_latam)
+    # Sliding-door panel joints: a dark seam every 5.5 m. Panel width is an
+    # inference from the ~45 m bays (8 leaves); the joints are what make the
+    # face read as a door instead of a wall at 1.1 km.
+    md = bpy.data.materials.new("SCL_LATAM_DoorPanels")
+    md.use_nodes = True
+    nt = md.node_tree
+    for n in list(nt.nodes):
+        nt.nodes.remove(n)
+    out = nt.nodes.new("ShaderNodeOutputMaterial"); out.location = (800, 0)
+    bsdf = nt.nodes.new("ShaderNodeBsdfPrincipled"); bsdf.location = (480, 0)
+    bsdf.inputs["Roughness"].default_value = 0.62
+    geo = nt.nodes.new("ShaderNodeNewGeometry")
+    sep = nt.nodes.new("ShaderNodeSeparateXYZ")
+    nt.links.new(geo.outputs["Position"], sep.inputs[0])
+    seam = _nm(nt, "LESS_THAN", _nm(nt, "MODULO", sep.outputs["X"], 5.5), 0.45)
+    mixd = nt.nodes.new("ShaderNodeMixRGB")
+    mixd.inputs["Color1"].default_value = (0.190, 0.192, 0.195, 1.0)
+    mixd.inputs["Color2"].default_value = (0.105, 0.107, 0.110, 1.0)
+    nt.links.new(seam, mixd.inputs["Fac"])
+    nt.links.new(mixd.outputs[0], bsdf.inputs["Base Color"])
+    grp = nt.nodes.new("ShaderNodeGroup"); grp.node_tree = haze_group()
+    grp.location = (640, 0)
+    nt.links.new(bsdf.outputs[0], grp.inputs[0])
+    nt.links.new(grp.outputs[0], out.inputs["Surface"])
+    md.diffuse_color = (0.190, 0.192, 0.195, 1.0)
+    bm_to_object(bm, "SCL_LATAM_HangarDoors", md, c_latam)
 
 
 def build_trees(d, P, c_furn):
