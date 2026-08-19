@@ -248,12 +248,19 @@ def ribbon(bm, pts, width, z):
             pass
 
 
-def bm_to_object(bm, name, mat, collection, smooth=False):
+def bm_to_object(bm, name, mat, collection, smooth=False, roof_mat=None):
+    """roof_mat: optional slot-1 material applied to up-facing polygons
+    (normal.z > 0.55 — flat caps and shallow gable planes, never walls)."""
     me = bpy.data.meshes.new(name)
     bm.to_mesh(me)
     bm.free()
     if mat:
         me.materials.append(mat)
+    if roof_mat is not None:
+        me.materials.append(roof_mat)
+        for p in me.polygons:
+            if p.normal.z > 0.55:
+                p.material_index = 1
     if smooth:
         for p in me.polygons:
             p.use_smooth = True
@@ -584,10 +591,14 @@ def runway_material(name, thr_a, thr_b, a_end):
     return m
 
 
-def soil_material(name, base, dark, scrub, scale=0.0016):
+def soil_material(name, base, dark, scrub, scale=0.0016, strips=False):
     """Bare ochre infield. scl_operations.md section 7: dry ochre-to-reddish soil
     with darker ploughed-looking patches, no turf anywhere inside the fence. A
-    green European infield is the fastest way to make this scene read as wrong."""
+    green European infield is the fastest way to make this scene read as wrong.
+
+    strips=True adds the ploughed bands _map_mro_overlay.png shows between the
+    runways: dark red-brown strips 50-200 m wide running roughly along the
+    field (N-S), bleached pale between them. Anisotropic noise, 12:1 N-S."""
     m = bpy.data.materials.new(name)
     m.use_nodes = True
     nt = m.node_tree
@@ -639,7 +650,27 @@ def soil_material(name, base, dark, scrub, scale=0.0016):
     mix3.inputs["Fac"].default_value = 1.0
     nt.links.new(mix2.outputs[0], mix3.inputs["Color1"])
     nt.links.new(lc.outputs[0], mix3.inputs["Color2"])
-    nt.links.new(mix3.outputs[0], bsdf.inputs["Base Color"])
+    colour = mix3.outputs[0]
+    if strips:
+        # ploughed bands: noise squashed 12:1 so features run along the field
+        st_map = nt.nodes.new("ShaderNodeMapping"); st_map.location = (-820, -760)
+        st_map.inputs["Scale"].default_value = (0.012, 0.001, 0.001)
+        nt.links.new(tex.outputs["Object"], st_map.inputs["Vector"])
+        n4 = nt.nodes.new("ShaderNodeTexNoise"); n4.location = (-700, -760)
+        n4.inputs["Scale"].default_value = 1.4
+        n4.inputs["Detail"].default_value = 2.0
+        nt.links.new(st_map.outputs["Vector"], n4.inputs["Vector"])
+        ramp2 = nt.nodes.new("ShaderNodeValToRGB"); ramp2.location = (-440, -760)
+        ramp2.color_ramp.elements[0].position = 0.55
+        ramp2.color_ramp.elements[1].position = 0.70
+        nt.links.new(n4.outputs["Fac"], ramp2.inputs["Fac"])
+        mix4 = nt.nodes.new("ShaderNodeMixRGB"); mix4.location = (280, -200)
+        mix4.inputs["Color2"].default_value = (dark[0] * 0.72, dark[1] * 0.72,
+                                               dark[2] * 0.72, 1.0)
+        nt.links.new(colour, mix4.inputs["Color1"])
+        nt.links.new(ramp2.outputs["Color"], mix4.inputs["Fac"])
+        colour = mix4.outputs[0]
+    nt.links.new(colour, bsdf.inputs["Base Color"])
     grp = nt.nodes.new("ShaderNodeGroup"); grp.node_tree = haze_group()
     grp.location = (620, 0)
     nt.links.new(bsdf.outputs[0], grp.inputs[0])
@@ -669,7 +700,8 @@ def palette():
         # refs/aerial_2014.jpg: the summer infield is pale straw with
         # red-brown dry-vegetation patches, not saturated chocolate.
         soil=soil_material("SCL_Soil", (0.232, 0.180, 0.100),
-                           (0.148, 0.090, 0.050), (0.118, 0.112, 0.058)),
+                           (0.148, 0.090, 0.050), (0.118, 0.112, 0.058),
+                           strips=True),
         soil_dark=soil_material("SCL_SoilOutfield", (0.192, 0.150, 0.086),
                                 (0.116, 0.078, 0.046), (0.095, 0.100, 0.052),
                                 scale=0.0009),
@@ -678,18 +710,27 @@ def palette():
         roof_light=mat("SCL_RoofLight", (0.330, 0.335, 0.330), 0.72),
         roof_grey=mat("SCL_RoofGrey", (0.140, 0.143, 0.145), 0.78),
         roof_navy=mat("SCL_RoofNavy", (0.020, 0.030, 0.075), 0.65),
-        roof_maroon=mat("SCL_RoofMaroon", (0.130, 0.010, 0.055), 0.70),
+        roof_navy_dark=mat("SCL_RoofNavyDark", (0.014, 0.021, 0.055), 0.68),
+        # _map_mro_overlay.png: the Sky hangar roof really is maroon, but
+        # weathered brick — the old saturated value rendered as neon pink.
+        roof_brick=mat("SCL_RoofBrick", (0.098, 0.030, 0.038), 0.75),
+        roof_steel_cool=mat("SCL_RoofSteelCool", (0.195, 0.202, 0.205), 0.66),
+        roof_steel_warm=mat("SCL_RoofSteelWarm", (0.218, 0.208, 0.188), 0.68),
+        roof_steel_dark=mat("SCL_RoofSteelDark", (0.118, 0.122, 0.126), 0.72),
+        roof_ribbed=mat("SCL_RoofRibbedWhite", (0.290, 0.294, 0.288), 0.58),
         wall=mat("SCL_WallLight", (0.300, 0.298, 0.288), 0.80),
         wall_grey=mat("SCL_WallGrey", (0.170, 0.172, 0.175), 0.82),
         wall_tan=mat("SCL_WallTan", (0.245, 0.205, 0.150), 0.82),
-        wall_pale=mat("SCL_WallPale", (0.390, 0.388, 0.375), 0.78),
+        wall_pale=mat("SCL_WallPale", (0.360, 0.345, 0.300), 0.78),
         foliage=mat("SCL_Foliage", (0.052, 0.070, 0.028), 0.90),
         trunk=mat("SCL_TreeTrunk", (0.048, 0.038, 0.026), 0.90),
         glass=mat("SCL_Glass", (0.030, 0.045, 0.050), 0.16, metal=0.35),
         tower_concrete=mat("SCL_TowerConcrete", (0.185, 0.182, 0.176), 0.80),
         steel=mat("SCL_SteelLight", (0.330, 0.340, 0.350), 0.42, metal=0.85),
         mast=mat("SCL_MastWhite", (0.520, 0.525, 0.530), 0.50),
-        t2_roof=mat("SCL_T2Roof", (0.088, 0.092, 0.094), 0.58, metal=0.45),
+        # t2_exterior_2022 / t2_panorama_anfiteatro: the wave roof is pale
+        # steel, not gunmetal — the old 0.09 read as a dark slab at distance.
+        t2_roof=mat("SCL_T2Roof", (0.275, 0.280, 0.285), 0.50, metal=0.25),
         t2_green=mat("SCL_T2PanelGreen", (0.185, 0.290, 0.150), 0.72),
         t2_brise=mat("SCL_T2Brise", (0.360, 0.115, 0.030), 0.62),
         latam_indigo=mat("SCL_LATAM_Indigo", (0.023, 0.000, 0.246), 0.55),
@@ -1072,17 +1113,28 @@ def build_buildings(d, P, c_bldg, c_latam, c_term, c_tower):
         gable(target, h["polygon_xy_m"], hh * 0.82, hh,
               h["footprint"]["long_axis_bearing_deg"])
 
-    for i, (bmg, key) in enumerate(zip(bm_generic,
-                                       ("wall", "wall_grey", "wall_tan",
-                                        "wall_pale"))):
-        bm_to_object(bmg, "SCL_Buildings_Generic_%d" % i, P[key], c_bldg)
+    # Walls and roofs split per bucket: the satellite shows white, cream,
+    # grey and tan blocks, each roofed a shade darker than its own walls —
+    # the uniform white-box look came from painting both faces alike.
+    for i, (bmg, wkey, rkey) in enumerate(zip(
+            bm_generic,
+            ("wall", "wall_grey", "wall_tan", "wall_pale"),
+            ("roof_steel_cool", "roof_steel_dark", "roof_steel_warm",
+             "roof_steel_warm"))):
+        bm_to_object(bmg, "SCL_Buildings_Generic_%d" % i, P[wkey], c_bldg,
+                     roof_mat=P[rkey])
     bm_to_object(bm_roof, "SCL_Buildings_Canopies", P["roof_light"], c_bldg)
-    bm_to_object(bm_fach, "SCL_Hangars_FACh", P["roof_navy"], c_bldg)
-    bm_to_object(bm_hangar, "SCL_Hangars_Other", P["roof_light"], c_bldg)
-    # refs/aerial_2014.jpg + hangar_sky_2021.jpg: the Sky hangar is pale grey
-    # steel like its neighbours; the old maroon read as a magenta box on film.
-    bm_to_object(bm_sky, "SCL_Hangar_SkyAirline", P["roof_light"], c_bldg)
-    bm_to_object(bm_latam, "SCL_LATAM_Buildings", P["roof_light"], c_latam)
+    bm_to_object(bm_fach, "SCL_Hangars_FACh", P["roof_navy"], c_bldg,
+                 roof_mat=P["roof_navy_dark"])
+    bm_to_object(bm_hangar, "SCL_Hangars_Other", P["wall_pale"], c_bldg,
+                 roof_mat=P["roof_steel_cool"])
+    # _map_mro_overlay.png: pale walls under a weathered maroon roof.
+    bm_to_object(bm_sky, "SCL_Hangar_SkyAirline", P["wall"], c_bldg,
+                 roof_mat=P["roof_brick"])
+    # The LATAM base stays the brightest block on the field — fresh paint —
+    # but its roof reads as ribbed steel, not the same white as the walls.
+    bm_to_object(bm_latam, "SCL_LATAM_Buildings", P["roof_light"], c_latam,
+                 roof_mat=P["roof_ribbed"])
 
     # terminals: T2 gets its undulating roof, everything else a flat slab
     bm_t = bmesh.new()
@@ -1095,7 +1147,8 @@ def build_buildings(d, P, c_bldg, c_latam, c_term, c_tower):
             undulating_roof(bm_roofline, t["polygon_xy_m"], h, h + 7.0)
         elif nm.startswith("Espig") and nm[8] in "CDEF":
             undulating_roof(bm_roofline, t["polygon_xy_m"], h, h + 3.5)
-    bm_to_object(bm_t, "SCL_Terminal_Volumes", P["wall_grey"], c_term)
+    bm_to_object(bm_t, "SCL_Terminal_Volumes", P["wall_grey"], c_term,
+                 roof_mat=P["roof_steel_dark"])
     ob = bm_to_object(bm_roofline, "SCL_Terminal_Roofs", P["t2_roof"], c_term,
                       smooth=True)
     ob.data.materials.append(P["t2_green"])
