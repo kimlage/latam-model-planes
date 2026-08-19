@@ -14,15 +14,29 @@ Two aircraft finished:
 | **Boeing 787-9 Dreamliner** | CC-BGK | [`boeing 787-9/B789_LATAM.blend`](boeing%20787-9/B789_LATAM.blend) | 62.81 m |
 | **Airbus A320neo** | PT-TMN | [`airbus A320neo/A320neo_LATAM.blend`](airbus%20A320neo/A320neo_LATAM.blend) | 37.57 m |
 
-![A320neo departing RWY 17R at Santiago, the camera arcing up and around into an aerial view of the LATAM base](airbus%20A320neo/a320_scl_v2.gif)
+![A320neo departing RWY 17R at Santiago, seen head-on as the camera flies formation and cranes up around its starboard bow](airbus%20A320neo/a320_scl_v10.gif)
 
-*A320neo departing 17R at Santiago — 240 frames, 9.6 s. The camera tracks low
-beside the ground run, then hands over to an orbit flown in the aircraft's own
-coordinates: it climbs faster than the aeroplane and swings forward around it,
-opening the LATAM maintenance base, the apron, the tower and both parallel
-runways out below, with the Andes across the top. The move is measured rather
-than eyeballed — see [§8 of the scenery manual](scenario/README.md). Earlier
-clips kept for comparison: the [first SCL camera](airbus%20A320neo/a320_scl.gif),
+*A320neo departing 17R at Santiago — 240 frames, 9.6 s. The camera flies
+formation in the aircraft's own coordinate frame from the first frame to the
+last: the jet closes head-on through the ground run, rotates 300 m from the
+lens, and the camera cranes up around its starboard bow — closing instead of
+receding — while the terminals slide past below, the LATAM base enters over
+the aircraft's shoulder and the cordillera rotates into the frame. The move
+is measured rather than eyeballed — see [§8 of the scenery
+manual](scenario/README.md).*
+
+![Drone orbit of the LATAM maintenance base at SCL](scenario/scl_base_v1.gif)
+
+*The second clip: one continuous drone orbit of the LATAM maintenance base —
+the official lockup on the ops building, the hangar, and the fleet parked on
+Plataforma LATAM, with the Andes pinned across the top. Constant angular
+rate, no hand-over ([`scenario/base_flyover.py`](scenario/base_flyover.py)).*
+
+*The version history is kept in the repository: every `a320_scl_v*.gif` is
+one improvement round over the one before — ground weathering, buildings,
+the base detail, margin scrub, farmland, runway furniture, and two camera
+rebuilds. Earlier clips for comparison: the
+[first SCL camera](airbus%20A320neo/a320_scl.gif),
 a [no-scenery pass](airbus%20A320neo/a320_decolagem_v2.gif) and an
 [orbit-in-place clip](airbus%20A320neo/a320_voo.gif).*
 

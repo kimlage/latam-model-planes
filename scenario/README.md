@@ -342,12 +342,16 @@ blender -b "airbus A320neo/A320neo_scl.blend" -P scenario/takeoff_camera.py \
 python3 scenario/takeoff_camera.py
 ```
 
-The move: a low dolly beside the roll, then a hand-over at frame ~100 to an
-**orbit flown in the aircraft's own coordinates** — distance, relative bearing,
-elevation above it. The reveal is bought with angle, not distance: the camera
-climbs faster than the aeroplane and swings 21° forward around it while the
-lens opens 37 → 21 mm. Full reasoning, and the measurements that forced each
-choice, are in the module docstring.
+The move (v4): **one orbit flown in the aircraft's own coordinates from frame
+1 to frame 240** — distance, relative bearing, elevation above it — with no
+dolly phase and no hand-over; the seam between coordinate frames was where
+the earlier cuts' stiffness lived. The camera starts 400 m off the nose at
+~13 m, lets the jet close head-on through the roll, then cranes up around
+the starboard bow, closing 284 → 200 m while the lens opens 55 → 28 mm, plus
+a metre of slow positional sway (formation flight is not a rail). Full
+reasoning, and the measurements that forced each choice, are in the module
+docstring. The second clip, a constant-rate drone orbit of the LATAM base,
+is `base_flyover.py` → `scl_base_v1.gif`.
 
 ### Judging the move with numbers, not adjectives
 
@@ -382,7 +386,7 @@ aircraft's smallest margin to the frame edge.
 
 ```bash
 # 240 frames, 960x540, Cycles 96 samples on Metal, 180 deg shutter (0.50)
-blender -b "airbus A320neo/A320neo_scl_v2.blend" -P - <<'PY'
+blender -b "airbus A320neo/A320neo_scl_v4.blend" -P - <<'PY'
 import bpy, os
 prefs = bpy.context.preferences.addons["cycles"].preferences
 prefs.compute_device_type = "METAL"; prefs.get_devices()
@@ -394,12 +398,15 @@ bpy.context.scene.render.image_settings.file_format = 'PNG'
 bpy.ops.render.render(animation=True)
 PY
 
-# GIF: 800 px wide, 25 fps
+# GIF: 800 px wide, 25 fps. max_colors is re-measured per round against the
+# ~15 MB budget: texture-heavy rounds (soil mottle, scrub tufts, camera sway)
+# cost colours - the ladder so far ran 144 -> 96 -> 88 -> 80. The base
+# flyover, whose orbit moves every pixel every frame, ships at 720 px / 72.
 ffmpeg -y -framerate 25 -start_number 1 -i /tmp/frames_scl/%04d.png \
   -vf "scale=800:-1:flags=lanczos,split[a][b];\
-[a]palettegen=max_colors=144:stats_mode=diff[p];\
+[a]palettegen=max_colors=88:stats_mode=diff[p];\
 [b][p]paletteuse=dither=none:diff_mode=rectangle" \
-  -loop 0 "airbus A320neo/a320_scl_v2.gif"
+  -loop 0 "airbus A320neo/a320_scl_v10.gif"
 ```
 
 **A 180° shutter (0.50) is affordable only because the pan slowed down.** The
@@ -421,14 +428,15 @@ PNGs — quantisation removes a hair of variation rather than adding any.
 
 **Use 25 fps, not 24.** A GIF delay is an integer number of centiseconds. 25 fps is
 exactly 4 cs for every frame; 24 fps is 4.1666… cs, and every encoder resolves that by
-alternating 4 and 5 cs delays, which is visible as a stutter. Verify after encoding —
-every Graphic Control Extension should carry the same delay:
+alternating 4 and 5 cs delays, which is visible as a stutter. Verify after encoding
+**with a real parser, not a byte scan** — the 0x21F904 pattern occurs by chance inside
+LZW data and once reported a phantom 311 s delay that did not exist:
 
 ```bash
 python3 - <<'PY'
-d = open("airbus A320neo/a320_scl_v2.gif", "rb").read()
-delays = {d[i+4] | (d[i+5] << 8) for i in range(len(d)-6)
-          if d[i] == 0x21 and d[i+1] == 0xF9 and d[i+2] == 0x04}
-print("delays (cs):", delays)      # must be a single value, {4}
+from PIL import Image, ImageSequence
+im = Image.open("airbus A320neo/a320_scl_v10.gif")
+durs = {fr.info.get("duration") for fr in ImageSequence.Iterator(im)}
+print("durations (ms):", durs)     # must be a single value, {40}
 PY
 ```
