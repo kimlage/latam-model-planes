@@ -27,22 +27,28 @@ already does.
 Geometry (world frame, metres):
 - subject centre (-590, -1290, 10): between the ops building / hangar block
   and the apron rows where the LATAM tails park
-- camera bearing FROM the centre sweeps 215 deg -> 288 deg: the camera stays
-  in the west half the whole time, so the 15 deg sun stays behind it, the
-  SIGN faces it (west facade), and the cordillera is the permanent backdrop
-- radius 420 -> 375 m, height 112 -> 137 m: a gentle push-in and rise;
-  depression to the centre grows 14.9 -> 20.1 deg. A 340 m orbit was tried
-  and rejected: it crops the sign and fills the frame with hangar roof
+- camera bearing FROM the centre sweeps 205 deg -> 335 deg: 130 degrees of
+  arc, SSW past due west to NNW. The v2 arc (215-288) never left the west
+  side; the owner asked for a MORE COMPLETE flight over the base. The sun
+  (267 deg azimuth) stays at least 68 deg off the view axis the whole way,
+  so nothing is ever backlit; the sign face opens the clip and the
+  terminals slide into the background as the arc comes around the north
+- radius 430 -> 300 m and height 105 -> 240 m: the orbit climbs into an
+  overview - the clip ends looking 37 deg down at the WHOLE block, aprons,
+  hangar, fleet rows and the runway beyond. A 340 m constant-height orbit
+  was tried earlier and rejected (crops the sign, fills the frame with
+  hangar roof); the climb is what buys the full-block ending instead
 - lens 30 mm, fixed: a drone does not zoom
 - aim: azimuth dead on the centre (the base holds u = 0.5); elevation runs
-  -8 -> -10 deg, which keeps the base at v ~ 0.3 and the Andes crest inside
-  the top of the frame (v ~ 0.80 -> 0.86) - the pinned-horizon rule from the
-  take-off shot, done here with a constant instead of a solver
+  -8 -> -30 deg, tracking the growing depression so the base holds
+  v ~ 0.3-0.38. The Andes crest starts pinned at v ~ 0.80 and slides out
+  of the top over the final two seconds as the overview takes over - the
+  ground becomes the anchor when it fills the frame
 
 At 30 mm from ~400 m the base block plus apron spans roughly three quarters
 of the frame width: the hangar doors, the sign lockup, the window band and
-the parked tails all read. Pan rate 73 deg / 9.6 s = 7.6 deg/s through a
-62 deg hfov = 0.12 frame-widths/s - inside the calm band by a factor of 4.
+the parked tails all read. Pan rate 130 deg / 9.6 s = 13.5 deg/s through a
+62 deg hfov = 0.22 frame-widths/s - still well inside the calm band.
 """
 import bpy
 import math
@@ -54,10 +60,10 @@ TERRAIN = os.path.join(HERE, "scl_terrain.blend")
 
 CENTER = (-590.0, -1290.0, 10.0)
 FRAME_END = 240
-A0, A1 = 215.0, 288.0          # camera bearing from the centre, compass deg
-R0, R1 = 420.0, 375.0          # orbit radius, m
-H0, H1 = 112.0, 137.0          # camera height, m
-EL0, EL1 = -8.0, -10.0         # aim elevation, deg (negative = down)
+A0, A1 = 205.0, 335.0          # camera bearing from the centre, compass deg
+R0, R1 = 430.0, 300.0          # orbit radius, m
+H0, H1 = 105.0, 240.0          # camera height, m
+EL0, EL1 = -8.0, -30.0         # aim elevation, deg (negative = down)
 LENS = 30.0
 
 
