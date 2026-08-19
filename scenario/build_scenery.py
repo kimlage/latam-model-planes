@@ -988,6 +988,7 @@ def build_field():
     build_latam_signage(P, c_latam)
     build_masts(d, P, c_furn)
     build_trees(d, P, c_furn)
+    build_tufts(P, c_furn)
     build_windsocks(d, P, c_furn)
     build_papi(P, c_furn)
     build_parked_aircraft(d, P, c_park)
@@ -1578,6 +1579,50 @@ def build_masts(d, P, c_furn):
                    (px + r2, py + 1.2), (px - r2, py + 1.2)], H, H + 2.6)
     bm_to_object(bm, "SCL_LightMasts", P["mast"], c_furn)
     print("light masts:", len(placed))
+
+
+def build_tufts(P, c_furn):
+    """Dry scrub tufts in the two clean bands beside RWY 17R.
+
+    The low dolly spends 100 frames looking across bare ground; the aerial
+    and the take-off photographs both show the runway margins peppered with
+    dark scrub. Two bands, 36-85 m each side of the centreline (shoulders end
+    at 33 m), stations 1300-2800 where the camera looks. Deterministic seed.
+    Parallax check: the camera track is 100 m west at 16 m altitude, so the
+    nearest tuft passes ~30 m out — measured 28 deg/s against the 38 deg/s
+    the shipped shot already carries. Sizes 0.25-0.6 m; 4 faces each."""
+    import random
+    rng = random.Random(20260819)
+    ox, oy = THR_17R
+    ux, uy, _ = unit(*THR_17R, *THR_35L)
+    nx, ny = -uy, ux
+    bm = bmesh.new()
+    count = 0
+    # dense where the camera looks, sparse along the rest so the band has no
+    # visible seam looking down the runway
+    stations = [(1400, 1300.0, 2800.0), (600, -60.0, 3860.0)]
+    draws = [(na, a0, a1) for (na, a0, a1) in stations for _ in range(na)]
+    for (_, a0, a1) in draws:
+        a = rng.uniform(a0, a1)
+        side = rng.choice((-1.0, 1.0))
+        l = side * rng.uniform(36.0, 85.0)
+        px, py = ox + ux * a + nx * l, oy + uy * a + ny * l
+        w = rng.uniform(0.25, 0.60)
+        h = rng.uniform(0.18, 0.45)
+        ang = rng.uniform(0.0, math.pi)
+        ca, sa = math.cos(ang), math.sin(ang)
+        base = [(px + w * ca, py + w * sa), (px - w * sa * 0.8, py + w * ca * 0.8),
+                (px - w * ca, py - w * sa), (px + w * sa * 0.8, py - w * ca * 0.8)]
+        vb = [bm.verts.new((x, y, 0.02)) for (x, y) in base]
+        vt = bm.verts.new((px, py, h))
+        for i in range(4):
+            try:
+                bm.faces.new((vb[i], vb[(i + 1) % 4], vt))
+            except ValueError:
+                pass
+        count += 1
+    bm_to_object(bm, "SCL_ScrubTufts", P["scrub"], c_furn)
+    print("scrub tufts:", count)
 
 
 def build_windsocks(d, P, c_furn):
