@@ -591,6 +591,69 @@ def runway_material(name, thr_a, thr_b, a_end):
     return m
 
 
+def farmland_material(name):
+    """The agricultural grid around the aerodrome. The satellite shows the
+    valley floor divided into roughly axis-aligned fields, 200-500 m, in
+    muted tans, olives and dry greens — the uniform tan surround was the one
+    surface in frame with no structure at all. Cell size and palette are read
+    qualitatively off the imagery; the grid alignment follows the valley's
+    road grid, roughly E-N."""
+    m = bpy.data.materials.new(name)
+    m.use_nodes = True
+    nt = m.node_tree
+    for n in list(nt.nodes):
+        nt.nodes.remove(n)
+    out = nt.nodes.new("ShaderNodeOutputMaterial"); out.location = (800, 0)
+    bsdf = nt.nodes.new("ShaderNodeBsdfPrincipled"); bsdf.location = (480, 0)
+    bsdf.inputs["Roughness"].default_value = 0.95
+    geo = nt.nodes.new("ShaderNodeNewGeometry"); geo.location = (-1100, 0)
+    sep = nt.nodes.new("ShaderNodeSeparateXYZ")
+    nt.links.new(geo.outputs["Position"], sep.inputs[0])
+    cx = _nm(nt, "FLOOR", _nm(nt, "DIVIDE", sep.outputs["X"], 385.0))
+    cy = _nm(nt, "FLOOR", _nm(nt, "DIVIDE", sep.outputs["Y"], 290.0))
+    cell = nt.nodes.new("ShaderNodeCombineXYZ")
+    nt.links.new(cx, cell.inputs[0])
+    nt.links.new(cy, cell.inputs[1])
+    wn = nt.nodes.new("ShaderNodeTexWhiteNoise"); wn.noise_dimensions = "3D"
+    nt.links.new(cell.outputs[0], wn.inputs["Vector"])
+    ramp = nt.nodes.new("ShaderNodeValToRGB"); ramp.location = (-380, 0)
+    cr = ramp.color_ramp
+    cr.interpolation = "CONSTANT"
+    stops = [(0.00, (0.190, 0.150, 0.085)),   # dry tan
+             (0.22, (0.120, 0.125, 0.055)),   # olive stubble
+             (0.44, (0.225, 0.185, 0.105)),   # pale straw
+             (0.64, (0.095, 0.118, 0.048)),   # irrigated green-grey
+             (0.83, (0.132, 0.088, 0.050))]   # ploughed brown
+    cr.elements[0].position, cr.elements[0].color = stops[0][0], (*stops[0][1], 1)
+    cr.elements[1].position, cr.elements[1].color = stops[1][0], (*stops[1][1], 1)
+    for pos, col in stops[2:]:
+        e = cr.elements.new(pos)
+        e.color = (*col, 1)
+    nt.links.new(wn.outputs["Value"], ramp.inputs["Fac"])
+    # per-cell brightness so neighbouring same-tone fields still separate
+    wn2 = nt.nodes.new("ShaderNodeTexWhiteNoise"); wn2.noise_dimensions = "4D"
+    wn2.inputs["W"].default_value = 7.31
+    nt.links.new(cell.outputs[0], wn2.inputs["Vector"])
+    lum = nt.nodes.new("ShaderNodeMapRange")
+    lum.inputs["To Min"].default_value = 0.82
+    lum.inputs["To Max"].default_value = 1.14
+    nt.links.new(wn2.outputs["Value"], lum.inputs["Value"])
+    lc = nt.nodes.new("ShaderNodeCombineColor")
+    for i in range(3):
+        nt.links.new(lum.outputs["Result"], lc.inputs[i])
+    mixl = nt.nodes.new("ShaderNodeMixRGB"); mixl.blend_type = "MULTIPLY"
+    mixl.inputs["Fac"].default_value = 1.0
+    nt.links.new(ramp.outputs["Color"], mixl.inputs["Color1"])
+    nt.links.new(lc.outputs[0], mixl.inputs["Color2"])
+    nt.links.new(mixl.outputs[0], bsdf.inputs["Base Color"])
+    grp = nt.nodes.new("ShaderNodeGroup"); grp.node_tree = haze_group()
+    grp.location = (640, 0)
+    nt.links.new(bsdf.outputs[0], grp.inputs[0])
+    nt.links.new(grp.outputs[0], out.inputs["Surface"])
+    m.diffuse_color = (0.170, 0.140, 0.080, 1.0)
+    return m
+
+
 def worn_marking_material(name, base):
     """Runway/taxiway paint, worn: fresh titanium-white paint exists nowhere on
     a pavement that gets 200 movements a day. Large soft patches lose up to a
@@ -743,7 +806,7 @@ def palette():
                                 (0.116, 0.078, 0.046), (0.095, 0.100, 0.052),
                                 scale=0.0009),
         scrub=mat("SCL_Scrub", (0.062, 0.062, 0.030), 0.95),
-        farm=mat("SCL_Farmland", (0.070, 0.085, 0.035), 0.94),
+        farm=farmland_material("SCL_Farmland"),
         roof_light=mat("SCL_RoofLight", (0.330, 0.335, 0.330), 0.72),
         roof_grey=mat("SCL_RoofGrey", (0.140, 0.143, 0.145), 0.78),
         roof_navy=mat("SCL_RoofNavy", (0.020, 0.030, 0.075), 0.65),
@@ -935,14 +998,19 @@ def build_field():
     flat_poly(bm, boundary, Z_GROUND)
     bm_to_object(bm, "SCL_AerodromeGround", P["soil"], c_ground)
 
-    # a wider apron of bare ground so the field does not end abruptly
+    # a wider skirt of farmland so the field does not end abruptly. 6 km:
+    # the Pudahuel valley floor is agricultural grid for kilometres in every
+    # direction, and the old 1.8 km pad ended in a visible seam against the
+    # uniform terrain tone. The flat pad floats <3 m over the curvature-
+    # dropped DEM at its far edge — subpixel from every airborne framing —
+    # and the western hills simply poke up through it.
     bm = bmesh.new()
     xs = [p[0] for p in boundary]; ys = [p[1] for p in boundary]
-    pad = 1800.0
+    pad = 6000.0
     flat_poly(bm, [(min(xs) - pad, min(ys) - pad), (max(xs) + pad, min(ys) - pad),
                    (max(xs) + pad, max(ys) + pad), (min(xs) - pad, max(ys) + pad)],
               Z_GROUND - 0.40)
-    bm_to_object(bm, "SCL_FieldSurround", P["soil_dark"], c_ground)
+    bm_to_object(bm, "SCL_FieldSurround", P["farm"], c_ground)
 
     # ---- runways ----------------------------------------------------------
     # One pavement object per runway: the rubber/weathering shader needs the

@@ -198,6 +198,11 @@ Other inferences, all visible in the render:
   are inference, not measurement. The same applies to the paint wear on the
   runway/taxiway markings and to the 5.5 m sliding-door panel width on the LATAM
   hangar (8 leaves across a ~45 m bay).
+- **Runway-margin scrub and the farmland grid.** The scrub tufts beside 17R
+  (2000, 0.25–0.6 m, bands 36–85 m off the centreline) and the agricultural
+  patchwork on the 6 km surround (axis-aligned cells 290–385 m in muted
+  tans/olives/greens) are read qualitatively off the satellite and the ground
+  photographs. Field boundaries are procedural, not the mapped parcels.
 
 ### Divergences left standing, not silently split
 
