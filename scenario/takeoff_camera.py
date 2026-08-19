@@ -34,51 +34,42 @@ Two more measured facts drove the rebuild:
   With v1's 80% subject and ~150 m/s of relative transverse speed that is
   ~3 widths/s. With a 40% subject and 23 m/s of relative speed it is 0.25.
 
-Shape of the shot
------------------
-1-70    ground run. The camera dollies down-runway at ~60% of the aircraft's
-        speed from e = -100 m, h = 16 m - the clean corridor between the runway
-        edge and the tree line, with every tree BEHIND the camera. The aircraft
-        starts left of frame and walks to the middle as it rotates.
-70-128  lift-off, and the hand-over. The camera stops chasing, climbs above the
-        tree line, and the rig changes from a dolly in runway coordinates to an
-        ORBIT in aircraft coordinates.
-128-240 the reveal, flown as an arc rather than a retreat. Measured over the
-        reveal the camera climbs at 27.5 m/s against the aircraft's 9.9, from
-        32 m to 181 m, and swings 21 deg forward around it - from 100.6 deg off
-        its nose (just aft of the right beam) to 80.0 deg (ahead of the right
-        shoulder) - while its elevation above the aircraft goes 10.6 -> 26.0
-        deg and the lens opens 37 -> 21 mm. Distance only goes 129 -> 270 m.
-        The aircraft stays the centre of the move at ~10% of frame width; what
-        changes is the ANGLE, and that is what opens the LATAM base, the apron,
-        the tower and both parallel runways out below, with the Andes crest
-        line pinned across the top of the frame throughout.
+Shape of the shot (v3 - the front-quarter crane)
+------------------------------------------------
+The v2 side-dolly-into-arc was calm and correct, and after five scenery
+rounds it was also the reason every version looked the same. The owner's
+brief for v3: show the FRONT of the aircraft, keep it the focus, and climb
+the camera with it.
 
-Straight recession was tried first and rejected: pulling back in a line reads
-as a zoom-out and the last three seconds went dead. In the arc the pan never
-stops - it runs at 4-13 deg/s the whole way, changing direction exactly once,
-at frame 100, where the camera overtakes the aircraft. That single sign change
-IS the orbit passing the subject's beam.
+1-85    the approach. The camera starts 368 m AHEAD of the jet at nose
+        height (7.5 m), e = -96 in the clean corridor, running down-track
+        at ~30 m/s while the aircraft closes at 53-64. The nose grows
+        head-on from 15.6% to 20% of frame width at 55 mm. The motion is
+        almost purely radial, so the drama costs nearly nothing in screen
+        flow (0.02-0.09 w/s).
+85-128  rotation, and the hand-over. The jet pitches up 300 m from the
+        lens; the rig blends from the runway-frame dolly into an ORBIT
+        flown in the aircraft's own coordinates, entering it almost dead
+        ahead (psi -21.5 deg, matched to the dolly position at frame 100).
+128-240 the crane. Attached to the climbing aircraft, the camera rises
+        with it by construction - plus its own gain, eye level to 21.5 deg
+        above - while CLOSING 284 -> 225 m and swinging 22 deg around the
+        starboard bow. Closing instead of receding keeps the jet growing
+        as the world opens beneath it; the lens opens 55 -> 28 mm. The
+        terminals slide past below-right, the LATAM base comes into frame
+        over the aircraft's shoulder at frame ~195, and the aim swings
+        11 -> 49 true, rotating the cordillera into the right half of the
+        frame for the close.
 
-Recognition anchor, recomputed for the new length: frame 70 is still the frame
-at which the aircraft is 1816.1 m down the roll - the abeam distance of the
-LATAM maintenance base - and the camera still points due east there. But the
-base is no longer a two-frame blur. It enters at the right edge, crosses to
-u = 0.23 by frame 100 and settles just left of centre at u = 0.54 on the last
-frame, in frame throughout. Its most legible moment is frames 100-130, where it
-is widest (19% of frame width) and the background is crossing 0.07-0.10
-frame-widths/s: the sign band, the wordmark and the coral brandmark all read,
-with LATAM tails parked in front of it.
+The pan never reverses (0 direction changes, one smooth hump peaking at
+7.0 deg/s) and no camera axis doubles back. The 5.7:1 body flow ratio is
+the deliberately-still approach against the moving crane, not a hitch
+inside a move - the rate ramps monotonically up and eases out.
 
-Measured, v1 -> this (scenario/camera_metrics.py):
-
-    screen flow, central band, median   1.66  -> 0.10  frame-widths/s
-    frames above 1.0 w/s                114/139 -> 0/239
-    worst single probe in frame        41.1   -> 0.90
-    nearest scenery in frame           12 m (a tree) -> 53 m (grass)
-    worst foreground parallax         582 deg/s -> 38 deg/s
-    aircraft edge margin, minimum       5.34% -> 12.26%
-    body flow ratio, max/min           76.7  -> 5.0
+Solved offline (this file, no Blender): flow median 0.103, max 0.121 w/s;
+aircraft screen box u 0.32-0.60, v 0.21-0.56; Andes crest pinned at
+v 0.70-0.82; camera 26-57 m/s. Scene-measured numbers live in the v8 GIF
+commit via scenario/camera_metrics.py.
 
 """
 import math
@@ -212,73 +203,70 @@ def extend_aircraft(loc, rot):
 # ---------------------------------------------------------------------------
 # the camera path, in runway-local (s down the roll, e east, h above pavement)
 # ---------------------------------------------------------------------------
-# Along-runway dolly speed. It accelerates like a tracking vehicle to ~60% of
-# the aircraft's speed - enough to hold the relative transverse speed near
-# 25 m/s through the rotation instead of v1's ~150, but not so much that the
-# aircraft hangs motionless in frame. Past frame ~128 the orbit below has taken
-# over completely and these three curves no longer contribute; they are kept
-# running so the hand-over blend has something smooth to blend FROM.
-DOLLY_SPEED = [(1, 14.0), (40, 24.0), (80, 42.0), (130, 58.0),
-               (180, 50.0), (215, 38.0), (240, 32.0)]
+# Along-runway dolly speed. The v3 camera starts AHEAD of the aircraft and
+# runs slower than it, so the jet closes head-on through the whole ground
+# run - the approach IS the drama, and it is radial, so it costs almost no
+# screen flow. Past the hand-over the orbit below owns the position; these
+# curves keep running only so the blend has something smooth to blend FROM.
+DOLLY_SPEED = [(1, 26.0), (60, 30.0), (100, 34.0), (140, 40.0),
+               (180, 46.0), (240, 50.0)]
 
 # Lateral: hold the clean corridor between the runway edge and the tree line
-# (the nearest tree is at e = -114.5 m, and every tree stays BEHIND the camera)
-# until the aircraft is off the ground, then slide west and open the field out.
-LATERAL = [(1, -100.0), (58, -100.0), (85, -112.0), (115, -140.0),
-           (150, -185.0), (185, -232.0), (215, -280.0), (240, -335.0)]
+# (the nearest tree is at e = -114.5 m). The camera only drifts west once the
+# orbit is in charge and the height has already cleared the trees.
+LATERAL = [(1, -96.0), (70, -96.0), (100, -104.0), (140, -120.0),
+           (240, -150.0)]
 
-# Height: leads the lateral move, so the camera is well above the 19 m tree
-# line before it ever crosses it. That ordering is the whole fix for the
-# foreground whip - measured, no tree is ever the nearest in-frame object in
-# this cut, where in v1 one was on 18 frames, down to 12 m.
-HEIGHT = [(1, 16.0), (55, 16.0), (82, 22.0), (115, 42.0), (150, 80.0),
-          (185, 122.0), (215, 165.0), (240, 200.0)]
+# Height: nose-level for the approach - 7.5 m puts the lens just under the
+# fin and above every tuft - then the crane rises with the rotation. The
+# orbit's elevation takes over from ~frame 100.
+HEIGHT = [(1, 7.5), (60, 8.5), (85, 12.0), (110, 22.0), (150, 45.0),
+          (240, 90.0)]
 
-# From frame ~100 the camera stops being a dolly and becomes an ORBIT, flown in
-# coordinates attached to the aircraft: distance, relative bearing (0 = dead
-# ahead of the aircraft, negative = off its right side, which is where the
-# camera is) and elevation above it. Straight recession reads as a zoom-out and
-# dies; an arc reads as movement. So the reveal is bought mostly with ANGLE -
-# the bearing swings 21 deg forward around the aircraft and the elevation more
-# than doubles - and only secondarily with distance, which grows 2.1x rather
-# than the 2.6x of a pure pull-back. The camera climbs faster than the aircraft
-# (it has to, to get above it) and ends ahead of its right shoulder, looking
-# back down the climb: from there the LATAM base sits directly behind the
-# aircraft, 14 deg away, instead of 47 deg away at the far edge of the frame.
-# The first entry matches the dolly's own position and velocity at frame 100,
-# so the hand-over is invisible.
+# From frame ~100 the camera stops being a dolly and becomes an ORBIT, flown
+# in coordinates attached to the aircraft: distance, relative bearing (0 =
+# dead ahead, negative = off its right/starboard bow, which is where the
+# camera sits) and elevation above it. The v3 move is a FRONT-QUARTER CRANE:
+# it starts 284 m off the nose almost dead ahead (psi -21.5, matching the
+# dolly's own position at frame 100 so the hand-over is invisible), then
+# CLOSES to 225 m while swinging 22 deg around toward the right bow and
+# climbing from eye level to 24 deg above the aircraft. Closing instead of
+# receding is what keeps the jet growing in frame as the world opens under
+# it; the climb is automatic - the orbit is attached to the aircraft, so the
+# camera rises with the climb-out plus its own elevation gain.
 # The last entry is past FRAME_END on purpose: PCHIP eases to a stop at its
 # final knot, and a camera that slams to a halt on the last frame reads as a
-# lurch. Overshooting the knot leaves the move still travelling at ~85% of its
-# speed when the clip ends, decelerating gently rather than braking.
-ORBIT = [(100, 131.0, -101.0, 11.2), (140, 175.0, -97.0, 16.0),
-         (180, 215.0, -90.0, 20.0), (210, 245.0, -85.0, 23.5),
-         (240, 270.0, -80.0, 26.0), (275, 300.0, -74.0, 29.5)]
+# lurch. Overshooting the knot leaves the move still travelling when the
+# clip ends, decelerating gently rather than braking.
+ORBIT = [(100, 284.0, -21.5, 0.8), (140, 262.0, -26.0, 6.0),
+         (180, 238.0, -32.0, 12.0), (210, 218.0, -38.0, 17.0),
+         (240, 200.0, -44.0, 21.5), (275, 186.0, -51.0, 26.5)]
 ORBIT_BLEND = (88, 128)   # frames over which the dolly hands over to the orbit
 ORBIT_D = [(p[0], p[1]) for p in ORBIT]
 ORBIT_PSI = [(p[0], p[2]) for p in ORBIT]
 ORBIT_EPS = [(p[0], p[3]) for p in ORBIT]
 
-# Focal length. Driven directly, not solved from a subject size: the aircraft
-# is allowed to shrink naturally as the camera arcs away, and the lens opens on
-# top of that so the last third reads as a reveal instead of a zoom-out.
-LENS = [(1, 35.0), (60, 36.0), (100, 37.0), (135, 32.0), (170, 27.0),
-        (205, 23.5), (240, 21.0), (275, 19.0)]
+# Focal length. Long through the approach - 55 mm compresses the nose-on jet
+# against the field and costs nothing while the motion is radial - then it
+# opens through the crane so the climb reads as the world widening, not as a
+# zoom-out. The pan-rate gain of the long end lives only where the pan is
+# near zero.
+LENS = [(1, 55.0), (70, 56.0), (100, 54.0), (140, 45.0), (180, 36.0),
+        (210, 31.0), (240, 28.0), (275, 26.0)]
 
-# Where the aircraft sits in frame. It enters left, walks to the middle for the
-# rotation, then settles right of centre so the LATAM base, the apron and the
-# tower have the left half of the frame in the final reveal.
-SCREEN_U = [(1, 0.33), (50, 0.39), (90, 0.46), (140, 0.54), (190, 0.64),
-            (240, 0.71), (275, 0.75)]
+# Where the aircraft sits in frame. Nearly centred for the head-on approach,
+# then easing left of centre so the reveal - the terminals sliding past, the
+# base behind, the cordillera - opens into the right half of the frame.
+SCREEN_U = [(1, 0.52), (70, 0.50), (120, 0.46), (180, 0.43), (240, 0.41),
+            (275, 0.40)]
 
 # Tilt is NOT driven off the aircraft. The Andes crest line is pinned to the
 # frame instead, and the aircraft is allowed to float against it. That is the
 # eye's anchor: with the horizon holding still, a moving camera stays legible,
 # and it also stops the cordillera being tipped out of the top of the frame
-# when the crane climbs above the aircraft - which is exactly what an
-# aircraft-driven tilt does between frames 100 and 160.
-HORIZON_V = [(1, 0.66), (70, 0.74), (120, 0.80), (180, 0.84), (240, 0.86),
-             (275, 0.87)]
+# when the crane climbs above the aircraft.
+HORIZON_V = [(1, 0.70), (70, 0.75), (120, 0.78), (180, 0.80), (240, 0.82),
+             (275, 0.83)]
 
 AIM_SMOOTH = 9.0          # frames of Gaussian smoothing on the solved angles
 FINAL_SMOOTH = 8.0        # kills the ripple the piecewise path leaves in the pan
@@ -305,10 +293,11 @@ def camera_path(ac_s, ac_h, nframes=FRAME_END):
         if f > 1:
             s += piecewise(f - 0.5, DOLLY_SPEED) / 25.0
         dolly.append((s, piecewise(f, LATERAL), piecewise(f, HEIGHT)))
-    # anchor: at frame 70 the camera must be abeam of 1816.1 m of roll, which
-    # is what puts the LATAM base directly behind the aircraft and the camera
-    # pointing due east - the recognition anchor of the previous cut.
-    s_abeam = 1816.1 - 4.4     # 4.4 m of lead makes the aim exactly 090 deg
+    # anchor: at frame 70 the camera sits 300 m AHEAD of the abeam station,
+    # looking back up the roll at the approaching nose. The LATAM base still
+    # enters the frame behind the aircraft - now over its shoulder instead of
+    # broadside - and the aim at frame 70 is roughly 340 true.
+    s_abeam = 1816.1 + 300.0
     off = s_abeam - dolly[69][0]
     dolly = [(s + off, e, h) for (s, e, h) in dolly]
 
