@@ -1057,6 +1057,7 @@ def build_field():
     build_masts(d, P, c_furn)
     build_trees(d, P, c_furn)
     build_tufts(P, c_furn)
+    build_runway_furniture(d, P, c_furn)
     build_windsocks(d, P, c_furn)
     build_papi(P, c_furn)
     build_parked_aircraft(d, P, c_park)
@@ -1647,6 +1648,72 @@ def build_masts(d, P, c_furn):
                    (px + r2, py + 1.2), (px - r2, py + 1.2)], H, H + 2.6)
     bm_to_object(bm, "SCL_LightMasts", P["mast"], c_furn)
     print("light masts:", len(placed))
+
+
+def build_runway_furniture(d, P, c_furn):
+    """Edge lights and taxiway guidance signs along 17R/35L.
+
+    The v3 camera spends 100 frames at 7.5 m looking down this runway, so the
+    furniture that lives at that eye level finally matters. Both are standard
+    ICAO fittings and both are INFERENCE in placement detail:
+    - elevated edge lights every 60 m, 0.36 m, within 3 m of the pavement
+      edge (Annex 14 5.3.9); daytime, so modelled as fittings, not emitters
+    - a yellow/black location sign where each mapped taxiway meets the
+      runway strip, 12 m off the pavement edge (Annex 14 5.4.3)"""
+    ox, oy = THR_17R
+    ux, uy, L = unit(*THR_17R, *THR_35L)
+    nx, ny = -uy, ux
+    half = W_17R * 0.5
+    bm_l = bmesh.new()
+    a = 30.0
+    while a < L - 10.0:
+        for s in (1, -1):
+            px = ox + ux * a + nx * s * (half + 2.5)
+            py = oy + uy * a + ny * s * (half + 2.5)
+            r = 0.13
+            prism(bm_l, [(px - r, py - r), (px + r, py - r),
+                         (px + r, py + r), (px - r, py + r)], 0.0, 0.36)
+        a += 60.0
+    bm_to_object(bm_l, "SCL_RunwayEdgeLights",
+                 mat("SCL_EdgeLightFitting", (0.420, 0.400, 0.330), 0.45),
+                 c_furn)
+
+    # signs: one at each taxiway end that reaches the 17R strip
+    bm_s = bmesh.new()
+    bm_p = bmesh.new()
+    n_signs = 0
+    for t in d["taxiways"]:
+        if t.get("is_closed"):
+            continue
+        pts = t["polygon_xy_m"]
+        for end in (pts[0], pts[-1]):
+            dx, dy = end[0] - ox, end[1] - oy
+            along = dx * ux + dy * uy
+            lat = dx * nx + dy * ny
+            if not (0.0 <= along <= L and abs(lat) < 60.0):
+                continue
+            side = 1.0 if lat >= 0 else -1.0
+            sx = ox + ux * along + nx * side * (half + 12.0)
+            sy = oy + uy * along + ny * side * (half + 12.0)
+            # face panel perpendicular to the runway, 2.5 x 1.0 m at 0.6 m
+            v = [bm_s.verts.new((sx - ux * 1.25, sy - uy * 1.25, 0.6)),
+                 bm_s.verts.new((sx + ux * 1.25, sy + uy * 1.25, 0.6)),
+                 bm_s.verts.new((sx + ux * 1.25, sy + uy * 1.25, 1.6)),
+                 bm_s.verts.new((sx - ux * 1.25, sy - uy * 1.25, 1.6))]
+            try:
+                bm_s.faces.new(v)
+            except ValueError:
+                pass
+            for lx, ly in ((sx - ux * 1.0, sy - uy * 1.0),
+                           (sx + ux * 1.0, sy + uy * 1.0)):
+                prism(bm_p, [(lx - 0.06, ly - 0.06), (lx + 0.06, ly - 0.06),
+                             (lx + 0.06, ly + 0.06), (lx - 0.06, ly + 0.06)],
+                      0.0, 0.6)
+            n_signs += 1
+    bm_to_object(bm_s, "SCL_TaxiSigns",
+                 mat("SCL_SignYellow", (0.520, 0.340, 0.020), 0.55), c_furn)
+    bm_to_object(bm_p, "SCL_TaxiSignPosts", P["mast"], c_furn)
+    print("edge lights + %d taxi signs" % n_signs)
 
 
 def build_tufts(P, c_furn):
