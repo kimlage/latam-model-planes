@@ -154,6 +154,77 @@ def main():
         if old_cam is not None:
             bpy.data.objects.remove(old_cam, do_unlink=True)
 
+        # Two more DETAILED A320s on free stands - pure translations of the
+        # hero (same heading), duplicated hierarchies sharing mesh data. The
+        # owner's brief: the base must be populated with the models we built,
+        # not the low-poly proxies. Stand clearances checked against the
+        # proxy rows (46 m rule from build_parked_aircraft).
+        def copy_subtree(root, dx, dy, tag):
+            mapping = {}
+
+            def rec(ob, parent_copy):
+                nc = ob.copy()
+                mapping[ob] = nc
+                bpy.context.scene.collection.objects.link(nc)
+                if parent_copy is not None:
+                    nc.parent = parent_copy
+                    nc.matrix_parent_inverse = ob.matrix_parent_inverse.copy()
+                for ch in ob.children:
+                    rec(ch, nc)
+            rec(root, None)
+            r = mapping[root]
+            r.location.x += dx
+            r.location.y += dy
+            r.name = "SCL_Hero_%s" % tag
+            return r
+
+        for i, (sx, sy) in enumerate(((-560.0, -1455.0), (-435.0, -1490.0))):
+            copy_subtree(rig, sx - stand[0], sy - stand[1], "A320_%d" % i)
+        print("2 detailed A320 copies placed")
+
+        # And the DETAILED 787-9, appended from its master. Its parts are
+        # world-coordinate roots (no rig), so they are parented to a fresh
+        # empty, rotated nose-north (nose is local -X: Rz(-90) points it +Y)
+        # and placed by the same self-verifying envelope.
+        B789 = os.path.join(os.path.dirname(HERE), "boeing 787-9",
+                            "B789_LATAM.blend")
+        if os.path.exists(B789):
+            with bpy.data.libraries.load(B789, link=False) as (src, dst):
+                dst.collections = [c for c in src.collections
+                                   if c in ("01_Estrutura", "02_Motores",
+                                            "03_Trem", "04_Detalhes")]
+            root7 = bpy.data.objects.new("SCL_Hero_B789", None)
+            bpy.context.scene.collection.objects.link(root7)
+            b_obs = []
+            for c in dst.collections:
+                if c is None:
+                    continue
+                bpy.context.scene.collection.children.link(c)
+                for ob in c.all_objects:
+                    b_obs.append(ob)
+                    if ob.parent is None:
+                        ob.parent = root7
+            root7.rotation_euler = (0.0, 0.0, -math.pi / 2.0)
+            bpy.context.view_layer.update()
+            dg = bpy.context.evaluated_depsgraph_get()
+            lo = mathutils.Vector((1e9, 1e9, 1e9))
+            hi = mathutils.Vector((-1e9, -1e9, -1e9))
+            for ob in b_obs:
+                if ob.type != "MESH" or ob.hide_render:
+                    continue
+                mw = ob.evaluated_get(dg).matrix_world
+                for cn in ob.bound_box:
+                    w = mw @ mathutils.Vector(cn)
+                    lo = mathutils.Vector(map(min, lo, w))
+                    hi = mathutils.Vector(map(max, hi, w))
+            stand7 = (-545.0, -1100.0)
+            root7.location.x += stand7[0] - (lo.x + hi.x) * 0.5
+            root7.location.y += stand7[1] - (lo.y + hi.y) * 0.5
+            root7.location.z += 0.06 - lo.z
+            bpy.context.view_layer.update()
+            print("detailed 787-9 parked at", stand7,
+                  "(span %.1f x %.1f m)" % (hi.x - lo.x, hi.y - lo.y))
+
     cd = bpy.data.cameras.new("CamBase")
     cd.lens = LENS
     cd.sensor_fit = "HORIZONTAL"
