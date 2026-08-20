@@ -5,7 +5,7 @@
  "datum": "x=0 na ponta do nariz; z=0 no meio da secao constante; unidades m (mesmo referencial do spec_a320)",
  "dimensoes_gerais": {
   "comprimento": 33.84,
-  "envergadura_fence": 34.10,
+  "envergadura_fence": 34.1,
   "altura": 11.76,
   "fuselagem_largura": 3.95,
   "fuselagem_altura": 4.14,
@@ -19,7 +19,10 @@
  },
  "cavernas_nariz": "identicas ao spec_a320.json (mesma secao, mesmo cockpit, mesmo parabrisa, mesma pinca do lobo superior)",
  "secao_constante": {
-  "x": [6.96, 20.43],
+  "x": [
+   6.96,
+   20.43
+  ],
   "nota": "A320: 6.96..24.16. Encurtada pelos dois plugs (1.60+2.13)."
  },
  "cauda": "estacoes do A320 (26.00..37.57 no master) transladadas -3.73 -> 22.27..33.84; mesma forma (elipse w=0.954r)",
@@ -29,8 +32,16 @@
   "overwing_x": 12.83,
   "overwing_pares": 1,
   "overwing_nota": "ACAP 2-7-0: saida overwing DIANTEIRA standard em 12.83; a AFT (13.68, +0.85) e OPCIONAL e NAO existe nos A319 da TAM/LATAM Brasil (foto PT-TMC 2012 mostra UMA escotilha; PT-TMT idem). Escotilha 0.50 x 0.90 m.",
-  "carga_fwd": [8.16, 1.82, 1.24],
-  "carga_aft": [20.56, 1.82, 1.23],
+  "carga_fwd": [
+   8.16,
+   1.82,
+   1.24
+  ],
+  "carga_aft": [
+   20.56,
+   1.82,
+   1.23
+  ],
   "carga_bulk_x": 22.57,
   "carga_bulk_nota": "estimada mantendo a distancia porta4->bulk do A320 (3.24 m adiante); ACAP nao cota o bulk na fig de localizacao",
   "fonte": "ACAP 2-7-0 fig 991-002 sheet 2 (5.04/12.83/25.81/8.16/20.56 FROM NOSE)"
@@ -60,7 +71,10 @@
  "empenagem": {
   "fin_LE": "x = 0.851*z + 23.866 (reta; ACAP 600dpi ancorado no trem: LE z4=27.27, z7.5=30.25; foto PT-TMT: 27.06 em z4)",
   "fin_TE": "x = 0.220*z + 30.72 (ACAP: TE z4=31.60, z7.5=32.37; foto: 31.79 em z4)",
-  "fin_z": [1.55, 8.05],
+  "fin_z": [
+   1.55,
+   8.05
+  ],
   "estab_tip_TE_x": 32.89,
   "estab_span": 12.45,
   "estab_delta_vs_master_a320": -2.86,
@@ -68,7 +82,10 @@
   "deriva_geometria": "mesh do master remapeada por (h,c): x' = LE_novo(z) + c*(TE_novo-LE_novo), c=(x-LE_320)/(TE_320-LE_320) com LE_320=0.8393z+26.773, TE_320=34.60+0.0538(z-1.55); UV preservada (arte do sash e invariante em (h,c))"
  },
  "janelas_cabine": {
-  "z_cinto": [0.52, 0.86],
+  "z_cinto": [
+   0.52,
+   0.86
+  ],
   "pitch_m": 0.515,
   "primeira_x": 6.08,
   "n_janelas": 35,
@@ -95,12 +112,67 @@
  "texturas": {
   "LiveryTex+LiveryFac": "regeneradas 4096x1024 (x,theta), comprimento_uv=34.2, supersample 2x",
   "NoseMask": "reamostrada do master (nariz identico em metros; so muda a escala u)",
-  "FinSashE/D": "REUTILIZADAS do master (mesma arte); UV da Deriva preservada no remap (h,c)",
+  "FinSashE/D": "REGENERADAS 2026-08-20 na planform propria do A319 a partir do template medido em foto (fin_bandas_2026-08-20); nao sao mais as texturas do master reutilizadas",
   "PanelBump": "regenerada: juncoes circunferenciais nas cavernas novas + lap joints"
  },
  "confianca": {
-  "oficial_acap": ["comprimento", "envergadura", "entre_eixos", "bitola", "portas pax/overwing/carga fwd-aft", "trem", "motor inlet_x", "estab span", "secao/altura fuselagem"],
-  "fotogrametria_pm015": ["echarpe", "matricula posicao", "titulo posicao", "fence pintura", "fin LE/TE (confere ACAP +-0.2)"],
-  "derivado_master": ["secao mestre", "pinca lobo superior", "parabrisa", "nacelle forma", "trem geometria", "carga bulk posicao"]
+  "oficial_acap": [
+   "comprimento",
+   "envergadura",
+   "entre_eixos",
+   "bitola",
+   "portas pax/overwing/carga fwd-aft",
+   "trem",
+   "motor inlet_x",
+   "estab span",
+   "secao/altura fuselagem"
+  ],
+  "fotogrametria_pm015": [
+   "echarpe",
+   "matricula posicao",
+   "titulo posicao",
+   "fence pintura",
+   "fin LE/TE (confere ACAP +-0.2)"
+  ],
+  "derivado_master": [
+   "secao mestre",
+   "pinca lobo superior",
+   "parabrisa",
+   "nacelle forma",
+   "trem geometria",
+   "carga bulk posicao"
+  ]
+ },
+ "fin_bandas_2026-08-20": {
+  "fonte": "Medido nas fotos PS-LBO DSC00896 (5822 px, estibordo, deriva ~780 px de altura) e DSC00834 (5020 px, bombordo), em 'airbus A321neo/'; conferido em PT-TMN (ref_PT-TMN_wikimedia.jpg retificada, ~150 px — consistente dentro de +-0.1 de zeta) e PT-TMT (tmt bank photo). Template unico da familia A320. 2026-08-20.",
+  "descoberta": "A transferencia (h,c)/zeta do desenho do 787 NAO vale para a familia A320: a LATAM posiciona o sash de forma especifica por tipo. A banda tem ~0.96 m de espessura perpendicular nos DOIS tipos (largura fisica constante na frota) — na deriva menor do A320 ela e proporcionalmente ~2x mais gorda do que a transferencia dava. A banda inferior entra pela RAIZ (nao pelo BA) e cruza o BF baixo; o cap da ponta ALARGA para tras (no 787 estreita).",
+  "ancoragem": "Cada aresta e uma reta pinada por DUAS travessias medidas, em fracoes da deriva exposta: zeta_LE ao longo do BA reto, zeta_TE ao longo do BF, rho ao longo da corda da raiz. Cortes do coral pinados por fracoes ao longo das arestas da propria banda. Isso reproduz onde o desenho encontra cada bordo, independente do afilamento do modelo (planform do modelo: taper 0.21 contra ~0.35 medido em foto).",
+  "arestas": {
+   "lb_bot": "raiz rho=0.10 -> BF zeta=0.37",
+   "lb_top": "BA zeta=0.175 -> BF zeta=0.535",
+   "ub_bot": "BA zeta=0.585 -> BF zeta=0.80",
+   "ub_top": "BA zeta=0.90 -> BF zeta=0.85 (DESCE para tras: o cap alarga)"
+  },
+  "cortes_coral": {
+   "inferior": "fwd em (lb_bot@0.626, lb_top@0.274); aft em (lb_bot@1.00, lb_top@0.655) — o canto inferior-tras do coral TOCA o BF logo acima da massa da raiz",
+   "superior": "fwd em (ub_bot@0.06, ub_top@0.00) — o coral e cortado pelo filete do BA; aft em (ub_bot@1.00, ub_top@0.827)"
+  },
+  "filete_BA": "cinza-voo 0.22 m perpendicular ao BA reto, z>=2.0 (conferido na DSC00896: 25.9 px a 120 px/m = 0.216 m)",
+  "campo": "indigo #2A0088 em TODA a area fora de bandas/cap/filete, inclusive fora da planform — elimina a banda cinza latente na raiz das texturas herdadas (achada na derivacao do A321)",
+  "cores": {
+   "indigo": "#2A0088",
+   "coral": "#ED1651",
+   "cinza_voo": "#C8CACC"
+  },
+  "nota_angulos": "No aviao real as bandas sobem a ~20.4 graus tambem na familia A320 (as duas fotos PS-LBO concordam). No MODELO as arestas saem a 21-22.5 graus porque a planform da deriva do modelo e mais afilada que a real; a ancoragem por travessia preserva o que o olho compara (onde cada banda encontra cada bordo).",
+  "gerador": "scratchpad build_fin_sash.py (sessao 2026-08-20); raster 4096^2 -> 2048^2 supersample 2x",
+  "retas_resultantes": {
+   "lb_bot": "(25.773,1.550)->(31.590,3.955) dz/dx=+0.4134",
+   "lb_top": "(26.153,2.688)->(31.826,5.028) dz/dx=+0.4125",
+   "ub_bot": "(28.422,5.353)->(32.206,6.750) dz/dx=+0.3693",
+   "ub_top": "(30.164,7.400)->(32.277,7.075) dz/dx=-0.1538"
+  },
+  "uv": "Deriva RE-UNWRAP 2026-08-20: afim planar u=(x-23.8)/9.0 ; v=(z-1.4)/7.0. A UV herdada do remap (h,c) tinha cisalhamento (u = 0.1326x - 0.0151z - 3.213) e residuo nao-afim de 0.029 (~60 px), o que entortava todas as bandas por igual na deriva.",
+  "planform_do_modelo": "LE x=0.8511z+23.866 ; TE x=31.061+0.2201(z-1.55) ; raiz 1.55, ponta 8.05"
  }
 }

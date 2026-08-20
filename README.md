@@ -196,6 +196,19 @@ perpendicular, indigo gap 2.42 m, period 3.38 m. A closure test that needs no
 calibration at all: the zones summed along the band normal
 (2.09 + 0.96 + 2.42 + 0.96 + 1.25 = 7.68 m) only fit the fin planform at 20.4°.
 
+A second round (2026-08-20, "as marcas nas caudas estão distorcidas") showed
+that **the placement of that artwork on the fin is type-specific**: transferring
+the 787's band positions to the A320 family by normalized fin coordinates put
+the lower band ~1.5 m too high at the trailing edge, made both bands ~half their
+real proportional thickness, and left the aft tip indigo where the real cap is
+grey. Measured on PS-LBO delivery photos (fin ~800 px tall) and cross-checked on
+PT-TMN/PT-TMT: the family's lower band enters through the fin **root** (not the
+LE), the tip cap **widens** aft (on the 787 it narrows), and the band thickness
+is the same **absolute** 0.96 m on both types — LATAM paints one physical band
+width fleet-wide, so it cannot scale with the fin. The band edges are now
+anchored by where they cross each fin edge (fractions of exposed height), per
+aircraft, in `spec_*.json → fin_bandas_2026-08-20`.
+
 The rear-fuselage indigo is bounded by three surfaces, and **they do not all
 live in the same space** — missing that cost four rounds:
 

@@ -16,7 +16,7 @@
   "altura": 11.76,
   "fuselagem_largura": 3.95,
   "fuselagem_altura": 4.14,
-  "entre_eixos": 16.90,
+  "entre_eixos": 16.9,
   "bitola": 7.59,
   "fonte": "ACAP A321 Rev 35, FIGURE-2-2-0-991-012-A01 (paginas brutas 73-74, blocos ACF)"
  },
@@ -29,7 +29,7 @@
   "nota": "nariz_x e entre_eixos do ACAP; rodas herdadas do A320 (o A321 usa pneus um pouco maiores; nao ajustado, diferenca visual <3%)"
  },
  "motor_pw1100g": {
-  "inlet_x": 15.40,
+  "inlet_x": 15.4,
   "y": 5.75,
   "nacelle_diametro": 2.6,
   "fan_diametro": 2.06,
@@ -39,18 +39,25 @@
  "portas_acf": {
   "fonte": "ACAP A321 Rev 35, FIGURE-2-7-0-991-047-A01 (paginas brutas 115-116, ON A/C A321neo-ACF)",
   "porta1_x": 5.04,
-  "overwing_fwd_x": 18.70,
+  "overwing_fwd_x": 18.7,
   "overwing_aft_x": 19.54,
   "porta3_x": 26.82,
   "porta4_x": 36.47,
   "porta4_x_modelo": 36.58,
   "nota_porta4": "no modelo a porta 4 e a Porta2 do A320 deslocada exatamente +6.94 para manter o encaixe na superficie do cone; erro de 0.11 m vs ACAP, aceito",
-  "carga": {"fwd": 8.56, "aft": 30.02, "bulk": 33.22},
+  "carga": {
+   "fwd": 8.56,
+   "aft": 30.02,
+   "bulk": 33.22
+  },
   "config": "ACF: 3 pares de portas de tamanho cheio (1, 3, 4) + 2 pares de saidas overwing; SEM porta 2 dianteira. Confirmado nas fotos PS-LBO.",
   "folhas": "mesmas dimensoes do A320 (pax 0.81x1.85, overwing tipo III)"
  },
  "janelas_cabine": {
-  "z_cinto": [0.52, 0.86],
+  "z_cinto": [
+   0.52,
+   0.86
+  ],
   "pitch_m": 0.515,
   "primeira_x": 6.08,
   "n_janelas_modelo": 57,
@@ -63,13 +70,16 @@
    "frontal": "x >= 35.48 + 0.822*z  (rms 0.10 m, n=46; NAO e o deslocamento cego do A320, que daria 34.33+0.839z — 1.15 m mais a frente)",
    "inferior": "theta <= max(129.0 - 23.7*(x-34.45), 105.3 - 3.78*(x-36.05)) graus a partir da crista — duas retas em (x,theta): segmento ingreme do bico + reta principal. A reta principal e mais funda e mais rasa que a do A320 deslocado (101.4 - 7.58*(x-36.05)).",
    "traseira": "x <= 41.46 + 0.0538*z (linha do BF da deriva, A320 +6.94; medido 41.23+-0.15 em z=1.9, dentro da tolerancia)",
-   "bico_foto": [34.45, -1.22],
+   "bico_foto": [
+    34.45,
+    -1.22
+   ],
    "porta4": "folha dividida pela fronteira: indigo acima de z=-0.11, branco abaixo (foto mostra a fronteira cruzando o terco inferior da folha); contorno branco pintado na textura"
   },
   "matricula": "PS-LBA BRANCA dentro do indigo (estilo de fabrica, foto de imprensa Airbus out/2023 e patch branco na PS-LBO), x 37.15-39.12, z 0.70-1.10, altura 0.40, Arial Bold (mesma fonte do modelo A320); espelhada em (x,theta) no lado direito",
   "titulo": "AIRBUS A321neo em x 33.55-35.42, caps z 0.88-1.03 (altura 0.145, comprimento 1.87; foto: 33.55-35.35). 'AIRBUS' reaproveitado da malha MarkAirbusNeo do A320; 'A321neo' do SVG oficial (Wikimedia, Airbus_A321neo_typeface.svg, PD-textlogo). Medido na foto: caps 0.145 m, comprimento total 1.77 m.",
   "hstab": "extradorso CINZA-VOO (fotos PS-LBO 2025 + foto de imprensa; difere do A320 PT-TMN atual que e indigo — aplicacao especifica do tipo/epoca)",
-  "fin_sash": "mesma arte do A320/787 (transferencia (h,c)); CORRECAO 2026-08-20: a regiao abaixo da banda inferior era cinza nas texturas FinSashE/D herdadas — a foto (e o proprio spec fin_bandas: 'resto: indigo') mostram indigo ate a raiz. Repintado (168k texels por lado). O master A320 carrega o mesmo defeito latente.",
+  "fin_sash": "REGENERADO 2026-08-20 do template medido nas proprias fotos PS-LBO (fin_bandas_2026-08-20). Substitui a arte herdada do master (transferencia (h,c) do 787, bandas finas e mal posicionadas) E o remendo local de 2026-08-20 que repintava 168k texels de cinza para indigo na raiz com a fronteira no angulo errado (0.179 contra 0.372).",
   "tailcone": "branco, anel APU metal — como A320"
  },
  "correcoes_da_derivacao": {
@@ -89,9 +99,63 @@
   "posicoes": "trem principal 21.97 = 5.07+16.90 ACAP; inlet motor 15.40 = ACAP; portas conferidas no build (ver build_a321_fase1_geometria.py output)"
  },
  "confianca": {
-  "oficial_acap": ["comprimento", "envergadura", "altura", "entre_eixos", "bitola", "portas_acf", "carga", "inlet_x"],
-  "derivado_do_a320_validado": ["secao transversal", "nariz/para-brisa", "cone de cauda", "asa/empenagem", "nacelle", "carenagem ventral"],
-  "fotogrametria_ps_lbo": ["echarpe (3 fronteiras)", "titulo", "matricula", "hstab cinza", "janelas ultima_x", "fin root indigo"],
+  "oficial_acap": [
+   "comprimento",
+   "envergadura",
+   "altura",
+   "entre_eixos",
+   "bitola",
+   "portas_acf",
+   "carga",
+   "inlet_x"
+  ],
+  "derivado_do_a320_validado": [
+   "secao transversal",
+   "nariz/para-brisa",
+   "cone de cauda",
+   "asa/empenagem",
+   "nacelle",
+   "carenagem ventral"
+  ],
+  "fotogrametria_ps_lbo": [
+   "echarpe (3 fronteiras)",
+   "titulo",
+   "matricula",
+   "hstab cinza",
+   "janelas ultima_x",
+   "fin root indigo"
+  ],
   "incerteza_fotogrametria": "+-0.10-0.15 m (declarada em cauda_livery_ps_lba.fonte)"
+ },
+ "fin_bandas_2026-08-20": {
+  "fonte": "Medido nas fotos PS-LBO DSC00896 (5822 px, estibordo, deriva ~780 px de altura) e DSC00834 (5020 px, bombordo), em 'airbus A321neo/'; conferido em PT-TMN (ref_PT-TMN_wikimedia.jpg retificada, ~150 px — consistente dentro de +-0.1 de zeta) e PT-TMT (tmt bank photo). Template unico da familia A320. 2026-08-20.",
+  "descoberta": "A transferencia (h,c)/zeta do desenho do 787 NAO vale para a familia A320: a LATAM posiciona o sash de forma especifica por tipo. A banda tem ~0.96 m de espessura perpendicular nos DOIS tipos (largura fisica constante na frota) — na deriva menor do A320 ela e proporcionalmente ~2x mais gorda do que a transferencia dava. A banda inferior entra pela RAIZ (nao pelo BA) e cruza o BF baixo; o cap da ponta ALARGA para tras (no 787 estreita).",
+  "ancoragem": "Cada aresta e uma reta pinada por DUAS travessias medidas, em fracoes da deriva exposta: zeta_LE ao longo do BA reto, zeta_TE ao longo do BF, rho ao longo da corda da raiz. Cortes do coral pinados por fracoes ao longo das arestas da propria banda. Isso reproduz onde o desenho encontra cada bordo, independente do afilamento do modelo (planform do modelo: taper 0.21 contra ~0.35 medido em foto).",
+  "arestas": {
+   "lb_bot": "raiz rho=0.10 -> BF zeta=0.37",
+   "lb_top": "BA zeta=0.175 -> BF zeta=0.535",
+   "ub_bot": "BA zeta=0.585 -> BF zeta=0.80",
+   "ub_top": "BA zeta=0.90 -> BF zeta=0.85 (DESCE para tras: o cap alarga)"
+  },
+  "cortes_coral": {
+   "inferior": "fwd em (lb_bot@0.626, lb_top@0.274); aft em (lb_bot@1.00, lb_top@0.655) — o canto inferior-tras do coral TOCA o BF logo acima da massa da raiz",
+   "superior": "fwd em (ub_bot@0.06, ub_top@0.00) — o coral e cortado pelo filete do BA; aft em (ub_bot@1.00, ub_top@0.827)"
+  },
+  "filete_BA": "cinza-voo 0.22 m perpendicular ao BA reto, z>=2.0 (conferido na DSC00896: 25.9 px a 120 px/m = 0.216 m)",
+  "campo": "indigo #2A0088 em TODA a area fora de bandas/cap/filete, inclusive fora da planform — elimina a banda cinza latente na raiz das texturas herdadas (achada na derivacao do A321)",
+  "cores": {
+   "indigo": "#2A0088",
+   "coral": "#ED1651",
+   "cinza_voo": "#C8CACC"
+  },
+  "nota_angulos": "No aviao real as bandas sobem a ~20.4 graus tambem na familia A320 (as duas fotos PS-LBO concordam). No MODELO as arestas saem a 21-22.5 graus porque a planform da deriva do modelo e mais afilada que a real; a ancoragem por travessia preserva o que o olho compara (onde cada banda encontra cada bordo).",
+  "gerador": "scratchpad build_fin_sash.py (sessao 2026-08-20); raster 4096^2 -> 2048^2 supersample 2x",
+  "retas_resultantes": {
+   "lb_bot": "(35.667,1.550)->(41.670,3.955) dz/dx=+0.4006",
+   "lb_top": "(35.969,2.688)->(41.727,5.028) dz/dx=+0.4063",
+   "ub_bot": "(38.205,5.353)->(41.820,6.750) dz/dx=+0.3866",
+   "ub_top": "(39.924,7.400)->(41.838,7.075) dz/dx=-0.1698"
+  },
+  "uv": "Deriva: u=0.125*x-4.2925 ; v=0.142857*z-0.2 (dominio x 34.34..42.34, z 1.4..8.4) — inalterada"
  }
 }

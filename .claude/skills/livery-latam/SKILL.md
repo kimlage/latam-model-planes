@@ -192,22 +192,34 @@ is wrong too]. `F1..F7` are obsolete; do not use them.
 The canonical geometry is now measured, in two linear coordinates:
 
 ```
-b = z − 0.24·x     across the bands
-e = z + 0.25·x     along the bands
+c = z − 0.372·x    across the bands (20.4°)
+e = z + 0.21·x     along the bands (cuts descend ~12°)
 
-lower band:  b ∈ [−6.725, −5.99]   coral where e ∈ [22.006, 23.332]
-upper band:  b ∈ [−4.208, −3.35]   coral where e ∈ [24.913, 26.192]
-b ≥ −3.35 → flight grey (tip cap)   ·   everything else → indigo
+lower band:  c ∈ [−16.49, −15.46]   coral where e ∈ [16.35, 18.49]
+upper band:  c ∈ [−12.88, −11.86]   coral where e ∈ [20.83, 23.05]
+above the upper band → flight grey (tip cap)  ·  everything else → indigo
 ```
 
-(787-9 reference frame; `spec_b789.json → cauda_livery.fin_bandas_medidas_2026_08_17`)
+(787-9 reference frame; `spec_b789.json → cauda_livery.fin_bandas_2026-08-17`.
+An earlier 13.5° model, `b = z − 0.24·x`, was wrong by dozens of sigmas —
+if you find those constants anywhere, they are stale.)
 
-**The brand artwork is the same on every aircraft — only the fin scale
-changes.** Transfer it through normalized coordinates
-`h = (z−z_root)/(z_tip−z_root)` and `c = (x−LE(z))/(TE(z)−LE(z))`: convert the
-new aircraft's texel into `(h,c)`, take that `(h,c)` back into the 787 reference
-frame and evaluate `b`/`e` there. That is how the A320 got the artwork without
-re-measuring anything.
+**The brand artwork does NOT transfer between types — the placement is
+type-specific.** The `(h,c)`-normalized transfer of the 787 bands to the A320
+family was believed for three days and was exactly what the owner rejected as
+*"as marcas nas caudas estão distorcidas"*: it put the lower band ~1.5 m too
+high at the TE, made both bands ~half their real proportional thickness, and
+left the aft tip indigo where the real cap is grey. Measured on PS-LBO
+delivery photos (2026-08-20): on the A320 family the lower band enters through
+the fin **root** (not the LE), the tip cap **widens** aft (on the 787 it
+narrows), and the band thickness is the same **absolute** 0.96 m on both types
+— LATAM paints one physical band width fleet-wide, so it cannot scale with the
+fin. What generalizes: the internal angles (bands climb ~20.4°, coral cuts
+descend ~12°) and the grey–coral–grey structure. What must be measured per
+type, on a photo of that type: where each band edge crosses each fin edge.
+Anchor the edges by those crossings — fractions of the exposed fin along
+LE/TE/root — and the artwork lands right even if the model's planform taper is
+imperfect (`spec_*.json → fin_bandas_2026-08-20`).
 
 ### Rectifying the photo is what unlocks the measurement
 

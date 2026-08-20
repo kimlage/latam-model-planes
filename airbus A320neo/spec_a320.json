@@ -371,16 +371,6 @@
  "cauda_livery": {
   "fonte": "workflow fotogrametrico 2026-08-16 (JetPhotos PT-TMN 1920px, calibracao dupla porta2/nariz, ±0.15m) + foto de referencia do dono (arranjo atual)",
   "fin_convencao": "h=(z-1.55)/6.5; c=(x-LE(z))/(TE(z)-LE(z)); TE reta (34.60,1.55)->(34.95,8.05); polylines [c->h] port; ESTIBORDO = MESMA imagem em (x,z) (espelhado, alturas coincidem no BF; a fita NAO da a volta pelo BA)",
-  "fin_fronteiras": {
-   "F0_filete_BA": "faixa branca continua de 0.30 m ao longo de todo o bordo de ataque (existe SIM, mas fina — nao os 11.5% da corda de antes)",
-   "F1_base_cap": "[0,0.900]->[1,0.835]",
-   "F2_base_coral_sup": "[0,0.720]->[0.5,0.755]->[1,0.790] (cunha: espessa no BA, fina no BF; gap branco abaixo so de c0-0.5)",
-   "F3_topo_swoosh": "[0,0.570]->[0.15,0.630]->[0.30,0.700]->[0.50,0.755]->[1,0.790]",
-   "F4_base_swoosh": "[0,0.190]->[0.18,0.250]->[0.35,0.300]->[0.50,0.340]->[0.575,0.360]->[0.75,0.420]->[1,0.500]",
-   "F5_topo_coral_central": "c>=0.575: [0.575,0.360]->[1,0.310]; antes disso coral toca o swoosh direto",
-   "F6_base_coral_central": "[0.18,0.250]->[0.50,0.165]->[0.53,0.150]; depois segue F7 (contato direto)",
-   "F7_topo_massa": "[0.32,0.0]->[0.50,0.140]->[0.75,0.210]->[1,0.270]; massa nao toca o BA"
-  },
   "echarpe_casco": {
    "nota": "NAO e wrap circunferencial: echarpe diagonal ~44-50 graus com ponta em (27.60,-1.20); ventre/keel BRANCOS; tailcone todo branco; anel APU metal",
    "x_front(z)": [
@@ -487,41 +477,38 @@
   },
   "matricula_atual": "PT-TMN INDIGO sobre BRANCO x27.00-28.80 z0.52-0.89 (altura 0.40); titulo 'AIRBUS A320neo' acima x27.0-29.3 z1.22-1.39 (2016-2020 era branca DENTRO do wrap x30.2-32.0 — variacao documentada)",
   "hstab": "extradorso INDIGO (arranjo atual/foto do dono; 2016-2020 era cinza claro), intradorso branco, BA metal",
-  "fin_bandas_medidas_2026_08_17": {
-   "fonte": "Medido na foto ref_CC-BGP_wikimedia.jpg RETIFICADA para o plano da deriva por transformada afim (2026-08-17). Ajuste por descida coordenada contra a foto classificada: 92.6% de concordancia pixel a pixel dentro do contorno.",
-   "modelo": "Bandas paralelas atravessando a deriva DE BORDO A BORDO sobre campo indigo. Cada banda e um paralelogramo: cinza-voo nas duas pontas, coral no miolo. NAO e deriva branca com bandas grossas.",
-   "coordenadas": "b = z - 0.24*x (atraves das bandas) ; e = z + 0.25*x (ao longo das bandas). x,z em metros no referencial da aeronave.",
-   "banda_inferior": {
-    "b": [
-     -6.725,
-     -5.99
-    ],
-    "coral_em_e": [
-     22.006,
-     23.332
-    ]
+  "fin_bandas_2026-08-20": {
+   "fonte": "Medido nas fotos PS-LBO DSC00896 (5822 px, estibordo, deriva ~780 px de altura) e DSC00834 (5020 px, bombordo), em 'airbus A321neo/'; conferido em PT-TMN (ref_PT-TMN_wikimedia.jpg retificada, ~150 px — consistente dentro de +-0.1 de zeta) e PT-TMT (tmt bank photo). Template unico da familia A320. 2026-08-20.",
+   "descoberta": "A transferencia (h,c)/zeta do desenho do 787 NAO vale para a familia A320: a LATAM posiciona o sash de forma especifica por tipo. A banda tem ~0.96 m de espessura perpendicular nos DOIS tipos (largura fisica constante na frota) — na deriva menor do A320 ela e proporcionalmente ~2x mais gorda do que a transferencia dava. A banda inferior entra pela RAIZ (nao pelo BA) e cruza o BF baixo; o cap da ponta ALARGA para tras (no 787 estreita).",
+   "ancoragem": "Cada aresta e uma reta pinada por DUAS travessias medidas, em fracoes da deriva exposta: zeta_LE ao longo do BA reto, zeta_TE ao longo do BF, rho ao longo da corda da raiz. Cortes do coral pinados por fracoes ao longo das arestas da propria banda. Isso reproduz onde o desenho encontra cada bordo, independente do afilamento do modelo (planform do modelo: taper 0.21 contra ~0.35 medido em foto).",
+   "arestas": {
+    "lb_bot": "raiz rho=0.10 -> BF zeta=0.37",
+    "lb_top": "BA zeta=0.175 -> BF zeta=0.535",
+    "ub_bot": "BA zeta=0.585 -> BF zeta=0.80",
+    "ub_top": "BA zeta=0.90 -> BF zeta=0.85 (DESCE para tras: o cap alarga)"
    },
-   "banda_superior": {
-    "b": [
-     -4.208,
-     -3.35
-    ],
-    "coral_em_e": [
-     24.913,
-     26.192
-    ]
+   "cortes_coral": {
+    "inferior": "fwd em (lb_bot@0.626, lb_top@0.274); aft em (lb_bot@1.00, lb_top@0.655) — o canto inferior-tras do coral TOCA o BF logo acima da massa da raiz",
+    "superior": "fwd em (ub_bot@0.06, ub_top@0.00) — o coral e cortado pelo filete do BA; aft em (ub_bot@1.00, ub_top@0.827)"
    },
-   "acima_da_superior": "b >= -3.35 -> cinza-voo (cap do topo)",
-   "resto": "indigo #2A0088",
-   "filete_bordo_ataque": "cinza-voo, 0.22 m perpendicular ao BA, a partir de z=2.2",
+   "filete_BA": "cinza-voo 0.22 m perpendicular ao BA reto, z>=2.0 (conferido na DSC00896: 25.9 px a 120 px/m = 0.216 m)",
+   "campo": "indigo #2A0088 em TODA a area fora de bandas/cap/filete, inclusive fora da planform — elimina a banda cinza latente na raiz das texturas herdadas (achada na derivacao do A321)",
    "cores": {
     "indigo": "#2A0088",
     "coral": "#ED1651",
     "cinza_voo": "#C8CACC"
    },
-   "uv": "Deriva A320: u=0.125*x-3.425 ; v=0.142857*z-0.2 (x=8u+27.4, z=7v+1.4).",
-   "nota": "Substitui as polilinhas F1..F7 herdadas do A320, que produziam deriva branca com bandas grossas que nao chegavam aos bordos.",
-   "transferencia": "Desenho transferido do 787-9 por coordenadas normalizadas da deriva (h,c): h=(z-1.55)/6.5 ; c=(x-LE)/(TE-LE), LE(z)=0.8393*z+26.7730, TE(z)=34.60+0.0538462*(z-1.55). E a MESMA marca, so muda a escala do fin."
+   "nota_angulos": "No aviao real as bandas sobem a ~20.4 graus tambem na familia A320 (as duas fotos PS-LBO concordam). No MODELO as arestas saem a 21-22.5 graus porque a planform da deriva do modelo e mais afilada que a real; a ancoragem por travessia preserva o que o olho compara (onde cada banda encontra cada bordo).",
+   "gerador": "scratchpad build_fin_sash.py (sessao 2026-08-20); raster 4096^2 -> 2048^2 supersample 2x",
+   "retas_resultantes": {
+    "lb_bot": "(28.727,1.550)->(34.730,3.955) dz/dx=+0.4006",
+    "lb_top": "(29.029,2.688)->(34.787,5.028) dz/dx=+0.4063",
+    "ub_bot": "(31.265,5.353)->(34.880,6.750) dz/dx=+0.3866",
+    "ub_top": "(32.984,7.400)->(34.898,7.075) dz/dx=-0.1698"
+   },
+   "uv": "Deriva: u=0.125*x-3.425 ; v=0.142857*z-0.2 (dominio x 27.4..35.4, z 1.4..8.4) — inalterada",
+   "SUBSTITUI": "fin_bandas_medidas_2026_08_17 (transferencia (h,c) do 787, b=z-0.24x depois c=z-0.372x): dava bandas de 0.80 m (real 0.96), banda inferior cruzando o BF em zeta 0.39-0.52 (foto: 0.37 e o TOPO dela; o fundo esta em 0.09-0.22 conforme a foto), coral da banda inferior comecando so no meio da corda e fugindo pelo BF, cinza do BA da banda inferior com metade do comprimento da banda, e ponta atras da banda superior em INDIGO onde a foto mostra o cap cinza. Era isso que fazia as faixas parecerem nao-paralelas e distorcidas no render.",
+   "nota_polylines": "As polilinhas F0..F7 (fin_fronteiras) foram removidas: obsoletas duas vezes (substituidas pela medicao de 2026-08-17, que por sua vez foi substituida por esta secao)."
   }
  },
  "ventre_real": {
@@ -534,7 +521,7 @@
   "LiveryTex+LiveryFac": "marcas oficiais rasterizadas em (x,theta) 4096x1024; mascara em imagem SEPARADA Non-Color (alfa de float nao sobrevive pack/reload)",
   "NoseMask": "para-brisa (R=moldura, G=vidro)",
   "PanelBump": "juncoes circunferenciais + lap joints, bump 2.2mm",
-  "FinSashE/FinSashD": "sash da deriva por lado (nao espelhado)"
+  "FinSashE/FinSashD": "sash da deriva por lado (conteudo identico nos dois lados); REGENERADAS 2026-08-20 do template medido em foto (cauda_livery.fin_bandas_2026-08-20)"
  },
  "construcao": {
   "casco": "gaiola esparsa nas cavernas + subsurf render 3; compensacao radial x1.0064 (encolhimento Catmull-Clark 32-gon); curvas PCHIP (hull_smooth.json)",
