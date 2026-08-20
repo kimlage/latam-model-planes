@@ -1,0 +1,71 @@
+{
+ "nota": "Fotos de referencia da fotogrametria de CC-BBF (787-8 LATAM). Os arquivos refs/ref_*.jpg NAO sao versionados — mesma regra do A321neo e do scenario/refs: a licenca das fotos conflita com o CC BY 4.0 dos assets do projeto, e neste caso TRES das quatro chegaram sem URL/autor registrados pela sessao anterior. Este manifesto registra o que foi possivel recuperar (EXIF) para reproducao.",
+ "aviso_de_procedencia": "ATENCAO: so ref_bbf_syd18.jpg tem autoria e licenca verificaveis. As outras tres foram baixadas pela sessao anterior sem registrar a URL. Elas foram usadas apenas como REGUA DE MEDIDA (nenhum pixel delas entra no modelo), mas antes de qualquer publicacao a procedencia precisa ser refeita. Pelo mesmo motivo, comparacao_com_foto.png, comparacao_cauda.png e comparacao_fin_sash.png NAO foram versionados neste aviao, embora os outros quatro avioes versionem o comparacao_fin_sash.png deles (aqueles usam fotos CC BY-SA com autoria registrada).",
+ "documento_oficial": [
+  {
+   "arquivo": "apr600_p20-020.png",
+   "origem": "Boeing 787 Airport Planning Report D6-58333 Rev P, Dezembro 2024, pagina 2-5 (2.2.1 General Dimensions: Model 787-8), rasterizada a 600 dpi de boeing 787-9/B787_APR_boeing.pdf",
+   "licenca": "Copyright 2024 Boeing. 'Not Subject to EAR or ITAR'. Documento publico; nao versionado (regra do .gitignore para apr*.png).",
+   "uso": "comprimento 56.72, envergadura 60.12, altura 16.92, entre-eixos 22.78, bitola 9.80, nariz->trem de nariz 5.41, motor cl_y 9.73, inlet 17.76, estab 19.81, largura 5.77"
+  },
+  {
+   "arquivo": "apr300_p23-023.png",
+   "origem": "mesmo PDF, pagina 2-8 (2.3.1 Ground Clearances: Model 787-8), 300 dpi",
+   "uso": "folgas ao solo; mostra linhas F separadas para motores GE e RR"
+  },
+  {
+   "arquivo": "apr300_p31-031.png",
+   "origem": "mesmo PDF, pagina 2-16 (2.7.1 Door Locations: Model 787-8/-9/-10), 300 dpi",
+   "uso": "as 7 estacoes de porta do -8 e do -9 na MESMA tabela — foi ela que fechou o esquema de plugues (D2/D3 -3.04, D4 e carga traseira -6.10, bulk -6.09, D1 e carga dianteira inalteradas)"
+  }
+ ],
+ "fotos": [
+  {
+   "arquivo": "refs/ref_bbf_syd18.jpg",
+   "matricula": "CC-BBF",
+   "bordo": "bombordo",
+   "resolucao": "2000x1333",
+   "url": "https://commons.wikimedia.org/wiki/File:LATAM_Chile_(CC-BBF)_Boeing_787-8_Dreamliner_at_Sydney_Airport_(1).jpg",
+   "autor": "EXIF Artist = 'Robert Myers' (conferir o creditador na pagina do Commons antes de publicar)",
+   "licenca": "Creative Commons Attribution-Share Alike 3.0 Australia (EXIF Copyright)",
+   "data": "2018-09-16 (EXIF); Canon EOS 6D",
+   "uso": "leitura geral do bordo de bombordo; resolucao insuficiente para cotas finas"
+  },
+  {
+   "arquivo": "refs/ref_bbf_mia23.jpg",
+   "matricula": "CC-BBF",
+   "bordo": "ESTIBORDO (nariz a direita)",
+   "resolucao": "4676x3117",
+   "url": "NAO REGISTRADA pela sessao anterior",
+   "autor": "desconhecido (EXIF sem autor; Canon EOS 5D Mark II, Snapheal CK 1.7)",
+   "licenca": "desconhecida",
+   "data": "2023-01-17 (EXIF)",
+   "uso": "foto de trabalho principal. Calibracao projetiva 1D u=(aX+b)/(cX+1) ancorada na ponta do nariz e nas portas 1/2/4, residuo maximo 6.7 px = 0.09 m. Dela sairam lockup (x 7.36..15.58), matricula (x 44.36..46.02), DREAMLINER, fronteira dianteira da cunha (x = 42.77 + 0.887 z, rms 0.012 m) e o simbolo de barriga cruzando a quilha.",
+   "identificacao_do_bordo": "porta de carga DIANTEIRA medida em x 9.65..12.53 (centro 11.09, APR 11.00) e TRASEIRA em x 35.0..38.5 (centro 36.75, APR 37.21) — as duas sao do lado direito na APR"
+  },
+  {
+   "arquivo": "refs/ref_bbf_mco24.jpg",
+   "matricula": "CC-BBF",
+   "bordo": "estibordo",
+   "resolucao": "6000x4000",
+   "url": "NAO REGISTRADA pela sessao anterior",
+   "autor": "desconhecido",
+   "licenca": "desconhecida",
+   "data": "sem EXIF",
+   "uso": "confirma matricula BRANCA sobre o indigo a estibordo; vista parcial do ventre"
+  },
+  {
+   "arquivo": "refs/ref_bbb_mia23.jpg",
+   "matricula": "CC-BBB (mesmo subtipo, mesma pintura)",
+   "bordo": "BOMBORDO (nariz a esquerda)",
+   "resolucao": "5025x3168",
+   "url": "NAO REGISTRADA pela sessao anterior",
+   "autor": "desconhecido (Canon EOS 5D Mark II, Snapheal CK 1.7)",
+   "licenca": "desconhecida",
+   "data": "2023-01-19 (EXIF)",
+   "uso": "a melhor do conjunto para a cauda: quase de perfil, porta 4 inteira servindo de regua e passo das janelas legivel. Dela sairam matricula (x 44.42..46.04, z 1.17..1.47, cap 0.30), titulo BOEING 787-8 (x 40.02..42.44, cap 0.128), altura das letras LATAM (0.777) e a folga de 0.10 m entre as letras e a fileira de janelas.",
+   "ressalva": "matricula diferente — vale para POSICAO e TAMANHO das marcas (que sao de frota), nao para os glifos"
+  }
+ ],
+ "derivadas_nao_versionadas": "refs/insp_*.png, refs/m_*.png, refs/view_*.png, refs/insp788_*.png sao recortes com grade gerados a partir das fotos e da APR; nao sao fontes independentes e carregam o mesmo problema de licenca."
+}

@@ -1,0 +1,148 @@
+{
+  "project": "LATAM Chile Boeing 767-316ER reference photos",
+  "chosen_registration": "CC-CWY",
+  "chosen_reason": "Active airframe (planespotters, updated 2026-08-05) with the two best free-licence near-pure side profiles in the current indigo livery, both taken February 2026 (livery guaranteed current). Sister-ship photos (identical fleet livery) fill the belly/rotation, 3/4 and right-side views.",
+  "aircraft": {
+    "type": "Boeing 767-316ER(WL)",
+    "msn": 35231,
+    "line_number": 961,
+    "first_flight": "2007-10-25",
+    "delivered_LAN": "2007-11-08",
+    "engines": "2x GE CF6-80C2B7F (airfleets.net, uniform across all nine LATAM Chile passenger 767-316ERs)",
+    "winglets": "Aviation Partners blended winglets, retrofitted fleet-wide",
+    "config": "C20Y213 (since 2020; C30Y191 before)"
+  },
+  "photos": [
+    {
+      "file": "ref_CC-CWY_perfil_mia.jpg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/0/01/CC-CWY_B767-300%2C_LATAM%2C_Miami_02-19-26_%2855146431338%29.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:CC-CWY_B767-300,_LATAM,_Miami_02-19-26_(55146431338).jpg",
+      "author": "Duncan Kirk (Flickr: 182528221@N07)",
+      "license": "CC BY 4.0",
+      "registration": "CC-CWY",
+      "view": "perfil (near-pure left side profile, taxiing, clean sky background)",
+      "date_taken": "2026-02-19",
+      "resolution": "5398x3599",
+      "notes": "PRIMARY reference. Current indigo livery, winglets, full airframe unobstructed, Miami Intl. Tail and rear wedge crop cleanly at high res. Canon EOS R5, sharp."
+    },
+    {
+      "file": "ref_CC-CWY_perfil_lax.jpg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/4/4c/CC-CWY_%2855154339420%29.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:CC-CWY_(55154339420).jpg",
+      "author": "Liam Thompson (Flickr: 204089279@N06)",
+      "license": "CC BY-SA 4.0",
+      "registration": "CC-CWY",
+      "view": "perfil (left side profile on ground roll, golden-hour light, LAX)",
+      "date_taken": "2026-02-27",
+      "resolution": "5104x2871",
+      "notes": "Second full side profile eight days after the MIA shot; warm raking light brings out fuselage panel/door relief. Registration CC-CWY readable on rear fuselage."
+    },
+    {
+      "file": "ref_CC-CXC_rotacao.jpg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/7/74/CC-CXC_%2855118331631%29.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:CC-CXC_(55118331631).jpg",
+      "author": "Liam Thompson (Flickr: 204089279@N06)",
+      "license": "CC BY-SA 4.0",
+      "registration": "CC-CXC (sister ship, identical livery)",
+      "view": "rotacao (climb-out from below-left, belly, gear retracting, winglets, rear indigo wedge wrap-under)",
+      "date_taken": "2026-02-21",
+      "resolution": "4020x2680",
+      "notes": "Covers the belly/winglet criterion. Shows how the rear indigo wedge wraps under the fuselage and the 'BOEING 767-300ER' titles."
+    },
+    {
+      "file": "ref_CC-CXC_aproximacao.jpg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/3/34/CC-CXC_%2855156576267%29.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:CC-CXC_(55156576267).jpg",
+      "author": "Liam Thompson (Flickr: 204089279@N06)",
+      "license": "CC BY-SA 4.0",
+      "registration": "CC-CXC (sister ship, identical livery)",
+      "view": "aproximacao (final approach, slightly low left 3/4, gear down, flaps/slats deployed)",
+      "date_taken": "2026-02-28",
+      "resolution": "4019x2679",
+      "notes": "In-flight view with tail fin sash and rear wedge visible; sunset light. Good for gear-door and flap-track fairing detail."
+    },
+    {
+      "file": "ref_CC-CXH_pouso_direita_jfk.png",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/6/60/CC-CXH_JFK_Touch_Down_13L_LA_B767_316_ER_Small_%2852615359237%29.png",
+      "page_url": "https://commons.wikimedia.org/wiki/File:CC-CXH_JFK_Touch_Down_13L_LA_B767_316_ER_Small_(52615359237).png",
+      "author": "Mark Bess (Flickr: 129713874@N03)",
+      "license": "CC BY-SA 2.0",
+      "registration": "CC-CXH (sister ship, identical livery)",
+      "view": "lado direito (right/starboard side, touchdown JFK 13L, tire smoke)",
+      "date_taken": "2023-01-08",
+      "resolution": "3300x1856 (16-bit PNG, author-downsized 'Small')",
+      "notes": "Only good free RIGHT-side view: shows the starboard fin sash direction and starboard rear wedge - the LATAM fin art is not mirror-symmetric, model both sides from the correct reference."
+    },
+    {
+      "file": "ref_CC-CXJ_nariz_lan.jpg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/2/2c/LATAM_Airlines_B767-316%28ER%29%2C_CC-CXJ%2C_MSN_985_%2812_2009%29%2C_as_LA_2381_New_York_%28JFK%29_-_Lima_%28LIM%29%2C_Flight_time_7_17_%2851296617576%29.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:LATAM_Airlines_B767-316(ER),_CC-CXJ,_MSN_985_(12_2009),_as_LA_2381_New_York_(JFK)_-_Lima_(LIM),_Flight_time_7_17_(51296617576).jpg",
+      "author": "Charles from Port Chester, New York (Flickr)",
+      "license": "CC BY 2.0",
+      "registration": "CC-CXJ (sister ship)",
+      "view": "nariz (close-up of nose, windshield frames, radome, forward door area, from above-right)",
+      "date_taken": "2021-07-04",
+      "resolution": "6000x4000",
+      "notes": "GEOMETRY ONLY - aircraft still wore the old LAN livery in this photo (CC-CXJ was repainted indigo later, confirmed indigo Jan 2026 on JetPhotos). Best free close-up of the 767 nose/windshield; geometry is livery-independent. Do NOT use for paint."
+    },
+    {
+      "file": null,
+      "url": "https://upload.wikimedia.org/wikipedia/commons/d/de/Aeropuerto_de_Lima%2C_2023%2C_CC-CXH.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:Aeropuerto_de_Lima,_2023,_CC-CXH.jpg",
+      "author": "Draceane (Wikimedia Commons)",
+      "license": "CC BY-SA 4.0 (free, not downloaded)",
+      "registration": "CC-CXH",
+      "view": "perfil, taxiing at Lima, hazy dusk light",
+      "date_taken": "2023-06-07",
+      "resolution": "6960x4640",
+      "notes": "Highest-resolution free side view of any indigo LATAM 767; flat grey light. Fetch if extra window/door-position detail is needed."
+    },
+    {
+      "file": null,
+      "url": "https://upload.wikimedia.org/wikipedia/commons/f/f2/CC-CXG_Boeing_767-316ER_LATAM_Chile_MIA_19.1.23_%2853375597158%29.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:CC-CXG_Boeing_767-316ER_LATAM_Chile_MIA_19.1.23_(53375597158).jpg",
+      "author": "Colin Cooke Photo (Flickr: 16172980@N07)",
+      "license": "CC BY-SA 2.0 (free, not downloaded)",
+      "registration": "CC-CXG",
+      "view": "perfil, taxiing at Miami, crisp daylight",
+      "date_taken": "2023-01-19",
+      "resolution": "4783x2909",
+      "notes": "Third-best free side profile, redundant with the two CC-CWY profiles."
+    },
+    {
+      "file": null,
+      "url": "https://www.jetphotos.com/photo/12076617",
+      "page_url": "https://www.jetphotos.com/photo/12076617",
+      "author": "Lisandro Pitowski (JetPhotos)",
+      "license": "reference-only, not downloaded",
+      "registration": "CC-CXJ",
+      "view": "3/4 left rotation at LAX, indigo livery",
+      "date_taken": "2026-01-18",
+      "resolution": "approx 1920px on site",
+      "notes": "Eyeball-only. Proves CC-CXJ now wears the indigo livery; excellent light on belly, engine pylons and rear wedge."
+    },
+    {
+      "file": null,
+      "url": "https://www.jetphotos.com/photo/11998037",
+      "page_url": "https://www.jetphotos.com/photo/11998037",
+      "author": "Jake Oesterreich (JetPhotos)",
+      "license": "reference-only, not downloaded",
+      "registration": "CC-CWY",
+      "view": "recent LATAM-era shot of the chosen airframe",
+      "date_taken": "2025/2026 (upload era)",
+      "resolution": "approx 1920px on site",
+      "notes": "Eyeball-only extra of the chosen registration; see also jetphotos 12029325, 12006909, 11967483, 11847116."
+    },
+    {
+      "file": null,
+      "url": "https://www.planespotters.net/airframe/boeing-767-300-cc-cwy-latam-airlines-chile/3w8dd6",
+      "page_url": "https://www.planespotters.net/airframe/boeing-767-300-cc-cwy-latam-airlines-chile/3w8dd6",
+      "author": "Planespotters.net",
+      "license": "reference-only, not downloaded",
+      "registration": "CC-CWY",
+      "view": "fleet-database page (status, history, config)",
+      "date_taken": null,
+      "notes": "Airframe status Active (updated 2026-08-05); MSN 35231, LN 961, delivered Nov 2007, C20Y213 since 2020, 2x GE engines. Engine subvariant CF6-80C2B7F per airfleets.net plane-b767-35231.htm."
+    }
+  ]
+}

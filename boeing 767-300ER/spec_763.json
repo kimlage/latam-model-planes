@@ -1,0 +1,629 @@
+{
+ "fonte": "Boeing ACAP D6-58328 Rev K (Dez/2024): p.29 (2-9 General Dimensions), p.33 (2-3.2 clearances), p.38/40 (2-4.3/2-4.5 arranjos de cabine), p.43 (2-23 secao), p.50/53/54 (portas), p.253-254 (scaled drawings) @600dpi, extract_b763.py; conferencia independente das 12 cotas + secao mestre em 2026-08-20; fotogrametria de CC-CWY (refs/manifest.json, foto de Miami 19/02/2026 a 5398 px) para livery, janelas e marcas; Boeing wingletspans.pdf (span com winglets)",
+ "matricula_alvo": "CC-CWY (Boeing 767-316ER WL, MSN 35231/LN 961, entregue nov/2007, LATAM Chile, config C20Y213). Escolhida por ter as duas melhores fotos livres em livery indigo atual (fev/2026). TODAS as 9 CC-CW*/CX* de passageiros usam livery indigo, winglets API e CF6-80C2B7F.",
+ "datum": "x=0 na ponta do nariz; z=0 no centro da secao constante; eixo AGL 4.61 m (estatico); unidades m",
+ "dimensoes_gerais": {
+  "comprimento": 54.94,
+  "comprimento_nota": "ate a ponta do BF da deriva (aftmost); o tailcone termina em x~54.2",
+  "envergadura_sem_winglet": 47.57,
+  "envergadura_com_winglet": 50.9,
+  "altura_deriva": 15.85,
+  "fuselagem_largura": 5.03,
+  "fuselagem_altura": 5.41,
+  "entre_eixos": 22.76,
+  "bitola": 9.3,
+  "solo_z": -4.61,
+  "altura_deriva_nota": "NAO impresso neste ACAP. p33 (2-3.2) da J = 50FT6IN (15.39) minimo a 52FT7IN (16.03) maximo conforme carga; 15.85 e o valor usado no modelo (ponta da deriva em z=11.15 com eixo a 4.61 AGL = 15.76) e cai dentro da faixa. Conferido 2026-08-20."
+ },
+ "nariz_estacoes": [
+  [
+   0.0,
+   -0.458,
+   -0.458,
+   0.0
+  ],
+  [
+   0.15,
+   -0.128,
+   -0.714,
+   0.279
+  ],
+  [
+   0.4,
+   0.138,
+   -1.001,
+   0.608
+  ],
+  [
+   0.75,
+   0.437,
+   -1.214,
+   0.893
+  ],
+  [
+   1.25,
+   0.66,
+   -1.406,
+   1.134
+  ],
+  [
+   1.75,
+   1.17,
+   -1.61,
+   1.365
+  ],
+  [
+   2.0,
+   1.438,
+   -1.715,
+   1.474
+  ],
+  [
+   2.5,
+   1.736,
+   -1.896,
+   1.671
+  ],
+  [
+   3.0,
+   1.928,
+   -2.023,
+   1.825
+  ],
+  [
+   3.5,
+   2.13,
+   -2.138,
+   1.989
+  ],
+  [
+   4.0,
+   2.3,
+   -2.224,
+   2.131
+  ],
+  [
+   4.5,
+   2.428,
+   -2.31,
+   2.241
+  ],
+  [
+   5.0,
+   2.535,
+   -2.382,
+   2.329
+  ],
+  [
+   5.5,
+   2.62,
+   -2.468,
+   2.405
+  ],
+  [
+   6.0,
+   2.673,
+   -2.554,
+   2.46
+  ],
+  [
+   6.5,
+   2.705,
+   -2.63,
+   2.504
+  ],
+  [
+   7.0,
+   2.705,
+   -2.684,
+   2.515
+  ],
+  [
+   7.5,
+   2.705,
+   -2.705,
+   2.515
+  ]
+ ],
+ "nariz_estacoes_formato": "[x, crown_z, keel_z, meia_largura]; secao constante x 7.5..40",
+ "cauda_estacoes": [
+  [
+   41.0,
+   0.117,
+   2.588,
+   2.48
+  ],
+  [
+   42.0,
+   0.224,
+   2.482,
+   2.455
+  ],
+  [
+   43.0,
+   0.334,
+   2.357,
+   2.36
+  ],
+  [
+   44.0,
+   0.426,
+   2.236,
+   2.26
+  ],
+  [
+   45.0,
+   0.49,
+   2.087,
+   2.1
+  ],
+  [
+   46.0,
+   0.554,
+   1.938,
+   1.91
+  ],
+  [
+   47.0,
+   0.608,
+   1.779,
+   1.67
+  ],
+  [
+   48.0,
+   0.65,
+   1.608,
+   1.445
+  ],
+  [
+   49.0,
+   0.677,
+   1.433,
+   1.21
+  ],
+  [
+   50.0,
+   0.725,
+   1.257,
+   0.98
+  ],
+  [
+   51.0,
+   0.763,
+   1.093,
+   0.75
+  ],
+  [
+   52.0,
+   0.807,
+   0.913,
+   0.53
+  ],
+  [
+   53.0,
+   0.858,
+   0.762,
+   0.325
+  ],
+  [
+   53.5,
+   0.903,
+   0.658,
+   0.22
+  ],
+  [
+   54.15,
+   0.94,
+   0.52,
+   0.09
+  ]
+ ],
+ "cauda_estacoes_formato": "[x, centro_z, raio_z, raio_y] — o tailcone do 767 e comprimido lateralmente (ry/rz cai de 1.01 em x=44 a 0.43 em x=53, medido na p254); cap vertical da APU em x~54.2 (z +0.13..+1.45), ponta de fecho (54.3, 0, 0.95)",
+ "secao_mestre": {
+  "modelo": "uniao de DOIS CIRCULOS DE RAIO IGUAL. Ajuste por minimos quadrados ao contorno desenhado na p43 a 600 dpi (2026-08-20): lobo superior R=2.521 centro a 2.514 de profundidade (z=+0.191); lobo inferior R=2.5075 centro a 2.9035 (z=-0.1985). Entre os dois centros o flanco e RETO em meia-largura 2.515. Fecha a quilha em -2.706 (profundidade 5.411) contra 5.41 impressos, e a crista em +2.712.",
+  "validacao": "largura 5.03 e altura 5.41 impressas duas vezes (p29 em pes-polegadas, p43 em polegadas: 198 IN / 213 IN). RMS do ajuste 0.30 cm (lobo superior, 318 amostras) e 0.4 cm (inferior, 311). ATENCAO: a p43 nao e isotropica contra as proprias cotas — 466.0 px/m na vertical e 466.9 px/m na largura interna, mas 460.4 px/m na cota externa de largura; calibrar por eixo.",
+  "SUBSTITUI": "lobo inferior r=2.466 centrado a 3.078 (herdado). Passava do fundo (chegava a 5.544) e precisava de um fecho artificial que deixava uma quilha CHATA de 1.60 m de largura, 6 cm de excesso a 4.1 de profundidade, 22 cm a 5.14. A 'tabela de validacao' que o acompanhava tinha sido gerada do proprio modelo, nao medida: dava hw=0.916 a prof 5.372 onde o desenho da 0.404. O 'equador 0.19 m acima do meio' tambem era artefato — com raios iguais a zona mais larga e um flanco reto centrado em 2.71, ou seja na meia-altura.",
+  "interior_trim": 4.72,
+  "razao_contorno_medida": 0.9195
+ },
+ "parabrisa": {
+  "fonte": "p29 vista frontal + lateral @600dpi; 6 vidros (2 frontais em V profundo + 2 laterais + 2 traseiros pequenos), estilo 757",
+  "banda_lateral": "x 1.50..3.04, z +0.44..+1.20 (medido na p33/p29 lateral)",
+  "banda_frontal": "meia-larguras ate 1.71 em z 0.62..1.23 (vista frontal p29)",
+  "detalhe_paines": "poligonos por medir na foto ref_CC-CXJ_nariz_lan.jpg (6000px)",
+  "aplicacao": "mascara UV NoseMask (R=moldura, G=vidro) como nos outros tipos"
+ },
+ "portas_pax": {
+  "porta1": {
+   "centro_x": 5.7,
+   "abertura": [
+    1.07,
+    1.88
+   ],
+   "z": [
+    -0.35,
+    1.53
+   ],
+   "fonte": "ACAP 2.7.1: 18FT8.5IN=5.70; LH 42x74in; sill z da p33 confere C=4.14-4.50 AGL"
+  },
+  "porta3": {
+   "centro_x": 42.55,
+   "abertura": [
+    1.07,
+    1.88
+   ],
+   "z": [
+    -0.4,
+    1.48
+   ],
+   "fonte": "ACAP 2.7.1: 139FT7IN=42.55"
+  },
+  "porta2_type_A_nao_instalada": "opcao em 52FT4IN=15.96 (p50: 'OPTION ON -300, -300ER'), NAO presente na frota LATAM (a foto de CC-CWY mostra 2 saidas overwing). p50 diz ainda 'LH SIDE TWO OR THREE PLACES'. A vista lateral da p50 e esquematica — as tres linhas de chamada implicam tres escalas diferentes; nao medir nada nela.",
+  "servico_RH": "42x72in (1.07x1.83) nas mesmas estacoes",
+  "overwing": {
+   "n_por_lado": 2,
+   "centros_x": [
+    24.22,
+    25.34
+   ],
+   "folha": [
+    0.51,
+    0.97
+   ],
+   "z": [
+    0.05,
+    1.02
+   ],
+   "fonte": "ACAP p38 (2-4.3) e p40 (2-4.5): o par de saidas fica a 24.22 e 25.34 m do nariz, as duas paginas concordam em 0.01 m, calibradas pelas estacoes impressas das portas 5.70/42.55 e conferidas contra a largura de fuselagem 5.03 e de cabine 4.72. Medido 2026-08-20.",
+   "SUBSTITUI": "[20.4, 21.6] provisorios de foto — 3.8 m a vante do lugar certo; o espacamento de 1.11 m entre centros estava correto"
+  }
+ },
+ "portas_carga": {
+  "fwd_grande": {
+   "centro_x": 11.57,
+   "clear": [
+    3.4,
+    1.7
+   ],
+   "porta": [
+    3.56,
+    1.7
+   ],
+   "z": [
+    -2.2,
+    -0.5
+   ],
+   "fonte": "ACAP 2.7.4: 37FT11.5IN=11.57, standard no -300ER"
+  },
+  "aft": {
+   "centro_x": 37.29,
+   "clear": [
+    1.78,
+    1.7
+   ],
+   "z": [
+    -2.2,
+    -0.5
+   ],
+   "fonte": "ACAP 2.7.5: 122FT4IN=37.29"
+  },
+  "bulk": {
+   "centro_x": 40.3,
+   "dim": [
+    0.97,
+    1.22
+   ],
+   "z": [
+    -1.9,
+    -0.7
+   ],
+   "lado": "direito",
+   "nota": "estacao aproximada (p55 nao medida com precisao)"
+  }
+ },
+ "janelas_cabine": {
+  "nota": "pitch/linha por fotogrametria na ref_CC-CWY_perfil_mia.jpg; passo de caverna do 767 ~0.508 m",
+  "faixa_x_estimada": [
+   6.7,
+   41.5
+  ],
+  "z_estimado": [
+   0.45,
+   0.85
+  ]
+ },
+ "asa": {
+  "le_formula": "x_LE = 17.17 + 0.694*y (sweep 34.8 graus), y ate 23.785",
+  "te_formula": "x_TE = 29.29 + 0.143*(y-2.515) ate y=9.41 (x 30.44); depois 30.44 + 0.376*(y-9.41)",
+  "raiz_y": 2.515,
+  "tip_y": 23.785,
+  "tip_chord": [
+   33.67,
+   35.85
+  ],
+  "raiz_z_le": -1.15,
+  "raiz_z_te": -1.65,
+  "diedro_graus": 5.3,
+  "validacao_diedro": "ponta a z=+0.57 = L 4.90-5.46 AGL da tabela 2.3.2",
+  "winglet": {
+   "tipo": "Aviation Partners blended (retrofit, todas as 9 da frota)",
+   "altura_inclinada": 3.35,
+   "extensao_horizontal": 1.665,
+   "extensao_vertical": 2.9,
+   "semi_span_total": 25.45,
+   "fonte": "Boeing wingletspans.pdf: 767-300ER com winglets = 167FT0IN (50.90 m); winglet 11 ft",
+   "livery": "face externa INDIGO com filete branco no BA; face interna BRANCA com logo LATAM indigo"
+  },
+  "carenagem_ventral": {
+   "x": [
+    17.5,
+    31.5
+   ],
+   "meia_larg_max": 3.0,
+   "fundo_z": -2.95,
+   "nota": "wing-body fairing; fundo pouco abaixo da quilha"
+  }
+ },
+ "empenagem": {
+  "deriva": {
+   "BA_reto": "x = 41.39 + 1.0014*z (45.0 graus), valido z 3.9..11.15",
+   "carenagem_dorsal": "abaixo de z~3.9 o BA curva para a frente ate a crista em (43.0, 2.66)",
+   "BF": "x = 50.55 + 0.398*z (68.3 graus da horizontal)",
+   "tip_chord": {
+    "z": 11.15,
+    "x": [
+     52.7,
+     54.94
+    ]
+   },
+   "raiz_te_z": 2.2,
+   "rudder_hinge": "x = 48.61 + 0.333*z",
+   "fonte": "p29 @600dpi, sondas por linha; ponta AGL = 4.61+11.15 = 15.76 (~15.85 oficial)"
+  },
+  "estab": {
+   "le_formula": "x_LE = 47.26 + 0.768*(y-2.515)",
+   "te_formula": "x_TE = 52.54 + 0.247*(y-2.515)",
+   "semi_span": 9.31,
+   "tip_chord": [
+    52.48,
+    54.22
+   ],
+   "raiz_z": 0.55,
+   "diedro_graus": 7,
+   "cor": "branco, BA metal, intradorso cinza-claro"
+  }
+ },
+ "motor_cf6_80c2b7f": {
+  "fonte": "frota inteira CF6-80C2B7F (airfleets por MSN); geometria do desenho p29/p254 + foto",
+  "cl_y": 7.9,
+  "cl_z": -2.34,
+  "inlet_x": 18.54,
+  "fan_od": 2.67,
+  "fan_diam": 2.36,
+  "reverser_ate_x": 22.0,
+  "core_ate_x": 23.6,
+  "nozzle_ate_x": 24.3,
+  "nota_cota": "cota IMPRESSA na p29: 'GE ENGINES 60 FT 10 IN (18.54 M)' do nariz ate o bico da entrada (RR/PW 18.72). O bico DESENHADO esta em 18.23 — o ACAP desenha uma nacelle generica e nao pode servir aos dois fabricantes. A frota e CF6-80C2B7F (GE), entao vale 18.54. A foto de perfil aparenta 18.2 porque o motor esta 7.9 m mais perto da camera do que o plano onde o mapa foi calibrado.",
+  "clearance_solo_K": "0.56-1.12 AGL; fundo da nacelle z=-3.76",
+  "livery": "fan cowl + reverser brancos, lip polido, core cowl metalico escuro, nozzle inconel; SEM chevrons",
+  "perfil_nacelle": [
+   [
+    18.54,
+    1.17
+   ],
+   [
+    18.66,
+    1.262
+   ],
+   [
+    18.95,
+    1.315
+   ],
+   [
+    19.6,
+    1.335
+   ],
+   [
+    20.6,
+    1.335
+   ],
+   [
+    21.4,
+    1.32
+   ],
+   [
+    22.1,
+    1.285
+   ],
+   [
+    22.8,
+    1.215
+   ],
+   [
+    23.25,
+    1.13
+   ]
+  ],
+  "perfil_core": [
+   [
+    23.1,
+    1.07
+   ],
+   [
+    23.6,
+    0.96
+   ],
+   [
+    24.2,
+    0.83
+   ],
+   [
+    24.9,
+    0.69
+   ],
+   [
+    25.35,
+    0.605
+   ]
+  ],
+  "bocal_ate_x": 25.75,
+  "plug_ate_x": 26.1,
+  "nota_forma": "remedido na foto de CC-CWY com grade metrica: a CF6-80C2 e praticamente um CILINDRO de 2.67 m que so afila depois de x=21.4, com escape longo visivel ate ~25.8. O perfil anterior (max 2.80 em 19.8 caindo a 2.17 em 22.6) tinha forma de ovo e lia como uma bolha lisa sem entrada nem escape.",
+  "pylon": "carenagem de 0.26-0.30 m de meia-largura, aresta superior enterrada no perfil da asa (z=-0.48..-0.58) e inferior dentro da nacelle (z=-1.02..-1.30), x 19.20..26.60"
+ },
+ "trem": {
+  "nariz_x": 4.55,
+  "principal_x": 27.31,
+  "bitola": 9.3,
+  "nariz_rodas": {
+   "diam": 0.98,
+   "larg": 0.37,
+   "gap": 0.55
+  },
+  "principal_bogie": {
+   "entre_eixos": 1.42,
+   "entre_rodas": 1.12,
+   "pneu_diam": 1.22,
+   "pneu_larg": 0.46
+  },
+  "solo_z": -4.61,
+  "fonte": "ACAP 2.2.2 (entre-eixos 74FT8IN=22.76, nariz 14FT11IN=4.55, bitola 30FT6IN=9.3); rodas medidas na vista frontal p29",
+  "nota_desenho": "as vistas da p29 sao exatas em ESCALA (span e estab conferem a 0.2%) mas colocam cada elemento com +-0.3 m: o trem de nariz desenhado da 4.28 contra 4.55 impressos e o entre-eixos desenhado 23.07 contra 22.76. Cota impressa ganha de pixel."
+ },
+ "livery_cc_cwy": {
+  "estado": "MEDIDO por fotogrametria em 2026-08-20 (b5_livery.py consome estes numeros).",
+  "metodo": "Mapa foto->modelo por afim de TRES retas: crista do casco (z=2.705, ajuste de 678 colunas, rms 1.34 px), BA reto da deriva e BF da deriva (ambos ajustados na silhueta, rms 1.5 e 1.0 px). Da 94.376 px/m na foto de Miami (5398 px). VALIDADO em tres feicoes independentes: ponta do nariz (x=0), porta 1 (x=5.70) e porta 3 (x=42.55) caem todas em cima. A inclinacao do BA medida na foto (dx/dz=1.0007) confere com a do desenho (1.0014) a 0.07%, e a do BF (0.3928 contra 0.398) a 1.3% — a planform da deriva do modelo esta certa.",
+  "cunha_traseira": {
+   "fronteira_dianteira": "x = 42.11 + 1.008*z  (rms 0.21 m em z 0.57..2.66)",
+   "nota_dianteira": "PARALELA ao BA reto da deriva (1.0014), 0.72 m atras dele — 0.077 da altura exposta, contra 0.10 no 787 e 0.062 no A320.",
+   "fronteira_inferior": "theta <= 134.4 - 8.061*(x - 41.5) graus a partir da crista  (rms 1.4 graus)",
+   "nota_inferior": "medida coluna a coluna convertendo a altura do limite do indigo em theta pela secao local; e reta em (x,theta), NAO em (x,z). Desce a 134 graus no bordo dianteiro — bem abaixo da meia-largura, quase na quilha, muito mais funda do que os 117 do 787-9 e os 101 do A320neo. E o que faz o CC-CWY parecer 'envolvido por baixo' nas fotos de rotacao.",
+   "limite_traseiro": "x <= 50.55 + 0.398*z  (a propria linha do BF da deriva; atras dela a carenagem da raiz do BF e o tailcone ficam claros)"
+  },
+  "fin_bandas_2026-08-20": {
+   "fonte": "Foto de CC-CWY (refs/ref_CC-CWY_perfil_mia.jpg) RETIFICADA no plano (x,z) da deriva por afim de tres retas (BA, BF, corda da ponta), 100 px/m. Medido por varredura de colunas e por percentis nas coordenadas de banda.",
+   "coordenadas": "u = z - 0.370*x  atravessa as bandas (sobem 20.3 graus) ; e = z + 0.21*x  ao longo delas (cortes do coral descem 11.9 graus)",
+   "banda_inferior": {
+    "u": [
+     -14.32,
+     -13.27
+    ],
+    "espessura_z": 1.05,
+    "espessura_perpendicular": 0.985,
+    "coral_e": [
+     14.37,
+     16.26
+    ]
+   },
+   "banda_superior": {
+    "u": [
+     -10.56,
+     -9.6
+    ],
+    "espessura_z": 0.96,
+    "espessura_perpendicular": 0.9,
+    "coral_e": [
+     19.13,
+     21.05
+    ]
+   },
+   "cap": "TUDO acima de u=-10.56 e cinza-voo ate a ponta: a banda superior e o cap sao contiguos, nao ha indigo acima dela",
+   "filete_BA": 0.24,
+   "travessias": {
+    "lb_bot": "sai pela RAIZ (rho~0.31 da corda da raiz, x~45.6) — nao chega ao BA; cruza o BF em zeta 0.355",
+    "lb_top": "BA zeta 0.152 -> BF zeta 0.487",
+    "ub_bot": "BA zeta 0.614 -> BF zeta 0.828",
+    "ub_top": "BA zeta 0.777 -> BF zeta 0.949 (so o CORAL tem aresta superior; o cinza segue ate a ponta)"
+   },
+   "zeta": "fracao da deriva exposta em z, de z_raiz=1.83 (encontro do BF com a crista) a z_ponta=11.15 (H=9.32 m)",
+   "confirmacoes": "(1) espessura perpendicular 0.985 e 0.900 m contra os 0.96 m absolutos que a LATAM pinta na frota toda — o achado do commit f162f73 vale tambem no 767; (2) angulos internos identicos aos da familia A320 e do 787 (bandas a 20.3 graus, cortes do coral a -11.9); (3) o canto inferior-tras de cada coral TOCA o BF e o canto superior-dianteiro e cortado pelo filete do BA, exatamente como no A320.",
+   "lados": "MESMA arte em (x,z) nos dois lados — conferido na foto de estibordo de CC-CXH (as bandas sobem para tras nas duas)",
+   "acordo_render": "84% de concordancia pixel a pixel contra a foto retificada; todo o residuo e uma orla de ~0.15 m nas arestas"
+  },
+  "marcas": {
+   "lockup_simbolo": {
+    "x": [
+     6.98,
+     8.68
+    ],
+    "theta_topo": 34.26,
+    "nota": "razao oficial preservada (0.6225); a base cai em theta 96.9 contra 94.4 medidos"
+   },
+   "lockup_wordmark": {
+    "x": [
+     9.15,
+     15.8
+    ],
+    "theta_cap": 37.21,
+    "nota": "razao oficial 6.731; a linha de base cai em theta 59.9 contra 59.4 medidos"
+   },
+   "nota_lockup": "o CC-CWY usa o SIMBOLO ~30% maior em relacao ao wordmark do que o lockup padrao. Simbolo e wordmark sao colocados SEPARADAMENTE, cada um na sua razao oficial, em espaco (x, theta) — a arte e pintada na SUPERFICIE, entao medi-la na projecao lateral (z) achata em ~25% quem sobe pelo ombro. Foi por isso que o lockup do 787 pareceu '28% esticado': a razao 4.30 do vetor vale no plano, nao na projecao.",
+   "matricula": {
+    "texto": "CC-CWY",
+    "x": [
+     44.12,
+     45.92
+    ],
+    "z": [
+     1.044,
+     1.343
+    ],
+    "estilo": "BRANCA dentro do indigo da cunha, os dois lados"
+   },
+   "titulo": {
+    "texto": "BOEING 767-300ER",
+    "x": [
+     37.41,
+     40.68
+    ],
+    "z": [
+     1.083,
+     1.269
+    ],
+    "estilo": "escuro obliquo sobre branco, a vante da cunha, logo acima da linha de janelas"
+   },
+   "ventre": "wordmark LATAM indigo x 24.0..31.0 com o simbolo a vante, rasterizado em arco lateral a partir da quilha"
+  },
+  "janelas": {
+   "z_vidro": [
+    0.81,
+    1.09
+   ],
+   "passo": 0.5669,
+   "faixa_x": [
+    7.1,
+    43.1
+   ],
+   "nota": "passo medido por corridas de pixels escuros na foto (53.5 px a 94.376 px/m). A geometria herdada tinha as janelas em z 0.53..1.078 (0.55 m de altura, quase o dobro) e ia ate x=47.9, bem dentro do tailcone; lia como uma fita escura continua. Corrigida para 0.79..1.11 e cortada em x=43.35."
+  },
+  "cores": {
+   "indigo": "#2A0088",
+   "coral": "#ED1651",
+   "branco_casco": "#E6E7EA",
+   "cinza_voo": "#C8CACC"
+  }
+ },
+ "confianca": {
+  "alta": "dimensoes gerais, portas pax/carga, trem, entre-eixos, bitola, span sem winglet, estab (todas cotas IMPRESSAS, reconferidas em 2026-08-20); secao mestre (ajuste de circulos a 0.3-0.4 cm); estacoes nariz/cauda (+-3 cm); deriva/estab planform (a inclinacao do BA e do BF confere com a foto a 0.07% e 1.3%); saidas overwing (duas paginas do ACAP concordam a 0.01 m); entrada do motor (cota impressa); livery: cunha traseira, bandas da deriva, matricula, titulo, janelas (todas medidas na foto de CC-CWY com mapa validado em tres feicoes)",
+  "media": "perfil da nacelle e do escape (+-0.1 m, medidos na foto com paralaxe de 3%), diedro, raiz da asa z, parabrisa poligonos, altura total 15.85 (nao impressa neste ACAP; faixa 15.39..16.03), lockup no ventre",
+  "baixa": "porta bulk (estacao aproximada), pinca do cockpit, marcas operacionais e desgaste"
+ },
+ "lobo_superior_pinca": {
+  "nota": "pinca do cockpit calibrada visualmente contra a vista frontal (vidros ate |y|~1.71 em z 0.62..1.23); parametros forca 0.30, sobe 1.2..1.2, desce 3.2..2.0, expoente 1.6"
+ },
+ "verificacao": {
+  "gate_2026-08-20": "6 angulos canonicos + verificacao_visual.png; comparacao_perfil.png (foto reprojetada x render ortografico, 40 px/m) e comparacao_fin_sash.png (foto | render | foto) sao a evidencia.",
+  "angulo_de_tailstrike": 8.76,
+  "angulo_de_tailstrike_nota": "medido girando a malha avaliada em torno do contato do trem principal (x=27.31, z=-4.61); limitado pela PROPRIA fuselagem em x=40.46, z=-2.58 — nao por um acessorio baixo nem por perna curta. Real do -300ER ~9.6 graus.",
+  "acordo_fotometrico": {
+   "deriva": "84% pixel a pixel contra a foto retificada; residuo todo numa orla de ~0.15 m nas arestas",
+   "cores": "coral p50 (196,50,69) no perfil contra (182,34,57) do A320neo aprovado, com o mesmo #ED1651 na textura",
+   "branco": "164-174 no perfil, na mesma familia do A320neo (172) e do 787-9 (173)"
+  },
+  "pendencias": [
+   "lockup da fuselagem le claro nos 3/4 dianteiros (verniz Coat 1.0 refletindo o cartao de nuvem no ombro) — mesma receita de material da frota aprovada",
+   "mapa de antenas/drenos/valvula do ventre nao tabulado para o 767 (o A320 tem em ventre_real)",
+   "porta bulk e pinca do cockpit ainda por medir"
+  ]
+ }
+}

@@ -9,6 +9,7 @@ A320_ACAP_airbus.pdf
 **/A319_ACAP_airbus.pdf
 **/A321_ACAP_airbus.pdf
 **/B787_APR_boeing.pdf
+**/B767_ACAP_D6-58328_boeing.pdf
 **/acap_text.txt
 
 # Rasterizacoes e recortes derivados desses documentos
@@ -17,12 +18,30 @@ apr*.png
 **/apr*.png
 insp_*.png
 **/insp_*.png
+# 767: recortes do ACAP D6-58328 com nomes que nao casam com os padroes acima
+boeing 767-300ER/insp*.png
+boeing 767-300ER/arr-*.png
+boeing 767-300ER/varr-*.png
+boeing 767-300ER/cargo*.png
+boeing 767-300ER/lo-*.png
+boeing 767-300ER/view_v*.png
 
 # Fotos de referencia de terceiros (sem metadados de autoria/licenca registrados)
 ref_*.jpg
 **/ref_*.jpg
+# Fotos com autoria/licenca REGISTRADAS em refs/manifest.json continuam fora do
+# git: CC BY-SA conflita com a CC BY 4.0 dos assets do projeto (share-alike), e
+# CC BY exigiria embutir os creditos no arquivo. Citamos no manifesto e no
+# NOTICE.md em vez de redistribuir. Mesma regra do cenario SCL.
+**/refs/ref_*
+**/refs/view_*.png
+**/refs/crop_*.png
 comparacao_com_foto.png
 **/comparacao_com_foto.png
+# Reprojecao da foto inteira no enquadramento do render (artefato de trabalho).
+# A folha comparacao_fin_sash.png fica: e um recorte da deriva, precedente do
+# commit f162f73, e e a evidencia que o gate exige.
+**/comparacao_perfil.png
 
 # Vetores de marca registrada (LATAM, Airbus, Boeing)
 latam_logo_indigo.svg
