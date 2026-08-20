@@ -276,7 +276,18 @@ indigo ⟺ x ≥ x0 + k·z              (FORWARD boundary — a straight line in
 `θ` is measured from the crown; `z = centro_z(x) + raio(x)·cos θ`.
 
 **787-9:** `x ≥ 48.77 + 0.992·z` ; `θ ≤ 117.0 − 5.2·(x − 48.70)` ; `x ≤ 57.14 + 0.3858·z`
-**A320neo:** `x ≥ 27.39 + 0.8393·z` ; `θ ≤ 101.4 − 7.58·(x − 29.11)` ; `x ≤ 34.52 + 0.0538·z`
+**A320neo (PT-TMN, re-solved 2026-08-20):** `x ≥ 28.51 + 0.63·z` ; lower `z ≥ −1.2` and
+`θ ≤ 145` (white keel, tip at 27.75) ; rear piecewise `z:[−1.2,1.6,1.8,2.05] →
+x:[27.75, 32.80, 33.36, 33.85]` (meets the fin at the corrected ACAP station).
+
+Warning from that re-solve: the previous A320neo line here (`27.39 + 0.8393·z`)
+had been constructed parallel to the **mis-placed** fin LE of the old master and
+sat ~1.1 m too far forward; the competing spec table (crown crossing at 31.3) was
+crown-wrap projection bias from a from-below photo. Both were refuted by a
+door-anchored measurement on the registration photo (residuals < 0.02 m over
+z 0.4–1.6), cross-checked by the current-era registration and title positions
+clearing the line by 0.04–0.09 m — the fleet's almost-touching style. Never
+anchor a paint boundary to model geometry that has not itself passed the gate.
 
 The rear limit is the **fin trailing-edge line itself**: the indigo stops at the
 projection of the TE, and from there aft come the TE root fairing and the
