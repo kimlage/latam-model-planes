@@ -24,12 +24,12 @@ the terminals, the LATAM base and the cordillera open around it. The move is
 measured rather than eyeballed — see [§8 of the scenery
 manual](scenario/README.md).*
 
-![Drone orbit of the LATAM maintenance base at SCL](scenario/scl_base_v2.gif)
+![Drone orbit of the LATAM maintenance base at SCL](scenario/scl_base_v3.gif)
 
-*The second clip: one continuous drone orbit of the LATAM maintenance base —
-the official lockup on the ops building, the hangar, the fleet parked on
-Plataforma LATAM and the assembled PT-TMN at its stand, with the Andes
-pinned across the top. Constant angular rate, no hand-over
+*The second clip: one continuous 130-degree climbing orbit of the LATAM
+maintenance base — the official lockup opens it, the fleet rows carry the
+middle, and it ends looking down at the whole block with the assembled
+PT-TMN at its stand. Constant angular rate, no hand-over
 ([`scenario/base_flyover.py`](scenario/base_flyover.py)).*
 
 *The version history is kept in the repository: every `a320_scl_v*.gif` is
