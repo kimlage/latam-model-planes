@@ -7,15 +7,16 @@ dimensions have to match the manufacturer's document, and the paint has to match
 a photograph of that specific registration**. The bar is not "it looks like an
 airliner" — it is a LATAM engineer recognising their own aircraft.
 
-Five aircraft finished:
+Six aircraft finished — every one gated against photographs of its own
+registration:
 
-| Aircraft | Registration | File | Length |
-|---|---|---|---|
-| **Boeing 787-9 Dreamliner** | CC-BGK | [`boeing 787-9/B789_LATAM.blend`](boeing%20787-9/B789_LATAM.blend) | 62.81 m |
-| **Airbus A320neo** | PT-TMN | [`airbus A320neo/A320neo_LATAM.blend`](airbus%20A320neo/A320neo_LATAM.blend) | 37.57 m |
-| **Airbus A319 (ceo)** | PT-TMT | [`airbus A319/A319_LATAM.blend`](airbus%20A319/A319_LATAM.blend) | 33.84 m |
-| **Airbus A321neo (ACF)** | PS-LBA | [`airbus A321neo/A321neo_LATAM.blend`](airbus%20A321neo/A321neo_LATAM.blend) | 44.51 m |
-| **Airbus A321-231 (ceo)** | PT-MXP | [`airbus A321ceo/A321ceo_LATAM.blend`](airbus%20A321ceo/A321ceo_LATAM.blend) | 44.51 m |
+| | |
+|---|---|
+| <img src="airbus%20A320neo/render_hero.png" width="440"><br>**Airbus A320neo** · PT-TMN · 37.57 m<br>[`A320neo_LATAM.blend`](airbus%20A320neo/A320neo_LATAM.blend) | <img src="boeing%20787-9/render_hero.png" width="440"><br>**Boeing 787-9 Dreamliner** · CC-BGK · 62.81 m<br>[`B789_LATAM.blend`](boeing%20787-9/B789_LATAM.blend) |
+| <img src="airbus%20A319/render_hero.png" width="440"><br>**Airbus A319 (ceo)** · PT-TMT · 33.84 m<br>[`A319_LATAM.blend`](airbus%20A319/A319_LATAM.blend) | <img src="airbus%20A320ceo/render_hero.png" width="440"><br>**Airbus A320ceo** · CC-BFO · 37.57 m<br>[`A320ceo_LATAM.blend`](airbus%20A320ceo/A320ceo_LATAM.blend) |
+| <img src="airbus%20A321ceo/render_hero.png" width="440"><br>**Airbus A321-231 (ceo)** · PT-MXP · 44.51 m<br>[`A321ceo_LATAM.blend`](airbus%20A321ceo/A321ceo_LATAM.blend) | <img src="airbus%20A321neo/render_hero.png" width="440"><br>**Airbus A321neo (ACF)** · PS-LBA · 44.51 m<br>[`A321neo_LATAM.blend`](airbus%20A321neo/A321neo_LATAM.blend) |
+
+In build: 787-8, 777-300ER and 767-300ER — the last three passenger types.
 
 The A319 is a spec-level derivation of the A320neo master: same nose and
 cross-section, the two constant-section plugs removed (1.60 m forward of the
@@ -48,6 +49,13 @@ against the neo's `35.48 + 0.822z`, identical within 5 cm, so the inherited
 paint stands (`airbus A321ceo/spec_a321ceo.json`, builders
 `build_a321ceo_fase1_geo.py` + `build_a321ceo_fase2_livery.py`, measurement
 `medir_echarpe_xpb2.py`).
+
+The A320ceo (CC-BFO, A320-214/SL) keeps the master's 37.57 m hull and swaps
+what its photographs and the ACAP's ceo pages change: the CFM56-5B pod at
+inlet 11.19, the empennage moved to where the ACAP draws it, pax doors raised
+to the ceo sill table, a 41-window row, indigo sharklets, and the rear wedge
+re-anchored to door 2 after a three-cause forensic on the photo rulers
+(`airbus A320ceo/spec_a320ceo.json`).
 
 ![A320neo departing RWY 17R at Santiago, seen head-on as the camera flies formation and cranes up around its starboard bow](airbus%20A320neo/a320_scl_v12.gif)
 
