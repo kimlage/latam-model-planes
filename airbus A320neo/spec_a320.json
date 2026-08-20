@@ -528,7 +528,12 @@
   "ponta": "lei sqrt ajustada por minimos quadrados (r=0.90*sqrt(x+0.025), w=0.943*sqrt(x-0.015)) misturada por smoothstep 0.9-1.5",
   "portas_janelas": "geometria analitica sobre a superficie v10 (funcao y_of com pinca e COMP), offsets em relevo"
  },
+ "sharklet": {
+  "pintura_2026-08-20": "lamina INDIGO macica nos dois lados, como no A321ceo (fotos PT-MXD/PT-MXP/PT-XPB e PS-LBO DSC00834: face inboard indigo, ponta cinza abaixo da transicao). 129 faces do mesh Asas com |y|>17.25 e z acima da diagonal 0.55+1.2*(17.9-|y|) -> LATAM_Indigo (fix_sharklet_indigo.py). O master deixava a face inboard branca/cinza (defeito latente da familia, sinalizado na derivacao do A321ceo).",
+  "aprendizado": "as constantes do A321ceo valem SEM reescala: a asa do ceo e o MESMO mesh master ~7% oversize (448 verts, pontas em |y| 19.142), verificado por diff face-a-face (0 diferencas). Reescalar pelo fator de oversize sub-seleciona 31 faces da raiz da lamina (y 18.40-18.71, z 0.55-1.12) e rende um degrau branco no bordo de fuga."
+ },
  "verificacoes": {
+  "sharklet_indigo_2026-08-20": "perfil re-renderizado antes/depois na mesma camera e comparado com o A321ceo aprovado e com a foto PS-LBO DSC00834 (Wikimedia): lamina indigo, transicao diagonal lisa, sem degrau; 6 angulos + verificacao_visual.png reconstruidos",
   "livery_vs_foto_2026-08-17": "CONFERIDO contra foto do proprio PT-TMN (ref_PT-TMN_wikimedia.jpg, Wikimedia Commons, Rafael Luiz, 2016-09-19): o modelo esta CERTO. O indigo desce mesmo da deriva sobre a fuselagem traseira cobrindo a porta 2, e a matricula PT-TMN e BRANCA dentro do indigo. Tailcone claro. IMPORTANTE: isso NAO vale para o 787-9, cuja fuselagem e toda branca e a matricula e indigo sobre branco — a aplicacao da livery no casco e especifica do tipo, so o desenho da deriva se repete.",
   "tailstrike_2026-08-18": {
    "achado": "Rotating about the main-gear contact point (17.71, 0, -3.670), the model allows only 7.75 deg of pitch before something touches the runway. The real A320 tailstrike angle is about 11.7 deg with the gear compressed.",

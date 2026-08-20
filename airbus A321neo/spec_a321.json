@@ -89,8 +89,13 @@
   "panelbump": "regenerado (a imagem do A320 estava sem dados no .blend — packed=false, filepath vazio): juntas circunferenciais nas cavernas do nariz + a cada ~2 m no barril + estacoes da cauda, lap joints em 4 linhas de v",
   "reg_porta_trem": "LBA (foto PS-LBO mostra so as 3 ultimas letras na porta do trem do nariz)"
  },
+ "sharklet": {
+  "pintura_2026-08-20": "lamina INDIGO macica nos dois lados, como no A321ceo (a propria PS-LBO DSC00834 mostra a face inboard indigo acima da fuselagem; tambem PT-MXD/PT-MXP/PT-XPB do ceo). 129 faces do mesh Asas com |y|>17.25 e z acima da diagonal 0.55+1.2*(17.9-|y|) -> LATAM_Indigo (fix_sharklet_indigo.py). O master herdado deixava a face inboard branca/cinza (defeito latente da familia, sinalizado na derivacao do A321ceo).",
+  "aprendizado": "as constantes do A321ceo valem SEM reescala: a asa do ceo e o MESMO mesh master ~7% oversize (448 verts, pontas em |y| 19.142), verificado por diff face-a-face (0 diferencas). Reescalar pelo fator de oversize sub-seleciona 31 faces da raiz da lamina (y 18.40-18.71, z 0.55-1.12) e rende um degrau branco no bordo de fuga. O objeto Asas tem offset so em x (+4.26), entao os limiares em y/z valem como estao."
+ },
  "verificacoes": {
   "gate_2026-08-20": "6 angulos renderizados e comparados com DSC00834/DSC00682/DSC00896 (PS-LBO) e foto de imprensa Airbus da PS-LBA; ver verificacao_visual.png",
+  "sharklet_indigo_2026-08-20": "perfil re-renderizado antes/depois na mesma camera e comparado com o A321ceo aprovado e com a foto PS-LBO DSC00834 (Wikimedia): lamina indigo, transicao diagonal lisa, sem degrau; 6 angulos + verificacao_visual.png reconstruidos",
   "sondas_raycast": "meia-largura barril 1.990 (esp ~1.99), crown/keel +-2.068 em x=20 — ok",
   "tailstrike": {
    "achado": "6.14 graus ate o Belly_DrenoAft (x=34.77) tocar a pista, pivo no trem principal (21.97, -3.670). O A321 real tem ~9.5-11 graus. Mesmo problema conhecido do A320 (7.75), amplificado pela fuselagem traseira mais longa: o mastro de dreno aft esta baixo demais e/ou o trem curto.",
