@@ -22,13 +22,23 @@
   "pax_fwd_x": 5.04,
   "pax_aft_x": 29.53,
   "pax_aft_nota": "fig 2-7-0-991-003 sheet 2: cota 29.53 ao CENTRO da porta (validada pelos overwing na mesma figura); fig -024 diz 29.64 (referencia do ponto critico da folha aberta). Folha modelada 29.14..30.15 (herdada do master, centro 29.65).",
-  "overwing_x": [14.43, 15.28],
-  "overwing_nota": "ACAP: pares em 14.43 E 15.28 (passo 0.85). O master neo usa 14.43/15.66 (+1.23) - passo 0.38 maior que o ACAP; mantido o do master na malha (diferenca 0.4 m no 2o hatch, anotada como pendencia do master).",
-  "carga": [8.16, 22.69, 26.29],
+  "overwing_x": [
+   14.43,
+   15.28
+  ],
+  "overwing_nota": "ACAP: pares em 14.43 E 15.28 (passo 0.85; foto CC-BFO mede 0.86). O mesh herdava o 15.66 do master (passo 1.23) e ficou registrado como pendencia; corrigido em 2026-08-20 junto com o master (build_a320ceo_geo3.py) e aneis repintados por build_a320ceo_livery.py.",
+  "carga": [
+   8.16,
+   22.69,
+   26.29
+  ],
   "pax_z_correcao_2026_08_20": "portas pax ERGUIDAS vs master: tabela 2-3-0 (solo z=-3.67): D1 sill 3.381 -> folha z -0.30..1.76; D4 sill 3.615 -> folha z -0.10..1.90. Master tinha -0.85..1.21 / -0.67..1.33 (~0.55 baixo). Foto CC-BFO confirma independente: porta1 -0.35..1.55, porta2 topo ~1.85 (calibre vertical = altura da folha 155px/1.99m). PENDENCIA equivalente no master neo e no A319."
  },
  "janelas_cabine": {
-  "z_cinto": [0.52, 0.86],
+  "z_cinto": [
+   0.52,
+   0.86
+  ],
   "pitch_m": 0.5334,
   "primeira_x": 6.18,
   "n_janelas": 41,
@@ -48,7 +58,10 @@
  "empenagem": {
   "fin_LE": "x = 0.863*z + 28.02 (reta z 3.0..7.6; filete dorsal curva a frente abaixo de z~3 ate a crista em ~29.7)",
   "fin_TE": "x = 0.221*z + 34.91 (raiz z1.55: 35.25; topo z8.05: 36.69)",
-  "fin_z": [1.55, 8.05],
+  "fin_z": [
+   1.55,
+   8.05
+  ],
   "estab_shift_vs_master": 0.87,
   "estab_tip_TE_x": 36.62,
   "estab_span": 12.45,
