@@ -203,6 +203,18 @@ def main():
             ("A321ceo", os.path.join(ROOT, "airbus A321ceo",
                                      "A321ceo_LATAM.blend"),
              (-435.0, -1345.0)),   # between the hero row and the neo
+            # the wide-bodies take the north end of Plataforma LATAM, where
+            # the apron is deepest: the 777 needs 65 m of span and 74 m of
+            # length, which no narrow-body stand can hold
+            ("B77W", os.path.join(ROOT, "boeing 777-300ER",
+                                  "B77W_LATAM.blend"),
+             (-660.0, -1090.0)),
+            ("B788", os.path.join(ROOT, "boeing 787-8",
+                                  "B788_LATAM.blend"),
+             (-455.0, -1130.0)),
+            ("B763", os.path.join(ROOT, "boeing 767-300ER",
+                                  "B763_LATAM.blend"),
+             (-655.0, -1235.0)),
         )
         for tag, path, stand_i in MASTERS:
             if not os.path.exists(path):
