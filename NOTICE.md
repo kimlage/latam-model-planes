@@ -16,7 +16,7 @@ Suggested attribution for the models and images:
 
 ## Trademarks
 
-**LATAM**, the LATAM symbol, **Airbus**, **A320neo**, **Boeing**, **787** and
+**LATAM**, the LATAM symbol, **Airbus**, **A319**, **A320neo**, **Boeing**, **787** and
 **Dreamliner** are trademarks of their respective owners. This is an
 **independent, non-commercial project with no affiliation, sponsorship or
 endorsement** from LATAM Airlines Group, Airbus S.A.S. or The Boeing Company.
@@ -35,6 +35,7 @@ licences above. To reproduce the pipeline from scratch, get them from the source
 | File | What it is | Where to get it |
 |---|---|---|
 | `A320_ACAP_airbus.pdf` | A320 *Aircraft Characteristics — Airport & Maintenance Planning* | Airbus **Aircraft Characteristics** page (free) |
+| `airbus A319/A319_ACAP_airbus.pdf` | A319 ACAP, Rev. 30 Jul/26 | Airbus **Aircraft Characteristics** page (free) |
 | `boeing 787-9/B787_APR_boeing.pdf` | 787 *Airplane Characteristics* D6-58333 | Boeing, **Airport Compatibility / ACAPs** section (free) |
 | `latam_logo_indigo.svg` | Official LATAM lockup (symbol + wordmark) | Wikimedia Commons |
 | `airbus_a320neo_logo.svg`, `dreamliner_logo.svg` | Manufacturer titles | Wikimedia Commons |

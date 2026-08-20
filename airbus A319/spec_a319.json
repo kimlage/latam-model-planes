@@ -1,0 +1,106 @@
+{
+ "fonte": "Airbus ACAP AC_A319 Rev.30 Jul 01/26 (aca31901-jul-2026-2.pdf, paginas raw 42-43 fence 600dpi, 49-53 clearances, 63-64 interiores, 72-79 portas) + derivacao parametrica do spec_a320.json (secao/nariz identicos por engenharia: A319 = A320 menos 7 cavernas) + fotogrametria Wikimedia CC0 PT-TMT 2023-09-11 (ref_sdu_00/01.jpg, calibracao nariz+cauda 33.84 m, transform similaridade residuo <0.1 m)",
+ "matricula": "PT-TMT",
+ "matricula_fonte": "Airbus A319-132, MSN 2321, ex CC-CPE/D-AVYO, LATAM Brasil, motores IAE V2524-A5. Escolhida por ter as fotos CC0 mais nitidas e recentes (2023) na livery indigo/coral atual: Wikimedia 'Airbus A319-132 of LATAM at Santos Dumont Airport(_01).jpg'. Candidatas CC-COX/CC-CPF/CC-CPI/PT-TMC/PT-TMD tinham apenas fotos JetPhotos (403 p/ download) ou fotos antigas em livery LAN/TAM.",
+ "datum": "x=0 na ponta do nariz; z=0 no meio da secao constante; unidades m (mesmo referencial do spec_a320)",
+ "dimensoes_gerais": {
+  "comprimento": 33.84,
+  "envergadura_fence": 34.10,
+  "altura": 11.76,
+  "fuselagem_largura": 3.95,
+  "fuselagem_altura": 4.14,
+  "entre_eixos": 11.04,
+  "bitola": 7.59,
+  "fonte": "ACAP 2-2-0 fig 991-002 sheets 1-2 (wing tip fence). PT-TMT tem FENCE, nao sharklet (foto)."
+ },
+ "derivacao_do_a320": {
+  "regra": "A319 = A320 com 2 plugs removidos NA SECAO CONSTANTE: 1.60 m (3 cavernas) a frente da asa e 2.13 m (4 cavernas) atras. Nariz (x<=6.96) identico; barril encurtado 6.96..20.43; cauda = cauda do A320 transladada -3.73.",
+  "validacao": "trem principal 17.71-1.60=16.11 (=5.07+11.04 ACAP OK); porta overwing 14.43-1.60=12.83 (ACAP OK); ponta da cauda 37.57-3.73=33.84 (ACAP OK); perfil crown/keel lateral 600dpi bate com A320 deslocado dentro do ruido de traco (~0.05 m)"
+ },
+ "cavernas_nariz": "identicas ao spec_a320.json (mesma secao, mesmo cockpit, mesmo parabrisa, mesma pinca do lobo superior)",
+ "secao_constante": {
+  "x": [6.96, 20.43],
+  "nota": "A320: 6.96..24.16. Encurtada pelos dois plugs (1.60+2.13)."
+ },
+ "cauda": "estacoes do A320 (26.00..37.57 no master) transladadas -3.73 -> 22.27..33.84; mesma forma (elipse w=0.954r)",
+ "portas": {
+  "pax_fwd_x": 5.04,
+  "pax_aft_x": 25.81,
+  "overwing_x": 12.83,
+  "overwing_pares": 1,
+  "overwing_nota": "ACAP 2-7-0: saida overwing DIANTEIRA standard em 12.83; a AFT (13.68, +0.85) e OPCIONAL e NAO existe nos A319 da TAM/LATAM Brasil (foto PT-TMC 2012 mostra UMA escotilha; PT-TMT idem). Escotilha 0.50 x 0.90 m.",
+  "carga_fwd": [8.16, 1.82, 1.24],
+  "carga_aft": [20.56, 1.82, 1.23],
+  "carga_bulk_x": 22.57,
+  "carga_bulk_nota": "estimada mantendo a distancia porta4->bulk do A320 (3.24 m adiante); ACAP nao cota o bulk na fig de localizacao",
+  "fonte": "ACAP 2-7-0 fig 991-002 sheet 2 (5.04/12.83/25.81/8.16/20.56 FROM NOSE)"
+ },
+ "trem": {
+  "nariz_x": 5.07,
+  "principal_x": 16.11,
+  "bitola": 7.59,
+  "roda_principal_diam": 1.17,
+  "roda_nariz_diam": 0.76,
+  "fonte": "ACAP 2-2-0 (5.07 nariz->NLG, 11.04 entre-eixos, 7.59 bitola); pernas identicas ao A320"
+ },
+ "motor_v2500": {
+  "modelo": "IAE V2524-A5 (A319-132)",
+  "inlet_x": 9.52,
+  "y": 5.75,
+  "nacelle_diametro": 2.2,
+  "fan_diametro": 1.6,
+  "clearance_solo": 0.51,
+  "fonte": "ACAP top view 'V2500 9.52 m'; y=5.75 (mesmo do A320); clearance fig 2-7-0-991-016 (V2500 0.51 m); diametros IAE V2500-A5 publicos (fan 1.613 m). Nacelle derivada da do A320neo escalada radial x0.846, comprimento x0.88, sem chevrons, fan cowl branco, lip metalico."
+ },
+ "asa": {
+  "planform": "identica ao A320 (mesma asa), transladada -1.60",
+  "wingtip": "FENCE (nao sharklet): corte do sharklet do master em |y|=18.45 e fence classica ~0.6 m para cima/baixo, corda ~1.1 m, indigo com banda coral (foto PT-TMT)",
+  "nota_escala": "o master A320 tem asa 38.28 m de envergadura (7% acima do real 35.8); o corte em 18.45 preserva a proporcao interna do master (36.9/38.28 ~ 34.10/35.80)"
+ },
+ "empenagem": {
+  "fin_LE": "x = 0.851*z + 23.866 (reta; ACAP 600dpi ancorado no trem: LE z4=27.27, z7.5=30.25; foto PT-TMT: 27.06 em z4)",
+  "fin_TE": "x = 0.220*z + 30.72 (ACAP: TE z4=31.60, z7.5=32.37; foto: 31.79 em z4)",
+  "fin_z": [1.55, 8.05],
+  "estab_tip_TE_x": 32.89,
+  "estab_span": 12.45,
+  "estab_delta_vs_master_a320": -2.86,
+  "achado_a320": "AMBOS os ACAPs (A319 e A320, medidos pelo mesmo metodo ancorado nos trens) e a foto do PT-TMT poem a empenagem ~1.0-1.4 m ATRAS de onde o master A320neo a modelou (Deriva TE topo 34.95 no master vs ~36.4 no ACAP A320; estab tip TE 35.75 vs 36.7). O shift A319-A320 real e -3.73 limpo. PENDENTE para o A320: conferir e possivelmente recuar a empenagem do master. O A319 foi construido pelo SEU ACAP + foto.",
+  "deriva_geometria": "mesh do master remapeada por (h,c): x' = LE_novo(z) + c*(TE_novo-LE_novo), c=(x-LE_320)/(TE_320-LE_320) com LE_320=0.8393z+26.773, TE_320=34.60+0.0538(z-1.55); UV preservada (arte do sash e invariante em (h,c))"
+ },
+ "janelas_cabine": {
+  "z_cinto": [0.52, 0.86],
+  "pitch_m": 0.515,
+  "primeira_x": 6.08,
+  "n_janelas": 35,
+  "nota": "master A320 usa 40; comecou em 33 (-7 cavernas) mas o render-match contra a foto mostrou a fileira chegando ate ~x24.3, logo antes da echarpe -> 35"
+ },
+ "verificacoes": {
+  "render_match_2026-08-20": "camera ortografica casada com a foto ref_sdu_00 (escala 79.7 px/m, rolagem 15.6 graus): silhueta, deriva, echarpe, trem, motor e proporcoes conferem lado a lado; fileira de janelas corrigida 33->35",
+  "tailstrike_2026-08-20": "Rotacionando sobre o contato do trem principal (16.11, 0, -3.67): 9.75 graus limitado pelo Belly_DrenoAft (x24.1), casco sozinho 12.21. Real ~13.9. MESMA limitacao herdada do master A320 (dreno aft possivelmente baixo/atras demais) — registrada, nao corrigida aqui."
+ },
+ "livery_pt_tmt": {
+  "fonte": "fotogrametria ref_sdu_00.jpg (perfil, CC0, 2023-09-11): transform de similaridade ancorada em nariz + TE da deriva (ACAP); leitura da fronteira em imagem RETIFICADA para o plano (x,z) com grade metrica (insp_wedge_rect2.png), regua local = porta 4 do ACAP; confirmacao da forma na foto do PR-MBU (ref_sdu_04)",
+  "echarpe_fronteira": "CURVA (swoosh), NAO reta, e com inclinacao OPOSTA a do A320/PT-TMN: adiante na crista, varrendo para TRAS ao descer. Quadratica x_b(z) = 25.511 - 1.003*z + 0.203*z^2 ajustada aos pontos (2.10,24.25) (1.00,24.85) (0.00,25.45) (-0.70,26.10) (-1.00,26.90); clamp z -1.05..2.4",
+  "echarpe_lower": "z >= -1.05 + 0.26*(x-26.9) (linha baixa subindo para o tailcone) e |theta| <= 150 (quilha branca)",
+  "echarpe_rear": "x <= 31.30 + 0.10*z (aresta da carenagem da raiz do TE da deriva); tailcone branco, anel APU metalico x 33.05-33.45",
+  "porta4": "a folha SEGUE a fronteira (parte baixa branca — confirmado no PR-MBU); contorno branco 0.058 m pintado por cima",
+  "matricula": "PT-TMT BRANCA dentro do indigo, x 26.45-28.45, z 0.22-0.66 (altura 0.44); glifos do mesh Reg oficial do master reombinados P,T,-,T,M,T",
+  "titulo": "'AIRBUS A319' indigo sobre branco, logo acima da fronteira, x 23.45-25.20, z 1.04-1.21; glifos swirl+AIRBUS+A+3 do SVG oficial airbus_a320neo_logo.svg; '1' e '9' reconstruidos ('1' = stem do I; '9' = anel + haste) (DESVIO documentado: nao existe SVG oficial 'A319' no Commons)",
+  "hstab": "extradorso INDIGO como no PT-TMN atual (foto PT-TMT confirma topo escuro), intradorso branco",
+  "fence": "outboard indigo com banda coral diagonal; inboard branco/cinza (foto ref_sdu_01)",
+  "lockup": "LATAM + simbolo coral: MESMA posicao do A320 (fuselagem dianteira identica): E x5.7-11.9, D idem espelhado, barriga x5.9",
+  "weathering": "PT-TMT e airframe 2004: sujeira moderada — leque do trem do nariz, escorridos dos drenos, grime portas do trem (fac 0.15-0.35)"
+ },
+ "ventre": "componentes do spec_a320 ventre_real com shifts: zona nariz (DME1/ATC/TCAS/dreno fwd) mantida; zona carenagem (ram-air/packs/DME2/placas RA) -1.60; zona traseira (VHF2/beacon inf/dreno aft/outflow/APU) -3.73 com ajuste para nao colidir com a carenagem",
+ "texturas": {
+  "LiveryTex+LiveryFac": "regeneradas 4096x1024 (x,theta), comprimento_uv=34.2, supersample 2x",
+  "NoseMask": "reamostrada do master (nariz identico em metros; so muda a escala u)",
+  "FinSashE/D": "REUTILIZADAS do master (mesma arte); UV da Deriva preservada no remap (h,c)",
+  "PanelBump": "regenerada: juncoes circunferenciais nas cavernas novas + lap joints"
+ },
+ "confianca": {
+  "oficial_acap": ["comprimento", "envergadura", "entre_eixos", "bitola", "portas pax/overwing/carga fwd-aft", "trem", "motor inlet_x", "estab span", "secao/altura fuselagem"],
+  "fotogrametria_pm015": ["echarpe", "matricula posicao", "titulo posicao", "fence pintura", "fin LE/TE (confere ACAP +-0.2)"],
+  "derivado_master": ["secao mestre", "pinca lobo superior", "parabrisa", "nacelle forma", "trem geometria", "carga bulk posicao"]
+ }
+}

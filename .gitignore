@@ -6,6 +6,7 @@
 # Documentos dimensionais dos fabricantes (Airbus ACAP / Boeing APR).
 # Sao gratuitos no site do fabricante, mas com direitos reservados.
 A320_ACAP_airbus.pdf
+**/A319_ACAP_airbus.pdf
 **/B787_APR_boeing.pdf
 
 # Rasterizacoes e recortes derivados desses documentos

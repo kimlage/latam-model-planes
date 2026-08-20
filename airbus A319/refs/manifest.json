@@ -1,0 +1,44 @@
+[
+ {
+  "local": "ref_sdu_00.jpg",
+  "title": "File:Airbus A319-132 of LATAM at Santos Dumont Airport.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Airbus_A319-132_of_LATAM_at_Santos_Dumont_Airport.jpg",
+  "original": "https://upload.wikimedia.org/wikipedia/commons/c/c7/Airbus_A319-132_of_LATAM_at_Santos_Dumont_Airport.jpg",
+  "w": 4390,
+  "h": 2860,
+  "author": "developer analys (Wikidata Q115464159)",
+  "license": "CC0",
+  "licurl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "date": "2023-09-11 14:52:04",
+  "desc": "PT-TMT em perfil quase puro, decolagem no Galeao (o nome do arquivo diz Santos Dumont, a descricao diz Galeao). Foto MESTRA da fotogrametria: echarpe, matricula, titulo, deriva, motor V2500, fence. CC0 - sem restricao.",
+  "bytes": 2795803
+ },
+ {
+  "local": "ref_sdu_01.jpg",
+  "title": "File:Airbus A319-132 of LATAM at Santos Dumont Airport 01.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Airbus_A319-132_of_LATAM_at_Santos_Dumont_Airport_01.jpg",
+  "original": "https://upload.wikimedia.org/wikipedia/commons/9/95/Airbus_A319-132_of_LATAM_at_Santos_Dumont_Airport_01.jpg",
+  "w": 5107,
+  "h": 3403,
+  "author": "developer analys (Wikidata Q115464159)",
+  "license": "CC0",
+  "licurl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "date": "2023-09-11 14:52:11",
+  "desc": "PT-TMT em curva apos decolagem, vista de tras/baixo: barriga, echarpe vista por baixo, fence com banda coral, porta 4 dentro do indigo.",
+  "bytes": 8760900
+ },
+ {
+  "local": "ref_sdu_04.jpg",
+  "title": "File:Airbus A319-132 of LATAM at Santos Dumont Airport 04.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Airbus_A319-132_of_LATAM_at_Santos_Dumont_Airport_04.jpg",
+  "original": "https://upload.wikimedia.org/wikipedia/commons/5/56/Airbus_A319-132_of_LATAM_at_Santos_Dumont_Airport_04.jpg",
+  "w": 2967,
+  "h": 1778,
+  "author": "developer analys (Wikidata Q115464159)",
+  "license": "CC0",
+  "licurl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "date": "2023-09-11 14:20:56",
+  "desc": "PR-MBU (A319 LATAM Brasil, titulos especiais 'Aviao Solidario') decolando. Usada para confirmar a forma curva (swoosh) da fronteira da echarpe e a porta 4 seguindo a fronteira.",
+  "bytes": 2460982
+ }
+]
