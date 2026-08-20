@@ -1,0 +1,97 @@
+{
+ "fonte": "Airbus ACAP A321 Rev 35 (Jul 01/26), blocos ON A/C A321neo-ACF + derivacao parametrica do spec_a320.json (mesma secao transversal, mesmo nariz, mesma empenagem) + fotogrametria PS-LBO (Wikimedia, ver refs_manifest.json)",
+ "aeronave": "Airbus A321-271NX (A321neo ACF), PS-LBA, LATAM Airlines Brasil, MSN 11524, entregue out/2023",
+ "datum": "x=0 na ponta do nariz; z=0 no meio da secao constante; unidades m",
+ "derivacao": {
+  "base": "airbus A320neo/A320neo_LATAM.blend + spec_a320.json (v10 aprovado)",
+  "alongamento": "plug dianteiro +4.26 m a frente da asa, plug traseiro +2.68 m atras (total +6.94 m). O valor dianteiro e travado pelo ACAP: trem principal 5.07+16.90=21.97 (A320: 17.71; delta 4.26) e entrada do motor 15.40 (A320: 11.14; delta 4.26). Total: 44.51-37.57=6.94.",
+  "mapa_x": "x<=11.5 inalterado; 11.5<x<=26.4 -> +4.26; x>26.4 -> +6.94; aneis de barril duplicados em x=12.1, 14.2, 32.94 (secao constante identica, subsurf preserva o cilindro)",
+  "nariz": "cavernas identicas ao spec_a320.json (mesma secao, mesmo para-brisa, NoseMask reamostrado para L_uv=45)",
+  "cauda": "aneis do A320 deslocados +6.94 (geometria do cone identica)",
+  "uv": "u=x/45.0 (era x/38.0); v=(theta+pi)/2pi em torno do centro da secao"
+ },
+ "dimensoes_gerais": {
+  "comprimento": 44.51,
+  "envergadura_sharklets": 35.8,
+  "altura": 11.76,
+  "fuselagem_largura": 3.95,
+  "fuselagem_altura": 4.14,
+  "entre_eixos": 16.90,
+  "bitola": 7.59,
+  "fonte": "ACAP A321 Rev 35, FIGURE-2-2-0-991-012-A01 (paginas brutas 73-74, blocos ACF)"
+ },
+ "trem": {
+  "nariz_x": 5.07,
+  "principal_x": 21.97,
+  "bitola": 7.59,
+  "roda_principal_diam": 1.17,
+  "roda_nariz_diam": 0.76,
+  "nota": "nariz_x e entre_eixos do ACAP; rodas herdadas do A320 (o A321 usa pneus um pouco maiores; nao ajustado, diferenca visual <3%)"
+ },
+ "motor_pw1100g": {
+  "inlet_x": 15.40,
+  "y": 5.75,
+  "nacelle_diametro": 2.6,
+  "fan_diametro": 2.06,
+  "sem_chevrons": true,
+  "nota": "A321-271NX = PW1127G (mesma familia PW1100G do A320neo LATAM; '27x'=PW). inlet_x 15.40 impresso no ACAP (top view ACF). Nacelle herdada do A320neo."
+ },
+ "portas_acf": {
+  "fonte": "ACAP A321 Rev 35, FIGURE-2-7-0-991-047-A01 (paginas brutas 115-116, ON A/C A321neo-ACF)",
+  "porta1_x": 5.04,
+  "overwing_fwd_x": 18.70,
+  "overwing_aft_x": 19.54,
+  "porta3_x": 26.82,
+  "porta4_x": 36.47,
+  "porta4_x_modelo": 36.58,
+  "nota_porta4": "no modelo a porta 4 e a Porta2 do A320 deslocada exatamente +6.94 para manter o encaixe na superficie do cone; erro de 0.11 m vs ACAP, aceito",
+  "carga": {"fwd": 8.56, "aft": 30.02, "bulk": 33.22},
+  "config": "ACF: 3 pares de portas de tamanho cheio (1, 3, 4) + 2 pares de saidas overwing; SEM porta 2 dianteira. Confirmado nas fotos PS-LBO.",
+  "folhas": "mesmas dimensoes do A320 (pax 0.81x1.85, overwing tipo III)"
+ },
+ "janelas_cabine": {
+  "z_cinto": [0.52, 0.86],
+  "pitch_m": 0.515,
+  "primeira_x": 6.08,
+  "n_janelas_modelo": 57,
+  "ultima_x_foto": 34.88,
+  "nota": "fileira continua ate x~35.05 no modelo; na foto PS-LBO a ultima janela fica em ~34.9, logo antes da echarpe"
+ },
+ "cauda_livery_ps_lba": {
+  "fonte": "fotogrametria DSC00834 PS-LBO (calibracao quadratica px(x) nas portas do ACAP D1/D3/D4, validada nas saidas overwing a +-3 px; mapa vertical afim py(px,z) ancorado nas silhuetas crown/keel; ver medir_echarpe_v2.py). Incerteza +-0.10-0.15 m.",
+  "echarpe": {
+   "frontal": "x >= 35.48 + 0.822*z  (rms 0.10 m, n=46; NAO e o deslocamento cego do A320, que daria 34.33+0.839z — 1.15 m mais a frente)",
+   "inferior": "theta <= max(129.0 - 23.7*(x-34.45), 105.3 - 3.78*(x-36.05)) graus a partir da crista — duas retas em (x,theta): segmento ingreme do bico + reta principal. A reta principal e mais funda e mais rasa que a do A320 deslocado (101.4 - 7.58*(x-36.05)).",
+   "traseira": "x <= 41.46 + 0.0538*z (linha do BF da deriva, A320 +6.94; medido 41.23+-0.15 em z=1.9, dentro da tolerancia)",
+   "bico_foto": [34.45, -1.22],
+   "porta4": "folha dividida pela fronteira: indigo acima de z=-0.11, branco abaixo (foto mostra a fronteira cruzando o terco inferior da folha); contorno branco pintado na textura"
+  },
+  "matricula": "PS-LBA BRANCA dentro do indigo (estilo de fabrica, foto de imprensa Airbus out/2023 e patch branco na PS-LBO), x 37.15-39.12, z 0.70-1.10, altura 0.40, Arial Bold (mesma fonte do modelo A320); espelhada em (x,theta) no lado direito",
+  "titulo": "AIRBUS A321neo em x 33.55-35.42, caps z 0.88-1.03 (altura 0.145, comprimento 1.87; foto: 33.55-35.35). 'AIRBUS' reaproveitado da malha MarkAirbusNeo do A320; 'A321neo' do SVG oficial (Wikimedia, Airbus_A321neo_typeface.svg, PD-textlogo). Medido na foto: caps 0.145 m, comprimento total 1.77 m.",
+  "hstab": "extradorso CINZA-VOO (fotos PS-LBO 2025 + foto de imprensa; difere do A320 PT-TMN atual que e indigo — aplicacao especifica do tipo/epoca)",
+  "fin_sash": "mesma arte do A320/787 (transferencia (h,c)); CORRECAO 2026-08-20: a regiao abaixo da banda inferior era cinza nas texturas FinSashE/D herdadas — a foto (e o proprio spec fin_bandas: 'resto: indigo') mostram indigo ate a raiz. Repintado (168k texels por lado). O master A320 carrega o mesmo defeito latente.",
+  "tailcone": "branco, anel APU metal — como A320"
+ },
+ "correcoes_da_derivacao": {
+  "contornos_movidos_na_textura": "carga fwd +0.40 (8.16->8.56), carga aft +7.33 (22.69->30.02), bulk +6.94, overwing2 -0.38 apos o mapa (+3.88 total), porta3 = anel/faixa FAR da porta1 copiado para +21.78",
+  "marcas_removidas": "PRIMEIRO A320neo DA AMERICA DO SUL (exclusivo PT-TMN), logo A320neo do nariz, matricula PT-TMN, titulos AIRBUS A320neo",
+  "espelhamento": "novas marcas do lado direito espelhadas em u antes da rasterizacao (aprendizado: rasterizar os mesmos triangulos nos dois lados produz texto espelhado a estibordo)",
+  "panelbump": "regenerado (a imagem do A320 estava sem dados no .blend — packed=false, filepath vazio): juntas circunferenciais nas cavernas do nariz + a cada ~2 m no barril + estacoes da cauda, lap joints em 4 linhas de v",
+  "reg_porta_trem": "LBA (foto PS-LBO mostra so as 3 ultimas letras na porta do trem do nariz)"
+ },
+ "verificacoes": {
+  "gate_2026-08-20": "6 angulos renderizados e comparados com DSC00834/DSC00682/DSC00896 (PS-LBO) e foto de imprensa Airbus da PS-LBA; ver verificacao_visual.png",
+  "sondas_raycast": "meia-largura barril 1.990 (esp ~1.99), crown/keel +-2.068 em x=20 — ok",
+  "tailstrike": {
+   "achado": "6.14 graus ate o Belly_DrenoAft (x=34.77) tocar a pista, pivo no trem principal (21.97, -3.670). O A321 real tem ~9.5-11 graus. Mesmo problema conhecido do A320 (7.75), amplificado pela fuselagem traseira mais longa: o mastro de dreno aft esta baixo demais e/ou o trem curto.",
+   "acao": "registrado, nao corrigido — modelo estatico; herdado do A320 master"
+  },
+  "posicoes": "trem principal 21.97 = 5.07+16.90 ACAP; inlet motor 15.40 = ACAP; portas conferidas no build (ver build_a321_fase1_geometria.py output)"
+ },
+ "confianca": {
+  "oficial_acap": ["comprimento", "envergadura", "altura", "entre_eixos", "bitola", "portas_acf", "carga", "inlet_x"],
+  "derivado_do_a320_validado": ["secao transversal", "nariz/para-brisa", "cone de cauda", "asa/empenagem", "nacelle", "carenagem ventral"],
+  "fotogrametria_ps_lbo": ["echarpe (3 fronteiras)", "titulo", "matricula", "hstab cinza", "janelas ultima_x", "fin root indigo"],
+  "incerteza_fotogrametria": "+-0.10-0.15 m (declarada em cauda_livery_ps_lba.fonte)"
+ }
+}

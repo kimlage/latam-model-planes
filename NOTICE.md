@@ -36,10 +36,12 @@ licences above. To reproduce the pipeline from scratch, get them from the source
 |---|---|---|
 | `A320_ACAP_airbus.pdf` | A320 *Aircraft Characteristics — Airport & Maintenance Planning* | Airbus **Aircraft Characteristics** page (free) |
 | `airbus A319/A319_ACAP_airbus.pdf` | A319 ACAP, Rev. 30 Jul/26 | Airbus **Aircraft Characteristics** page (free) |
+| `airbus A321neo/A321_ACAP_airbus.pdf` | A321 ACAP, Rev. 35 Jul/26 (covers neo/ACF/XLR) | Airbus **Aircraft Characteristics** page (free) |
 | `boeing 787-9/B787_APR_boeing.pdf` | 787 *Airplane Characteristics* D6-58333 | Boeing, **Airport Compatibility / ACAPs** section (free) |
 | `latam_logo_indigo.svg` | Official LATAM lockup (symbol + wordmark) | Wikimedia Commons |
-| `airbus_a320neo_logo.svg`, `dreamliner_logo.svg` | Manufacturer titles | Wikimedia Commons |
+| `airbus_a320neo_logo.svg`, `airbus_a321neo_logo.svg`, `dreamliner_logo.svg` | Manufacturer titles | Wikimedia Commons |
 | `ref_CC-BGP_wikimedia.jpg`, `ref_PT-TMN_wikimedia.jpg` | Reference photographs of the registrations | Wikimedia Commons / JetPhotos / Planespotters |
+| `airbus A321neo/ref_PS-LBO_wikimedia_*.jpg` | PS-LBO reference photographs (CC BY-SA 4.0, share-alike — cited, not shipped) | credits in `airbus A321neo/refs_manifest.json` |
 
 The manufacturer documents are free downloads, but **free to download is not
 free to redistribute**: the rights stay with Airbus and Boeing.

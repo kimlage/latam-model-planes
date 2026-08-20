@@ -7,13 +7,14 @@ dimensions have to match the manufacturer's document, and the paint has to match
 a photograph of that specific registration**. The bar is not "it looks like an
 airliner" — it is a LATAM engineer recognising their own aircraft.
 
-Three aircraft finished:
+Four aircraft finished:
 
 | Aircraft | Registration | File | Length |
 |---|---|---|---|
 | **Boeing 787-9 Dreamliner** | CC-BGK | [`boeing 787-9/B789_LATAM.blend`](boeing%20787-9/B789_LATAM.blend) | 62.81 m |
 | **Airbus A320neo** | PT-TMN | [`airbus A320neo/A320neo_LATAM.blend`](airbus%20A320neo/A320neo_LATAM.blend) | 37.57 m |
 | **Airbus A319 (ceo)** | PT-TMT | [`airbus A319/A319_LATAM.blend`](airbus%20A319/A319_LATAM.blend) | 33.84 m |
+| **Airbus A321neo (ACF)** | PS-LBA | [`airbus A321neo/A321neo_LATAM.blend`](airbus%20A321neo/A321neo_LATAM.blend) | 44.51 m |
 
 The A319 is a spec-level derivation of the A320neo master: same nose and
 cross-section, the two constant-section plugs removed (1.60 m forward of the
@@ -22,6 +23,17 @@ the A319 ACAP, IAE V2500 nacelles, wingtip fences instead of sharklets, single
 overwing exit, and the PT-TMT ecarpe/registration measured on CC0 photographs
 (`airbus A319/spec_a319.json`, builders `build_a319_geo.py` +
 `build_a319_livery.py`).
+
+The A321neo is the opposite derivation from the same master: two
+constant-section plugs added (+4.26 m forward of the wing — pinned by the ACAP
+gear and engine stations, 5.07 + 16.90 = 21.97 and inlet 15.40 — and +2.68 m
+aft), tail translated 6.94 m aft, ACF door set (D1 + two overwing pairs +
+D3 + D4, cargo 8.56/30.02/33.22) per the A321 ACAP Rev 35, and the PS-LBA
+livery re-solved photogrammetrically on PS-LBO delivery photos: the rear wedge's
+forward boundary sits 1.15 m aft of a blind +6.94 shift and its lower boundary
+is two straight lines in `(x, θ)`, not one (`airbus A321neo/spec_a321.json`,
+builders `build_a321_fase1_geometria.py` + `build_a321_fase2_livery.py`,
+measurement `medir_echarpe_v2.py`).
 
 ![A320neo departing RWY 17R at Santiago, seen head-on as the camera flies formation and cranes up around its starboard bow](airbus%20A320neo/a320_scl_v11.gif)
 
