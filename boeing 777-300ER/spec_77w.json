@@ -296,7 +296,9 @@
     0.92
    ]
   ],
-  "nota": "V inferior caracteristico: a borda de baixo dos dois vidros centrais desce em direcao ao centro (na foto 083 le-se claramente). Montante central estreito ~0.10. Aplicar como NoseMask UV igual ao 787."
+  "nota": "V inferior caracteristico: a borda de baixo dos dois vidros centrais desce em direcao ao centro (na foto 083 le-se claramente). Montante central estreito ~0.10. Aplicar como NoseMask UV igual ao 787.",
+  "construcao_no_modelo": "Construido em (x,z) e convertido para (x,theta) pelo angulo parametrico da secao: x 1.45..3.05 com dois montantes (1.90-1.96 e 2.46-2.52); topo z = min(crista(x)-0.16, 0.97); base = topo - (0.50 + 0.085*(x-1.45)). Faixa de x e altura vem da VISTA LATERAL do APR p.18 @600 dpi, onde os tres vidros estao desenhados entre x 1.39..3.00 e z 0.36..0.99 (calibracao: eixo z=0 na linha 486.5, 35.0 px/m).",
+  "duvida": "Na foto FRA o vidro APARENTE fica em x 2.03..3.17 e z 0.78..1.35 — 0.6 m mais atras e 0.4 m mais alto do que o desenho. O deslocamento em z e explicado pela elevacao da camera (+16.5 graus: um ponto em theta=40 aparece 0.47 m mais alto do que esta), e o de x pelo fato de a parte dianteira do vidro CONTORNAR o nariz e ficar escondida numa vista de baixo. Seguimos o desenho, mas a extensao dianteira exata do vidro #1 (o quanto ele sobe em direcao a crista) e o ponto menos certo desta livery — vale conferir numa foto frontal de perto."
  },
  "portas_pax": {
   "centros_x": [
@@ -480,8 +482,8 @@
  },
  "confianca": {
   "alta": "dimensoes gerais, entre-eixos, bitola, portas pax/carga x (porta 5 confirmada em foto), janela pitch (documento), fin BA/BF (conferido em pixel: 58.06+0.985z / 68.34+0.385z), asa LE/TE, ponta raked (cotas impressas), motor inlet_x/cl_y/OD, tires, bandas da deriva (2 fotos), cunha indigo (fronteiras medidas)",
-  "media": "estacoes nariz (+-0.05), cauda centro/raio (+-0.1), parabrisa (+-0.05 no frontal; gate_x da lateral estilizada), diedro, carenagem ventral, w_ratio da lamina do cone",
-  "baixa": "carenagens de flap y, stab raiz_z, nacelle top/pylon, cor real do ventre traseiro (sombra)"
+  "media": "estacoes nariz (+-0.05), cauda centro/raio (+-0.1), diedro, carenagem ventral, w_ratio da lamina do cone, carenagens de flap (y da foto), lockup/registro/titulo (+-0.15 m), simbolo do ventre (arco estimado pela razao oficial)",
+  "baixa": "stab raiz_z, nacelle top/pylon, cor real do ventre traseiro (sombra nas duas fotos), extensao dianteira do parabrisa (ver parabrisa_6_vidros.duvida)"
  },
  "correcoes": {
   "calibracao_2026-08-20": "Primeira calibracao pelo vao nariz-cauda da PLANTA com normalizacao por eixo (ky=0.958) ERRADA para posicoes: o vies de traco e ABSOLUTO (~0.10 m por borda, traco 7px), nao proporcional — aplicar ky como escala encolhia a semi-envergadura de 32.4 para 31.05 e a 'asa sumia' na varredura. Correto: escala unica pela entre-eixos (centros), meia-traco nas bordas, e normalizacao SOMENTE nas dimensoes da secao.",
