@@ -7,7 +7,7 @@ dimensions have to match the manufacturer's document, and the paint has to match
 a photograph of that specific registration**. The bar is not "it looks like an
 airliner" — it is a LATAM engineer recognising their own aircraft.
 
-Six aircraft finished — every one gated against photographs of its own
+Eight aircraft finished — every one gated against photographs of its own
 registration:
 
 | | |
@@ -15,8 +15,9 @@ registration:
 | <img src="airbus%20A320neo/render_hero.png" width="440"><br>**Airbus A320neo** · PT-TMN · 37.57 m<br>[`A320neo_LATAM.blend`](airbus%20A320neo/A320neo_LATAM.blend) | <img src="boeing%20787-9/render_hero.png" width="440"><br>**Boeing 787-9 Dreamliner** · CC-BGK · 62.81 m<br>[`B789_LATAM.blend`](boeing%20787-9/B789_LATAM.blend) |
 | <img src="airbus%20A319/render_hero.png" width="440"><br>**Airbus A319 (ceo)** · PT-TMT · 33.84 m<br>[`A319_LATAM.blend`](airbus%20A319/A319_LATAM.blend) | <img src="airbus%20A320ceo/render_hero.png" width="440"><br>**Airbus A320ceo** · CC-BFO · 37.57 m<br>[`A320ceo_LATAM.blend`](airbus%20A320ceo/A320ceo_LATAM.blend) |
 | <img src="airbus%20A321ceo/render_hero.png" width="440"><br>**Airbus A321-231 (ceo)** · PT-MXP · 44.51 m<br>[`A321ceo_LATAM.blend`](airbus%20A321ceo/A321ceo_LATAM.blend) | <img src="airbus%20A321neo/render_hero.png" width="440"><br>**Airbus A321neo (ACF)** · PS-LBA · 44.51 m<br>[`A321neo_LATAM.blend`](airbus%20A321neo/A321neo_LATAM.blend) |
+| <img src="boeing%20787-8/render_hero.png" width="440"><br>**Boeing 787-8 Dreamliner** · CC-BBF · 56.72 m<br>[`B788_LATAM.blend`](boeing%20787-8/B788_LATAM.blend) | <img src="boeing%20767-300ER/render_hero.png" width="440"><br>**Boeing 767-300ER** · CC-CWY · 54.94 m<br>[`B763_LATAM.blend`](boeing%20767-300ER/B763_LATAM.blend) |
 
-In build: 787-8, 777-300ER and 767-300ER — the last three passenger types.
+In build: the 777-300ER — the last passenger type.
 
 The A319 is a spec-level derivation of the A320neo master: same nose and
 cross-section, the two constant-section plugs removed (1.60 m forward of the
