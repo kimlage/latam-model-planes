@@ -129,13 +129,34 @@ LV = S["livery_pt_mug"]["cunha_indigo"]
 CUNHA_X0, CUNHA_K = 59.11, 1.058              # dianteira, reta em (x,z)
 CUNHA_T0, CUNHA_R = 108.1, 1.03               # inferior, reta em (x,theta) graus
 CUNHA_TX0 = 60.0
-theta_max = np.radians(np.clip(CUNHA_T0 + CUNHA_R * (GX - CUNHA_TX0), 0.0, 180.0))
-cunha = ((GX >= CUNHA_X0 + CUNHA_K * GZ) & (GABS <= theta_max) &
-         (GX <= 68.254 + 0.396 * GZ))
-tex[cunha] = INDIGO
-base_cor = np.where(cunha[..., None], np.array(INDIGO, np.uint8),
-                    np.array(BRANCO, np.uint8))
-print(f"[casco] cunha indigo = {int(cunha.sum())} texels ({100*cunha.mean():.2f}%)")
+
+
+def cunha_cobertura(sub=3):
+    """Cobertura da cunha por supersample: a fronteira sem anti-alias vira
+    escadinha justamente na volta do filete da raiz da deriva (o defeito que
+    f162f73 teve de corrigir nos A320)."""
+    acc = np.zeros((H, W), np.float32)
+    dx = LUV / W
+    dv = 2 * math.pi / H
+    for a in range(sub):
+        for b in range(sub):
+            gx = GX + ((a + 0.5) / sub - 0.5) * dx
+            gt = GT + ((b + 0.5) / sub - 0.5) * dv
+            gab = np.abs(gt)
+            gz = _zc[None, :] + _rz[None, :] * np.cos(gt)
+            tmax = np.radians(np.clip(CUNHA_T0 + CUNHA_R * (gx - CUNHA_TX0), 0.0, 180.0))
+            acc += ((gx >= CUNHA_X0 + CUNHA_K * gz) & (gab <= tmax) &
+                    (gx <= 68.254 + 0.396 * gz))
+    return acc / (sub * sub)
+
+
+cob = cunha_cobertura()
+cunha = cob >= 0.5
+tex[...] = (np.array(BRANCO, np.float32) * (1 - cob[..., None]) +
+            np.array(INDIGO, np.float32) * cob[..., None]).astype(np.uint8)
+base_cor = tex.copy()
+print(f"[casco] cunha indigo = {int(cunha.sum())} texels ({100*cunha.mean():.2f}%), "
+      f"{int(((cob > 0.02) & (cob < 0.98)).sum())} texels de borda suavizados")
 
 
 # ==================================================== 2. marcas em (x,z)
