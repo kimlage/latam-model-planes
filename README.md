@@ -59,7 +59,7 @@ the terminals, the LATAM base and the cordillera open around it. The move is
 measured rather than eyeballed — see [§8 of the scenery
 manual](scenario/README.md).*
 
-![Aerial survey of SCL: terminals, tower and the LATAM base](scenario/scl_base_v5.gif)
+![Aerial survey of SCL: terminals, tower and the LATAM base](scenario/scl_base_v6.gif)
 
 *The second clip: a northbound aerial survey of the whole airport — it
 opens on the T1/T2 terminal core with its piers and parked fleet, crosses
