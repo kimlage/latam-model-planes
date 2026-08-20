@@ -1,0 +1,98 @@
+{
+ "fonte": "Airbus ACAP AC_A320 Jun/24 (mesmo documento do master neo; paginas raw 40-43 3-views ceo 600dpi, 47-50 clearances, 74-77 portas 300dpi) + derivacao parametrica do spec_a320.json (fuselagem/asa/trem identicos: paginas 2-2-0 e 2-7-0 valem 'ON A/C A320-200 A320neo') + fotogrametria Wikimedia CC BY 4.0 CC-BFO 2022-01-26 (refs/)",
+ "matricula": "CC-BFO",
+ "matricula_fonte": "Airbus A320-214(SL), MSN 7010, LATAM Airlines Chile, motores CFM56-5B4/3, sharklets. Escolhida pelo agente anterior: unico par de fotos livres (CC BY 4.0, Wikimedia, SJO 2022) nitidas na livery indigo/coral atual, um perfil por lado. Matriculas IAE (PR-MA*/MB*) so tinham fotos na livery TAM antiga - por isso o alvo e um CFM56, apesar de a frota ceo LATAM ser majoritariamente V2500. Mantida apos verificacao nas fotos: nacelle CFM curta com reversor de luva, sharklets, livery atual.",
+ "datum": "x=0 na ponta do nariz; z=0 no meio da secao constante; unidades m (mesmo referencial do spec_a320)",
+ "dimensoes_gerais": {
+  "comprimento": 37.57,
+  "envergadura_sharklets": 35.8,
+  "altura": 11.76,
+  "fuselagem_largura": 3.95,
+  "fuselagem_altura": 4.14,
+  "entre_eixos": 12.64,
+  "bitola": 7.59,
+  "fonte": "ACAP 2-2-0 fig 991-004 sheets 3-4 (Sharklet, ON A/C A320-200): identicas ao neo"
+ },
+ "derivacao_do_neo": {
+  "regra": "A320ceo = A320neo com outro motor e a MESMA celula: fuselagem, nariz, parabrisa, asa+sharklet, trem e portas identicos (paginas do ACAP valem para os dois). Mudam: nacelle CFM56, empenagem reposicionada pelo ACAP (o master neo a tinha ~1 m a frente), fileira de janelas corrigida, z das portas pax corrigido, marcas neo removidas.",
+  "validacao": "portas 5.04/14.43/15.28/29.53 e cargas 8.16/22.69/26.29 lidas na fig 2-7-0-991-003 (300dpi, escala 36.87 px/m consistente em 3 pares de cotas independentes, residuo <0.1 m); overwing na foto: passo medido 0.86 m (ACAP 0.85)"
+ },
+ "cavernas_nariz": "identicas ao spec_a320.json",
+ "portas": {
+  "pax_fwd_x": 5.04,
+  "pax_aft_x": 29.53,
+  "pax_aft_nota": "fig 2-7-0-991-003 sheet 2: cota 29.53 ao CENTRO da porta (validada pelos overwing na mesma figura); fig -024 diz 29.64 (referencia do ponto critico da folha aberta). Folha modelada 29.14..30.15 (herdada do master, centro 29.65).",
+  "overwing_x": [14.43, 15.28],
+  "overwing_nota": "ACAP: pares em 14.43 E 15.28 (passo 0.85). O master neo usa 14.43/15.66 (+1.23) - passo 0.38 maior que o ACAP; mantido o do master na malha (diferenca 0.4 m no 2o hatch, anotada como pendencia do master).",
+  "carga": [8.16, 22.69, 26.29],
+  "pax_z_correcao_2026_08_20": "portas pax ERGUIDAS vs master: tabela 2-3-0 (solo z=-3.67): D1 sill 3.381 -> folha z -0.30..1.76; D4 sill 3.615 -> folha z -0.10..1.90. Master tinha -0.85..1.21 / -0.67..1.33 (~0.55 baixo). Foto CC-BFO confirma independente: porta1 -0.35..1.55, porta2 topo ~1.85 (calibre vertical = altura da folha 155px/1.99m). PENDENCIA equivalente no master neo e no A319."
+ },
+ "janelas_cabine": {
+  "z_cinto": [0.52, 0.86],
+  "pitch_m": 0.5334,
+  "primeira_x": 6.18,
+  "n_janelas": 41,
+  "fonte": "fileira medida na fig 2-7-0-991-003 (primeira 6.18, ultima 27.58, passo 0.529-0.536 = caverna de 21 in) e conferida na foto (ultima janela ~1.3 m antes da fronteira da echarpe). Master neo usa 40 @ 0.515 desde 6.08 (fileira termina 26.17, ~1.3 m cedo) - pendencia do master, nao corrigida la."
+ },
+ "trem": "identico ao spec_a320.json (5.07 / 17.71 / bitola 7.59)",
+ "motor_cfm56_5b": {
+  "modelo": "CFM56-5B4/3 (A320-214)",
+  "inlet_x": 11.19,
+  "y": 5.75,
+  "nacelle_diametro": 2.17,
+  "fan_diametro_real": 1.735,
+  "clearance_solo": 0.577,
+  "fonte": "ACAP top view 'CFM56 11.19 m' (V2500 11.12); clearance N1 CFM 5B 0.577 m (tabela 2-3-0 WV0 17%, sheet fence e sharklet iguais); perfil da nacelle medido no side view 600dpi: topo z~-1.0, fundo -3.09..-3.17, capo do fan ate ~14.2, bocal primario ~15.4.",
+  "derivacao": "nacelle do master (PW1100G d2.6, 11.14..14.32) escalada radial x0.835 em torno de (5.75,-1.95) + dz -0.055 (fundo -3.09), comprimento x0.94 ancorado no inlet (11.19..14.18). Fan resultante 1.67 vs real 1.735 (-4%, dentro do inlet escuro - aceito). Sem chevrons, fan cowl branco, lip metalico, reversor FECHADO (foto stbd tem a luva ABERTA - usada so para diametro/posicao)."
+ },
+ "empenagem": {
+  "fin_LE": "x = 0.863*z + 28.02 (reta z 3.0..7.6; filete dorsal curva a frente abaixo de z~3 ate a crista em ~29.7)",
+  "fin_TE": "x = 0.221*z + 34.91 (raiz z1.55: 35.25; topo z8.05: 36.69)",
+  "fin_z": [1.55, 8.05],
+  "estab_shift_vs_master": 0.87,
+  "estab_tip_TE_x": 36.62,
+  "estab_span": 12.45,
+  "fonte": "dupla leitura no MESMO ACAP: p040 600dpi (TE 34.91+0.221z) e p074 300dpi (TE 34.91+0.220z) - identicas; LE 600dpi 28.02+0.863z (A319 mediu 0.851 no fin irmao). Estab = A319 ACAP tip TE 32.89 + 3.73. CONFIRMA o achado do spec_a319: o master neo tem a empenagem ~0.9-1.7 m A FRENTE do ACAP (fin TE topo 34.95 vs 36.69) - pendencia do master, corrigida AQUI pelo remap (h,c).",
+  "deriva_raiz": "fundo da malha esticado 1.55->1.05 (verts z<2.05, fator 2.0) para continuar enterrada no tailcone mais fino na nova posicao (crista do casco 1.64 na raiz do TE)"
+ },
+ "carenagem_ventral": "identica ao spec_a320.json",
+ "livery_cc_bfo": {
+  "fonte": "fotogrametria ref_CC-BFO_sjo_stbd.jpg (3965px, mapeamento projetivo Moebius com ancoras ACAP nariz/porta1/overwings/cauda; residuos <=10px; passo de janela implicado 0.51-0.53 confere) + medidas RELATIVAS a porta 2 e a fileira de janelas onde o mapa absoluto degrada (vies ate +0.5 m na zona da cauda, resolvido no item regua_discrepancia); confirmacao qualitativa no perfil port (ref_CC-BFO_sjo_wide_port.jpg)",
+  "echarpe": {
+   "fwd": "x >= 28.60 + 0.66*z (reta; passa colada no bordo dianteiro da porta 2 na faixa das janelas, crista em ~29.9; rake bem mais vertical que o do PT-TMN)",
+   "rear": "x <= 30.35 + 1.83*z (diagonal ~29 graus, desce da regiao da raiz do fin ate a ponta)",
+   "baixo": "z >= -1.25 e |theta| <= 145 (quilha branca; ponta em ~(27.8,-1.25))",
+   "incerteza": "+-0.3 m nas absolutas; fronteira inferior sob sombra do estab na foto stbd e oclusa na port - forma inferior herdada da topologia PT-TMN com a ponta medida"
+  },
+  "porta2": "folha quase toda dentro do indigo, contorno branco 0.058 m (igual ao PT-TMN)",
+  "matricula": "CC-BFO BRANCA dentro do indigo, DOS DOIS LADOS (ambas as fotos), x 30.29..31.81, z 1.04..1.34 (altura 0.295: colunas de glifos 2873..2992px, proporcao Arial Bold CC-BFO ~5.1 fecha com a largura 1.51 m; a primeira leitura 0.54 pegou pixels do estab), Arial Bold (mesma fonte do RegPortaTrem do master; posicao relativa: comeca 0.15 m atras do contorno da porta 2, 'O' quase toca a diagonal traseira)",
+  "titulo": "'AIRBUS A320' indigo sobre branco, x 26.21..27.94, z 1.04..1.24 (largura 1.73 = mesma arte do A319; medida RELATIVA a porta 2: 2.93..1.20 m a frente do bordo dianteiro), glifos swirl+AIRBUS+A+3+2 do mesh oficial do master + '0' reconstruido em anel (o '0' do mesh vem fundido com 'neo')",
+  "hstab": "extradorso CINZA claro (foto 2022; PT-TMN atual e indigo) - faces superiores trocadas para CinzaAsa; intradorso branco",
+  "sharklet": "indigo com filete branco no BA (foto port) = esquema do master, herdado",
+  "lockup_latam": "posicao identica ao master (fuselagem dianteira identica)",
+  "trem_nariz_porta": "'BFO' na porta do trem do nariz (foto stbd)",
+  "apu_anel_metal": "x 36.7..37.15 (A319 33.05-33.45 + 3.73)",
+  "weathering": "CC-BFO e airframe 2016, foto 2022: leve - leque do trem do nariz, escorridos dos drenos 8.55/27.6, grime das portas do trem principal 16.8..18.8 (fac 0.10-0.22)"
+ },
+ "regua_discrepancia_resolvida_2026_08_20": {
+  "problema": "o agente anterior viu as reguas 'largura da porta' vs 'porta->fin' discordarem na foto stbd e suspeitou de oclusao.",
+  "resolucao": "tres causas somadas, todas confirmadas: (1) OCLUSAO REAL - a raiz do estab (cinza claro) e sua sombra cortam o contorno da porta 2 na foto stbd: a primeira leitura da largura dava 0.70 m; o zoom 5x mostra o contorno verdadeiro 2787..2867 px = ~1.0 m (folha 0.89 + contorno pintado). (2) VIES PROJETIVO - entre os overwings (15.28) e a cauda (37.57) nao havia ancora: o ajuste Moebius de 5 ancoras poe a porta 2 em 28.8 m; com a porta ancorada no ACAP o residuo e +37px (~0.5 m) - distorcao de lente/projecao real da foto, nao geometria do aviao. Posicoes ABSOLUTAS na zona da cauda carregam +-0.4-0.5 m; por isso a livery da cauda foi medida RELATIVA a porta 2/janelas. (3) A hipotese 'ponta = fronteira da pintura do APU' foi testada e REFUTADA (piora o passo de janela implicado). GEOMETRIA vem do ACAP; a foto da a PINTURA.",
+  "verificacao_ortografica": "fig 2-7-0 do proprio ACAP: ultima janela -> centro porta 2 = 1.95 m no desenho vs 1.7 m na foto (+-0.2) - o contorno visto na foto E a porta 2."
+ },
+ "pendencias_para_o_master_neo": [
+  "empenagem ~0.9-1.7 m a frente do ACAP (fin TE topo 34.95 vs 36.69; ja apontado pelo A319, agora confirmado no ACAP do proprio A320)",
+  "portas pax ~0.55 m baixas vs tabela de sills 2-3-0 (D1 3.381 / D4 3.615)",
+  "fileira de janelas termina ~1.3 m cedo (40 @ 0.515 desde 6.08 vs ACAP primeira 6.18 / ultima 27.58 / passo ~0.53)",
+  "segundo overwing em 15.66 vs ACAP 15.28",
+  "spec_a320 'cauda_livery.echarpe_casco.x_front(z)' (crista 31.3) contradiz a formula plana do proprio projeto (27.39+0.8393z -> 29.1 na crista) - as duas descrevem o PT-TMN e diferem 2.2 m"
+ ],
+ "verificacoes": {
+  "tailstrike": "herdada do master a limitacao do Belly_DrenoAft (7.75 graus) - mesma geometria de trem/ventre, nao corrigida aqui"
+ },
+ "texturas_do_blend": {
+  "LiveryTex+LiveryFac": "regeneradas 4096x1024 (x,theta), comprimento_uv=38.0 (UV do casco herdada do master), supersample 2x",
+  "NoseMask": "herdada do master (mesmo nariz, mesma escala u)",
+  "FinSashE/D": "copiadas do master CORRIGIDO (commit f162f73, fin_bandas_2026-08-20: bandas re-medidas por tipo nas fotos PS-LBO, transferencia (h,c) do 787 abandonada). A copia inicial trazia as texturas antigas distorcidas; substituidas por pixel-copy apos o fix paralelo aterrissar. O remap (h,c) da Deriva preserva as travessias zeta/rho nos bordos, que e exatamente a ancoragem da receita nova. Ressalva: o alongamento da raiz (z<2.05) estica a arte verticalmente na zona enterrada/quase-enterrada - so massa indigo visivel ali.",
+  "PanelBump": "herdada do master (mesmas cavernas)"
+ }
+}
