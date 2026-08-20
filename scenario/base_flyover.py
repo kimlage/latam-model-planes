@@ -16,39 +16,25 @@ out of the apron.
 
 Why this shot is built the way it is
 ------------------------------------
-The owner asked to see the base CLOSER, and for a camera that does not lose
-fluidity. The take-off clip's residual artificiality lives in its hand-over
-(dolly frame -> aircraft frame); this shot has no hand-over and no solver.
-It is one continuous orbit at CONSTANT angular rate - every control value is
-linear in the frame number, so the pan rate ratio is 1.0 by construction and
-the loop restarts mid-motion the way every version of the take-off GIF
-already does.
+v4, after three orbit versions: the owner pointed out the clip only ever
+showed the LATAM base - the REST of the airport was missing. The orbit
+became a northbound aerial SURVEY of the whole east-side infrastructure:
 
-Geometry (world frame, metres):
-- subject centre (-590, -1290, 10): between the ops building / hangar block
-  and the apron rows where the LATAM tails park
-- camera bearing FROM the centre sweeps 205 deg -> 335 deg: 130 degrees of
-  arc, SSW past due west to NNW. The v2 arc (215-288) never left the west
-  side; the owner asked for a MORE COMPLETE flight over the base. The sun
-  (267 deg azimuth) stays at least 68 deg off the view axis the whole way,
-  so nothing is ever backlit; the sign face opens the clip and the
-  terminals slide into the background as the arc comes around the north
-- radius 430 -> 300 m and height 105 -> 240 m: the orbit climbs into an
-  overview - the clip ends looking 37 deg down at the WHOLE block, aprons,
-  hangar, fleet rows and the runway beyond. A 340 m constant-height orbit
-  was tried earlier and rejected (crops the sign, fills the frame with
-  hangar roof); the climb is what buys the full-block ending instead
-- lens 30 mm, fixed: a drone does not zoom
-- aim: azimuth dead on the centre (the base holds u = 0.5); elevation runs
-  -8 -> -30 deg, tracking the growing depression so the base holds
-  v ~ 0.3-0.38. The Andes crest starts pinned at v ~ 0.80 and slides out
-  of the top over the final two seconds as the overview takes over - the
-  ground becomes the anchor when it fills the frame
+- the camera travels a straight line 2.0 km long, west of both runways
+  (x -1750), from SSW of the terminals to north of the base, climbing
+  280 -> 330 m at 208 m/s - at that altitude nothing is near enough to
+  rush, and every control value is linear, so the move keeps the
+  constant-rate fluidity of the orbits
+- the AIM travels too: it opens on the T1/T2 terminal core - piers, jet
+  bridges, the parked fleet - crosses the control tower mid-clip, and
+  settles on the LATAM base with the assembled PT-TMN at its stand
+- both runways cross the lower frame the whole way; the Andes hold the
+  top; the sun (267 deg) stays behind the camera end to end
+- lens 38 mm fixed; the aim point rides at v ~ 0.38 (TILT_UP), which
+  keeps the crest inside the frame until the closing seconds
+- pan is 79 -> 109 deg true, 3.1 deg/s through a 50 deg hfov: 0.06
+  frame-widths/s of pan, with translation parallax bounded by altitude
 
-At 30 mm from ~400 m the base block plus apron spans roughly three quarters
-of the frame width: the hangar doors, the sign lockup, the window band and
-the parked tails all read. Pan rate 130 deg / 9.6 s = 13.5 deg/s through a
-62 deg hfov = 0.22 frame-widths/s - still well inside the calm band.
 """
 import bpy
 import math
@@ -58,25 +44,24 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 TERRAIN = os.path.join(HERE, "scl_terrain.blend")
 
-CENTER = (-590.0, -1290.0, 10.0)
+AIM0 = (-230.0, -2600.0, 12.0)   # T1/T2 terminal core
+AIM1 = (-590.0, -1290.0, 10.0)   # the LATAM base
+CAM0 = (-1750.0, -2900.0, 280.0)  # west of both runways, SSW of the terminals
+CAM1 = (-1750.0, -900.0, 330.0)   # same line, north of the base
 FRAME_END = 240
-A0, A1 = 205.0, 335.0          # camera bearing from the centre, compass deg
-R0, R1 = 430.0, 300.0          # orbit radius, m
-H0, H1 = 105.0, 240.0          # camera height, m
-EL0, EL1 = -8.0, -30.0         # aim elevation, deg (negative = down)
-LENS = 30.0
+LENS = 38.0
+TILT_UP = math.radians(3.7)       # puts the aim point at v ~ 0.38
 
 
 def pose(f):
     t = (f - 1) / float(FRAME_END - 1)
-    a = math.radians(A0 + (A1 - A0) * t)
-    r = R0 + (R1 - R0) * t
-    h = H0 + (H1 - H0) * t
-    x = CENTER[0] + r * math.sin(a)
-    y = CENTER[1] + r * math.cos(a)
-    look = a - math.pi                      # dead at the centre
-    el = math.radians(EL0 + (EL1 - EL0) * t)
-    return (x, y, h), look, el
+    cam = tuple(a + (b - a) * t for a, b in zip(CAM0, CAM1))
+    aim = tuple(a + (b - a) * t for a, b in zip(AIM0, AIM1))
+    dx, dy = aim[0] - cam[0], aim[1] - cam[1]
+    look = math.atan2(dx, dy)                      # compass, radians
+    horiz = math.hypot(dx, dy)
+    el = math.atan2(aim[2] - cam[2], horiz) + TILT_UP
+    return cam, look, el
 
 
 def main():
