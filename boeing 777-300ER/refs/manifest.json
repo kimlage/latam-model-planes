@@ -1,0 +1,94 @@
+{
+  "project": "LATAM Brasil Boeing 777-300ER reference photos",
+  "chosen_registration": "PT-MUG",
+  "chosen_reason": "Of the PT-MU* fleet, PT-MUG has the two best free-licence photographs in the CURRENT LATAM livery and both are port-side and near-orthographic: a 6000x4000 in-flight side view against clean sky (Frankfurt 2022) and a 5172x2909 ground side view at London Heathrow (2025). Together they gave the fin sash twice, independently, agreeing within 0.2-0.4 m. Sister ships PT-MUC and PT-MUB cover the starboard side and the nose close-up.",
+  "aircraft": {
+    "type": "Boeing 777-32W(ER)",
+    "operator": "LATAM Brasil",
+    "engines": "2x GE90-115B (the only engine offered on the 777-300ER)",
+    "wingtips": "raked, no winglets",
+    "gear": "six-wheel main bogies (three axles), rear axle steering — the 777 signature"
+  },
+  "note_licencas": "As fotos NAO sao redistribuidas neste repositorio (.gitignore); este manifesto e a citacao. Baixe-as das paginas do Commons abaixo se precisar reproduzir as medidas.",
+  "photos": [
+    {
+      "file": "../ref_PT-MUG_2022_FRA.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:PT-MUG_LATAM_Airlines_Brasil.jpg",
+      "author": "Moritz 2011",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "registration": "PT-MUG",
+      "view": "bombordo, em voo (aproximacao), ceu limpo",
+      "date_taken": "2022-10-25",
+      "resolution": "6000x4000",
+      "usada_para": "PRIMARIA. Retificacao da deriva (cantos dos dois corais), cunha indigo (fronteira dianteira x>=59.11+1.058z, rms 0.21 m; fronteira inferior theta<=108.1+1.03(x-60), rms 4.1 graus), matricula, titulo de tipo, lockup dianteiro, simbolo do ventre, canoas de flap. Elevacao de camera +16.5 graus resolvida pela linha de janelas."
+    },
+    {
+      "file": "../ref_PT-MUG_2025_EGLL.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:(GBR-London)_LATAM_Airlines_Brasil_Boeing_777-32WER_PT-MUG_@_EGLL_2025-06-17.jpg",
+      "author": "S5A-0043",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0",
+      "registration": "PT-MUG",
+      "view": "bombordo, no solo (taxi), fim de tarde",
+      "date_taken": "2025-06-17",
+      "resolution": "5172x2909",
+      "usada_para": "CONFIRMACAO independente da deriva (retificada pelo mesmo metodo, cantos dos corais dentro de 0.2-0.4 m da foto de 2022) e da livery atual em 2025."
+    },
+    {
+      "file": "LATAM_Brasil_Boeing_777_PT-MUB_Milan_Malpensa_2024_(01).jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:LATAM_Brasil_Boeing_777_PT-MUB_Milan_Malpensa_2024_(01).jpg",
+      "author": "Bahnfrend",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "registration": "PT-MUB",
+      "view": "estibordo, no solo",
+      "date_taken": "2024-08-01",
+      "resolution": "5736x3231",
+      "usada_para": "Conferir que a arte da deriva e a MESMA em (x,z) nos dois lados (nao espelhada): as bandas sobem para tras tambem a estibordo."
+    },
+    {
+      "file": "20251011_LATAM_PT-MUC_EGLL.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:20251011_LATAM_PT-MUC_EGLL.jpg",
+      "author": "Alex Noble",
+      "license": "CC0 (dominio publico)",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "registration": "PT-MUC",
+      "view": "estibordo 3/4 no portao",
+      "date_taken": "2025-10-11",
+      "resolution": "6016x4012",
+      "usada_para": "Livery a estibordo (lockup espelhado: wordmark a frente, simbolo atras)."
+    },
+    {
+      "file": "At_São_Paulo_2023_083.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:At_S%C3%A3o_Paulo_2023_083.jpg",
+      "author": "Mike Peel (www.mikepeel.net)",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "registration": "PT-MUC",
+      "view": "nariz de perto, estibordo, no portao (LHR)",
+      "date_taken": "2023-11-30",
+      "resolution": "4032x3024",
+      "usada_para": "Forma e posicao do parabrisa (tres vidros por lado, molduras claras, borda de baixo escalonada)."
+    },
+    {
+      "file": "At_São_Paulo_2023_076.jpg / _077 / _078 / _079 / _084 / _085",
+      "page_url": "https://commons.wikimedia.org/wiki/File:At_S%C3%A3o_Paulo_2023_076.jpg",
+      "author": "Mike Peel (www.mikepeel.net)",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "registration": "PT-MUC (e vizinhos)",
+      "view": "serie no portao: nacelle GE90 em voo, 3/4 dianteiro, cauda ao longe",
+      "date_taken": "2023-11-29/30",
+      "resolution": "4032x3024 (varias)",
+      "usada_para": "Nacelle branca sem chevrons, ausencia de cheatline, aparencia geral."
+    }
+  ],
+  "documento_dimensional": {
+    "file": "../B777_APR_boeing.pdf",
+    "titulo": "Boeing 777 Airplane Characteristics for Airport Planning, D6-58329-2, Rev G (Dez 2024)",
+    "origem": "site da Boeing (gratuito, direitos reservados — nao redistribuido aqui)",
+    "paginas_usadas": "p.18 raster (2.2.2 General Dimensions: Model 777-300ER) @600 dpi; secoes 2.7 (portas) e 7.2 (trem)",
+    "calibracao": "35.0 px/m, obtida DUAS vezes de forma independente: entre-eixos 31.22 m (centros das rodas) e diametro da fuselagem 6.20 m (217 px). Validada em comprimento (73.7 medido vs 73.86), envergadura, BA/BF da deriva e passo de janela."
+  }
+}

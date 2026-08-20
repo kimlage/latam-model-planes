@@ -1,0 +1,550 @@
+{
+ "fonte": "Boeing APR D6-58329-2 Rev G (Dez 2024), p.18 3-view @600dpi, calibracao pela ENTRE-EIXOS 31.22 m (centros, livre de traco); validado: envergadura frontal 64.78 vs 64.80 (0.03%), semi-span topo 32.43 vs 32.40, nariz->trem 5.86 vs 5.89, comprimento 73.79 vs 73.86 (0.1%). Fotos PT-MUG (Wikimedia, CC): EGLL 2025-06-17 CC-BY-4.0 5172px, FRA 2022-10-25 CC-BY-SA-4.0 6000px. Extraido 2026-08-20, sessao 777-300ER.",
+ "datum": "x=0 ponta do nariz; z=0 centro da secao constante; solo estatico z=-5.67; matricula alvo PT-MUG (LATAM Brasil)",
+ "dimensoes_gerais": {
+  "comprimento": 73.86,
+  "envergadura": 64.8,
+  "altura": 18.6,
+  "fuselagem_largura": 6.2,
+  "fuselagem_altura": 6.2,
+  "entre_eixos": 31.22,
+  "bitola": 10.97,
+  "nota": "APR da 6.20 tanto na largura (planta) quanto na altura (lateral): a secao do 777 e CIRCULAR r=3.10. O briefing dizia 6.60 de altura — o documento ganha."
+ },
+ "secao_mestre": "circulo r=3.10; sem ovoide de ombro mensuravel no desenho; leve achatamento so na regiao da carenagem ventral",
+ "nariz_estacoes": [
+  [
+   0.0,
+   -0.6,
+   -0.6,
+   0.0
+  ],
+  [
+   0.15,
+   -0.144,
+   -1.09,
+   0.366
+  ],
+  [
+   0.3,
+   0.029,
+   -1.206,
+   0.507
+  ],
+  [
+   0.5,
+   0.201,
+   -1.349,
+   0.705
+  ],
+  [
+   0.75,
+   0.345,
+   -1.492,
+   0.846
+  ],
+  [
+   1.0,
+   0.459,
+   -1.636,
+   0.987
+  ],
+  [
+   1.5,
+   0.919,
+   -1.808,
+   1.241
+  ],
+  [
+   2.0,
+   1.321,
+   -1.981,
+   1.466
+  ],
+  [
+   2.5,
+   1.579,
+   -2.153,
+   1.663
+  ],
+  [
+   3.0,
+   1.78,
+   -2.296,
+   1.833
+  ],
+  [
+   3.5,
+   2.009,
+   -2.44,
+   2.002
+  ],
+  [
+   4.0,
+   2.153,
+   -2.555,
+   2.17
+  ],
+  [
+   4.5,
+   2.326,
+   -2.669,
+   2.312
+  ],
+  [
+   5.0,
+   2.44,
+   -2.756,
+   2.453
+  ],
+  [
+   6.0,
+   2.641,
+   -2.928,
+   2.679
+  ],
+  [
+   7.0,
+   2.813,
+   -3.014,
+   2.875
+  ],
+  [
+   8.0,
+   2.986,
+   -3.071,
+   3.002
+  ],
+  [
+   9.0,
+   3.071,
+   -3.095,
+   3.08
+  ],
+  [
+   10.0,
+   3.1,
+   -3.1,
+   3.1
+  ]
+ ],
+ "nariz_estacoes_formato": "[x, crown_z, keel_z, meia_largura]; z normalizado x1.005 (H medida 6.17 -> 6.20), y x0.987 (W 6.28 -> 6.20); ponta em z=-0.60",
+ "secao_constante_x": [
+  10.0,
+  56.0
+ ],
+ "cauda": [
+  [
+   56.0,
+   0.0,
+   3.1
+  ],
+  [
+   57.0,
+   0.06,
+   3.04
+  ],
+  [
+   58.0,
+   0.155,
+   2.945
+  ],
+  [
+   59.0,
+   0.25,
+   2.85
+  ],
+  [
+   60.0,
+   0.34,
+   2.74
+  ],
+  [
+   61.0,
+   0.47,
+   2.64
+  ],
+  [
+   62.0,
+   0.55,
+   2.49
+  ],
+  [
+   63.0,
+   0.635,
+   2.345
+  ],
+  [
+   64.0,
+   0.71,
+   2.19
+  ],
+  [
+   65.0,
+   0.765,
+   2.015
+  ],
+  [
+   66.0,
+   0.81,
+   1.86
+  ],
+  [
+   67.0,
+   0.875,
+   1.685
+  ],
+  [
+   68.0,
+   0.93,
+   1.52
+  ],
+  [
+   69.0,
+   1.03,
+   1.385
+  ],
+  [
+   70.0,
+   1.06,
+   1.19
+  ],
+  [
+   71.0,
+   1.15,
+   1.05
+  ],
+  [
+   72.0,
+   1.25,
+   0.95
+  ],
+  [
+   73.0,
+   1.55,
+   0.62
+  ],
+  [
+   73.5,
+   1.8,
+   0.3
+  ],
+  [
+   73.86,
+   1.97,
+   0.05
+  ]
+ ],
+ "cauda_formato": "[x, centro_z, raio]; cone termina em LAMINA vertical: w_ratio 0.96 ate x=68, caindo linear para ~0.35 na ponta (o cone do 777 achata lateralmente; anel do escape da APU e oval vertical). Ponta x=73.86 z=+1.97.",
+ "parabrisa_6_vidros": {
+  "fonte": "vista frontal APR p.18 @600dpi (quads aproximados +-0.05) + fotos PT-MUC 083 para o V inferior; 6 paineis planos, 3 por lado",
+  "gate_x": [
+   1.4,
+   3.1
+  ],
+  "vidro_centro_yz": [
+   [
+    0.11,
+    0.49
+   ],
+   [
+    0.77,
+    0.54
+   ],
+   [
+    0.83,
+    0.83
+   ],
+   [
+    0.15,
+    0.97
+   ]
+  ],
+  "vidro_meio_yz": [
+   [
+    0.9,
+    0.35
+   ],
+   [
+    1.6,
+    0.5
+   ],
+   [
+    1.45,
+    0.95
+   ],
+   [
+    0.87,
+    0.95
+   ]
+  ],
+  "vidro_lateral_yz": [
+   [
+    1.66,
+    0.25
+   ],
+   [
+    1.99,
+    0.45
+   ],
+   [
+    1.85,
+    0.9
+   ],
+   [
+    1.55,
+    0.92
+   ]
+  ],
+  "nota": "V inferior caracteristico: a borda de baixo dos dois vidros centrais desce em direcao ao centro (na foto 083 le-se claramente). Montante central estreito ~0.10. Aplicar como NoseMask UV igual ao 787."
+ },
+ "portas_pax": {
+  "centros_x": [
+   6.69,
+   17.04,
+   32.84,
+   46.32,
+   59.66
+  ],
+  "recorte": [
+   1.07,
+   1.88
+  ],
+  "soleira_z": -0.44,
+  "topo_z": 1.3,
+  "nota": "5 pares D1..D5 medidos no 3-view (bordas 6.14-7.23 / 16.51-17.57 / 32.31-33.36 / 45.79-46.84 / 59.13-60.18); D3 overwing; D5 fica DENTRO da cunha indigo (foto PT-MUG)"
+ },
+ "portas_carga": {
+  "fwd_x": 11.8,
+  "aft_x": 51.38,
+  "abertura_fwd": [
+   2.69,
+   1.7
+  ],
+  "abertura_aft": [
+   1.78,
+   1.7
+  ],
+  "bulk": {
+   "x": 56.45,
+   "dim": [
+    0.91,
+    1.14
+   ]
+  },
+  "lado": "estibordo",
+  "fonte": "APR 2.7.5 (dimensoes ao CENTRO da porta); LATAM usa aft standard 70x67in (nao a optional grande) — conferir em foto se surgir duvida"
+ },
+ "janelas_pax": {
+  "abertura": [
+   0.27,
+   0.38
+  ],
+  "pitch": 0.557,
+  "centro_z": 0.55,
+  "faixa_x": [
+   7.9,
+   58.5
+  ],
+  "nota": "passo 0.557 medido no desenho (autocorrelacao 19.7 px @35.0 px/m = 0.563; mediana das corridas 0.557). Nas fotos de PT-MUG o passo aparente e 0.53 +-0.01 (37.2 px a ~69-70 px/m) — 4% menor. Mantido o valor do documento; a faixa e ancorada nas duas pontas, entao a diferenca nao desloca nada visivel."
+ },
+ "asa": {
+  "le_formula": "x_LE = 24.69 + 0.681*y  (34.3 graus), valida ate y=31.4",
+  "le_raiz": [
+   26.84,
+   3.1
+  ],
+  "te_inboard_x": 40.19,
+  "te_inboard_ate_y": 7.1,
+  "te_transicao": "40.19 em y=7.1 -> 41.0 em y=12.5 (regiao yehudi/flap break)",
+  "te_outboard_formula": "x_TE = 36.57 + 0.358*y  para y 12.5..29.5",
+  "raked_tip": {
+   "y_inicio": 31.4,
+   "te_sweep_inicio_y": 29.5,
+   "tip_y": 32.4,
+   "tip_le_x": 48.5,
+   "tip_te_x": 49.11,
+   "nota": "LE acelera de 0.681 para ~2.0 de slope; TE de 0.358 para ~0.68. tip_le_x/tip_te_x agora sao as COTAS IMPRESSAS na planta do APR p.18 (159FT1.4IN=48.50 nariz->BA da ponta, 161FT1.4IN=49.11 nariz->BF da ponta); os 48.9/49.3 herdados eram medidos em pixel e ficavam 0.2-0.4 m para tras."
+  },
+  "diedro_graus": 5.5,
+  "raiz_chord_z": -1.0,
+  "raiz_z_le": -0.8,
+  "carenagem_ventral": {
+   "x": [
+    25.3,
+    43.5
+   ],
+   "fundo_z": -3.5,
+   "fundo_plato_x": [
+    32.5,
+    41.0
+   ],
+   "meia_larg_max": 3.4,
+   "nota": "carenagem RASA (0.4 m abaixo da quilha) — bem mais discreta que a do 787; fundo -3.5 medido na lateral"
+  },
+  "carenagens_flap": {
+   "n_por_semiasa": 3,
+   "y_aprox": [
+    9.0,
+    14.5,
+    19.5
+   ],
+   "nota": "canoas Fowler LONGAS (o 777 tem trilhos, diferente do drop-hinge do 787); confirmar y nas fotos"
+  }
+ },
+ "motor_ge90_115b": {
+  "inlet_x": 25.76,
+  "cl_y": 9.61,
+  "cl_z": -2.83,
+  "nacelle_od_max": 3.96,
+  "fan_cowl_te_x": 30.9,
+  "core_cowl_te_x": 32.2,
+  "fan_diam": 3.25,
+  "inlet_dia": 3.43,
+  "nacelle_bottom_z": -4.81,
+  "fonte": "inlet_x e cl_y IMPRESSOS no APR (84FT6IN/31FT6.5IN); OD 13FT impresso; fan 3.25/inlet 3.43 GE90-115B publico; sem chevrons; fan cowl branco, inlet lip metal, core cinza",
+  "nota": "o maior motor a jato em servico — errar o tamanho mata a leitura do tipo. Nacelle quase circular, leve flat no fundo."
+ },
+ "trem": {
+  "nariz_x": 5.89,
+  "principal_x": 37.11,
+  "bitola": 10.97,
+  "solo_z": -5.67,
+  "nariz_rodas": {
+   "diam": 1.09,
+   "larg": 0.445,
+   "gap": 0.78,
+   "tire": "43x17.5R17"
+  },
+  "principal_bogie": {
+   "n_rodas": 6,
+   "eixos": 3,
+   "entre_eixos": 1.465,
+   "entre_eixos_total": 2.93,
+   "entre_rodas_lat": 1.4,
+   "entre_rodas_lat_aft": 1.48,
+   "pneu_diam": 1.32,
+   "pneu_larg": 0.533,
+   "tire": "52x21.0R22",
+   "nota": "ASSINATURA DO 777: bogie de 6 rodas, eixo traseiro esterçavel. Dims do APR 7.2."
+  }
+ },
+ "empenagem": {
+  "deriva": {
+   "BA_reto": "x = 57.996 + 1.0104*z  (45.3 graus), valido z 4.5..12.2",
+   "BF": "x = 68.254 + 0.3960*z",
+   "ponta_z": 12.9,
+   "ponta_corda_x": [
+    70.61,
+    73.23
+   ],
+   "raiz_z": 3.1,
+   "H_exposta": 9.8,
+   "carenagem_dorsal": "abaixo de z~4.5 o BA curva para a frente ate a crista em x~58.5-60",
+   "fonte": "fit em 28 linhas @600dpi, resid 0.014 m; ponta conciliada lateral(12.55)+frontal(13.04) -> 12.9; altura total 18.6 AGL"
+  },
+  "estab": {
+   "le_formula": "x_LE = 62.59 + 0.813*y",
+   "te_formula": "x_TE = 69.82 + 0.378*y",
+   "semi_span": 10.765,
+   "raiz_y": 1.8,
+   "raiz_z": 0.6,
+   "diedro_graus": 7,
+   "tip_le_x": 71.34,
+   "tip_te_x": 73.88,
+   "cor": "cinza-voo claro (foto PT-MUG: NAO indigo, diferente do A320 atual)"
+  }
+ },
+ "livery_pt_mug": {
+  "status": "MEDIDO 2026-08-20 nas duas fotos Wikimedia de PT-MUG (FRA 2022-10-25 CC BY-SA 4.0 6000px em voo; EGLL 2025-06-17 CC BY 4.0 5172px no solo). Ambas bombordo. Estibordo conferido em PT-MUB (Milao 2024) e PT-MUC.",
+  "metodo": "Deriva: retificacao afim por TRES retas (BA reto, BF, corda da ponta) medidas na silhueta contra o ceu, escala pinada pela corda da ponta; as duas fotos concordam dentro de 0.2-0.4 m. Casco: quadro local do casco (crista+quilha = eixo, 6.20 m = escala z), escala x pinada em PORTA 5 (x=59.66 do APR) e na ponta da cauda; validado — o centro medido da porta 5 caiu em 59.67. Elevacao da camera na foto FRA: +16.5 graus (resolvida pela linha de janelas em z=+0.55), usada para converter u da silhueta em theta.",
+  "fuselagem": "branca #E6E7EA; SEM cheatline; cunha indigo so na traseira",
+  "cunha_indigo": {
+   "dianteira": "x >= 59.11 + 1.058*z   (rms 0.21 m, 49 colunas; paralela ao BA reto da deriva, 0.78 m perpendicular atras dele)",
+   "inferior": "theta <= 108.1 + 1.03*(x-60) graus desde a crista (rms 4.1 graus, 179 colunas)",
+   "traseira": "x <= 68.254 + 0.396*z  (a propria linha do BF da deriva; atras disso a carenagem do BF e o cone ficam CLAROS)",
+   "nota": "a cunha engole a PORTA 5 (centro x=59.66): a fronteira dianteira passa logo a vante dela"
+  },
+  "matricula": "PT-MUG BRANCA dentro do indigo, x 60.64..62.37 (1.73 m), altura ~0.55 m, topo z~1.35",
+  "titulo_tipo": "'BOEING 777-300' INDIGO sobre branco, x 55.84..58.55 (2.70 m), z 0.72..1.17, logo acima da linha de janelas e a vante da cunha",
+  "lockup_dianteiro": {
+   "simbolo": "x 7.91..9.64 (1.73 m), topo em theta 46.8 graus desde a crista (base 95.0)",
+   "wordmark": "x 10.34..17.26 (6.92 m), altura de caixa alta theta 51.6..68.4 (0.91 m de arco)",
+   "nota": "mesmas dimensoes absolutas do 767 CC-CWY (simbolo 1.70/wordmark 6.65): a LATAM aplica a marca no mesmo tamanho fisico nos dois widebodies"
+  },
+  "barriga": "simbolo+wordmark LATAM no ventre dianteiro, x ~11.5..14.6 (visivel na foto FRA em voo)",
+  "estabilizador": "cinza-voo claro em cima e embaixo — NAO indigo (confirmado nas duas fotos)",
+  "nacelles": "brancas, lip metalico, sem chevrons",
+  "cone_de_cauda": "claro (branco/cinza), anel do escape da APU metalico",
+  "ventre_traseiro": "nas fotos aparece cinza, mas nas duas esta em SOMBRA — tratado como branco; duvida registrada"
+ },
+ "confianca": {
+  "alta": "dimensoes gerais, entre-eixos, bitola, portas pax/carga x (porta 5 confirmada em foto), janela pitch (documento), fin BA/BF (conferido em pixel: 58.06+0.985z / 68.34+0.385z), asa LE/TE, ponta raked (cotas impressas), motor inlet_x/cl_y/OD, tires, bandas da deriva (2 fotos), cunha indigo (fronteiras medidas)",
+  "media": "estacoes nariz (+-0.05), cauda centro/raio (+-0.1), parabrisa (+-0.05 no frontal; gate_x da lateral estilizada), diedro, carenagem ventral, w_ratio da lamina do cone",
+  "baixa": "carenagens de flap y, stab raiz_z, nacelle top/pylon, cor real do ventre traseiro (sombra)"
+ },
+ "correcoes": {
+  "calibracao_2026-08-20": "Primeira calibracao pelo vao nariz-cauda da PLANTA com normalizacao por eixo (ky=0.958) ERRADA para posicoes: o vies de traco e ABSOLUTO (~0.10 m por borda, traco 7px), nao proporcional — aplicar ky como escala encolhia a semi-envergadura de 32.4 para 31.05 e a 'asa sumia' na varredura. Correto: escala unica pela entre-eixos (centros), meia-traco nas bordas, e normalizacao SOMENTE nas dimensoes da secao.",
+  "altura_secao": "briefing dizia 6.60 de altura de fuselagem; APR p.18 imprime 6.20 na lateral E na planta — secao circular. Nao propagar 6.60."
+ },
+ "fin_bandas_2026-08-20": {
+  "fonte": "PT-MUG: EGLL 2025-06-17 (CC BY 4.0) e FRA 2022-10-25 (CC BY-SA 4.0), retificadas por 3 retas no plano (x,z) da deriva. Cantos dos dois corais concordam entre as fotos dentro de 0.2-0.4 m. Estibordo: MESMA arte em (x,z) (PT-MUB Milao 2024).",
+  "convencao": "deriva exposta z 3.1 (raiz) .. 12.9 (ponta), H=9.8; BA x=57.996+1.0104z; BF x=68.254+0.396z; zeta = fracao ao longo da aresta entre raiz e ponta",
+  "estrutura": "Campo INDIGO na parte de baixo. UMA banda cinza-voo atravessa a deriva subindo 20.0 graus, com CORAL no meio. Acima de ub_bot TODA a area e cinza-voo (a banda superior e o cap da ponta sao uma coisa so — nao ha indigo acima), com o segundo CORAL dentro dela. Filete cinza-voo de 0.30 m ao longo do BA.",
+  "retas_medidas": {
+   "lb_bot": "z = 0.364*x - 18.70   (cruza BA em zeta 0.073, BF em zeta 0.416)",
+   "lb_top": "z = 0.364*x - 17.73   (cruza BA em zeta 0.229, BF em zeta 0.532)",
+   "ub_bot": "z = 0.403*x - 18.05   (cruza BA em zeta 0.600, BF em zeta 0.832)",
+   "espessura_banda_inferior": "0.91 m perpendicular (media das duas fotos) — bate com o 0.96 m absoluto da frota dentro do erro",
+   "filete_BA": "0.30 m perpendicular"
+  },
+  "coral_inferior_cantos": [
+   [
+    68.19,
+    6.12
+   ],
+   [
+    66.43,
+    6.45
+   ],
+   [
+    70.95,
+    7.12
+   ],
+   [
+    69.38,
+    7.53
+   ]
+  ],
+  "coral_inferior_cortes": "fwd dz/dx=-0.188 ; aft dz/dx=-0.261 (descem para tras, media -13 graus)",
+  "coral_superior_cantos": [
+   [
+    69.77,
+    10.07
+   ],
+   [
+    68.63,
+    10.23
+   ],
+   [
+    72.55,
+    11.19
+   ],
+   [
+    70.02,
+    11.58
+   ]
+  ],
+  "coral_superior_cortes": "fwd dz/dx=-0.140 ; aft dz/dx=-0.154 (media -8.4 graus); o coral sobe ate encostar no FILETE do BA (limite superior-dianteiro)",
+  "conferencia_frota": "as travessias caem quase em cima do template da familia A320 medido em f162f73 (lb_top BA 0.229 vs 0.175, ub_bot BA 0.600 vs 0.585 / BF 0.832 vs 0.80): a arte da marca se mantem, o que muda por tipo e onde ela encontra cada bordo.",
+  "erro_herdado": "a retificacao herdada (_rect3.npy) colocava as duas bandas ~1.5 m BAIXAS e dava espessura 1.28 m e angulos 16-19 graus. A causa: o .npy foi gravado com a linha 0 = z MINIMO enquanto o PNG com a grade foi gravado invertido — a 'inversao de intervalo' que a sessao anterior estava perseguindo. Refeito do zero nas duas fotos.",
+  "conferencia_no_modelo": "render ortogonal da deriva (render_fin_ortho.png, mesmo dominio (x,z) da textura) medido com o mesmo detector de cantos das fotos: coral inferior erro medio de canto 0.05 m, coral superior 0.08 m — dentro da propria dispersao entre as duas fotos (0.2-0.4 m)."
+ },
+ "portoes_de_qualidade_2026-08-20": {
+  "auditoria_casco": "gaiola vs spec 1.0064 em todas as estacoes; superficie por raycast erro mediano 0.5 cm (max 3.4 cm na ponta do nariz)",
+  "pecas_soltas": "todas as raizes penetram a peca de apoio (deriva +1.19 m, carenagem ventral +0.33 m, nacelles no pylon +0.09 m). A carenagem ventral sobrava 0.11 m para FORA do casco na primeira volta — borda superior enterrada em 0.86*meia-largura / z=-0.90.",
+  "solo": "a Pista herdada do 787 estava em z=-4.89 e o trem em z=-5.67: o aviao rendia com as rodas ENTERRADAS. Pista movida para -5.67; menor z do modelo = -5.670 (roda do trem de nariz).",
+  "tailstrike": "7.73 graus, limitado pela quilha em x=56.74 (inicio da conicidade). O -300ER real tem angulo baixo mesmo (por isso leva tail skid, que este modelo ainda nao tem).",
+  "parabrisa": "NoseMask passou a ter resolucao propria (8192x2048) e cobertura por supersample 4x4 — com mascara binaria a 4096 o close-up do nariz mostrava serrilha grossa nas molduras."
+ }
+}
