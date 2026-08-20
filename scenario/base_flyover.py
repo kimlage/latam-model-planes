@@ -197,6 +197,12 @@ def main():
             ("A321", os.path.join(ROOT, "airbus A321neo",
                                   "A321neo_LATAM.blend"),
              (-450.0, -1420.0)),   # east edge of Plataforma LATAM
+            ("A320ceo", os.path.join(ROOT, "airbus A320ceo",
+                                     "A320ceo_LATAM.blend"),
+             (-828.0, -1300.0)),   # Plataforma Papa, north of the A319
+            ("A321ceo", os.path.join(ROOT, "airbus A321ceo",
+                                     "A321ceo_LATAM.blend"),
+             (-435.0, -1345.0)),   # between the hero row and the neo
         )
         for tag, path, stand_i in MASTERS:
             if not os.path.exists(path):
