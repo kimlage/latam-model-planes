@@ -1,0 +1,99 @@
+{
+ "fonte": "Airbus ACAP A321 Rev 35 (Jul 01/26), blocos ON A/C A321-100 A321-200 + derivacao a nivel de spec do spec_a321.json / A321neo_LATAM.blend (mesmo casco de 44.51 m, mesma secao, mesma empenagem, mesma asa sharklet) + fotogrametria PT-XPB/PT-MXP/PT-MXD (Wikimedia, ver refs_manifest.json)",
+ "aeronave": "Airbus A321-231 (A321ceo, sharklets), PT-MXP, LATAM Airlines Brasil, MSN 6163, entregue 2014 a TAM, repintada LATAM",
+ "matricula_fonte": "Escolhida por ter foto CC0 recente (out/2024) na livery LATAM atual em perfil + foto CC BY 2.0 de 2017 (era TAM) de alta resolucao confirmando airframe (sharklets, V2500, 4 portas); testemunhas: PT-XPB (perfil quase ortografico 3809px, variante oneworld — cauda/echarpe padrao) e PT-MXD (bombordo elevado 2021). Candidatas CC-BE* sao A321-211 (CFM56) — motor errado para o padrao IAE da frota brasileira.",
+ "datum": "x=0 na ponta do nariz; z=0 no meio da secao constante; unidades m (mesmo referencial do spec_a321)",
+ "derivacao": {
+  "base": "airbus A321neo/A321neo_LATAM.blend + spec_a321.json (gate 2026-08-20 aprovado)",
+  "regra": "MESMO comprimento 44.51 m (ceo e neo-ACF identicos em casco, asa, empenagem, trem). Muda: portas (ceo: 4 pares full-size D1/D2/D3/D4, SEM overwing), motor (V2533-A5 em vez de PW1127G), livery (matricula, titulo, desgaste). Fuselagem, UV, wedge, fin sash, lockups LATAM intocados.",
+  "portas_validacao": "D4 do ceo (36.58 ACAP) coincide com a posicao ja modelada da Porta2 do neo (36.58) — zero movimento; D1 5.02 ACAP vs 5.04 modelo: delta 0.02 m aceito e documentado"
+ },
+ "dimensoes_gerais": {
+  "comprimento": 44.51,
+  "envergadura_sharklets": 35.8,
+  "altura": 11.76,
+  "fuselagem_largura": 3.95,
+  "fuselagem_altura": 4.14,
+  "entre_eixos": 16.90,
+  "bitola": 7.59,
+  "fonte": "ACAP A321 Rev 35, FIGURE-2-2-0-991-005-A01 sheets 3-4 (Sharklet, ON A/C A321-100 A321-200; texto bruto linhas 3297-3560)"
+ },
+ "trem": {
+  "nariz_x": 5.07,
+  "principal_x": 21.97,
+  "bitola": 7.59,
+  "roda_principal_diam": 1.17,
+  "roda_nariz_diam": 0.76,
+  "nota": "identico ao A321neo (ACAP mesmo bloco: 5.07 + 16.90)"
+ },
+ "motor_v2533": {
+  "modelo": "IAE V2533-A5 (A321-231)",
+  "inlet_x": 15.39,
+  "y": 5.75,
+  "nacelle_diametro": 2.2,
+  "fan_diametro": 1.6,
+  "clearance_solo_acap": 0.78,
+  "sem_chevrons": true,
+  "fonte": "ACAP Fig 2-2-0 sheet 4: 'V2500 15.39 m' (CFM56 15.46); clearance V2500 nacelle low point 0.78 m (tabela 2-3-0 WV0 fwd CG). Nacelle: mesma familia V2500-A5 do A319 (fan 1.613 m) — derivada da nacelle PW1100G do master com os fatores ja validados no A319: radial x0.846, comprimento x0.88, sem chevrons, fan cowl branco (foto PT-MXP 2024: nacelle toda branca)."
+ },
+ "portas_ceo": {
+  "fonte": "ACAP A321 Rev 35, FIGURE-2-7-0-991-004-A01 sheet 2 (pagina bruta 114, ON A/C A321-100 A321-200 A321neo) — rasterizada 600 dpi (acap321ceo_600-114-114.png)",
+  "porta1_x": 5.02,
+  "porta1_x_modelo": 5.04,
+  "porta2_x": 13.84,
+  "porta3_x": 24.79,
+  "porta4_x": 36.58,
+  "carga": {"fwd": 8.16, "aft": 29.62, "bulk": 33.22},
+  "config": "ceo: 4 pares de portas full-size (D1, D2 a frente da asa, D3 atras da asa, D4 traseira), SEM saidas overwing — confirmado nas fotos PT-MXP 2017/2024, PT-XPB, PT-MXD e na Fig 2-7-0-991-004 sheet 1",
+  "folhas": {
+   "d1_d4": "0.81 x 1.85, soleira z=-0.67 (herdadas do master)",
+   "d2_d3": "0.76 x 1.52, MESMA linha de soleira da D1 (z=-0.67, topo z=0.85) — lidas na foto PT-XPB (D2 118 px vs D1 154 px, fundos coincidentes) e coerentes com Fig 2-7-0-991-034 (1.52 m 'TOP OF FLOOR' na secao B-B). INCERTEZA +-0.05-0.10 m: a Fig -034 tambem imprime 1.73 m (vao com porta aberta) e a tabela 2-3-0 da soleiras D2/D3 0.27 m acima da D4 (3.90 vs 3.63) — leitura da tabela conflita com a foto; a foto ganhou. Duvida registrada para revisao humana."
+  },
+  "nota_posicoes": "cargas fwd/aft do ceo ficam 0.40 m a frente das do neo-ACF (8.16/29.62 vs 8.56/30.02); bulk identica 33.22; D3 do ceo 2.03 m a frente da D3 do ACF (24.79 vs 26.82)"
+ },
+ "janelas_cabine": {
+  "z_cinto": [0.52, 0.86],
+  "pitch_m": 0.515,
+  "primeira_x": 6.08,
+  "n_janelas_modelo": 57,
+  "nota": "fileira continua ate ~34.9 como no neo; nas fotos ceo a fileira segue ate a fronteira do wedge igual (PT-MXP 2024). Fileira interrompida visualmente pelas folhas D2/D3 (as folhas 3D cobrem a faixa)."
+ },
+ "cauda_livery_pt_mxp": {
+  "fonte": "fotogrametria PT-XPB ref_PT-XPB_sbgr.jpg (medir_echarpe_xpb2.py: calibracao quadratica px(x) em D1/D2/D3/D4 do ACAP + ponta do cone; gradiente 82.4 px/m quase constante; mapa vertical pela fileira de janelas z=0.69). Testemunhas: PT-MXP 2024 (CC0) e PT-MXD 2021. Incerteza +-0.10-0.30 m conforme a regiao.",
+  "echarpe": {
+   "frontal_medida_xpb": "x >= 35.52 + 0.816*z (rms 0.06 m, n=21, linhas contaminadas por matricula/carenagem dorsal excluidas)",
+   "frontal_adotada": "x >= 35.48 + 0.822*z — IGUAL ao neo PS-LBA dentro de +-0.05; a aplicacao de frota e a mesma no casco de 44.51 m, entao as tres fronteiras do spec_a321 foram mantidas intactas na textura",
+   "inferior": "herdada do neo: theta <= max(129.0 - 23.7*(x-34.45), 105.3 - 3.78*(x-36.05)); medicao XPB coerente na regiao x 35-39 (theta ~100-113) mas ruidosa atras (asa/estab ocluem a quilha) — nao sobrepoe a medida do neo",
+   "traseira": "x <= 41.46 + 0.0538*z (linha do BF da deriva — estrutural, mesma deriva)",
+   "porta4": "folha dividida pela fronteira: indigo acima, branco abaixo, contorno branco — IGUAL ao neo; confirmado nas fotos PT-XPB e PT-MXD (fronteira cruza a folha)"
+  },
+  "matricula": "PT-MXP BRANCA dentro do indigo NOS DOIS LADOS (foto PT-MXP 2024 estibordo + PT-MXD 2021 bombordo), mesma caixa do neo: cap 0.40, ancora x 36.78, z base 0.70, Arial Bold; espelhada em u a estibordo",
+  "titulo": "'(swirl) AIRBUS A321' indigo sobre branco, caps z 0.88-1.03 (cap 0.145), fim traseiro em x=34.75 — 0.65 m A FRENTE do titulo do neo (35.42). Medido em DUAS fotos ceo: XPB fim 34.65 (calibracao portas) e PT-MXP 2024 fim ~34.77 (contagem de janelas ate a fronteira, livre de calibracao). Glifos: swirl+AIRBUS da malha MarkAirbusNeo_E do master; 'A321' = 4 primeiros glifos do SVG oficial A321neo (recorte do 'neo').",
+  "hstab": "extradorso CINZA-VOO herdado do neo; foto PT-MXD 2021 (bombordo elevado) mostra topo claro (cinza/branco), definitivamente NAO indigo. Duvida cinza-vs-branco registrada.",
+  "fin_sash": "REGENERADO: as texturas FinSash/FinSashE/FinSashD foram sincronizadas do master A321neo APOS a correcao familia-wide do sash (spec_a321.json -> fin_bandas_2026-08-20: bandas ~0.96 m de espessura fisica constante, banda inferior entrando pela RAIZ, cap da ponta alargando para tras). A copia inicial do .blend (13:25) antecedia o fix do master (14:01); pixels copiados via bpy.data.libraries.load, Deriva identica (168 verts). Gate re-rodado com a arte corrigida.",
+  "tailcone": "branco, anel APU metal — como neo/A319"
+ },
+ "correcoes_da_derivacao": {
+  "3d": "Overwing1/2_E/D removidas; Porta3_E/D -2.03 (26.82->24.79) com malha propria redimensionada para 0.76x1.52; novas Porta2ceo_E/D em 13.84 (0.76x1.52, folha branca); PortaCargaFwd -0.40; PortaCargaAft -0.40; motores V2500 (escala radial 0.846 / comprimento 0.88 sobre a nacelle PW do master, inlet 15.40->15.39)",
+  "textura": "contornos overwing apagados; anel D3 apagado em 26.82 e repintado analiticamente em 24.79 no tamanho de saida; anel novo D2 em 13.84; aneis de carga fwd/aft -0.40; PS-LBA apagada (indigo restaurado) e PT-MXP rasterizada nos dois lados (D espelhada); titulo AIRBUS A321neo apagado e AIRBUS A321 rasterizado com fim traseiro 34.75; weathering moderado (airframe 2014): leque do trem do nariz, escorridos dos drenos 8.55/34.54, grime nas portas do trem",
+  "reg_porta_trem": "MXP (padrao das 3 ultimas letras, como LBA no neo)"
+ },
+ "sharklet": {
+  "pintura": "lamina INDIGO macica nos dois lados (CORRECAO desta derivacao: o master A320neo/A321neo deixa a lamina branca/cinza por dentro; as fotos PT-MXD/PT-MXP/PT-XPB — e a propria PS-LBO do neo — mostram indigo). 129 faces do mesh Asas com |y|>17.25 acima da transicao -> LATAM_Indigo (fix_sharklet_indigo.py). Banda coral do lado outboard NAO modelada (sem foto do outboard; simplificacao documentada).",
+  "nota_master": "defeito latente da familia sinalizado para correcao nos masters A320neo/A321neo"
+ },
+ "verificacoes": {
+  "posicoes": "conferidas no build por bbox: D1 5.04, D2 13.84, D3 24.79, D4 36.58, cargas 8.16/29.62/33.23, inlet V2500 15.39; meia-largura barril 1.99 por raycast",
+  "clearance_nacelle": "fundo da nacelle z -3.05 -> 0.62 m acima da pista (-3.67); ACAP V2500 0.78. Discrepancia 0.16 herdada da geometria do master (mesma receita do A319); registrada",
+  "envergadura_modelo": "a asa do master A320 tem envergadura 7% acima do real (38.28 vs 35.8 do A319/A320; aqui ponta em |y|=19.14). Desvio herdado e ja documentado no spec_a319; nao corrigido aqui para nao divergir da familia",
+  "tailstrike": "geometria de trem/dreno identica a do A321neo -> vale o achado do spec_a321: 6.14 graus ate o Belly_DrenoAft tocar (real ~9.5-11). Herdado, nao corrigido",
+  "gate_2026-08-20": "6 angulos renderizados; comparacao lado a lado com ref_PT-MXP_2024_gig.jpg (cauda espelhada), ref_PT-XPB_sbgr.jpg (perfil) e ref_PT-MXD_2021_cwb.jpg; zoom no canto BF-da-deriva x estab x tailcone conferido contra o mesmo crop do master neo (artefatos de serrilhado identicos aos do master aprovado, nada introduzido pela derivacao); ver verificacao_visual.png"
+ },
+ "confianca": {
+  "oficial_acap": ["comprimento", "envergadura", "altura", "entre_eixos", "bitola", "portas_ceo posicoes", "carga", "inlet_x V2500", "clearance nacelle"],
+  "derivado_do_a321neo_validado": ["casco/secao/UV", "asa+sharklet", "empenagem", "trem", "wedge (3 fronteiras)", "fin sash", "lockups LATAM", "ventre/antenas", "materiais"],
+  "derivado_do_a319_validado": ["fatores de escala da nacelle V2500 (0.846/0.88)"],
+  "fotogrametria": ["echarpe frontal re-verificada (XPB, rms 0.06)", "titulo posicao (2 fotos)", "matricula estilo/lados", "folhas D2/D3 tamanho", "hstab claro", "sharklets presentes", "nacelle branca"],
+  "incerteza_fotogrametria": "+-0.10-0.30 m conforme regiao; folhas D2/D3 +-0.05-0.10"
+ }
+}

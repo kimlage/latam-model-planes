@@ -1,0 +1,52 @@
+{
+ "nota": "Fotos de referencia usadas na derivacao e fotogrametria da livery PT-MXP. Os arquivos ref_*.jpg NAO sao versionados (CC BY-SA/CC BY conflitam ou pesam; mesma regra do A321neo e do scenario/refs). Este manifesto registra autor/licenca/URL para reproducao.",
+ "fotos": [
+  {
+   "arquivo": "ref_PT-MXP_2024_gig.jpg",
+   "url": "https://commons.wikimedia.org/wiki/File:LATAM-PTMXPgig011024hbs_5687.jpg",
+   "autor": "HELIO BASTOS SALMON",
+   "licenca": "CC0 1.0",
+   "data": "2024-10-01",
+   "uso": "FONTE PRIMARIA da livery atual: perfil estibordo em aproximacao (GIG). Matricula PT-MXP branca no indigo, titulo AIRBUS A321 (fim traseiro ~34.77 por contagem de janelas), 4 portas full-size sem overwing, sharklets, nacelle V2500 branca, wedge igual ao do neo"
+  },
+  {
+   "arquivo": "ref_PT-MXP_2017_flickr33651986200.jpg",
+   "url": "https://commons.wikimedia.org/wiki/File:LATAM_A321_PT-MXP_(33651986200).jpg",
+   "autor": "Carlos Daniel Dobelli (Flickr)",
+   "licenca": "CC BY 2.0",
+   "data": "2017-04-14",
+   "uso": "airframe witness em alta resolucao (4608px, era TAM): sharklets, V2500, layout de portas D1/D2 visiveis, sem overwing"
+  },
+  {
+   "arquivo": "ref_PT-XPB_sbgr.jpg",
+   "url": "https://commons.wikimedia.org/wiki/File:A321_LATAM_SBGR.jpg",
+   "autor": "Rafael Luiz Canossa (Flickr)",
+   "licenca": "CC BY-SA 2.0",
+   "data": "2017-01-25",
+   "uso": "perfil estibordo quase ortografico 3809px (variante oneworld; cauda/echarpe padrao LATAM): calibracao quadratica px(x) nas 4 portas do ACAP + ponta do cone (medir_echarpe_xpb2.py) — fronteira frontal do wedge 35.52+0.816z (rms 0.06 m), titulo fim 34.65, folhas D2/D3 mais curtas (1.52) na mesma linha de soleira da D1"
+  },
+  {
+   "arquivo": "ref_PT-MXD_2021_cwb.jpg",
+   "url": "https://commons.wikimedia.org/wiki/File:Airbus_A321_LATAM_PT-MXD.jpg",
+   "autor": "Iyusi766",
+   "licenca": "CC BY-SA 4.0",
+   "data": "2021-09-25",
+   "uso": "bombordo elevado (CWB, thumbnail 1920px): matricula branca no indigo tambem a bombordo, hstab extradorso claro (nao indigo), sharklet inboard INDIGO macico, titulo AIRBUS A321"
+  }
+ ],
+ "vetores": [
+  {
+   "arquivo": "../airbus_a321neo_logo.svg",
+   "url": "https://commons.wikimedia.org/wiki/File:Airbus_A321neo_typeface.svg",
+   "autor": "Airbus",
+   "licenca": "PD-textlogo",
+   "uso": "glifos A,3,2,1 do titulo traseiro (o path 'neo' — x 0.314..0.505 do SVG — descartado); swirl+AIRBUS reaproveitados da malha MarkAirbusNeo_E do master"
+  }
+ ],
+ "documento_oficial": {
+  "arquivo": "../airbus A321neo/A321_ACAP_airbus.pdf (nao versionado)",
+  "url": "https://mediaassets.airbus.com/pm_38_916_916230-7u6neg4lfg.pdf?fileName=aca32101-jul-2026.pdf",
+  "titulo": "Airbus A321 Aircraft Characteristics - Airport and Maintenance Planning, Rev 35, Jul 01/26",
+  "paginas_usadas": "blocos ON A/C A321-100 A321-200: Fig 2-2-0-991-005 sheets 1-4 (dimensoes, V2500 15.39), Fig 2-7-0-991-004 sheet 2 pagina bruta 114 rasterizada 600 dpi (portas 5.02/13.84/24.79/36.58, carga 8.16/29.62/33.22), Fig 2-7-0-991-034 pagina bruta 118 (saidas de emergencia), tabela 2-3-0 (clearances, nacelle V2500 0.78)"
+ }
+}

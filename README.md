@@ -7,7 +7,7 @@ dimensions have to match the manufacturer's document, and the paint has to match
 a photograph of that specific registration**. The bar is not "it looks like an
 airliner" — it is a LATAM engineer recognising their own aircraft.
 
-Four aircraft finished:
+Five aircraft finished:
 
 | Aircraft | Registration | File | Length |
 |---|---|---|---|
@@ -15,6 +15,7 @@ Four aircraft finished:
 | **Airbus A320neo** | PT-TMN | [`airbus A320neo/A320neo_LATAM.blend`](airbus%20A320neo/A320neo_LATAM.blend) | 37.57 m |
 | **Airbus A319 (ceo)** | PT-TMT | [`airbus A319/A319_LATAM.blend`](airbus%20A319/A319_LATAM.blend) | 33.84 m |
 | **Airbus A321neo (ACF)** | PS-LBA | [`airbus A321neo/A321neo_LATAM.blend`](airbus%20A321neo/A321neo_LATAM.blend) | 44.51 m |
+| **Airbus A321-231 (ceo)** | PT-MXP | [`airbus A321ceo/A321ceo_LATAM.blend`](airbus%20A321ceo/A321ceo_LATAM.blend) | 44.51 m |
 
 The A319 is a spec-level derivation of the A320neo master: same nose and
 cross-section, the two constant-section plugs removed (1.60 m forward of the
@@ -34,6 +35,19 @@ forward boundary sits 1.15 m aft of a blind +6.94 shift and its lower boundary
 is two straight lines in `(x, θ)`, not one (`airbus A321neo/spec_a321.json`,
 builders `build_a321_fase1_geometria.py` + `build_a321_fase2_livery.py`,
 measurement `medir_echarpe_v2.py`).
+
+The A321ceo (A321-231, IAE V2533-A5) derives from the A321neo — same 44.51 m
+hull — swapping only what the ACAP's ceo blocks and the PT-MXP photographs
+change: the four full-size door pairs with no overwing exits (D1/D2/D3/D4 at
+5.02/13.84/24.79/36.58, cargo 8.16/29.62/33.22; D2/D3 are shorter 0.76 × 1.52
+exits on the D1 sill line), V2500 nacelles at inlet 15.39 (the A319's validated
+scale factors), the shorter `AIRBUS A321` title 0.65 m forward of the neo's
+(measured on two ceo photos), and the wedge verified rather than assumed — the
+forward boundary re-measured on a PT-XPB profile came out `35.52 + 0.816z`
+against the neo's `35.48 + 0.822z`, identical within 5 cm, so the inherited
+paint stands (`airbus A321ceo/spec_a321ceo.json`, builders
+`build_a321ceo_fase1_geo.py` + `build_a321ceo_fase2_livery.py`, measurement
+`medir_echarpe_xpb2.py`).
 
 ![A320neo departing RWY 17R at Santiago, seen head-on as the camera flies formation and cranes up around its starboard bow](airbus%20A320neo/a320_scl_v11.gif)
 
