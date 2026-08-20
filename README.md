@@ -49,7 +49,7 @@ paint stands (`airbus A321ceo/spec_a321ceo.json`, builders
 `build_a321ceo_fase1_geo.py` + `build_a321ceo_fase2_livery.py`, measurement
 `medir_echarpe_xpb2.py`).
 
-![A320neo departing RWY 17R at Santiago, seen head-on as the camera flies formation and cranes up around its starboard bow](airbus%20A320neo/a320_scl_v11.gif)
+![A320neo departing RWY 17R at Santiago, seen head-on as the camera flies formation and cranes up around its starboard bow](airbus%20A320neo/a320_scl_v12.gif)
 
 *A320neo departing 17R at Santiago — 240 frames, 9.6 s. The camera flies
 formation in the aircraft's own coordinate frame from the first frame to the
