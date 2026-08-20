@@ -51,7 +51,23 @@
    "bulk": 33.22
   },
   "config": "ACF: 3 pares de portas de tamanho cheio (1, 3, 4) + 2 pares de saidas overwing; SEM porta 2 dianteira. Confirmado nas fotos PS-LBO.",
-  "folhas": "mesmas dimensoes do A320 (pax 0.81x1.85, overwing tipo III)"
+  "folhas": "mesmas dimensoes do A320 (pax 0.81x1.85, overwing tipo III)",
+  "z_folha_2026_08_20": {
+   "porta1": [
+    -0.3,
+    1.76
+   ],
+   "porta3": [
+    0.02,
+    1.71
+   ],
+   "porta4": [
+    -0.1,
+    1.9
+   ],
+   "fonte": "tabela 2-3-0-991-048 (ACF): D1 3.39 / D3 3.89 / D4 3.61 (MRW FWD CG; A320: 3.381/3.615 - mesma familia, ergues +0.55/+0.57). A porta 3 ACF e a porta CURTA ELEVADA: abertura 1.52 m (nao 1.85) com sill 0.39 m acima do piso (FIGURE-2-7-0-991-046 corte C-C) - o modelo tinha um clone da porta 1 em tamanho cheio na altura da porta 1; folha reconstruida 0.02..1.71 (escala 0.82). Aneis da textura repintados das malhas; folha da porta 4 re-dividida na fronteira z=-0.11 (fixa no casco)."
+  },
+  "nota_porta3_antiga": "spec anterior dizia 'folhas: mesmas dimensoes do A320' - INCORRETO para a D3 ACF (corrigido 2026-08-20)"
  },
  "janelas_cabine": {
   "z_cinto": [
@@ -96,7 +112,8 @@
    "achado": "6.14 graus ate o Belly_DrenoAft (x=34.77) tocar a pista, pivo no trem principal (21.97, -3.670). O A321 real tem ~9.5-11 graus. Mesmo problema conhecido do A320 (7.75), amplificado pela fuselagem traseira mais longa: o mastro de dreno aft esta baixo demais e/ou o trem curto.",
    "acao": "registrado, nao corrigido — modelo estatico; herdado do A320 master"
   },
-  "posicoes": "trem principal 21.97 = 5.07+16.90 ACAP; inlet motor 15.40 = ACAP; portas conferidas no build (ver build_a321_fase1_geometria.py output)"
+  "posicoes": "trem principal 21.97 = 5.07+16.90 ACAP; inlet motor 15.40 = ACAP; portas conferidas no build (ver build_a321_fase1_geometria.py output)",
+  "fase3_2026-08-20": "build_a321_fase3_acap.py: empenagem recuada (verificada no ACAP proprio), portas erguidas (D3 reconstruida curta/elevada), aneis repintados, CamAlvoCauda 38.44->39.14; 6 angulos re-renderizados e conferidos"
  },
  "confianca": {
   "oficial_acap": [
@@ -157,5 +174,14 @@
    "ub_top": "(39.924,7.400)->(41.838,7.075) dz/dx=-0.1698"
   },
   "uv": "Deriva: u=0.125*x-4.2925 ; v=0.142857*z-0.2 (dominio x 34.34..42.34, z 1.4..8.4) — inalterada"
+ },
+ "empenagem_2026_08_20": {
+  "fin_LE": "x = 0.863*z + 34.96 (= A320 corrigido + 6.94)",
+  "fin_TE": "x = 0.221*z + 41.85 (raiz z1.55: 42.19; topo z8.05: 43.63)",
+  "estab_tip_TE_x": 43.56,
+  "verificacao_acap_propria": "ANTES de aplicar: TE medido no ACAP A321 FIGURE-2-2-0-991-012 p73 (ancoras pelo preenchimento amarelo do desenho, escala do comprimento 44.51): TE = 0.222*z + 41.93 - concorda com a previsao da familia em 0.08 m / 0.001 de inclinacao. A posicao herdada do master antigo (41.46+0.054z) cai nos DOIS eixos (intercepto e inclinacao).",
+  "deriva_raiz": "fundo esticado 1.55->1.05 (z<2.05, fator 2) como no master/ceo",
+  "nota_echarpe_traseira": "a fronteira traseira da echarpe (41.46+0.0538z, medida na PS-LBO em 41.23+-0.15 em z1.9) NAO e a linha do BF da deriva como o spec dizia: e a fronteira da PINTURA do casco, ~0.7-1.0 m a frente da carenagem da raiz do TE - o mesmo padrao que a foto do PT-TMN mostra no master. Ela NAO se move com o fin; mantida.",
+  "uv_sash": "remap (h,c) com UV por-loop preservada: as travessias zeta/rho do fin_bandas viajam com a malha"
  }
 }
