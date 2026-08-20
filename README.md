@@ -24,12 +24,12 @@ the terminals, the LATAM base and the cordillera open around it. The move is
 measured rather than eyeballed — see [§8 of the scenery
 manual](scenario/README.md).*
 
-![Drone orbit of the LATAM maintenance base at SCL](scenario/scl_base_v3.gif)
+![Aerial survey of SCL: terminals, tower and the LATAM base](scenario/scl_base_v4.gif)
 
-*The second clip: one continuous 130-degree climbing orbit of the LATAM
-maintenance base — the official lockup opens it, the fleet rows carry the
-middle, and it ends looking down at the whole block with the assembled
-PT-TMN at its stand. Constant angular rate, no hand-over
+*The second clip: a northbound aerial survey of the whole airport — it
+opens on the T1/T2 terminal core with its piers and parked fleet, crosses
+the control tower, and closes on the LATAM base with the assembled PT-TMN
+at its stand, both runways crossing the frame end to end
 ([`scenario/base_flyover.py`](scenario/base_flyover.py)).*
 
 *The version history is kept in the repository: every `a320_scl_v*.gif` is
