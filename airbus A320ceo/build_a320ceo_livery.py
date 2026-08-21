@@ -21,6 +21,12 @@ import numpy as np
 
 D = bpy.data
 BASE = os.path.dirname(os.path.abspath(__file__))
+
+# a implementacao unica dos aneis de porta mora na raiz do repositorio
+import sys as _sys
+_sys.path.insert(0, os.path.dirname(BASE))
+import latam_livery_kit as kit  # noqa: E402
+
 log = lambda *a: print("[A320ceoL]", *a)
 
 L_UV = 38.0
@@ -244,28 +250,27 @@ paint(selp | sels, 2, 1.0)
 log("title texels:", int((selp | sels).sum()))
 
 # ---------------------------------------------------------------- door outlines
-def rounded_rect(px, pz, x0, x1, z0, z1, r):
-    ix0, ix1, iz0, iz1 = x0 + r, x1 - r, z0 + r, z1 - r
-    dx = np.maximum(np.maximum(ix0 - px, px - ix1), 0)
-    dz = np.maximum(np.maximum(iz0 - pz, pz - iz1), 0)
-    return np.hypot(dx, dz) <= r
+# ------------------------------------------------------------ door rings
+# UMA implementacao para as cinco Airbus: `latam_livery_kit.anel_porta`.
+# Este bloco era uma copia de `door_ring()` que pintava o contorno no
+# RETANGULO (x, z) — a projecao lateral — enquanto a folha vive na superficie.
+# Acima do ombro os dois divergiam 0.5-0.7 m: era a "porta 1 fantasma".
+# O contorno agora e descrito em (x, w), com w = arco da secao. Ver
+# `airbus A320neo/portas_familia.py` para a medicao e para o assentamento das
+# folhas, que tinham o mesmo erro NA MALHA.
+_WG = kit.grade_arco(rx, rrz, rry, X, TH)
 
 def door_ring(name, band_c, band_w, groove_c, groove_w, side, far_band=False):
     ob = D.objects.get(name)
-    if not ob:
+    if ob is None:
         return
-    vs = np.array([v.co[:] for v in ob.data.vertices])
-    x0, x1 = vs[:, 0].min() + ob.location.x, vs[:, 0].max() + ob.location.x
-    z0, z1 = vs[:, 2].min() + ob.location.z, vs[:, 2].max() + ob.location.z
-    r = 0.15
-    inner = rounded_rect(Xg, Zg, x0, x1, z0, z1, r)
-    oband = rounded_rect(Xg, Zg, x0 - band_w, x1 + band_w, z0 - band_w, z1 + band_w, r)
-    ogro = rounded_rect(Xg, Zg, x0 + groove_w, x1 - groove_w, z0 + groove_w, z1 - groove_w, r)
+    caixa = kit.caixa_porta_xw(ob, rx, rzc, rrz, rry)
+    banda, sulco = kit.anel_porta(Xg, _WG, caixa, band_w, groove_w, 0.15)
     sideok = ((Yg < 0) if side < 0 else (Yg > 0)) & (np.abs(np.sin(THg)) > 0.25)
     if far_band:
-        paint((oband & ~inner) & sideok, band_c, 1.0)
-    paint((inner & ~ogro) & sideok, groove_c, 1.0)
-    log("door ring", name, f"x {x0:.2f}..{x1:.2f} z {z0:.2f}..{z1:.2f}")
+        paint(banda & sideok, band_c, 1.0)
+    paint(sulco & sideok, groove_c, 1.0)
+    log("door ring", name, "x %.2f..%.2f w %.3f..%.3f" % caixa)
 
 door_ring("Porta1_E", 4, 0.05, 5, 0.010, side=-1, far_band=True)
 door_ring("Porta1_D", 4, 0.05, 5, 0.010, side=+1, far_band=True)

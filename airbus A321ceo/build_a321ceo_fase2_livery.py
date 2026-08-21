@@ -94,6 +94,13 @@ cap_paste(28.90, 31.15, -0.40, 0.77, 0.93)   # aft cargo 30.02 -> 29.62
 log("cargo rings moved -0.40")
 
 # ------------------------------------------------ door rings (paint helpers)
+# SUPERADO 2026-08-21. Este `door_ring` pinta o contorno no RETANGULO (x, z) —
+# a projecao lateral — e por isso desloca o anel 0.5-0.7 m acima do ombro (a
+# "porta 1 fantasma"). A implementacao correta, em (x, w) com w = arco da secao,
+# e `latam_livery_kit.anel_porta`, e quem repinta os quatro aneis desta aeronave
+# e `build_a321ceo_fase3_acap.py`, que roda DEPOIS desta fase e ja usa o kit.
+# Nao da para trocar aqui sem mais: esta fase monta a tabela de aneis com apenas
+# (x, zc, r) — secao circular — e o arco precisa dos dois semi-eixos.
 def rounded_rect(px, pz, x0, x1, z0, z1, r):
     ix0, ix1, iz0, iz1 = x0 + r, x1 - r, z0 + r, z1 - r
     dx = np.maximum(np.maximum(ix0 - px, px - ix1), 0)

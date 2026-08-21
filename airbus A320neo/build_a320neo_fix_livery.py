@@ -37,6 +37,12 @@ import numpy as np
 D = bpy.data
 BASE = os.path.dirname(os.path.abspath(__file__))
 
+# a implementacao unica dos aneis de porta mora na raiz do repositorio
+import sys as _sys
+_sys.path.insert(0, os.path.dirname(BASE))
+import latam_livery_kit as kit  # noqa: E402
+
+
 # ---------------------------------------------------------------------------
 # MERGE 2026-08-21: this stage originally also painted the registration
 # "PT-TMN" in INDIGO ON WHITE at x 27.00..28.80, taking the arrangement from
@@ -136,26 +142,27 @@ set_px(wedge, C["indigo"], 1.0)
 log("wedge texels:", int(wedge.sum()))
 
 # ---------------------------------------------------------------- rings
-def rounded_rect(px, pz, x0, x1, z0, z1, r):
-    ix0, ix1, iz0, iz1 = x0 + r, x1 - r, z0 + r, z1 - r
-    dx = np.maximum(np.maximum(ix0 - px, px - ix1), 0)
-    dz = np.maximum(np.maximum(iz0 - pz, pz - iz1), 0)
-    return np.hypot(dx, dz) <= r
+# ------------------------------------------------------------ door rings
+# UMA implementacao para as cinco Airbus: `latam_livery_kit.anel_porta`.
+# Este bloco era uma copia de `door_ring()` que pintava o contorno no
+# RETANGULO (x, z) — a projecao lateral — enquanto a folha vive na superficie.
+# Acima do ombro os dois divergiam 0.5-0.7 m: era a "porta 1 fantasma".
+# O contorno agora e descrito em (x, w), com w = arco da secao. Ver
+# `airbus A320neo/portas_familia.py` para a medicao e para o assentamento das
+# folhas, que tinham o mesmo erro NA MALHA.
+_WG = kit.grade_arco(rx, rrz, rry, X, TH)
 
 def door_ring(name, band_cor, band_w, groove_cor, groove_w, side, far_band=False):
-    ob = D.objects[name]
-    vs = np.array([q.co[:] for q in ob.data.vertices])
-    x0, x1 = vs[:, 0].min() + ob.location.x, vs[:, 0].max() + ob.location.x
-    z0, z1 = vs[:, 2].min() + ob.location.z, vs[:, 2].max() + ob.location.z
-    r = 0.15
-    inner = rounded_rect(Xg, Zg, x0, x1, z0, z1, r)
-    oband = rounded_rect(Xg, Zg, x0 - band_w, x1 + band_w, z0 - band_w, z1 + band_w, r)
-    ogro = rounded_rect(Xg, Zg, x0 + groove_w, x1 - groove_w, z0 + groove_w, z1 - groove_w, r)
+    ob = D.objects.get(name)
+    if ob is None:
+        return
+    caixa = kit.caixa_porta_xw(ob, rx, rzc, rrz, rry)
+    banda, sulco = kit.anel_porta(Xg, _WG, caixa, band_w, groove_w, 0.15)
     sideok = ((Yg < 0) if side < 0 else (Yg > 0)) & (np.abs(np.sin(THg)) > 0.25)
     if far_band:
-        set_px((oband & ~inner) & sideok, band_cor, 1.0)
-    set_px((inner & ~ogro) & sideok, groove_cor, 1.0)
-    log("door ring", name, "x %.2f..%.2f z %.2f..%.2f" % (x0, x1, z0, z1))
+        set_px(banda & sideok, band_cor, 1.0)
+    set_px(sulco & sideok, groove_cor, 1.0)
+    log("door ring", name, "x %.2f..%.2f w %.3f..%.3f" % caixa)
 
 door_ring("Porta1_E", C["far"], 0.05, C["sulco"], 0.010, side=-1, far_band=True)
 door_ring("Porta1_D", C["far"], 0.05, C["sulco"], 0.010, side=+1, far_band=True)

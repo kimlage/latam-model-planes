@@ -358,3 +358,135 @@ def luzes_navegacao(colecao, pos_esq, pos_dir, pos_beacon=None, pos_cauda=None):
         blob("Beacon", pos_beacon, emissivo("LuzVermelha", "#FF2A2A"), r=0.06)
     if pos_cauda:
         blob("LuzCauda", pos_cauda, emissivo("LuzBranca", "#FFFFFF"), r=0.045)
+
+
+# ---------------------------------------------------------------- door rings
+# A TINTA VIVE NA SUPERFICIE DESENVOLVIDA.
+#
+# Ate 2026-08-21 as cinco Airbus pintavam o contorno das portas com um
+# `rounded_rect(Xg, Zg, ...)` — um retangulo na PROJECAO LATERAL (x, z) — sobre
+# uma folha construida ANALITICAMENTE NA SUPERFICIE. Em cima do ombro os dois
+# divergem: na A320neo, acima de z = 1.4 a folha da porta 1 vive em |y|
+# 1.571..1.831 e o anel pintado caia em |y| 0.865..1.114 — 0.5 a 0.7 m de
+# distancia no mesmo casco. Era a "porta 1 fantasma" do backlog, e e o mesmo
+# defeito que o para-brisa teve (b28fa20), que o 777 teve (22500e6) e que o 767
+# teve duas vezes (f2f96cd, d401766).
+#
+# A correcao e a mesma: descrever o anel num espaco METRICO (x, w) com
+# w = comprimento de ARCO da secao, medido no proprio casco, e deslocar o
+# poligono NESSE espaco. O 767 tinha tentado dilatacao por bandas e ela rasgava
+# as bordas em deslocamentos grandes; o offset de poligono nao rasga.
+#
+# Estas quatro funcoes sao a UNICA implementacao: os builders das cinco
+# aeronaves as chamam em vez de carregar uma copia cada um.
+
+def grade_arco(rx, rrz, rry, X, TH):
+    """(H, W) com w(x, theta) em METROS DE ARCO a partir da crista (theta = 0).
+
+    rx/rrz/rry sao a tabela de aneis que a propria textura ja usa (o casco e uma
+    elipse por estacao: y = ry*sin(theta), z = zc + rz*cos(theta)), X e o vetor
+    de x das colunas e TH o vetor de theta das linhas. w e negativo a bombordo e
+    positivo a boreste, como sin(theta).
+    """
+    import numpy as np
+    ry = np.interp(X, rx, rry)[None, :]
+    rz = np.interp(X, rx, rrz)[None, :]
+    th = np.asarray(TH)[:, None]
+    f = np.hypot(ry * np.cos(th), rz * np.sin(th))      # |d(y,z)/dtheta|
+    dth = float(TH[1] - TH[0])
+    w = np.cumsum(f, axis=0) * dth - 0.5 * f * dth      # trapezio
+    i0 = int(np.argmin(np.abs(np.asarray(TH))))
+    return w - w[i0][None, :]
+
+
+def arco_do_ponto(rx, rzc, rrz, rry, x, y, z, n=512):
+    """w de pontos soltos (os vertices de uma folha de porta), mesmo referencial."""
+    import numpy as np
+    x = np.asarray(x, float)
+    ry = np.interp(x, rx, rry)
+    rz = np.interp(x, rx, rrz)
+    zc = np.interp(x, rx, rzc)
+    th = np.arctan2(np.asarray(y, float) / ry, (np.asarray(z, float) - zc) / rz)
+    t = np.linspace(0.0, 1.0, n)[None, :] * th[:, None]
+    f = np.hypot(ry[:, None] * np.cos(t), rz[:, None] * np.sin(t))
+    return np.trapezoid(f, t, axis=1) if hasattr(np, "trapezoid") \
+        else np.trapz(f, t, axis=1)
+
+
+def caixa_porta_xw(ob, rx, rzc, rrz, rry):
+    """(x0, x1, w0, w1) da folha, medida NA SUPERFICIE.
+
+    Le a malha em coordenadas de MUNDO (a matriz do objeto entra: varias portas
+    da familia carregam o deslocamento do esticamento da A321 em `location`).
+    """
+    import numpy as np
+    P = np.array([(ob.matrix_world @ v.co)[:] for v in ob.data.vertices], float)
+    w = arco_do_ponto(rx, rzc, rrz, rry, P[:, 0], P[:, 1], P[:, 2])
+    return P[:, 0].min(), P[:, 0].max(), w.min(), w.max()
+
+
+def anel_porta(Xg, Wg, caixa, band_w=0.0, groove_w=0.0, raio=0.15):
+    """(mascara da banda FAR, mascara do sulco) para uma porta, em (x, w).
+
+    band_w e groove_w sao METROS DE ARCO, nao graus e nao metros de projecao:
+    misturar um recuo no plano com um recuo em arco foi o que distorceu os
+    montantes do 767 em 20-30%.
+    """
+    import numpy as np
+
+    def rr(x0, x1, w0, w1, r):
+        ix0, ix1 = x0 + r, x1 - r
+        iw0, iw1 = w0 + r, w1 - r
+        dx = np.maximum(np.maximum(ix0 - Xg, Xg - ix1), 0)
+        dw = np.maximum(np.maximum(iw0 - Wg, Wg - iw1), 0)
+        return np.hypot(dx, dw) <= r
+
+    x0, x1, w0, w1 = caixa
+    dentro = rr(x0, x1, w0, w1, raio)
+    banda = rr(x0 - band_w, x1 + band_w, w0 - band_w, w1 + band_w, raio) & ~dentro
+    sulco = dentro & ~rr(x0 + groove_w, x1 - groove_w,
+                         w0 + groove_w, w1 - groove_w, raio)
+    return banda, sulco
+
+
+def assentar_na_secao(ob, rx, rzc, rrz, rry, saliencia=0.010, grau=2):
+    """Reassenta um painel (folha de porta) NA SECAO do casco, radialmente.
+
+    Preserva (x, theta) de cada vertice — ou seja, a pegada ANGULAR e o tamanho
+    em arco do painel nao mudam — e refaz so a distancia radial: superficie mais
+    `saliencia`, mais o RELEVO PROPRIO do painel (janela, manopla, sulco), que e
+    o residuo de t em relacao a uma tendencia suave em theta.
+
+    Existe porque as folhas das portas pax das cinco Airbus foram ERGUIDAS em z
+    (+0.55/+0.57, tabela de soleiras do ACAP 2-3-0) por uma translacao pura, sem
+    reprojetar. Um painel que abraca o ombro, subido 0.55 m em z, sai do casco:
+    no topo da porta 1 da A320neo a folha ficava em |y| 1.585 com o casco em
+    0.889 — 0.70 m de fora. E o mesmo erro de classe do anel pintado em (x, z),
+    so que na malha.
+
+    Devolve (t_antes_mediano, t_depois_mediano).
+    """
+    import numpy as np
+    if ob.data.users > 1:
+        ob.data = ob.data.copy()          # portas clonadas compartilham a malha
+    M = ob.matrix_world
+    Mi = M.inverted()
+    P = np.array([(M @ v.co)[:] for v in ob.data.vertices], float)
+    zc = np.interp(P[:, 0], rx, rzc)
+    rz = np.interp(P[:, 0], rx, rrz)
+    ry = np.interp(P[:, 0], rx, rry)
+    a = P[:, 1] / ry
+    b = (P[:, 2] - zc) / rz
+    th = np.arctan2(a, b)
+    t = np.hypot(a, b)
+    rho = np.hypot(ry * np.sin(th), rz * np.cos(th))   # raio local da secao
+    tend = np.polyval(np.polyfit(th, t, grau), th)
+    relevo = (t - tend) * rho
+    t_novo = 1.0 + (saliencia + relevo) / rho
+    novo = np.stack([P[:, 0],
+                     ry * np.sin(th) * t_novo,
+                     zc + rz * np.cos(th) * t_novo], axis=1)
+    for v, p in zip(ob.data.vertices, novo):
+        v.co = Mi @ mathutils.Vector((p[0], p[1], p[2]))
+    ob.data.update()
+    return float(np.median(t)), float(np.median(t_novo))

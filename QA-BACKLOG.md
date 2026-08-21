@@ -9,32 +9,34 @@ survives, suspect the instrument before the model**.
 
 ---
 
-## Fleet-wide: the gate has never seen the starboard side
+## A321ceo and A321neo: a white rectangle inside the indigo wedge
 
-Found by the 767-300BCF build (`48efdac`), which rendered its own control view
-and read the registration back as `EXC-CC` — mirrored. Cause in that file: the
-`matricula` and `titulo` calls looped `for lado in (-1, 1)` without
-`espelha=True`, while the lockup did pass it.
+Found by the starboard sweep, but it is **not** a mirroring defect — it is on
+both flanks, in mirror-consistent positions, so it was always visible in
+`render_perfil.png` and nobody had looked.
 
-The reason it survived to be found by accident is the instrument. **Every
-canonical camera sits at negative y:**
+A block of pure hull white (`0xE6E7EA`) sits **inside** the indigo wedge, just
+above and forward of the registration. Its aft edge is at `x = 38.441` on both
+masters, and it reaches up to `theta ~ 44.5`; it is a clean rectangle, not a
+glyph shape, so it is the footprint of an **erase box that restored the wrong
+base** — white where the wedge is indigo. `refazer_marcas.Casco._basemap`
+warns about exactly this ("a wrong guess punches white letters into the
+indigo, which is exactly what happened once here"); an `apagar` in that region
+needs `base="indigo"`, or `base="fronteira"` if the box straddles the edge.
 
-    CamFrontal (-0.888, -0.459, -0.023)   CamNariz  (-0.707, -0.687,  0.167)
-    CamPerfil  ( 0.000, -1.000,  0.000)   CamHero   (-0.776, -0.630,  0.032)
-    CamCauda   ( 0.693, -0.719, -0.051)   CamBarriga(-0.810, -0.585, -0.041)
+Both A321s carry it identically, which points at the shared derivation rather
+than at one build. The A319, A320ceo and A320neo are clean — checked by
+looking for hull white enclosed by indigo in the same window.
 
-CamPerfil is literally (0, -1, 0). Seven angles, one hemisphere. Anything that
-is wrong only on the starboard side of any aircraft in this repository has
-never been looked at.
+What must not be assumed while fixing it: which script left it. The candidates
+that erase in that region are `fix_reg_ghosts.py`, `fix_titulo_a321.py` and the
+`apagar` entries in `refazer_marcas.MARCAS`, and the marks currently in the
+texture came from more than one of them. Measure the rectangle first, then find
+the box whose corners match it — do not repaint over it, or the next erase
+inherits the same wrong base.
 
-Two things follow: the fleet standard should gain a starboard angle, and every
-aircraft needs a sweep for per-side mirroring — the 767-300F very likely
-carries the same defect, and the A321neo build fixed a mirrored starboard
-lockup back in `166c864`, which in hindsight was the first sighting.
-
-This is the third time the instrument, not the model, was the defect: the gate
-cameras were 45 mm at 18 m (`aa2d27d`), then had no head-on (same commit,
-which is how six windshields were found), and now cover half the aircraft.
+To see it: `python3 verificacao_visual.py "airbus A321ceo"`, side-profile panel,
+just above `PT-MXP`.
 
 ---
 
@@ -170,54 +172,62 @@ deviation `spec_a319.json → livery_pt_tmt.titulo` already documents.
 
 ---
 
-## Door outlines painted in the (x, z) projection — "ghost door 1"
 
-Was "A320ceo: ghost door 1"; measured during the windshield round and it is the
-**same defect class the windshield had**, so it is worth stating in those terms.
 
-`door_ring()` in the livery builders (`airbus A320ceo/build_a320ceo_livery.py`,
-and the master's ancestor of it) takes the door's **(x, z) bounding box** and
-paints `rounded_rect(Xg, Zg, x0, x1, z0, z1, r)` — a rectangle in the SIDE
-projection. The door leaf itself is built analytically **on the surface**. On
-the shoulder the two diverge badly:
+## A320 family: the flap-track fairings are not at the ACAP stations
 
-| where the door is at z > 1.4 | `|y|` |
-|---|---|
-| door 1 mesh (`Porta1_D`) | 1.571 .. 1.831 |
-| painted ring in LiveryTex | 0.865 .. 1.114 |
+Found while carrying them along with the wingspan fix. The ACAP plan view
+(`A320_ACAP_airbus.pdf` p.45, read as vector) shows trailing-edge bumps
+centred at `|y|` **4.95, 8.48 and 12.21** — the inboard ones are hidden behind
+the nacelle and the belly fairing, so three is all the drawing gives.
 
-0.5-0.7 m apart on the same hull, which is what reads as a second, tilted door
-outline abutting the real one. Measured on the **A320neo** (the master) and the
-**A320ceo**; the A319 and both A321s inherit the same texture recipe, and door
-2, the overwing exits and the three cargo doors all go through the same
-function.
+The model has **five**, and after the span fix they sit at 3.11, 4.70, 6.66,
+8.57 and 10.30. Two of them land within 0.25 m of a drawn bump; the outermost
+is 1.9 m inboard of one. The count may be wrong too — the A320 carries four
+per wing.
 
-The fix is the windshield's fix — describe the ring on the developed surface and
-rasterise it in `(x, theta)` — not a numeric tweak, and it is a livery round for
-five aircraft. Left for one.
+They were moved by the same spanwise map as the wing and re-anchored on the new
+trailing edge, so they are attached and their protrusion aft of the TE is
+unchanged. Putting them on the drawn stations is a round of its own, and it
+should settle the count first.
 
 ---
 
-## A320 family: the wingspan is 2.4-2.8 m over
+## A320 family: the sharklet is a straight blade, not the ACAP's J
 
-Found by the export pipeline (`457cbfe`), which compared every exported
-bounding box against the aircraft's own spec. The four Boeings agree to a few
-centimetres. All five Airbus do not:
+The wingspan fix put both ENDS of the sharklet exactly where the ACAP does —
+tip at `|y|` 17.90 (span 35.80) and 2.43 m above the wing tip — and the blade
+runs straight between them, at 31.3 degrees from vertical.
 
-| Aircraft | declared span | model measures | over by |
-|---|---|---|---|
-| A320neo, A320ceo, A321ceo, A321neo | 35.80 m | **38.23 m** | +2.43 m (6.8%) |
-| A319 | 34.10 m | **36.92 m** | +2.82 m (8.3%) |
+The drawing's sharklet is not straight. Measured on the front view, `(dy, dz)`
+from the wing tip:
 
-Blender measures the same figure directly on the masters, so this is the
-geometry, not the exporter. The A321ceo build had already flagged it in
-passing as an "inherited family deviation", and the sharklet round noted a
-~7% oversize wing from a third direction — three independent sightings, now
-with numbers.
+    (0, 0) (0.660, 0.182) (0.886, 0.276) (1.055, 0.394) (1.143, 0.494)
+    (1.178, 0.557) (1.210, 0.642) (1.235, 0.754) (1.480, 2.430)
 
-It is a MASTER defect: the A320neo is the family parent, so every derivation
-inherited it. Fixing it means the wing planform, which is upstream of the
-sharklets/fences, the engine stations and every gate render.
+— a wide, nearly horizontal blend carrying the surface 1.24 m outboard while
+rising 0.75 m, and then a near-vertical blade. The model's straight blade is
+the CHORD of that curve: right at both ends, missing the belly.
+
+It was left straight deliberately. The blade's mesh sections are HORIZONTAL
+slices (chord in x, thickness in y), and a nearly horizontal blend sliced that
+way degenerates — the sections end up almost parallel to the surface they are
+supposed to describe. Fixing it means re-parameterising the blade along its own
+arc, which is a new loft, not a remap.
+
+---
+
+## A320 family: the pax door leaf is 0.09 m too tall
+
+Measured during the door round. Each leaf now sits on the hull and keeps its
+angular footprint, which is **2.02 m of arc** — against the `0.89 x 1.93`
+that every spec in the family declares for the modelled leaf.
+
+The seating preserves size on purpose: it fixes where the panel is, not how big
+it is, and changing both at once would have made the before/after unreadable.
+The 0.09 m predates the z-lift — the leaf was built 2.06 m tall in the SIDE
+PROJECTION back when the door sat near the widest point of the section, where
+arc and `dz` happen to agree.
 
 ---
 
