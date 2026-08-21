@@ -1,47 +1,30 @@
-"""Renderiza os 6 angulos canonicos do gate (verificacao-visual).
+"""Renderiza os SETE angulos canonicos do gate visual do 767-300ER.
 
-/Applications/Blender.app/Contents/MacOS/Blender -b "boeing 767-300ER/B763_LATAM.blend" --python "boeing 767-300ER/b6_render.py" -- 900 96
+  /Applications/Blender.app/Contents/MacOS/Blender -b "boeing 767-300ER/B763_LATAM.blend" \
+      --python "boeing 767-300ER/b6_render.py" -- [largura] [amostras] [alvos...]
+
+Este arquivo e um atalho: as cameras vem do PADRAO DE FROTA na raiz
+(cameras_canonicas.py), montadas na hora e nao gravadas no .blend. Antes cada
+aeronave carregava a sua propria lista de cameras e o gate julgava cada uma com
+uma lente diferente - foi assim que teleobjetiva virou grande-angular a 18 m.
+Equivalente a rodar `render_gate.py` na raiz.
 """
-import bpy
 import os
 import sys
 
-BASE = os.path.dirname(os.path.abspath(__file__))
-arg = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
-LARG = int(arg[0]) if arg else 900
-AMOSTRAS = int(arg[1]) if len(arg) > 1 else 96
-ALVOS = arg[2:] if len(arg) > 2 else None
+import bpy
 
-VISTAS = [
-    ("CamFrontal", "render_frontal.png"),
-    ("CamNariz", "render_nariz.png"),
-    ("CamPerfil", "render_perfil.png"),
-    ("CamHero", "render_hero.png"),
-    ("CamCauda", "render_cauda.png"),
-    ("CamBarriga", "render_frente_baixa.png"),
-]
+RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if RAIZ not in sys.path:
+    sys.path.insert(0, RAIZ)
 
-sc = bpy.context.scene
-sc.render.engine = "CYCLES"
-sc.cycles.samples = AMOSTRAS
-sc.cycles.use_denoising = True
-sc.render.resolution_x = LARG
-sc.render.resolution_y = int(LARG * 9 / 16)
-sc.render.resolution_percentage = 100
-sc.render.image_settings.file_format = "PNG"
-sc.view_settings.view_transform = "AgX"
-sc.view_settings.look = "AgX - Punchy"
-sc.view_settings.exposure = 0.20
+import cameras_canonicas  # noqa: E402
 
-for cam, fn in VISTAS:
-    if ALVOS and fn not in ALVOS and cam not in ALVOS:
-        continue
-    ob = bpy.data.objects.get(cam)
-    if ob is None:
-        print("SEM CAMERA", cam)
-        continue
-    sc.camera = ob
-    sc.render.filepath = os.path.join(BASE, fn)
-    bpy.ops.render.render(write_still=True)
-    print("OK", fn)
-print("FIM")
+argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
+larg = int(argv[0]) if argv else 1600
+amostras = int(argv[1]) if len(argv) > 1 else 96
+alvos = argv[2:] or None
+
+cameras_canonicas.renderizar(os.path.dirname(os.path.abspath(__file__)),
+                             larg=larg, amostras=amostras, alvos=alvos)
+print("[gate] FIM")

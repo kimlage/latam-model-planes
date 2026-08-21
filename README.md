@@ -119,12 +119,24 @@ rebuild from it.
    paint as a UV texture in `(x, θ)` — never as a 3D shell. → skill `livery-latam`
 5. **Details** — doors, windows, gear, engines, antennas, belly. The standard is
    a complete, connected aircraft, not a painted hull.
-6. **Visual gate** — six canonical angles, contact sheet, comparison against the
-   photo. → skill `verificacao-visual`
+6. **Visual gate** — seven canonical angles, contact sheet, comparison against
+   the photo. → skill `verificacao-visual`
 
 ```bash
+/Applications/Blender.app/Contents/MacOS/Blender -b "boeing 787-9/B789_LATAM.blend" \
+    --python render_gate.py -- 1600 96
 python3 verificacao_visual.py "boeing 787-9"
 ```
+
+The seven cameras come from the fleet standard in
+[`cameras_canonicas.py`](cameras_canonicas.py): the **distance** is fixed at
+`3.00 x length` for whole-aircraft angles and `1.25 x length` for the nose
+close-ups (90–250 m and 70–150 m), and the lens is derived from it, so every
+aircraft is judged with the geometry of a reference photograph instead of a
+short lens at 18 m. The cameras are built at render time and are not written
+into the `.blend`.
+
+![Three gate angles before and after the camera standard: the 777 and A319 noses stop bulging, and the A320neo nose close-up stops being a photograph of door 1](comparacao_cameras_gate.png)
 
 ## Skills
 

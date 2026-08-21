@@ -19,13 +19,20 @@ assume.
 
 ## Running it
 
-Render the six canonical angles and build the sheet:
+Two commands, always in this order:
 
 ```bash
+/Applications/Blender.app/Contents/MacOS/Blender -b "airbus A320neo/A320neo_LATAM.blend" \
+    --python render_gate.py -- 1600 96
 python3 verificacao_visual.py "airbus A320neo"
 ```
 
-The script is at the root and expects these files in the aircraft's folder:
+`render_gate.py` builds the **seven** canonical cameras from the fleet standard
+in `cameras_canonicas.py` and renders them. Both scripts are at the root and
+work on any aircraft in the repository — there is no longer a per-aircraft
+camera list to drift. The old per-aircraft entry points
+(`render_canonicos.py`, `b6_render.py`) still work; they are shims onto the
+same standard.
 
 | File | Angle | What it is for |
 |---|---|---|
@@ -35,11 +42,99 @@ The script is at the root and expects these files in the aircraft's folder:
 | `render_hero.png` | classic 3/4 | overall read; this is what sells or delivers the model |
 | `render_cauda.png` | tail | fin sash, hull sash, registration, stabilizers |
 | `render_frente_baixa.png` | low front | belly, fairing, landing gear, nacelles |
+| `render_headon.png` | **head-on** | windshield wrap and the frontal section |
 
-Output: `verificacao_visual.png` in the aircraft's folder.
+Outputs: the seven renders, `cameras_gate.json` (the camera provenance) and
+`verificacao_visual.png`, all in the aircraft's folder. Each panel of the sheet
+is labelled with the lens and the distance that produced it.
+
+The cameras are built **in memory and never saved into the `.blend`**. The
+master is only read, so the gate can run while another session is editing the
+aircraft.
 
 To render safely (the render queue has a known race), see `blender-mcp` — in
 particular `wait`, which stops you reading the previous render.
+
+## The camera standard — read this before adding an aircraft
+
+For a long time the gate judged every aircraft through a lens no reference
+photograph uses. `CamNariz` was **45 mm at 18 m** from a 6.2 m nose;
+`CamFrontal` **70 mm at 27 m**. Photographs of airliners are taken with long
+glass from **90–250 m**.
+
+The error is measurable, not a matter of taste. At 18 m the near surface of a
+777 nose — 1.85 m closer than its own centreline — is magnified about **9%**,
+while the barrel 10 m behind renders about **38% smaller**. That reads as a
+bulging nose on a tapering body. The owner said the 777 nose looked bulbous; the
+geometry measured correct against the APR (crown and keel within 0.03 m). The
+camera was the defect.
+
+Perspective depends **only on distance** relative to the depth of the subject.
+Focal length just crops. So the standard fixes the distance and derives the
+lens:
+
+```
+D_far  = clamp(3.00 x L, 90, 250) m   whole-aircraft angles
+                                      (Frontal, Perfil, Hero, Cauda, Barriga)
+D_near = clamp(1.25 x L, 70, 150) m   nose close-ups (Nariz, HeadOn)
+```
+
+`L` is the aircraft's overall length, so the standoff scales with the fleet just
+as it does in real photography: **A319 at 102 m, A320 at 113 m, A321 at 134 m,
+767 at 165 m, 787-8 at 170 m, 787-9 at 189 m, 777-300ER at 222 m.** Sensor is
+36 mm full frame throughout. Resulting lenses run **91–538 mm**.
+
+Three rules make it behave:
+
+**Framing is preserved, two ways.** Where the fuselage overflowed the frame on
+purpose (the crops: Frontal, Cauda, Nariz, HeadOn), the frame width `W` at the
+target plane is kept and the lens comes out as `f = 36 x D / W`. Where the whole
+fuselage fitted (Perfil, Hero, and Barriga on the narrowbodies), keep `W`
+instead and the subject *shrinks* — flattening the perspective stops magnifying
+the near half. So those match the **projected silhouette fill** instead, which
+is what the eye actually reads. On the A319 hero that is the difference between
+a 107 mm lens and the correct 129 mm.
+
+**Pull back, do not climb.** Moving the camera along its own ray multiplies the
+height difference by the same ratio as the distance. `CamNariz`, 2.2 m above its
+target at 13 m, would end up 11.7 m above it at 70 m — a crane shot; and the
+A319's `CamBarriga` would end up 1.9 m *below* the runway. What a photographer
+does is walk backwards. So the **azimuth** and the **height difference in
+metres** are preserved, and the horizontal distance becomes `sqrt(D² - dz²)`.
+The elevation angle flattens by itself, which is the whole point.
+
+**Floor.** No camera below runway + 1.30 m. On the current fleet this binds only
+on `CamBarriga`, by about 3 cm.
+
+The standard validates itself: the `D_near` rule reproduces the `CamHeadOn` that
+the 777 agent had found by hand — `1.25 x 73.94 = 92.4 m` against its 93 m, and
+aiming at windshield height from eye height (runway + 1.60 m) gives **2.99°**
+against its 3°. A rule that re-derives a number measured by another route.
+
+Applying the standard twice gives the same cameras, so it is safe to re-run.
+
+### CamNariz has to frame the NOSE
+
+On all five Airbus narrowbodies `CamNariz` sat at (11, 7.5, 1.6) looking *aft*.
+The frame landed on **passenger door 1** and the cabin windows; the windshield
+was clipped at the edge of the frame, at a grazing angle. The "NOSE CLOSE-UP"
+panel of the contact sheet had never shown the windshield of any Airbus in the
+fleet — which is precisely how a windshield defect can survive a gate.
+
+All nine now use the same geometry: **44.2° off the nose axis, from ahead, with
+the camera 0.46 x fuselage diameter above the target**, framing `2.20 x` the
+fuselage diameter. When you add an aircraft, open `render_nariz.png` and confirm
+you are looking at glass, not at a door.
+
+### The seventh angle
+
+`CamHeadOn` exists because none of the six canonical angles showed that the
+777's windshield had no centre post — 1.16 m of white paint sat where the "V"
+belongs. It is dead on the centreline, at eye height, framing `1.40 x` the
+fuselage diameter (wider than the 777's original windshield-specific crop, so
+the frontal section reads too). Anything about symmetry, about the plane of
+symmetry, or about how a feature wraps around the front shows up here and
+nowhere else.
 
 ## Compare, do not admire
 
@@ -116,6 +211,15 @@ checked it and it is fine" for all of them, it is not ready yet.
 **Render**
 - blown-out white (use `#E6E7EA`, controlled exposure)
 - surface with constant roughness reading as plastic
+
+**The gate itself** — twice now the defect was in the instrument, not the model
+- **judging shape through a short lens.** If a nose looks bulbous, check the
+  camera before touching geometry: at gate distances under ~30 m the near
+  surface is magnified by several percent over its own centreline. Read the
+  lens and the distance off the contact sheet's own panel labels.
+- **a panel that does not show what its title says.** The "NOSE CLOSE-UP" was
+  framed on door 1 on five of the nine aircraft. Look at what is actually in
+  each frame, not at what the label promises.
 
 ## When the owner points out a defect
 
