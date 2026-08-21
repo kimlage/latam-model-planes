@@ -192,8 +192,8 @@
      "motivo": "Surface<-MIX_SHADER",
      "metodo": "bake",
      "px": [
-      4096,
-      1024
+      8192,
+      2048
      ],
      "rugosidade": "mapa",
      "cor": null
@@ -202,24 +202,24 @@
    "caixa_blender": {
     "min": [
      -0.04,
-     -18.46,
+     -17.0502,
      -3.675
     ],
     "max": [
      33.97,
-     18.46,
+     17.0502,
      8.05
     ],
     "tamanho": [
      34.01,
-     36.92,
+     34.1004,
      11.725
     ],
     "deslocamento_z": 3.675
    },
    "n_objetos": 71,
    "triangulos_blender": 308386,
-   "megapixels": 13.63,
+   "megapixels": 26.21,
    "texturas_em_disco": [
     "textures_A319/FinSashD.png",
     "textures_A319/FinSashE.png",
@@ -229,17 +229,17 @@
    "saidas": {
     "glb": {
      "arquivo": "alta/A319_alta.glb",
-     "bytes": 8334856,
+     "bytes": 8785944,
      "extras": []
     },
     "fbx": {
      "arquivo": "alta/A319_alta.fbx",
-     "bytes": 6500972,
+     "bytes": 6953596,
      "extras": []
     },
     "obj": {
      "arquivo": "alta/A319_alta.obj",
-     "bytes": 26445327,
+     "bytes": 26897089,
      "extras": [
       "A319_alta.mtl"
      ]
@@ -256,23 +256,23 @@
     "materiais": 23,
     "materiais_clearcoat": 7,
     "imagens": 4,
-    "megapixels": 13.63,
-    "bytes_imagens": 482452,
+    "megapixels": 26.21,
+    "bytes_imagens": 933512,
     "caixa": {
      "min": [
       -0.0123,
       -0.0,
-      -18.46
+      -17.0502
      ],
      "max": [
       33.97,
       11.7138,
-      18.46
+      17.0502
      ],
      "tamanho": [
       33.9823,
       11.7138,
-      36.92
+      34.1004
      ]
     },
     "extensoes": [
@@ -284,12 +284,7 @@
     "nos": 72,
     "raizes_da_cena": 1,
     "gerador": "Khronos glTF Blender I/O v5.2.39"
-   },
-   "reimportacao": [
-    "ROUNDTRIP A319_alta.glb objs=71 tris=308386 mats=23 texs=4 X=33.982 Y=36.920 Z=11.714 minZ=-0.0000",
-    "ROUNDTRIP A319_alta.fbx objs=71 tris=308386 mats=23 texs=4 X=33.982 Y=36.920 Z=11.714 minZ=-0.0000",
-    "ROUNDTRIP A319_alta.obj objs=71 tris=308386 mats=23 texs=4 X=33.982 Y=36.920 Z=11.714 minZ=-0.0000"
-   ]
+   }
   },
   {
    "slug": "A319",
@@ -467,8 +462,8 @@
     {
      "nome": "NoseMask",
      "de": [
-      4096,
-      1024
+      8192,
+      2048
      ],
      "para": [
       2048,
@@ -504,17 +499,17 @@
    "caixa_blender": {
     "min": [
      -0.04,
-     -18.46,
+     -17.0502,
      -3.675
     ],
     "max": [
      33.97,
-     18.46,
+     17.0502,
      8.05
     ],
     "tamanho": [
      34.01,
-     36.92,
+     34.1004,
      11.725
     ],
     "deslocamento_z": 3.675
@@ -525,12 +520,12 @@
    "saidas": {
     "glb": {
      "arquivo": "web/A319_web.glb",
-     "bytes": 526528,
+     "bytes": 525408,
      "extras": []
     },
     "usdz": {
      "arquivo": "web/A319_web.usdz",
-     "bytes": 2985527,
+     "bytes": 2982766,
      "extras": []
     }
    },
@@ -546,22 +541,22 @@
     "materiais_clearcoat": 7,
     "imagens": 3,
     "megapixels": 9.44,
-    "bytes_imagens": 265156,
+    "bytes_imagens": 263592,
     "caixa": {
      "min": [
       -0.0123,
       -0.0,
-      -18.46
+      -17.0502
      ],
      "max": [
       33.97,
       11.7138,
-      18.46
+      17.0502
      ],
      "tamanho": [
       33.9823,
       11.7138,
-      36.92
+      34.1004
      ]
     },
     "extensoes": [
@@ -574,11 +569,7 @@
     "nos": 72,
     "raizes_da_cena": 1,
     "gerador": "Khronos glTF Blender I/O v5.2.39"
-   },
-   "reimportacao": [
-    "ROUNDTRIP A319_web.glb objs=71 tris=57250 mats=23 texs=3 X=33.982 Y=36.920 Z=11.714 minZ=-0.0000",
-    "ROUNDTRIP A319_web.usdz objs=71 tris=57250 mats=23 texs=3 X=33.982 Y=36.920 Z=11.714 minZ=-0.0000"
-   ]
+   }
   },
   {
    "slug": "A320ceo",
@@ -743,8 +734,8 @@
      "motivo": "Surface<-MIX_SHADER",
      "metodo": "bake",
      "px": [
-      4096,
-      1024
+      8192,
+      2048
      ],
      "rugosidade": "mapa",
      "cor": null
@@ -753,24 +744,24 @@
    "caixa_blender": {
     "min": [
      -0.04,
-     -19.1424,
+     -17.932,
      -3.675
     ],
     "max": [
      37.7,
-     19.1424,
+     17.932,
      8.05
     ],
     "tamanho": [
      37.74,
-     38.2849,
+     35.864,
      11.725
     ],
     "deslocamento_z": 3.675
    },
    "n_objetos": 72,
    "triangulos_blender": 328490,
-   "megapixels": 13.63,
+   "megapixels": 26.21,
    "texturas_em_disco": [
     "textures_A320ceo/FinSashD.png",
     "textures_A320ceo/FinSashE.png",
@@ -780,17 +771,17 @@
    "saidas": {
     "glb": {
      "arquivo": "alta/A320ceo_alta.glb",
-     "bytes": 8835844,
+     "bytes": 9322772,
      "extras": []
     },
     "fbx": {
      "arquivo": "alta/A320ceo_alta.fbx",
-     "bytes": 6882476,
+     "bytes": 7370716,
      "extras": []
     },
     "obj": {
      "arquivo": "alta/A320ceo_alta.obj",
-     "bytes": 28111007,
+     "bytes": 28598744,
      "extras": [
       "A320ceo_alta.mtl"
      ]
@@ -807,23 +798,23 @@
     "materiais": 23,
     "materiais_clearcoat": 7,
     "imagens": 4,
-    "megapixels": 13.63,
-    "bytes_imagens": 479366,
+    "megapixels": 26.21,
+    "bytes_imagens": 966313,
     "caixa": {
      "min": [
       -0.0123,
       -0.0,
-      -19.1162
+      -17.8997
      ],
      "max": [
       37.7,
       11.7138,
-      19.1162
+      17.8997
      ],
      "tamanho": [
       37.7123,
       11.7138,
-      38.2325
+      35.7994
      ]
     },
     "extensoes": [
@@ -835,12 +826,7 @@
     "nos": 73,
     "raizes_da_cena": 1,
     "gerador": "Khronos glTF Blender I/O v5.2.39"
-   },
-   "reimportacao": [
-    "ROUNDTRIP A320ceo_alta.glb objs=72 tris=328490 mats=23 texs=4 X=37.712 Y=38.232 Z=11.714 minZ=-0.0000",
-    "ROUNDTRIP A320ceo_alta.fbx objs=72 tris=328490 mats=23 texs=4 X=37.712 Y=38.232 Z=11.714 minZ=-0.0000",
-    "ROUNDTRIP A320ceo_alta.obj objs=72 tris=328490 mats=23 texs=4 X=37.712 Y=38.232 Z=11.714 minZ=-0.0000"
-   ]
+   }
   },
   {
    "slug": "A320ceo",
@@ -1023,8 +1009,8 @@
     {
      "nome": "NoseMask",
      "de": [
-      4096,
-      1024
+      8192,
+      2048
      ],
      "para": [
       2048,
@@ -1060,17 +1046,17 @@
    "caixa_blender": {
     "min": [
      -0.04,
-     -19.1424,
+     -17.932,
      -3.675
     ],
     "max": [
      37.7,
-     19.1424,
+     17.932,
      8.05
     ],
     "tamanho": [
      37.74,
-     38.2849,
+     35.864,
      11.725
     ],
     "deslocamento_z": 3.675
@@ -1081,12 +1067,12 @@
    "saidas": {
     "glb": {
      "arquivo": "web/A320ceo_web.glb",
-     "bytes": 549604,
+     "bytes": 551372,
      "extras": []
     },
     "usdz": {
      "arquivo": "web/A320ceo_web.usdz",
-     "bytes": 3272996,
+     "bytes": 3271859,
      "extras": []
     }
    },
@@ -1102,22 +1088,22 @@
     "materiais_clearcoat": 7,
     "imagens": 3,
     "megapixels": 9.44,
-    "bytes_imagens": 267529,
+    "bytes_imagens": 268668,
     "caixa": {
      "min": [
       -0.0123,
       -0.0,
-      -19.1162
+      -17.8997
      ],
      "max": [
       37.7,
       11.7138,
-      19.1162
+      17.8997
      ],
      "tamanho": [
       37.7123,
       11.7138,
-      38.2325
+      35.7994
      ]
     },
     "extensoes": [
@@ -1130,11 +1116,7 @@
     "nos": 73,
     "raizes_da_cena": 1,
     "gerador": "Khronos glTF Blender I/O v5.2.39"
-   },
-   "reimportacao": [
-    "ROUNDTRIP A320ceo_web.glb objs=72 tris=62954 mats=23 texs=3 X=37.712 Y=38.232 Z=11.714 minZ=-0.0000",
-    "ROUNDTRIP A320ceo_web.usdz objs=72 tris=62954 mats=23 texs=3 X=37.712 Y=38.232 Z=11.714 minZ=-0.0000"
-   ]
+   }
   },
   {
    "slug": "A320neo",
@@ -1329,8 +1311,8 @@
      "motivo": "Surface<-MIX_SHADER",
      "metodo": "bake",
      "px": [
-      4096,
-      1024
+      8192,
+      2048
      ],
      "rugosidade": "mapa",
      "cor": null
@@ -1339,24 +1321,24 @@
    "caixa_blender": {
     "min": [
      -0.04,
-     -19.1424,
+     -17.932,
      -3.675
     ],
     "max": [
      37.7,
-     19.1424,
+     17.932,
      8.05
     ],
     "tamanho": [
      37.74,
-     38.2849,
+     35.864,
      11.725
     ],
     "deslocamento_z": 3.675
    },
    "n_objetos": 72,
    "triangulos_blender": 327010,
-   "megapixels": 13.63,
+   "megapixels": 26.21,
    "texturas_em_disco": [
     "textures_A320neo/FinSashD.png",
     "textures_A320neo/FinSashE.png",
@@ -1366,17 +1348,17 @@
    "saidas": {
     "glb": {
      "arquivo": "alta/A320neo_alta.glb",
-     "bytes": 8812172,
+     "bytes": 9385572,
      "extras": []
     },
     "fbx": {
      "arquivo": "alta/A320neo_alta.fbx",
-     "bytes": 6883804,
+     "bytes": 7458508,
      "extras": []
     },
     "obj": {
      "arquivo": "alta/A320neo_alta.obj",
-     "bytes": 27980417,
+     "bytes": 28554622,
      "extras": [
       "A320neo_alta.mtl"
      ]
@@ -1393,23 +1375,23 @@
     "materiais": 23,
     "materiais_clearcoat": 7,
     "imagens": 4,
-    "megapixels": 13.63,
-    "bytes_imagens": 513049,
+    "megapixels": 26.21,
+    "bytes_imagens": 1086464,
     "caixa": {
      "min": [
       -0.0123,
       -0.0,
-      -19.1162
+      -17.8997
      ],
      "max": [
       37.7,
       11.7138,
-      19.1162
+      17.8997
      ],
      "tamanho": [
       37.7123,
       11.7138,
-      38.2325
+      35.7994
      ]
     },
     "extensoes": [
@@ -1421,12 +1403,7 @@
     "nos": 73,
     "raizes_da_cena": 1,
     "gerador": "Khronos glTF Blender I/O v5.2.39"
-   },
-   "reimportacao": [
-    "ROUNDTRIP A320neo_alta.glb objs=72 tris=327010 mats=23 texs=4 X=37.712 Y=38.232 Z=11.714 minZ=-0.0000",
-    "ROUNDTRIP A320neo_alta.fbx objs=72 tris=327010 mats=23 texs=4 X=37.712 Y=38.232 Z=11.714 minZ=-0.0000",
-    "ROUNDTRIP A320neo_alta.obj objs=72 tris=327010 mats=23 texs=4 X=37.712 Y=38.232 Z=11.714 minZ=-0.0000"
-   ]
+   }
   },
   {
    "slug": "A320neo",
@@ -1639,8 +1616,8 @@
     {
      "nome": "NoseMask",
      "de": [
-      4096,
-      1024
+      8192,
+      2048
      ],
      "para": [
       2048,
@@ -1676,17 +1653,17 @@
    "caixa_blender": {
     "min": [
      -0.04,
-     -19.1424,
+     -17.932,
      -3.675
     ],
     "max": [
      37.7,
-     19.1424,
+     17.932,
      8.05
     ],
     "tamanho": [
      37.74,
-     38.2849,
+     35.864,
      11.725
     ],
     "deslocamento_z": 3.675
@@ -1697,12 +1674,12 @@
    "saidas": {
     "glb": {
      "arquivo": "web/A320neo_web.glb",
-     "bytes": 561884,
+     "bytes": 562424,
      "extras": []
     },
     "usdz": {
      "arquivo": "web/A320neo_web.usdz",
-     "bytes": 3203029,
+     "bytes": 3203103,
      "extras": []
     }
    },
@@ -1718,22 +1695,22 @@
     "materiais_clearcoat": 7,
     "imagens": 3,
     "megapixels": 9.44,
-    "bytes_imagens": 284632,
+    "bytes_imagens": 284683,
     "caixa": {
      "min": [
       -0.0123,
       -0.0,
-      -19.1162
+      -17.8997
      ],
      "max": [
       37.7,
       11.7138,
-      19.1162
+      17.8997
      ],
      "tamanho": [
       37.7123,
       11.7138,
-      38.2325
+      35.7994
      ]
     },
     "extensoes": [
@@ -1746,11 +1723,7 @@
     "nos": 73,
     "raizes_da_cena": 1,
     "gerador": "Khronos glTF Blender I/O v5.2.39"
-   },
-   "reimportacao": [
-    "ROUNDTRIP A320neo_web.glb objs=72 tris=61474 mats=23 texs=3 X=37.712 Y=38.232 Z=11.714 minZ=-0.0000",
-    "ROUNDTRIP A320neo_web.usdz objs=72 tris=61474 mats=23 texs=3 X=37.712 Y=38.232 Z=11.714 minZ=-0.0000"
-   ]
+   }
   },
   {
    "slug": "A321ceo",
@@ -1905,8 +1878,8 @@
      "motivo": "Surface<-MIX_SHADER",
      "metodo": "bake",
      "px": [
-      4096,
-      1024
+      8192,
+      2048
      ],
      "rugosidade": "mapa",
      "cor": null
@@ -1915,24 +1888,24 @@
    "caixa_blender": {
     "min": [
      -0.04,
-     -19.1424,
+     -17.932,
      -3.675
     ],
     "max": [
      44.64,
-     19.1424,
+     17.932,
      8.05
     ],
     "tamanho": [
      44.68,
-     38.2849,
+     35.864,
      11.725
     ],
     "deslocamento_z": 3.675
    },
    "n_objetos": 72,
    "triangulos_blender": 342802,
-   "megapixels": 13.63,
+   "megapixels": 26.21,
    "texturas_em_disco": [
     "textures_A321ceo/FinSashD.png",
     "textures_A321ceo/FinSashE.png",
@@ -1942,17 +1915,17 @@
    "saidas": {
     "glb": {
      "arquivo": "alta/A321ceo_alta.glb",
-     "bytes": 9223684,
+     "bytes": 9727564,
      "extras": []
     },
     "fbx": {
      "arquivo": "alta/A321ceo_alta.fbx",
-     "bytes": 7110972,
+     "bytes": 7612796,
      "extras": []
     },
     "obj": {
      "arquivo": "alta/A321ceo_alta.obj",
-     "bytes": 29231891,
+     "bytes": 29733361,
      "extras": [
       "A321ceo_alta.mtl"
      ]
@@ -1969,23 +1942,23 @@
     "materiais": 23,
     "materiais_clearcoat": 7,
     "imagens": 4,
-    "megapixels": 13.63,
-    "bytes_imagens": 491203,
+    "megapixels": 26.21,
+    "bytes_imagens": 991944,
     "caixa": {
      "min": [
       -0.0123,
       -0.0,
-      -19.1162
+      -17.8997
      ],
      "max": [
       44.64,
       11.7138,
-      19.1162
+      17.8997
      ],
      "tamanho": [
       44.6523,
       11.7138,
-      38.2325
+      35.7994
      ]
     },
     "extensoes": [
@@ -1997,12 +1970,7 @@
     "nos": 73,
     "raizes_da_cena": 1,
     "gerador": "Khronos glTF Blender I/O v5.2.39"
-   },
-   "reimportacao": [
-    "ROUNDTRIP A321ceo_alta.glb objs=72 tris=342802 mats=23 texs=4 X=44.652 Y=38.232 Z=11.714 minZ=-0.0000",
-    "ROUNDTRIP A321ceo_alta.fbx objs=72 tris=342802 mats=23 texs=4 X=44.652 Y=38.232 Z=11.714 minZ=-0.0000",
-    "ROUNDTRIP A321ceo_alta.obj objs=72 tris=342802 mats=23 texs=4 X=44.652 Y=38.232 Z=11.714 minZ=-0.0000"
-   ]
+   }
   },
   {
    "slug": "A321ceo",
@@ -2175,8 +2143,8 @@
     {
      "nome": "NoseMask",
      "de": [
-      4096,
-      1024
+      8192,
+      2048
      ],
      "para": [
       2048,
@@ -2212,17 +2180,17 @@
    "caixa_blender": {
     "min": [
      -0.04,
-     -19.1424,
+     -17.932,
      -3.675
     ],
     "max": [
      44.64,
-     19.1424,
+     17.932,
      8.05
     ],
     "tamanho": [
      44.68,
-     38.2849,
+     35.864,
      11.725
     ],
     "deslocamento_z": 3.675
@@ -2233,12 +2201,12 @@
    "saidas": {
     "glb": {
      "arquivo": "web/A321ceo_web.glb",
-     "bytes": 558748,
+     "bytes": 560128,
      "extras": []
     },
     "usdz": {
      "arquivo": "web/A321ceo_web.usdz",
-     "bytes": 3357341,
+     "bytes": 3389052,
      "extras": []
     }
    },
@@ -2254,22 +2222,22 @@
     "materiais_clearcoat": 7,
     "imagens": 3,
     "megapixels": 9.44,
-    "bytes_imagens": 274252,
+    "bytes_imagens": 274846,
     "caixa": {
      "min": [
       -0.0123,
       -0.0,
-      -19.1162
+      -17.8997
      ],
      "max": [
       44.64,
       11.7138,
-      19.1162
+      17.8997
      ],
      "tamanho": [
       44.6523,
       11.7138,
-      38.2325
+      35.7994
      ]
     },
     "extensoes": [
@@ -2282,11 +2250,7 @@
     "nos": 73,
     "raizes_da_cena": 1,
     "gerador": "Khronos glTF Blender I/O v5.2.39"
-   },
-   "reimportacao": [
-    "ROUNDTRIP A321ceo_web.glb objs=72 tris=65746 mats=23 texs=3 X=44.652 Y=38.232 Z=11.714 minZ=-0.0000",
-    "ROUNDTRIP A321ceo_web.usdz objs=72 tris=65746 mats=23 texs=3 X=44.652 Y=38.232 Z=11.714 minZ=-0.0000"
-   ]
+   }
   },
   {
    "slug": "A321neo",
@@ -2441,8 +2405,8 @@
      "motivo": "Surface<-MIX_SHADER",
      "metodo": "bake",
      "px": [
-      4096,
-      1024
+      8192,
+      2048
      ],
      "rugosidade": "mapa",
      "cor": null
@@ -2451,24 +2415,24 @@
    "caixa_blender": {
     "min": [
      -0.04,
-     -19.1424,
+     -17.932,
      -3.675
     ],
     "max": [
      44.64,
-     19.1424,
+     17.932,
      8.05
     ],
     "tamanho": [
      44.68,
-     38.2849,
+     35.864,
      11.725
     ],
     "deslocamento_z": 3.675
    },
    "n_objetos": 74,
    "triangulos_blender": 343790,
-   "megapixels": 13.63,
+   "megapixels": 26.21,
    "texturas_em_disco": [
     "textures_A321neo/FinSashD.png",
     "textures_A321neo/FinSashE.png",
@@ -2478,17 +2442,17 @@
    "saidas": {
     "glb": {
      "arquivo": "alta/A321neo_alta.glb",
-     "bytes": 9297016,
+     "bytes": 9841020,
      "extras": []
     },
     "fbx": {
      "arquivo": "alta/A321neo_alta.fbx",
-     "bytes": 7153276,
+     "bytes": 7695420,
      "extras": []
     },
     "obj": {
      "arquivo": "alta/A321neo_alta.obj",
-     "bytes": 29345800,
+     "bytes": 29887638,
      "extras": [
       "A321neo_alta.mtl"
      ]
@@ -2505,23 +2469,23 @@
     "materiais": 23,
     "materiais_clearcoat": 7,
     "imagens": 4,
-    "megapixels": 13.63,
-    "bytes_imagens": 511668,
+    "megapixels": 26.21,
+    "bytes_imagens": 1052535,
     "caixa": {
      "min": [
       -0.0123,
       -0.0,
-      -19.1162
+      -17.8997
      ],
      "max": [
       44.64,
       11.7138,
-      19.1162
+      17.8997
      ],
      "tamanho": [
       44.6523,
       11.7138,
-      38.2325
+      35.7994
      ]
     },
     "extensoes": [
@@ -2533,12 +2497,7 @@
     "nos": 75,
     "raizes_da_cena": 1,
     "gerador": "Khronos glTF Blender I/O v5.2.39"
-   },
-   "reimportacao": [
-    "ROUNDTRIP A321neo_alta.glb objs=74 tris=343790 mats=23 texs=4 X=44.652 Y=38.232 Z=11.714 minZ=-0.0000",
-    "ROUNDTRIP A321neo_alta.fbx objs=74 tris=343790 mats=23 texs=4 X=44.652 Y=38.232 Z=11.714 minZ=-0.0000",
-    "ROUNDTRIP A321neo_alta.obj objs=74 tris=343790 mats=23 texs=4 X=44.652 Y=38.232 Z=11.714 minZ=-0.0000"
-   ]
+   }
   },
   {
    "slug": "A321neo",
@@ -2711,8 +2670,8 @@
     {
      "nome": "NoseMask",
      "de": [
-      4096,
-      1024
+      8192,
+      2048
      ],
      "para": [
       2048,
@@ -2741,24 +2700,24 @@
       2048,
       512
      ],
-     "rugosidade": "escalar 0.218",
+     "rugosidade": "escalar 0.219",
      "cor": null
     }
    ],
    "caixa_blender": {
     "min": [
      -0.04,
-     -19.1424,
+     -17.932,
      -3.675
     ],
     "max": [
      44.64,
-     19.1424,
+     17.932,
      8.05
     ],
     "tamanho": [
      44.68,
-     38.2849,
+     35.864,
      11.725
     ],
     "deslocamento_z": 3.675
@@ -2769,12 +2728,12 @@
    "saidas": {
     "glb": {
      "arquivo": "web/A321neo_web.glb",
-     "bytes": 580656,
+     "bytes": 584288,
      "extras": []
     },
     "usdz": {
      "arquivo": "web/A321neo_web.usdz",
-     "bytes": 3450519,
+     "bytes": 3453406,
      "extras": []
     }
    },
@@ -2790,22 +2749,22 @@
     "materiais_clearcoat": 7,
     "imagens": 3,
     "megapixels": 9.44,
-    "bytes_imagens": 282219,
+    "bytes_imagens": 285119,
     "caixa": {
      "min": [
       -0.0123,
       -0.0,
-      -19.1162
+      -17.8997
      ],
      "max": [
       44.64,
       11.7138,
-      19.1162
+      17.8997
      ],
      "tamanho": [
       44.6523,
       11.7138,
-      38.2325
+      35.7994
      ]
     },
     "extensoes": [
@@ -2818,11 +2777,7 @@
     "nos": 75,
     "raizes_da_cena": 1,
     "gerador": "Khronos glTF Blender I/O v5.2.39"
-   },
-   "reimportacao": [
-    "ROUNDTRIP A321neo_web.glb objs=74 tris=66734 mats=23 texs=3 X=44.652 Y=38.232 Z=11.714 minZ=-0.0000",
-    "ROUNDTRIP A321neo_web.usdz objs=74 tris=66734 mats=23 texs=3 X=44.652 Y=38.232 Z=11.714 minZ=-0.0000"
-   ]
+   }
   },
   {
    "slug": "B763",
