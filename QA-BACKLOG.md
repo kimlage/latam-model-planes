@@ -243,17 +243,29 @@ open, deferred on purpose:** the two Airbus docstrings and the two Airbus spec
 round is folding per-aircraft builder copies into family modules, so those
 scripts may be retired outright.
 
-Two things the peer found that outlive the rename, and are the reason this is
-not a find-and-replace:
+Three things that outlive the rename, and are the reason this is a hand sweep
+and not a find-and-replace:
 
 - **`refs_fetch.py` names `refs_manifest.json` on purpose.** It scans for that
   filename as a STRAY legacy manifest left behind in a folder. A blanket
   substitution across the repo would rename the very string the guard hunts
   for and disarm it silently. Verified: the check is real.
-- **`airbus A320neo/fix_sharklet_indigo.py` says "all in refs_manifest.json",
-  and that was never true.** Its sentence cites PT-MXD, PT-MXP and PT-XPB —
-  which are in `airbus A321ceo/refs/manifest.json` — alongside PS-LBO, which
-  lives in `airbus A321neo/refs/manifest.json`. Manifests were per-folder under
-  the old name too. Fixing the path without fixing "all in" would tidy a
-  sentence that is still wrong. Also note that docstring wraps at 78 columns
-  and the new path pushes it to ~85, so lines 3-7 want a re-wrap.
+- **`airbus A321ceo/fix_sharklet_indigo.py` — the wording, not the width.**
+  Line 3 reads `Photo evidence (all in refs_manifest.json): PT-MXD 2021 …`, and
+  "all in" was never true: PT-MXD, PT-MXP and PT-XPB are in
+  `airbus A321ceo/refs/manifest.json`, while the PS-LBO frame the same sentence
+  cites is in `airbus A321neo/refs/manifest.json`. Manifests were per-folder
+  under the old name too. The path swap is the same length here, so no re-wrap
+  — but fixing the path alone leaves a sentence that is still wrong. Suggested:
+  "all in refs/manifest.json except the neo's PS-LBO, which is in
+  airbus A321neo/".
+- **`airbus A320neo/fix_sharklet_indigo.py` — the width, not the wording.**
+  Line 3 reads `Photo evidence (A321ceo refs_manifest.json: PT-MXD 2021, …` and
+  becomes `(airbus A321ceo/refs/manifest.json:` — seven characters longer, on a
+  77-column line in a block wrapped at 78. Lines 3–7 want a re-wrap. This file
+  never says "all in"; its wording is fine.
+
+The two bullets above were crossed in the first version of this entry, which is
+worth a moment: whoever picks this up would grep the A320neo file for "all in",
+find nothing, and lose trust in the whole entry. A peer session caught it by
+running the grep instead of reading the prose.
