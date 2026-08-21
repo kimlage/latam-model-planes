@@ -1,23 +1,69 @@
 # LATAM fleet — 3D replicas
 
-![Boeing 787-9 and Airbus A320neo in LATAM livery, rendered from several angles](capa.png)
-
 Blender models of LATAM Airlines aircraft, built to one standard: **the
 dimensions have to match the manufacturer's document, and the paint has to match
 a photograph of that specific registration**. The bar is not "it looks like an
 airliner" — it is a LATAM engineer recognising their own aircraft.
 
-**The whole LATAM passenger fleet — nine types, nine registrations** — plus
-the first freighter, every one gated against photographs of its own airframe:
+**The whole LATAM passenger fleet — nine types — plus both halves of the cargo
+fleet.** Eleven aircraft, each gated against photographs of its own
+registration, each shown from the three angles that answer the three questions:
+the shape, the proportions and paint along the hull, and the tail — where this
+project spent most of its measurement.
 
-| | |
-|---|---|
-| <img src="airbus%20A320neo/render_hero.png" width="440"><br>**Airbus A320neo** · PT-TMN · 37.57 m<br>[`A320neo_LATAM.blend`](airbus%20A320neo/A320neo_LATAM.blend) | <img src="boeing%20787-9/render_hero.png" width="440"><br>**Boeing 787-9 Dreamliner** · CC-BGK · 62.81 m<br>[`B789_LATAM.blend`](boeing%20787-9/B789_LATAM.blend) |
-| <img src="airbus%20A319/render_hero.png" width="440"><br>**Airbus A319 (ceo)** · PT-TMT · 33.84 m<br>[`A319_LATAM.blend`](airbus%20A319/A319_LATAM.blend) | <img src="airbus%20A320ceo/render_hero.png" width="440"><br>**Airbus A320ceo** · CC-BFO · 37.57 m<br>[`A320ceo_LATAM.blend`](airbus%20A320ceo/A320ceo_LATAM.blend) |
-| <img src="airbus%20A321ceo/render_hero.png" width="440"><br>**Airbus A321-231 (ceo)** · PT-MXP · 44.51 m<br>[`A321ceo_LATAM.blend`](airbus%20A321ceo/A321ceo_LATAM.blend) | <img src="airbus%20A321neo/render_hero.png" width="440"><br>**Airbus A321neo (ACF)** · PS-LBA · 44.51 m<br>[`A321neo_LATAM.blend`](airbus%20A321neo/A321neo_LATAM.blend) |
-| <img src="boeing%20787-8/render_hero.png" width="440"><br>**Boeing 787-8 Dreamliner** · CC-BBF · 56.72 m<br>[`B788_LATAM.blend`](boeing%20787-8/B788_LATAM.blend) | <img src="boeing%20767-300ER/render_hero.png" width="440"><br>**Boeing 767-300ER** · CC-CWY · 54.94 m<br>[`B763_LATAM.blend`](boeing%20767-300ER/B763_LATAM.blend) |
-| <img src="boeing%20777-300ER/render_hero.png" width="440"><br>**Boeing 777-300ER** · PT-MUG · 73.86 m<br>[`B77W_LATAM.blend`](boeing%20777-300ER/B77W_LATAM.blend) | <img src="boeing%20767-300F/render_hero.png" width="440"><br>**Boeing 767-300F** · N536LA · 54.94 m<br>*LATAM Cargo Colombia*<br>[`B763F_LATAM_CARGO.blend`](boeing%20767-300F/B763F_LATAM_CARGO.blend) |
-| <img src="boeing%20767-300BCF/render_hero.png" width="440"><br>**Boeing 767-300BCF** · CC-CXE · 54.94 m<br>*LATAM Cargo Chile — converted freighter*<br>[`B763BCF_LATAM_CARGO.blend`](boeing%20767-300BCF/B763BCF_LATAM_CARGO.blend) | |
+![Airbus A319 (ceo) PT-TMT](galeria_airbus_A319.png)
+
+**Airbus A319 (ceo)** · PT-TMT · 33.84 m · [`A319_LATAM.blend`](airbus%20A319/A319_LATAM.blend)
+
+
+![Airbus A320ceo CC-BFO](galeria_airbus_A320ceo.png)
+
+**Airbus A320ceo** · CC-BFO · 37.57 m · [`A320ceo_LATAM.blend`](airbus%20A320ceo/A320ceo_LATAM.blend)
+
+
+![Airbus A320neo PT-TMN](galeria_airbus_A320neo.png)
+
+**Airbus A320neo** · PT-TMN · 37.57 m · [`A320neo_LATAM.blend`](airbus%20A320neo/A320neo_LATAM.blend)
+
+
+![Airbus A321-231 (ceo) PT-MXP](galeria_airbus_A321ceo.png)
+
+**Airbus A321-231 (ceo)** · PT-MXP · 44.51 m · [`A321ceo_LATAM.blend`](airbus%20A321ceo/A321ceo_LATAM.blend)
+
+
+![Airbus A321neo (ACF) PS-LBA](galeria_airbus_A321neo.png)
+
+**Airbus A321neo (ACF)** · PS-LBA · 44.51 m · [`A321neo_LATAM.blend`](airbus%20A321neo/A321neo_LATAM.blend)
+
+
+![Boeing 767-300ER CC-CWY](galeria_boeing_767-300ER.png)
+
+**Boeing 767-300ER** · CC-CWY · 54.94 m · [`B763_LATAM.blend`](boeing%20767-300ER/B763_LATAM.blend)
+
+
+![Boeing 767-300F N536LA](galeria_boeing_767-300F.png)
+
+**Boeing 767-300F** · N536LA · 54.94 m · *LATAM Cargo Colombia, factory freighter* · [`B763F_LATAM_CARGO.blend`](boeing%20767-300F/B763F_LATAM_CARGO.blend)
+
+
+![Boeing 767-300BCF CC-CXE](galeria_boeing_767-300BCF.png)
+
+**Boeing 767-300BCF** · CC-CXE · 54.94 m · *LATAM Cargo Chile, converted* · [`B763BCF_LATAM_CARGO.blend`](boeing%20767-300BCF/B763BCF_LATAM_CARGO.blend)
+
+
+![Boeing 777-300ER PT-MUG](galeria_boeing_777-300ER.png)
+
+**Boeing 777-300ER** · PT-MUG · 73.86 m · [`B77W_LATAM.blend`](boeing%20777-300ER/B77W_LATAM.blend)
+
+
+![Boeing 787-8 Dreamliner CC-BBF](galeria_boeing_787-8.png)
+
+**Boeing 787-8 Dreamliner** · CC-BBF · 56.72 m · [`B788_LATAM.blend`](boeing%20787-8/B788_LATAM.blend)
+
+
+![Boeing 787-9 Dreamliner CC-BGK](galeria_boeing_787-9.png)
+
+**Boeing 787-9 Dreamliner** · CC-BGK · 62.81 m · [`B789_LATAM.blend`](boeing%20787-9/B789_LATAM.blend)
 
 Together they cover all 356 passenger aircraft LATAM operates — the A320ceo
 alone accounts for 135 of them — and the two freighters cover the 19-aircraft
