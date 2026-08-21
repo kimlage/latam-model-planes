@@ -74,12 +74,49 @@ the same sheet at 0.808, and no photograph resolves it head-on.
 
 ---
 
-## 787 family: radome joint drawn on the front face
+## 787 family: the hull's crown and keel carry the wrong UV
 
-Found by the same head-on angle. On both the **787-8** and **787-9** the
-radome joint is drawn as a **circle on the front face** of the nose, inside
-the silhouette, instead of a ring at a fuselage station. The windshield
-mullions are also wide black bars with torn edges.
+What the nose-art fix left open. The windshield half of the old entry is
+**done**: the mullions were not "wide black bars" by accident — the mask
+painted the whole post dark, when on the real aircraft the post is *hull
+white* with a thin dark seal each side, so the light slit between the panes
+did not exist at all. Re-measured on two free-licence head-on photographs,
+normalised by the half-width of the dark blob (the only scale-, lens- and
+distance-free normalisation), the slit is `0.0740` at the centre post and
+`0.0497` at the middle one; the two photographs agree to 2% and 8%.
+
+The radome half of the old entry was a **misdiagnosis** and is withdrawn. The
+joint was already a ring at a fuselage station — measured on the old texture
+it runs `x = 1.109` at the crown to `1.389` at the keel, and the APR's side
+view gives 1.078 and 1.403. Head-on, a ring at that station *does* project as
+a closed oval inside the silhouette; the APR's own front view draws it that
+way and so do all three head-on photographs. Only the stroke was wrong (0.039 m
+of flat grey with a stair-step, and no relief).
+
+What the fix found and did **not** repair: on both 787s every ring vertex of
+the hull cage carries `v = i/32` exactly **except two**. The crown vertex
+carries `0.50712` instead of `0.5`, the keel vertex `0.99288` instead of `1.0`.
+On the evaluated surface the plane of symmetry therefore lands at `v = 0.5044`,
+4.5 texture rows off centre — which is why the old centre post sat 0.045 m to
+port, split by a 0.018 m slit of white hull. The 767, 777 and A319 hulls are
+clean at `v = 0.5` / `1.0`, so this is a 787-family defect, not a fleet one.
+
+`nose_art.py` is immune because it tests every texel by its own 3-D position on
+the evaluated mesh, but **nothing else painted on these two hulls is** — in
+particular the rear écharpe, which crosses the crown. The distortion is ~0.7%
+of the circumference, concentrated within ±11° of the crown and the keel.
+
+Also open on the same aircraft: the **radome oval against the glazing**. The
+ratio of their half-widths is 0.770 in the model, 0.697 in the APR front view,
+**0.673** on the A7-BCC head-on and **0.835** on the N805AN head-on. The two
+photographs disagree by 22% — the N805AN is shot from above the windshield,
+which foreshortens the outer pane exactly where it climbs the shoulder — so
+nothing was changed. The APR and the better photograph both sit near 0.68,
+which would make the glazing ~10% narrow. The hull is not the suspect: the
+APR's **top** view gives the nose half-width to 1.3% of the model, after
+normalising by the section the drawing itself draws (3.3% oversize in the top
+view, 11% in the front view — the 767's trap again). This needs one head-on at
+eye level on a light nose.
 
 ---
 

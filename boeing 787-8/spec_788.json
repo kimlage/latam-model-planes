@@ -149,7 +149,7 @@
  "herdado_do_787_9_sem_alteracao": {
   "asa": "planform, torcao, carenagens de flape e superficies de comando identicas (spec_b789.json -> asa); so a posicao em x muda (-3.04)",
   "empenagem": "deriva e estabilizador identicos; BA reto da deriva x = 41.82 + 0.9920*z (45.2 graus) no referencial do -8; BF x = 51.05 + 0.3858*z",
-  "nariz": "estacoes do nariz e parabrisa identicas em metros (o -8 nao muda nada a vante de x=13.40); NoseMask reamostrada metro a metro",
+  "nariz": "estacoes do nariz e parabrisa identicas em metros (o -8 nao muda nada a vante de x=13.40). A NoseMask NAO e mais reamostrada da do -9: desde 2026-08-21 os dois avioes constroem a arte do nariz do zero com 'boeing 787-9/nose_art.py', que testa cada texel pela posicao 3D do proprio casco — so muda o L_UV (57.5 aqui, 63.5 no -9). A reamostragem por coluna que build_788_livery.py faz na NoseMask esta SUPERSEDIDA; se aquele script for rodado de novo, rodar nose_art.py depois.",
   "motor": "geometria da nacele do -9 (ver motor abaixo)",
   "fin_sash": "FinSashE/FinSashD sao BIT-A-BIT IDENTICAS as do 787-9 (verificado). A arte do fin foi medida por tipo em 2026-08-20 (commit f162f73) e o -8 usa a MESMA deriva, entao transfere sem reescala."
  },
@@ -345,7 +345,29 @@
   "simbolo_da_marca_estreito": "RESOLVIDO 2026-08-20 (auditoria (x,theta) da frota). As fotos estavam certas e a razao 4.30 nao contradiz: (1) o simbolo da APLICACAO NO CASCO e ~1.41x mais largo em relacao ao wordmark do que o SVG de impressao — divisao 0.260 contra 0.18458, medida em cinco tipos (767 0.2551, A321neo 0.2598, A320ceo 0.2716, 787-9 0.242, e as proprias fotos do -8 dao 0.253-0.259 contra o wordmark de 6.247 m); (2) a comparacao '1.58-1.62 m contra 1.16 m na mesma altura' foi feita em Z, e o simbolo cruza theta 29..76 — na projecao lateral a altura encolhe ~25%, entao a 'mesma altura' nao era a mesma. Nao falta arte oficial: e a mesma arte com outra divisao. A razao do lockup INTEIRO na aeronave e ~3.15, nao 4.30 (4.30 vale para o SVG plano). O -8 ainda carrega a divisao do SVG (0.182) e o simbolo -21% da sua razao oficial em arco: mesma correcao que os outros seis levaram, aplicavel com refazer_marcas.py (fora do escopo daquela rodada).",
   "matricula_do_787_9": "RESOLVIDO 2026-08-20: a suspeita estava certa e o -9 e que estava errado. Medido em CC-BGP (bombordo): a matricula fica 0.85..2.62 m a re da porta 4, z 0.95..1.29 — compativel com os 0.84..2.47 m e z 1.17..1.47 medidos aqui no -8. O master do -9 a punha em x 54..58.6, FORA da cunha, como contorno palido quebrado, e a estibordo nem existia. Corrigida para x 50.86..52.63.",
   "boeing_787-8": "titulo nao pintado por falta de vetor (ver titulos_extras)",
-  "largura_do_simbolo_de_barriga": "sem foto vertical"
+  "largura_do_simbolo_de_barriga": "sem foto vertical",
+  "oval_do_radome_vs_envidracado": "Mesma pendencia do -9 (spec_b789.json). A razao oval-do-radome / envidracado vale 0.770 no modelo contra 0.697 no APR, 0.673 numa foto e 0.835 na outra. O modelo esta dentro do intervalo, entao nao foi mexido."
  },
- "confianca": "ALTA: todas as cotas da APR (erro <=0.04 m), portas, trem, motor x/y, plugues, matricula (duas fotos, dois bordos), DREAMLINER, arte do fin (herdada e medida por tipo); MEDIA: fronteiras da cunha (+-0.3 m), posicao vertical dos titulos (+-0.1), simbolo de barriga (+-1); BAIXA: altura total (desvio conhecido de -0.44 m), largura do simbolo da marca"
+ "confianca": "ALTA: todas as cotas da APR (erro <=0.04 m), portas, trem, motor x/y, plugues, matricula (duas fotos, dois bordos), DREAMLINER, arte do fin (herdada e medida por tipo); MEDIA: fronteiras da cunha (+-0.3 m), posicao vertical dos titulos (+-0.1), simbolo de barriga (+-1); BAIXA: altura total (desvio conhecido de -0.44 m), largura do simbolo da marca",
+ "arte_do_nariz_2026-08-21": {
+  "script": "boeing 787-9/nose_art.py  (export / build / apply, ver o cabecalho)",
+  "parabrisa": "O montante do 787 e pintado NA COR DO CASCO com um selo escuro de cada lado: head-on ve-se uma MANCHA ESCURA por vidro e uma FRESTA CLARA entre elas. A mascara antiga pintava o montante inteiro de escuro — dai as 'barras pretas largas'. Frestas remedidas em duas fotos head-on de licenca livre, normalizadas pela meia-largura da mancha: central 0.0740, do meio 0.0497, centro do do meio 0.573. Selo 0.030 m medido como distancia 3D NA SUPERFICIE. NoseMask passou a 8192x2048 com supersample 4x4.",
+  "montante_central": "Estava 0.045 m deslocado para bombordo e partido por uma fresta de casco branco de 0.018 m, porque a mascara era simetrica em v=0.5 da textura enquanto a crista do casco esta em v=0.5044 (defeito de UV herdado do -9, detalhado em spec_b789.json -> correcoes/uv_da_crista_2026-08-21). O -8 herdou o mesmo defeito pela reamostragem.",
+  "junta_do_radome": "CONFIRMADA no lugar, ao contrario do que dizia o QA-BACKLOG: e uma anilha numa estacao de fuselagem (plano x + 0.1118*z = 1.1309, ou seja x=1.109 na crista e 1.389 na quilha), o que a vista lateral do APR confirma em 0.03 m. Head-on ela projeta um oval fechado dentro da silhueta — e isso e o certo. Redesenhada com 0.026 m, supersample e sulco no PanelBump.",
+  "medido_no_modelo_depois": {
+   "fresta_central_x_mancha": 0.0757,
+   "fresta_meio_x_mancha": 0.0553,
+   "fresta_meio_centro_x_mancha": 0.5779,
+   "meia_largura_da_mancha": 1.518,
+   "vidro_x": [
+    1.338,
+    2.651
+   ],
+   "vidro_z": [
+    0.355,
+    0.885
+   ]
+  },
+  "fotos": "refs/ws_headon_A7-BCC_qatar_osl.jpg (Bene Riobo, CC BY-SA 4.0) e refs/ws_headon_N805AN_aa_pae.jpg (Eric Salard, CC BY-SA 2.0) — as duas de 787-8, mesmo subtipo. Nao existe head-on de LATAM em licenca livre; o nariz e o para-brisa sao padrao de tipo, e o nariz da LATAM e branco, o que faz da N805AN (American, nariz branco) o analogo mais proximo."
+ }
 }

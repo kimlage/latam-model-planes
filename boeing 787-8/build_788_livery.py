@@ -401,6 +401,13 @@ write_img(img_pb, np.concatenate([pb[..., :3], np.ones((H, W, 1), np.float32)], 
 log("LiveryTex/Fac/PanelBump written")
 
 # ---------------------------------------------------------------- 8. NoseMask rescale
+# SUPERSEDIDO em 2026-08-21 por "boeing 787-9/nose_art.py", que constroi a
+# NoseMask dos DOIS avioes do zero, testando cada texel pela sua posicao 3D no
+# proprio casco (e por isso e imune ao defeito de UV da crista do 787). Esta
+# reamostragem por coluna continua aqui porque o resto do script depende do
+# datablock existir com o tamanho do casco; se este script for rodado de novo,
+# RODAR nose_art.py (export/build/apply) DEPOIS dele, senao a NoseMask volta a
+# 4096x1024 com os montantes antigos.
 img_nm, nmb = read_img("NoseMask")
 src = x8_cols / L_UV_9 * W - 0.5
 c0 = np.clip(np.floor(src).astype(int), 0, W - 1)

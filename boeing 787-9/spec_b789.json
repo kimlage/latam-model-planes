@@ -259,7 +259,47 @@
    3.66
   ],
   "aplicacao": "mascara UV (x,theta) no shader do casco: NoseMask R=moldura, G=vidro. Expandir os poligonos ~0.03 m (metade da espessura do traco do desenho), arredondar cantos ~0.05 m por abertura morfologica, vedacao ~0.065 m por dilatacao, e supersample 4x - sem AA a moldura serrilha.",
-  "nota": "flush, sem molduras salientes; olho do piloto z+0.60 y+-0.53"
+  "nota": "flush, sem molduras salientes; olho do piloto z+0.60 y+-0.53",
+  "montantes_2026-08-21": {
+   "modelo": "O montante do 787 e pintado NA COR DO CASCO, com um selo escuro de cada lado. Head-on, portanto, o que se ve e uma MANCHA ESCURA por vidro (vidro + selo) e uma FRESTA CLARA entre elas. A mascara antiga pintava o montante INTEIRO de escuro — e por isso que as barras liam como 'barras pretas largas': a fresta clara simplesmente nao existia. Agora os quatro vidros sao o envelope do envidracado menos duas faixas de |y| (o montante central, centrado no plano de simetria, e o do meio), o canal R da NoseMask leva SO o selo, e o miolo do montante fica com a tinta do casco.",
+   "fonte": "Duas fotos head-on de licenca livre (refs_manifest.json): A7-BCC (Qatar 787-8, Bene Riobo, CC BY-SA 4.0) e N805AN (American 787-8, Eric Salard, CC BY-SA 2.0). As medidas sao da FRESTA CLARA, normalizadas pela MEIA-LARGURA DA MANCHA ESCURA — a unica normalizacao imune a escala, lente e distancia. As duas fotos, com lentes, distancias e elevacoes diferentes, concordam em 2% na fresta central e 8% na do meio.",
+   "por_foto": {
+    "A7-BCC": {
+     "fresta_central": 0.0733,
+     "fresta_meio": 0.0477,
+     "fresta_meio_centro": 0.564
+    },
+    "N805AN": {
+     "fresta_central": 0.0747,
+     "fresta_meio": 0.0517,
+     "fresta_meio_centro": 0.582
+    }
+   },
+   "fresta_central_x_mancha": 0.074,
+   "fresta_meio_x_mancha": 0.0497,
+   "fresta_meio_centro_x_mancha": 0.573,
+   "em_metros": {
+    "selo": 0.03,
+    "meia_largura_do_vidro": 1.5,
+    "meia_largura_da_mancha": 1.53,
+    "montante_central_estrutural": 0.1732,
+    "montante_meio_estrutural": 0.136,
+    "montante_meio_centro": 0.8767,
+    "nota": "montante estrutural = fresta clara + 2 selos"
+   },
+   "selo": "0.030 m medidos como DISTANCIA 3D NA SUPERFICIE ate o contorno do vidro (KD-tree sobre os pontos de contorno), nao como offset no plano (|y|,z). E a licao do 767: offset no plano e arco na superficie nao sao a mesma coisa, e misturar os dois distorceu os montantes do 767 em 20-30%.",
+   "resolucao": "NoseMask passou de 4096x1024 (a do casco) para 8192x2048, com cobertura por supersample 4x4. Na resolucao do casco o contorno do vidro era UM texel, que o shader lia a meio termo — por isso a moldura aparecia cinza-clara em volta dos vidros e preta so nos montantes.",
+   "SUBSTITUI": "montante_central_y = 0.115 (0.230 m de vao, TODO escuro) e o vao 0.837..1.018 entre os vidros (0.181 m, tambem todo escuro). Sem fresta clara nenhuma. Contra a foto, a barra escura central do modelo media 0.230 m onde a real mede 2 selos (0.060) separados por 0.113 m de casco.",
+   "medido_no_modelo_depois": {
+    "fresta_central_x_mancha": 0.0756,
+    "fresta_meio_x_mancha": 0.0557,
+    "fresta_meio_centro_x_mancha": 0.5779,
+    "meia_largura_da_mancha": 1.518,
+    "altura_da_mancha_sobre_meia_largura": 0.382,
+    "residuo": "fresta central +2% e do meio +12% contra a media das duas fotos. O excesso na do meio vem do filete dos cantos (R=0.055 m), que alarga o vao onde as bordas dos dois vidros sao inclinadas; 6 mm na aeronave. A foto A7-BCC da 0.0477 e a N805AN 0.0517, ou seja as proprias fontes discordam em 8% — o residuo esta dentro da dispersao das fontes.",
+    "altura_conferida": "mancha 0.382 x meia-largura no modelo contra 0.398 medido na A7-BCC (rows 1499..1618 sobre meia-largura 298.65 px): 4%."
+   }
+  }
  },
  "portas_pax": {
   "centros_x": [
@@ -536,7 +576,7 @@
  "correcoes": {
   "nariz_largura_2026-08-16": "A gaiola do casco tinha um afilamento espurio na largura do nariz: max|y|/meia_largura_spec ia de 0.911 em x=0.25 subindo linearmente a 1.000 em x=5 (o barril estava correto em COMP=1.0064). Crown e keel estavam certos, entao nenhum render denunciava. Corrigido escalando so y anel por anel; erro mediano contra o spec caiu de 1.2 cm para 0.4 cm.",
   "asa_bordo_de_fuga_2026-08-16": "O spec dizia te_raiz_x=33.0 com 11 graus no trecho interno. Medicao propria no APR p.21 @600dpi (confirmada por um agente de pesquisa independente) da x=33.80+0.0700*y, ou seja ~4 graus e raiz em 34.00 — a corda de raiz era 11.22 e passou para 12.05 m (7% curta). Bordo de ataque conferido e CORRETO (34.7 vs 34.8 do spec). Asa reconstruida a partir do planform medido; carenagens de flap eram 2 por asa em y=5.6/8.6 e passaram para 3 em y=8.88/14.75/19.16.",
-  "junta_do_radome": "Junta circunferencial do radome em x=1.11 (topo) a 1.39 (base), inclinada — medida na fig. 5.4.3 do APR calibrada por duas cotas oficiais (controle: ponta do nariz cai em x=-0.05). E a linha circunferencial mais visivel da fuselagem e vale desenhar.",
+  "junta_do_radome": "CONFIRMADA e re-derivada em 2026-08-21. O QA-BACKLOG dizia que era 'um circulo desenhado na face frontal do nariz'. Nao e: a linha ja estava numa ESTACAO de fuselagem. Medida na textura antiga ela vai de x=1.109 na crista (z=+0.196) a x=1.389 na quilha (z=-2.308); a VISTA LATERAL do APR D6-58333 p.2-6 a 600 dpi, calibrada pela altura de fuselagem de 5.94 m (49.16 px/m, ponta do nariz na coluna 865), da 1.078 e 1.403 — concordancia de 0.03 m. Head-on, uma anilha nessa estacao PROJETA um oval fechado dentro da silhueta: e o que a vista frontal do proprio APR desenha e o que as tres fotos head-on mostram. Agora e gerada como o corte do plano x + 0.1118*z = 1.1309, com 0.026 m de largura, supersample 4x4 e um sulco no PanelBump (o radome e peca removivel: a folga existe). Antes eram 0.039 m de cinza chapado com degrau e sem relevo.",
   "dreamliner_z_2026-08-16": "Pintado estava centrado em z=+0.30; o correto e z=-0.04 (bloco de 0.631 m com as letras centradas nele, confirmado medindo o mesh do dreamliner_logo.svg). Deslocado 19-20 linhas de textura por lado.",
   "sash_da_deriva_2026-08-16": "O triangulo branco no canto inferior DIANTEIRO da deriva e LEGITIMO — fica entre a base do swoosh (F4) e o topo da massa (F7), e o A320 aprovado tem o mesmo. Cheguei a preenche-lo com indigo por leitura errada de um feedback; desfeito. Licao: quando a prosa do spec e a geometria medida do outro aviao discordarem sobre a MARCA, a marca ganha — ela e a mesma nos dois.",
   "echarpe_do_cone_2026-08-16": "A echarpe estava com a borda inferior quase constante em v de x=51 a 61, o que projeta uma cunha branca de borda reta no cone. Corrigido: borda em z=-0.50 ate x=53 (spec) e subindo depois como potencia 1.35 ate zc+0.30r, fazendo a fita afinar em ponta e deixando o cone branco com o cone da APU metalico.",
@@ -546,12 +586,16 @@
   "echarpe_nao_existe_2026-08-17": "ERRO DE RAIZ, e o mais caro da sessao. O spec descrevia uma echarpe indigo descendo da deriva pelo casco ate o tailcone. Esse texto atravessou fotogrametria, medicao do 3-view a 600 dpi, dois workflows de pesquisa e uma rodada de verificacao adversarial sem ser questionado, e foi refinado por horas (limite por z -> limite angular -> mergulho local para preservar a matricula). A foto ar-ar do CC-BGK mostrou que a fuselagem e toda branca. Todo o refino foi ajuste fino da coisa errada. LICAO GRAVADA COMO REGRA 0 DO PROJETO: buscar e olhar foto da matricula e o PRIMEIRO passo, antes do documento do fabricante e antes de qualquer spec — e prosa nunca substitui a foto, mesmo prosa que veio de medicao.",
   "cunha_traseira_2026-08-17": "Sequencia de erros que vale registrar. (1) O spec original tinha uma echarpe percorrendo o casco ate o tailcone; isso nao existe. (2) Ao ver a foto ar-ar do dono, apaguei TODO o indigo do casco — sobre-correcao: a foto de cima esconde a cunha, que fica no flanco/baixo. (3) Voltei a pintar usando medicao automatica por limiar de cor, que falha porque a DERIVA tambem e indigo e se sobrepoe ao casco na vista lateral. (4) A calibracao da foto pelo vao nariz-cauda errava 14% (aviao em angulo); calibrar pelo passo das janelas resolveu. LICAO: para pintura, medir a foto por limiar de cor nao funciona quando duas pecas tem a MESMA cor e se sobrepoem na projecao — ler a fronteira A OLHO no crop ampliado e mais confiavel. E calibrar sempre por uma cota repetida (passo de janela), nunca pelo comprimento total.",
   "deriva_2026-08-17": "Sash refeito por retificacao da foto: bandas de bordo a bordo, indigo dominante, coral no miolo e cinza nas pontas. Antes: deriva branca com bandas grossas interrompidas. Tambem corrigida a marca LATAM da fuselagem (estava esticada 28% na vertical -> proporcao oficial 4.30, e agora nao invade a fileira de janelas) e removidos matricula fantasma e lockup fantasma da textura.",
-  "workflow_geometria_2026-08-17": "Workflow de 9 agentes (5 medicoes + 3 verificacoes adversariais + sintese), ~2.4M tokens. Achou tres erros que a medicao solo nao pegou: (1) o BA da deriva no spec era a corda da carenagem dorsal, nao o BA; (2) o angulo das bandas era 13.5 e o real e 20.4; (3) a echarpe do casco e um corte PLANO paralelo ao BA deslocado 0.86 m, nao um wrap circunferencial. Confianca alta. Em aberto: limite inferior e traseiro da echarpe, e a borda superior da banda superior (cinza sobre cinza, invisivel)."
+  "workflow_geometria_2026-08-17": "Workflow de 9 agentes (5 medicoes + 3 verificacoes adversariais + sintese), ~2.4M tokens. Achou tres erros que a medicao solo nao pegou: (1) o BA da deriva no spec era a corda da carenagem dorsal, nao o BA; (2) o angulo das bandas era 13.5 e o real e 20.4; (3) a echarpe do casco e um corte PLANO paralelo ao BA deslocado 0.86 m, nao um wrap circunferencial. Confianca alta. Em aberto: limite inferior e traseiro da echarpe, e a borda superior da banda superior (cinza sobre cinza, invisivel).",
+  "parabrisa_2026-08-21": "Tres defeitos numa vez, todos so visiveis no angulo head-on de aa2d27d. (1) MONTANTES 2.1x e 2.4x LARGOS — remedidos em duas fotos head-on, ver parabrisa_4_vidros/montantes_2026-08-21. (2) MONTANTES RASGADOS: o vao entre dois vidros era preenchido por dilatacao do selo e ganhava farpas; agora o montante e o complemento do vidro dentro do envelope. (3) MONTANTE CENTRAL FORA DO PLANO DE SIMETRIA — ver correcoes/uv_da_crista_2026-08-21. Reconstruido por nose_art.py, que testa CADA TEXEL pela sua propria posicao 3D na malha avaliada em vez de desenhar em (x, v).",
+  "uv_da_crista_2026-08-21": "DEFEITO DE UV DO CASCO, encontrado ao remedir o para-brisa e ainda NAO corrigido na malha (corrigido apenas no metodo de pintura). Todos os 32 vertices de cada anel carregam v = i/32 EXATO, menos dois: o da CRISTA, que carrega v = 0.50712 em vez de 0.5, e o da QUILHA, que carrega 0.99288 em vez de 1.0 — ambos deslocados 0.00712 na direcao de v=0.75 (estibordo). Na superficie avaliada pelo subsurf a crista cai em v = 0.5044, ou seja 4.5 linhas de textura acima de v=0.5. Consequencia medida: a NoseMask antiga, desenhada simetrica em torno de v=0.5, punha o montante central 0.045 m a bombordo do plano de simetria e o partia ao meio com uma fresta de casco BRANCO de 0.018 m. Qualquer marca que atravesse a crista ou a quilha sofre a mesma torcao (~0.7% da circunferencia, concentrada em +-11 graus da crista). nose_art.py e imune porque nao desenha em (x,v); o resto da livery nao e."
  },
  "pendencias": {
   "rr_na_nacelle": "Distintivo Rolls-Royce: NAO e do casco, vive na nacelle, que precisa de UV proprio em torno do eixo do motor. Geometria ja apurada para quando houver: caixa 0.43 m (x) x 0.698 m (arco), razao 1.624, x 22.085-22.515, theta_centro 0 graus +-10 (face externa dos dois motores), raio local 1.504 m, z -2.055..-2.745. Desenhar em espaco de ARCO, nao em angulo linear. Cores #0F059E e #FFFFFF.",
   "vetados_por_falta_de_fonte": "Nao pintar sem fonte nova: (a) portas estaticas e cantoneiras vermelhas do nariz — duas pesquisas discordam em ~8 m e a citacao normativa estava errada; (b) mastro/escorrido do dreno DIANTEIRO — conflito de estacao e de lado; (c) marcacoes de cut-in — o proprio ARFF da Boeing diz 'NOT MARKED ON ALL AIRPLANES' e nenhuma foto LATAM as mostra; (d) juntas de barril da fuselagem — invisiveis na pele pintada (composito unido por splice straps pelo lado interno) e estacoes desconhecidas.",
-  "nao_desenhar_no_787": "Rebites, lap joints longitudinais e quilting NAO existem num 787: o barril e peca unica de composito. Uma malha de rebites transforma o 787 num 767. O que faz o casco parecer 787 e o REFLEXO limpo, nao panel lines. Linhas de painel de verdade so na carenagem ventral (x 22-35.5), que e aparafusada."
+  "nao_desenhar_no_787": "Rebites, lap joints longitudinais e quilting NAO existem num 787: o barril e peca unica de composito. Uma malha de rebites transforma o 787 num 767. O que faz o casco parecer 787 e o REFLEXO limpo, nao panel lines. Linhas de painel de verdade so na carenagem ventral (x 22-35.5), que e aparafusada.",
+  "oval_do_radome_vs_envidracado": "EM ABERTO, nao resolvido por falta de fonte que feche. A razao meia-largura-do-oval-do-radome / meia-largura-do-envidracado vale 0.770 no modelo, 0.697 na vista frontal do APR, 0.673 na foto head-on A7-BCC e 0.835 na N805AN. As duas fotos discordam entre si em 22% — a N805AN e tirada de cima do para-brisa, o que encurta a meia-largura aparente do vidro externo, que fica no ombro do nariz. O modelo esta DENTRO do intervalo das fotos, entao nada foi mexido; mas o APR e a A7-BCC concordam em ~0.68-0.70, o que sugere que o envidracado seja ~10% estreito (meia-largura 1.67 em vez de 1.50). Nao mexer sem uma head-on na altura do olho e com o nariz claro. A geometria do casco NAO e suspeita: a vista superior do APR da meia-largura 1.112/1.171/1.230 em x=1.12/1.24/1.36 contra 1.098/1.155/1.213 no modelo (1.3%), depois de normalizar pela secao DESENHADA (o desenho tem a secao 3.3% grande no topo e 11% na vista frontal — a armadilha do 767).",
+  "casco_branco_puro": "Observado ao mexer na LiveryTex: 76% dos texels do casco estao em 1.0 (branco puro), nao no #F5F6F8 que este spec declara nem no #E6E7EA da regra de livery. So o radome (a vante da junta) esta em 0.969. Nao foi tocado — e decisao de frota, nao local — mas vale medir antes da proxima entrega."
  },
  "cauda_livery": {
   "fin_bandas_medidas_2026_08_17": {

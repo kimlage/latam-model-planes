@@ -1,0 +1,6 @@
+# Fotos de referencia de terceiros. Sao CC BY / CC BY-SA com autoria registrada
+# em refs_manifest.json; share-alike conflita com a CC BY 4.0 dos assets do
+# projeto, entao citamos em vez de redistribuir. Mesma regra do 767-300ER.
+refs/*.jpg
+refs/*.jpeg
+refs/*.png
