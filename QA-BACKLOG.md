@@ -184,7 +184,7 @@ sharklets/fences, the engine stations and every gate render.
 
 ---
 
-## Licensing: photo pixels are still in git history
+## Licensing: photo pixels in git history — closed
 
 Closed going forward in `0da5329` — five `comparacao_fin_sash.png` sheets were
 removed from the index and ignored, because each is roughly two thirds
@@ -192,11 +192,10 @@ photograph (PT-TMN, PS-LBO, CC-BBB) and `NOTICE.md` records those images as
 **"cited, not shipped"**: CC BY-SA share-alike is incompatible with the CC BY
 4.0 the models ship under.
 
-**Still open, and an owner decision, not an agent one:** those pixels remain in
-the repository's history, so a clone still carries them. Options, in
-increasing order of disruption: leave it and rely on the current tree being
-clean; rewrite history for the five paths; or relicense the affected sheets'
-photographs by replacing them with CC0/CC BY sources and regenerating.
+**Decided by the owner: the history stays as it is.** The decision is safe on
+its own terms — `origin/main` sits at `88715a6`, from before the fleet work,
+so the 75 commits that carry those pixels were never pushed. Nothing was
+published; the working tree is clean; the remote never saw them.
 
 Worth noting how it happened, because it is a pattern rather than a slip: the
 sheets were committed by an early round, and two later rounds independently
