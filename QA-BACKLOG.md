@@ -52,6 +52,28 @@ just the numbers.
 
 ---
 
+## 767-300ER: the cockpit pinch is now unjustified
+
+Left open by the windshield fix (`d401766`). The hull's cockpit pinch was
+calibrated visually against "glazing out to |y| ~ 1.71", which turned out to
+be the isotropic misreading of a front view that draws the section oversize —
+the corrected figure is 1.564. The pinch was not touched, because changing it
+changes the hull and invalidates other gates.
+
+Two independent signals say it is worth re-measuring: head-on, the glazing
+occupies a smaller fraction of the nose width than in the photographs while
+the glazing's **own** aspect matches to 2% — which points at the nose being
+too blunt at the cockpit rather than at the glass. The fuselage silhouette
+could not be measured in any of the nine reference frames (trees, heat
+shimmer, or white against a white sky), so this needs a better photograph or
+a different method.
+
+Also open on the same aircraft: the glazing's z position is 0.068 m
+unresolved — the front view puts its centre at z = 0.876 and the side view of
+the same sheet at 0.808, and no photograph resolves it head-on.
+
+---
+
 ## 787 family: radome joint drawn on the front face
 
 Found by the same head-on angle. On both the **787-8** and **787-9** the
