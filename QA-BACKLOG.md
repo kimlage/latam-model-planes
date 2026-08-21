@@ -9,46 +9,27 @@ survives, suspect the instrument before the model**.
 
 ---
 
-## Windshield: the glass never reaches the centreline
+## Fleet-wide: the nose tip is a valence-32 pole
 
-Found by the head-on angle added in `aa2d27d`. Same defect class as the 777's,
-fixed in `22500e6`: paint and glazing measured in the **side projection**
-cannot see the panes wrapping around the nose, so the glass stops short of the
-plane of symmetry and the centre post — the "V" — is missing.
+The other half of the head-on complaint from `aa2d27d` — "a vertical crease on
+the radome's plane of symmetry converging to a point low on the nose". The
+windshield fix left it alone, because it is not paint and not the mask.
 
-| Aircraft | Symptom |
-|---|---|
-| **A319, A320ceo, A320neo, A321ceo, A321neo** | Wide black wedge at the top of the windshield where a narrow centre post belongs. Plus a vertical crease on the radome's plane of symmetry converging to a point low on the nose. |
+The fuselage cage ends in **one** vertex at (-0.040, 0, -0.716) with **32 edges
+and 32 faces**: every station behind it carries 32 vertices and they all
+converge there. Catmull-Clark keeps an extraordinary vertex of that valence
+tangent-plane continuous but lets the curvature blow up, and the paint's clear
+coat (Coat 1.0, Coat Roughness 0.05) turns that into a dark radial wedge with a
+bright specular eye at the apex. It sits on the plane of symmetry because the
+pole does, and it reads *low* on the nose because CamHeadOn is at eye height,
+2.95 m below the nose tip — we are looking at the underside of the radome.
 
-**Method that worked on the 777** (`boeing 777-300ER/spec_77w.json`, commit
-`22500e6`) **and then on the 767** (`boeing 767-300ER/spec_763.json`):
-re-measure on the manufacturer's **front** view at high dpi, self-calibrated
-by fitting the drawn fuselage section from its own centre; store polygons in
-`(|y|, z)` and put each vertex **on the surface** — the hull coupling then
-generates the V and the 3D wrap by itself. Do not dilate the seal by a single
-angle: use the **local** section radius, or the seal comes out ~25% thin
-exactly at the crown, where the centre post is.
+Measured on the A320neo. All five Airbus share that cage (identical station
+list) and the Boeings are built by the same recipe, so expect it fleet-wide.
 
-Three traps the 767 added to that recipe, all of which cost ~10% each and
-none of which are visible without a real head-on photograph:
-
-- **The drawn section may not be the real one.** On ACAP D6-58328 p.2-9 the
-  front view draws the fuselage as a *circle* (5.545 x 5.466 m) where the
-  767 is 5.03 x 5.41. The wingspan in the same view is right to 0.07%, so it
-  is the section outline alone that is oversize. Read `(|y|, z)` normalised
-  by the **drawn** section and remultiplied by the **true** one.
-- **The front view can flatten the glazing.** Its glazing is 0.610 m tall
-  against 0.666 m in the side view of the same sheet, and all three head-on
-  photographs side with the side view.
-- **Set-back and seal must live in the same space.** Head-on, a seal of arc
-  `s` on the surface shows as `s·cos(theta)`, while a set-back done in the
-  `(|y|, z)` plane shows in full. Mixing them left the outboard mullion 29%
-  wide and the narrow No.3 pane 19% thin while the inboard one closed to 1%.
-
-The A320 family stores its windshield as `(x, z)` polygons — the flawed
-method — but its builder converts them to a band closing at the crown, which
-is why it gets away with it on a much less blunt nose. Fix the method, not
-just the numbers.
+Fixing it is a HULL change: the tip needs a quad cap instead of a 32-fan, which
+moves every vertex of the first stations and invalidates the nose gates. Left
+open for the same reason the 767's cockpit pinch was.
 
 ---
 
@@ -137,6 +118,12 @@ Worth keeping from the original entry: this was **already visible in the old
 profile render**, which barely changed under the new cameras. It did not hide —
 it was looked at and passed.
 
+Looked at again during the windshield round (2026-08-21) and **not** fixed: the
+splinter and the dotted edge live where the wedge's forward straight line
+`x >= 28.51 + 0.63 z` meets the keel cut `z >= -1.2, |theta| <= 145`, which is
+the echarpe rasteriser, not the nose mask. Fixing it means re-running the wedge
+paint on both A321s, which is a different round from this one.
+
 ---
 
 ## A319: the type title reads "AIRBUS A3"
@@ -154,10 +141,31 @@ deviation `spec_a319.json → livery_pt_tmt.titulo` already documents.
 
 ---
 
-## A320ceo: ghost door 1
+## Door outlines painted in the (x, z) projection — "ghost door 1"
 
-A second tilted wedge outline abuts door 1. Present before the camera fix but
-illegible at the grazing 11 m angle; unambiguous now.
+Was "A320ceo: ghost door 1"; measured during the windshield round and it is the
+**same defect class the windshield had**, so it is worth stating in those terms.
+
+`door_ring()` in the livery builders (`airbus A320ceo/build_a320ceo_livery.py`,
+and the master's ancestor of it) takes the door's **(x, z) bounding box** and
+paints `rounded_rect(Xg, Zg, x0, x1, z0, z1, r)` — a rectangle in the SIDE
+projection. The door leaf itself is built analytically **on the surface**. On
+the shoulder the two diverge badly:
+
+| where the door is at z > 1.4 | `|y|` |
+|---|---|
+| door 1 mesh (`Porta1_D`) | 1.571 .. 1.831 |
+| painted ring in LiveryTex | 0.865 .. 1.114 |
+
+0.5-0.7 m apart on the same hull, which is what reads as a second, tilted door
+outline abutting the real one. Measured on the **A320neo** (the master) and the
+**A320ceo**; the A319 and both A321s inherit the same texture recipe, and door
+2, the overwing exits and the three cargo doors all go through the same
+function.
+
+The fix is the windshield's fix — describe the ring on the developed surface and
+rasterise it in `(x, theta)` — not a numeric tweak, and it is a livery round for
+five aircraft. Left for one.
 
 ---
 

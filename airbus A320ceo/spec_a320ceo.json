@@ -18,6 +18,10 @@
   "validacao": "portas 5.04/14.43/15.28/29.53 e cargas 8.16/22.69/26.29 lidas na fig 2-7-0-991-003 (300dpi, escala 36.87 px/m consistente em 3 pares de cotas independentes, residuo <0.1 m); overwing na foto: passo medido 0.86 m (ACAP 0.85)"
  },
  "cavernas_nariz": "identicas ao spec_a320.json",
+ "parabrisa": {
+  "herda_de": "airbus A320neo/spec_a320.json -> parabrisa",
+  "nota": "A319, A320 e A321 compartilham a fuselagem dianteira e o ACAP de cada tipo desenha o MESMO envidracado: medido vertice a vertice nas tres pranchas frontais, a maior diferenca em (|y|, z) e 1.5 mm. O builder 'airbus A320neo/parabrisa_familia.py' le as cotas do mestre e as poe NA SUPERFICIE desta aeronave por raycast, de modo que a pinca do cockpit e a UV proprias sao respeitadas. Conferido nesta prancha: mesma prancha do mestre (A320 ACAP p.44), envidracado identico."
+ },
  "portas": {
   "pax_fwd_x": 5.04,
   "pax_aft_x": 29.53,
