@@ -39,8 +39,13 @@ ref_*.jpg
 comparacao_com_foto.png
 **/comparacao_com_foto.png
 # Reprojecao da foto inteira no enquadramento do render (artefato de trabalho).
-# A folha comparacao_fin_sash.png fica: e um recorte da deriva, precedente do
-# commit f162f73, e e a evidencia que o gate exige.
+# comparacao_fin_sash.png tambem NAO fica. A folha e dois tercos pixels de
+# fotografia (PT-TMN, PS-LBO, CC-BBB...), e o NOTICE.md deste repositorio diz
+# que essas fotos sao "citadas, nao distribuidas" — CC BY-SA e share-alike,
+# incompativel com o CC BY 4.0 dos assets. Cinco folhas tinham sido commitadas
+# antes dessa regra existir; foram removidas do indice. A evidencia do gate
+# continua reproduzivel pelos manifestos em refs/.
+**/comparacao_fin_sash.png
 **/comparacao_perfil.png
 
 # Vetores de marca registrada (LATAM, Airbus, Boeing)
