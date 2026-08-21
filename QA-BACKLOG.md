@@ -83,16 +83,37 @@ mullions are also wide black bars with torn edges.
 
 ---
 
-## Brand fidelity: the LATAM wordmark's final "M" is broken
+## A321ceo / A321neo: the rear écharpe splinter and its dotted boundary
 
-**A321ceo and A321neo.** The last diagonal of the "M" sits detached, roughly
-14 window pitches aft of the wordmark. The rear écharpe on the same aircraft
-carries a detached indigo splinter and a dotted boundary.
+What is left of the old "broken M" entry. The **wordmark half is fixed**: the
+bisection was the forward plug's +4.27 m shifting the texture columns aft of
+its station, cutting the mark into "LATAN" plus an orphan 0.385 m of the "M" at
+x 15.77–16.16. Both A321s were re-rasterized in `(x, θ)` and the orphan station
+now measures **0 indigo texels**.
 
-This one is different from the others and worth remembering: it was **already
-visible in the old profile render**, which barely changed under the new
-cameras. It did not hide — it was looked at and passed. Repo rule 1 is exact
-brand from the official vectors; a broken glyph is a rule-1 failure.
+Still open on both: the rear écharpe carries a **detached indigo splinter** and
+a **dotted lower boundary** where the wedge meets the TE root fairing. Present
+before and after the marks round — it is a wedge-rasterization defect, not a
+brand one.
+
+Worth keeping from the original entry: this was **already visible in the old
+profile render**, which barely changed under the new cameras. It did not hide —
+it was looked at and passed.
+
+---
+
+## A319: the type title reads "AIRBUS A3"
+
+Found by the `(x, θ)` marks audit, which measured the right box on the PT-TMT
+photo (`refs/ref_sdu_00.jpg`: x 22.40–24.35, whole title on the white, rear end
+~0.12 m ahead of the boundary) and then **declined to move the ink**.
+
+The reason is worth stating: the glyphs "1", "9" and the Airbus swirl were
+destroyed when the wedge was painted over them, and **the source art no longer
+exists in the blend** — there is no A319 title mesh. Moving the surviving ink
+would only float a truncated title at the right station. The fix needs
+`airbus_a320neo_logo.svg` re-imported and the digits rebuilt, which is the
+deviation `spec_a319.json → livery_pt_tmt.titulo` already documents.
 
 ---
 
@@ -111,7 +132,3 @@ illegible at the grazing 11 m angle; unambiguous now.
 - **787-8 height** 16.48 m vs 16.92 published, inherited from the -9 (identical
   fin top and ground line in both blends). Fixing it invalidates the per-type
   fin art measured in `f162f73` — a fleet decision, not a local one.
-- **Brand symbol proportion**: the 787-8 measures the symbol at 1.58–1.62 m
-  wide on two photographs against 1.16 m in the official SVG at the same
-  height, while the overall lockup ratio (4.30) matches. The aircraft
-  application may use a different symbol/wordmark split than the print vector.
