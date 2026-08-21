@@ -226,3 +226,16 @@ written after the practice, and nobody went back to reconcile the two.
 - **787-8 height** 16.48 m vs 16.92 published, inherited from the -9 (identical
   fin top and ground line in both blends). Fixing it invalidates the per-type
   fin art measured in `f162f73` — a fleet decision, not a local one.
+
+---
+
+## Housekeeping: three docstrings name the retired manifest path
+
+`refs_manifest.json` moved to `<aircraft>/refs/manifest.json` in `37cf7b8`, but
+three docstrings still quote the old name: `airbus A320neo/fix_sharklet_indigo.py`,
+`airbus A321ceo/fix_sharklet_indigo.py` and `boeing 787-9/nose_art.py`.
+
+A peer session is fixing the 787-9 one now. The two Airbus files are deferred
+until the wingspan/door round lands, because that round is consolidating
+per-aircraft builder copies into family modules and may retire those scripts
+outright — in which case the edit would be moot.
