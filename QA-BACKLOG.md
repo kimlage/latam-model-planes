@@ -189,6 +189,12 @@ sharklets/fences, the engine stations and every gate render.
 - **Tailstrike angles** run short across the A320 family (7.75° modelled
   against ~11.7° real) — a short gear leg or a low belly fitting, inherited by
   every derivation. Documented in each spec.
+- **The hulls render pure white.** 76% of `LiveryTex` is exactly `1.0`,
+  against `#F5F6F8` in the specs and `#E6E7EA` in the livery rule — the
+  eurowhite the whole fleet is supposed to wear. Found on the 787s while
+  fixing their mullions, but it is fleet-level and pre-existing: a hull that
+  clips to pure white loses the shading that tells a viewer it is a curved
+  surface, which is part of why the noses read as flat in some angles.
 - **787-8 height** 16.48 m vs 16.92 published, inherited from the -9 (identical
   fin top and ground line in both blends). Fixing it invalidates the per-type
   fin art measured in `f162f73` — a fleet decision, not a local one.
