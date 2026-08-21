@@ -188,5 +188,46 @@
  "sharklet": {
   "pintura_2026-08-20": "lamina INDIGO macica nos dois lados, como no A321ceo (a propria PS-LBO DSC00834 mostra a face inboard indigo acima da fuselagem; tambem PT-MXD/PT-MXP/PT-XPB do ceo). 129 faces do mesh Asas com |y|>17.25 e z acima da diagonal 0.55+1.2*(17.9-|y|) -> LATAM_Indigo (fix_sharklet_indigo.py). O master herdado deixava a face inboard branca/cinza (defeito latente da familia, sinalizado na derivacao do A321ceo).",
   "aprendizado": "as constantes do A321ceo valem SEM reescala: a asa do ceo e o MESMO mesh master ~7% oversize (448 verts, pontas em |y| 19.142), verificado por diff face-a-face (0 diferencas). Reescalar pelo fator de oversize sub-seleciona 31 faces da raiz da lamina (y 18.40-18.71, z 0.55-1.12) e rende um degrau branco no bordo de fuga. O objeto Asas tem offset so em x (+4.26), entao os limiares em y/z valem como estao."
+ },
+ "marcas_xtheta_2026-08-20": {
+  "data": "2026-08-20",
+  "lei_da_frota": {
+   "regra": "A TINTA VIVE NA SUPERFICIE DESENVOLVIDA. A proporcao de uma marca e largura/ARCO, nunca largura/dz. Medir ou colocar na projecao lateral achata em ~25% quem sobe pelo ombro (o simbolo cruza theta 38..95). Simbolo e wordmark sao colocados SEPARADAMENTE, cada um na sua razao oficial; o lockup inteiro NAO tem razao 4.303 na aeronave (isso e do SVG de impressao) e sim ~3.15.",
+   "razao_simbolo_oficial": 0.6223,
+   "razao_wordmark_oficial": 6.7308,
+   "divisao_simbolo_sobre_wordmark": 0.26,
+   "divisao_nota": "medida em cinco aeronaves de cinco tipos: CC-CWY/767 0.2551, PS-LBO/A321neo 0.2598, CC-BBF/787-8 0.253-0.259, CC-BFO/A320ceo 0.2716, CC-BGP/787-9 0.242. O SVG de impressao (latam_logo_indigo.svg) da 0.18458: a aplicacao no casco usa o simbolo ~1.41x mais largo em relacao ao wordmark.",
+   "folga_sobre_largura_do_wordmark": 0.065,
+   "simbolo_acima_do_cap_m_de_arco": 0.17,
+   "simbolo_acima_nota": "medido 0.214 (CC-BFO), 0.155 (PS-LBO), 0.143 (CC-CWY), 0.167 (CC-BGP)",
+   "espelhamento": "a estibordo o SIMBOLO e o WORDMARK sao espelhados cada um em torno do PROPRIO centro, nunca o lockup como bloco: o simbolo fica do lado do NARIZ nos dois bordos.",
+   "ferramenta": "refazer_marcas.py (raiz), tarefas 'lockup' e 'marcas'"
+  },
+  "lockup": {
+   "wordmark_x": [
+    7.68,
+    12.44
+   ],
+   "wordmark_arco_m": 0.7072,
+   "wordmark_theta": [
+    43.1,
+    62.84
+   ],
+   "simbolo_x": [
+    6.133,
+    7.371
+   ],
+   "simbolo_arco_m": 1.9894,
+   "simbolo_theta": [
+    38.38,
+    94.56
+   ],
+   "folga_m": 0.309,
+   "medido_em": "PS-LBO (A321neo, XFW, bombordo, 113 px/m): simbolo x0 6.147, wordmark 7.706..12.445, razao do wordmark 6.830 (+1.5% do oficial), divisao 0.2598, theta do cap 43.06, simbolo theta 38.60..93.28. CC-BFO (A320ceo, SJO, estibordo, 80 px/m): simbolo x0 6.076, wordmark 7.725..12.646, razao 6.742 (+0.2%), divisao 0.2716. PT-TMT (A319, SDU, estibordo, 80 px/m): simbolo x0 6.03, wordmark 7.61..12.24. As tres fotos concordam em 0.07 m no inicio do simbolo e 0.02 m no inicio do wordmark.",
+   "erro_corrigido": "o lockup estava colado como UM BLOCO cuja razao batia 4.30 na projecao (x,z); na superficie desenvolvida isso da 3.45 (-20%), com o simbolo -20% e o wordmark -14% das suas razoes oficiais. Estava tambem ~0.65 m a vante da estacao das fotos e ESPELHADO COMO BLOCO a estibordo (simbolo na cauda)."
+  },
+  "lockup_bissectado": "identico ao A321ceo: 'LATAN' ate x 11.50 mais um fragmento orfao em x 15.77..16.16 (deslocamento do plugue dianteiro, +4.27 m).",
+  "fantasma_do_titulo": "restos do 'AIRBUS A320neo' herdado do master ainda estavam em x 34.05..35.11, theta ~43. Apagados.",
+  "verificacao": "razoes conferidas na propria textura depois de pintar: simbolo 0.622 e wordmark 6.731 em ARCO, nos dois bordos."
  }
 }

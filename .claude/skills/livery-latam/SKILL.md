@@ -352,39 +352,126 @@ stabilizer × tailcone junction comes out wrong — that was the last defect poi
 out, with the rest of the tail already approved. Check that corner zoomed in,
 always.
 
-## Check the PROPORTION of the lockup, not just the artwork
+## The paint lives on the DEVELOPED surface — measure in (x, θ), never in (x, z)
 
-Rasterizing from the official SVG guarantees the shape of each glyph, but it
-**does not guarantee that the result was pasted at the right proportion**. On the
-787-9 the fuselage lockup was **28% stretched vertically**: 8.96 m long by 2.67 m
-high, when the official vector has a ratio of **4.30**. The artwork was perfect
-and the assembly was wrong — and the side effect was the brand encroaching on the
-window row.
+This is the single error that had propagated furthest through the fleet. It was
+found on the 767 build and then confirmed on every Airbus master and the 787-8.
 
-The check is arithmetic and takes seconds, but **there is a catch: the texels of
-the (x,θ) texture are not square**. Convert to metres before dividing:
+A mark is painted onto the skin, so **its proportion is width / ARC**, not
+width / Δz. The side projection foreshortens: for anything that climbs the
+shoulder the flattening is about **25%**. The brand symbol crosses θ 38–95°, so
+it is the worst affected; a registration sitting near θ 60–70° barely notices.
 
 ```
-metres per column = fuselage_length / texture_width
-metres per row    = 2π·radius       / texture_height
-ratio = (n_columns · m_per_column) / (n_rows · m_per_row)
+metres along x    = Δcolumns · fuselage_length / texture_width
+metres along arc  = ∫ ds along the section between the two θ  (NOT R·Δθ if the
+                    section is a double bubble, and NOT Δz ever)
+ratio             = width_x / height_arc
 ```
 
-Compare against the ink bounding-box ratio of the SVG itself. If they differ,
-fix whichever dimension is wrong and **anchor on the side that is already
-right** — on the 787 the anchor was the top, which as a bonus lifted the brand
-off the windows.
+The symptom, if you place in (x, z) instead: the mark's ratio comes out right in
+the side render and ~20% squat on the aeroplane. On the 787-9 this is what once
+made the lockup read *"28% stretched"*. On the five Airbus masters and the 787-8
+the whole lockup had been pasted as **one block** whose ratio matched the
+official 4.303 **in the (x,z) projection**; on the developed surface that reads
+3.45, with the symbol 20% and the wordmark 14% off their own ratios.
 
-When rescaling already-rasterized ink, use **area averaging**, never nearest
-neighbour: with nearest the letters come out jagged and the owner sees it. And
-clean up the anti-aliasing fringe of the old version, otherwise a ghost remains
-— but **restrict the cleanup to the mark's own bounding box**. Cleaning
-"everything with saturation" over a wide band erased pieces of the door outlines,
-which are also slightly tinted.
+### Symbol and wordmark are two marks, not one
 
-It is the same brand — so it must be literally the same geometry. Import it from
-the finished `.blend` with `bpy.data.libraries.load` instead of re-importing the
-SVG and risking a drift in scale or in the outlines.
+Place them **separately**, each at its own official ink ratio, measured off the
+lockup mesh:
+
+| | official ratio (w/h) |
+|---|---|
+| symbol (indigo bars + coral) | **0.6223** |
+| wordmark LATAM | **6.7308** |
+| full lockup, print SVG | 4.3030 |
+
+**And the aircraft does not use the print SVG's split.** In
+`latam_logo_indigo.svg` the symbol is 0.18458 of the wordmark's width. On the
+aeroplane it is **0.260** — the symbol is about 1.41× wider relative to the
+wordmark. Measured on five registrations of five types, and they agree:
+
+| CC-CWY 767 | PS-LBO A321neo | CC-BBF 787-8 | CC-BFO A320ceo | CC-BGP 787-9 |
+|---|---|---|---|---|
+| 0.2551 | 0.2598 | 0.253–0.259 | 0.2716 | 0.242 |
+
+So the recipe, given the wordmark's measured x range (width `W`):
+
+```
+symbol width  S = 0.260 · W
+gap           G = 0.065 · W          (symbol sits nose-side of the wordmark)
+wordmark arc height = W / 6.7308
+symbol   arc height = S / 0.6223
+symbol top = wordmark cap line − 0.170 m of ARC
+```
+
+That reproduces the approved 767 build to within a few centimetres, which is how
+it was validated.
+
+**A corollary worth stating, because the older text here said the opposite:
+checking the FULL lockup against 4.303 is checking the print sheet, not the
+aeroplane.** With the aircraft's split and gap the full mark's ratio on the skin
+is **≈3.15**. Check the two parts separately instead.
+
+This also settles a question the 787-8 build raised: its photos gave the symbol
+1.58–1.62 m wide against 1.16 m in the SVG "at the same height", and the overall
+4.30 seemed to match. Both readings were right and there is no missing artwork —
+it is the same art with a different split, and "the same height" had been
+measured in z on a mark that crosses θ 29–76°.
+
+### Starboard is mirrored PART BY PART, never as a block
+
+The `_D` mesh in these blends is the whole lockup rotated 180°. Painting from it
+inverts the composition and throws the symbol to the tail. **The symbol is
+nose-side on both sides**; the wordmark is mirrored about its own centre so it
+reads correctly from starboard (nose→tail it spells symbol, M, A, T, A, L). All
+five Airbus masters had this defect; the 767 and 787-9 did not.
+
+### Where (x,θ) and (x,z) agree, and where they do not
+
+On the **cylindrical** section constant-z and constant-θ are the same line, so
+the lockup can be placed either way there — the error above is purely one of
+*proportion*, not of path. On the **tailcone** the radius shrinks and the two
+diverge: a registration or a type title reads **horizontally** on the aeroplane,
+which is a constant-**z** baseline, while its cap height is still measured along
+the **arc**. Place those in "z mode": anchor the baseline in z, take the height
+from width/ratio in arc. Placing them at constant arc tilts the text down the
+cone.
+
+### Erasing a mark without wrecking what is under it
+
+Re-rasterizing means erasing the old ink first, and that has two traps.
+
+**A "restore white" pass must not cross the wedge boundary.** Told to restore
+white over a box that straddled it, the eraser cheerfully painted white letters
+onto the indigo — the ghost was more visible than the mark had been. State which
+side each erase box is on, and choose boxes that do not straddle.
+
+**When a box must straddle, read the boundary back from the paint — do not
+recompute it from the spec.** Rebuilding the A320neo's wedge edge from
+`x ≥ 27.39 + 0.8393·z` left a visible step against the surrounding paint: the
+painted wedge and that straight line are not the same curve. Instead take the
+rows the mark does not touch, find the white→indigo transition on each, fit a
+quadratic through them and carry it across the rows the mark hides. That lands
+within 0.3 px and leaves no seam. (That `27.39 + 0.8393·z` has since been
+re-solved — see the écharpe table above — which changes nothing here: the point
+is that the paint, not the spec, is the boundary's own record.)
+
+**And the read-back only works while the mark is not the wedge's colour.** The
+same erase was run once with the type title repainted in indigo `#2A0088`
+instead of its own navy `#1C2E63`: the row scan looks for the first indigo
+column, found the title's left edge 2 m ahead of the wedge in the rows the
+title occupies, and fitted a quadratic through two clusters — 92 px rms instead
+of 0.35, and a white gash through the paint where it thought the boundary was.
+If a mark inside the search window shares the boundary colour, either give the
+mark its right colour first or move the box.
+
+Restrict the erase to ink that lies on the blend line between the base and the
+mark's own colour. That removes the mark and its anti-aliasing fringe while
+window glass, door outlines and panel lines survive untouched.
+
+The tool that does all of this is `refazer_marcas.py` at the project root.
 
 ## Material: making paint look like paint
 

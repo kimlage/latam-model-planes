@@ -186,5 +186,45 @@
   },
   "uv": "Deriva RE-UNWRAP 2026-08-20: afim planar u=(x-23.8)/9.0 ; v=(z-1.4)/7.0. A UV herdada do remap (h,c) tinha cisalhamento (u = 0.1326x - 0.0151z - 3.213) e residuo nao-afim de 0.029 (~60 px), o que entortava todas as bandas por igual na deriva.",
   "planform_do_modelo": "LE x=0.8511z+23.866 ; TE x=31.061+0.2201(z-1.55) ; raiz 1.55, ponta 8.05"
+ },
+ "marcas_xtheta_2026-08-20": {
+  "data": "2026-08-20",
+  "lei_da_frota": {
+   "regra": "A TINTA VIVE NA SUPERFICIE DESENVOLVIDA. A proporcao de uma marca e largura/ARCO, nunca largura/dz. Medir ou colocar na projecao lateral achata em ~25% quem sobe pelo ombro (o simbolo cruza theta 38..95). Simbolo e wordmark sao colocados SEPARADAMENTE, cada um na sua razao oficial; o lockup inteiro NAO tem razao 4.303 na aeronave (isso e do SVG de impressao) e sim ~3.15.",
+   "razao_simbolo_oficial": 0.6223,
+   "razao_wordmark_oficial": 6.7308,
+   "divisao_simbolo_sobre_wordmark": 0.26,
+   "divisao_nota": "medida em cinco aeronaves de cinco tipos: CC-CWY/767 0.2551, PS-LBO/A321neo 0.2598, CC-BBF/787-8 0.253-0.259, CC-BFO/A320ceo 0.2716, CC-BGP/787-9 0.242. O SVG de impressao (latam_logo_indigo.svg) da 0.18458: a aplicacao no casco usa o simbolo ~1.41x mais largo em relacao ao wordmark.",
+   "folga_sobre_largura_do_wordmark": 0.065,
+   "simbolo_acima_do_cap_m_de_arco": 0.17,
+   "simbolo_acima_nota": "medido 0.214 (CC-BFO), 0.155 (PS-LBO), 0.143 (CC-CWY), 0.167 (CC-BGP)",
+   "espelhamento": "a estibordo o SIMBOLO e o WORDMARK sao espelhados cada um em torno do PROPRIO centro, nunca o lockup como bloco: o simbolo fica do lado do NARIZ nos dois bordos.",
+   "ferramenta": "refazer_marcas.py (raiz), tarefas 'lockup' e 'marcas'"
+  },
+  "lockup": {
+   "wordmark_x": [
+    7.68,
+    12.44
+   ],
+   "wordmark_arco_m": 0.7072,
+   "wordmark_theta": [
+    43.1,
+    62.84
+   ],
+   "simbolo_x": [
+    6.133,
+    7.371
+   ],
+   "simbolo_arco_m": 1.9894,
+   "simbolo_theta": [
+    38.38,
+    94.56
+   ],
+   "folga_m": 0.309,
+   "medido_em": "PS-LBO (A321neo, XFW, bombordo, 113 px/m): simbolo x0 6.147, wordmark 7.706..12.445, razao do wordmark 6.830 (+1.5% do oficial), divisao 0.2598, theta do cap 43.06, simbolo theta 38.60..93.28. CC-BFO (A320ceo, SJO, estibordo, 80 px/m): simbolo x0 6.076, wordmark 7.725..12.646, razao 6.742 (+0.2%), divisao 0.2716. PT-TMT (A319, SDU, estibordo, 80 px/m): simbolo x0 6.03, wordmark 7.61..12.24. As tres fotos concordam em 0.07 m no inicio do simbolo e 0.02 m no inicio do wordmark.",
+   "erro_corrigido": "o lockup estava colado como UM BLOCO cuja razao batia 4.30 na projecao (x,z); na superficie desenvolvida isso da 3.45 (-20%), com o simbolo -20% e o wordmark -14% das suas razoes oficiais. Estava tambem ~0.65 m a vante da estacao das fotos e ESPELHADO COMO BLOCO a estibordo (simbolo na cauda)."
+  },
+  "titulo_pendencia": "'AIRBUS A319' esta CORTADO pela cunha: a tinta visivel vai de x 23.47 ate a fronteira em x 24.47 e le-se 'AIRBUS A3'. Os glifos '1' e '9' e o swirl da Airbus foram perdidos quando a cunha foi pintada por cima deles, e a arte-fonte nao existe mais no blend (nao ha malha de titulo do A319). A foto PT-TMT (refs/ref_sdu_00.jpg) mostra o titulo INTEIRO sobre o branco, com o fim traseiro ~0.12 m a vante da fronteira: a caixa certa e x 22.40..24.35. NAO corrigido nesta rodada: exige reimportar airbus_a320neo_logo.svg e reconstruir os digitos, que e o desvio ja documentado em livery_pt_tmt.titulo.",
+  "verificacao": "razoes conferidas na propria textura depois de pintar: simbolo 0.622 e wordmark 6.731 em ARCO, nos dois bordos."
  }
 }

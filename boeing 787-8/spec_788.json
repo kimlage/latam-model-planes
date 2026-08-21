@@ -1,160 +1,351 @@
 {
-  "aeronave": "Boeing 787-8 Dreamliner",
-  "operador": "LATAM Airlines Group",
-  "matricula_modelada": "CC-BBF",
-  "fonte": "Boeing APR D6-58333 Rev P (Dezembro 2024), secoes 2.2.1 (p.2-5), 2.3.1 (p.2-8) e 2.7.1 (p.2-16), rasterizadas a 300/600 dpi; derivacao geometrica do B789_LATAM.blend aprovado; fotogrametria de CC-BBF e CC-BBB (refs_manifest.json)",
-  "datum": "x=0 na ponta do nariz e CRESCE PARA A RE (a cauda esta em x=+56.72); z=0 no centro da secao constante; y=+ estibordo; solo z=-4.88; pose nivelada",
-
-  "dimensoes_gerais": {
-    "comprimento": 56.72,
-    "envergadura": 60.12,
-    "altura": 16.92,
-    "fuselagem_largura": 5.77,
-    "fuselagem_altura": 5.94,
-    "entre_eixos": 22.78,
-    "bitola": 9.8,
-    "estab_envergadura": 19.81,
-    "nariz_ao_trem_de_nariz": 5.41,
-    "fonte": "APR p.2-5 (186 FT 1 IN / 197 FT 3 IN / 55 FT 6 IN / 74 FT 9 IN / 32 FT 2 IN / 65 FT 0 IN / 17 FT 9 IN / 18 FT 11 IN)"
+ "aeronave": "Boeing 787-8 Dreamliner",
+ "operador": "LATAM Airlines Group",
+ "matricula_modelada": "CC-BBF",
+ "fonte": "Boeing APR D6-58333 Rev P (Dezembro 2024), secoes 2.2.1 (p.2-5), 2.3.1 (p.2-8) e 2.7.1 (p.2-16), rasterizadas a 300/600 dpi; derivacao geometrica do B789_LATAM.blend aprovado; fotogrametria de CC-BBF e CC-BBB (refs_manifest.json)",
+ "datum": "x=0 na ponta do nariz e CRESCE PARA A RE (a cauda esta em x=+56.72); z=0 no centro da secao constante; y=+ estibordo; solo z=-4.88; pose nivelada",
+ "dimensoes_gerais": {
+  "comprimento": 56.72,
+  "envergadura": 60.12,
+  "altura": 16.92,
+  "fuselagem_largura": 5.77,
+  "fuselagem_altura": 5.94,
+  "entre_eixos": 22.78,
+  "bitola": 9.8,
+  "estab_envergadura": 19.81,
+  "nariz_ao_trem_de_nariz": 5.41,
+  "fonte": "APR p.2-5 (186 FT 1 IN / 197 FT 3 IN / 55 FT 6 IN / 74 FT 9 IN / 32 FT 2 IN / 65 FT 0 IN / 17 FT 9 IN / 18 FT 11 IN)"
+ },
+ "auditoria_do_modelo_2026-08-20": {
+  "metodo": "malha AVALIADA (com subsurf) medida em coordenadas de mundo, nao a gaiola de controle",
+  "comprimento": [
+   56.742,
+   56.72,
+   "+0.02 m"
+  ],
+  "fuselagem_largura": [
+   5.77,
+   5.77,
+   "0.00"
+  ],
+  "fuselagem_altura": [
+   5.941,
+   5.94,
+   "+0.00"
+  ],
+  "envergadura": [
+   60.11,
+   60.12,
+   "-0.01"
+  ],
+  "estab_envergadura": [
+   19.81,
+   19.81,
+   "0.00"
+  ],
+  "motor_cl_y": [
+   9.73,
+   9.73,
+   "0.00"
+  ],
+  "motor_inlet_x": [
+   17.8,
+   17.76,
+   "+0.04"
+  ],
+  "trem_nariz_x": [
+   5.41,
+   5.41,
+   "0.00"
+  ],
+  "entre_eixos": [
+   22.79,
+   22.78,
+   "+0.01"
+  ],
+  "bitola": [
+   9.8,
+   9.8,
+   "0.00"
+  ],
+  "altura_total": [
+   16.48,
+   16.92,
+   "-0.44 m (-2.6%) — DESVIO CONHECIDO, ver pendencias"
+  ],
+  "angulo_de_tailstrike": "9.25 graus (primeiro contato: Fuselagem em x 42.88, z -2.49). O 787-9 no mesmo teste da 7.65 graus — a diferenca e fisicamente correta (braco de cauda maior no -9)."
+ },
+ "derivacao_do_787_9": {
+  "principio": "o 787-9 e o 787-8 mais dois plugues; removidos, tudo a re de cada plugue anda para a frente",
+  "plugue_dianteiro": {
+   "banda_no_mestre": [
+    13.4,
+    16.44
+   ],
+   "largura": 3.04,
+   "entre": "porta de carga dianteira (11.00, igual nos dois) e porta 2"
   },
-
-  "auditoria_do_modelo_2026-08-20": {
-    "metodo": "malha AVALIADA (com subsurf) medida em coordenadas de mundo, nao a gaiola de controle",
-    "comprimento": [56.742, 56.72, "+0.02 m"],
-    "fuselagem_largura": [5.77, 5.77, "0.00"],
-    "fuselagem_altura": [5.941, 5.94, "+0.00"],
-    "envergadura": [60.11, 60.12, "-0.01"],
-    "estab_envergadura": [19.81, 19.81, "0.00"],
-    "motor_cl_y": [9.73, 9.73, "0.00"],
-    "motor_inlet_x": [17.8, 17.76, "+0.04"],
-    "trem_nariz_x": [5.41, 5.41, "0.00"],
-    "entre_eixos": [22.79, 22.78, "+0.01"],
-    "bitola": [9.8, 9.8, "0.00"],
-    "altura_total": [16.48, 16.92, "-0.44 m (-2.6%) — DESVIO CONHECIDO, ver pendencias"],
-    "angulo_de_tailstrike": "9.25 graus (primeiro contato: Fuselagem em x 42.88, z -2.49). O 787-9 no mesmo teste da 7.65 graus — a diferenca e fisicamente correta (braco de cauda maior no -9)."
+  "plugue_traseiro": {
+   "banda_no_mestre": [
+    37.54,
+    40.59
+   ],
+   "largura": 3.05,
+   "entre": "porta 3 e porta de carga traseira"
   },
-
-  "derivacao_do_787_9": {
-    "principio": "o 787-9 e o 787-8 mais dois plugues; removidos, tudo a re de cada plugue anda para a frente",
-    "plugue_dianteiro": {"banda_no_mestre": [13.4, 16.44], "largura": 3.04,
-      "entre": "porta de carga dianteira (11.00, igual nos dois) e porta 2"},
-    "plugue_traseiro": {"banda_no_mestre": [37.54, 40.59], "largura": 3.05,
-      "entre": "porta 3 e porta de carga traseira"},
-    "deslocamentos": {"nariz_ate_13.40": 0.0, "grupo_da_asa": -3.04, "cauda_e_empenagem": -6.09},
-    "verificacao": "as 7 portas da APR caem no lugar: D1 6.30 (0), D2 18.36->15.32, D3 35.43->32.39, D4 49.66->43.56, carga dianteira 11.00 (0), carga traseira 43.31->37.21, bulk 47.75->41.66",
-    "janelas": "as fileiras dentro das bandas removidas foram apagadas (5 janelas por plugue: 3.05 m = 5 x 0.61 de passo, entao a fileira continua em fase)",
-    "motores": "-3.04 em x e 0.18 m PARA DENTRO em y: a APR imprime cl_y 9.73 para o -8 contra 9.91 para o -9"
+  "deslocamentos": {
+   "nariz_ate_13.40": 0.0,
+   "grupo_da_asa": -3.04,
+   "cauda_e_empenagem": -6.09
   },
-
-  "secao_mestre": "elipse a=2.885 (y) x b=2.97 (z); secao plena x 10.0-38.41 (no -9 ia ate 44.5)",
-  "portas_pax": {"centros_x": [6.3, 15.32, 32.39, 43.56], "recorte": [1.02, 1.9], "soleira_z": -0.3,
-    "nota": "APR p.2-16. Entrada a bombordo, servico a estibordo."},
-  "portas_carga": {"fwd_x": 11.0, "aft_x": 37.21, "abertura": [2.69, 1.7], "centro_z": -1.3,
-    "bulk": {"x": 41.66, "lado": "esquerdo", "dim": [0.9, 1.1]}},
-  "janelas_pax": {"abertura": [0.27, 0.47], "pitch": 0.61, "centro_z": 0.8, "faixa_x": [7.5, 41.9]},
-
-  "herdado_do_787_9_sem_alteracao": {
-    "asa": "planform, torcao, carenagens de flape e superficies de comando identicas (spec_b789.json -> asa); so a posicao em x muda (-3.04)",
-    "empenagem": "deriva e estabilizador identicos; BA reto da deriva x = 41.82 + 0.9920*z (45.2 graus) no referencial do -8; BF x = 51.05 + 0.3858*z",
-    "nariz": "estacoes do nariz e parabrisa identicas em metros (o -8 nao muda nada a vante de x=13.40); NoseMask reamostrada metro a metro",
-    "motor": "geometria da nacele do -9 (ver motor abaixo)",
-    "fin_sash": "FinSashE/FinSashD sao BIT-A-BIT IDENTICAS as do 787-9 (verificado). A arte do fin foi medida por tipo em 2026-08-20 (commit f162f73) e o -8 usa a MESMA deriva, entao transfere sem reescala."
+  "verificacao": "as 7 portas da APR caem no lugar: D1 6.30 (0), D2 18.36->15.32, D3 35.43->32.39, D4 49.66->43.56, carga dianteira 11.00 (0), carga traseira 43.31->37.21, bulk 47.75->41.66",
+  "janelas": "as fileiras dentro das bandas removidas foram apagadas (5 janelas por plugue: 3.05 m = 5 x 0.61 de passo, entao a fileira continua em fase)",
+  "motores": "-3.04 em x e 0.18 m PARA DENTRO em y: a APR imprime cl_y 9.73 para o -8 contra 9.91 para o -9"
+ },
+ "secao_mestre": "elipse a=2.885 (y) x b=2.97 (z); secao plena x 10.0-38.41 (no -9 ia ate 44.5)",
+ "portas_pax": {
+  "centros_x": [
+   6.3,
+   15.32,
+   32.39,
+   43.56
+  ],
+  "recorte": [
+   1.02,
+   1.9
+  ],
+  "soleira_z": -0.3,
+  "nota": "APR p.2-16. Entrada a bombordo, servico a estibordo."
+ },
+ "portas_carga": {
+  "fwd_x": 11.0,
+  "aft_x": 37.21,
+  "abertura": [
+   2.69,
+   1.7
+  ],
+  "centro_z": -1.3,
+  "bulk": {
+   "x": 41.66,
+   "lado": "esquerdo",
+   "dim": [
+    0.9,
+    1.1
+   ]
+  }
+ },
+ "janelas_pax": {
+  "abertura": [
+   0.27,
+   0.47
+  ],
+  "pitch": 0.61,
+  "centro_z": 0.8,
+  "faixa_x": [
+   7.5,
+   41.9
+  ]
+ },
+ "herdado_do_787_9_sem_alteracao": {
+  "asa": "planform, torcao, carenagens de flape e superficies de comando identicas (spec_b789.json -> asa); so a posicao em x muda (-3.04)",
+  "empenagem": "deriva e estabilizador identicos; BA reto da deriva x = 41.82 + 0.9920*z (45.2 graus) no referencial do -8; BF x = 51.05 + 0.3858*z",
+  "nariz": "estacoes do nariz e parabrisa identicas em metros (o -8 nao muda nada a vante de x=13.40); NoseMask reamostrada metro a metro",
+  "motor": "geometria da nacele do -9 (ver motor abaixo)",
+  "fin_sash": "FinSashE/FinSashD sao BIT-A-BIT IDENTICAS as do 787-9 (verificado). A arte do fin foi medida por tipo em 2026-08-20 (commit f162f73) e o -8 usa a MESMA deriva, entao transfere sem reescala."
+ },
+ "motor": {
+  "tipo": "Rolls-Royce Trent 1000",
+  "justificativa": "a frota 787 original da LATAM (787-8 e os primeiros -9, entregas 2012-2016) e EXCLUSIVAMENTE Trent 1000; os GEnx so chegaram com a encomenda de 16 787-9 de 2023, o primeiro deles CC-BMB em 30/12/2025. CC-BBF e um -8 de 2013.",
+  "inlet_x": 17.76,
+  "cl_y": 9.73,
+  "cl_z": -2.4,
+  "fan_diam": 2.85,
+  "nota": "a APR imprime folgas separadas para GE (F 0.74 m) e RR (F 0.71 m) — o 787-8 existe com os dois."
+ },
+ "trem": {
+  "nariz_x": 5.41,
+  "principal_x": 28.2,
+  "bitola": 9.8,
+  "solo_z": -4.88,
+  "nariz_rodas": {
+   "diam": 1.016,
+   "larg": 0.406,
+   "gap": 0.72
   },
-
-  "motor": {
-    "tipo": "Rolls-Royce Trent 1000",
-    "justificativa": "a frota 787 original da LATAM (787-8 e os primeiros -9, entregas 2012-2016) e EXCLUSIVAMENTE Trent 1000; os GEnx so chegaram com a encomenda de 16 787-9 de 2023, o primeiro deles CC-BMB em 30/12/2025. CC-BBF e um -8 de 2013.",
-    "inlet_x": 17.76,
-    "cl_y": 9.73,
-    "cl_z": -2.4,
-    "fan_diam": 2.85,
-    "nota": "a APR imprime folgas separadas para GE (F 0.74 m) e RR (F 0.71 m) — o 787-8 existe com os dois."
+  "principal_bogie": {
+   "entre_eixos": 1.52,
+   "entre_rodas": 1.51,
+   "pneu_diam": 1.372,
+   "pneu_larg": 0.533
+  }
+ },
+ "livery_cc_bbf": {
+  "regra_geral": "fuselagem branca; cunha indigo triangular na fuselagem traseira, continua com a massa indigo da raiz da deriva; sem cheatline",
+  "cores": {
+   "indigo": "#2A0088",
+   "coral": "#ED1651",
+   "branco_casco": "#E6E7EA",
+   "asa": "#C8CACC (Boeing flight gray)",
+   "nota": "os valores acima vem do SVG oficial; a fotogrametria de CC-BGK deu #1B0088/#E8114B — observacao, nao fonte"
   },
-
-  "trem": {"nariz_x": 5.41, "principal_x": 28.2, "bitola": 9.8, "solo_z": -4.88,
-    "nariz_rodas": {"diam": 1.016, "larg": 0.406, "gap": 0.72},
-    "principal_bogie": {"entre_eixos": 1.52, "entre_rodas": 1.51, "pneu_diam": 1.372, "pneu_larg": 0.533}},
-
-  "livery_cc_bbf": {
-    "regra_geral": "fuselagem branca; cunha indigo triangular na fuselagem traseira, continua com a massa indigo da raiz da deriva; sem cheatline",
-    "cores": {"indigo": "#2A0088", "coral": "#ED1651", "branco_casco": "#E6E7EA",
-      "asa": "#C8CACC (Boeing flight gray)",
-      "nota": "os valores acima vem do SVG oficial; a fotogrametria de CC-BGK deu #1B0088/#E8114B — observacao, nao fonte"},
-
-    "titulos": {
-      "arte": "latam_logo_indigo.svg (mesh B789_LogoLATAM_*, importado do blend do -9 — mesma marca, mesma geometria)",
-      "orientacao": "o SIMBOLO fica sempre do lado do NARIZ (x menor) nos dois bordos; a bombordo a ordem para a re e simbolo,L,A,T,A,M e a estibordo simbolo,M,A,T,A,L — em ambos o texto se le normalmente",
-      "tinta_no_modelo": {"x": [7.6, 15.61], "letras_x": [9.45, 15.73], "letras_z": [1.12, 2.05],
-        "cap": 0.932, "simbolo_x": [7.6, 8.76], "simbolo_z": [0.65, 2.51],
-        "razao_da_marca": 4.3},
-      "medido_na_foto": {"tinta_x": [7.36, 15.58], "letras_cap": [0.765, 0.777],
-        "letras_z": [1.06, 1.83], "simbolo_x_largura": [1.58, 1.62], "simbolo_z": [0.05, 1.92],
-        "razao_da_marca_medida": [4.01, 4.7],
-        "fonte": "CC-BBF estibordo (ref_bbf_mia23) e CC-BBB bombordo (ref_bbb_mia23), escala = passo das janelas 0.61 m"},
-      "decisao": "a marca do modelo mantem as proporcoes do VETOR OFICIAL (razao de tinta 4.30, conferida na malha). As duas fotos dao 4.01 e 4.70 — a dispersao de +-15% e a incerteza da fotogrametria em casco curvo, e 4.30 cai no meio. A unica correcao aplicada foi de POSICAO (+0.12 m em z), porque as letras invadiam 0.08 m do topo da fileira de janelas e a foto mostra folga de ~0.10 m."
+  "titulos": {
+   "arte": "latam_logo_indigo.svg (mesh B789_LogoLATAM_*, importado do blend do -9 — mesma marca, mesma geometria)",
+   "orientacao": "o SIMBOLO fica sempre do lado do NARIZ (x menor) nos dois bordos; a bombordo a ordem para a re e simbolo,L,A,T,A,M e a estibordo simbolo,M,A,T,A,L — em ambos o texto se le normalmente",
+   "tinta_no_modelo": {
+    "x": [
+     7.6,
+     15.61
+    ],
+    "letras_x": [
+     9.45,
+     15.73
+    ],
+    "letras_z": [
+     1.12,
+     2.05
+    ],
+    "cap": 0.932,
+    "simbolo_x": [
+     7.6,
+     8.76
+    ],
+    "simbolo_z": [
+     0.65,
+     2.51
+    ],
+    "razao_da_marca": 4.3
+   },
+   "medido_na_foto": {
+    "tinta_x": [
+     7.36,
+     15.58
+    ],
+    "letras_cap": [
+     0.765,
+     0.777
+    ],
+    "letras_z": [
+     1.06,
+     1.83
+    ],
+    "simbolo_x_largura": [
+     1.58,
+     1.62
+    ],
+    "simbolo_z": [
+     0.05,
+     1.92
+    ],
+    "razao_da_marca_medida": [
+     4.01,
+     4.7
+    ],
+    "fonte": "CC-BBF estibordo (ref_bbf_mia23) e CC-BBB bombordo (ref_bbb_mia23), escala = passo das janelas 0.61 m"
+   },
+   "decisao": "a marca do modelo mantem as proporcoes do VETOR OFICIAL (razao de tinta 4.30, conferida na malha). As duas fotos dao 4.01 e 4.70 — a dispersao de +-15% e a incerteza da fotogrametria em casco curvo, e 4.30 cai no meio. A unica correcao aplicada foi de POSICAO (+0.12 m em z), porque as letras invadiam 0.08 m do topo da fileira de janelas e a foto mostra folga de ~0.10 m."
+  },
+  "matricula": {
+   "estilo": "letras BRANCAS SOBRE O INDIGO da cunha, NOS DOIS BORDOS (confirmado em CC-BBF estibordo e CC-BBB bombordo) — diferente do 787-9 CC-BGK, que e assimetrico",
+   "x": [
+    44.4,
+    46.03
+   ],
+   "z": [
+    1.17,
+    1.47
+   ],
+   "cap": 0.3,
+   "comprimento": 1.63,
+   "medicoes": {
+    "CC-BBB_bombordo": {
+     "x": [
+      44.42,
+      46.04
+     ],
+     "z": [
+      1.17,
+      1.47
+     ],
+     "cap": 0.3,
+     "metodo": "escala pelo passo das janelas (0.61 m) local; x ancorado na porta 4 = 43.56"
     },
-
-    "matricula": {
-      "estilo": "letras BRANCAS SOBRE O INDIGO da cunha, NOS DOIS BORDOS (confirmado em CC-BBF estibordo e CC-BBB bombordo) — diferente do 787-9 CC-BGK, que e assimetrico",
-      "x": [44.4, 46.03],
-      "z": [1.17, 1.47],
-      "cap": 0.3,
-      "comprimento": 1.63,
-      "medicoes": {
-        "CC-BBB_bombordo": {"x": [44.42, 46.04], "z": [1.17, 1.47], "cap": 0.3,
-          "metodo": "escala pelo passo das janelas (0.61 m) local; x ancorado na porta 4 = 43.56"},
-        "CC-BBF_estibordo": {"x": [44.36, 46.02], "cap": [0.28, 0.3],
-          "metodo": "ajuste projetivo 1D em ponta do nariz + portas 1/2/4, residuo maximo 6.7 px (0.09 m)"}
-      },
-      "nota_icao": "cap 0.30 m e exatamente o minimo do Anexo 7 da OACI para marcas na fuselagem"
-    },
-
-    "echarpe_cunha_traseira": {
-      "regra": "indigo <=> x >= 42.68 + 0.992*z  E  theta <= 117.0 - 5.2*(x - 42.61)  E  x <= 51.05 + 0.3858*z",
-      "origem": "a regra do 787-9 deslocada -6.09 (mesma cauda, mesma deriva)",
-      "verificacao_fotogrametrica": {
-        "fronteira_dianteira_medida": "x = 42.77 + 0.887*z (rms 0.012 m sobre 22 pontos limpos, z -0.78..+2.14, CC-BBF estibordo)",
-        "leitura": "x0 bate em 0.09 m; a inclinacao medida (48.4 graus) difere dos 45.2 graus do BA da deriva em ~10%, o que deslocaria a fronteira no maximo 0.3 m nos extremos. Mantida a regra de 45.2 graus porque a fronteira e PARALELA ao BA reto da deriva (medido em 3 agentes independentes na APR a 600 dpi) e a curvatura do casco enviesa a inclinacao aparente na foto.",
-        "fronteira_inferior_medida": "theta cai ~6.1 graus/m entre x 44.6 e 47.3 (regra: 5.2); theta ~89 graus em x=47.3 contra 92.5 da regra",
-        "limite_traseiro": "a linha do BF da deriva, nao um x constante"
-      },
-      "crista_a_vante_da_cunha": "branca; cone de cauda branco; anel do APU metalico"
-    },
-
-    "titulos_extras": {
-      "DREAMLINER": {"x": [38.76, 42.12], "cap": 0.241, "centro_z": -0.04, "cor": "#B7BCC1",
-        "medido": "CC-BBB x 39.16..42.51 cap 0.23 centro z -0.08; CC-BBF x 38.88..42.22",
-        "arte": "dreamliner_logo.svg rasterizado como mesh"},
-      "BOEING 787-8": {"pintado": false, "x": [40.02, 42.44], "centro_z": 1.22, "cap": 0.128,
-        "comprimento": 2.42,
-        "medido_em": "CC-BBB bombordo (ref_bbb_mia23), escala local pelo passo das janelas",
-        "motivo": "mesma decisao tomada no 787-9: nao existe vetor livre da marcacao completa (o wordmark da Boeing cobre so as letras; os digitos 787-8 teriam de ser redesenhados) e a regra do projeto proibe fonte parecida. A geometria fica registrada para quando houver vetor."}
-    },
-
-    "barriga": {
-      "simbolo_no_modelo": {"x": [9.89, 13.01], "largura": 3.12, "ponta_coral_para_o_nariz": true},
-      "medido": "as barras do simbolo cruzam a quilha entre x ~9.4 e ~11.8 na foto de CC-BBF estibordo (ref_bbf_mia23); o intervalo do modelo e compativel",
-      "estado": "a posicao x~10-13 esta CONFIRMADA contra o spec antigo do -9 que dizia x 17-22; a largura exata continua sem foto vertical",
-      "sem_wordmark": true
-    },
-
-    "asas": "cinza Boeing flight-gray extradorso e intradorso; ponta raked sem cor de marca; estabilizador branco"
+    "CC-BBF_estibordo": {
+     "x": [
+      44.36,
+      46.02
+     ],
+     "cap": [
+      0.28,
+      0.3
+     ],
+     "metodo": "ajuste projetivo 1D em ponta do nariz + portas 1/2/4, residuo maximo 6.7 px (0.09 m)"
+    }
+   },
+   "nota_icao": "cap 0.30 m e exatamente o minimo do Anexo 7 da OACI para marcas na fuselagem"
   },
-
-  "correcoes_2026-08-20": {
-    "matricula_grande_demais": "A etapa 2 reconstruiu CC-BBF a partir dos alveolos de CC-BGK do -9, com cap 0.50 m: ficou 1.63x comprida demais (2.63 m contra 1.63), 1.67x alta demais e 0.4 m baixa demais. Medida duas vezes, em duas fotos e nos dois bordos, cada uma ancorada num regua local (passo das janelas / porta 4) e nao no vao nariz-cauda. Corrigida reamostrando a TINTA JA PINTADA com media de area para a caixa menor — as formas das letras (inclusive o F construido) sobrevivem intactas, sem nenhuma fonte nova.",
-    "titulos_baixos": "As letras LATAM invadiam 0.08 m do topo da fileira de janelas; a foto mostra folga de ~0.10 m. Subidas 0.12 m. Proporcoes intocadas.",
-    "lockup_de_estibordo_espelhado_ao_contrario": "DEFEITO MAIS GRAVE DA ETAPA 2. O bordo de estibordo era pintado a partir de B789_LogoLATAM_D, que e o lockup inteiro girado 180 graus em z — isso inverte a COMPOSICAO como bloco e joga o simbolo para a cauda. As duas fotos mostram o simbolo do lado do NARIZ nos DOIS bordos (CC-BBB bombordo: simbolo,L,A,T,A,M para a re; CC-BBF estibordo: simbolo,M,A,T,A,L para a re). A textura pintada do 787-9 esta certa e a malha D dele tem o mesmo defeito — ou seja, a tinta do -9 tambem nao saiu daquela malha. Corrigido espelhando o SIMBOLO em torno do proprio centro (x=8.179) e o WORDMARK em torno do proprio centro (x=12.471), a partir das malhas de bombordo. Evidencia: render_perfil_estibordo.png contra ref_bbf_mia23.",
-    "mancha_branca_da_etapa_2": "o apagamento da etapa 2 escrevia 0.975 onde a base da textura e 1.0 — invisivel no render (Fac=0 ali) mas visivel ao abrir a textura. Normalizado."
+  "echarpe_cunha_traseira": {
+   "regra": "indigo <=> x >= 42.68 + 0.992*z  E  theta <= 117.0 - 5.2*(x - 42.61)  E  x <= 51.05 + 0.3858*z",
+   "origem": "a regra do 787-9 deslocada -6.09 (mesma cauda, mesma deriva)",
+   "verificacao_fotogrametrica": {
+    "fronteira_dianteira_medida": "x = 42.77 + 0.887*z (rms 0.012 m sobre 22 pontos limpos, z -0.78..+2.14, CC-BBF estibordo)",
+    "leitura": "x0 bate em 0.09 m; a inclinacao medida (48.4 graus) difere dos 45.2 graus do BA da deriva em ~10%, o que deslocaria a fronteira no maximo 0.3 m nos extremos. Mantida a regra de 45.2 graus porque a fronteira e PARALELA ao BA reto da deriva (medido em 3 agentes independentes na APR a 600 dpi) e a curvatura do casco enviesa a inclinacao aparente na foto.",
+    "fronteira_inferior_medida": "theta cai ~6.1 graus/m entre x 44.6 e 47.3 (regra: 5.2); theta ~89 graus em x=47.3 contra 92.5 da regra",
+    "limite_traseiro": "a linha do BF da deriva, nao um x constante"
+   },
+   "crista_a_vante_da_cunha": "branca; cone de cauda branco; anel do APU metalico"
   },
-
-  "pendencias": {
-    "altura_total": "o modelo da 16.48 m contra 16.92 da APR (-0.44 m). O desvio e HERDADO do 787-9 (topo da deriva z=11.60 e solo z=-4.88 sao identicos nos dois blends) e nao foi introduzido aqui. Corrigir exige levantar a deriva ~0.44 m, o que invalidaria a arte do fin medida por tipo em f162f73 — decisao de frota, nao de uma aeronave.",
-    "simbolo_da_marca_estreito": "as duas fotos dao o simbolo com 1.58-1.62 m de largura contra 1.16 m do vetor oficial (com a mesma altura, 1.87 contra 1.86). A razao geral da marca bate (4.30), mas a divisao interna simbolo/wordmark nao. Suspeita: a aplicacao no casco usa um lockup com simbolo maior que o de latam_logo_indigo.svg. Precisa de arte oficial da aplicacao aeronautica antes de mexer.",
-    "matricula_do_787_9": "o spec do -9 poe CC-BGK em x 54-58 (4.3-8.3 m a re da porta 4); nas duas fotos de -8 a matricula fica 0.8-2.5 m a re da porta 4. Se a colocacao for a mesma na frota, um dos dois esta errado — vale reconferir o -9.",
-    "boeing_787-8": "titulo nao pintado por falta de vetor (ver titulos_extras)",
-    "largura_do_simbolo_de_barriga": "sem foto vertical"
+  "titulos_extras": {
+   "DREAMLINER": {
+    "x": [
+     38.76,
+     42.12
+    ],
+    "cap": 0.241,
+    "centro_z": -0.04,
+    "cor": "#B7BCC1",
+    "medido": "CC-BBB x 39.16..42.51 cap 0.23 centro z -0.08; CC-BBF x 38.88..42.22",
+    "arte": "dreamliner_logo.svg rasterizado como mesh"
+   },
+   "BOEING 787-8": {
+    "pintado": false,
+    "x": [
+     40.02,
+     42.44
+    ],
+    "centro_z": 1.22,
+    "cap": 0.128,
+    "comprimento": 2.42,
+    "medido_em": "CC-BBB bombordo (ref_bbb_mia23), escala local pelo passo das janelas",
+    "motivo": "mesma decisao tomada no 787-9: nao existe vetor livre da marcacao completa (o wordmark da Boeing cobre so as letras; os digitos 787-8 teriam de ser redesenhados) e a regra do projeto proibe fonte parecida. A geometria fica registrada para quando houver vetor."
+   }
   },
-
-  "confianca": "ALTA: todas as cotas da APR (erro <=0.04 m), portas, trem, motor x/y, plugues, matricula (duas fotos, dois bordos), DREAMLINER, arte do fin (herdada e medida por tipo); MEDIA: fronteiras da cunha (+-0.3 m), posicao vertical dos titulos (+-0.1), simbolo de barriga (+-1); BAIXA: altura total (desvio conhecido de -0.44 m), largura do simbolo da marca"
+  "barriga": {
+   "simbolo_no_modelo": {
+    "x": [
+     9.89,
+     13.01
+    ],
+    "largura": 3.12,
+    "ponta_coral_para_o_nariz": true
+   },
+   "medido": "as barras do simbolo cruzam a quilha entre x ~9.4 e ~11.8 na foto de CC-BBF estibordo (ref_bbf_mia23); o intervalo do modelo e compativel",
+   "estado": "a posicao x~10-13 esta CONFIRMADA contra o spec antigo do -9 que dizia x 17-22; a largura exata continua sem foto vertical",
+   "sem_wordmark": true
+  },
+  "asas": "cinza Boeing flight-gray extradorso e intradorso; ponta raked sem cor de marca; estabilizador branco"
+ },
+ "correcoes_2026-08-20": {
+  "matricula_grande_demais": "A etapa 2 reconstruiu CC-BBF a partir dos alveolos de CC-BGK do -9, com cap 0.50 m: ficou 1.63x comprida demais (2.63 m contra 1.63), 1.67x alta demais e 0.4 m baixa demais. Medida duas vezes, em duas fotos e nos dois bordos, cada uma ancorada num regua local (passo das janelas / porta 4) e nao no vao nariz-cauda. Corrigida reamostrando a TINTA JA PINTADA com media de area para a caixa menor — as formas das letras (inclusive o F construido) sobrevivem intactas, sem nenhuma fonte nova.",
+  "titulos_baixos": "As letras LATAM invadiam 0.08 m do topo da fileira de janelas; a foto mostra folga de ~0.10 m. Subidas 0.12 m. Proporcoes intocadas.",
+  "lockup_de_estibordo_espelhado_ao_contrario": "DEFEITO MAIS GRAVE DA ETAPA 2. O bordo de estibordo era pintado a partir de B789_LogoLATAM_D, que e o lockup inteiro girado 180 graus em z — isso inverte a COMPOSICAO como bloco e joga o simbolo para a cauda. As duas fotos mostram o simbolo do lado do NARIZ nos DOIS bordos (CC-BBB bombordo: simbolo,L,A,T,A,M para a re; CC-BBF estibordo: simbolo,M,A,T,A,L para a re). A textura pintada do 787-9 esta certa e a malha D dele tem o mesmo defeito — ou seja, a tinta do -9 tambem nao saiu daquela malha. Corrigido espelhando o SIMBOLO em torno do proprio centro (x=8.179) e o WORDMARK em torno do proprio centro (x=12.471), a partir das malhas de bombordo. Evidencia: render_perfil_estibordo.png contra ref_bbf_mia23.",
+  "mancha_branca_da_etapa_2": "o apagamento da etapa 2 escrevia 0.975 onde a base da textura e 1.0 — invisivel no render (Fac=0 ali) mas visivel ao abrir a textura. Normalizado."
+ },
+ "pendencias": {
+  "altura_total": "o modelo da 16.48 m contra 16.92 da APR (-0.44 m). O desvio e HERDADO do 787-9 (topo da deriva z=11.60 e solo z=-4.88 sao identicos nos dois blends) e nao foi introduzido aqui. Corrigir exige levantar a deriva ~0.44 m, o que invalidaria a arte do fin medida por tipo em f162f73 — decisao de frota, nao de uma aeronave.",
+  "simbolo_da_marca_estreito": "RESOLVIDO 2026-08-20 (auditoria (x,theta) da frota). As fotos estavam certas e a razao 4.30 nao contradiz: (1) o simbolo da APLICACAO NO CASCO e ~1.41x mais largo em relacao ao wordmark do que o SVG de impressao — divisao 0.260 contra 0.18458, medida em cinco tipos (767 0.2551, A321neo 0.2598, A320ceo 0.2716, 787-9 0.242, e as proprias fotos do -8 dao 0.253-0.259 contra o wordmark de 6.247 m); (2) a comparacao '1.58-1.62 m contra 1.16 m na mesma altura' foi feita em Z, e o simbolo cruza theta 29..76 — na projecao lateral a altura encolhe ~25%, entao a 'mesma altura' nao era a mesma. Nao falta arte oficial: e a mesma arte com outra divisao. A razao do lockup INTEIRO na aeronave e ~3.15, nao 4.30 (4.30 vale para o SVG plano). O -8 ainda carrega a divisao do SVG (0.182) e o simbolo -21% da sua razao oficial em arco: mesma correcao que os outros seis levaram, aplicavel com refazer_marcas.py (fora do escopo daquela rodada).",
+  "matricula_do_787_9": "RESOLVIDO 2026-08-20: a suspeita estava certa e o -9 e que estava errado. Medido em CC-BGP (bombordo): a matricula fica 0.85..2.62 m a re da porta 4, z 0.95..1.29 — compativel com os 0.84..2.47 m e z 1.17..1.47 medidos aqui no -8. O master do -9 a punha em x 54..58.6, FORA da cunha, como contorno palido quebrado, e a estibordo nem existia. Corrigida para x 50.86..52.63.",
+  "boeing_787-8": "titulo nao pintado por falta de vetor (ver titulos_extras)",
+  "largura_do_simbolo_de_barriga": "sem foto vertical"
+ },
+ "confianca": "ALTA: todas as cotas da APR (erro <=0.04 m), portas, trem, motor x/y, plugues, matricula (duas fotos, dois bordos), DREAMLINER, arte do fin (herdada e medida por tipo); MEDIA: fronteiras da cunha (+-0.3 m), posicao vertical dos titulos (+-0.1), simbolo de barriga (+-1); BAIXA: altura total (desvio conhecido de -0.44 m), largura do simbolo da marca"
 }

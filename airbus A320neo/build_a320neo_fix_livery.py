@@ -24,7 +24,8 @@ lockups, belly logo, nose marks, title, weathering — is left untouched):
   Cross-checks: reg 27.00-28.80 clears the front line by 0.04 m at its aft-
   bottom corner and the title by 0.09 m — the fleet's almost-touching style.
 - Door/overwing/cargo rings re-read from the (already corrected) meshes.
-- (registration: DISABLED on merge, see PINTAR_MATRICULA below).
+- (registration and type title: DISABLED on merge, see PINTAR_MATRICULA /
+  PINTAR_TITULO below - both marks are painted by refazer_marcas.py instead).
 - APU metal ring x 36.70..37.15 (= A319 33.05-33.45 + 3.73), was absent.
 """
 import bpy
@@ -51,6 +52,20 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 # to refazer_marcas.py. The wedge front line below does NOT depend on it: it
 # comes from the door-anchored fit (residuals < 0.02 m over z 0.4..1.6).
 PINTAR_MATRICULA = False
+
+# MERGE 2026-08-21, second finding: the title repaint below is switched off for
+# the same reason plus one of its own. It re-rasterized "AIRBUS A320neo" in
+# C["indigo"] (#2A0088), but the title ink on this hull is NAVY (#1C2E63,
+# material AirbusNavy) - sampling the pre-merge LiveryTex over the title box
+# gives 3053 texels of #1C2E63 against 2425 of #2A0088, and the #2A0088 there is
+# the wedge behind it, not the letters. Painting the title indigo also blinds
+# the marks round that follows: its erase reads the wedge's forward boundary
+# back FROM THE PAINT by finding the first indigo column in each row, and an
+# indigo title 2 m ahead of the wedge turns that read into two clusters (the fit
+# came out at 92 px rms instead of 0.3). refazer_marcas.py erases this title and
+# re-rasterizes it in navy at x 26.42..28.72 with an ARC height of 0.230 m, so
+# it is left to do that.
+PINTAR_TITULO = False
 log = lambda *a: print("[A320neoL]", *a)
 
 L_UV = 38.0
@@ -210,29 +225,30 @@ if PINTAR_MATRICULA:
     D.curves.remove(cu)
 
 # ---------------------------------------------------------------- title
-# 'AIRBUS A320neo' from the official glyph mesh, spec position x 27.0..29.3
-# z 1.22..1.39 (owner-photo current arrangement; clears the new front line
-# by 0.09 m at its top-aft corner).
-mk = D.objects["MarkAirbusNeo_E"]
-mm = mk.data
-mm.calc_loop_triangles()
-ttris = [[(mm.vertices[i].co.x, mm.vertices[i].co.y) for i in t.vertices]
-         for t in mm.loop_triangles]
-xs = [p[0] for t in ttris for p in t]
-ys = [p[1] for t in ttris for p in t]
-lx0, lx1, ly0, ly1 = min(xs), max(xs), min(ys), max(ys)
-TX0, TX1, TZ0, TZ1 = 27.00, 29.30, 1.22, 1.39
-s = (TX1 - TX0) / (lx1 - lx0)   # width-driven: spec z band is CAPS height;
-# the mesh box includes the 'neo' swirl descender (cf. A321 titulo note)
-ttris = [[(TX0 + (px - lx0) * s, TZ0 + (py - ly0) * s) for px, py in t] for t in ttris]
-txs = [p[0] for t in ttris for p in t]
-log("title: x %.2f..%.2f z %.2f..%.2f" % (min(txs), max(txs), TZ0, TZ0 + (ly1 - ly0) * s))
-TXe = max(txs)
-mi = tri_mask_2d(ttris, TX0 - 0.03, TXe + 0.03, TZ0 - 0.03, TZ1 + 0.03, res=1500)
-selp = sample_mask(mi, Xg, Zg) & (Yg < 0) & (np.abs(np.sin(THg)) > 0.25)
-sels = sample_mask(mi, (TX0 + TXe) - Xg, Zg) & (Yg > 0) & (np.abs(np.sin(THg)) > 0.25)
-set_px(selp | sels, C["indigo"], 1.0)
-log("title texels:", int((selp | sels).sum()))
+if PINTAR_TITULO:
+    # 'AIRBUS A320neo' from the official glyph mesh, spec position x 27.0..29.3
+    # z 1.22..1.39 (owner-photo current arrangement; clears the new front line
+    # by 0.09 m at its top-aft corner).
+    mk = D.objects["MarkAirbusNeo_E"]
+    mm = mk.data
+    mm.calc_loop_triangles()
+    ttris = [[(mm.vertices[i].co.x, mm.vertices[i].co.y) for i in t.vertices]
+             for t in mm.loop_triangles]
+    xs = [p[0] for t in ttris for p in t]
+    ys = [p[1] for t in ttris for p in t]
+    lx0, lx1, ly0, ly1 = min(xs), max(xs), min(ys), max(ys)
+    TX0, TX1, TZ0, TZ1 = 27.00, 29.30, 1.22, 1.39
+    s = (TX1 - TX0) / (lx1 - lx0)   # width-driven: spec z band is CAPS height;
+    # the mesh box includes the 'neo' swirl descender (cf. A321 titulo note)
+    ttris = [[(TX0 + (px - lx0) * s, TZ0 + (py - ly0) * s) for px, py in t] for t in ttris]
+    txs = [p[0] for t in ttris for p in t]
+    log("title: x %.2f..%.2f z %.2f..%.2f" % (min(txs), max(txs), TZ0, TZ0 + (ly1 - ly0) * s))
+    TXe = max(txs)
+    mi = tri_mask_2d(ttris, TX0 - 0.03, TXe + 0.03, TZ0 - 0.03, TZ1 + 0.03, res=1500)
+    selp = sample_mask(mi, Xg, Zg) & (Yg < 0) & (np.abs(np.sin(THg)) > 0.25)
+    sels = sample_mask(mi, (TX0 + TXe) - Xg, Zg) & (Yg > 0) & (np.abs(np.sin(THg)) > 0.25)
+    set_px(selp | sels, C["indigo"], 1.0)
+    log("title texels:", int((selp | sels).sum()))
 
 # ---------------------------------------------------------------- APU ring
 sel = (Xg > 36.70) & (Xg < 37.15) & (facA[..., 0] < 0.05)

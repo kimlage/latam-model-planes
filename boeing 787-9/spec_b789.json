@@ -624,5 +624,47 @@
    "A320": "theta_max(x)=101.4-7.58*(x-29.11) ; x >= 27.39+0.8393*z ; x <= 34.52+0.0538*z (BF da deriva)",
    "SUBSTITUI_2": "As tentativas por reta unica (corte horizontal, 16 graus, reta do estabilizador) todas produziam cunha pequena demais. A fronteira nao e uma reta em (x,z): e uma reta em (x,theta)."
   }
+ },
+ "marcas_xtheta_2026-08-20": {
+  "data": "2026-08-20",
+  "lei_da_frota": {
+   "regra": "A TINTA VIVE NA SUPERFICIE DESENVOLVIDA. A proporcao de uma marca e largura/ARCO, nunca largura/dz. Medir ou colocar na projecao lateral achata em ~25% quem sobe pelo ombro (o simbolo cruza theta 38..95). Simbolo e wordmark sao colocados SEPARADAMENTE, cada um na sua razao oficial; o lockup inteiro NAO tem razao 4.303 na aeronave (isso e do SVG de impressao) e sim ~3.15.",
+   "razao_simbolo_oficial": 0.6223,
+   "razao_wordmark_oficial": 6.7308,
+   "divisao_simbolo_sobre_wordmark": 0.26,
+   "divisao_nota": "medida em cinco aeronaves de cinco tipos: CC-CWY/767 0.2551, PS-LBO/A321neo 0.2598, CC-BBF/787-8 0.253-0.259, CC-BFO/A320ceo 0.2716, CC-BGP/787-9 0.242. O SVG de impressao (latam_logo_indigo.svg) da 0.18458: a aplicacao no casco usa o simbolo ~1.41x mais largo em relacao ao wordmark.",
+   "folga_sobre_largura_do_wordmark": 0.065,
+   "simbolo_acima_do_cap_m_de_arco": 0.17,
+   "simbolo_acima_nota": "medido 0.214 (CC-BFO), 0.155 (PS-LBO), 0.143 (CC-CWY), 0.167 (CC-BGP)",
+   "espelhamento": "a estibordo o SIMBOLO e o WORDMARK sao espelhados cada um em torno do PROPRIO centro, nunca o lockup como bloco: o simbolo fica do lado do NARIZ nos dois bordos.",
+   "ferramenta": "refazer_marcas.py (raiz), tarefas 'lockup' e 'marcas'"
+  },
+  "lockup": {
+   "wordmark_x": [
+    9.48,
+    16.549
+   ],
+   "wordmark_arco_m": 1.0503,
+   "wordmark_theta": [
+    43.07,
+    63.71
+   ],
+   "simbolo_x": [
+    7.183,
+    9.021
+   ],
+   "simbolo_arco_m": 2.9535,
+   "simbolo_theta": [
+    40.09,
+    100.74
+   ],
+   "folga_m": 0.459,
+   "medido_em": "CC-BGP (bombordo, 18 px/m, ancorado nas portas 1 e 2): simbolo x 7.39..9.11, wordmark 9.52..16.63, divisao 0.242, razao do simbolo 0.617 (-0.9% do oficial). O x do wordmark do modelo ja estava certo (9.48 vs 9.52); o simbolo era 1.30 m e passou a 1.84.",
+   "erro_corrigido": "simbolo na divisao do SVG de impressao (0.184) em vez da divisao da aeronave (0.260); wordmark 7.3% largo demais em arco; estibordo espelhado como bloco."
+  },
+  "matricula_corrigida": "CC-BGK estava em x ~54..58.6, theta 94..102, FORA da cunha (sobre o branco) e como contorno palido quebrado — praticamente invisivel, e a estibordo nao existia. A pendencia levantada pelo 787-8 estava certa. Medida em CC-BGP (bombordo): 0.85..2.62 m a re da porta 4 (x 49.66), ou seja x 50.51..52.28, z 0.95..1.29, comprimento 1.77 m, cap ~0.40 m — e o 787-8 mede 0.84..2.47 m a re da porta 4 nas fotos de CC-BBF/CC-BBB, com z 1.17..1.47. Repintada BRANCA sobre o indigo em x 50.86..52.63 (0.35 m a re do medido, para folgar a fronteira da cunha DO MODELO, que fica em x 50.76 a theta 62), cap 0.340 m de arco.",
+  "janelas_estibordo_reparadas": "a fileira de janelas de estibordo estava comida por mordidas verticais (defeito ja presente no commit anterior, nao introduzido aqui: 7070 texels pretos contra 8064 a bombordo). Reconstruida espelhando a faixa intacta de bombordo em x 6.8..48.2, theta 64..84.",
+  "fantasma_dreamliner": "uma segunda copia quebrada de DREAMLINER em theta 79..88 foi apagada nos dois bordos.",
+  "verificacao": "razoes conferidas na propria textura depois de pintar: simbolo 0.622 e wordmark 6.731 em ARCO, nos dois bordos."
  }
 }

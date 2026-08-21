@@ -391,10 +391,10 @@
    "x_front": "x >= 28.51 + 0.63*z (reta; incerteza +-0.15)",
    "x_rear": "x <= interp em z: [-1.2,1.6,1.8,2.05] -> [27.75,32.80,33.36,33.85] (medido z>=1.6; abaixo, a diagonal 1.80 ate a ponta casa com o padrao da familia - CC-BFO 1.83; zona z<1.1 ocultada pelo estab na foto)",
    "baixo": "z >= -1.2 e |theta| <= 145 (quilha branca; ponta em (27.75,-1.2) - a reta frontal chega em z=-1.2 exatamente na ponta 27.6-27.75 das medicoes antigas)",
-   "validacao_cruzada": "matricula atual (ate 28.80, z 0.52-0.89) folga 0.04 m da fronteira no canto traseiro-baixo; titulo (ate 29.30, z ate 1.39) folga 0.09 m - o estilo 'quase toca' da frota (CC-BFO: 'O quase toca a diagonal'). Porta 4: fronteira cruza o bordo dianteiro da folha em z~1.2 (canto superior-dianteiro no branco, resto no indigo - igual PT-MXP 2024).",
+   "validacao_cruzada": "matricula atual (ate 28.80, z 0.52-0.89) folga 0.04 m da fronteira no canto traseiro-baixo; titulo (ate 29.30, z ate 1.39) folga 0.09 m - o estilo 'quase toca' da frota (CC-BFO: 'O quase toca a diagonal'). Porta 4: fronteira cruza o bordo dianteiro da folha em z~1.2 (canto superior-dianteiro no branco, resto no indigo - igual PT-MXP 2024). | REVISTO no merge 2026-08-21: essa validacao cruzada CAIU. As duas marcas que ela usava como regua foram re-medidas pela rodada de marcas em (x,theta): a matricula nao esta em x<=28.80 sobre o branco, esta BRANCA DENTRO da cunha em 30.14-31.76, e o titulo foi para 26.42-28.72 (navy), folgando a fronteira por ~0.5 m em vez de 0.09. A fronteira x >= 28.51 + 0.63z NAO depende disso: continua de pe pelo ajuste primario ancorado na porta (residuos < 0.02 m em z 0.4-1.6).",
    "sem_listra_fina": "a foto 2016 mostra uma listra indigo fina (~0.38 m) separada ~1 m a frente da massa; NAO pintada: as 4 campanhas recentes (CC-BFO 2022, PS-LBO 2025, PT-MXP 2024, foto atual do dono) nao a registram - detalhe da era de entrega, abandonado no arranjo atual"
   },
-  "matricula_atual": "PT-TMN INDIGO sobre BRANCO x27.00-28.80 z0.52-0.89 (altura 0.40); titulo 'AIRBUS A320neo' acima x27.0-29.3 z1.22-1.39 (2016-2020 era branca DENTRO do wrap x30.2-32.0 - variacao documentada) | NAO PINTADA nesta rodada: a etapa de marcas em (x,theta) que vem depois (refazer_marcas.py) re-mediu a matricula na unica foto versionada, ref_PT-TMN_wikimedia.jpg, e a pinta BRANCA DENTRO DA CUNHA em x30.14-31.76, que e tambem o padrao da familia (A319 26.45-28.45, A320ceo 30.29-31.81, A321ceo, A321neo: todas brancas dentro do indigo). Ver marcas_xtheta_2026-08-20.matricula_variante_nao_aplicada. A fronteira dianteira da cunha NAO depende disso: sai do ajuste ancorado na porta (residuos < 0.02 m em z 0.4-1.6).",
+  "matricula_atual": "PT-TMN INDIGO sobre BRANCO x27.00-28.80 z0.52-0.89 (altura 0.40); titulo 'AIRBUS A320neo' acima x27.0-29.3 z1.22-1.39 (2016-2020 era branca DENTRO do wrap x30.2-32.0 - variacao documentada) | NAO PINTADA assim: a rodada de marcas em (x,theta) re-mediu a matricula na unica foto versionada, ref_PT-TMN_wikimedia.jpg, e a pinta BRANCA DENTRO DA CUNHA em x30.14-31.76, que e tambem o padrao da familia (A319 26.45-28.45, A320ceo 30.29-31.81, A321ceo, A321neo: todas brancas dentro do indigo). Ver marcas_xtheta_2026-08-20.matricula_variante_nao_aplicada e .merge_2026-08-21.",
   "hstab": "extradorso INDIGO (arranjo atual/foto do dono; 2016-2020 era cinza claro), intradorso branco, BA metal",
   "fin_bandas_2026-08-20": {
    "fonte": "Medido nas fotos PS-LBO DSC00896 (5822 px, estibordo, deriva ~780 px de altura) e DSC00834 (5020 px, bombordo), em 'airbus A321neo/'; conferido em PT-TMN (ref_PT-TMN_wikimedia.jpg retificada, ~150 px — consistente dentro de +-0.1 de zeta) e PT-TMT (tmt bank photo). Template unico da familia A320. 2026-08-20.",
@@ -478,5 +478,48 @@
  "sharklet": {
   "pintura_2026-08-20": "lamina INDIGO macica nos dois lados, como no A321ceo (fotos PT-MXD/PT-MXP/PT-XPB e PS-LBO DSC00834: face inboard indigo, ponta cinza abaixo da transicao). 129 faces do mesh Asas com |y|>17.25 e z acima da diagonal 0.55+1.2*(17.9-|y|) -> LATAM_Indigo (fix_sharklet_indigo.py). O master deixava a face inboard branca/cinza (defeito latente da familia, sinalizado na derivacao do A321ceo).",
   "aprendizado": "as constantes do A321ceo valem SEM reescala: a asa do ceo e o MESMO mesh master ~7% oversize (448 verts, pontas em |y| 19.142), verificado por diff face-a-face (0 diferencas). Reescalar pelo fator de oversize sub-seleciona 31 faces da raiz da lamina (y 18.40-18.71, z 0.55-1.12) e rende um degrau branco no bordo de fuga."
+ },
+ "marcas_xtheta_2026-08-20": {
+  "data": "2026-08-20",
+  "lei_da_frota": {
+   "regra": "A TINTA VIVE NA SUPERFICIE DESENVOLVIDA. A proporcao de uma marca e largura/ARCO, nunca largura/dz. Medir ou colocar na projecao lateral achata em ~25% quem sobe pelo ombro (o simbolo cruza theta 38..95). Simbolo e wordmark sao colocados SEPARADAMENTE, cada um na sua razao oficial; o lockup inteiro NAO tem razao 4.303 na aeronave (isso e do SVG de impressao) e sim ~3.15.",
+   "razao_simbolo_oficial": 0.6223,
+   "razao_wordmark_oficial": 6.7308,
+   "divisao_simbolo_sobre_wordmark": 0.26,
+   "divisao_nota": "medida em cinco aeronaves de cinco tipos: CC-CWY/767 0.2551, PS-LBO/A321neo 0.2598, CC-BBF/787-8 0.253-0.259, CC-BFO/A320ceo 0.2716, CC-BGP/787-9 0.242. O SVG de impressao (latam_logo_indigo.svg) da 0.18458: a aplicacao no casco usa o simbolo ~1.41x mais largo em relacao ao wordmark.",
+   "folga_sobre_largura_do_wordmark": 0.065,
+   "simbolo_acima_do_cap_m_de_arco": 0.17,
+   "simbolo_acima_nota": "medido 0.214 (CC-BFO), 0.155 (PS-LBO), 0.143 (CC-CWY), 0.167 (CC-BGP)",
+   "espelhamento": "a estibordo o SIMBOLO e o WORDMARK sao espelhados cada um em torno do PROPRIO centro, nunca o lockup como bloco: o simbolo fica do lado do NARIZ nos dois bordos.",
+   "ferramenta": "refazer_marcas.py (raiz), tarefas 'lockup' e 'marcas'"
+  },
+  "lockup": {
+   "wordmark_x": [
+    7.68,
+    12.44
+   ],
+   "wordmark_arco_m": 0.7072,
+   "wordmark_theta": [
+    43.1,
+    62.84
+   ],
+   "simbolo_x": [
+    6.133,
+    7.371
+   ],
+   "simbolo_arco_m": 1.9894,
+   "simbolo_theta": [
+    38.38,
+    94.56
+   ],
+   "folga_m": 0.309,
+   "medido_em": "PS-LBO (A321neo, XFW, bombordo, 113 px/m): simbolo x0 6.147, wordmark 7.706..12.445, razao do wordmark 6.830 (+1.5% do oficial), divisao 0.2598, theta do cap 43.06, simbolo theta 38.60..93.28. CC-BFO (A320ceo, SJO, estibordo, 80 px/m): simbolo x0 6.076, wordmark 7.725..12.646, razao 6.742 (+0.2%), divisao 0.2716. PT-TMT (A319, SDU, estibordo, 80 px/m): simbolo x0 6.03, wordmark 7.61..12.24. As tres fotos concordam em 0.07 m no inicio do simbolo e 0.02 m no inicio do wordmark.",
+   "erro_corrigido": "o lockup estava colado como UM BLOCO cuja razao batia 4.30 na projecao (x,z); na superficie desenvolvida isso da 3.45 (-20%), com o simbolo -20% e o wordmark -14% das suas razoes oficiais. Estava tambem ~0.65 m a vante da estacao das fotos e ESPELHADO COMO BLOCO a estibordo (simbolo na cauda)."
+  },
+  "matricula_repintada": "PT-TMN NAO EXISTIA na textura: a malha Reg_E/Reg_D estava posicionada em x 27.00..28.80 com material BRANCO, ou seja, letras brancas sobre casco branco — invisiveis. Repintada BRANCA DENTRO DO INDIGO em x 30.14..31.76, cap 0.332 m de arco, theta 57.11..69.60, que e onde a foto de referencia do projeto (ref_PT-TMN_wikimedia.jpg) a mostra: 30.14..31.76 medido com ancora na porta 2 (x 29.64) e passo de janela 0.515 m, theta 57.6..68.1. As coordenadas PROPRIAS da malha (x 30.173..31.255, antes de a translacao do objeto a levar para 27.0) concordam com a foto no inicio.",
+  "matricula_variante_nao_aplicada": "o spec anterior registrava 'PT-TMN INDIGO sobre BRANCO x27.00-28.80' como arranjo atual, vindo de uma foto do dono que nao esta no repositorio. Essa variante nao foi aplicada porque a unica foto versionada mostra a outra. Para trocar: pintar a mesma malha em x 27.00..28.80 na cor indigo em vez de branca.",
+  "titulo_movido": "'AIRBUS A320neo' ia de x 27.01 a 29.29 e o 'neo' caia DENTRO da cunha, pintado em navy sobre indigo — invisivel. Movido para x 26.42..28.72 (fim traseiro 0.15 m a vante da fronteira, como na foto) e re-rasterizado da malha MarkAirbusNeo com altura de ARCO 0.230 m (a caixa antiga tinha 0.224 m em z, que na superficie sao 0.319 m — 39% alto demais).",
+  "verificacao": "razoes conferidas na propria textura depois de pintar: simbolo 0.622 e wordmark 6.731 em ARCO, nos dois bordos.",
+  "merge_2026-08-21": "As tres rodadas de QA (geometria ACAP, sharklets, marcas em (x,theta)) foram reaplicadas na main nesta ordem. Duas marcas que a rodada de geometria repintava foram DESLIGADAS la (build_a320neo_fix_livery.py: PINTAR_MATRICULA / PINTAR_TITULO) e ficaram a cargo desta rodada: (a) a matricula, porque a variante indigo-sobre-branco vinha de foto nao versionada e contradiz a foto do repo e a familia inteira; (b) o titulo, porque era repintado em INDIGO #2A0088 e a tinta do titulo neste casco e NAVY #1C2E63 - e um titulo indigo 2 m a vante da cunha cega a leitura da fronteira que o apagador faz a partir da propria pintura (o ajuste saia com 92 px de rms em vez de 0.35). Conferido depois de pintar: 0 texels indigo na caixa 27.00-28.80 / theta 65-79, titulo NAVY em x 26.43..28.71, matricula branca em x 30.13..31.76 nos dois bordos."
  }
 }
