@@ -137,8 +137,9 @@ centimetres. All five Airbus do not:
 
 Blender measures the same figure directly on the masters, so this is the
 geometry, not the exporter. The A321ceo build had already flagged it in
-passing as an "inherited family deviation" — this is the second independent
-sighting, now with numbers.
+passing as an "inherited family deviation", and the sharklet round noted a
+~7% oversize wing from a third direction — three independent sightings, now
+with numbers.
 
 It is a MASTER defect: the A320neo is the family parent, so every derivation
 inherited it. Fixing it means the wing planform, which is upstream of the
