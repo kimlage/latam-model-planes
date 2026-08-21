@@ -70,12 +70,13 @@ the terminals, the LATAM base and the cordillera open around it. The move is
 measured rather than eyeballed — see [§8 of the scenery
 manual](scenario/README.md).*
 
-![Aerial survey of SCL: terminals, tower and the LATAM base](scenario/scl_base_v6.gif)
+![Aerial survey of SCL: terminals, tower and the LATAM base](scenario/scl_base_v7.gif)
 
 *The second clip: a northbound aerial survey of the whole airport — it
 opens on the T1/T2 terminal core with its piers and parked fleet, crosses
-the control tower, and closes on the LATAM base with the assembled PT-TMN
-at its stand, both runways crossing the frame end to end
+the control tower, and closes on the LATAM base — where one of
+every type in this repository is parked — both runways crossing the frame
+end to end
 ([`scenario/base_flyover.py`](scenario/base_flyover.py)).*
 
 *The version history is kept in the repository: every `a320_scl_v*.gif` is
