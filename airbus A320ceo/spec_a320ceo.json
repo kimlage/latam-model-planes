@@ -22,13 +22,23 @@
   "pax_fwd_x": 5.04,
   "pax_aft_x": 29.53,
   "pax_aft_nota": "fig 2-7-0-991-003 sheet 2: cota 29.53 ao CENTRO da porta (validada pelos overwing na mesma figura); fig -024 diz 29.64 (referencia do ponto critico da folha aberta). Folha modelada 29.14..30.15 (herdada do master, centro 29.65).",
-  "overwing_x": [14.43, 15.28],
+  "overwing_x": [
+   14.43,
+   15.28
+  ],
   "overwing_nota": "ACAP: pares em 14.43 E 15.28 (passo 0.85). O master neo usa 14.43/15.66 (+1.23) - passo 0.38 maior que o ACAP; mantido o do master na malha (diferenca 0.4 m no 2o hatch, anotada como pendencia do master).",
-  "carga": [8.16, 22.69, 26.29],
+  "carga": [
+   8.16,
+   22.69,
+   26.29
+  ],
   "pax_z_correcao_2026_08_20": "portas pax ERGUIDAS vs master: tabela 2-3-0 (solo z=-3.67): D1 sill 3.381 -> folha z -0.30..1.76; D4 sill 3.615 -> folha z -0.10..1.90. Master tinha -0.85..1.21 / -0.67..1.33 (~0.55 baixo). Foto CC-BFO confirma independente: porta1 -0.35..1.55, porta2 topo ~1.85 (calibre vertical = altura da folha 155px/1.99m). PENDENCIA equivalente no master neo e no A319."
  },
  "janelas_cabine": {
-  "z_cinto": [0.52, 0.86],
+  "z_cinto": [
+   0.52,
+   0.86
+  ],
   "pitch_m": 0.5334,
   "primeira_x": 6.18,
   "n_janelas": 41,
@@ -48,7 +58,10 @@
  "empenagem": {
   "fin_LE": "x = 0.863*z + 28.02 (reta z 3.0..7.6; filete dorsal curva a frente abaixo de z~3 ate a crista em ~29.7)",
   "fin_TE": "x = 0.221*z + 34.91 (raiz z1.55: 35.25; topo z8.05: 36.69)",
-  "fin_z": [1.55, 8.05],
+  "fin_z": [
+   1.55,
+   8.05
+  ],
   "estab_shift_vs_master": 0.87,
   "estab_tip_TE_x": 36.62,
   "estab_span": 12.45,
@@ -94,5 +107,44 @@
   "NoseMask": "herdada do master (mesmo nariz, mesma escala u)",
   "FinSashE/D": "copiadas do master CORRIGIDO (commit f162f73, fin_bandas_2026-08-20: bandas re-medidas por tipo nas fotos PS-LBO, transferencia (h,c) do 787 abandonada). A copia inicial trazia as texturas antigas distorcidas; substituidas por pixel-copy apos o fix paralelo aterrissar. O remap (h,c) da Deriva preserva as travessias zeta/rho nos bordos, que e exatamente a ancoragem da receita nova. Ressalva: o alongamento da raiz (z<2.05) estica a arte verticalmente na zona enterrada/quase-enterrada - so massa indigo visivel ali.",
   "PanelBump": "herdada do master (mesmas cavernas)"
+ },
+ "marcas_xtheta_2026-08-20": {
+  "data": "2026-08-20",
+  "lei_da_frota": {
+   "regra": "A TINTA VIVE NA SUPERFICIE DESENVOLVIDA. A proporcao de uma marca e largura/ARCO, nunca largura/dz. Medir ou colocar na projecao lateral achata em ~25% quem sobe pelo ombro (o simbolo cruza theta 38..95). Simbolo e wordmark sao colocados SEPARADAMENTE, cada um na sua razao oficial; o lockup inteiro NAO tem razao 4.303 na aeronave (isso e do SVG de impressao) e sim ~3.15.",
+   "razao_simbolo_oficial": 0.6223,
+   "razao_wordmark_oficial": 6.7308,
+   "divisao_simbolo_sobre_wordmark": 0.26,
+   "divisao_nota": "medida em cinco aeronaves de cinco tipos: CC-CWY/767 0.2551, PS-LBO/A321neo 0.2598, CC-BBF/787-8 0.253-0.259, CC-BFO/A320ceo 0.2716, CC-BGP/787-9 0.242. O SVG de impressao (latam_logo_indigo.svg) da 0.18458: a aplicacao no casco usa o simbolo ~1.41x mais largo em relacao ao wordmark.",
+   "folga_sobre_largura_do_wordmark": 0.065,
+   "simbolo_acima_do_cap_m_de_arco": 0.17,
+   "simbolo_acima_nota": "medido 0.214 (CC-BFO), 0.155 (PS-LBO), 0.143 (CC-CWY), 0.167 (CC-BGP)",
+   "espelhamento": "a estibordo o SIMBOLO e o WORDMARK sao espelhados cada um em torno do PROPRIO centro, nunca o lockup como bloco: o simbolo fica do lado do NARIZ nos dois bordos.",
+   "ferramenta": "refazer_marcas.py (raiz), tarefas 'lockup' e 'marcas'"
+  },
+  "lockup": {
+   "wordmark_x": [
+    7.68,
+    12.44
+   ],
+   "wordmark_arco_m": 0.7072,
+   "wordmark_theta": [
+    43.1,
+    62.84
+   ],
+   "simbolo_x": [
+    6.133,
+    7.371
+   ],
+   "simbolo_arco_m": 1.9894,
+   "simbolo_theta": [
+    38.38,
+    94.56
+   ],
+   "folga_m": 0.309,
+   "medido_em": "PS-LBO (A321neo, XFW, bombordo, 113 px/m): simbolo x0 6.147, wordmark 7.706..12.445, razao do wordmark 6.830 (+1.5% do oficial), divisao 0.2598, theta do cap 43.06, simbolo theta 38.60..93.28. CC-BFO (A320ceo, SJO, estibordo, 80 px/m): simbolo x0 6.076, wordmark 7.725..12.646, razao 6.742 (+0.2%), divisao 0.2716. PT-TMT (A319, SDU, estibordo, 80 px/m): simbolo x0 6.03, wordmark 7.61..12.24. As tres fotos concordam em 0.07 m no inicio do simbolo e 0.02 m no inicio do wordmark.",
+   "erro_corrigido": "o lockup estava colado como UM BLOCO cuja razao batia 4.30 na projecao (x,z); na superficie desenvolvida isso da 3.45 (-20%), com o simbolo -20% e o wordmark -14% das suas razoes oficiais. Estava tambem ~0.65 m a vante da estacao das fotos e ESPELHADO COMO BLOCO a estibordo (simbolo na cauda)."
+  },
+  "verificacao": "razoes conferidas na propria textura depois de pintar: simbolo 0.622 e wordmark 6.731 em ARCO, nos dois bordos."
  }
 }
