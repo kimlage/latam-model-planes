@@ -1,0 +1,196 @@
+<!--
+  LATAM fleet — minimal three.js viewer for the exported GLBs.
+
+  One file, no build step, CDN import map. Serve this folder over HTTP:
+
+      cd export && python3 -m http.server 8000
+      open http://localhost:8000/viewer.html
+
+  Opening the file directly from disk (file://) will NOT work: the browser
+  blocks fetching the .glb from a file:// page. That is a browser rule, not a
+  bug in the export.
+
+  Models, renders and this page: CC BY 4.0 — LATAM fleet 3D replicas, Kim Lage.
+  LATAM, Airbus, Boeing and Dreamliner are trademarks of their owners; this is
+  an independent, non-commercial project with no affiliation. See ../NOTICE.md.
+-->
+<meta charset="utf-8">
+<title>LATAM fleet — GLB viewer</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; height: 100%; background: #0d0f14; overflow: hidden;
+               font: 13px/1.5 -apple-system, "Segoe UI", Roboto, sans-serif;
+               color: #e6e7ea; }
+  canvas { display: block; }
+  #ui { position: fixed; top: 12px; left: 12px; z-index: 2;
+        background: rgba(16,18,24,.82); border: 1px solid #2a2d38;
+        border-radius: 8px; padding: 10px 12px; backdrop-filter: blur(6px);
+        max-width: min(90vw, 340px); }
+  #ui h1 { font-size: 13px; margin: 0 0 8px; font-weight: 600; letter-spacing: .01em; }
+  select { width: 100%; background: #1a1d26; color: #e6e7ea; border: 1px solid #2a2d38;
+           border-radius: 5px; padding: 6px 8px; font: inherit; }
+  #info { margin-top: 8px; color: #9aa0ae; font-size: 12px; white-space: pre-line; }
+  #info b { color: #e6e7ea; font-weight: 600; }
+  a { color: #8fa6ff; }
+</style>
+
+<div id="ui">
+  <h1>LATAM fleet — GLB viewer</h1>
+  <select id="pick"></select>
+  <div id="info">loading…</div>
+</div>
+
+<script type="importmap">
+{ "imports": {
+    "three": "https://unpkg.com/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.169.0/examples/jsm/"
+} }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls }   from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader }      from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader }     from 'three/addons/loaders/DRACOLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+// The web LODs, in the order the repository lists the fleet. Entries whose file
+// is missing are dropped from the picker rather than throwing.
+const FROTA = [
+  ['A320neo', 'Airbus A320neo · PT-TMN'],
+  ['A319',    'Airbus A319 (ceo) · PT-TMT'],
+  ['A320ceo', 'Airbus A320ceo · CC-BFO'],
+  ['A321ceo', 'Airbus A321-231 (ceo) · PT-MXP'],
+  ['A321neo', 'Airbus A321neo (ACF) · PS-LBA'],
+  ['B763',    'Boeing 767-300ER · CC-CWY'],
+  ['B77W',    'Boeing 777-300ER · PT-MUG'],
+  ['B788',    'Boeing 787-8 · CC-BBF'],
+  ['B789',    'Boeing 787-9 · CC-BGK'],
+  ['B763F',   'Boeing 767-300F'],
+];
+const url = s => `web/${s}_web.glb`;
+
+// ------------------------------------------------------------------ scene
+// innerHeight can be 0 during an early layout pass (a collapsed pane, a
+// devtools split). Dividing by it puts NaN into camera.aspect, NaN into the
+// framing maths and the aircraft nowhere — a black page with correct-looking
+// numbers in the panel. Every size read goes through here.
+const larg = () => Math.max(1, innerWidth);
+const alt  = () => Math.max(1, innerHeight);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(larg(), alt());
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+document.body.append(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0d0f14);
+
+// Image-based lighting: clearcoat paint needs something to reflect, or the
+// livery reads as flat vinyl.
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+const sun = new THREE.DirectionalLight(0xfff4e6, 2.2);
+sun.position.set(-1, 2.4, 1.6);
+scene.add(sun);
+scene.add(new THREE.HemisphereLight(0xbfd4ff, 0x39312a, 0.6));
+
+const camera = new THREE.PerspectiveCamera(35, larg() / alt(), 0.1, 4000);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.maxPolarAngle = Math.PI * 0.52;   // no going under the tarmac
+
+const grid = new THREE.GridHelper(200, 40, 0x2a2d38, 0x191c24);
+grid.material.transparent = true;
+grid.material.opacity = 0.5;
+scene.add(grid);
+
+// ------------------------------------------------------------------ loader
+const draco = new DRACOLoader()
+  .setDecoderPath('https://unpkg.com/three@0.169.0/examples/jsm/libs/draco/gltf/');
+const loader = new GLTFLoader().setDRACOLoader(draco);
+
+const pick = document.getElementById('pick');
+const info = document.getElementById('info');
+let atual = null;
+
+function enquadrar(obj) {
+  const box = new THREE.Box3().setFromObject(obj);
+  const size = box.getSize(new THREE.Vector3());
+  const mid  = box.getCenter(new THREE.Vector3());
+  // Fit against whichever field of view is tighter, then close in: a jet from
+  // three-quarters never fills its own bounding sphere.
+  const r = size.length() / 2;
+  const fovY = THREE.MathUtils.degToRad(camera.fov);
+  const fovX = 2 * Math.atan(Math.tan(fovY / 2) * (camera.aspect || 1));
+  const d = 0.80 * r / Math.sin(Math.min(fovY, fovX) / 2);
+  camera.position.set(mid.x - d * 0.62, mid.y + d * 0.26, mid.z + d * 0.72);
+  camera.near = d / 100; camera.far = d * 20; camera.updateProjectionMatrix();
+  controls.target.copy(mid);
+  controls.update();
+  grid.position.set(mid.x, box.min.y, mid.z);
+  grid.scale.setScalar(Math.max(1, size.x / 60));
+  return { size, box };
+}
+
+function carregar(slug, rotulo) {
+  info.textContent = 'loading ' + url(slug) + ' …';
+  loader.load(url(slug), gltf => {
+    if (atual) { scene.remove(atual); }
+    atual = gltf.scene;
+    scene.add(atual);
+    const { size, box } = enquadrar(atual);
+    let tris = 0, malhas = 0, mats = new Set();
+    atual.traverse(o => {
+      if (!o.isMesh) return;
+      malhas++;
+      mats.add(o.material.uuid);
+      const g = o.geometry;
+      tris += (g.index ? g.index.count : g.attributes.position.count) / 3;
+    });
+    info.innerHTML =
+      `<b>${rotulo}</b>\n` +
+      `${tris.toLocaleString()} triangles · ${malhas} meshes · ${mats.size} materials\n` +
+      `${size.x.toFixed(2)} m long · ${size.y.toFixed(2)} m tall · ` +
+      `${size.z.toFixed(2)} m span\n` +
+      `ground at y = ${box.min.y.toFixed(3)} m\n` +
+      `drag to orbit · scroll to zoom · right-drag to pan`;
+  }, undefined, err => { info.textContent = 'failed to load ' + url(slug) + '\n' + err; });
+}
+
+// Only offer what is actually on disk.
+(async () => {
+  for (const [slug, rotulo] of FROTA) {
+    try {
+      const r = await fetch(url(slug), { method: 'HEAD' });
+      if (!r.ok) continue;
+    } catch (e) { continue; }
+    const o = document.createElement('option');
+    o.value = slug; o.textContent = rotulo;
+    pick.append(o);
+  }
+  if (!pick.options.length) {
+    info.textContent = 'no .glb found under web/ — run:  python3 export_frota.py';
+    return;
+  }
+  const q = new URLSearchParams(location.search).get('m');
+  if (q && [...pick.options].some(o => o.value === q)) pick.value = q;
+  carregar(pick.value, pick.selectedOptions[0].textContent);
+})();
+
+pick.addEventListener('change', () =>
+  carregar(pick.value, pick.selectedOptions[0].textContent));
+
+addEventListener('resize', () => {
+  camera.aspect = larg() / alt();
+  camera.updateProjectionMatrix();
+  renderer.setSize(larg(), alt());
+});
+
+renderer.setAnimationLoop(() => { controls.update(); renderer.render(scene, camera); });
+</script>

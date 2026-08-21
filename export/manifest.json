@@ -1,0 +1,5538 @@
+{
+ "gerado_por": "export_frota.py",
+ "licenca": "Modelos CC BY 4.0 - LATAM fleet 3D replicas - Kim Lage. Marcas de LATAM/Airbus/Boeing pertencem aos titulares. Ver export/README.md e NOTICE.md.",
+ "lods": {
+  "alta": {
+   "subsurf": null,
+   "textura_max": null,
+   "bake_max": 8192,
+   "draco": false,
+   "imagem": "AUTO",
+   "qualidade": 100,
+   "rugosidade": "mapa",
+   "rugosidade_max": 2048,
+   "formatos": [
+    "glb",
+    "fbx",
+    "obj"
+   ],
+   "descricao": "fiel - desktop, DCC, uso offline"
+  },
+  "web": {
+   "subsurf": 1,
+   "textura_max": 2048,
+   "bake_max": 2048,
+   "draco": true,
+   "imagem": "AUTO",
+   "qualidade": 88,
+   "rugosidade": "media",
+   "formatos": [
+    "glb",
+    "usdz"
+   ],
+   "descricao": "leve - three.js, web, AR"
+  }
+ },
+ "exportacoes": [
+  {
+   "slug": "A319",
+   "lod": "alta",
+   "blend": "A319_LATAM.blend",
+   "nome": "Airbus A319 (ceo)",
+   "matricula": "PT-TMT",
+   "L_ref": 33.84,
+   "blender": "5.2.0 LTS",
+   "medidas": {
+    "L": 34.01,
+    "d_fus": 4.0082,
+    "z_solo": -3.675,
+    "familia": "airbus",
+    "x_bico": -0.04
+   },
+   "removidos": [
+    {
+     "nome": "LogoLATAM_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_E_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_D_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "MarkAirbusNeo_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "MarkAirbusNeo_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Pista",
+     "tipo": "MESH",
+     "motivo": "nao e a aeronave"
+    },
+    {
+     "nome": "Sol",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "CamHero",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamPerfil",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamCauda",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvo",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamAlvoCauda",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamBarriga",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoBarriga",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamNariz",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoNariz",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamFrontal",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoFrontal",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamOrtoFrente",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CloudCard",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    }
+   ],
+   "tipos_exportados": {
+    "MESH": 70,
+    "FONT": 1
+   },
+   "subsurf": {
+    "modificadores": 10,
+    "teto": null
+   },
+   "texturas_escaladas": [],
+   "bake": [
+    {
+     "material": "FuselagemPaint",
+     "objeto": "Fuselagem",
+     "motivo": "Surface<-MIX_SHADER",
+     "metodo": "bake",
+     "px": [
+      4096,
+      1024
+     ],
+     "rugosidade": "mapa",
+     "cor": null
+    }
+   ],
+   "caixa_blender": {
+    "min": [
+     -0.04,
+     -18.46,
+     -3.675
+    ],
+    "max": [
+     33.97,
+     18.46,
+     8.05
+    ],
+    "tamanho": [
+     34.01,
+     36.92,
+     11.725
+    ],
+    "deslocamento_z": 3.675
+   },
+   "n_objetos": 71,
+   "triangulos_blender": 308386,
+   "megapixels": 13.63,
+   "texturas_em_disco": [
+    "textures_A319/FinSashD.png",
+    "textures_A319/FinSashE.png",
+    "textures_A319/FuselagemPaint__Fuselagem_BaseColor.png",
+    "textures_A319/FuselagemPaint__Fuselagem_Roughness.png"
+   ],
+   "saidas": {
+    "glb": {
+     "arquivo": "alta/A319_alta.glb",
+     "bytes": 8334856,
+     "extras": []
+    },
+    "fbx": {
+     "arquivo": "alta/A319_alta.fbx",
+     "bytes": 6500972,
+     "extras": []
+    },
+    "obj": {
+     "arquivo": "alta/A319_alta.obj",
+     "bytes": 26445327,
+     "extras": [
+      "A319_alta.mtl"
+     ]
+    }
+   },
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "comprimento 33.982 m x 34.010 m medido no Blender"
+    ],
+    "triangulos": 308386,
+    "vertices": 167951,
+    "materiais": 23,
+    "materiais_clearcoat": 7,
+    "imagens": 4,
+    "megapixels": 13.63,
+    "bytes_imagens": 482452,
+    "caixa": {
+     "min": [
+      -0.0123,
+      -0.0,
+      -18.46
+     ],
+     "max": [
+      33.97,
+      11.7138,
+      18.46
+     ],
+     "tamanho": [
+      33.9823,
+      11.7138,
+      36.92
+     ]
+    },
+    "extensoes": [
+     "KHR_materials_clearcoat",
+     "KHR_materials_emissive_strength",
+     "KHR_materials_specular"
+    ],
+    "draco": false,
+    "nos": 72,
+    "raizes_da_cena": 1,
+    "gerador": "Khronos glTF Blender I/O v5.2.39"
+   },
+   "reimportacao": [
+    "ROUNDTRIP A319_alta.glb objs=71 tris=308386 mats=23 texs=4 X=33.982 Y=36.920 Z=11.714 minZ=-0.0000",
+    "ROUNDTRIP A319_alta.fbx objs=71 tris=308386 mats=23 texs=4 X=33.982 Y=36.920 Z=11.714 minZ=-0.0000",
+    "ROUNDTRIP A319_alta.obj objs=71 tris=308386 mats=23 texs=4 X=33.982 Y=36.920 Z=11.714 minZ=-0.0000"
+   ]
+  },
+  {
+   "slug": "A319",
+   "lod": "web",
+   "blend": "A319_LATAM.blend",
+   "nome": "Airbus A319 (ceo)",
+   "matricula": "PT-TMT",
+   "L_ref": 33.84,
+   "blender": "5.2.0 LTS",
+   "medidas": {
+    "L": 34.01,
+    "d_fus": 4.0082,
+    "z_solo": -3.675,
+    "familia": "airbus",
+    "x_bico": -0.04
+   },
+   "removidos": [
+    {
+     "nome": "LogoLATAM_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_E_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_D_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "MarkAirbusNeo_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "MarkAirbusNeo_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Pista",
+     "tipo": "MESH",
+     "motivo": "nao e a aeronave"
+    },
+    {
+     "nome": "Sol",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "CamHero",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamPerfil",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamCauda",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvo",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamAlvoCauda",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamBarriga",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoBarriga",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamNariz",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoNariz",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamFrontal",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoFrontal",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamOrtoFrente",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CloudCard",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    }
+   ],
+   "tipos_exportados": {
+    "MESH": 70,
+    "FONT": 1
+   },
+   "subsurf": {
+    "modificadores": 10,
+    "teto": 1
+   },
+   "texturas_escaladas": [
+    {
+     "nome": "LiveryFac",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "LiveryTex",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "NoseMask",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "PanelBump",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    }
+   ],
+   "bake": [
+    {
+     "material": "FuselagemPaint",
+     "objeto": "Fuselagem",
+     "motivo": "Surface<-MIX_SHADER",
+     "metodo": "bake",
+     "px": [
+      2048,
+      512
+     ],
+     "rugosidade": "escalar 0.218",
+     "cor": null
+    }
+   ],
+   "caixa_blender": {
+    "min": [
+     -0.04,
+     -18.46,
+     -3.675
+    ],
+    "max": [
+     33.97,
+     18.46,
+     8.05
+    ],
+    "tamanho": [
+     34.01,
+     36.92,
+     11.725
+    ],
+    "deslocamento_z": 3.675
+   },
+   "n_objetos": 71,
+   "triangulos_blender": 57250,
+   "megapixels": 9.44,
+   "saidas": {
+    "glb": {
+     "arquivo": "web/A319_web.glb",
+     "bytes": 526528,
+     "extras": []
+    },
+    "usdz": {
+     "arquivo": "web/A319_web.usdz",
+     "bytes": 2985527,
+     "extras": []
+    }
+   },
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "comprimento 33.982 m x 34.010 m medido no Blender"
+    ],
+    "triangulos": 57250,
+    "vertices": 39416,
+    "materiais": 23,
+    "materiais_clearcoat": 7,
+    "imagens": 3,
+    "megapixels": 9.44,
+    "bytes_imagens": 265156,
+    "caixa": {
+     "min": [
+      -0.0123,
+      -0.0,
+      -18.46
+     ],
+     "max": [
+      33.97,
+      11.7138,
+      18.46
+     ],
+     "tamanho": [
+      33.9823,
+      11.7138,
+      36.92
+     ]
+    },
+    "extensoes": [
+     "KHR_draco_mesh_compression",
+     "KHR_materials_clearcoat",
+     "KHR_materials_emissive_strength",
+     "KHR_materials_specular"
+    ],
+    "draco": true,
+    "nos": 72,
+    "raizes_da_cena": 1,
+    "gerador": "Khronos glTF Blender I/O v5.2.39"
+   },
+   "reimportacao": [
+    "ROUNDTRIP A319_web.glb objs=71 tris=57250 mats=23 texs=3 X=33.982 Y=36.920 Z=11.714 minZ=-0.0000",
+    "ROUNDTRIP A319_web.usdz objs=71 tris=57250 mats=23 texs=3 X=33.982 Y=36.920 Z=11.714 minZ=-0.0000"
+   ]
+  },
+  {
+   "slug": "A320ceo",
+   "lod": "alta",
+   "blend": "A320ceo_LATAM.blend",
+   "nome": "Airbus A320ceo",
+   "matricula": "CC-BFO",
+   "L_ref": 37.57,
+   "blender": "5.2.0 LTS",
+   "medidas": {
+    "L": 37.74,
+    "d_fus": 4.0082,
+    "z_solo": -3.675,
+    "familia": "airbus",
+    "x_bico": -0.04
+   },
+   "removidos": [
+    {
+     "nome": "LogoLATAM_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_E_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_D_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "WrapIndigo",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "MarkAirbusNeo_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "MarkAirbusNeo_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Pista",
+     "tipo": "MESH",
+     "motivo": "nao e a aeronave"
+    },
+    {
+     "nome": "Sol",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "CamHero",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamPerfil",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamCauda",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvo",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamAlvoCauda",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamBarriga",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoBarriga",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamNariz",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoNariz",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamFrontal",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoFrontal",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamOrtoFrente",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CloudCard",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    }
+   ],
+   "tipos_exportados": {
+    "MESH": 71,
+    "FONT": 1
+   },
+   "subsurf": {
+    "modificadores": 10,
+    "teto": null
+   },
+   "texturas_escaladas": [],
+   "bake": [
+    {
+     "material": "FuselagemPaint",
+     "objeto": "Fuselagem",
+     "motivo": "Surface<-MIX_SHADER",
+     "metodo": "bake",
+     "px": [
+      4096,
+      1024
+     ],
+     "rugosidade": "mapa",
+     "cor": null
+    }
+   ],
+   "caixa_blender": {
+    "min": [
+     -0.04,
+     -19.1424,
+     -3.675
+    ],
+    "max": [
+     37.7,
+     19.1424,
+     8.05
+    ],
+    "tamanho": [
+     37.74,
+     38.2849,
+     11.725
+    ],
+    "deslocamento_z": 3.675
+   },
+   "n_objetos": 72,
+   "triangulos_blender": 328490,
+   "megapixels": 13.63,
+   "texturas_em_disco": [
+    "textures_A320ceo/FinSashD.png",
+    "textures_A320ceo/FinSashE.png",
+    "textures_A320ceo/FuselagemPaint__Fuselagem_BaseColor.png",
+    "textures_A320ceo/FuselagemPaint__Fuselagem_Roughness.png"
+   ],
+   "saidas": {
+    "glb": {
+     "arquivo": "alta/A320ceo_alta.glb",
+     "bytes": 8835844,
+     "extras": []
+    },
+    "fbx": {
+     "arquivo": "alta/A320ceo_alta.fbx",
+     "bytes": 6882476,
+     "extras": []
+    },
+    "obj": {
+     "arquivo": "alta/A320ceo_alta.obj",
+     "bytes": 28111007,
+     "extras": [
+      "A320ceo_alta.mtl"
+     ]
+    }
+   },
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "comprimento 37.712 m x 37.740 m medido no Blender"
+    ],
+    "triangulos": 328490,
+    "vertices": 180051,
+    "materiais": 23,
+    "materiais_clearcoat": 7,
+    "imagens": 4,
+    "megapixels": 13.63,
+    "bytes_imagens": 479366,
+    "caixa": {
+     "min": [
+      -0.0123,
+      -0.0,
+      -19.1162
+     ],
+     "max": [
+      37.7,
+      11.7138,
+      19.1162
+     ],
+     "tamanho": [
+      37.7123,
+      11.7138,
+      38.2325
+     ]
+    },
+    "extensoes": [
+     "KHR_materials_clearcoat",
+     "KHR_materials_emissive_strength",
+     "KHR_materials_specular"
+    ],
+    "draco": false,
+    "nos": 73,
+    "raizes_da_cena": 1,
+    "gerador": "Khronos glTF Blender I/O v5.2.39"
+   },
+   "reimportacao": [
+    "ROUNDTRIP A320ceo_alta.glb objs=72 tris=328490 mats=23 texs=4 X=37.712 Y=38.232 Z=11.714 minZ=-0.0000",
+    "ROUNDTRIP A320ceo_alta.fbx objs=72 tris=328490 mats=23 texs=4 X=37.712 Y=38.232 Z=11.714 minZ=-0.0000",
+    "ROUNDTRIP A320ceo_alta.obj objs=72 tris=328490 mats=23 texs=4 X=37.712 Y=38.232 Z=11.714 minZ=-0.0000"
+   ]
+  },
+  {
+   "slug": "A320ceo",
+   "lod": "web",
+   "blend": "A320ceo_LATAM.blend",
+   "nome": "Airbus A320ceo",
+   "matricula": "CC-BFO",
+   "L_ref": 37.57,
+   "blender": "5.2.0 LTS",
+   "medidas": {
+    "L": 37.74,
+    "d_fus": 4.0082,
+    "z_solo": -3.675,
+    "familia": "airbus",
+    "x_bico": -0.04
+   },
+   "removidos": [
+    {
+     "nome": "LogoLATAM_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_E_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_D_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "WrapIndigo",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "MarkAirbusNeo_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "MarkAirbusNeo_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Pista",
+     "tipo": "MESH",
+     "motivo": "nao e a aeronave"
+    },
+    {
+     "nome": "Sol",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "CamHero",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamPerfil",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamCauda",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvo",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamAlvoCauda",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamBarriga",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoBarriga",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamNariz",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoNariz",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamFrontal",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoFrontal",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamOrtoFrente",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CloudCard",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    }
+   ],
+   "tipos_exportados": {
+    "MESH": 71,
+    "FONT": 1
+   },
+   "subsurf": {
+    "modificadores": 10,
+    "teto": 1
+   },
+   "texturas_escaladas": [
+    {
+     "nome": "LiveryFac",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "LiveryTex",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "NoseMask",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "PanelBump",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    }
+   ],
+   "bake": [
+    {
+     "material": "FuselagemPaint",
+     "objeto": "Fuselagem",
+     "motivo": "Surface<-MIX_SHADER",
+     "metodo": "bake",
+     "px": [
+      2048,
+      512
+     ],
+     "rugosidade": "escalar 0.218",
+     "cor": null
+    }
+   ],
+   "caixa_blender": {
+    "min": [
+     -0.04,
+     -19.1424,
+     -3.675
+    ],
+    "max": [
+     37.7,
+     19.1424,
+     8.05
+    ],
+    "tamanho": [
+     37.74,
+     38.2849,
+     11.725
+    ],
+    "deslocamento_z": 3.675
+   },
+   "n_objetos": 72,
+   "triangulos_blender": 62954,
+   "megapixels": 9.44,
+   "saidas": {
+    "glb": {
+     "arquivo": "web/A320ceo_web.glb",
+     "bytes": 549604,
+     "extras": []
+    },
+    "usdz": {
+     "arquivo": "web/A320ceo_web.usdz",
+     "bytes": 3272996,
+     "extras": []
+    }
+   },
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "comprimento 37.712 m x 37.740 m medido no Blender"
+    ],
+    "triangulos": 62954,
+    "vertices": 44202,
+    "materiais": 23,
+    "materiais_clearcoat": 7,
+    "imagens": 3,
+    "megapixels": 9.44,
+    "bytes_imagens": 267529,
+    "caixa": {
+     "min": [
+      -0.0123,
+      -0.0,
+      -19.1162
+     ],
+     "max": [
+      37.7,
+      11.7138,
+      19.1162
+     ],
+     "tamanho": [
+      37.7123,
+      11.7138,
+      38.2325
+     ]
+    },
+    "extensoes": [
+     "KHR_draco_mesh_compression",
+     "KHR_materials_clearcoat",
+     "KHR_materials_emissive_strength",
+     "KHR_materials_specular"
+    ],
+    "draco": true,
+    "nos": 73,
+    "raizes_da_cena": 1,
+    "gerador": "Khronos glTF Blender I/O v5.2.39"
+   },
+   "reimportacao": [
+    "ROUNDTRIP A320ceo_web.glb objs=72 tris=62954 mats=23 texs=3 X=37.712 Y=38.232 Z=11.714 minZ=-0.0000",
+    "ROUNDTRIP A320ceo_web.usdz objs=72 tris=62954 mats=23 texs=3 X=37.712 Y=38.232 Z=11.714 minZ=-0.0000"
+   ]
+  },
+  {
+   "slug": "A320neo",
+   "lod": "alta",
+   "blend": "A320neo_LATAM.blend",
+   "nome": "Airbus A320neo",
+   "matricula": "PT-TMN",
+   "L_ref": 37.57,
+   "blender": "5.2.0 LTS",
+   "medidas": {
+    "L": 37.74,
+    "d_fus": 4.0082,
+    "z_solo": -3.675,
+    "familia": "airbus",
+    "x_bico": -0.04
+   },
+   "removidos": [
+    {
+     "nome": "LogoLATAM_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_E_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_D_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "WrapIndigo",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoA320neo_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoA320neo_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "MarkAirbusNeo_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "MarkAirbusNeo_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "CapPrimeiro_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "CapAmerica_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "CapPrimeiro_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "CapAmerica_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Pista",
+     "tipo": "MESH",
+     "motivo": "nao e a aeronave"
+    },
+    {
+     "nome": "Sol",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "CamHero",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamPerfil",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamCauda",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvo",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamAlvoCauda",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamBarriga",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoBarriga",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamNariz",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoNariz",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamFrontal",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoFrontal",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamOrtoFrente",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CloudCard",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    }
+   ],
+   "tipos_exportados": {
+    "MESH": 71,
+    "FONT": 1
+   },
+   "subsurf": {
+    "modificadores": 10,
+    "teto": null
+   },
+   "texturas_escaladas": [],
+   "bake": [
+    {
+     "material": "FuselagemPaint",
+     "objeto": "Fuselagem",
+     "motivo": "Surface<-MIX_SHADER",
+     "metodo": "bake",
+     "px": [
+      4096,
+      1024
+     ],
+     "rugosidade": "mapa",
+     "cor": null
+    }
+   ],
+   "caixa_blender": {
+    "min": [
+     -0.04,
+     -19.1424,
+     -3.675
+    ],
+    "max": [
+     37.7,
+     19.1424,
+     8.05
+    ],
+    "tamanho": [
+     37.74,
+     38.2849,
+     11.725
+    ],
+    "deslocamento_z": 3.675
+   },
+   "n_objetos": 72,
+   "triangulos_blender": 327010,
+   "megapixels": 13.63,
+   "texturas_em_disco": [
+    "textures_A320neo/FinSashD.png",
+    "textures_A320neo/FinSashE.png",
+    "textures_A320neo/FuselagemPaint__Fuselagem_BaseColor.png",
+    "textures_A320neo/FuselagemPaint__Fuselagem_Roughness.png"
+   ],
+   "saidas": {
+    "glb": {
+     "arquivo": "alta/A320neo_alta.glb",
+     "bytes": 8812172,
+     "extras": []
+    },
+    "fbx": {
+     "arquivo": "alta/A320neo_alta.fbx",
+     "bytes": 6883804,
+     "extras": []
+    },
+    "obj": {
+     "arquivo": "alta/A320neo_alta.obj",
+     "bytes": 27980417,
+     "extras": [
+      "A320neo_alta.mtl"
+     ]
+    }
+   },
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "comprimento 37.712 m x 37.740 m medido no Blender"
+    ],
+    "triangulos": 327010,
+    "vertices": 178453,
+    "materiais": 23,
+    "materiais_clearcoat": 7,
+    "imagens": 4,
+    "megapixels": 13.63,
+    "bytes_imagens": 513049,
+    "caixa": {
+     "min": [
+      -0.0123,
+      -0.0,
+      -19.1162
+     ],
+     "max": [
+      37.7,
+      11.7138,
+      19.1162
+     ],
+     "tamanho": [
+      37.7123,
+      11.7138,
+      38.2325
+     ]
+    },
+    "extensoes": [
+     "KHR_materials_clearcoat",
+     "KHR_materials_emissive_strength",
+     "KHR_materials_specular"
+    ],
+    "draco": false,
+    "nos": 73,
+    "raizes_da_cena": 1,
+    "gerador": "Khronos glTF Blender I/O v5.2.39"
+   },
+   "reimportacao": [
+    "ROUNDTRIP A320neo_alta.glb objs=72 tris=327010 mats=23 texs=4 X=37.712 Y=38.232 Z=11.714 minZ=-0.0000",
+    "ROUNDTRIP A320neo_alta.fbx objs=72 tris=327010 mats=23 texs=4 X=37.712 Y=38.232 Z=11.714 minZ=-0.0000",
+    "ROUNDTRIP A320neo_alta.obj objs=72 tris=327010 mats=23 texs=4 X=37.712 Y=38.232 Z=11.714 minZ=-0.0000"
+   ]
+  },
+  {
+   "slug": "A320neo",
+   "lod": "web",
+   "blend": "A320neo_LATAM.blend",
+   "nome": "Airbus A320neo",
+   "matricula": "PT-TMN",
+   "L_ref": 37.57,
+   "blender": "5.2.0 LTS",
+   "medidas": {
+    "L": 37.74,
+    "d_fus": 4.0082,
+    "z_solo": -3.675,
+    "familia": "airbus",
+    "x_bico": -0.04
+   },
+   "removidos": [
+    {
+     "nome": "LogoLATAM_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_E_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_D_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "WrapIndigo",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoA320neo_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoA320neo_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "MarkAirbusNeo_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "MarkAirbusNeo_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "CapPrimeiro_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "CapAmerica_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "CapPrimeiro_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "CapAmerica_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Pista",
+     "tipo": "MESH",
+     "motivo": "nao e a aeronave"
+    },
+    {
+     "nome": "Sol",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "CamHero",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamPerfil",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamCauda",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvo",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamAlvoCauda",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamBarriga",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoBarriga",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamNariz",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoNariz",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamFrontal",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoFrontal",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamOrtoFrente",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CloudCard",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    }
+   ],
+   "tipos_exportados": {
+    "MESH": 71,
+    "FONT": 1
+   },
+   "subsurf": {
+    "modificadores": 10,
+    "teto": 1
+   },
+   "texturas_escaladas": [
+    {
+     "nome": "LiveryFac",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "LiveryTex",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "NoseMask",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "PanelBump",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    }
+   ],
+   "bake": [
+    {
+     "material": "FuselagemPaint",
+     "objeto": "Fuselagem",
+     "motivo": "Surface<-MIX_SHADER",
+     "metodo": "bake",
+     "px": [
+      2048,
+      512
+     ],
+     "rugosidade": "escalar 0.218",
+     "cor": null
+    }
+   ],
+   "caixa_blender": {
+    "min": [
+     -0.04,
+     -19.1424,
+     -3.675
+    ],
+    "max": [
+     37.7,
+     19.1424,
+     8.05
+    ],
+    "tamanho": [
+     37.74,
+     38.2849,
+     11.725
+    ],
+    "deslocamento_z": 3.675
+   },
+   "n_objetos": 72,
+   "triangulos_blender": 61474,
+   "megapixels": 9.44,
+   "saidas": {
+    "glb": {
+     "arquivo": "web/A320neo_web.glb",
+     "bytes": 561884,
+     "extras": []
+    },
+    "usdz": {
+     "arquivo": "web/A320neo_web.usdz",
+     "bytes": 3203029,
+     "extras": []
+    }
+   },
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "comprimento 37.712 m x 37.740 m medido no Blender"
+    ],
+    "triangulos": 61474,
+    "vertices": 42688,
+    "materiais": 23,
+    "materiais_clearcoat": 7,
+    "imagens": 3,
+    "megapixels": 9.44,
+    "bytes_imagens": 284632,
+    "caixa": {
+     "min": [
+      -0.0123,
+      -0.0,
+      -19.1162
+     ],
+     "max": [
+      37.7,
+      11.7138,
+      19.1162
+     ],
+     "tamanho": [
+      37.7123,
+      11.7138,
+      38.2325
+     ]
+    },
+    "extensoes": [
+     "KHR_draco_mesh_compression",
+     "KHR_materials_clearcoat",
+     "KHR_materials_emissive_strength",
+     "KHR_materials_specular"
+    ],
+    "draco": true,
+    "nos": 73,
+    "raizes_da_cena": 1,
+    "gerador": "Khronos glTF Blender I/O v5.2.39"
+   },
+   "reimportacao": [
+    "ROUNDTRIP A320neo_web.glb objs=72 tris=61474 mats=23 texs=3 X=37.712 Y=38.232 Z=11.714 minZ=-0.0000",
+    "ROUNDTRIP A320neo_web.usdz objs=72 tris=61474 mats=23 texs=3 X=37.712 Y=38.232 Z=11.714 minZ=-0.0000"
+   ]
+  },
+  {
+   "slug": "A321ceo",
+   "lod": "alta",
+   "blend": "A321ceo_LATAM.blend",
+   "nome": "Airbus A321-231 (ceo)",
+   "matricula": "PT-MXP",
+   "L_ref": 44.51,
+   "blender": "5.2.0 LTS",
+   "medidas": {
+    "L": 44.68,
+    "d_fus": 4.0082,
+    "z_solo": -3.675,
+    "familia": "airbus",
+    "x_bico": -0.04
+   },
+   "removidos": [
+    {
+     "nome": "LogoLATAM_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_E_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_D_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "WrapIndigo",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "MarkAirbusNeo_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "MarkAirbusNeo_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Pista",
+     "tipo": "MESH",
+     "motivo": "nao e a aeronave"
+    },
+    {
+     "nome": "Sol",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "CamHero",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamPerfil",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamCauda",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvo",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamAlvoCauda",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamBarriga",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoBarriga",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamNariz",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoNariz",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamFrontal",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoFrontal",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamOrtoFrente",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CloudCard",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    }
+   ],
+   "tipos_exportados": {
+    "MESH": 71,
+    "FONT": 1
+   },
+   "subsurf": {
+    "modificadores": 10,
+    "teto": null
+   },
+   "texturas_escaladas": [],
+   "bake": [
+    {
+     "material": "FuselagemPaint",
+     "objeto": "Fuselagem",
+     "motivo": "Surface<-MIX_SHADER",
+     "metodo": "bake",
+     "px": [
+      4096,
+      1024
+     ],
+     "rugosidade": "mapa",
+     "cor": null
+    }
+   ],
+   "caixa_blender": {
+    "min": [
+     -0.04,
+     -19.1424,
+     -3.675
+    ],
+    "max": [
+     44.64,
+     19.1424,
+     8.05
+    ],
+    "tamanho": [
+     44.68,
+     38.2849,
+     11.725
+    ],
+    "deslocamento_z": 3.675
+   },
+   "n_objetos": 72,
+   "triangulos_blender": 342802,
+   "megapixels": 13.63,
+   "texturas_em_disco": [
+    "textures_A321ceo/FinSashD.png",
+    "textures_A321ceo/FinSashE.png",
+    "textures_A321ceo/FuselagemPaint__Fuselagem_BaseColor.png",
+    "textures_A321ceo/FuselagemPaint__Fuselagem_Roughness.png"
+   ],
+   "saidas": {
+    "glb": {
+     "arquivo": "alta/A321ceo_alta.glb",
+     "bytes": 9223684,
+     "extras": []
+    },
+    "fbx": {
+     "arquivo": "alta/A321ceo_alta.fbx",
+     "bytes": 7110972,
+     "extras": []
+    },
+    "obj": {
+     "arquivo": "alta/A321ceo_alta.obj",
+     "bytes": 29231891,
+     "extras": [
+      "A321ceo_alta.mtl"
+     ]
+    }
+   },
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "comprimento 44.652 m x 44.680 m medido no Blender"
+    ],
+    "triangulos": 342802,
+    "vertices": 187653,
+    "materiais": 23,
+    "materiais_clearcoat": 7,
+    "imagens": 4,
+    "megapixels": 13.63,
+    "bytes_imagens": 491203,
+    "caixa": {
+     "min": [
+      -0.0123,
+      -0.0,
+      -19.1162
+     ],
+     "max": [
+      44.64,
+      11.7138,
+      19.1162
+     ],
+     "tamanho": [
+      44.6523,
+      11.7138,
+      38.2325
+     ]
+    },
+    "extensoes": [
+     "KHR_materials_clearcoat",
+     "KHR_materials_emissive_strength",
+     "KHR_materials_specular"
+    ],
+    "draco": false,
+    "nos": 73,
+    "raizes_da_cena": 1,
+    "gerador": "Khronos glTF Blender I/O v5.2.39"
+   },
+   "reimportacao": [
+    "ROUNDTRIP A321ceo_alta.glb objs=72 tris=342802 mats=23 texs=4 X=44.652 Y=38.232 Z=11.714 minZ=-0.0000",
+    "ROUNDTRIP A321ceo_alta.fbx objs=72 tris=342802 mats=23 texs=4 X=44.652 Y=38.232 Z=11.714 minZ=-0.0000",
+    "ROUNDTRIP A321ceo_alta.obj objs=72 tris=342802 mats=23 texs=4 X=44.652 Y=38.232 Z=11.714 minZ=-0.0000"
+   ]
+  },
+  {
+   "slug": "A321ceo",
+   "lod": "web",
+   "blend": "A321ceo_LATAM.blend",
+   "nome": "Airbus A321-231 (ceo)",
+   "matricula": "PT-MXP",
+   "L_ref": 44.51,
+   "blender": "5.2.0 LTS",
+   "medidas": {
+    "L": 44.68,
+    "d_fus": 4.0082,
+    "z_solo": -3.675,
+    "familia": "airbus",
+    "x_bico": -0.04
+   },
+   "removidos": [
+    {
+     "nome": "LogoLATAM_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_E_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_D_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "WrapIndigo",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "MarkAirbusNeo_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "MarkAirbusNeo_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Pista",
+     "tipo": "MESH",
+     "motivo": "nao e a aeronave"
+    },
+    {
+     "nome": "Sol",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "CamHero",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamPerfil",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamCauda",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvo",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamAlvoCauda",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamBarriga",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoBarriga",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamNariz",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoNariz",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamFrontal",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoFrontal",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamOrtoFrente",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CloudCard",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    }
+   ],
+   "tipos_exportados": {
+    "MESH": 71,
+    "FONT": 1
+   },
+   "subsurf": {
+    "modificadores": 10,
+    "teto": 1
+   },
+   "texturas_escaladas": [
+    {
+     "nome": "LiveryFac",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "LiveryTex",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "NoseMask",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "PanelBump",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    }
+   ],
+   "bake": [
+    {
+     "material": "FuselagemPaint",
+     "objeto": "Fuselagem",
+     "motivo": "Surface<-MIX_SHADER",
+     "metodo": "bake",
+     "px": [
+      2048,
+      512
+     ],
+     "rugosidade": "escalar 0.218",
+     "cor": null
+    }
+   ],
+   "caixa_blender": {
+    "min": [
+     -0.04,
+     -19.1424,
+     -3.675
+    ],
+    "max": [
+     44.64,
+     19.1424,
+     8.05
+    ],
+    "tamanho": [
+     44.68,
+     38.2849,
+     11.725
+    ],
+    "deslocamento_z": 3.675
+   },
+   "n_objetos": 72,
+   "triangulos_blender": 65746,
+   "megapixels": 9.44,
+   "saidas": {
+    "glb": {
+     "arquivo": "web/A321ceo_web.glb",
+     "bytes": 558748,
+     "extras": []
+    },
+    "usdz": {
+     "arquivo": "web/A321ceo_web.usdz",
+     "bytes": 3357341,
+     "extras": []
+    }
+   },
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "comprimento 44.652 m x 44.680 m medido no Blender"
+    ],
+    "triangulos": 65746,
+    "vertices": 46114,
+    "materiais": 23,
+    "materiais_clearcoat": 7,
+    "imagens": 3,
+    "megapixels": 9.44,
+    "bytes_imagens": 274252,
+    "caixa": {
+     "min": [
+      -0.0123,
+      -0.0,
+      -19.1162
+     ],
+     "max": [
+      44.64,
+      11.7138,
+      19.1162
+     ],
+     "tamanho": [
+      44.6523,
+      11.7138,
+      38.2325
+     ]
+    },
+    "extensoes": [
+     "KHR_draco_mesh_compression",
+     "KHR_materials_clearcoat",
+     "KHR_materials_emissive_strength",
+     "KHR_materials_specular"
+    ],
+    "draco": true,
+    "nos": 73,
+    "raizes_da_cena": 1,
+    "gerador": "Khronos glTF Blender I/O v5.2.39"
+   },
+   "reimportacao": [
+    "ROUNDTRIP A321ceo_web.glb objs=72 tris=65746 mats=23 texs=3 X=44.652 Y=38.232 Z=11.714 minZ=-0.0000",
+    "ROUNDTRIP A321ceo_web.usdz objs=72 tris=65746 mats=23 texs=3 X=44.652 Y=38.232 Z=11.714 minZ=-0.0000"
+   ]
+  },
+  {
+   "slug": "A321neo",
+   "lod": "alta",
+   "blend": "A321neo_LATAM.blend",
+   "nome": "Airbus A321neo (ACF)",
+   "matricula": "PS-LBA",
+   "L_ref": 44.51,
+   "blender": "5.2.0 LTS",
+   "medidas": {
+    "L": 44.68,
+    "d_fus": 4.0082,
+    "z_solo": -3.675,
+    "familia": "airbus",
+    "x_bico": -0.04
+   },
+   "removidos": [
+    {
+     "nome": "LogoLATAM_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_E_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_D_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "WrapIndigo",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "MarkAirbusNeo_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "MarkAirbusNeo_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Pista",
+     "tipo": "MESH",
+     "motivo": "nao e a aeronave"
+    },
+    {
+     "nome": "Sol",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "CamHero",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamPerfil",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamCauda",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvo",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamAlvoCauda",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamBarriga",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoBarriga",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamNariz",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoNariz",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamFrontal",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoFrontal",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamOrtoFrente",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CloudCard",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    }
+   ],
+   "tipos_exportados": {
+    "MESH": 73,
+    "FONT": 1
+   },
+   "subsurf": {
+    "modificadores": 10,
+    "teto": null
+   },
+   "texturas_escaladas": [],
+   "bake": [
+    {
+     "material": "FuselagemPaint",
+     "objeto": "Fuselagem",
+     "motivo": "Surface<-MIX_SHADER",
+     "metodo": "bake",
+     "px": [
+      4096,
+      1024
+     ],
+     "rugosidade": "mapa",
+     "cor": null
+    }
+   ],
+   "caixa_blender": {
+    "min": [
+     -0.04,
+     -19.1424,
+     -3.675
+    ],
+    "max": [
+     44.64,
+     19.1424,
+     8.05
+    ],
+    "tamanho": [
+     44.68,
+     38.2849,
+     11.725
+    ],
+    "deslocamento_z": 3.675
+   },
+   "n_objetos": 74,
+   "triangulos_blender": 343790,
+   "megapixels": 13.63,
+   "texturas_em_disco": [
+    "textures_A321neo/FinSashD.png",
+    "textures_A321neo/FinSashE.png",
+    "textures_A321neo/FuselagemPaint__Fuselagem_BaseColor.png",
+    "textures_A321neo/FuselagemPaint__Fuselagem_Roughness.png"
+   ],
+   "saidas": {
+    "glb": {
+     "arquivo": "alta/A321neo_alta.glb",
+     "bytes": 9297016,
+     "extras": []
+    },
+    "fbx": {
+     "arquivo": "alta/A321neo_alta.fbx",
+     "bytes": 7153276,
+     "extras": []
+    },
+    "obj": {
+     "arquivo": "alta/A321neo_alta.obj",
+     "bytes": 29345800,
+     "extras": [
+      "A321neo_alta.mtl"
+     ]
+    }
+   },
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "comprimento 44.652 m x 44.680 m medido no Blender"
+    ],
+    "triangulos": 343790,
+    "vertices": 189117,
+    "materiais": 23,
+    "materiais_clearcoat": 7,
+    "imagens": 4,
+    "megapixels": 13.63,
+    "bytes_imagens": 511668,
+    "caixa": {
+     "min": [
+      -0.0123,
+      -0.0,
+      -19.1162
+     ],
+     "max": [
+      44.64,
+      11.7138,
+      19.1162
+     ],
+     "tamanho": [
+      44.6523,
+      11.7138,
+      38.2325
+     ]
+    },
+    "extensoes": [
+     "KHR_materials_clearcoat",
+     "KHR_materials_emissive_strength",
+     "KHR_materials_specular"
+    ],
+    "draco": false,
+    "nos": 75,
+    "raizes_da_cena": 1,
+    "gerador": "Khronos glTF Blender I/O v5.2.39"
+   },
+   "reimportacao": [
+    "ROUNDTRIP A321neo_alta.glb objs=74 tris=343790 mats=23 texs=4 X=44.652 Y=38.232 Z=11.714 minZ=-0.0000",
+    "ROUNDTRIP A321neo_alta.fbx objs=74 tris=343790 mats=23 texs=4 X=44.652 Y=38.232 Z=11.714 minZ=-0.0000",
+    "ROUNDTRIP A321neo_alta.obj objs=74 tris=343790 mats=23 texs=4 X=44.652 Y=38.232 Z=11.714 minZ=-0.0000"
+   ]
+  },
+  {
+   "slug": "A321neo",
+   "lod": "web",
+   "blend": "A321neo_LATAM.blend",
+   "nome": "Airbus A321neo (ACF)",
+   "matricula": "PS-LBA",
+   "L_ref": 44.51,
+   "blender": "5.2.0 LTS",
+   "medidas": {
+    "L": 44.68,
+    "d_fus": 4.0082,
+    "z_solo": -3.675,
+    "familia": "airbus",
+    "x_bico": -0.04
+   },
+   "removidos": [
+    {
+     "nome": "LogoLATAM_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_E_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoLATAM_D_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "WrapIndigo",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "MarkAirbusNeo_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "MarkAirbusNeo_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Pista",
+     "tipo": "MESH",
+     "motivo": "nao e a aeronave"
+    },
+    {
+     "nome": "Sol",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "CamHero",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamPerfil",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamCauda",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvo",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamAlvoCauda",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamBarriga",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoBarriga",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamNariz",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoNariz",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamFrontal",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoFrontal",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamOrtoFrente",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CloudCard",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    }
+   ],
+   "tipos_exportados": {
+    "MESH": 73,
+    "FONT": 1
+   },
+   "subsurf": {
+    "modificadores": 10,
+    "teto": 1
+   },
+   "texturas_escaladas": [
+    {
+     "nome": "LiveryFac",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "LiveryTex",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "NoseMask",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "PanelBump",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    }
+   ],
+   "bake": [
+    {
+     "material": "FuselagemPaint",
+     "objeto": "Fuselagem",
+     "motivo": "Surface<-MIX_SHADER",
+     "metodo": "bake",
+     "px": [
+      2048,
+      512
+     ],
+     "rugosidade": "escalar 0.218",
+     "cor": null
+    }
+   ],
+   "caixa_blender": {
+    "min": [
+     -0.04,
+     -19.1424,
+     -3.675
+    ],
+    "max": [
+     44.64,
+     19.1424,
+     8.05
+    ],
+    "tamanho": [
+     44.68,
+     38.2849,
+     11.725
+    ],
+    "deslocamento_z": 3.675
+   },
+   "n_objetos": 74,
+   "triangulos_blender": 66734,
+   "megapixels": 9.44,
+   "saidas": {
+    "glb": {
+     "arquivo": "web/A321neo_web.glb",
+     "bytes": 580656,
+     "extras": []
+    },
+    "usdz": {
+     "arquivo": "web/A321neo_web.usdz",
+     "bytes": 3450519,
+     "extras": []
+    }
+   },
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "comprimento 44.652 m x 44.680 m medido no Blender"
+    ],
+    "triangulos": 66734,
+    "vertices": 47578,
+    "materiais": 23,
+    "materiais_clearcoat": 7,
+    "imagens": 3,
+    "megapixels": 9.44,
+    "bytes_imagens": 282219,
+    "caixa": {
+     "min": [
+      -0.0123,
+      -0.0,
+      -19.1162
+     ],
+     "max": [
+      44.64,
+      11.7138,
+      19.1162
+     ],
+     "tamanho": [
+      44.6523,
+      11.7138,
+      38.2325
+     ]
+    },
+    "extensoes": [
+     "KHR_draco_mesh_compression",
+     "KHR_materials_clearcoat",
+     "KHR_materials_emissive_strength",
+     "KHR_materials_specular"
+    ],
+    "draco": true,
+    "nos": 75,
+    "raizes_da_cena": 1,
+    "gerador": "Khronos glTF Blender I/O v5.2.39"
+   },
+   "reimportacao": [
+    "ROUNDTRIP A321neo_web.glb objs=74 tris=66734 mats=23 texs=3 X=44.652 Y=38.232 Z=11.714 minZ=-0.0000",
+    "ROUNDTRIP A321neo_web.usdz objs=74 tris=66734 mats=23 texs=3 X=44.652 Y=38.232 Z=11.714 minZ=-0.0000"
+   ]
+  },
+  {
+   "slug": "B763",
+   "lod": "alta",
+   "blend": "B763_LATAM.blend",
+   "nome": "Boeing 767-300ER",
+   "matricula": "CC-CWY",
+   "L_ref": 54.94,
+   "blender": "5.2.0 LTS",
+   "medidas": {
+    "L": 54.9877,
+    "d_fus": 5.0622,
+    "z_solo": -4.61,
+    "familia": "boeing",
+    "x_bico": 0.0
+   },
+   "removidos": [
+    {
+     "nome": "B789_LogoLATAM_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B789_LogoLATAM_E_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B789_LogoLATAM_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B789_LogoLATAM_D_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg787_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg787_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "CamEstib",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamBomb",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "LogoBarriga_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Pista",
+     "tipo": "MESH",
+     "motivo": "nao e a aeronave"
+    },
+    {
+     "nome": "Sol",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "CamHero",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamPerfil",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamCauda",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvo",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamAlvoCauda",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamBarriga",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoBarriga",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamNariz",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoNariz",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamFrontal",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoFrontal",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamOrtoFrente",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CloudCard",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "CamOrtoPerfil",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    }
+   ],
+   "tipos_exportados": {
+    "MESH": 85
+   },
+   "subsurf": {
+    "modificadores": 29,
+    "teto": null
+   },
+   "texturas_escaladas": [],
+   "bake": [
+    {
+     "material": "CinzaAsa",
+     "objeto": "Asas",
+     "motivo": "Base Color<-MIX",
+     "metodo": "bake",
+     "px": [
+      2048,
+      2048
+     ],
+     "rugosidade": "mapa",
+     "cor": null
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaE0",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaE1",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaE2",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaE3",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaE4",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaE5",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaD0",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaD1",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaD2",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaD3",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaD4",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaD5",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "FuselagemPaint",
+     "objeto": "Fuselagem",
+     "motivo": "Surface<-MIX_SHADER",
+     "metodo": "bake",
+     "px": [
+      8192,
+      2048
+     ],
+     "rugosidade": "mapa",
+     "cor": null
+    }
+   ],
+   "caixa_blender": {
+    "min": [
+     0.0,
+     -25.4457,
+     -4.61
+    ],
+    "max": [
+     54.9877,
+     25.4457,
+     11.15
+    ],
+    "tamanho": [
+     54.9877,
+     50.8914,
+     15.76
+    ],
+    "deslocamento_z": 4.61
+   },
+   "n_objetos": 85,
+   "triangulos_blender": 326960,
+   "megapixels": 34.6,
+   "texturas_em_disco": [
+    "textures_B763/CinzaAsa__Asas_BaseColor.png",
+    "textures_B763/CinzaAsa__Asas_Roughness.png",
+    "textures_B763/FinSashD.png",
+    "textures_B763/FinSashE.png",
+    "textures_B763/FuselagemPaint__Fuselagem_BaseColor.png",
+    "textures_B763/FuselagemPaint__Fuselagem_Roughness.png"
+   ],
+   "saidas": {
+    "glb": {
+     "arquivo": "alta/B763_alta.glb",
+     "bytes": 8861328,
+     "extras": []
+    },
+    "fbx": {
+     "arquivo": "alta/B763_alta.fbx",
+     "bytes": 7410028,
+     "extras": []
+    },
+    "obj": {
+     "arquivo": "alta/B763_alta.obj",
+     "bytes": 28781098,
+     "extras": [
+      "B763_alta.mtl"
+     ]
+    }
+   },
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "comprimento 54.748 m x 54.988 m medido no Blender"
+    ],
+    "triangulos": 326960,
+    "vertices": 171900,
+    "materiais": 30,
+    "materiais_clearcoat": 17,
+    "imagens": 6,
+    "megapixels": 34.6,
+    "bytes_imagens": 951043,
+    "caixa": {
+     "min": [
+      0.0189,
+      -0.0,
+      -25.4457
+     ],
+     "max": [
+      54.7674,
+      15.7472,
+      25.4457
+     ],
+     "tamanho": [
+      54.7485,
+      15.7472,
+      50.8914
+     ]
+    },
+    "extensoes": [
+     "KHR_materials_clearcoat",
+     "KHR_materials_emissive_strength",
+     "KHR_materials_specular"
+    ],
+    "draco": false,
+    "nos": 86,
+    "raizes_da_cena": 1,
+    "gerador": "Khronos glTF Blender I/O v5.2.39"
+   },
+   "reimportacao": [
+    "ROUNDTRIP B763_alta.glb objs=85 tris=326960 mats=30 texs=6 X=54.748 Y=50.891 Z=15.747 minZ=-0.0000",
+    "ROUNDTRIP B763_alta.fbx objs=85 tris=326960 mats=30 texs=6 X=54.748 Y=50.891 Z=15.747 minZ=-0.0000",
+    "ROUNDTRIP B763_alta.obj objs=85 tris=326960 mats=30 texs=6 X=54.748 Y=50.891 Z=15.747 minZ=-0.0000"
+   ]
+  },
+  {
+   "slug": "B763",
+   "lod": "web",
+   "blend": "B763_LATAM.blend",
+   "nome": "Boeing 767-300ER",
+   "matricula": "CC-CWY",
+   "L_ref": 54.94,
+   "blender": "5.2.0 LTS",
+   "medidas": {
+    "L": 54.9877,
+    "d_fus": 5.0622,
+    "z_solo": -4.61,
+    "familia": "boeing",
+    "x_bico": 0.0
+   },
+   "removidos": [
+    {
+     "nome": "B789_LogoLATAM_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B789_LogoLATAM_E_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B789_LogoLATAM_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B789_LogoLATAM_D_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg787_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg787_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "CamEstib",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamBomb",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "LogoBarriga_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Pista",
+     "tipo": "MESH",
+     "motivo": "nao e a aeronave"
+    },
+    {
+     "nome": "Sol",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "CamHero",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamPerfil",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamCauda",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvo",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamAlvoCauda",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamBarriga",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoBarriga",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamNariz",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoNariz",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamFrontal",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoFrontal",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamOrtoFrente",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CloudCard",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "CamOrtoPerfil",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    }
+   ],
+   "tipos_exportados": {
+    "MESH": 85
+   },
+   "subsurf": {
+    "modificadores": 29,
+    "teto": 1
+   },
+   "texturas_escaladas": [
+    {
+     "nome": "LiveryFac",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "LiveryTex",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "NoseMask",
+     "de": [
+      8192,
+      2048
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "PanelBump",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    }
+   ],
+   "bake": [
+    {
+     "material": "CinzaAsa",
+     "objeto": "Asas",
+     "motivo": "Base Color<-MIX",
+     "metodo": "bake",
+     "px": [
+      2048,
+      2048
+     ],
+     "rugosidade": "escalar 0.082",
+     "cor": null
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaE0",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaE1",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaE2",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaE3",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaE4",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaE5",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaD0",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaD1",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaD2",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaD3",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaD4",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "FlapCanoaD5",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "FuselagemPaint",
+     "objeto": "Fuselagem",
+     "motivo": "Surface<-MIX_SHADER",
+     "metodo": "bake",
+     "px": [
+      2048,
+      512
+     ],
+     "rugosidade": "escalar 0.218",
+     "cor": null
+    }
+   ],
+   "caixa_blender": {
+    "min": [
+     0.0,
+     -25.4457,
+     -4.61
+    ],
+    "max": [
+     54.9877,
+     25.4457,
+     11.15
+    ],
+    "tamanho": [
+     54.9877,
+     50.8914,
+     15.76
+    ],
+    "deslocamento_z": 4.61
+   },
+   "n_objetos": 85,
+   "triangulos_blender": 60428,
+   "megapixels": 13.63,
+   "saidas": {
+    "glb": {
+     "arquivo": "web/B763_web.glb",
+     "bytes": 559004,
+     "extras": []
+    },
+    "usdz": {
+     "arquivo": "web/B763_web.usdz",
+     "bytes": 3240827,
+     "extras": []
+    }
+   },
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "comprimento 54.748 m x 54.988 m medido no Blender"
+    ],
+    "triangulos": 60428,
+    "vertices": 37292,
+    "materiais": 30,
+    "materiais_clearcoat": 17,
+    "imagens": 4,
+    "megapixels": 13.63,
+    "bytes_imagens": 308818,
+    "caixa": {
+     "min": [
+      0.0189,
+      -0.0,
+      -25.4457
+     ],
+     "max": [
+      54.7674,
+      15.7472,
+      25.4457
+     ],
+     "tamanho": [
+      54.7485,
+      15.7472,
+      50.8914
+     ]
+    },
+    "extensoes": [
+     "KHR_draco_mesh_compression",
+     "KHR_materials_clearcoat",
+     "KHR_materials_emissive_strength",
+     "KHR_materials_specular"
+    ],
+    "draco": true,
+    "nos": 86,
+    "raizes_da_cena": 1,
+    "gerador": "Khronos glTF Blender I/O v5.2.39"
+   },
+   "reimportacao": [
+    "ROUNDTRIP B763_web.glb objs=85 tris=60428 mats=30 texs=4 X=54.748 Y=50.891 Z=15.747 minZ=-0.0000",
+    "ROUNDTRIP B763_web.usdz objs=85 tris=60428 mats=30 texs=4 X=54.748 Y=50.891 Z=15.747 minZ=-0.0000"
+   ]
+  },
+  {
+   "slug": "B77W",
+   "lod": "alta",
+   "blend": "B77W_LATAM.blend",
+   "nome": "Boeing 777-300ER",
+   "matricula": "PT-MUG",
+   "L_ref": 73.86,
+   "blender": "5.2.0 LTS",
+   "medidas": {
+    "L": 73.95,
+    "d_fus": 6.2397,
+    "z_solo": -5.67,
+    "familia": "boeing",
+    "x_bico": 0.0
+   },
+   "removidos": [
+    {
+     "nome": "B77W_LogoLATAM_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B77W_LogoLATAM_E_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B77W_LogoLATAM_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B77W_LogoLATAM_D_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "CamEstib",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamBomb",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamHeadOn",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "LogoBarriga_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Pista",
+     "tipo": "MESH",
+     "motivo": "nao e a aeronave"
+    },
+    {
+     "nome": "Sol",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "CamHero",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamPerfil",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamCauda",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvo",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamAlvoCauda",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamBarriga",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoBarriga",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamNariz",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoNariz",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamFrontal",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoFrontal",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamOrtoFrente",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CloudCard",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    }
+   ],
+   "tipos_exportados": {
+    "MESH": 67
+   },
+   "subsurf": {
+    "modificadores": 33,
+    "teto": null
+   },
+   "texturas_escaladas": [],
+   "bake": [
+    {
+     "material": "CinzaAsa",
+     "objeto": "AsaD",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "AsaE",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "EstabD",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "EstabE",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "FuselagemPaint",
+     "objeto": "Fuselagem",
+     "motivo": "Surface<-MIX_SHADER",
+     "metodo": "bake",
+     "px": [
+      8192,
+      2048
+     ],
+     "rugosidade": "mapa",
+     "cor": null
+    }
+   ],
+   "caixa_blender": {
+    "min": [
+     0.0,
+     -32.38,
+     -5.67
+    ],
+    "max": [
+     73.95,
+     32.38,
+     12.85
+    ],
+    "tamanho": [
+     73.95,
+     64.76,
+     18.52
+    ],
+    "deslocamento_z": 5.67
+   },
+   "n_objetos": 67,
+   "triangulos_blender": 325344,
+   "megapixels": 26.21,
+   "texturas_em_disco": [
+    "textures_B77W/FinSashD.png",
+    "textures_B77W/FinSashE.png",
+    "textures_B77W/FuselagemPaint__Fuselagem_BaseColor.png",
+    "textures_B77W/FuselagemPaint__Fuselagem_Roughness.png"
+   ],
+   "saidas": {
+    "glb": {
+     "arquivo": "alta/B77W_alta.glb",
+     "bytes": 8615004,
+     "extras": []
+    },
+    "fbx": {
+     "arquivo": "alta/B77W_alta.fbx",
+     "bytes": 7070796,
+     "extras": []
+    },
+    "obj": {
+     "arquivo": "alta/B77W_alta.obj",
+     "bytes": 28319580,
+     "extras": [
+      "B77W_alta.mtl"
+     ]
+    }
+   },
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "comprimento 73.926 m x 73.950 m medido no Blender"
+    ],
+    "triangulos": 325344,
+    "vertices": 167467,
+    "materiais": 20,
+    "materiais_clearcoat": 10,
+    "imagens": 4,
+    "megapixels": 26.21,
+    "bytes_imagens": 787052,
+    "caixa": {
+     "min": [
+      0.0189,
+      -0.0,
+      -32.3723
+     ],
+     "max": [
+      73.945,
+      18.508,
+      32.3723
+     ],
+     "tamanho": [
+      73.9261,
+      18.508,
+      64.7447
+     ]
+    },
+    "extensoes": [
+     "KHR_materials_clearcoat",
+     "KHR_materials_emissive_strength",
+     "KHR_materials_specular"
+    ],
+    "draco": false,
+    "nos": 68,
+    "raizes_da_cena": 1,
+    "gerador": "Khronos glTF Blender I/O v5.2.39"
+   },
+   "reimportacao": [
+    "ROUNDTRIP B77W_alta.glb objs=67 tris=325344 mats=20 texs=4 X=73.926 Y=64.745 Z=18.508 minZ=-0.0000",
+    "ROUNDTRIP B77W_alta.fbx objs=67 tris=325344 mats=20 texs=4 X=73.926 Y=64.745 Z=18.508 minZ=-0.0000",
+    "ROUNDTRIP B77W_alta.obj objs=67 tris=325344 mats=20 texs=4 X=73.926 Y=64.745 Z=18.508 minZ=-0.0000"
+   ]
+  },
+  {
+   "slug": "B77W",
+   "lod": "web",
+   "blend": "B77W_LATAM.blend",
+   "nome": "Boeing 777-300ER",
+   "matricula": "PT-MUG",
+   "L_ref": 73.86,
+   "blender": "5.2.0 LTS",
+   "medidas": {
+    "L": 73.95,
+    "d_fus": 6.2397,
+    "z_solo": -5.67,
+    "familia": "boeing",
+    "x_bico": 0.0
+   },
+   "removidos": [
+    {
+     "nome": "B77W_LogoLATAM_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B77W_LogoLATAM_E_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B77W_LogoLATAM_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B77W_LogoLATAM_D_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "CamEstib",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamBomb",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamHeadOn",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "LogoBarriga_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Pista",
+     "tipo": "MESH",
+     "motivo": "nao e a aeronave"
+    },
+    {
+     "nome": "Sol",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "CamHero",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamPerfil",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamCauda",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvo",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamAlvoCauda",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamBarriga",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoBarriga",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamNariz",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoNariz",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamFrontal",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoFrontal",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamOrtoFrente",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CloudCard",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    }
+   ],
+   "tipos_exportados": {
+    "MESH": 67
+   },
+   "subsurf": {
+    "modificadores": 33,
+    "teto": 1
+   },
+   "texturas_escaladas": [
+    {
+     "nome": "LiveryFac",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "LiveryTex",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "NoseMask",
+     "de": [
+      8192,
+      2048
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "PanelBump",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    }
+   ],
+   "bake": [
+    {
+     "material": "CinzaAsa",
+     "objeto": "AsaD",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "AsaE",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "EstabD",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "CinzaAsa",
+     "objeto": "EstabE",
+     "motivo": "Base Color<-MIX",
+     "metodo": "cor plana",
+     "px": null,
+     "rugosidade": "herdada",
+     "cor": [
+      0.784,
+      0.792,
+      0.8,
+      1.0
+     ]
+    },
+    {
+     "material": "FuselagemPaint",
+     "objeto": "Fuselagem",
+     "motivo": "Surface<-MIX_SHADER",
+     "metodo": "bake",
+     "px": [
+      2048,
+      512
+     ],
+     "rugosidade": "escalar 0.218",
+     "cor": null
+    }
+   ],
+   "caixa_blender": {
+    "min": [
+     0.0,
+     -32.38,
+     -5.67
+    ],
+    "max": [
+     73.95,
+     32.38,
+     12.85
+    ],
+    "tamanho": [
+     73.95,
+     64.76,
+     18.52
+    ],
+    "deslocamento_z": 5.67
+   },
+   "n_objetos": 67,
+   "triangulos_blender": 46908,
+   "megapixels": 9.44,
+   "saidas": {
+    "glb": {
+     "arquivo": "web/B77W_web.glb",
+     "bytes": 411644,
+     "extras": []
+    },
+    "usdz": {
+     "arquivo": "web/B77W_web.usdz",
+     "bytes": 2456159,
+     "extras": []
+    }
+   },
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "comprimento 73.926 m x 73.950 m medido no Blender"
+    ],
+    "triangulos": 46908,
+    "vertices": 26494,
+    "materiais": 20,
+    "materiais_clearcoat": 10,
+    "imagens": 3,
+    "megapixels": 9.44,
+    "bytes_imagens": 224515,
+    "caixa": {
+     "min": [
+      0.0189,
+      -0.0,
+      -32.3723
+     ],
+     "max": [
+      73.945,
+      18.508,
+      32.3723
+     ],
+     "tamanho": [
+      73.9261,
+      18.508,
+      64.7447
+     ]
+    },
+    "extensoes": [
+     "KHR_draco_mesh_compression",
+     "KHR_materials_clearcoat",
+     "KHR_materials_emissive_strength",
+     "KHR_materials_specular"
+    ],
+    "draco": true,
+    "nos": 68,
+    "raizes_da_cena": 1,
+    "gerador": "Khronos glTF Blender I/O v5.2.39"
+   }
+  },
+  {
+   "slug": "B788",
+   "lod": "alta",
+   "blend": "B788_LATAM.blend",
+   "nome": "Boeing 787-8 Dreamliner",
+   "matricula": "CC-BBF",
+   "L_ref": 56.72,
+   "blender": "5.2.0 LTS",
+   "medidas": {
+    "L": 56.76,
+    "d_fus": 5.8069,
+    "z_solo": -4.89,
+    "familia": "boeing",
+    "x_bico": 0.0
+   },
+   "removidos": [
+    {
+     "nome": "B789_LogoLATAM_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B789_LogoLATAM_E_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B789_LogoLATAM_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B789_LogoLATAM_D_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg787_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg787_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "CamEstib",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamBomb",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "LogoBarriga_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Pista",
+     "tipo": "MESH",
+     "motivo": "nao e a aeronave"
+    },
+    {
+     "nome": "Sol",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "CamHero",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamPerfil",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamCauda",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvo",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamAlvoCauda",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamBarriga",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoBarriga",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamNariz",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoNariz",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamFrontal",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoFrontal",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamOrtoFrente",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CloudCard",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "MarkDreamliner",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    }
+   ],
+   "tipos_exportados": {
+    "MESH": 81
+   },
+   "subsurf": {
+    "modificadores": 37,
+    "teto": null
+   },
+   "texturas_escaladas": [],
+   "bake": [
+    {
+     "material": "CinzaAsa",
+     "objeto": "Asas",
+     "motivo": "Base Color<-MIX",
+     "metodo": "bake",
+     "px": [
+      2048,
+      2048
+     ],
+     "rugosidade": "mapa",
+     "cor": null
+    },
+    {
+     "material": "FuselagemPaint",
+     "objeto": "Fuselagem",
+     "motivo": "Surface<-MIX_SHADER",
+     "metodo": "bake",
+     "px": [
+      4096,
+      1024
+     ],
+     "rugosidade": "mapa",
+     "cor": null
+    }
+   ],
+   "caixa_blender": {
+    "min": [
+     0.0,
+     -30.06,
+     -4.88
+    ],
+    "max": [
+     56.76,
+     30.06,
+     11.6
+    ],
+    "tamanho": [
+     56.76,
+     60.12,
+     16.48
+    ],
+    "deslocamento_z": 4.89
+   },
+   "n_objetos": 81,
+   "triangulos_blender": 346008,
+   "megapixels": 22.02,
+   "texturas_em_disco": [
+    "textures_B788/CinzaAsa__Asas_BaseColor.png",
+    "textures_B788/CinzaAsa__Asas_Roughness.png",
+    "textures_B788/FinSashD.png",
+    "textures_B788/FinSashE.png",
+    "textures_B788/FuselagemPaint__Fuselagem_BaseColor.png",
+    "textures_B788/FuselagemPaint__Fuselagem_Roughness.png"
+   ],
+   "saidas": {
+    "glb": {
+     "arquivo": "alta/B788_alta.glb",
+     "bytes": 8620220,
+     "extras": []
+    },
+    "fbx": {
+     "arquivo": "alta/B788_alta.fbx",
+     "bytes": 7261596,
+     "extras": []
+    },
+    "obj": {
+     "arquivo": "alta/B788_alta.obj",
+     "bytes": 29369796,
+     "extras": [
+      "B788_alta.mtl"
+     ]
+    }
+   },
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [],
+    "triangulos": 346008,
+    "vertices": 183181,
+    "materiais": 16,
+    "materiais_clearcoat": 5,
+    "imagens": 6,
+    "megapixels": 22.02,
+    "bytes_imagens": 718891,
+    "caixa": {
+     "min": [
+      0.0126,
+      0.01,
+      -30.06
+     ],
+     "max": [
+      56.755,
+      16.49,
+      30.0497
+     ],
+     "tamanho": [
+      56.7424,
+      16.48,
+      60.1097
+     ]
+    },
+    "extensoes": [
+     "KHR_materials_clearcoat",
+     "KHR_materials_emissive_strength",
+     "KHR_materials_specular"
+    ],
+    "draco": false,
+    "nos": 82,
+    "raizes_da_cena": 1,
+    "gerador": "Khronos glTF Blender I/O v5.2.39"
+   },
+   "reimportacao": [
+    "ROUNDTRIP B788_alta.glb objs=81 tris=346008 mats=16 texs=6 X=56.742 Y=60.110 Z=16.480 minZ=0.0100",
+    "ROUNDTRIP B788_alta.fbx objs=81 tris=346008 mats=16 texs=6 X=56.742 Y=60.110 Z=16.480 minZ=0.0100",
+    "ROUNDTRIP B788_alta.obj objs=81 tris=346008 mats=16 texs=6 X=56.742 Y=60.110 Z=16.480 minZ=0.0100"
+   ]
+  },
+  {
+   "slug": "B788",
+   "lod": "web",
+   "blend": "B788_LATAM.blend",
+   "nome": "Boeing 787-8 Dreamliner",
+   "matricula": "CC-BBF",
+   "L_ref": 56.72,
+   "blender": "5.2.0 LTS",
+   "medidas": {
+    "L": 56.76,
+    "d_fus": 5.8069,
+    "z_solo": -4.89,
+    "familia": "boeing",
+    "x_bico": 0.0
+   },
+   "removidos": [
+    {
+     "nome": "B789_LogoLATAM_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B789_LogoLATAM_E_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B789_LogoLATAM_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B789_LogoLATAM_D_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg787_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg787_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "CamEstib",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamBomb",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "LogoBarriga_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Pista",
+     "tipo": "MESH",
+     "motivo": "nao e a aeronave"
+    },
+    {
+     "nome": "Sol",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "CamHero",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamPerfil",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamCauda",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvo",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamAlvoCauda",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamBarriga",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoBarriga",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamNariz",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoNariz",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamFrontal",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoFrontal",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamOrtoFrente",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CloudCard",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "MarkDreamliner",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    }
+   ],
+   "tipos_exportados": {
+    "MESH": 81
+   },
+   "subsurf": {
+    "modificadores": 37,
+    "teto": 1
+   },
+   "texturas_escaladas": [
+    {
+     "nome": "LiveryFac",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "LiveryTex",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "NoseMask",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "PanelBump",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    }
+   ],
+   "bake": [
+    {
+     "material": "CinzaAsa",
+     "objeto": "Asas",
+     "motivo": "Base Color<-MIX",
+     "metodo": "bake",
+     "px": [
+      2048,
+      2048
+     ],
+     "rugosidade": "escalar 0.165",
+     "cor": null
+    },
+    {
+     "material": "FuselagemPaint",
+     "objeto": "Fuselagem",
+     "motivo": "Surface<-MIX_SHADER",
+     "metodo": "bake",
+     "px": [
+      2048,
+      512
+     ],
+     "rugosidade": "escalar 0.218",
+     "cor": null
+    }
+   ],
+   "caixa_blender": {
+    "min": [
+     0.0,
+     -30.06,
+     -4.88
+    ],
+    "max": [
+     56.76,
+     30.06,
+     11.6
+    ],
+    "tamanho": [
+     56.76,
+     60.12,
+     16.48
+    ],
+    "deslocamento_z": 4.89
+   },
+   "n_objetos": 81,
+   "triangulos_blender": 59256,
+   "megapixels": 13.63,
+   "saidas": {
+    "glb": {
+     "arquivo": "web/B788_web.glb",
+     "bytes": 618740,
+     "extras": []
+    },
+    "usdz": {
+     "arquivo": "web/B788_web.usdz",
+     "bytes": 3260377,
+     "extras": []
+    }
+   },
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [],
+    "triangulos": 59256,
+    "vertices": 38125,
+    "materiais": 16,
+    "materiais_clearcoat": 5,
+    "imagens": 4,
+    "megapixels": 13.63,
+    "bytes_imagens": 390545,
+    "caixa": {
+     "min": [
+      0.0126,
+      0.01,
+      -30.06
+     ],
+     "max": [
+      56.755,
+      16.49,
+      30.0497
+     ],
+     "tamanho": [
+      56.7424,
+      16.48,
+      60.1097
+     ]
+    },
+    "extensoes": [
+     "KHR_draco_mesh_compression",
+     "KHR_materials_clearcoat",
+     "KHR_materials_emissive_strength",
+     "KHR_materials_specular"
+    ],
+    "draco": true,
+    "nos": 82,
+    "raizes_da_cena": 1,
+    "gerador": "Khronos glTF Blender I/O v5.2.39"
+   },
+   "reimportacao": [
+    "ROUNDTRIP B788_web.glb objs=81 tris=59256 mats=16 texs=4 X=56.742 Y=60.110 Z=16.480 minZ=0.0100",
+    "ROUNDTRIP B788_web.usdz objs=81 tris=59256 mats=16 texs=4 X=56.742 Y=60.110 Z=16.480 minZ=0.0100"
+   ]
+  },
+  {
+   "slug": "B789",
+   "lod": "alta",
+   "blend": "B789_LATAM.blend",
+   "nome": "Boeing 787-9 Dreamliner",
+   "matricula": "CC-BGK",
+   "L_ref": 62.81,
+   "blender": "5.2.0 LTS",
+   "medidas": {
+    "L": 62.85,
+    "d_fus": 5.8069,
+    "z_solo": -4.89,
+    "familia": "boeing",
+    "x_bico": 0.0
+   },
+   "removidos": [
+    {
+     "nome": "B789_LogoLATAM_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B789_LogoLATAM_E_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B789_LogoLATAM_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B789_LogoLATAM_D_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg787_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg787_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "CamEstib",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamBomb",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "LogoBarriga_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Pista",
+     "tipo": "MESH",
+     "motivo": "nao e a aeronave"
+    },
+    {
+     "nome": "Sol",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "CamHero",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamPerfil",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamCauda",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvo",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamAlvoCauda",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamBarriga",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoBarriga",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamNariz",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoNariz",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamFrontal",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoFrontal",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamOrtoFrente",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CloudCard",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "MarkDreamliner",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    }
+   ],
+   "tipos_exportados": {
+    "MESH": 81
+   },
+   "subsurf": {
+    "modificadores": 37,
+    "teto": null
+   },
+   "texturas_escaladas": [],
+   "bake": [
+    {
+     "material": "CinzaAsa",
+     "objeto": "Asas",
+     "motivo": "Base Color<-MIX",
+     "metodo": "bake",
+     "px": [
+      2048,
+      2048
+     ],
+     "rugosidade": "mapa",
+     "cor": null
+    },
+    {
+     "material": "FuselagemPaint",
+     "objeto": "Fuselagem",
+     "motivo": "Surface<-MIX_SHADER",
+     "metodo": "bake",
+     "px": [
+      4096,
+      1024
+     ],
+     "rugosidade": "mapa",
+     "cor": null
+    }
+   ],
+   "caixa_blender": {
+    "min": [
+     0.0,
+     -30.06,
+     -4.88
+    ],
+    "max": [
+     62.85,
+     30.06,
+     11.6
+    ],
+    "tamanho": [
+     62.85,
+     60.12,
+     16.48
+    ],
+    "deslocamento_z": 4.89
+   },
+   "n_objetos": 81,
+   "triangulos_blender": 356200,
+   "megapixels": 22.02,
+   "texturas_em_disco": [
+    "textures_B789/CinzaAsa__Asas_BaseColor.png",
+    "textures_B789/CinzaAsa__Asas_Roughness.png",
+    "textures_B789/FinSashD.png",
+    "textures_B789/FinSashE.png",
+    "textures_B789/FuselagemPaint__Fuselagem_BaseColor.png",
+    "textures_B789/FuselagemPaint__Fuselagem_Roughness.png"
+   ],
+   "saidas": {
+    "glb": {
+     "arquivo": "alta/B789_alta.glb",
+     "bytes": 8858688,
+     "extras": []
+    },
+    "fbx": {
+     "arquivo": "alta/B789_alta.fbx",
+     "bytes": 7401036,
+     "extras": []
+    },
+    "obj": {
+     "arquivo": "alta/B789_alta.obj",
+     "bytes": 30203311,
+     "extras": [
+      "B789_alta.mtl"
+     ]
+    }
+   },
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [],
+    "triangulos": 356200,
+    "vertices": 189036,
+    "materiais": 16,
+    "materiais_clearcoat": 5,
+    "imagens": 6,
+    "megapixels": 22.02,
+    "bytes_imagens": 672699,
+    "caixa": {
+     "min": [
+      0.0126,
+      0.01,
+      -30.06
+     ],
+     "max": [
+      62.845,
+      16.49,
+      30.0497
+     ],
+     "tamanho": [
+      62.8323,
+      16.48,
+      60.1097
+     ]
+    },
+    "extensoes": [
+     "KHR_materials_clearcoat",
+     "KHR_materials_emissive_strength",
+     "KHR_materials_specular"
+    ],
+    "draco": false,
+    "nos": 82,
+    "raizes_da_cena": 1,
+    "gerador": "Khronos glTF Blender I/O v5.2.39"
+   },
+   "reimportacao": [
+    "ROUNDTRIP B789_alta.glb objs=81 tris=356200 mats=16 texs=6 X=62.832 Y=60.110 Z=16.480 minZ=0.0100",
+    "ROUNDTRIP B789_alta.fbx objs=81 tris=356200 mats=16 texs=6 X=62.832 Y=60.110 Z=16.480 minZ=0.0100",
+    "ROUNDTRIP B789_alta.obj objs=81 tris=356200 mats=16 texs=6 X=62.832 Y=60.110 Z=16.480 minZ=0.0100"
+   ]
+  },
+  {
+   "slug": "B789",
+   "lod": "web",
+   "blend": "B789_LATAM.blend",
+   "nome": "Boeing 787-9 Dreamliner",
+   "matricula": "CC-BGK",
+   "L_ref": 62.81,
+   "blender": "5.2.0 LTS",
+   "medidas": {
+    "L": 62.85,
+    "d_fus": 5.8069,
+    "z_solo": -4.89,
+    "familia": "boeing",
+    "x_bico": 0.0
+   },
+   "removidos": [
+    {
+     "nome": "B789_LogoLATAM_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B789_LogoLATAM_E_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B789_LogoLATAM_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "B789_LogoLATAM_D_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg787_E",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Reg787_D",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "CamEstib",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamBomb",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "LogoBarriga_Coral",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "LogoBarriga",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    },
+    {
+     "nome": "Pista",
+     "tipo": "MESH",
+     "motivo": "nao e a aeronave"
+    },
+    {
+     "nome": "Sol",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "CamHero",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamPerfil",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamCauda",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvo",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamAlvoCauda",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamBarriga",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoBarriga",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamNariz",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoNariz",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamFrontal",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CamAlvoFrontal",
+     "tipo": "EMPTY",
+     "motivo": "auxiliar do gate (EMPTY)"
+    },
+    {
+     "nome": "CamOrtoFrente",
+     "tipo": "CAMERA",
+     "motivo": "auxiliar do gate (CAMERA)"
+    },
+    {
+     "nome": "CloudCard",
+     "tipo": "LIGHT",
+     "motivo": "auxiliar do gate (LIGHT)"
+    },
+    {
+     "nome": "MarkDreamliner",
+     "tipo": "MESH",
+     "motivo": "hide_render (geometria de origem da livery)"
+    }
+   ],
+   "tipos_exportados": {
+    "MESH": 81
+   },
+   "subsurf": {
+    "modificadores": 37,
+    "teto": 1
+   },
+   "texturas_escaladas": [
+    {
+     "nome": "LiveryFac",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "LiveryTex",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "NoseMask",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    },
+    {
+     "nome": "PanelBump",
+     "de": [
+      4096,
+      1024
+     ],
+     "para": [
+      2048,
+      512
+     ]
+    }
+   ],
+   "bake": [
+    {
+     "material": "CinzaAsa",
+     "objeto": "Asas",
+     "motivo": "Base Color<-MIX",
+     "metodo": "bake",
+     "px": [
+      2048,
+      2048
+     ],
+     "rugosidade": "escalar 0.165",
+     "cor": null
+    },
+    {
+     "material": "FuselagemPaint",
+     "objeto": "Fuselagem",
+     "motivo": "Surface<-MIX_SHADER",
+     "metodo": "bake",
+     "px": [
+      2048,
+      512
+     ],
+     "rugosidade": "escalar 0.218",
+     "cor": null
+    }
+   ],
+   "caixa_blender": {
+    "min": [
+     0.0,
+     -30.06,
+     -4.88
+    ],
+    "max": [
+     62.85,
+     30.06,
+     11.6
+    ],
+    "tamanho": [
+     62.85,
+     60.12,
+     16.48
+    ],
+    "deslocamento_z": 4.89
+   },
+   "n_objetos": 81,
+   "triangulos_blender": 61768,
+   "megapixels": 13.63,
+   "saidas": {
+    "glb": {
+     "arquivo": "web/B789_web.glb",
+     "bytes": 616400,
+     "extras": []
+    },
+    "usdz": {
+     "arquivo": "web/B789_web.usdz",
+     "bytes": 3374758,
+     "extras": []
+    }
+   },
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [],
+    "triangulos": 61768,
+    "vertices": 40127,
+    "materiais": 16,
+    "materiais_clearcoat": 5,
+    "imagens": 4,
+    "megapixels": 13.63,
+    "bytes_imagens": 381521,
+    "caixa": {
+     "min": [
+      0.0126,
+      0.01,
+      -30.06
+     ],
+     "max": [
+      62.845,
+      16.49,
+      30.0497
+     ],
+     "tamanho": [
+      62.8323,
+      16.48,
+      60.1097
+     ]
+    },
+    "extensoes": [
+     "KHR_draco_mesh_compression",
+     "KHR_materials_clearcoat",
+     "KHR_materials_emissive_strength",
+     "KHR_materials_specular"
+    ],
+    "draco": true,
+    "nos": 82,
+    "raizes_da_cena": 1,
+    "gerador": "Khronos glTF Blender I/O v5.2.39"
+   },
+   "reimportacao": [
+    "ROUNDTRIP B789_web.glb objs=81 tris=61768 mats=16 texs=4 X=62.832 Y=60.110 Z=16.480 minZ=0.0100",
+    "ROUNDTRIP B789_web.usdz objs=81 tris=61768 mats=16 texs=4 X=62.832 Y=60.110 Z=16.480 minZ=0.0100"
+   ]
+  }
+ ]
+}
