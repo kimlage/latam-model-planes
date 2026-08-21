@@ -262,6 +262,23 @@ Three traps worth carrying to any photo measurement:
   projection.** Measuring the rear wedge by "which pixels are indigo" failed
   repeatedly because the fin is also indigo and covers the hull in side view.
 
+Those band edges are recorded as **crossings** — fractions of the exposed fin at
+which each edge cuts the LE, the TE and the root — so checking one means
+measuring along an edge, which needs an *elevation* of the fin. None of the seven
+gate angles is that. `render_fin_ortho.py` is:
+
+```bash
+/Applications/Blender.app/Contents/MacOS/Blender -b "airbus A320neo/A320neo_LATAM.blend" \
+    --python render_fin_ortho.py -- 1300 96
+```
+
+Orthographic, square, port side, framed on the `Deriva` bounding box, camera
+built at render time and never written into the `.blend` — same rule as the
+gate. It writes `render_fin_ortho.png` next to the master. **Re-run it whenever
+the empennage or the fin artwork moves**: the first three of these panels were
+shot from a scratchpad and left behind by the ACAP empennage round, which is
+the only reason this file exists in the tree instead of a session folder.
+
 ## The sharklet round
 
 The A321ceo build (2026-08) caught a **latent family defect**: LATAM sharklet
