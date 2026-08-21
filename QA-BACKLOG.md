@@ -9,6 +9,35 @@ survives, suspect the instrument before the model**.
 
 ---
 
+## Fleet-wide: the gate has never seen the starboard side
+
+Found by the 767-300BCF build (`48efdac`), which rendered its own control view
+and read the registration back as `EXC-CC` — mirrored. Cause in that file: the
+`matricula` and `titulo` calls looped `for lado in (-1, 1)` without
+`espelha=True`, while the lockup did pass it.
+
+The reason it survived to be found by accident is the instrument. **Every
+canonical camera sits at negative y:**
+
+    CamFrontal (-0.888, -0.459, -0.023)   CamNariz  (-0.707, -0.687,  0.167)
+    CamPerfil  ( 0.000, -1.000,  0.000)   CamHero   (-0.776, -0.630,  0.032)
+    CamCauda   ( 0.693, -0.719, -0.051)   CamBarriga(-0.810, -0.585, -0.041)
+
+CamPerfil is literally (0, -1, 0). Seven angles, one hemisphere. Anything that
+is wrong only on the starboard side of any aircraft in this repository has
+never been looked at.
+
+Two things follow: the fleet standard should gain a starboard angle, and every
+aircraft needs a sweep for per-side mirroring — the 767-300F very likely
+carries the same defect, and the A321neo build fixed a mirrored starboard
+lockup back in `166c864`, which in hindsight was the first sighting.
+
+This is the third time the instrument, not the model, was the defect: the gate
+cameras were 45 mm at 18 m (`aa2d27d`), then had no head-on (same commit,
+which is how six windshields were found), and now cover half the aircraft.
+
+---
+
 ## Fleet-wide: the nose tip is a valence-32 pole
 
 The other half of the head-on complaint from `aa2d27d` — "a vertical crease on
