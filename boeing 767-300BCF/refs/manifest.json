@@ -1,0 +1,175 @@
+{
+ "schema": "latam-refs/1",
+ "subject": "boeing 767-300BCF",
+ "policy": "Reference photographs are cited here, never committed. They are CC0 / CC BY / CC BY-SA works: share-alike conflicts with the CC BY 4.0 this project's assets ship under, and CC BY would require carrying the credit inside the file. This manifest records URL, author, licence and date for every one of them so the photogrammetry can be reproduced. Re-download them with `python3 refs_fetch.py \"boeing 767-300BCF\"` from the repository root; check the rule is holding with `python3 refs_fetch.py --verificar`. See NOTICE.md.",
+ "project": "LATAM Cargo Boeing 767-300BCF reference photos",
+ "chosen_registration": "CC-CXE",
+ "chosen_reason": "Boeing 767-316(ER)(BCF)(WL) of LATAM Cargo Chile - a CONVERSION, which is the larger half of the cargo fleet (12 conversions against 7 factory freighters). Chosen over the other conversion candidates because it has by far the richest free-licence coverage on Wikimedia Commons: ten photographs from three photographers spanning 2023-05-04 to 2026-05-02, all in the current LATAM CARGO scheme with no special titles, covering BOTH sides on the ground and in the air. N568LA, CC-CXD, CC-CXK, CC-BDC, N538LA, N540LA and N542LA were checked too; N568LA has the single sharpest side profile in the whole cargo set but only ONE photograph, one side, no belly and no head-on, which is thin for a seven-angle gate. CC-CXE also carries the type title 'BOEING 767-300BCF' painted on its own skin, legible at 4x on two independent photographs, which is what names the subtype without relying on a database.",
+ "photos": [
+  {
+   "file": "refs/ref_CC-CXE_fra03.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Frankfurt_Airport_LATAM_Cargo_Chile_Boeing_767-316ER(BCF)(WL)_CC-CXE_(DSC04103).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Frankfurt_Airport_LATAM_Cargo_Chile_Boeing_767-316ER(BCF)(WL)_CC-CXE_(DSC04103).jpg",
+   "author": "MarcelX42",
+   "license": "CC BY-SA 4.0",
+   "date": "2023-05-04",
+   "resolution": "5925x3335",
+   "registration": "CC-CXE",
+   "view": "starboard, taxiing, sunlit, sharpest frame of the set",
+   "notes": "PRIMARY starboard reference and the sharpest view of the plugged window row anywhere in the cargo set. Settles four things: (1) the whole cabin window row survives as PLUGS - a faint rounded-rectangle outline that reaches 0.88 +-0.05 of the local white, i.e. ~12% darker than the skin, against ~92% for a real window; (2) both overwing exits carry an amber EXIT INOPERATIVE placard just below the sill, and each exit door still has its own plugged window inside it; (3) door 3R exists and is placarded; (4) the R1 service door is ALSO placarded, while L1 (crew) is not - the only left/right asymmetry of placards on the aircraft. Also carries the CHILEAN flag forward of R1 and the type title 'BOEING 767-300BCF'."
+  },
+  {
+   "file": "refs/ref_CC-CXE_fra10.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Frankfurt_Airport_LATAM_Cargo_Chile_Boeing_767-316ER(BCF)(WL)_CC-CXE_(DSC04110).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Frankfurt_Airport_LATAM_Cargo_Chile_Boeing_767-316ER(BCF)(WL)_CC-CXE_(DSC04110).jpg",
+   "author": "MarcelX42",
+   "license": "CC BY-SA 4.0",
+   "date": "2023-05-04",
+   "resolution": "5010x2819",
+   "registration": "CC-CXE",
+   "view": "starboard, on the ground, second frame of the same pass",
+   "notes": "Cross-check for the starboard side; confirms the mirrored lockup keeps the symbol nose-side."
+  },
+  {
+   "file": "refs/ref_CC-CXE_lax26.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/CC-CXE.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:CC-CXE.jpg",
+   "author": "Liam Thompson",
+   "license": "CC BY-SA 4.0",
+   "date": "2026-05-02",
+   "resolution": "4442x2962",
+   "registration": "CC-CXE",
+   "view": "port side, on approach with gear down, flat grey sky",
+   "notes": "Most recent photograph of the target: the scheme has not changed since 2023. Reads 'BOEING 767-300BCF' and the white CC-CXE inside the indigo wedge, and shows the registration repeated on the upper wing surface and on the nose gear door - two marks the model does not carry."
+  },
+  {
+   "file": "refs/ref_CC-CXE_appr2.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/CC-CXE_AIRCRAFT_Boeing_767-316(ER)(BCF)_(2).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:CC-CXE_AIRCRAFT_Boeing_767-316(ER)(BCF)_(2).jpg",
+   "author": "Sg1959",
+   "license": "CC BY-SA 4.0",
+   "date": "2025-10-17",
+   "resolution": "5043x2837",
+   "registration": "CC-CXE",
+   "view": "port side on approach, near profile",
+   "notes": "Best port-side view of the nose: the CHILEAN flag with the canton FORWARD, the L1 crew door with no placard, and a thin dark caption under the flag that no available frame resolves. Together with the Frankfurt starboard frame it fixes the flag as the SAME artwork on both sides, not mirrored."
+  },
+  {
+   "file": "refs/ref_CC-CXE_appr1.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/CC-CXE_AIRCRAFT_Boeing_767-316(ER)(BCF)_(1).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:CC-CXE_AIRCRAFT_Boeing_767-316(ER)(BCF)_(1).jpg",
+   "author": "Sg1959",
+   "license": "CC BY-SA 4.0",
+   "date": "2025-10-17",
+   "resolution": "3428x1928",
+   "registration": "CC-CXE",
+   "view": "port side, landing gear down, blended winglet in frame"
+  },
+  {
+   "file": "refs/ref_CC-CXE_appr4.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/CC-CXE_AIRCRAFT_Boeing_767-316(ER)(BCF)_(4).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:CC-CXE_AIRCRAFT_Boeing_767-316(ER)(BCF)_(4).jpg",
+   "author": "Sg1959",
+   "license": "CC BY-SA 4.0",
+   "date": "2025-12-02",
+   "resolution": "4366x2456",
+   "registration": "CC-CXE",
+   "view": "port side, slightly from below, on approach",
+   "notes": "Underside sliver: the LATAM symbol on the belly reads as a coral-and-indigo chip over the keel, forward of the wing."
+  },
+  {
+   "file": "refs/ref_CC-CXE_appr6.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/CC-CXE_AIRCRAFT_Boeing_767-316(ER)(BCF)_(6).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:CC-CXE_AIRCRAFT_Boeing_767-316(ER)(BCF)_(6).jpg",
+   "author": "Sg1959",
+   "license": "CC BY-SA 4.0",
+   "date": "2025-12-02",
+   "resolution": "4316x2428",
+   "registration": "CC-CXE",
+   "view": "front three-quarter from port, low",
+   "notes": "The gate's CamFrontal angle: nose proportion, windshield, both nacelles, and both winglet faces."
+  },
+  {
+   "file": "refs/ref_CC-CXE_appr7.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/CC-CXE_AIRCRAFT_Boeing_767-316(ER)(BCF)_(7).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:CC-CXE_AIRCRAFT_Boeing_767-316(ER)(BCF)_(7).jpg",
+   "author": "Sg1959",
+   "license": "CC BY-SA 4.0",
+   "date": "2025-12-02",
+   "resolution": "5184x3456",
+   "registration": "CC-CXE",
+   "view": "near head-on from below, on short final",
+   "notes": "Closest thing in the set to the gate's CamHeadOn: the windshield wrap and the frontal section."
+  },
+  {
+   "file": "refs/ref_CC-CXE_fra_stbd_a0.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/CC-CXE_AIRCRAFT_Boeing_767-316(ER)(BCF).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:CC-CXE_AIRCRAFT_Boeing_767-316(ER)(BCF).jpg",
+   "author": "Sg1959",
+   "license": "CC BY-SA 4.0",
+   "date": "2025-10-17",
+   "resolution": "2559x1440",
+   "registration": "CC-CXE",
+   "view": "starboard, rolling out"
+  },
+  {
+   "file": "refs/ref_N568LA_mia26.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/N568LA_B767-300F,_LATAM_Cargo,_Miami_02-20-26_(55148311158).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:N568LA_B767-300F,_LATAM_Cargo,_Miami_02-20-26_(55148311158).jpg",
+   "author": "Duncan Kirk",
+   "license": "CC BY 4.0",
+   "date": "2026-02-20",
+   "resolution": "5307x3538",
+   "registration": "N568LA (sister BCF conversion, LATAM Cargo Colombia)",
+   "view": "near-pure port side profile on the ground, sunlit, clean sky",
+   "notes": "THE MEASUREMENT PHOTOGRAPH. Every livery number this model consumes was measured here, by the 767-300F build - and N568LA is itself a CONVERSION, so those numbers are a direct measurement of this subtype rather than an extrapolation from the factory freighter that consumed them. Re-used here for: the rear wedge boundaries, the two-line lockup, the belly symbol, the EXIT INOPERATIVE placard geometry (0.65 x 0.14 m on the overwing exits, 0.615 x 0.12 m at 27% down door 3), and the plugged-window pitch (autocorrelation gives 50.9 px at 91.4 px/m = 0.557 m, 1.7% from the passenger 0.5669). Under a strong high-pass it also resolves the closed MAIN DECK CARGO DOOR - forward edge at model x 10.1 and aft edge at 13.6 against the ACAP's 10.23 and 13.63 - which is the first free-licence LATAM Cargo photograph to do so, and settles that the conversion's door sits at the factory station."
+  },
+  {
+   "file": "refs/ref_CC-CWY_perfil_mia.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/0/01/CC-CWY_B767-300%2C_LATAM%2C_Miami_02-19-26_%2855146431338%29.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:CC-CWY_B767-300,_LATAM,_Miami_02-19-26_(55146431338).jpg",
+   "author": "Duncan Kirk (Flickr: 182528221@N07)",
+   "license": "CC BY 4.0",
+   "date": "2026-02-19",
+   "resolution": "5398x3599",
+   "registration": "CC-CWY (LATAM passenger 767-300ER)",
+   "view": "port side profile on the ground, Miami",
+   "notes": "CONTROL, not a target. Same photographer, same airport, same camera geometry as the N568LA frame - which is what let this build settle the 13-degree disagreement between the passenger and cargo rear wedges. Both candidate lower boundaries were drawn over BOTH photographs: each fits its own aircraft's paint edge and misses the other by far more than the 2% difference between the two photogrammetric maps. The cargo wedge really is shallower; it is not a measurement bias. See spec_763bcf.json -> livery_cc_cxe.cunha_traseira."
+  },
+  {
+   "file": null,
+   "url": "https://commons.wikimedia.org/wiki/File:CC-CXD_Boeing_767-316ER_BDSF_LATAM_Cargo_Colombia_MIA_17.1.23_(52831814841).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:CC-CXD_Boeing_767-316ER_BDSF_LATAM_Cargo_Colombia_MIA_17.1.23_(52831814841).jpg",
+   "author": "Colin Cooke Photo",
+   "license": "CC BY-SA 2.0",
+   "date": "2023-01-17",
+   "resolution": "5120x3413",
+   "registration": "CC-CXD",
+   "view": "not downloaded - cited for its title only",
+   "notes": "Cited, not measured. Its Commons title says BDSF (IAI Bedek) where CC-CXE, CC-CXK, CC-BDC, N538LA and N540LA say BCF. That is uploader-entered metadata, not a primary source, but it is the first evidence found on the BCF-vs-BDSF split that the 767-300F build listed as an open question."
+  }
+ ],
+ "aircraft": {
+  "type": "Boeing 767-316(ER)(BCF)(WL)",
+  "operator": "LATAM Cargo Chile",
+  "factory_or_conversion": "CONVERSION. Named as (BCF) in the file titles of eight independent Commons uploads, and - the evidence that does not depend on a database - the type title painted on the aircraft's own rear fuselage reads 'BOEING 767-300BCF', legible at 4x on both the Frankfurt starboard frame and the LAX port frame.",
+  "engines": "2x GE CF6-80C2 (same as the whole LATAM 767 fleet)",
+  "winglets": "Aviation Partners blended winglets - present, seen from both faces on the approach frames",
+  "sources_note": "No MSN, line number or delivery date is claimed here. planespotters, airfleets, rzjets, ATDB and FR24 all return HTTP 403 from this environment, and the 767-300F build's experience is that a single database is not enough. Everything the model uses is either measured on the photographs above or read from the Boeing ACAP D6-58328."
+ },
+ "livery": "LATAM CARGO, the group's unified cargo scheme - NOT the passenger scheme repainted. White fuselage; the passenger fin sash carried over unchanged; a rear indigo wedge measurably SMALLER than the passenger one; a two-line LATAM/CARGO lockup with the symbol forward; white registration inside the wedge; the LATAM symbol alone on the belly; indigo/coral winglets; national flag behind the windshield - CHILEAN here, where the factory freighters N536LA and N568LA carry Colombia.",
+ "not_found": [
+  "No free-licence photograph of CC-CXE from directly below; the belly symbol's rotation is inherited from the 767-300F build and remains unmeasured.",
+  "The thin dark caption under the flag on the port side is present but illegible at the best available resolution (~45 px wide). Modelled as 'CHILE' by analogy with the 'COLOMBIA' that reads clearly on N568LA.",
+  "No photograph with the main deck cargo door OPEN on any LATAM Cargo airframe; the door's height still rests on the ACAP detail plus the 767-300F build's UPS control frame."
+ ],
+ "brand_vector": {
+  "file": "../boeing 767-300F/latam_cargo_logo.svg (not versioned)",
+  "url": "https://commons.wikimedia.org/wiki/File:LATAM_Cargo_logo.svg",
+  "direct": "https://upload.wikimedia.org/wikipedia/commons/2/25/LATAM_Cargo_logo.svg",
+  "author": "LATAM Cargo",
+  "license": "Public domain (below the threshold of originality)",
+  "notes": "Official two-line LATAM CARGO lockup. This build inherited the already-tesselated CargoLockup_* meshes inside the .blend, so b0f_marca_cargo.py only has to be re-run if the lockup is ever rebuilt from the vector; in that case download the SVG into this folder first, under the same rule as the other brand SVGs."
+ },
+ "policy_note": "The photographs themselves are NOT redistributed in this repository (see NOTICE.md and the root .gitignore). URL, author, licence and date are recorded here so any measurement can be traced and the attribution the licences require can be met."
+}
