@@ -1,0 +1,71 @@
+{
+ "schema": "latam-refs/1",
+ "subject": "airbus A320neo",
+ "policy": "Reference photographs are cited here, never committed. They are CC0 / CC BY / CC BY-SA works: share-alike conflicts with the CC BY 4.0 this project's assets ship under, and CC BY would require carrying the credit inside the file. This manifest records URL, author, licence and date for every one of them so the photogrammetry can be reproduced. Re-download them with `python3 refs_fetch.py \"<folder>\"` from the repository root; check the rule is holding with `python3 refs_fetch.py --verificar`. See NOTICE.md.",
+ "photos": [
+  {
+   "file": "refs/ws_headon_EC-KOH.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/4/4c/EC-KOH_A320_Iberia_Express_VGO_02.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:EC-KOH_A320_Iberia_Express_VGO_02.jpg",
+   "author": "Bene Riobo",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+   "view": "HEAD-ON de verdade: Iberia Express A320-214 EC-KOH taxiando em Vigo, azimute 2-4 graus, elevacao ~-2 graus (camera pouco abaixo do nariz)",
+   "notes": "varredura de linha a 25/30/35% da altura do envidracado; e a foto que condenou o poste central do ACAP (0.0647 de meia-extensao contra 0.0416 do modelo)",
+   "baixado": "3840x2559 (rendicao Special:FilePath?width=4000 do original 4101x2733)"
+  },
+  {
+   "file": "refs/ws_headon_aeroflot.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/f/f6/Aeroflot_A320_front_view.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Aeroflot_A320_front_view.jpg",
+   "author": "Bjorn Strey",
+   "license": "CC BY-SA 2.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+   "view": "HEAD-ON, Aeroflot A320 em Hannover, azimute ~3 graus, elevacao ~0",
+   "notes": "segunda travessia independente da mesma varredura; confirma o poste (0.0664) e da a faixa das duas fotos em cada grandeza",
+   "baixado": "3127x2084"
+  },
+  {
+   "file": "refs/ws_headon_G-EZGM.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/b/b6/G-EZGM_easyJet_Airbus_A319-111_-_cn_4778_head-on_taxiing.JPG",
+   "page_url": "https://commons.wikimedia.org/wiki/File:G-EZGM_easyJet_Airbus_A319-111_-_cn_4778_head-on_taxiing.JPG",
+   "author": "Alf van Beem",
+   "license": "CC0",
+   "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+   "view": "head-on de um A319-111, azimute 2-4 graus; aeronave pequena no quadro",
+   "notes": "reserva/terceira opiniao; nao entrou na tabela porque o envidracado tem poucos pixels",
+   "baixado": "3648x2736"
+  },
+  {
+   "file": "refs/ws_headon_swiss.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/d/d2/Swiss_A320_front_view.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Swiss_A320_front_view.jpg",
+   "author": "Bjorn Strey",
+   "license": "CC BY-SA 2.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+   "view": "head-on, azimute 0-2 graus",
+   "notes": "reserva",
+   "baixado": "2619x1748"
+  },
+  {
+   "file": "refs/ws_perfil_VP-BWD.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/0/0d/VP-BWD_Airbus_A320_Aeroflot_Nose_%287976228814%29.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:VP-BWD_Airbus_A320_Aeroflot_Nose_(7976228814).jpg",
+   "author": "Aeroprints.com",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+   "view": "close do nariz em perfil quase puro, A320 VP-BWD",
+   "notes": "conferencia da altura do envidracado em z contra a discordancia frontal x lateral do ACAP",
+   "baixado": "2300 px de largura"
+  }
+ ],
+ "proposito": "Referencias FOTOGRAFICAS do PARA-BRISA da familia A320, usadas na correcao de 2026-08-21. O envidracado e type-standard (os ACAP do A319, A320 e A321 desenham o MESMO desenho dentro de 1.5 mm), entao estas fotos valem para as cinco aeronaves: A320neo PT-TMN, A319 PT-TMT, A320ceo CC-BFO, A321neo PS-LBA e A321ceo PT-MXP. NAO existe head-on de licenca livre de nenhuma matricula LATAM/TAM da familia no Commons — varridas todas as categorias de matricula; sao todas perfil ou 3/4.",
+ "politica": "As imagens NAO entram no git (refs/.gitignore + a politica do NOTICE.md). Este manifesto carrega URL, autor e licenca de cada uma.",
+ "fotos_da_frota_usadas_nesta_rodada": [
+  "airbus A320neo/ref_PT-TMN_wikimedia.jpg — PT-TMN, a propria matricula: moldura BRANCA, poste central branco.",
+  "airbus A320ceo/refs/ref_CC-BFO_sjo_stbd.jpg e ref_PR-TYR_elevated_34.jpg — A320ceo LATAM: moldura BRANCA.",
+  "airbus A321ceo/ref_PT-MXP_2017_flickr33651986200.jpg — A321ceo: poste central BRANCO.",
+  "airbus A321neo/ref_PS-LBO_wikimedia_DSC00682.jpg e DSC00834.jpg — A321neo (irma de PS-LBA): MASCARA PRETA em volta do envidracado, o unico dos cinco que a tem. Tambem a foto que mede a razao (crista - topo do vidro)/altura = 1.41, que arbitra a discordancia em z entre a vista frontal e a lateral do ACAP a favor da FRONTAL."
+ ],
+ "procedimento_de_download": "upload.wikimedia.org devolve 429 depois de ~10 originais anonimos; usar https://commons.wikimedia.org/wiki/Special:FilePath/<Arquivo>?width=N, que nao e limitado, com alguns segundos entre pedidos."
+}

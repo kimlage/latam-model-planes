@@ -114,12 +114,65 @@ What a good photo source needs, in order of usefulness:
   almost never appears;
 - **close-ups of nose and tail**: for windshield and fin sash.
 
-Record the URL of every photo used in a measurement inside `spec_*.json` — when
-someone questions a dimension a month from now, the answer has to be in the
-file.
-
 For how to measure from those photos (calibration, uncertainty, what is
 trustworthy and what is not), see `extrair-cotas`, photogrammetry section.
+
+## Where the photos go: links, never files
+
+**Photographs never enter git. Their citation does.** They are CC0 / CC BY /
+CC BY-SA works: share-alike conflicts with the CC BY 4.0 the models ship under,
+and CC BY would require embedding the credit in the file. This is not optional
+and it is not per-aircraft folklore — it is one convention, in one place:
+
+    <aircraft folder>/refs/            the photographs (ignored by git)
+    <aircraft folder>/refs/manifest.json   the citation (committed)
+
+The manifest is schema `latam-refs/1`: a JSON object with `schema`, `subject`,
+`policy` and `photos`, where every entry in `photos` carries at least
+
+```json
+{ "file": "refs/ref_CC-CWY_perfil_mia.jpg",
+  "url": "https://commons.wikimedia.org/wiki/Special:FilePath/....jpg",
+  "page_url": "https://commons.wikimedia.org/wiki/File:....jpg",
+  "author": "Duncan Kirk", "license": "CC BY 4.0",
+  "date": "2026-02-19", "resolution": "5398x3599",
+  "notes": "what this photograph settled" }
+```
+
+`file` is relative to the aircraft folder; new photos go under `refs/`. Use
+`file: null` for a source you consulted but did not download — the citation
+still counts. Any extra key you need (`registration`, `view`, `ressalva`, …)
+is allowed and preserved; only `url`, `author` and `license` are enforced.
+
+Three commands, from the repository root:
+
+```bash
+python3 refs_fetch.py "boeing 767-300F"   # bring the photos back from the manifest
+python3 refs_fetch.py                     # ... for the whole fleet
+python3 refs_fetch.py --verificar         # RUN THIS BEFORE YOU COMMIT
+```
+
+`--verificar` checks that every entry carries URL + author + licence **and**
+that no photograph is tracked by git or exposed to the next `git add`, and exits
+non-zero if either fails. It is the check you cannot forget to run.
+
+**Adding an aircraft:** create `<folder>/refs/manifest.json` in that schema and
+nothing else. Do **not** add a folder-level `.gitignore` — the root one already
+denies `**/refs/*` and re-admits only `*.json`/`*.csv`/`*.md`, so a photograph
+is ignored the day it lands, whatever it is called. Every folder-level ignore
+that used to exist for this was a rule someone had to reinvent, and a rule that
+has to be reinvented is one that will eventually be missed.
+
+**Record author and licence at download time, not later.** Four entries in this
+repository are permanently incomplete because an early session downloaded the
+file and not the credit; they now fail `--verificar` on every run and cannot be
+published. Recovering it afterwards is sometimes possible — the Commons API
+`extmetadata.Artist` field recovered three A320ceo authors — and sometimes not.
+
+Wikimedia note: prefer `https://commons.wikimedia.org/wiki/Special:FilePath/<name>`
+over a direct `upload.wikimedia.org` link. The latter starts returning 429 after
+about ten anonymous originals; `refs_fetch.py` already derives the former from
+`page_url`.
 
 ## Existing CAD and 3D models
 

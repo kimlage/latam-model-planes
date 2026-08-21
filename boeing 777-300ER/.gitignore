@@ -1,16 +1,6 @@
-# Fotos de referencia de terceiros: creditadas em refs/manifest.json, nao
-# redistribuidas (mesma regra do .gitignore da raiz para ref_*.jpg).
-refs/*.jpg
-refs/*.jpeg
-refs/*.png
-refs/thumbs/
-
-# Folha de comparacao com as fotos: contem pixels das fotos de terceiros
-# (uma delas CC BY-SA 4.0, share-alike incompativel com a licenca de assets
-# deste repo). Fica local; a evidencia numerica esta em
-# spec_77w.json -> fin_bandas_2026-08-20.conferencia_no_modelo, e o painel do
-# modelo sozinho esta em render_fin_ortho.png.
-comparacao_fin_sash.png
+# As fotos de referencia desta pasta (refs/, incluindo refs/thumbs/) e a folha
+# comparacao_fin_sash.png sao cobertas pela regra unica do .gitignore da raiz.
+# Nao repita a regra aqui: se uma foto escapar, corrija na raiz.
 
 # Varreduras e arrays intermediarios da extracao (reproduziveis com
 # extract_77w.py a partir do PDF do APR).

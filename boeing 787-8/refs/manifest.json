@@ -1,0 +1,166 @@
+{
+ "schema": "latam-refs/1",
+ "subject": "boeing 787-8",
+ "policy": "Reference photographs are cited here, never committed. They are CC0 / CC BY / CC BY-SA works: share-alike conflicts with the CC BY 4.0 this project's assets ship under, and CC BY would require carrying the credit inside the file. This manifest records URL, author, licence and date for every one of them so the photogrammetry can be reproduced. Re-download them with `python3 refs_fetch.py \"<folder>\"` from the repository root; check the rule is holding with `python3 refs_fetch.py --verificar`. See NOTICE.md.",
+ "photos": [
+  {
+   "file": "refs/ref_bbf_syd18.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/LATAM_Chile_(CC-BBF)_Boeing_787-8_Dreamliner_at_Sydney_Airport_(1).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:LATAM_Chile_(CC-BBF)_Boeing_787-8_Dreamliner_at_Sydney_Airport_(1).jpg",
+   "author": "EXIF Artist = 'Robert Myers' (conferir o creditador na pagina do Commons antes de publicar)",
+   "license": "Creative Commons Attribution-Share Alike 3.0 Australia (EXIF Copyright)",
+   "date": "2018-09-16 (EXIF); Canon EOS 6D",
+   "resolution": "2000x1333",
+   "registration": "CC-BBF",
+   "view": "bombordo",
+   "notes": "leitura geral do bordo de bombordo; resolucao insuficiente para cotas finas",
+   "url_derived_from_page": true
+  },
+  {
+   "file": "refs/ref_bbf_mia23.jpg",
+   "url": null,
+   "page_url": null,
+   "author": null,
+   "license": null,
+   "date": "2023-01-17 (EXIF)",
+   "resolution": "4676x3117",
+   "registration": "CC-BBF",
+   "view": "ESTIBORDO (nariz a direita)",
+   "notes": "foto de trabalho principal. Calibracao projetiva 1D u=(aX+b)/(cX+1) ancorada na ponta do nariz e nas portas 1/2/4, residuo maximo 6.7 px = 0.09 m. Dela sairam lockup (x 7.36..15.58), matricula (x 44.36..46.02), DREAMLINER, fronteira dianteira da cunha (x = 42.77 + 0.887 z, rms 0.012 m) e o simbolo de barriga cruzando a quilha.",
+   "url_note": "NAO REGISTRADA pela sessao anterior",
+   "author_note": "desconhecido (EXIF sem autor; Canon EOS 5D Mark II, Snapheal CK 1.7)",
+   "license_note": "desconhecida",
+   "identificacao_do_bordo": "porta de carga DIANTEIRA medida em x 9.65..12.53 (centro 11.09, APR 11.00) e TRASEIRA em x 35.0..38.5 (centro 36.75, APR 37.21) — as duas sao do lado direito na APR"
+  },
+  {
+   "file": "refs/ref_bbf_mco24.jpg",
+   "url": null,
+   "page_url": null,
+   "author": null,
+   "license": null,
+   "date": "sem EXIF",
+   "resolution": "6000x4000",
+   "registration": "CC-BBF",
+   "view": "estibordo",
+   "notes": "confirma matricula BRANCA sobre o indigo a estibordo; vista parcial do ventre",
+   "url_note": "NAO REGISTRADA pela sessao anterior",
+   "author_note": "desconhecido",
+   "license_note": "desconhecida"
+  },
+  {
+   "file": "refs/ref_bbb_mia23.jpg",
+   "url": null,
+   "page_url": null,
+   "author": null,
+   "license": null,
+   "date": "2023-01-19 (EXIF)",
+   "resolution": "5025x3168",
+   "registration": "CC-BBB (mesmo subtipo, mesma pintura)",
+   "view": "BOMBORDO (nariz a esquerda)",
+   "notes": "a melhor do conjunto para a cauda: quase de perfil, porta 4 inteira servindo de regua e passo das janelas legivel. Dela sairam matricula (x 44.42..46.04, z 1.17..1.47, cap 0.30), titulo BOEING 787-8 (x 40.02..42.44, cap 0.128), altura das letras LATAM (0.777) e a folga de 0.10 m entre as letras e a fileira de janelas.",
+   "url_note": "NAO REGISTRADA pela sessao anterior",
+   "author_note": "desconhecido (Canon EOS 5D Mark II, Snapheal CK 1.7)",
+   "license_note": "desconhecida",
+   "ressalva": "matricula diferente — vale para POSICAO e TAMANHO das marcas (que sao de frota), nao para os glifos"
+  },
+  {
+   "file": "refs/ws_headon_A7-BCC_qatar_osl.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/d/de/A7-BCC_787_Qatar_OSL_02.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:A7-BCC_787_Qatar_OSL_02.jpg",
+   "author": "Bene Riobo",
+   "license": "CC BY-SA 4.0",
+   "resolution": "4900x3267",
+   "notes": "FOTO PRINCIPAL do para-brisa. Head-on de teleobjetiva, camera um pouco ABAIXO do para-brisa. Dela sairam os montantes normalizados pela meia-largura do envidracado: central 0.0733, do meio 0.0477, centro do do meio 0.564. Linha de centro otica achada pelo oval do radome (col 2378.0) e confirmada pelo montante central (2377.95). Oval do radome: meia-largura 200 px contra 298.6 px de meia-largura do envidracado.",
+   "aeronave": "Boeing 787-8, Qatar Airways A7-BCC, Oslo",
+   "group": "fotos_do_nariz_2026-08-21"
+  },
+  {
+   "file": "refs/ws_headon_N805AN_aa_pae.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/5/5c/American_Airlines%2C_Boeing_787-8_Dreamliner%2C_N805AN_-_PAE_%2818677833553%29.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:American_Airlines,_Boeing_787-8_Dreamliner,_N805AN_-_PAE_(18677833553).jpg",
+   "author": "Eric Salard",
+   "license": "CC BY-SA 2.0",
+   "resolution": "3167x2113",
+   "notes": "Segunda medida, independente: montantes 0.0747 / 0.0517 / 0.582 x meia-largura — concorda com a A7-BCC em 2% no central e 8% no do meio, com lente, distancia e elevacao diferentes. Nariz branco: e nela que a junta do radome fica MAIS legivel (um passa-alta revela o oval inteiro). RESSALVA: a camera esta ACIMA do para-brisa, o que encurta a meia-largura aparente do vidro externo — por isso a razao oval/envidracado sai 0.835 aqui contra 0.673 na A7-BCC.",
+   "aeronave": "Boeing 787-8, American Airlines N805AN, Paine Field",
+   "group": "fotos_do_nariz_2026-08-21"
+  },
+  {
+   "file": "refs/ws_headon_G-TUIC_thomson.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Thomson_Airways%2C_Boeing_787-8_Dreamliner%2C_G-TUIC_%2821080363598%29.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Thomson_Airways,_Boeing_787-8_Dreamliner,_G-TUIC_(21080363598).jpg",
+   "author": "Russell Lee Photography from England",
+   "license": "CC BY 2.0",
+   "resolution": "4609x3047",
+   "notes": "Head-on com o envidracado no maior numero de pixels do conjunto. NAO usada para a junta do radome: o nariz e azul e a fronteira azul/cinza da pintura TUI passa perto da junta, o que confunde as duas.",
+   "aeronave": "Boeing 787-8, Thomson/TUI G-TUIC",
+   "group": "fotos_do_nariz_2026-08-21"
+  },
+  {
+   "file": "refs/ws_headon_JA834A_ana_tsa.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Front_view_of_ANA_Boeing_787-8_JA834A_at_Taipei_Songshan_Airport_20150101.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Front_view_of_ANA_Boeing_787-8_JA834A_at_Taipei_Songshan_Airport_20150101.jpg",
+   "author": "玄史生",
+   "license": "CC BY-SA 3.0",
+   "resolution": "4896x3264",
+   "notes": "Head-on geometricamente o mais limpo (na altura do para-brisa, sem inclinacao), mas a aeronave e pequena no quadro — guardada como desempate para a pendencia oval/envidracado, ainda nao medida.",
+   "aeronave": "Boeing 787-8, ANA JA834A, Taipei Songshan",
+   "group": "fotos_do_nariz_2026-08-21"
+  },
+  {
+   "file": "refs/radome_side_ZA001_boeing.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/c/c6/DREAMLINER_%285993676807%29.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:DREAMLINER_(5993676807).jpg",
+   "author": "Cory W. Watts from Madison, Wisconsin",
+   "license": "CC BY-SA 2.0",
+   "resolution": "1280x960",
+   "notes": "Perfil do nariz COM A PONTA NO QUADRO: e a foto que mostra que a junta do radome e uma anilha inclinada, varrendo para a re conforme desce da crista para a quilha — o mesmo que o APR desenha. Confirma qualitativamente o plano x + 0.1118 z = 1.1309.",
+   "aeronave": "Boeing 787-8 ZA001, pintura da casa",
+   "group": "fotos_do_nariz_2026-08-21"
+  },
+  {
+   "file": "refs/radome_side_ET-AOP_lhr.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/7/7a/ET-AOP_Boeing_787_Ethiopian_Nose_%289323028916%29.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:ET-AOP_Boeing_787_Ethiopian_Nose_(9323028916).jpg",
+   "author": "Aeroprints.com",
+   "license": "CC BY-SA 3.0",
+   "resolution": "2592x1936",
+   "notes": "Nariz branco em tres-quartos: confere a junta do radome com mais resolucao que a ZA001.",
+   "aeronave": "Boeing 787-8 Ethiopian ET-AOP, Heathrow",
+   "group": "fotos_do_nariz_2026-08-21"
+  },
+  {
+   "file": "refs/radome_side_united_ksea.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/0/0d/United_787_nose_KSEA_AVGeek_%2818137837483%29.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:United_787_nose_KSEA_AVGeek_(18137837483).jpg",
+   "author": "Pablo Fernicola from United States",
+   "license": "CC BY 2.0",
+   "resolution": "5481x3654",
+   "notes": "A junta mais nitida do conjunto (rebites resolvidos), mas a ponta do nariz esta fora do quadro: serve para a FORMA da junta e a posicao dela em relacao ao para-brisa, nao para a estacao absoluta.",
+   "aeronave": "Boeing 787 United, Seattle",
+   "group": "fotos_do_nariz_2026-08-21"
+  }
+ ],
+ "nota": "Fotos de referencia da fotogrametria de CC-BBF (787-8 LATAM). Os arquivos refs/ref_*.jpg NAO sao versionados — mesma regra do A321neo e do scenario/refs: a licenca das fotos conflita com o CC BY 4.0 dos assets do projeto, e neste caso TRES das quatro chegaram sem URL/autor registrados pela sessao anterior. Este manifesto registra o que foi possivel recuperar (EXIF) para reproducao.",
+ "aviso_de_procedencia": "ATENCAO: so ref_bbf_syd18.jpg tem autoria e licenca verificaveis. As outras tres foram baixadas pela sessao anterior sem registrar a URL. Elas foram usadas apenas como REGUA DE MEDIDA (nenhum pixel delas entra no modelo), mas antes de qualquer publicacao a procedencia precisa ser refeita. Pelo mesmo motivo, comparacao_com_foto.png, comparacao_cauda.png e comparacao_fin_sash.png NAO foram versionados neste aviao, embora os outros quatro avioes versionem o comparacao_fin_sash.png deles (aqueles usam fotos CC BY-SA com autoria registrada).",
+ "documento_oficial": [
+  {
+   "arquivo": "apr600_p20-020.png",
+   "origem": "Boeing 787 Airport Planning Report D6-58333 Rev P, Dezembro 2024, pagina 2-5 (2.2.1 General Dimensions: Model 787-8), rasterizada a 600 dpi de boeing 787-9/B787_APR_boeing.pdf",
+   "licenca": "Copyright 2024 Boeing. 'Not Subject to EAR or ITAR'. Documento publico; nao versionado (regra do .gitignore para apr*.png).",
+   "uso": "comprimento 56.72, envergadura 60.12, altura 16.92, entre-eixos 22.78, bitola 9.80, nariz->trem de nariz 5.41, motor cl_y 9.73, inlet 17.76, estab 19.81, largura 5.77"
+  },
+  {
+   "arquivo": "apr300_p23-023.png",
+   "origem": "mesmo PDF, pagina 2-8 (2.3.1 Ground Clearances: Model 787-8), 300 dpi",
+   "uso": "folgas ao solo; mostra linhas F separadas para motores GE e RR"
+  },
+  {
+   "arquivo": "apr300_p31-031.png",
+   "origem": "mesmo PDF, pagina 2-16 (2.7.1 Door Locations: Model 787-8/-9/-10), 300 dpi",
+   "uso": "as 7 estacoes de porta do -8 e do -9 na MESMA tabela — foi ela que fechou o esquema de plugues (D2/D3 -3.04, D4 e carga traseira -6.10, bulk -6.09, D1 e carga dianteira inalteradas)"
+  }
+ ],
+ "derivadas_nao_versionadas": "refs/insp_*.png, refs/m_*.png, refs/view_*.png, refs/insp788_*.png sao recortes com grade gerados a partir das fotos e da APR; nao sao fontes independentes e carregam o mesmo problema de licenca.",
+ "nota_do_nariz_2026-08-21": "As fotos refs/*.jpg NAO sao versionadas (ver o .gitignore desta pasta): CC BY-SA conflita com o share-alike da CC BY 4.0 dos assets do projeto e CC BY exigiria embutir os creditos no arquivo. O manifesto registra a URL exata para reproduzir o download. Nenhum pixel delas entra no modelo — sao regua de medida. NAO EXISTE head-on de 787 da LATAM em licenca livre no Wikimedia Commons (checados CC-BGB/D/E/F/G/I/J/K/L/M/N/P/T/V, CC-BBA, CC-BBF, PS-LAA: todas de perfil, tres-quartos, em voo ou no portao). A junta do radome e o para-brisa sao PADRAO DE TIPO, entao 787-8 de qualquer operador serve; o nariz da LATAM e branco, o que faz da N805AN o analogo de pintura mais proximo. Descartado File:Boeing_787_front_view.jpg: sem EXIF de camera, quadro derivado de 1080p, chao branco de estudio — quase certamente captura de simulador, ou seja, medir o modelo de outra pessoa. Os arquivos sao hard links dos mesmos bytes em ../boeing 787-9/refs/ — os dois avioes tem o mesmo nariz e foram medidos nas mesmas fotos."
+}

@@ -1,7 +1,0 @@
-# Fotos de referencia de terceiros: creditadas em refs/manifest.json, nao
-# redistribuidas (mesma regra do .gitignore da raiz para ref_*.jpg e do
-# .gitignore do 777). As fotos head-on do parabrisa entraram em 2026-08-21
-# com nomes ws_*, que as regras ref_* da raiz nao cobriam.
-refs/*.jpg
-refs/*.jpeg
-refs/*.png

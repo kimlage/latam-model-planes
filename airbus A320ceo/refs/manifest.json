@@ -1,0 +1,57 @@
+{
+ "schema": "latam-refs/1",
+ "subject": "airbus A320ceo",
+ "policy": "Reference photographs are cited here, never committed. They are CC0 / CC BY / CC BY-SA works: share-alike conflicts with the CC BY 4.0 this project's assets ship under, and CC BY would require carrying the credit inside the file. This manifest records URL, author, licence and date for every one of them so the photogrammetry can be reproduced. Re-download them with `python3 refs_fetch.py \"<folder>\"` from the repository root; check the rule is holding with `python3 refs_fetch.py --verificar`. See NOTICE.md.",
+ "photos": [
+  {
+   "file": "refs/ref_CC-BFO_sjo_stbd.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/CC-BFO_-_Airbus_A320-214_-_LATAM_Airlines_SJO_220126.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:CC-BFO_-_Airbus_A320-214_-_LATAM_Airlines_SJO_220126.jpg",
+   "author": "kitmasterbloke",
+   "license": "CC BY 4.0",
+   "date": "2022-01-26",
+   "resolution": "3965x1780",
+   "view": "perfil quase puro, lado ESTIBORDO (nariz para a direita), pouso em SJO com reversores ABERTOS",
+   "notes": "fotogrametria da echarpe/matricula/titulo; sash da deriva; hstab extradorso claro; 2 saidas overwing por lado",
+   "url_derived_from_page": true,
+   "author_source": "recovered 2026-08-21 from the Wikimedia Commons API (Artist field of the file page); the original manifest recorded the licence and the page but not the author"
+  },
+  {
+   "file": "refs/ref_CC-BFO_sjo_wide_port.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/CC-BFO_-_Airbus_A320-214_-_LATAM_Airlines_wide_SJO_220126.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:CC-BFO_-_Airbus_A320-214_-_LATAM_Airlines_wide_SJO_220126.jpg",
+   "author": "kitmasterbloke",
+   "license": "CC BY 4.0",
+   "date": "2022-01-26",
+   "resolution": "5112x2400",
+   "view": "perfil lado PORT (nariz para a esquerda), taxi",
+   "notes": "confirma matricula branca no indigo e titulo AIRBUS A320 nos DOIS lados; sharklet; sash port",
+   "url_derived_from_page": true,
+   "author_source": "recovered 2026-08-21 from the Wikimedia Commons API (Artist field of the file page); the original manifest recorded the licence and the page but not the author"
+  },
+  {
+   "file": "refs/ref_PR-TYR_elevated_34.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Brazil-01276_-_Journey_Continues_(48989435868).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Brazil-01276_-_Journey_Continues_(48989435868).jpg",
+   "author": "Dennis G. Jarvis",
+   "license": "CC BY-SA 2.0",
+   "date": "2019-10-11",
+   "resolution": "6000x4000",
+   "view": "3/4 dianteiro elevado de um A320-214 LATAM Brasil (PR-TYR)",
+   "notes": "APENAS conferencia qualitativa de crista/lockup/nacelle CFM em vista elevada — nao e a matricula alvo",
+   "url_derived_from_page": true,
+   "author_source": "recovered 2026-08-21 from the Wikimedia Commons API (Artist field of the file page); the original manifest recorded the licence and the page but not the author"
+  }
+ ],
+ "matricula_alvo": "CC-BFO",
+ "aeronave": "Airbus A320-214(SL), LATAM Airlines Chile (ex D-AVVE), CFM56-5B4/3, sharklets",
+ "fotos_rejeitadas": "CC-COP (6 fotos CC BY-SA 4.0): scans de filme na livery LAN antiga. PR-MA*/MB* (A320-232 IAE): so livery TAM antiga no Commons — por isso a matricula IAE foi descartada e o alvo e um CFM56.",
+ "nota_reversor": "na foto de estibordo os reversores estao abertos (luva transladada); o modelo representa a nacelle FECHADA — usar a foto para diametro/posicao, nao para o comprimento da luva",
+ "paginas_acap_rasterizadas": {
+  "acap_ceo-040..043.png": "AC_A320 Jun/24 raw 40-43, 600dpi: 3-views A320-200 fence (40-41) e Sharklet (42-43). CFM56 inlet 11.19 / V2500 11.12; span sharklet 35.80; comprimento 37.57.",
+  "acap_clr-047..050.png": "raw 47-50, 300dpi: Ground Clearances 2-3-0 fence e sharklet. N1 CFM 5B 0.577 m (WV0 17%), V2500 0.759; sills D1 3.381 / D4 3.615.",
+  "acap_doors-074..077.png": "raw 74-77, 300dpi (rasterizadas nesta sessao): fig 2-7-0-991-003 Door Location (5.04/14.43/15.28/29.53; cargas 8.16/22.69/26.29) e -024 Aft Doors (29.64, folha 1.79x0.81)."
+ },
+ "medicoes_2026_08_20": "Reguas do agente anterior resolvidas (ver spec_a320ceo.json regua_discrepancia_resolvida): oclusao do estab sobre a porta 2 + vies projetivo sem ancora entre overwings e cauda. Scripts: medir_crops.py, medir_janelas.py, medir_fit.py, medir_projetivo.py, medir_echarpe.py; crops insp_*.png documentam as ancoras.",
+ "nota_parabrisa_2026_08_21": "PARA-BRISA 2026-08-21: as fotos head-on que mediram o envidracado desta familia vivem em 'airbus A320neo/refs/' (EC-KOH, Aeroflot, G-EZGM, Swiss, VP-BWD), com URL/autor/licenca em 'airbus A320neo/refs/manifest.json'. O envidracado e type-standard — os ACAP do A319, A320 e A321 desenham o mesmo desenho dentro de 1.5 mm — e nao existe head-on de licenca livre de nenhuma matricula LATAM/TAM da familia no Wikimedia Commons."
+}

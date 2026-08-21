@@ -26,16 +26,43 @@ boeing 767-300ER/cargo*.png
 boeing 767-300ER/lo-*.png
 boeing 767-300ER/view_v*.png
 
-# Fotos de referencia de terceiros (sem metadados de autoria/licenca registrados)
+# ---------------------------------------------------------------------------
+# FOTOS DE REFERENCIA — a regra unica do repositorio. Nao crie .gitignore de
+# pasta para isso; se uma foto nova escapar, corrija AQUI.
+#
+# Nenhuma fotografia de referencia entra no git. Sao obras de terceiros em
+# CC0 / CC BY / CC BY-SA: share-alike conflita com a CC BY 4.0 dos assets do
+# projeto, e CC BY exigiria embutir o credito no proprio arquivo. O que E
+# versionado e o manifesto de cada pasta,
+#     <pasta da aeronave>/refs/manifest.json      (schema "latam-refs/1")
+# com URL, autor, licenca e data de cada foto. Traga as fotos de volta com
+#     python3 refs_fetch.py                       # a frota inteira
+#     python3 refs_fetch.py "boeing 777-300ER"    # so uma
+# e confira que a regra continua valendo com
+#     python3 refs_fetch.py --verificar
+# Veja NOTICE.md e a skill fontes-aeronave.
+#
+# refs/ e negado por inteiro — inclusive derivados (crop_*, view_*, insp_*,
+# m_*, thumbs/) e qualquer extensao futura — e so os arquivos de DADOS voltam.
+# Assim uma foto nova com nome imprevisto ja nasce ignorada.
+**/refs/*
+!**/refs/*.json
+!**/refs/*.csv
+!**/refs/*.md
+# Fotos herdadas que moram na RAIZ da pasta da aeronave (A320neo, A321ceo,
+# A321neo, 777, 787-9): ficaram onde os scripts de medicao ja apontam. Foto
+# nova vai para refs/.
 ref_*.jpg
 **/ref_*.jpg
-# Fotos com autoria/licenca REGISTRADAS em refs/manifest.json continuam fora do
-# git: CC BY-SA conflita com a CC BY 4.0 dos assets do projeto (share-alike), e
-# CC BY exigiria embutir os creditos no arquivo. Citamos no manifesto e no
-# NOTICE.md em vez de redistribuir. Mesma regra do cenario SCL.
-**/refs/ref_*
-**/refs/view_*.png
-**/refs/crop_*.png
+**/ref_*.jpeg
+**/ref_*.png
+**/ws_*.jpg
+**/ws_*.jpeg
+**/ws_*.png
+**/ctl_*.jpg
+**/radome_side_*.jpg
+# ---------------------------------------------------------------------------
+
 comparacao_com_foto.png
 **/comparacao_com_foto.png
 # Reprojecao da foto inteira no enquadramento do render (artefato de trabalho).

@@ -1,10 +1,5 @@
-# Fotos de referencia de terceiros: creditadas em refs/manifest.json, nao
-# redistribuidas (mesma regra do .gitignore da raiz e do 767-300ER). Inclui as
-# fotos de controle ctl_*, de outros operadores, usadas para achar a aresta da
-# porta de conves principal.
-refs/*.jpg
-refs/*.jpeg
-refs/*.png
+# As fotos de referencia desta pasta (refs/, inclusive as de controle ctl_*)
+# sao cobertas pela regra unica do .gitignore da raiz. Nao repita a regra aqui.
 
 # Rasterizacoes das paginas do CARGUEIRO do ACAP D6-58328 (p.30 cotas gerais,
 # p.34 clearances, p.41 arranjo do conves, p.50 portas pax/servico, p.56 porta

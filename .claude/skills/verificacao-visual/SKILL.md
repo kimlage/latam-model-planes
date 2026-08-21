@@ -142,8 +142,18 @@ Open the sheet **side by side with the reference photos of the registration**.
 The goal is not to find it pretty; it is to find the divergence. For each panel,
 ask what would change if you overlaid the photo.
 
-**If you do not have the photo, stop and go find it now** — `WebSearch` for the
-registration, JetPhotos, Planespotters, Wikimedia. Comparing the render with the
+**If you do not have the photo, stop and go find it now.** For an aircraft that
+already exists in the repository the photos are one command away — they are
+never committed, only cited, so re-fetch them from the folder's manifest:
+
+```bash
+python3 refs_fetch.py "boeing 767-300ER"     # downloads into that folder's refs/
+```
+
+For a photo the project has never used, `WebSearch` for the
+registration, JetPhotos, Planespotters, Wikimedia — and record its URL, author
+and licence in `<folder>/refs/manifest.json` as you go, per `fontes-aeronave`.
+Comparing the render with the
 *description* in a spec is comparing it with nothing: the description may be
 wrong, and in that case the gate approves the error with full confidence. That
 is exactly what happened with the 787-9 sash, refined for hours against a text

@@ -1,0 +1,74 @@
+{
+ "schema": "latam-refs/1",
+ "subject": "airbus A321neo",
+ "policy": "Reference photographs are cited here, never committed. They are CC0 / CC BY / CC BY-SA works: share-alike conflicts with the CC BY 4.0 this project's assets ship under, and CC BY would require carrying the credit inside the file. This manifest records URL, author, licence and date for every one of them so the photogrammetry can be reproduced. Re-download them with `python3 refs_fetch.py \"<folder>\"` from the repository root; check the rule is holding with `python3 refs_fetch.py --verificar`. See NOTICE.md.",
+ "photos": [
+  {
+   "file": "ref_PS-LBO_wikimedia_DSC00834.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Hamburg-Finkenwerder_Airport_LATAM_Airlines_Brasil_Airbus_A321-271NX_PS-LBO_(DSC00834).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Hamburg-Finkenwerder_Airport_LATAM_Airlines_Brasil_Airbus_A321-271NX_PS-LBO_(DSC00834).jpg",
+   "author": "MarcelX42",
+   "license": "CC BY-SA 4.0",
+   "date": "2025-06-12",
+   "notes": "perfil lateral bombordo quase ortografico — calibracao quadratica px(x) nas portas do ACAP, fronteiras da echarpe, titulo, patch da matricula, janelas (medir_echarpe_v2.py)",
+   "url_derived_from_page": true
+  },
+  {
+   "file": "ref_PS-LBO_wikimedia_DSC00682.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Hamburg-Finkenwerder_Airport_LATAM_Airlines_Brasil_Airbus_A321-271NX_PS-LBO_(DSC00682).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Hamburg-Finkenwerder_Airport_LATAM_Airlines_Brasil_Airbus_A321-271NX_PS-LBO_(DSC00682).jpg",
+   "author": "MarcelX42",
+   "license": "CC BY-SA 4.0",
+   "date": "2025-06-12",
+   "notes": "perfil bombordo, segunda testemunha da echarpe e do nariz limpo (sem titulos PRIMEIRO)",
+   "url_derived_from_page": true
+  },
+  {
+   "file": "ref_PS-LBO_wikimedia_DSC00896.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Hamburg-Finkenwerder_Airport_LATAM_Airlines_Brasil_Airbus_A321-271NX_PS-LBO_(DSC00896).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Hamburg-Finkenwerder_Airport_LATAM_Airlines_Brasil_Airbus_A321-271NX_PS-LBO_(DSC00896).jpg",
+   "author": "MarcelX42",
+   "license": "CC BY-SA 4.0",
+   "date": "2025-06-12",
+   "notes": "lado estibordo — portas de carga, echarpe espelhada, hstab cinza",
+   "url_derived_from_page": true
+  },
+  {
+   "file": null,
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/LATAM_Airlines_New_Airbus_A321Neo.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:LATAM_Airlines_New_Airbus_A321Neo.jpg",
+   "author": "Airbus (press)",
+   "license": "CC BY 4.0",
+   "date": "2023-10-02",
+   "notes": "PS-LBA em voo (3/4 traseiro estibordo, 678px) — confirma matricula BRANCA dentro da echarpe no estilo de fabrica",
+   "file_note": "(nao baixada para o repo — vista no scratchpad)",
+   "url_derived_from_page": true
+  },
+  {
+   "file": null,
+   "url": "https://www.jetphotos.com/registration/PS-LBA",
+   "page_url": null,
+   "author": "varios",
+   "license": "todos os direitos reservados",
+   "notes": "confirmacao de que PS-LBA e A321-271NX (ACF) e esta na frota LATAM Brasil desde out/2023",
+   "file_note": "(consulta apenas, nao baixada)"
+  }
+ ],
+ "nota": "Fotos de referencia usadas na fotogrametria da livery PS-LBA. Os arquivos ref_*.jpg NAO sao versionados (CC BY-SA e share-alike, conflita com o CC BY 4.0 dos assets do projeto — mesma regra do scenario/refs). Este manifesto registra autor/licenca/URL para reproducao.",
+ "vetores": [
+  {
+   "arquivo": "../airbus_a321neo_logo.svg",
+   "url": "https://commons.wikimedia.org/wiki/File:Airbus_A321neo_typeface.svg",
+   "autor": "Airbus",
+   "licenca": "PD-textlogo (marca registrada; uso nao-comercial de retrato)",
+   "uso": "logotipo A321neo do titulo traseiro; 'AIRBUS' reaproveitado da malha do master A320"
+  }
+ ],
+ "documento_oficial": {
+  "arquivo": "A321_ACAP_airbus.pdf (nao versionado)",
+  "url": "https://mediaassets.airbus.com/pm_38_916_916230-7u6neg4lfg.pdf?fileName=aca32101-jul-2026.pdf",
+  "titulo": "Airbus A321 Aircraft Characteristics - Airport and Maintenance Planning, Rev 35, Jul 01/26",
+  "paginas_usadas": "brutas 73-74 (Fig 2-2-0 ACF), 115-116 (Fig 2-7-0 portas ACF)"
+ },
+ "nota_parabrisa_2026_08_21": "PARA-BRISA 2026-08-21: as fotos head-on que mediram o envidracado desta familia vivem em 'airbus A320neo/refs/' (EC-KOH, Aeroflot, G-EZGM, Swiss, VP-BWD), com URL/autor/licenca em 'airbus A320neo/refs/manifest.json'. O envidracado e type-standard — os ACAP do A319, A320 e A321 desenham o mesmo desenho dentro de 1.5 mm — e nao existe head-on de licenca livre de nenhuma matricula LATAM/TAM da familia no Wikimedia Commons."
+}

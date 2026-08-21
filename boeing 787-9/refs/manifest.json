@@ -1,0 +1,97 @@
+{
+ "schema": "latam-refs/1",
+ "subject": "boeing 787-9",
+ "policy": "Reference photographs are cited here, never committed. They are CC0 / CC BY / CC BY-SA works: share-alike conflicts with the CC BY 4.0 this project's assets ship under, and CC BY would require carrying the credit inside the file. This manifest records URL, author, licence and date for every one of them so the photogrammetry can be reproduced. Re-download them with `python3 refs_fetch.py \"<folder>\"` from the repository root; check the rule is holding with `python3 refs_fetch.py --verificar`. See NOTICE.md.",
+ "photos": [
+  {
+   "file": "refs/ws_headon_A7-BCC_qatar_osl.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/d/de/A7-BCC_787_Qatar_OSL_02.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:A7-BCC_787_Qatar_OSL_02.jpg",
+   "author": "Bene Riobo",
+   "license": "CC BY-SA 4.0",
+   "resolution": "4900x3267",
+   "notes": "FOTO PRINCIPAL do para-brisa. Head-on de teleobjetiva, camera um pouco ABAIXO do para-brisa. Dela sairam os montantes normalizados pela meia-largura do envidracado: central 0.0733, do meio 0.0477, centro do do meio 0.564. Linha de centro otica achada pelo oval do radome (col 2378.0) e confirmada pelo montante central (2377.95). Oval do radome: meia-largura 200 px contra 298.6 px de meia-largura do envidracado.",
+   "aeronave": "Boeing 787-8, Qatar Airways A7-BCC, Oslo"
+  },
+  {
+   "file": "refs/ws_headon_N805AN_aa_pae.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/5/5c/American_Airlines%2C_Boeing_787-8_Dreamliner%2C_N805AN_-_PAE_%2818677833553%29.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:American_Airlines,_Boeing_787-8_Dreamliner,_N805AN_-_PAE_(18677833553).jpg",
+   "author": "Eric Salard",
+   "license": "CC BY-SA 2.0",
+   "resolution": "3167x2113",
+   "notes": "Segunda medida, independente: montantes 0.0747 / 0.0517 / 0.582 x meia-largura — concorda com a A7-BCC em 2% no central e 8% no do meio, com lente, distancia e elevacao diferentes. Nariz branco: e nela que a junta do radome fica MAIS legivel (um passa-alta revela o oval inteiro). RESSALVA: a camera esta ACIMA do para-brisa, o que encurta a meia-largura aparente do vidro externo — por isso a razao oval/envidracado sai 0.835 aqui contra 0.673 na A7-BCC.",
+   "aeronave": "Boeing 787-8, American Airlines N805AN, Paine Field"
+  },
+  {
+   "file": "refs/ws_headon_G-TUIC_thomson.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Thomson_Airways%2C_Boeing_787-8_Dreamliner%2C_G-TUIC_%2821080363598%29.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Thomson_Airways,_Boeing_787-8_Dreamliner,_G-TUIC_(21080363598).jpg",
+   "author": "Russell Lee Photography from England",
+   "license": "CC BY 2.0",
+   "resolution": "4609x3047",
+   "notes": "Head-on com o envidracado no maior numero de pixels do conjunto. NAO usada para a junta do radome: o nariz e azul e a fronteira azul/cinza da pintura TUI passa perto da junta, o que confunde as duas.",
+   "aeronave": "Boeing 787-8, Thomson/TUI G-TUIC"
+  },
+  {
+   "file": "refs/ws_headon_JA834A_ana_tsa.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Front_view_of_ANA_Boeing_787-8_JA834A_at_Taipei_Songshan_Airport_20150101.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Front_view_of_ANA_Boeing_787-8_JA834A_at_Taipei_Songshan_Airport_20150101.jpg",
+   "author": "玄史生",
+   "license": "CC BY-SA 3.0",
+   "resolution": "4896x3264",
+   "notes": "Head-on geometricamente o mais limpo (na altura do para-brisa, sem inclinacao), mas a aeronave e pequena no quadro — guardada como desempate para a pendencia oval/envidracado, ainda nao medida.",
+   "aeronave": "Boeing 787-8, ANA JA834A, Taipei Songshan"
+  },
+  {
+   "file": "refs/radome_side_ZA001_boeing.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/c/c6/DREAMLINER_%285993676807%29.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:DREAMLINER_(5993676807).jpg",
+   "author": "Cory W. Watts from Madison, Wisconsin",
+   "license": "CC BY-SA 2.0",
+   "resolution": "1280x960",
+   "notes": "Perfil do nariz COM A PONTA NO QUADRO: e a foto que mostra que a junta do radome e uma anilha inclinada, varrendo para a re conforme desce da crista para a quilha — o mesmo que o APR desenha. Confirma qualitativamente o plano x + 0.1118 z = 1.1309.",
+   "aeronave": "Boeing 787-8 ZA001, pintura da casa"
+  },
+  {
+   "file": "refs/radome_side_ET-AOP_lhr.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/7/7a/ET-AOP_Boeing_787_Ethiopian_Nose_%289323028916%29.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:ET-AOP_Boeing_787_Ethiopian_Nose_(9323028916).jpg",
+   "author": "Aeroprints.com",
+   "license": "CC BY-SA 3.0",
+   "resolution": "2592x1936",
+   "notes": "Nariz branco em tres-quartos: confere a junta do radome com mais resolucao que a ZA001.",
+   "aeronave": "Boeing 787-8 Ethiopian ET-AOP, Heathrow"
+  },
+  {
+   "file": "refs/radome_side_united_ksea.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/0/0d/United_787_nose_KSEA_AVGeek_%2818137837483%29.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:United_787_nose_KSEA_AVGeek_(18137837483).jpg",
+   "author": "Pablo Fernicola from United States",
+   "license": "CC BY 2.0",
+   "resolution": "5481x3654",
+   "notes": "A junta mais nitida do conjunto (rebites resolvidos), mas a ponta do nariz esta fora do quadro: serve para a FORMA da junta e a posicao dela em relacao ao para-brisa, nao para a estacao absoluta.",
+   "aeronave": "Boeing 787 United, Seattle"
+  },
+  {
+   "file": "ref_CC-BGP_wikimedia.jpg",
+   "url": null,
+   "page_url": null,
+   "author": null,
+   "license": null,
+   "registration": "CC-BGP (787-9 LATAM)",
+   "notes": "foto historica desta pasta, usada para a deriva e a cunha traseira; nao serve para o nariz."
+  }
+ ],
+ "nota": "As fotos refs/*.jpg NAO sao versionadas (ver o .gitignore desta pasta): CC BY-SA conflita com o share-alike da CC BY 4.0 dos assets do projeto e CC BY exigiria embutir os creditos no arquivo. O manifesto registra a URL exata para reproduzir o download. Nenhum pixel delas entra no modelo — sao regua de medida.",
+ "aviso_de_procedencia": "NAO EXISTE head-on de 787 da LATAM em licenca livre no Wikimedia Commons (checados CC-BGB/D/E/F/G/I/J/K/L/M/N/P/T/V, CC-BBA, CC-BBF, PS-LAA: todas de perfil, tres-quartos, em voo ou no portao). A junta do radome e o para-brisa sao PADRAO DE TIPO, entao 787-8 de qualquer operador serve; o nariz da LATAM e branco, o que faz da N805AN o analogo de pintura mais proximo. Descartado File:Boeing_787_front_view.jpg: sem EXIF de camera, quadro derivado de 1080p, chao branco de estudio — quase certamente captura de simulador, ou seja, medir o modelo de outra pessoa.",
+ "documento_oficial": [
+  {
+   "arquivo": "B787_APR_boeing.pdf, pagina 2-6 (2.2.2 General Dimensions: Model 787-9)",
+   "origem": "Boeing 787 Airport Planning Report D6-58333 Rev P, Dezembro 2024",
+   "licenca": "Copyright 2024 Boeing. 'Not Subject to EAR or ITAR'. Documento publico; nao versionado.",
+   "resolucao_real": "a imagem embutida na pagina tem 1208x1708 px sobre 6x8.5 polegadas, ou seja 201 dpi NATIVOS. Rasterizar a 600 dpi da subpixel, nao informacao nova: 1 px nativo = 6 cm de aeronave.",
+   "uso": "Vista LATERAL: estacao da junta do radome (crista x=1.078, quilha x=1.403; calibracao pela altura de fuselagem 5.94 m -> 49.16 px/m, ponta do nariz na coluna 865, comprimento total confere em 0.8%). Vista SUPERIOR: meia-largura do nariz (1.112/1.171/1.230 em x=1.12/1.24/1.36 depois de normalizar pela secao desenhada, que sai 3.3% grande). Vista FRONTAL: oval do radome e envidracado; ATENCAO, nela a secao da fuselagem esta desenhada ~11% grande — a mesma armadilha do ACAP do 767 — enquanto a envergadura (extensoes da cota de 60.12 m em 2939 px) e a bitola do trem (9.80 m em 477 px) concordam entre si em 0.4%."
+  }
+ ]
+}

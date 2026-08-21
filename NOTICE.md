@@ -41,21 +41,62 @@ licences above. To reproduce the pipeline from scratch, get them from the source
 | `boeing 767-300ER/B767_ACAP_D6-58328_boeing.pdf` | 767 *Airplane Characteristics* D6-58328 Rev K (Dec/24) | Boeing, **Airport Compatibility / ACAPs** section (free) |
 | `latam_logo_indigo.svg` | Official LATAM lockup (symbol + wordmark) | Wikimedia Commons |
 | `airbus_a320neo_logo.svg`, `airbus_a321neo_logo.svg`, `dreamliner_logo.svg` | Manufacturer titles | Wikimedia Commons |
-| `ref_CC-BGP_wikimedia.jpg`, `ref_PT-TMN_wikimedia.jpg` | Reference photographs of the registrations | Wikimedia Commons / JetPhotos / Planespotters |
-| `airbus A321neo/ref_PS-LBO_wikimedia_*.jpg` | PS-LBO reference photographs (CC BY-SA 4.0, share-alike — cited, not shipped) | credits in `airbus A321neo/refs_manifest.json` |
-| `boeing 767-300F/refs/*`, `boeing 777-300ER/refs/*`, `boeing 787-8/refs/*`, `boeing 787-9/refs/*` | N536LA / N568LA, PT-MU*, CC-BBF and 787 head-on reference photographs (CC0 / CC BY / CC BY-SA) | full URL, author, licence and date for each in the folder's `refs/manifest.json` or `refs_manifest.json` |
 | `boeing 777-300ER/B777_APR_boeing.pdf` | 777 *Airplane Characteristics* D6-58329-2 | Boeing, **Airport Compatibility / ACAPs** section (free) |
-| `boeing 767-300ER/refs/ref_*`, `refs/view_*.png`, `refs/crop_*.png` | CC-CWY and sister-ship photographs and the crops derived from them (CC BY 4.0 / CC BY-SA 4.0 / CC BY 2.0) | full URL, author, licence and date for each in `boeing 767-300ER/refs/manifest.json` |
+| **every reference photograph** | see the section below | `python3 refs_fetch.py` |
 
 The manufacturer documents are free downloads, but **free to download is not
 free to redistribute**: the rights stay with Airbus and Boeing.
 
-The reference photographs were excluded for a different and equally simple
-reason: the project did not record the author and licence of each one at
-download time, and without that it is impossible to meet the attribution that
-Creative Commons licences require. **Lesson folded into the pipeline:** every new
-photograph enters with its URL, author and licence recorded in the aircraft's
-`spec_*.json`.
+## Reference photographs: links, never files
+
+Every photograph the project measures is a third-party work under CC0, CC BY or
+CC BY-SA. Share-alike conflicts with the CC BY 4.0 the models ship under, and
+CC BY would require carrying the credit inside the file itself. So the rule is
+absolute and applies to all eleven aircraft folders and to `scenario/`:
+
+> **The photographs are cited, never committed. The citation is committed.**
+
+The citation is one manifest per folder, always at the same path, always in the
+same schema:
+
+    <folder>/refs/manifest.json          schema "latam-refs/1"
+
+Every entry carries `file`, `url`, `page_url`, `author`, `license` and, where
+known, `license_url`, `date`, `resolution` and free-text notes on what the
+photograph was used for. Entries with `file: null` are citations of sources that
+were consulted but never downloaded.
+
+Because the manifest is the only copy of that knowledge, one script keeps it
+honest and keeps it useful — **listing the paths here would only let them drift**:
+
+```
+python3 refs_fetch.py                      # re-download the whole fleet
+python3 refs_fetch.py "boeing 777-300ER"   # just one folder
+python3 refs_fetch.py --verificar          # the gate, run it before committing
+```
+
+`--verificar` answers the two questions that matter, in one command: does every
+entry carry URL + author + licence, and is any photograph tracked by git or
+exposed to the next `git add`. It exits non-zero if either answer is bad.
+
+A **single rule set in the root [`.gitignore`](.gitignore)** covers this — no
+folder-level `.gitignore` is needed or wanted. It denies `**/refs/*` outright
+and re-admits only `*.json`, `*.csv` and `*.md`, so a photograph with an
+unforeseen name or extension is ignored the day it lands.
+
+**The history is not clean, and deliberately so.** Five derived comparison
+sheets that embed photograph pixels were committed before this policy existed;
+they were removed from the index in `0da5329`, but the earlier commits still
+contain them. Nothing was ever pushed — `origin/main` predates the fleet work —
+and the owner chose to leave the history as it is rather than rewrite it.
+
+**Four entries are knowingly incomplete** and are reported by `--verificar` on
+every run, rather than being quietly filled in:
+
+| Entry | What is missing |
+|---|---|
+| `boeing 787-8/refs/ref_bbf_mia23.jpg`, `ref_bbf_mco24.jpg`, `ref_bbb_mia23.jpg` | URL, author and licence — downloaded by an early session that recorded none of them. Used as a measuring rule only; no pixel of them is in the model. Provenance must be redone before any publication. |
+| `boeing 787-9/ref_CC-BGP_wikimedia.jpg` | URL, author and licence |
 
 ## Elevation and geographic data (the SCL scenario)
 
