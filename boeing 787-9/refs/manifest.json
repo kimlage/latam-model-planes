@@ -7,7 +7,7 @@
    "file": "refs/ws_headon_A7-BCC_qatar_osl.jpg",
    "url": "https://upload.wikimedia.org/wikipedia/commons/d/de/A7-BCC_787_Qatar_OSL_02.jpg",
    "page_url": "https://commons.wikimedia.org/wiki/File:A7-BCC_787_Qatar_OSL_02.jpg",
-   "author": "Bene Riobo",
+   "author": "Bene Riobó",
    "license": "CC BY-SA 4.0",
    "resolution": "4900x3267",
    "notes": "FOTO PRINCIPAL do para-brisa. Head-on de teleobjetiva, camera um pouco ABAIXO do para-brisa. Dela sairam os montantes normalizados pela meia-largura do envidracado: central 0.0733, do meio 0.0477, centro do do meio 0.564. Linha de centro otica achada pelo oval do radome (col 2378.0) e confirmada pelo montante central (2377.95). Oval do radome: meia-largura 200 px contra 298.6 px de meia-largura do envidracado.",
@@ -75,15 +75,24 @@
   },
   {
    "file": "ref_CC-BGP_wikimedia.jpg",
-   "url": null,
-   "page_url": null,
-   "author": null,
-   "license": null,
+   "url": "https://upload.wikimedia.org/wikipedia/commons/e/e2/LATAM_Airlines%2C_CC-BGP%2C_Boeing_787-9_Dreamliner_%2852563974504%29.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:LATAM_Airlines,_CC-BGP,_Boeing_787-9_Dreamliner_(52563974504).jpg",
+   "author": "Anna Zvereva (Flickr 130961247@N06)",
+   "license": "CC BY-SA 2.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+   "source_url": "https://www.flickr.com/photos/130961247@N06/52563974504/",
+   "date": "2022-11-01 18:26 (EXIF DateTimeOriginal 18:26:11)",
+   "resolution": "1200x800",
+   "sha1": "336bbde6b3f7b277bbb20ff0d7234b3d7fe78774",
    "registration": "CC-BGP (787-9 LATAM)",
-   "notes": "foto historica desta pasta, usada para a deriva e a cunha traseira; nao serve para o nariz."
+   "aeronave": "Boeing 787-9, LATAM Chile CC-BGP, Madrid-Barajas",
+   "notes": "foto historica desta pasta, usada para a deriva e a cunha traseira; nao serve para o nariz.",
+   "procedencia_recuperada": "2026-08-21. O nome do arquivo dizia 'wikimedia' e nada mais. Recuperado pela API do Commons e confirmado por IDENTIDADE DE BYTES: sha1 local = sha1 do original no Commons (336bbde6...), 1200x800, 1074504 bytes. Pistas: EXIF DateTimeOriginal 2022-11-01 18:26:11 com Nikon D5600 e 55-300mm, e o bloco Photoshop do arquivo, cujo SlicesGroupName e literalmente 'CC-BGP' — o proprio fotografo nomeou o documento pela matricula. A busca por 'CC-BGP' no espaco de Arquivo devolveu um unico candidato com essa data e hora. O original enviado ao Commons ja e 1200x800: o IFD0 guarda 6000x4000 (o quadro da camera) enquanto o ExifImageWidth diz 1200, ou seja a reducao foi feita pelo fotografo no Photoshop antes do envio, e nao pelo Commons nem por esta pasta. Revisao de licenca do Flickr: FlickreviewR 2, status passed, 2025-10-27.",
+   "ressalva_de_resolucao": "1200x800 e a MAIOR versao publicada. As cotas da deriva e da cunha traseira em spec_b789.json saem dela e nao podem ficar mais finas sem uma foto melhor da CC-BGP."
   }
  ],
  "nota": "As fotos refs/*.jpg NAO sao versionadas (ver o .gitignore desta pasta): CC BY-SA conflita com o share-alike da CC BY 4.0 dos assets do projeto e CC BY exigiria embutir os creditos no arquivo. O manifesto registra a URL exata para reproduzir o download. Nenhum pixel delas entra no modelo — sao regua de medida.",
+ "procedencia_do_CC-BGP": "RESOLVIDO em 2026-08-21. ref_CC-BGP_wikimedia.jpg chegou a esta pasta sem URL, autor nem licenca; agora e Anna Zvereva, CC BY-SA 2.0, via Flickr e Commons, confirmado por sha1 identico ao original. Nenhuma medida mudou: sao os mesmos bytes que a sessao de 2026-08-17 mediu.",
  "aviso_de_procedencia": "NAO EXISTE head-on de 787 da LATAM em licenca livre no Wikimedia Commons (checados CC-BGB/D/E/F/G/I/J/K/L/M/N/P/T/V, CC-BBA, CC-BBF, PS-LAA: todas de perfil, tres-quartos, em voo ou no portao). A junta do radome e o para-brisa sao PADRAO DE TIPO, entao 787-8 de qualquer operador serve; o nariz da LATAM e branco, o que faz da N805AN o analogo de pintura mais proximo. Descartado File:Boeing_787_front_view.jpg: sem EXIF de camera, quadro derivado de 1080p, chao branco de estudio — quase certamente captura de simulador, ou seja, medir o modelo de outra pessoa.",
  "documento_oficial": [
   {

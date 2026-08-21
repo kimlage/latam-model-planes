@@ -163,11 +163,43 @@ is ignored the day it lands, whatever it is called. Every folder-level ignore
 that used to exist for this was a rule someone had to reinvent, and a rule that
 has to be reinvented is one that will eventually be missed.
 
-**Record author and licence at download time, not later.** Four entries in this
-repository are permanently incomplete because an early session downloaded the
-file and not the credit; they now fail `--verificar` on every run and cannot be
-published. Recovering it afterwards is sometimes possible — the Commons API
-`extmetadata.Artist` field recovered three A320ceo authors — and sometimes not.
+**Record author and licence at download time, not later.** Four entries on the
+two Dreamliners spent weeks failing `--verificar` because an early session kept
+the file and not the credit. They were recovered in the end, but only because
+the files still carried enough to search on — and the recovery cost far more
+than typing the URL into the manifest would have.
+
+**How to recover a photograph whose provenance was lost.** In order:
+
+1. **Read the file's own metadata first**, with `exiftool -a -G1 -s` — not just
+   the EXIF block. What identifies a photograph is `DateTimeOriginal` to the
+   second, the camera body and lens, and the pixel dimensions after cropping.
+   The Photoshop and XMP blocks are worth as much: on `ref_CC-BGP_wikimedia.jpg`
+   the Photoshop `SlicesGroupName` was literally `CC-BGP`, because the
+   photographer had named the document after the registration.
+2. **Search Commons in the File namespace**, `list=search` with `srnamespace=6`
+   and `intitle:"<registration>"`, and list `Category:<registration> (aircraft)`.
+   Aviation photographs are titled and categorised by registration far more
+   reliably than by anything else, and the Flickr photo id in the filename tells
+   you the upstream source.
+3. **Confirm by SHA-1, never by resemblance.** `prop=imageinfo` with
+   `iiprop=sha1|size|extmetadata` returns the original's SHA-1 and byte count;
+   compare them against the local file. All four Dreamliner photographs matched
+   exactly, which is what made it safe to say no measurement had to be redone.
+   A downscale or crop of the same original is still usable, but then say so in
+   the manifest instead of claiming the file *is* the source.
+4. `extmetadata.Artist` / `LicenseShortName` give author and licence — the same
+   field that recovered three missing A320ceo authors.
+
+The hardest of the four had **no EXIF at all**: it was found by listing the
+registration's category and matching 6000x4000 and the exact byte count. Where
+resolution and bytes are all you have, that is still evidence — but it is the
+floor, not the standard.
+
+**Check the credit on the file page, not in the EXIF.** `ref_bbf_syd18.jpg` has
+`Artist = Robert Myers` in its EXIF while the Commons page asks for attribution
+to **Bidgee**. The EXIF is what the camera and the editor wrote; the file page is
+what the licensor asked for. Credit the file page.
 
 Wikimedia note: prefer `https://commons.wikimedia.org/wiki/Special:FilePath/<name>`
 over a direct `upload.wikimedia.org` link. The latter starts returning 429 after

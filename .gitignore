@@ -74,6 +74,9 @@ comparacao_com_foto.png
 # continua reproduzivel pelos manifestos em refs/.
 **/comparacao_fin_sash.png
 **/comparacao_perfil.png
+# 787-8: mesma folha, mesmo motivo — dois tercos pixels de CC-BBB/CC-BBF. O
+# manifesto do 787-8 ja dizia que ela nao e versionada; a regra faltava aqui.
+**/comparacao_cauda.png
 
 # Vetores de marca registrada (LATAM, Airbus, Boeing)
 latam_logo_indigo.svg

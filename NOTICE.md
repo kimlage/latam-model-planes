@@ -90,13 +90,27 @@ they were removed from the index in `0da5329`, but the earlier commits still
 contain them. Nothing was ever pushed — `origin/main` predates the fleet work —
 and the owner chose to leave the history as it is rather than rewrite it.
 
-**Four entries are knowingly incomplete** and are reported by `--verificar` on
-every run, rather than being quietly filled in:
+**The four entries that were incomplete are now complete.** An early session on
+the two Dreamliners kept the files and not the credit, so four photographs sat
+in the manifests with `url`, `author` and `license` all null and `--verificar`
+failed on every run by design. All four were traced back to Wikimedia Commons on
+2026-08-21, and the match is **byte identity, not resemblance**: each local file
+has the same SHA-1 as the Commons original, so these are the very files the
+photogrammetry was done on, not lookalikes. No measurement moved — the pixels
+never changed, only the citation next to them.
 
-| Entry | What is missing |
-|---|---|
-| `boeing 787-8/refs/ref_bbf_mia23.jpg`, `ref_bbf_mco24.jpg`, `ref_bbb_mia23.jpg` | URL, author and licence — downloaded by an early session that recorded none of them. Used as a measuring rule only; no pixel of them is in the model. Provenance must be redone before any publication. |
-| `boeing 787-9/ref_CC-BGP_wikimedia.jpg` | URL, author and licence |
+| Entry | Author | Licence |
+|---|---|---|
+| `boeing 787-8/refs/ref_bbf_mia23.jpg` | Colin Cooke Photo, via Flickr | CC BY-SA 2.0 |
+| `boeing 787-8/refs/ref_bbb_mia23.jpg` | Colin Cooke Photo, via Flickr | CC BY-SA 2.0 |
+| `boeing 787-8/refs/ref_bbf_mco24.jpg` | ZLEA, own work on Commons | CC BY-SA 4.0 |
+| `boeing 787-9/ref_CC-BGP_wikimedia.jpg` | Anna Zvereva, via Flickr | CC BY-SA 2.0 |
+
+Each entry carries the Commons file page, the Flickr source where there is one,
+the SHA-1 that proves the match, and a note on what evidence found it. One
+attribution was corrected in passing: `refs/ref_bbf_syd18.jpg` was credited from
+its EXIF `Artist` to "Robert Myers", but the Commons file page asks for
+**Bidgee** — the manifest had flagged that doubt and it is now settled.
 
 ## Elevation and geographic data (the SCL scenario)
 
