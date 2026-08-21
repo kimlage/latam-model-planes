@@ -21,6 +21,10 @@ VIEWS = [
     ("CamHero", "render_hero.png"),
     ("CamCauda", "render_cauda.png"),
     ("CamBarriga", "render_frente_baixa.png"),
+    # head-on de verdade (azimute 0, camera 3 graus abaixo do eixo, tele) para
+    # comparar o parabrisa com a foto de S2-AFO em refs/. Sem este angulo o
+    # defeito do "V" ausente nao aparece em nenhum dos seis canonicos.
+    ("CamHeadOn", "render_headon.png"),
 ]
 print("[render] engine", S.render.engine, "res", S.render.resolution_x, S.render.resolution_y,
       "@", pct, "% samples", smp)

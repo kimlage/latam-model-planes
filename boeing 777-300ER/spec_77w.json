@@ -237,68 +237,199 @@
  ],
  "cauda_formato": "[x, centro_z, raio]; cone termina em LAMINA vertical: w_ratio 0.96 ate x=68, caindo linear para ~0.35 na ponta (o cone do 777 achata lateralmente; anel do escape da APU e oval vertical). Ponta x=73.86 z=+1.97.",
  "parabrisa_6_vidros": {
-  "fonte": "vista frontal APR p.18 @600dpi (quads aproximados +-0.05) + fotos PT-MUC 083 para o V inferior; 6 paineis planos, 3 por lado",
-  "gate_x": [
-   1.4,
-   3.1
-  ],
-  "vidro_centro_yz": [
+  "fonte": "VISTA FRONTAL do APR D6-58329-2 p.18 rasterizada a 4800 dpi (pdftoppm -r 4800 -x 20600 -y 38900 -W 4700 -H 2400), auto-calibrada pelo proprio circulo da fuselagem: ajuste por raios a partir do centro, cx=2199.3 cy=1129.8 R_interno=875.09 px, rms 0.55 px, R na linha de centro do traco = 889.5 px == 3.10 m. Poligonos = contorno das aberturas dos vidros, media dos dois lados. Substitui a medicao anterior, que veio de um recorte de 600 dpi ampliado 8x e errava ate 0.36 m em |y| (dizia |y|max 1.99, impossivel: a meia-largura do casco no gate era 1.85).",
+  "metodo": "Poligonos em (|y|, z). A vista frontal e uma projecao AO LONGO DE x, portanto y e z sao exatos e so x se perde. A estacao x de cada vertice sai de por o ponto NA SUPERFICIE: g(x) = (y/ry)^2 + ((z-zc)/rz)^2 - 1 e monotona decrescente no nariz, entao a bissecao devolve um unico x. O acoplamento com a secao do casco produz sozinho o V no plano de simetria e o contorno 3D. NUNCA medir o parabrisa do 777 na projecao lateral: ela nao ve o vidro contornar o nariz (regra de f2f96cd, o 767).",
+  "no1_frontal_yz": [
    [
-    0.11,
-    0.49
+    0.075,
+    0.883
    ],
    [
-    0.77,
-    0.54
+    0.635,
+    0.991
    ],
    [
-    0.83,
-    0.83
+    0.832,
+    0.58
    ],
    [
-    0.15,
-    0.97
+    0.14,
+    0.563
    ]
   ],
-  "vidro_meio_yz": [
+  "no2_deslizante_yz": [
    [
-    0.9,
-    0.35
+    0.802,
+    1.008
    ],
    [
-    1.6,
-    0.5
+    1.073,
+    1.008
    ],
    [
-    1.45,
-    0.95
+    1.373,
+    0.452
    ],
    [
-    0.87,
-    0.95
+    1.021,
+    0.53
    ]
   ],
-  "vidro_lateral_yz": [
+  "no3_kick_yz": [
    [
-    1.66,
-    0.25
+    1.242,
+    0.977
    ],
    [
-    1.99,
-    0.45
+    1.468,
+    0.968
    ],
    [
-    1.85,
-    0.9
+    1.617,
+    0.551
    ],
    [
-    1.55,
-    0.92
+    1.461,
+    0.369
    ]
   ],
-  "nota": "V inferior caracteristico: a borda de baixo dos dois vidros centrais desce em direcao ao centro (na foto 083 le-se claramente). Montante central estreito ~0.10. Aplicar como NoseMask UV igual ao 787.",
-  "construcao_no_modelo": "Construido em (x,z) e convertido para (x,theta) pelo angulo parametrico da secao: x 1.45..3.05 com dois montantes (1.90-1.96 e 2.46-2.52); topo z = min(crista(x)-0.16, 0.97); base = topo - (0.50 + 0.085*(x-1.45)). Faixa de x e altura vem da VISTA LATERAL do APR p.18 @600 dpi, onde os tres vidros estao desenhados entre x 1.39..3.00 e z 0.36..0.99 (calibracao: eixo z=0 na linha 486.5, 35.0 px/m).",
-  "duvida": "Na foto FRA o vidro APARENTE fica em x 2.03..3.17 e z 0.78..1.35 — 0.6 m mais atras e 0.4 m mais alto do que o desenho. O deslocamento em z e explicado pela elevacao da camera (+16.5 graus: um ponto em theta=40 aparece 0.47 m mais alto do que esta), e o de x pelo fato de a parte dianteira do vidro CONTORNAR o nariz e ficar escondida numa vista de baixo. Seguimos o desenho, mas a extensao dianteira exata do vidro #1 (o quanto ele sobe em direcao a crista) e o ponto menos certo desta livery — vale conferir numa foto frontal de perto."
+  "ordem_dos_vertices": "interno-topo, externo-topo, externo-base, interno-base",
+  "montante_central_meia_largura": [
+   0.075,
+   0.14
+  ],
+  "montante_central_nota": "o montante alarga para baixo (0.108 no topo, 0.173 na base): e o que faz a borda INFERIOR dos dois No.1 descer em V para o centro.",
+  "derivado_x_theta": {
+   "nota": "valores impressos por build_77w_fase2_livery.py depois do offset de folga_desenho_m e do filete de canto; sao o que a mascara realmente pinta.",
+   "no1_frontal": {
+    "x": [
+     1.107,
+     1.821
+    ],
+    "theta_graus": [
+     2.9,
+     41.9
+    ]
+   },
+   "no2_deslizante": {
+    "x": [
+     1.654,
+     2.338
+    ],
+    "theta_graus": [
+     33.7,
+     63.4
+    ]
+   },
+   "no3_kick": {
+    "x": [
+     2.244,
+     3.047
+    ],
+    "theta_graus": [
+     47.8,
+     67.9
+    ]
+   },
+   "envidracado": {
+    "x": [
+     1.107,
+     3.047
+    ],
+    "theta_graus": [
+     2.9,
+     67.9
+    ],
+    "area_vidro_m2": 2.076
+   }
+  },
+  "selo_m": 0.018,
+  "aplicacao": "mascara UV NoseMask (x,theta) 8192x2048 com supersample 4x4: G = vidro, R = selo preto de 0.018 m em anel na SUPERFICIE (dilatacao por faixas de x, com o raio LOCAL da secao — um raio unico em graus deixava o selo 25% fino perto da crista). Cantos por filete de 0.055 m aplicado no poligono em (|y|,z), nao por abertura na grade. A cinta da moldura vai na LiveryTex.",
+  "conferencia_foto_2026-08-21": {
+   "foto": "refs/ws_frontal_S2-AFO_Dhaka.jpg (Wikimedia, CC BY-SA 2.0, Faisal Akram), head-on de verdade: azimute ~0-2 graus, elevacao ~-3.",
+   "calibracao_da_foto": "circulo da fuselagem ajustado em cx=1363.5 cy=813.8 R=357.0 px (rms 0.71) -> 115.16 px/m NA ESTACAO x=10. O parabrisa esta ~8 m mais perto da camera; com D~93 m ao nariz o fator e (D+10)/(D+2)=1.084, logo 124.8 px/m no parabrisa.",
+   "razao_sem_escala": "altura/meia-largura do envidracado: 0.382 na foto contra 0.392 no desenho (2.5%). Essa razao nao depende de calibracao nenhuma.",
+   "meia_largura_maxima": "1.635 m na foto contra 1.617 medido no desenho.",
+   "montantes": "montante No.1/No.2 medido na foto em |y| 0.769 (z 0.974) e 0.865 (z 0.733); o desenho da 0.731 e 0.843. Montante No.2/No.3: foto 1.182 e 1.298; desenho 1.163 e 1.272. Erro maximo 0.04 m.",
+   "montante_central": "a foto mostra o branco entre os dois vidros No.1 com ~16 px = 0.13 m de largura total; o desenho da 0.216 (abertura a abertura). A diferenca e o selo escuro de cada lado, que a foto conta como vidro."
+  },
+  "divergencia_conhecida": "A vista LATERAL do mesmo APR desenha os tres vidros em x 1.330..3.006, z 0.370..0.983 — z fecha com o frontal (0.02-0.03 m) mas x sai 0.20 m MAIS PARA TRAS de forma uniforme nos tres. Explicacao: a arte lateral desenha o vidro onde ele e visivel DE LADO, nao a projecao verdadeira do contorno; a parte do No.1 que contorna a frente do nariz fica de perfil e nao foi desenhada. O modelo segue o frontal, porque e o frontal que a foto head-on confirma e e o head-on que mostra o defeito.",
+  "defeito_corrigido_2026-08-21": "Antes: banda em (x,z) com topo colado na crista (z=min(crista(x)-0.16, 0.97)) e base 0.50..0.64 m abaixo, cortada por dois montantes VERTICAIS em x=1.90-1.96 e 2.46-2.52. Resultado: theta 28..60 graus em x=1.45 e 53..73 em x=3.05 — o vidro nunca chegava a theta<28, os dois lados nunca se encontravam e o V nao existia; 3 retangulos enfileirados numa tira plana, altos demais e atras demais.",
+  "folga_desenho_m": 0.02,
+  "no1_frontal_yz_nota": "os dois vertices internos (0.075 e 0.140) NAO sao o que o APR desenha (0.108 e 0.173): o desenho poe o montante central duas vezes mais largo do que a foto head-on mostra. Todos os vaos do desenho sao ~2x os da foto (razao entre vaos identica: 2.47 no desenho, 2.67 na foto), o que e meia espessura de traco a 1:200. A foto ganha porque o defeito reclamado e de aparencia e e head-on que ele aparece.",
+  "folga_desenho_m_nota": "offset de +0.020 m aplicado a TODOS os poligonos em (|y|,z) antes do mapeamento: fecha os vaos do desenho contra a foto. Somado ao selo de 0.018 na superficie da a mancha escura de +0.038 que a foto mede.",
+  "filete_canto_m": 0.055,
+  "conferencia_render_2026-08-21": {
+   "camera": "CamHeadOn: azimute 0, camera a 93 m e 3.0 graus abaixo do eixo, tele 560 mm — reproduz a geometria da foto de S2-AFO. render_headon.png.",
+   "metodo": "varredura de linha a 30% da altura do envidracado em render_headon.png (1600x900, 96 samples) e na foto, larguras e vaos normalizados pela MEIA-LARGURA do envidracado (adimensional: nao depende de escala, de distancia nem de lente).",
+   "altura_sobre_meia_largura": {
+    "foto": 0.454,
+    "render": 0.445
+   },
+   "larguras_no3_no2_no1": {
+    "foto": [
+     0.151,
+     0.229,
+     0.42
+    ],
+    "render": [
+     0.161,
+     0.207,
+     0.459
+    ]
+   },
+   "vaos_no3no2_no2no1_central": {
+    "foto": [
+     0.024,
+     0.044,
+     0.078
+    ],
+    "render": [
+     0.03,
+     0.044,
+     0.069
+    ]
+   },
+   "veredito": "todos dentro de 10%. Em metros (meia-largura 1.66 m) o maior desvio e o No.1, 0.065 m largo demais, e o No.2, 0.037 m estreito demais; os vaos ficam dentro de 0.015 m. A tabela e estavel entre 25% e 35% da altura, entao nao e artefato de uma linha so."
+  },
+  "antes_e_depois": {
+   "antes": {
+    "theta_graus": [
+     26.6,
+     73.4
+    ],
+    "x": [
+     1.45,
+     3.05
+    ],
+    "abs_y": [
+     0.578,
+     1.772
+    ],
+    "area_vidro_m2": 2.028,
+    "nota": "|y| minimo 0.578 => 1.16 m de pintura branca entre os dois lados no plano de simetria. O V nao existia. Area quase igual a de agora: o defeito nao era tamanho, era POSICAO e forma."
+   },
+   "depois": {
+    "theta_graus": [
+     2.9,
+     67.9
+    ],
+    "x": [
+     1.107,
+     3.047
+    ],
+    "abs_y": [
+     0.055,
+     1.655
+    ],
+    "area_vidro_m2": 2.076,
+    "nota": "os dois No.1 se encontram no montante central de 0.11 m; o envidracado contorna a frente do nariz."
+   }
+  },
+  "conferencia_perfil": "razao (comprimento do envidracado)/(ponta do nariz ate o fim do envidracado): modelo 0.637, foto de perfil PH-BQL 0.694, vista lateral do APR 0.559. A foto apoia a extensao para a frente que o frontal deu, nao o desenho lateral.",
+  "cinta_moldura_m": 0.085,
+  "cinta_moldura_nota": "faixa de estrutura rebitada em volta dos seis vidros, pintada na LiveryTex em (0xD8,0xD9,0xDC) contra o branco 0xE6E7EA do casco. Sem ela os vidros leem como seis adesivos separados; na foto AA-B773 (close-up) a moldura e um conjunto unico.",
+  "resta_por_fazer": "a foto mostra rebites na moldura dos No.1 e o degrau do peitoril inferior com os dois limpadores; nada disso esta no modelo. Tambem nao ha vidro transmissivo — o interior da cabine nao existe, entao o vidro e um escuro opaco envernizado, como no resto da frota."
  },
  "portas_pax": {
   "centros_x": [
@@ -482,12 +613,13 @@
  },
  "confianca": {
   "alta": "dimensoes gerais, entre-eixos, bitola, portas pax/carga x (porta 5 confirmada em foto), janela pitch (documento), fin BA/BF (conferido em pixel: 58.06+0.985z / 68.34+0.385z), asa LE/TE, ponta raked (cotas impressas), motor inlet_x/cl_y/OD, tires, bandas da deriva (2 fotos), cunha indigo (fronteiras medidas)",
-  "media": "estacoes nariz (+-0.05), cauda centro/raio (+-0.1), diedro, carenagem ventral, w_ratio da lamina do cone, carenagens de flap (y da foto), lockup/registro/titulo (+-0.15 m), simbolo do ventre (arco estimado pela razao oficial)",
-  "baixa": "stab raiz_z, nacelle top/pylon, cor real do ventre traseiro (sombra nas duas fotos), extensao dianteira do parabrisa (ver parabrisa_6_vidros.duvida)"
+  "media": "estacoes nariz (+-0.05), cauda centro/raio (+-0.1), diedro, carenagem ventral, w_ratio da lamina do cone, carenagens de flap (y da foto), lockup/registro/titulo (+-0.15 m), simbolo do ventre (arco estimado pela razao oficial), parabrisa poligonos (+-0.03 m: vista frontal do APR a 4800 dpi corrigida pela foto head-on de S2-AFO)",
+  "baixa": "stab raiz_z, nacelle top/pylon, cor real do ventre traseiro (sombra nas duas fotos)"
  },
  "correcoes": {
   "calibracao_2026-08-20": "Primeira calibracao pelo vao nariz-cauda da PLANTA com normalizacao por eixo (ky=0.958) ERRADA para posicoes: o vies de traco e ABSOLUTO (~0.10 m por borda, traco 7px), nao proporcional — aplicar ky como escala encolhia a semi-envergadura de 32.4 para 31.05 e a 'asa sumia' na varredura. Correto: escala unica pela entre-eixos (centros), meia-traco nas bordas, e normalizacao SOMENTE nas dimensoes da secao.",
-  "altura_secao": "briefing dizia 6.60 de altura de fuselagem; APR p.18 imprime 6.20 na lateral E na planta — secao circular. Nao propagar 6.60."
+  "altura_secao": "briefing dizia 6.60 de altura de fuselagem; APR p.18 imprime 6.20 na lateral E na planta — secao circular. Nao propagar 6.60.",
+  "parabrisa_2026-08-21": "O parabrisa era uma banda em (x,z) colada na crista e cortada por montantes verticais: theta 26.6..73.4 graus, |y| minimo 0.578 — os dois lados nunca se encontravam e o V do 777 nao existia. Remedido na VISTA FRONTAL do APR a 4800 dpi (auto-calibrada pelo circulo da fuselagem) e conferido numa foto head-on de verdade; reconstruido pelo metodo do 787-9, poligonos em (|y|,z) com x resolvido por bissecao NA SUPERFICIE. Agora theta 2.9..67.9, |y| a partir de 0.055. A licao de f2f96cd vale nos dois sentidos: a projecao lateral nao ve o vidro contornar o nariz, e a PROPRIA arte lateral do APR foi desenhada so onde o vidro e visivel de lado — por isso ela punha o envidracado 0.20 m atras."
  },
  "fin_bandas_2026-08-20": {
   "fonte": "PT-MUG: EGLL 2025-06-17 (CC BY 4.0) e FRA 2022-10-25 (CC BY-SA 4.0), retificadas por 3 retas no plano (x,z) da deriva. Cantos dos dois corais concordam entre as fotos dentro de 0.2-0.4 m. Estibordo: MESMA arte em (x,z) (PT-MUB Milao 2024).",
@@ -547,6 +679,6 @@
   "pecas_soltas": "todas as raizes penetram a peca de apoio (deriva +1.19 m, carenagem ventral +0.33 m, nacelles no pylon +0.09 m). A carenagem ventral sobrava 0.11 m para FORA do casco na primeira volta — borda superior enterrada em 0.86*meia-largura / z=-0.90.",
   "solo": "a Pista herdada do 787 estava em z=-4.89 e o trem em z=-5.67: o aviao rendia com as rodas ENTERRADAS. Pista movida para -5.67; menor z do modelo = -5.670 (roda do trem de nariz).",
   "tailstrike": "7.73 graus, limitado pela quilha em x=56.74 (inicio da conicidade). O -300ER real tem angulo baixo mesmo (por isso leva tail skid, que este modelo ainda nao tem).",
-  "parabrisa": "NoseMask passou a ter resolucao propria (8192x2048) e cobertura por supersample 4x4 — com mascara binaria a 4096 o close-up do nariz mostrava serrilha grossa nas molduras."
+  "parabrisa": "NoseMask passou a ter resolucao propria (8192x2048) e cobertura por supersample 4x4 — com mascara binaria a 4096 o close-up do nariz mostrava serrilha grossa nas molduras. GEOMETRIA REFEITA EM 2026-08-21, ver parabrisa_6_vidros.antes_e_depois e conferencia_render_2026-08-21; camera CamHeadOn acrescentada ao render_canonicos.py porque nenhum dos seis angulos canonicos mostrava o defeito."
  }
 }

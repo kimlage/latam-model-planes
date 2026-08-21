@@ -388,42 +388,138 @@ suja(38.0, 46.0, 150, 180, (0x9E, 0x98, 0x8E), 0.06)         # atras do trem pri
 suja(69.0, 74.0, 120, 180, (0x8E, 0x88, 0x82), 0.10)         # fuligem da APU
 
 # ========================================================= 8. NoseMask
-# Parabrisa do 777: banda de 3 vidros por lado que envolve o nariz.
-# Construida em (x, z) — topo colado na crista la na frente e descendo em
-# relacao a ela para tras — e convertida para (x, theta) pelo angulo
-# parametrico da secao. Fontes: vista lateral do APR p.18 @600 dpi (a arte dos
-# vidros esta desenhada: x 1.37..3.00, z 0.36..0.99) e a vista frontal
-# (y ate 1.99); conferido na foto de nariz de PT-MUC (refs 083).
+# Parabrisa do 777: SEIS vidros, tres por lado, que envolvem a FRENTE do nariz.
+#
+# O que estava errado ate 2026-08-21: a banda era construida em (x,z) com o
+# topo colado na crista (z = crista(x)-0.16, limitado em 0.97) e cortada por
+# dois montantes VERTICAIS em x. Isso produz tres retangulos enfileirados numa
+# faixa que so existe entre theta 28 e 73 graus — ou seja, nunca chega ao
+# plano de simetria. Os dois vidros No.1 nao se encontravam no montante
+# central, e o "V" que identifica o 777 de frente simplesmente nao existia.
+# A causa e a que a skill extrair-cotas ja tinha escrito: a projecao LATERAL
+# nao ve o vidro contornar o nariz, e medir nela achata o que sobe o ombro.
+#
+# Metodo correto (o mesmo do 787-9): os poligonos sao medidos na VISTA FRONTAL
+# em (|y|, z) — projecao ao longo de x, portanto y e z sao exatos — e a
+# estacao x de cada vertice sai de POR O PONTO NA SUPERFICIE: para (|y|,z)
+# dado existe um unico x cuja secao passa por ele, porque as secoes do nariz
+# crescem monotonicamente. O acoplamento com o casco produz sozinho o V e o
+# contorno em 3D; nada e decalque.
+#
+# Fontes: APR D6-58329-2 p.18 vista frontal rasterizada a 4800 dpi, calibrada
+# pelo proprio circulo da fuselagem (ajuste por raios, R=889.5 px = 3.10 m,
+# rms 0.55 px). Conferido na foto head-on de S2-AFO (refs/manifest.json):
+# meia-largura maxima do envidracado 1.63 m contra 1.62 medido no desenho, e
+# razao altura/meia-largura 0.382 na foto contra 0.392 no desenho.
 PB = S["parabrisa_6_vidros"]
-WSX0, WSX1 = 1.45, 3.05
-POSTES = [(1.90, 1.96), (2.46, 2.52)]        # montantes entre os vidros
+PANES_YZ = [PB["no1_frontal_yz"], PB["no2_deslizante_yz"], PB["no3_kick_yz"]]
+SELO_M = PB["selo_m"]                     # espessura do selo preto na superficie
+FOLGA_M = PB["folga_desenho_m"]           # o APR desenha o vidro menor que a foto
 
 
-def ws_z_topo(x):
+def x_de_yz(y, z):
+    """Estacao x cuja secao eliptica passa por (|y|, z).
+
+    g(x) = (y/ry)^2 + ((z-zc)/rz)^2 - 1 e monotona decrescente em x no nariz
+    (as secoes crescem), entao a bissecao acha a raiz sem ambiguidade.
+    """
+    def g(x):
+        zc, rz, ry = zc_rz_ry(np.array([x]))
+        return (y / float(ry[0])) ** 2 + ((z - float(zc[0])) / float(rz[0])) ** 2 - 1.0
+    lo, hi = 0.02, 9.5
+    if g(hi) > 0.0:
+        raise ValueError(f"(y={y}, z={z}) nao pousa no casco ate x=9.5")
+    for _ in range(70):
+        m = 0.5 * (lo + hi)
+        if g(m) > 0.0:
+            lo = m
+        else:
+            hi = m
+    return 0.5 * (lo + hi)
+
+
+def theta_de_yz(x, y, z):
     zc, rz, ry = zc_rz_ry(np.array([x]))
-    crista = float(zc[0] + rz[0])
-    return min(crista - 0.16, 0.97)
+    return math.degrees(math.atan2(max(y, 0.0) / float(ry[0]),
+                                   (z - float(zc[0])) / float(rz[0])))
 
 
-def ws_z_base(x):
-    return ws_z_topo(x) - (0.50 + 0.085 * (x - WSX0))
+def para_xtheta(poly_yz, n=24):
+    """(|y|,z) -> (x, theta em graus), densificando cada aresta."""
+    out = []
+    m = len(poly_yz)
+    for i in range(m):
+        y0, z0 = poly_yz[i]
+        y1, z1 = poly_yz[(i + 1) % m]
+        for k in range(n):
+            t = k / n
+            y, z = y0 + t * (y1 - y0), z0 + t * (z1 - z0)
+            x = x_de_yz(y, z)
+            out.append((x, theta_de_yz(x, y, z)))
+    return out
 
 
-def theta_de(x, z):
-    zc, rz, ry = zc_rz_ry(np.array([x]))
-    zc, rz, ry = float(zc[0]), float(rz[0]), float(ry[0])
-    t = max(-1.0, min(1.0, (z - zc) / rz))
-    s = math.sqrt(max(0.0, 1.0 - t * t))
-    return math.degrees(math.atan2(s, t))
+def desloca(poly, d):
+    """Offset do poligono por d em (|y|, z): cada aresta anda d para fora e as
+    retas vizinhas se reencontram. O alvo desta correcao E a vista head-on, e
+    e nela que a medida existe, entao o offset e feito NO PLANO frontal e nao
+    sobre a superficie."""
+    m = len(poly)
+    P = [np.array(p, float) for p in poly]
+    c = sum(P) / m
+    ret = []
+    for i in range(m):
+        a, b = P[i], P[(i + 1) % m]
+        e = b - a
+        n = np.array([e[1], -e[0]])
+        n /= max(np.linalg.norm(n), 1e-9)
+        if n @ (a - c) < 0:
+            n = -n
+        ret.append((n, float(n @ a) + d))
+    out = []
+    for i in range(m):
+        n1, o1 = ret[i - 1]
+        n2, o2 = ret[i]
+        M = np.array([n1, n2])
+        if abs(np.linalg.det(M)) < 1e-9:
+            out.append(tuple(P[i]))
+        else:
+            q = np.linalg.solve(M, [o1, o2])
+            out.append((float(q[0]), float(q[1])))
+    return out
 
 
-def pane_poly(xa, xb, folga_t=0.0, folga_x=0.0):
-    """poligono do vidro em (x, theta), amostrado ao longo de x."""
-    xa, xb = xa - folga_x, xb + folga_x
-    xs = np.linspace(xa, xb, 12)
-    topo = [(x, theta_de(x, ws_z_topo(x)) - folga_t) for x in xs]
-    base = [(x, theta_de(x, ws_z_base(x)) + folga_t) for x in xs]
-    return topo + base[::-1]
+def arredonda(poly, r=0.055, n=7):
+    """Filete de raio r em cada canto do poligono, feito em (|y|, z) antes do
+    mapeamento — mais barato e mais previsivel que uma abertura morfologica na
+    grade, e o vidro do 777 tem canto arredondado bem visivel na foto."""
+    out = []
+    m = len(poly)
+    for i in range(m):
+        p = np.array(poly[i], float)
+        a = np.array(poly[i - 1], float)
+        b = np.array(poly[(i + 1) % m], float)
+        ua = (a - p) / max(np.linalg.norm(a - p), 1e-9)
+        ub = (b - p) / max(np.linalg.norm(b - p), 1e-9)
+        cosang = float(np.clip(ua @ ub, -1.0, 1.0))
+        t = r / max(math.tan(math.acos(cosang) / 2.0), 1e-6)
+        t = min(t, 0.45 * np.linalg.norm(a - p), 0.45 * np.linalg.norm(b - p))
+        pa, pb = p + ua * t, p + ub * t
+        for k in range(n + 1):
+            s = k / n
+            # Bezier quadratica: aproxima o arco do filete
+            q = (1 - s) ** 2 * pa + 2 * (1 - s) * s * p + s ** 2 * pb
+            out.append((float(q[0]), float(q[1])))
+    return out
+
+
+def leque_centro(poly):
+    """Fan a partir do centroide: os poligonos mapeados em (x,theta) tem
+    arestas curvas e o fan a partir do vertice 0 deixaria buraco."""
+    cx = sum(p[0] for p in poly) / len(poly)
+    ct = sum(p[1] for p in poly) / len(poly)
+    return [[(cx, ct), poly[i], poly[(i + 1) % len(poly)]]
+            for i in range(len(poly))]
 
 
 # NoseMask tem resolucao PROPRIA (2x a do casco) e cobertura por supersample
@@ -431,15 +527,21 @@ def pane_poly(xa, xb, folga_t=0.0, folga_x=0.0):
 # grossa no close-up do nariz — o defeito apareceu no primeiro render.
 NW, NH = W * 2, H * 2
 nose_mask = np.zeros((NH, NW, 3), np.float32)
-lim = [WSX0] + [p for pr in POSTES for p in pr] + [WSX1]
-panes = [(lim[0], lim[1]), (lim[2], lim[3]), (lim[4], lim[5])]
-for (a, b) in panes:
-    print(f"[parabrisa] vidro x {a:.2f}..{b:.2f}  theta "
-          f"{theta_de(a, ws_z_topo(a)):.0f}..{theta_de(a, ws_z_base(a)):.0f} -> "
-          f"{theta_de(b, ws_z_topo(b)):.0f}..{theta_de(b, ws_z_base(b)):.0f}")
-PX0, PX1 = WSX0 - 0.35, WSX1 + 0.35
-PT0, PT1 = 0.0, 95.0
-npx, npt = 2400, 1500
+
+PANES_XT = [para_xtheta(arredonda(desloca(p, FOLGA_M)), n=6)
+             for p in PANES_YZ]
+_allx = [p[0] for pn in PANES_XT for p in pn]
+_allt = [p[1] for pn in PANES_XT for p in pn]
+for nome, pn in zip(("No.1 frontal", "No.2 deslizante", "No.3 kick"), PANES_XT):
+    xs = [p[0] for p in pn]; ts = [p[1] for p in pn]
+    print(f"[parabrisa] {nome:16s} x {min(xs):.3f}..{max(xs):.3f}  "
+          f"theta {min(ts):.1f}..{max(ts):.1f} graus")
+print(f"[parabrisa] envidracado inteiro: x {min(_allx):.3f}..{max(_allx):.3f}  "
+      f"theta {min(_allt):.1f}..{max(_allt):.1f} graus")
+
+PX0, PX1 = min(_allx) - 0.30, max(_allx) + 0.30
+PT0, PT1 = 0.0, max(_allt) + 8.0
+npx, npt = 2600, 1800
 _nuu = (np.arange(NW) + 0.5) / NW * LUV
 _nvv = (np.arange(NH) + 0.5) / NH * 2 * math.pi - math.pi
 NGX = np.repeat(_nuu[None, :], NH, axis=0)
@@ -447,9 +549,91 @@ NGD = np.degrees(np.abs(np.repeat(_nvv[:, None], NW, axis=1)))
 dx_tex = LUV / NW
 dt_tex = 360.0 / NH
 
+# raio medio da secao na zona do parabrisa: converte metros em graus de theta
+_zcw, _rzw, _ryw = zc_rz_ry(np.array([0.5 * (min(_allx) + max(_allx))]))
+R_WS = 0.5 * (float(_rzw[0]) + float(_ryw[0]))
+print(f"[parabrisa] raio medio na zona do vidro {R_WS:.3f} m -> "
+      f"{math.degrees(1.0 / R_WS):.2f} graus/m (so diagnostico: a morfologia "
+      f"usa o raio LOCAL, faixa a faixa)")
 
-def pinta(poly, canal, sub=4):
-    arr = fill_tris(leque(poly), PX0, PX1, PT0, PT1, npx, npt)
+
+def _dil_eixo(m, r, eixo):
+    """Dilatacao de caixa por raio r ao longo de um eixo, por duplicacao
+    binaria: 1,2,4,... — O(log r) passadas em vez de O(r)."""
+    if r <= 0:
+        return m
+    out = m.copy()
+    d = 1
+    while d <= r:
+        sh = np.zeros_like(out)
+        if eixo == 0:
+            sh[d:, :] = out[:-d, :]
+            out = out | sh
+            sh = np.zeros_like(out)
+            sh[:-d, :] = out[d:, :]
+        else:
+            sh[:, d:] = out[:, :-d]
+            out = out | sh
+            sh = np.zeros_like(out)
+            sh[:, :-d] = out[:, d:]
+        out = out | sh
+        d *= 2
+    return out
+
+
+def _dil_octo(m, rx, rt):
+    """Octogono ~ uniao de dois retangulos (rx, rt/2) e (rx/2, rt): evita o
+    canto quadrado que um retangulo puro deixaria na borda externa do selo."""
+    a = _dil_eixo(_dil_eixo(m, rx, 1), max(1, rt // 2), 0)
+    b = _dil_eixo(_dil_eixo(m, max(1, rx // 2), 1), rt, 0)
+    return a | b
+
+
+sx_m = (PX1 - PX0) / npx                    # metros por celula em x
+st_g = (PT1 - PT0) / npt                    # graus por celula em theta
+
+
+def _dil_metrico(m, metros, nb=10):
+    """Dilata por `metros` de ARCO REAL.
+
+    Um disco fixo em (x, theta) nao e um disco em metros: o raio da secao vai
+    de ~1.1 m em x=1.1 a ~2.1 m em x=3.0, entao o mesmo numero de graus vale o
+    dobro de arco atras. Um raio unico em graus deixava o selo 25% fino perto
+    da crista — que e exatamente onde fica o montante central, o detalhe que
+    o dono olha primeiro. Resolvido por faixas de x.
+    """
+    out = np.zeros_like(m)
+    bordas = np.linspace(PX0, PX1, nb + 1)
+    rx = max(1, int(round(metros / sx_m)))
+    for k in range(nb):
+        xa, xb = bordas[k], bordas[k + 1]
+        zc_, rz_, ry_ = zc_rz_ry(np.array([0.5 * (xa + xb)]))
+        r = 0.5 * (float(rz_[0]) + float(ry_[0]))
+        rt = max(1, int(round(metros * math.degrees(1.0 / r) / st_g)))
+        ia = max(0, int((xa - PX0) / sx_m) - rx - 1)
+        ib = min(npx, int((xb - PX0) / sx_m) + rx + 2)
+        d = _dil_octo(m[:, ia:ib], rx, rt)
+        ja = max(0, int((xa - PX0) / sx_m))
+        jb = min(npx, int((xb - PX0) / sx_m) + 1)
+        out[:, ja:jb] |= d[:, ja - ia:jb - ia]
+    return out
+
+
+# vidro rasterizado na grade fina (cantos ja filetados nos poligonos)
+vidro_f = np.zeros((npt, npx), bool)
+for pn in PANES_XT:
+    vidro_f |= fill_tris(leque_centro(pn), PX0, PX1, PT0, PT1, npx, npt)
+
+# Selo escuro em volta de cada vidro. O APR desenha o CONTORNO DO VIDRO; na
+# aeronave real ha uma vedacao preta de ~6 cm entre o vidro e a pintura, e e
+# ela que a foto head-on conta como parte da mancha escura. Medido em
+# S2-AFO: a mancha escura vai a |y| 1.70 contra 1.617 do contorno do desenho,
+# e o vao branco no montante central mede 0.128 m contra 0.216 de abertura a
+# abertura — as duas coisas fecham com um selo de 0.06 m por lado.
+selo_f = _dil_metrico(vidro_f, SELO_M) & ~vidro_f
+
+
+def pinta_grade(arr, canal, sub=4):
     sel = (NGX >= PX0) & (NGX <= PX1) & (NGD >= PT0) & (NGD <= PT1)
     r, c = np.where(sel)
     acc = np.zeros(r.shape, np.float32)
@@ -464,14 +648,40 @@ def pinta(poly, canal, sub=4):
             acc += arr[jt, ix]
     acc /= sub * sub
     nose_mask[r, c, canal] = np.maximum(nose_mask[r, c, canal], acc)
-    return float(acc.sum())
 
 
-pinta(pane_poly(WSX0, WSX1, folga_t=-2.4, folga_x=0.085), 0)   # R = moldura
-for (a, b) in panes:
-    pinta(pane_poly(a, b), 1)                                   # G = vidro
+pinta_grade(selo_f, 0)                                          # R = selo
+pinta_grade(vidro_f, 1)                                         # G = vidro
 nose_mask[..., 0] *= (1.0 - nose_mask[..., 1])
-print(f"[parabrisa] moldura {float(nose_mask[...,0].sum()):.0f} / vidro "
+
+# Cinta da moldura: na foto os seis vidros vivem dentro de UMA estrutura
+# rebitada, levemente mais fosca que a pintura do casco, e e ela que faz o
+# conjunto ler como um envidracado so em vez de seis adesivos separados.
+# Vai na LiveryTex (cor base), nao na NoseMask: e tinta/estrutura, nao vidro.
+CINTA_M = PB.get("cinta_moldura_m", 0.085)
+CINTA_COR = (0xD8, 0xD9, 0xDC)
+cinta_f = _dil_metrico(vidro_f | selo_f, CINTA_M) & ~(vidro_f | selo_f)
+_selc = (GX >= PX0) & (GX <= PX1) & (np.degrees(GABS) >= PT0) & (np.degrees(GABS) <= PT1)
+if _selc.any():
+    _r, _c = np.where(_selc)
+    _ix = np.clip(((GX[_selc] - PX0) / (PX1 - PX0) * npx).astype(int), 0, npx - 1)
+    _jt = np.clip(((np.degrees(GABS[_selc]) - PT0) / (PT1 - PT0) * npt).astype(int),
+                  0, npt - 1)
+    _h = cinta_f[_jt, _ix]
+    tex[_r[_h], _c[_h]] = CINTA_COR
+    print(f"[parabrisa] cinta da moldura {int(_h.sum())} texels na LiveryTex")
+
+# area real do envidracado sobre a superficie (dA = ry*rz*... ; aproximacao por
+# celula da grade fina usando o raio local) — serve de numero antes/depois.
+_area = 0.0
+_jj, _ii = np.where(vidro_f)
+if len(_ii):
+    _xc = PX0 + (_ii + 0.5) * sx_m
+    _zcc, _rzc, _ryc = zc_rz_ry(_xc)
+    _rloc = 0.5 * (_rzc + _ryc)
+    _area = float(np.sum(sx_m * math.radians(st_g) * _rloc)) * 2.0   # dois lados
+print(f"[parabrisa] area de vidro na superficie: {_area:.3f} m2 (os 6 vidros)")
+print(f"[parabrisa] selo {float(nose_mask[...,0].sum()):.0f} / vidro "
       f"{float(nose_mask[...,1].sum()):.0f} texels (cobertura, {NW}x{NH})")
 
 # ========================================================= 9. PanelBump
