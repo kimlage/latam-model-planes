@@ -1,0 +1,20 @@
+# Fotos de referencia de terceiros: creditadas em refs/manifest.json, nao
+# redistribuidas (mesma regra do .gitignore da raiz e do 767-300ER). Inclui as
+# fotos de controle ctl_*, de outros operadores, usadas para achar a aresta da
+# porta de conves principal.
+refs/*.jpg
+refs/*.jpeg
+refs/*.png
+
+# Rasterizacoes das paginas do CARGUEIRO do ACAP D6-58328 (p.30 cotas gerais,
+# p.34 clearances, p.41 arranjo do conves, p.50 portas pax/servico, p.56 porta
+# de conves principal). Mesma regra dos acap*.png da raiz: o documento e livre
+# para baixar, nao para redistribuir.
+f600-*.png
+
+# Vetor oficial da marca. Mesma regra dos outros SVG de marca da raiz
+# (latam_logo_indigo.svg, dreamliner_logo.svg): o projeto nao redistribui marca
+# registrada. Baixe de
+# https://commons.wikimedia.org/wiki/File:LATAM_Cargo_logo.svg (dominio publico)
+# para dentro desta pasta antes de rodar b0f_marca_cargo.py.
+latam_cargo_logo.svg

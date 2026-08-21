@@ -1,0 +1,740 @@
+{
+ "fonte": "Boeing ACAP D6-58328 Rev K (Dez/2024). Celula herdada do -300ER (p.29 3-vistas, p.33 clearances, p.43 secao, p.50 portas pax/servico, p.253-256 detalhes). PAGINAS DO CARGUEIRO usadas nesta derivacao: p.26 (2.1.5 General Characteristics: Model 767-300 Freighter), p.30 (2.2.3 General Dimensions: 767-300 Freighter), p.34 (2.3.3 Ground Clearances: 767-300 Freighter), p.41 (2.4.6 Typical Interior Arrangements: Freighter, Main Deck Cargo), p.50 (2.7.1 Passenger and Service Doors — traz a nota 'FWD LH SIDE ONLY ON -300 FREIGHTER'), p.56 (2.7.7 Door Clearances: Model 767-300 Freighter, MAIN DECK CARGO DOOR). Numeros de pagina = indice bruto do pdftoppm, nao o numero impresso.",
+ "matricula_alvo": "N536LA — Boeing 767-316F(ER)(WL), MSN 32573 / LN 848, primeiro voo 2001-10-02, LATAM Cargo Colombia desde 2018-03-13, motores CF6-80C2. CARGUEIRO DE FABRICA (nao e conversao BCF): a pele e limpa, sem NENHUMA janela de cabine nem contorno de janela tamponada — o discriminante visual que separa os 7 cargueiros de fabrica das 12 conversoes da frota. Escolhida por ser de fabrica (casa com a propria prancha do -300F do ACAP), estar na pintura LATAM CARGO atual sem titulo especial ('AVION SOLIDARIO' de N534LA/N420LA fica de fora) e ter cinco fotos de licenca livre entre 2021 e 2026, dos dois lados.",
+ "datum": "x=0 na ponta do nariz; z=0 no centro da secao constante; eixo AGL 4.61 m (estatico); unidades m",
+ "dimensoes_gerais": {
+  "comprimento": 54.94,
+  "comprimento_nota": "ate a ponta do BF da deriva (aftmost); o tailcone termina em x~54.2",
+  "envergadura_sem_winglet": 47.57,
+  "envergadura_com_winglet": 50.9,
+  "altura_deriva": 15.85,
+  "fuselagem_largura": 5.03,
+  "fuselagem_altura": 5.41,
+  "entre_eixos": 22.76,
+  "bitola": 9.3,
+  "solo_z": -4.61,
+  "altura_deriva_nota": "NAO impresso neste ACAP. p33 (2-3.2) da J = 50FT6IN (15.39) minimo a 52FT7IN (16.03) maximo conforme carga; 15.85 e o valor usado no modelo (ponta da deriva em z=11.15 com eixo a 4.61 AGL = 15.76) e cai dentro da faixa. Conferido 2026-08-20."
+ },
+ "nariz_estacoes": [
+  [
+   0.0,
+   -0.458,
+   -0.458,
+   0.0
+  ],
+  [
+   0.15,
+   -0.128,
+   -0.714,
+   0.279
+  ],
+  [
+   0.4,
+   0.138,
+   -1.001,
+   0.608
+  ],
+  [
+   0.75,
+   0.437,
+   -1.214,
+   0.893
+  ],
+  [
+   1.25,
+   0.66,
+   -1.406,
+   1.134
+  ],
+  [
+   1.75,
+   1.17,
+   -1.61,
+   1.365
+  ],
+  [
+   2.0,
+   1.438,
+   -1.715,
+   1.474
+  ],
+  [
+   2.5,
+   1.736,
+   -1.896,
+   1.671
+  ],
+  [
+   3.0,
+   1.928,
+   -2.023,
+   1.825
+  ],
+  [
+   3.5,
+   2.13,
+   -2.138,
+   1.989
+  ],
+  [
+   4.0,
+   2.3,
+   -2.224,
+   2.131
+  ],
+  [
+   4.5,
+   2.428,
+   -2.31,
+   2.241
+  ],
+  [
+   5.0,
+   2.535,
+   -2.382,
+   2.329
+  ],
+  [
+   5.5,
+   2.62,
+   -2.468,
+   2.405
+  ],
+  [
+   6.0,
+   2.673,
+   -2.554,
+   2.46
+  ],
+  [
+   6.5,
+   2.705,
+   -2.63,
+   2.504
+  ],
+  [
+   7.0,
+   2.705,
+   -2.684,
+   2.515
+  ],
+  [
+   7.5,
+   2.705,
+   -2.705,
+   2.515
+  ]
+ ],
+ "nariz_estacoes_formato": "[x, crown_z, keel_z, meia_largura]; secao constante x 7.5..40",
+ "cauda_estacoes": [
+  [
+   41.0,
+   0.117,
+   2.588,
+   2.48
+  ],
+  [
+   42.0,
+   0.224,
+   2.482,
+   2.455
+  ],
+  [
+   43.0,
+   0.334,
+   2.357,
+   2.36
+  ],
+  [
+   44.0,
+   0.426,
+   2.236,
+   2.26
+  ],
+  [
+   45.0,
+   0.49,
+   2.087,
+   2.1
+  ],
+  [
+   46.0,
+   0.554,
+   1.938,
+   1.91
+  ],
+  [
+   47.0,
+   0.608,
+   1.779,
+   1.67
+  ],
+  [
+   48.0,
+   0.65,
+   1.608,
+   1.445
+  ],
+  [
+   49.0,
+   0.677,
+   1.433,
+   1.21
+  ],
+  [
+   50.0,
+   0.725,
+   1.257,
+   0.98
+  ],
+  [
+   51.0,
+   0.763,
+   1.093,
+   0.75
+  ],
+  [
+   52.0,
+   0.807,
+   0.913,
+   0.53
+  ],
+  [
+   53.0,
+   0.858,
+   0.762,
+   0.325
+  ],
+  [
+   53.5,
+   0.903,
+   0.658,
+   0.22
+  ],
+  [
+   54.15,
+   0.94,
+   0.52,
+   0.09
+  ]
+ ],
+ "cauda_estacoes_formato": "[x, centro_z, raio_z, raio_y] — o tailcone do 767 e comprimido lateralmente (ry/rz cai de 1.01 em x=44 a 0.43 em x=53, medido na p254); cap vertical da APU em x~54.2 (z +0.13..+1.45), ponta de fecho (54.3, 0, 0.95)",
+ "secao_mestre": {
+  "modelo": "uniao de DOIS CIRCULOS DE RAIO IGUAL. Ajuste por minimos quadrados ao contorno desenhado na p43 a 600 dpi (2026-08-20): lobo superior R=2.521 centro a 2.514 de profundidade (z=+0.191); lobo inferior R=2.5075 centro a 2.9035 (z=-0.1985). Entre os dois centros o flanco e RETO em meia-largura 2.515. Fecha a quilha em -2.706 (profundidade 5.411) contra 5.41 impressos, e a crista em +2.712.",
+  "validacao": "largura 5.03 e altura 5.41 impressas duas vezes (p29 em pes-polegadas, p43 em polegadas: 198 IN / 213 IN). RMS do ajuste 0.30 cm (lobo superior, 318 amostras) e 0.4 cm (inferior, 311). ATENCAO: a p43 nao e isotropica contra as proprias cotas — 466.0 px/m na vertical e 466.9 px/m na largura interna, mas 460.4 px/m na cota externa de largura; calibrar por eixo.",
+  "SUBSTITUI": "lobo inferior r=2.466 centrado a 3.078 (herdado). Passava do fundo (chegava a 5.544) e precisava de um fecho artificial que deixava uma quilha CHATA de 1.60 m de largura, 6 cm de excesso a 4.1 de profundidade, 22 cm a 5.14. A 'tabela de validacao' que o acompanhava tinha sido gerada do proprio modelo, nao medida: dava hw=0.916 a prof 5.372 onde o desenho da 0.404. O 'equador 0.19 m acima do meio' tambem era artefato — com raios iguais a zona mais larga e um flanco reto centrado em 2.71, ou seja na meia-altura.",
+  "interior_trim": 4.72,
+  "razao_contorno_medida": 0.9195
+ },
+ "parabrisa": {
+  "fonte": "VISTA FRONTAL do ACAP D6-58328 p.2-9 (pagina 29) rasterizada a 4800 dpi (pdftoppm -r 4800 -x 18800 -y 38800 -W 4800 -H 5200), auto-calibrada pela propria secao desenhada: ajuste de ELIPSE por raios a partir do centro, cx=2234.6 cy=2649.7, semi-eixo y 1015.98 px, semi-eixo z 1001.43 px, rms relativo 0.20%. Poligonos = contorno das ABERTURAS dos vidros, media dos dois lados (discordancia maxima esquerda/direita 6 mm). Substitui a medicao anterior, que era um contorno unico em (x,z) medido na foto de CC-CXJ.",
+  "anisotropia_do_desenho": "ARMADILHA MEDIDA, e o motivo de a medicao anterior errar 10%: nesta pagina a secao da fuselagem na vista frontal e desenhada CIRCULAR - 5.545 m de largura por 5.466 m de altura no eixo do traco (razao z/y = 0.986) - enquanto o 767 real tem 5.03 x 5.41 (razao 1.0755). Nao e a vista inteira que esta esticada: a envergadura medida NA MESMA vista da 47.537 m contra 47.57 impressos (0.07%), e a largura da fuselagem na VISTA SUPERIOR da 5.010 contra 5.03. So o contorno da secao na vista frontal e que foi desenhado ~10% largo demais. Portanto y e z sao lidos NORMALIZADOS pela secao desenhada e remultiplicados pela secao verdadeira: y = (px-cx)/1015.98 * 2.515 ; z = (cy-py)/1001.43 * 2.705. Ler a escala isotropica do desenho (366.45 px/m a 4800 dpi, aferida na bitola de 9.3 m e na propria barra de escala) daria |y|max 1.724 em vez de 1.564 - foi esse numero que gerou a nota antiga 'vidros ate |y|~1.71'.",
+  "metodo": "Poligonos em (|y|, z). A vista frontal e uma projecao AO LONGO DE x, portanto y e z sao exatos e so x se perde. A estacao x de cada vertice sai de por o ponto NA SUPERFICIE, por RAYCAST no casco ja subdividido: raio de (-6, y, z) na direcao +x, primeiro impacto. Isso e a propria definicao da projecao frontal e dispensa replicar a secao analitica - pega de graca a pinca do cockpit, o duplo lobo e o encolhimento do subsurf. theta sai de atan2(|y|, z - zc(x)), que e exatamente a formula da UV gravada em b1_casco.py. O acoplamento com o casco produz sozinho o V no plano de simetria e o contorno 3D. NUNCA medir o parabrisa na projecao lateral nem montar a mascara em (x,z): e a regra de f2f96cd, escrita neste proprio 767, e foi ela que o parabrisa antigo violava.",
+  "ordem_dos_vertices": "interno-topo, externo-topo, externo-base, interno-base",
+  "no1_frontal_yz": [
+   [
+    0.0198,
+    1.1148
+   ],
+   [
+    0.7055,
+    1.1364
+   ],
+   [
+    0.8355,
+    0.7312
+   ],
+   [
+    0.0198,
+    0.7663
+   ]
+  ],
+  "no2_deslizante_yz": [
+   [
+    0.7624,
+    1.1607
+   ],
+   [
+    1.1486,
+    1.1661
+   ],
+   [
+    1.3392,
+    0.5948
+   ],
+   [
+    0.8874,
+    0.7352
+   ]
+  ],
+  "no3_kick_yz": [
+   [
+    1.187,
+    1.1742
+   ],
+   [
+    1.3491,
+    1.1809
+   ],
+   [
+    1.5645,
+    0.6596
+   ],
+   [
+    1.3801,
+    0.5705
+   ]
+  ],
+  "montante_central_meia_largura": 0.095,
+  "montante_central_nota": "|y| da borda do VIDRO No.1 no plano de simetria, constante em z (no 767 o montante central e um poste reto - o desenho poe os dois vertices internos na mesma coluna, e a foto confirma vao constante entre 25% e 35% da altura). NAO e o que o ACAP desenha: o desenho da |y| = 0.0198, ou seja um montante de 4 cm, que nao e fisico - a 1:200 o desenhista separou os dois vidros pelo minimo. A foto head-on de EI-CXO mede o poste branco em 0.106 da meia-largura do envidracado = 0.166 m; com o selo de 0.018 de cada lado isso poe a borda do vidro em 0.101. Um montante central de ~15 cm e o que a aeronave tem.",
+  "selo_m": 0.018,
+  "folga_desenho_m": 0.02,
+  "folga_desenho_nota": "RECUO da abertura, EM METROS DE ARCO SOBRE A SUPERFICIE (erosao na grade (x,theta) com o raio LOCAL da secao), nao no plano (|y|,z). O ACAP desenha a ABERTURA estrutural; a foto mostra o VIDRO visivel, menor, porque a moldura cavalga a borda. Depois o selo de 0.018 cresce de volta, tambem em arco. Sinal contrario ao do 777 (22500e6), onde o desenho ENGORDAVA os montantes.\nPOR QUE EM ARCO: head-on, um selo de arco s aparece com largura s*cos(theta); um recuo feito no plano aparece inteiro. Nos vidros que ja subiram o ombro os dois deixam de se cancelar. Com o recuo no plano, o montante No.2/No.3 (theta ~50-58 graus) saia 29% largo e o No.3 19% fino, enquanto o No.1/No.2 (theta ~35) fechava em 1%. Em arco os dois caem para -2% e -8%. E a mesma familia de erro do selo 25% fino na crista: metro de arco nao e grau de theta.",
+  "filete_canto_m": 0.012,
+  "cinta_moldura_m": 0.075,
+  "aplicacao": "mascara UV NoseMask (x,theta) 8192x2048, cobertura EXATA do texel por imagem integral (as duas grades sao uniformes em (x,theta), entao a media de area sai de uma soma cumulativa 2D). G = vidro, R = selo escuro de 0.018 m NA SUPERFICIE, dilatado por faixas de x com o raio LOCAL da secao — um raio unico em graus deixa o selo ~25% fino perto da crista, que e onde fica o montante central.\nO R inclui a area do vidro DENTRO dele. Se o selo fosse so o anel, no texel de borda ficariam R=0.5 e G=0.5 e o shader — Mix(tinta, selo, R) e depois Mix(., vidro, G) — deixaria ~25% de TINTA aparecer entre o vidro e o selo: um fio branco contornando cada painel, bem visivel no close do nariz. Com o selo cheio, R=1 em todo o conjunto e o G so decide quanto e vidro.\nCantos por filete no poligono em (|y|,z), nao por abertura na grade. A cinta CLARA da moldura vai na LiveryTex: nas fotos head-on de 767 a moldura e branca/prateada, nao preta como no 777.",
+  "defeito_corrigido_2026-08-21": "Antes: UM poligono unico em (x,z) — CONTORNO 1.60..3.25 por z 0.60..1.33 — rasterizado contra GZ = zc + rz*cos(theta), mais uma 'moldura' que era o mesmo poligono dilatado 0.115 m, e dois montantes que eram retangulos VERTICAIS em x=2.16 e x=2.78. Medido na propria mascara antiga:\n - o vidro vivia em theta 21.2..66.6 graus e NUNCA chegava perto do plano de simetria: |y| minimo 0.472, ou seja 0.945 m de pintura branca entre os dois lados, onde mora o montante central. Sem montante, sem V.\n - a moldura dilatada ia de theta 0.0 a 68.0: em x 1.508..1.762 ela COBRIA a crista, atravessando o plano de simetria. Essa e a banda preta arqueada de borda serrilhada que o gate head-on de aa2d27d mostrou.\n - 4 vidros por conjunto em vez de 6.\nDepois: theta 3.2..65.8, x 1.315..3.268, montante central de 0.19 m de branco. Area de vidro na superficie 2.173 m2 antes contra 1.898 agora — o problema nunca foi a area, foi a POSICAO e a forma.",
+  "divergencia_conhecida": "A vista LATERAL da mesma p.2-9, medida a 4800 dpi, desenha o envidracado em x 1.430..3.021, z +0.475..+1.141. z fecha com o frontal dentro de 0.04-0.10 m, mas o limite traseiro sai 0.20 m A FRENTE do que o frontal gera (3.021 contra 3.225). E a mesma discordancia, no mesmo sentido e na mesma magnitude, que o 777 registrou em 22500e6: a arte lateral desenha o vidro so onde ele e visivel DE LADO, e a parte do No.1 que contorna a frente do nariz fica de perfil e nao e desenhada. O modelo segue o frontal, porque e o frontal que a foto head-on confirma e e o head-on que mostra o defeito. (Lida ISOTROPICAMENTE a vista frontal daria 3.506, ou seja 0.49 m atras da lateral - mais uma evidencia contra a leitura isotropica.)",
+  "estica_z": 1.0911,
+  "estica_z_centro": 0.8757,
+  "estica_z_nota": "A VISTA FRONTAL ACHATA O ENVIDRACADO EM ~9% NA VERTICAL, e as tres fotos head-on concordam com a lateral contra ela. Alturas do envidracado (abertura), todas divididas pela meia-largura de 1.5645 para ficarem sem escala: vista frontal 0.6104 m = 0.390 ; vista LATERAL da mesma p.2-9 a 4800 dpi 0.6660 m = 0.426 ; foto EI-CXO (head-on de verdade, azimute 0-5 graus, camera no nivel) 0.403 ; foto Aviano (azimute 0) 0.419 ; foto Austrian (12 graus fora, de baixo) 0.435. As fotos caem em cima da lateral, nao da frontal. Correcao: escala 1.0911 = 0.6660/0.6104 aplicada so em z, em torno de z=0.8757 (centro do envidracado), o que reproduz exatamente a altura da lateral e mantem a POSICAO que so a frontal sabe dar (a frontal e projecao ao longo de x; a lateral desenha o vidro so onde ele e visivel de lado e sai 0.20 m atras em x). |y| continua vindo da frontal: a lateral nao ve y nenhum.",
+  "filete_canto_nota": "0.012 e nao 0.055 como no 777, por duas razoes. Um filete grande come a ALTURA duas vezes (topo e base) e a meia-largura so uma, entao achata o envidracado inteiro: com 0.055 o render dava h/meia-largura 0.343 contra 0.403 na foto, e o No.3 saia 37% estreito. E a erosao do recuo ja arredonda os cantos convexos pelo proprio raio (0.020), entao o filete efetivo e ~0.032.",
+  "ajuste_montante_23_m": 0.035,
+  "ajuste_montante_23_nota": "O ACAP poe o montante No.2/No.3 para FORA do que a foto mostra, e o erro cai todo no painel mais estreito. Varredura a 30% da altura, tudo normalizado pela meia-largura do envidracado: o desenho da No.2 = 0.254 e No.3 = 0.115; a foto EI-CXO da 0.213 e 0.129 — No.2 19% largo, No.3 11% estreito, com a borda EXTERNA do No.3 batendo (0.911 desenho contra 0.905 foto). Ou seja: nao e o painel que esta errado, e a fronteira entre os dois. Correcao unica: 0.035 m para dentro na aresta externa do No.2 e na aresta interna do No.3, aplicada antes da folga; o vao entre eles nao muda. Depois disso No.2 sai +5% e No.3 +2% contra a foto.",
+  "conferencia_render_2026-08-21": {
+   "camera": "CamHeadOn do padrao de frota (cameras_canonicas.py): azimute 0, 70 m, 2.96 graus abaixo do eixo, 356 mm. render_headon.png.",
+   "foto": "refs/ws_frontal_EI-CXO_dhaka.jpg — Blue Panorama EI-CXO em Dhaka, Faisal Akram, CC BY-SA 2.0. Head-on de verdade: os dois No.3 caem a 178.5 px do eixo dos dois lados (simetria 0.6%), camera no nivel.",
+   "metodo": "Varredura de linha a 30% da altura do envidracado, na foto e no render, com tudo dividido pela MEIA-LARGURA do envidracado — adimensional, nao depende de escala, distancia nem lente. Em cada imagem o limiar e o que separa os SEIS paineis (foto 165, render 110): as exposicoes nao tem relacao nenhuma.",
+   "resultado": {
+    "altura/meia-largura": "foto 0.403, modelo 0.396 (-1.9%)",
+    "largura No.1": "foto 0.415, modelo 0.446 (+7.6%)",
+    "largura No.2": "foto 0.213, modelo 0.216 (+1.3%)",
+    "largura No.3": "foto 0.129, modelo 0.118 (-8.3%)",
+    "poste central": "foto 0.106, modelo 0.109 (+2.7%)",
+    "montante No.1/No.2": "foto 0.056, modelo 0.047 (-15.6%)",
+    "montante No.2/No.3": "foto 0.039, modelo 0.038 (-2.1%)"
+   },
+   "estabilidade": "as sete medidas mudam menos de 0.01 entre 25% e 35% da altura, entao nao e uma linha de varredura de sorte.",
+   "residuo": "o unico fora de 10% e o montante No.1/No.2, e ele tem ~10 px na foto: 1 px de limiar ja vale 10%. O desenho tambem discorda da foto na RAZAO entre os dois montantes (1.53 contra 1.44), entao um recuo unico nao fecha os dois; o compromisso poe m12 -16% e m23 -2%."
+  },
+  "vidro_material_2026-08-21": "O 'painel que renderiza CLARO' do QA-BACKLOG nao era atribuicao de material: NAO EXISTE material por painel. Os seis vidros sao uma regiao do canal G de UMA mascara alimentando UM BSDF, e os parametros do 767 eram identicos aos do 777 aprovado (Roughness 0.05, Coat 0.85, Coat Roughness 0.03). O painel claro e o reflexo especular do CloudCard — area light de 60x20 m, 8000 W, em (15,-25,30) — num vidro quase espelho; o mesmo reflexo esta no render_headon do 777, la como uma lasca fina. No 767 o nariz e bem mais rombudo e os paineis maiores, entao o lobo cobre um painel inteiro e le como vidro faltando. Reflexo em parabrisa e real, borda dura e artefato: Roughness 0.05->0.14, Coat 0.85->0.55, Coat Roughness 0.03->0.11. O selo virou borracha (0.020 base, Roughness 0.68) em vez de tinta preta brilhante. Alterado SO no 767.",
+  "duvidas_para_revisao_humana": [
+   "POSICAO em z: a vista frontal poe o centro do envidracado em z=0.876 e a lateral da mesma prancha em z=0.808 — 0.068 m de desacordo entre duas projecoes que deveriam concordar (as duas medem z direto). O modelo segue a frontal na posicao e a lateral na ALTURA. Nenhuma das fotos head-on resolve isso, porque nenhuma da uma referencia de z calibravel; as duas de perfil que temos sao de ponto alto ou com o parabrisa em 190 px contra o sol. Fica em aberto.",
+   "A pinca do lobo superior no cockpit foi calibrada contra a leitura ISOTROPICA antiga ('vidros ate |y|~1.71'), que esta agora medida em 1.564. A pinca nao foi tocada nesta correcao — mexer nela muda o casco e invalidaria os outros portoes — mas a sua justificativa caducou e ela deveria ser remedida. Ver lobo_superior_pinca.",
+   "O montante No.1/No.2 fica 16% estreito contra a foto e nao fecha junto com o No.2/No.3 (-2%): o desenho e a foto discordam na RAZAO entre os dois montantes (1.53 contra 1.44). Uma segunda foto head-on nitida e no nivel decidiria; a de EI-CXO tem so ~10 px nesse montante.",
+   "Head-on, o envidracado do modelo ocupa uma fracao menor da largura do nariz do que na foto. Como a altura/meia-largura do proprio envidracado bate em 2%, a suspeita recai sobre a FORMA DO NARIZ (rombudo demais na zona do cockpit), nao sobre o parabrisa. Nao foi possivel medir a silhueta da fuselagem em nenhuma das fotos com confianca — fundo de arvores, tremulacao de calor ou branco contra ceu branco."
+  ]
+ },
+ "portas_pax": {
+  "porta1": {
+   "centro_x": 5.7,
+   "abertura": [
+    1.07,
+    1.88
+   ],
+   "z": [
+    -0.35,
+    1.53
+   ],
+   "fonte": "ACAP 2.7.1 (p.50): 18FT8.5IN=5.70 do nariz, folha 42x74in (1.07x1.88). A MESMA prancha traz a nota decisiva do cargueiro: 'PASSENGER DOOR / LH SIDE TWO OR THREE PLACES / FWD LH SIDE ONLY ON -300 FREIGHTER'. Confirmado na vista lateral do cargueiro (p.34 e p.30): uma unica porta a vante, sem porta 3 e sem saidas overwing."
+  },
+  "servico_RH": "porta de servico 42x72in (1.07x1.83) na mesma estacao 5.70, lado direito (ACAP 2.7.1 'SERVICE DOOR / RH SIDE TWO OR THREE PLACES'). A prancha nao repete a restricao 'FWD ONLY' para a de servico, mas a vista lateral do cargueiro so desenha o par dianteiro; modelada so a R1.",
+  "REMOVIDAS_vs_300ER": "porta3 (x=42.55) e as DUAS saidas overwing por lado (x=24.22 e 25.34) NAO existem no 767-300F de fabrica — ACAP 2.7.1 'FWD LH SIDE ONLY ON -300 FREIGHTER' e as vistas laterais do cargueiro (p.30/p.34) nao as desenham."
+ },
+ "portas_carga": {
+  "fwd_grande": {
+   "centro_x": 11.57,
+   "clear": [
+    3.4,
+    1.7
+   ],
+   "porta": [
+    3.56,
+    1.7
+   ],
+   "z": [
+    -2.2,
+    -0.5
+   ],
+   "fonte": "ACAP 2.7.4: 37FT11.5IN=11.57, standard no -300ER",
+   "lado": "direito — na p.56 a porta do porao dianteiro esta TRACEJADA (lado oculto) enquanto a de conves principal esta hachurada (lado proximo), o que fixa main deck = bombordo e porao = estibordo."
+  },
+  "aft": {
+   "centro_x": 37.29,
+   "clear": [
+    1.78,
+    1.7
+   ],
+   "z": [
+    -2.2,
+    -0.5
+   ],
+   "fonte": "ACAP 2.7.5: 122FT4IN=37.29"
+  },
+  "bulk": {
+   "centro_x": 40.3,
+   "dim": [
+    0.97,
+    1.22
+   ],
+   "z": [
+    -1.9,
+    -0.7
+   ],
+   "lado": "direito",
+   "nota": "estacao aproximada (p55 nao medida com precisao)"
+  },
+  "main_deck": {
+   "centro_x": 11.93,
+   "lado": "esquerdo (bombordo) — 'MAIN DECK CARGO DOOR (LEFT SIDE)'",
+   "clear": [
+    3.4,
+    2.63
+   ],
+   "z": [
+    -0.3,
+    2.082
+   ],
+   "fonte": "ACAP 2.7.7 (p.56), a prancha do CARGUEIRO. A cota impressa 39FT1.5IN (11.93 M) do nariz cai na LINHA DE CENTRO da porta: na propria vista lateral da prancha a porta hachurada mede 250 px por 3.40 m impressos (73.6 px/m) e a linha de extensao da cota cai a 987 px, o centro exato dos 862..1112 px da porta; a mesma verificacao na p.34 da 11.93 m de novo (centro 1615.5 px, nariz 939 px, 56.7 px/m). CLEAR DOOR OPENING = 134 IN (3.40 M) de largura, dimensionado com setas nas duas arestas do retangulo tracejado. Altura: a tabela da mesma prancha da A=100.70IN (2.56) / B=100.00IN (2.54) para 'FREIGHTERS WITH POWERED CARGO HANDLING SYSTEM' e A=103.70IN (2.63) / B=103.00IN (2.62) para 'MANUAL'; a razao DESENHADA da abertura tracejada e 1309.5/1687.5 = 0.776, contra 103.70/134 = 0.774 (manual) e 100.70/134 = 0.751 (powered), entao a ABERTURA ESTRUTURAL desenhada e a de 103.7 IN = 2.63 m e a diferenca powered/manual e so a altura do piso de roletes dentro. Soleira: dimensao E de 2.3.3 (p.34), 13FT8IN..14FT8IN = 4.16..4.47 m AGL, media 4.315 -> z = -0.295 com o eixo a 4.61 AGL; a propria p.34 desenha a soleira em z=-0.263.",
+   "ARMADILHA_desenho": "as vistas laterais PEQUENAS (p.34 e a miniatura da p.56) desenham a porta de conves principal com a MESMA altura da porta de passageiros — 136 px = 1.79 m, e na p.56 ainda flutuando de z=0.01 a z=1.81, acima do piso. E esquematico: a largura sai certa (3.40) e a soleira sai certa na p.34, a ALTURA nao. So o detalhe cotado da p.56 vale.",
+   "forma": "retangulo em (x, theta): as arestas dianteira e traseira sao cavernas (x constante) e as arestas superior e inferior sao longarinas (theta constante). Desenhar em (x,z) achataria a porta no ombro — e o erro que os commits 22500e6/d401766 documentam para o parabrisa.",
+   "theta": [
+    39.7,
+    96.4
+   ],
+   "altura_e_ARCO": "MEDIDO, e corrige a primeira leitura: os 103.7 IN (2.63 m) do detalhe cotado da p.56 sao a altura da porta SOBRE A PELE CURVA (arco), nao a extensao em z. Tomados como extensao em z dariam o topo em z=+2.33; o arco de 2.63 m subindo da soleira z=-0.30 pela secao real poe o topo em z=+2.082, ou seja 2.38 m de extensao vertical. A foto de controle (UPS N354UP em Viena, Doronenko, CC BY-SA 4.0 — a unica em que a aresta da porta FECHADA resolve, depois de passa-alta forte) da: topo 0.61 m abaixo da crista -> z=+2.09, base -> z=-0.24, extensao vertical 2.33 m. Calibracao pela porta 1 no mesmo quadro (1.07 x 1.88 m). Os 2.09 medidos contra 2.082 calculados fecham em 8 mm. E a mesma familia de armadilha do parabrisa (commits 22500e6 / d401766): cota de feature em casco curvo medida na superficie desenvolvida, nao na projecao.",
+   "theta_nota": "theta 39.7 (topo) a 96.4 (soleira) desde a crista: 57 graus de circunferencia. E a maior feature de superficie da aeronave e o motivo de ela ser desenhada em (x,theta)."
+  }
+ },
+ "janelas_cabine": {
+  "existem": false,
+  "fonte": "N536LA, N418LA, N534LA e N420LA (cargueiros de fabrica) nao tem nenhuma janela de cabine nem contorno tamponado. O objeto JanelasPax herdado do -300ER e APAGADO no b1f, e a faixa de janelas da LiveryTex nao e pintada."
+ },
+ "asa": {
+  "le_formula": "x_LE = 17.17 + 0.694*y (sweep 34.8 graus), y ate 23.785",
+  "te_formula": "x_TE = 29.29 + 0.143*(y-2.515) ate y=9.41 (x 30.44); depois 30.44 + 0.376*(y-9.41)",
+  "raiz_y": 2.515,
+  "tip_y": 23.785,
+  "tip_chord": [
+   33.67,
+   35.85
+  ],
+  "raiz_z_le": -1.15,
+  "raiz_z_te": -1.65,
+  "diedro_graus": 5.3,
+  "validacao_diedro": "ponta a z=+0.57 = L 4.90-5.46 AGL da tabela 2.3.2",
+  "winglet": {
+   "tipo": "Aviation Partners blended (retrofit, todas as 9 da frota)",
+   "altura_inclinada": 3.35,
+   "extensao_horizontal": 1.665,
+   "extensao_vertical": 2.9,
+   "semi_span_total": 25.45,
+   "fonte": "Boeing wingletspans.pdf: 767-300ER com winglets = 167FT0IN (50.90 m); winglet 11 ft",
+   "livery": "CARGUEIRO: face EXTERNA indigo, face INTERNA CORAL, secao baixa da transicao clara. NAO e o que a frota de passageiros faz — o spec do -300ER descreve 'face interna BRANCA com logo LATAM indigo'. Medido na unica foto que mostra as duas faces no mesmo quadro (refs/ref_N536LA_2021.jpg, vista de baixo: o winglet de um lado mostra a externa indigo e o do outro a interna coral) e conferido em N420LA SJO 2026-01-24. Implementado em b9f_winglets.py por atribuicao de material pelo sinal da normal em y, acima de z=1.40.",
+   "presente_em_N536LA": "SIM, blended Aviation Partners — conferido na foto de 2026-06-20. Na frota de cargueiros so CC-CZZ nao tem (foto de 2022-08-31, pontas lisas).",
+   "ARMADILHA_cor": "Base Color de um BSDF e LINEAR, nao sRGB. Os #2A0088 e #ED1651 jogados direto divididos por 255 renderizaram o winglet ROXO e ROSA-CHOQUE — quem pegou foi a folha de contato do gate, no painel da cauda. Os materiais de marca que ja estavam no .blend guardam os valores lineares (LATAM_Indigo.001 = 0.0232/0/0.2462, LATAM_Coral.001 = 0.8469/0.008/0.0823); b9f_winglets.py agora faz a conversao explicitamente e bate com eles ate a quarta casa. Os parametros de superficie tambem foram alinhados com os da deriva (Roughness 0.45, Specular 0.20, SEM verniz): superficie vertical grande com Coat 1.0 reflete o cartao de nuvem inteiro e lava a tinta, que foi o achado do -300ER de passageiros."
+  },
+  "carenagem_ventral": {
+   "x": [
+    17.5,
+    31.5
+   ],
+   "meia_larg_max": 3.0,
+   "fundo_z": -2.95,
+   "nota": "wing-body fairing; fundo pouco abaixo da quilha"
+  }
+ },
+ "empenagem": {
+  "deriva": {
+   "BA_reto": "x = 41.39 + 1.0014*z (45.0 graus), valido z 3.9..11.15",
+   "carenagem_dorsal": "abaixo de z~3.9 o BA curva para a frente ate a crista em (43.0, 2.66)",
+   "BF": "x = 50.55 + 0.398*z (68.3 graus da horizontal)",
+   "tip_chord": {
+    "z": 11.15,
+    "x": [
+     52.7,
+     54.94
+    ]
+   },
+   "raiz_te_z": 2.2,
+   "rudder_hinge": "x = 48.61 + 0.333*z",
+   "fonte": "p29 @600dpi, sondas por linha; ponta AGL = 4.61+11.15 = 15.76 (~15.85 oficial)"
+  },
+  "estab": {
+   "le_formula": "x_LE = 47.26 + 0.768*(y-2.515)",
+   "te_formula": "x_TE = 52.54 + 0.247*(y-2.515)",
+   "semi_span": 9.31,
+   "tip_chord": [
+    52.48,
+    54.22
+   ],
+   "raiz_z": 0.55,
+   "diedro_graus": 7,
+   "cor": "branco, BA metal, intradorso cinza-claro"
+  }
+ },
+ "motor_cf6_80c2b7f": {
+  "fonte": "frota inteira CF6-80C2B7F (airfleets por MSN); geometria do desenho p29/p254 + foto",
+  "cl_y": 7.9,
+  "cl_z": -2.34,
+  "inlet_x": 18.54,
+  "fan_od": 2.67,
+  "fan_diam": 2.36,
+  "reverser_ate_x": 22.0,
+  "core_ate_x": 23.6,
+  "nozzle_ate_x": 24.3,
+  "nota_cota": "cota IMPRESSA na p29: 'GE ENGINES 60 FT 10 IN (18.54 M)' do nariz ate o bico da entrada (RR/PW 18.72). O bico DESENHADO esta em 18.23 — o ACAP desenha uma nacelle generica e nao pode servir aos dois fabricantes. A frota e CF6-80C2B7F (GE), entao vale 18.54. A foto de perfil aparenta 18.2 porque o motor esta 7.9 m mais perto da camera do que o plano onde o mapa foi calibrado.",
+  "clearance_solo_K": "0.56-1.12 AGL; fundo da nacelle z=-3.76",
+  "livery": "fan cowl + reverser brancos, lip polido, core cowl metalico escuro, nozzle inconel; SEM chevrons",
+  "perfil_nacelle": [
+   [
+    18.54,
+    1.17
+   ],
+   [
+    18.66,
+    1.262
+   ],
+   [
+    18.95,
+    1.315
+   ],
+   [
+    19.6,
+    1.335
+   ],
+   [
+    20.6,
+    1.335
+   ],
+   [
+    21.4,
+    1.32
+   ],
+   [
+    22.1,
+    1.285
+   ],
+   [
+    22.8,
+    1.215
+   ],
+   [
+    23.25,
+    1.13
+   ]
+  ],
+  "perfil_core": [
+   [
+    23.1,
+    1.07
+   ],
+   [
+    23.6,
+    0.96
+   ],
+   [
+    24.2,
+    0.83
+   ],
+   [
+    24.9,
+    0.69
+   ],
+   [
+    25.35,
+    0.605
+   ]
+  ],
+  "bocal_ate_x": 25.75,
+  "plug_ate_x": 26.1,
+  "nota_forma": "remedido na foto de CC-CWY com grade metrica: a CF6-80C2 e praticamente um CILINDRO de 2.67 m que so afila depois de x=21.4, com escape longo visivel ate ~25.8. O perfil anterior (max 2.80 em 19.8 caindo a 2.17 em 22.6) tinha forma de ovo e lia como uma bolha lisa sem entrada nem escape.",
+  "pylon": "carenagem de 0.26-0.30 m de meia-largura, aresta superior enterrada no perfil da asa (z=-0.48..-0.58) e inferior dentro da nacelle (z=-1.02..-1.30), x 19.20..26.60"
+ },
+ "trem": {
+  "nariz_x": 4.55,
+  "principal_x": 27.31,
+  "bitola": 9.3,
+  "nariz_rodas": {
+   "diam": 0.98,
+   "larg": 0.37,
+   "gap": 0.55
+  },
+  "principal_bogie": {
+   "entre_eixos": 1.42,
+   "entre_rodas": 1.12,
+   "pneu_diam": 1.22,
+   "pneu_larg": 0.46
+  },
+  "solo_z": -4.61,
+  "fonte": "ACAP 2.2.2 (entre-eixos 74FT8IN=22.76, nariz 14FT11IN=4.55, bitola 30FT6IN=9.3); rodas medidas na vista frontal p29",
+  "nota_desenho": "as vistas da p29 sao exatas em ESCALA (span e estab conferem a 0.2%) mas colocam cada elemento com +-0.3 m: o trem de nariz desenhado da 4.28 contra 4.55 impressos e o entre-eixos desenhado 23.07 contra 22.76. Cota impressa ganha de pixel."
+ },
+ "confianca": {
+  "alta": "dimensoes gerais, portas pax/carga, trem, entre-eixos, bitola, span sem winglet, estab (todas cotas IMPRESSAS, reconferidas em 2026-08-20); secao mestre (ajuste de circulos a 0.3-0.4 cm); estacoes nariz/cauda (+-3 cm); deriva/estab planform (a inclinacao do BA e do BF confere com a foto a 0.07% e 1.3%); saidas overwing (duas paginas do ACAP concordam a 0.01 m); entrada do motor (cota impressa); livery: cunha traseira, bandas da deriva, matricula, titulo, janelas (todas medidas na foto de CC-CWY com mapa validado em tres feicoes) | CARGUEIRO: estacao e largura da porta de conves (cotas IMPRESSAS na p.56), lado da porta (texto 'LEFT SIDE'), ausencia de janelas e porta unica a vante (nota 'FWD LH SIDE ONLY ON -300 FREIGHTER' + as vistas do cargueiro).",
+  "media": "perfil da nacelle e do escape (+-0.1 m, medidos na foto com paralaxe de 3%), diedro, raiz da asa z, parabrisa poligonos, altura total 15.85 (nao impressa neste ACAP; faixa 15.39..16.03), lockup no ventre | CARGUEIRO: altura da porta de conves (2.63 m de ARCO -> topo z=+2.082; conferida a 8 mm na foto de controle da UPS, mas nao numa foto da propria frota); cunha traseira e lockup (fotogrametria em N568LA, +-0.2 m).",
+  "baixa": "porta bulk (estacao aproximada), pinca do cockpit, marcas operacionais e desgaste | CARGUEIRO: bandeira da COLOMBIA (proporcao estimada), estacao do simbolo do ventre, corte de z=1.40 na pintura do winglet."
+ },
+ "lobo_superior_pinca": {
+  "nota": "pinca do cockpit calibrada visualmente contra a vista frontal (parametros forca 0.30, sobe 1.2..1.2, desce 3.2..2.0, expoente 1.6). ATENCAO: a calibracao dizia 'vidros ate |y|~1.71 em z 0.62..1.23', numero que veio de ler a vista frontal ISOTROPICAMENTE. Medido de novo em 2026-08-21 contra a propria secao desenhada, o envidracado vai a |y| 1.564 em z 0.571..1.181 (ver parabrisa.anisotropia_do_desenho). A pinca NAO foi mexida na correcao do parabrisa — mexer nela muda o casco e invalida os outros portoes — mas a razao pela qual ela tem esses parametros caducou. Remedir."
+ },
+ "verificacao": {
+  "gate_2026-08-21": "7 angulos canonicos a 1600 px / 96 amostras pelo padrao de frota (render_gate.py + cameras_canonicas.py) + verificacao_visual.png. Cameras: aeronave de 54.94 m -> D_LONGE = 165 m, D_PERTO = 70 m.",
+  "porta_de_conves_no_render": "A porta de conves NAO le como uma porta a distancia de gate, e isso esta CERTO: nas fotos de licenca livre da propria frota (N536LA, N418LA, N568LA, ate em quadros de 5000 px no chao) a aresta da porta fechada tambem nao resolve — a tinta e nova e a folga e apertada. So com passa-alta forte, e so na foto de controle da UPS, a aresta aparece. No modelo o sulco tem 45 mm e a banda cinza 105 mm, o que a 1600 px sobre 55 m da menos de 1 px. Aumentar isso deixaria a porta mais legivel que a real.",
+  "angulo_de_tailstrike": 8.76,
+  "herdado_do_300ER": "parabrisa (6 vidros, poste central, V) conferido em d401766 e nao tocado aqui; casco, asas, empenagem, motores e trem sao a MESMA celula, sem nenhuma mudanca de geometria. As unicas mudancas de malha do cargueiro sao a exclusao do objeto JanelasPax e a atribuicao de material nos winglets."
+ },
+ "derivado_de": "boeing 767-300ER/spec_763.json @ d401766 (parabrisa remedido). A p.30 do ACAP imprime para o cargueiro EXATAMENTE as mesmas cotas gerais do -300ER: comprimento 180FT3IN (54.94), fuselagem 16FT6IN (5.03) x 17FT9IN (5.41), trem de nariz 14FT11IN (4.55), entre-eixos 74FT8IN (22.76), motor GE 60FT10IN (18.54). Celula identica; as diferencas sao portas, janelas e pintura.",
+ "frota_cargo": {
+  "de_fabrica": "PR-ABD, PR-ACO, CC-CZZ, N418LA, N420LA, N534LA, N536LA (7)",
+  "conversoes_BCF": "CC-BDB, CC-BDC, CC-CXD, CC-CXE, CC-CXK, N538LA, N540LA, N542LA, N564LA, N566LA, N568LA, N572LA (12)",
+  "discriminante": "cargueiro de fabrica = pele lisa sem linha de janelas; conversao = fileira inteira de janelas TAMPONADAS e pintadas de branco, cujos contornos continuam legiveis na tinta (evidente em CC-CXE e N568LA). As conversoes tambem guardam a porta 3, desativada e com placa 'EXIT INOPERATIVE' (visivel em N568LA).",
+  "winglets": "N536LA tem winglets blended Aviation Partners (confirmado na foto de 2026-06-20). CC-CZZ e o unico sem winglets na frota, pela foto de 2022-08-31.",
+  "duvida": "BCF x BDSF por matricula nao foi possivel fechar em fonte autoritativa; as proprias aeronaves pintam 'BOEING 767-300BCF'."
+ },
+ "livery_n536la": {
+  "estado": "MEDIDO por fotogrametria em 2026-08-21 sobre N568LA (irma de conversao, MESMA aplicacao de pintura) em perfil de bombordo quase puro, e conferido em N536LA. b5f_livery.py consome estes numeros.",
+  "o_que_a_pintura_cargo_e": "A LATAM Cargo NAO usa a pintura de passageiros nem a antiga LAN Cargo/ABSA. Verificado em fotos de 2020-2026 de N536LA, N418LA, N568LA, N540LA, CC-CXE, N538LA, N572LA: (1) fuselagem TODA BRANCA, sem cheatline, barriga branca; (2) deriva com a MESMA arte da frota de passageiros (campo indigo, duas bandas cinza-voo com o miolo coral, filete cinza no BA, cap na ponta) — nenhuma diferenca mensuravel contra CC-CWY; (3) cunha indigo traseira SIM, existe, vindo da raiz da deriva — mas MENOR que a de passageiros (ver cunha_traseira); (4) o lockup do casco e de DUAS LINHAS, 'LATAM' com 'CARGO' embaixo, mais o simbolo a vante — arte oficial em latam_cargo_logo.svg (Wikimedia Commons, dominio publico); (5) matricula BRANCA dentro do indigo da cunha, os dois lados; (6) titulo de tipo 'BOEING767-300F' indigo obliquo sobre o branco, a vante da cunha (as conversoes pintam 'BOEING 767-300BCF'; N418LA, de fabrica, pinta 'BOEING 767-300ER' — anomalia real, verificada a 4x); (7) bandeira nacional pequena atras do parabrisa com o nome do pais embaixo ('COLOMBIA' na N536LA), e bandeira na ponta da deriva; os tres ultimos digitos da matricula na porta do trem de nariz ('536'); (8) nacelles brancas, lip polido, sem chevrons.",
+  "metodo": "Mapa foto->modelo montado no proprio perfil: escala em z pela ponta da deriva (z=11.15) contra a crista do casco (z=2.705) = 94.1 px/m; escala em x pela inclinacao medida do BA reto da deriva (dx/dy = -0.9725 contra 1.0014 do modelo) = 91.4 px/m, ou seja 2.9% de encurtamento por guinada; x=0 fixado por reprojecao do BA da deriva em duas alturas (fecha em 1 px). A ponta da deriva prevista em x=52.7 cai em 4883 px contra 4880 medidos. Regiao do NARIZ tem escala propria (a camera esta mais perto do nariz): calibrada pela porta 1 (1.07 x 1.88 m) — 98.1 px/m em x e 95.2 px/m em z.",
+  "cunha_traseira": {
+   "fronteira_dianteira": "x = 42.65 + 1.00*z",
+   "nota_dianteira": "PARALELA ao BA reto da deriva (1.0014), como na frota de passageiros, mas 0.54 m mais ATRAS que em CC-CWY (42.11 + 1.008*z). Medida por mascara indigo fechada morfologicamente (para nao quebrar na matricula branca) varrendo linha a linha; os dois trechos limpos (z 1.54..2.66 e z -0.70..-0.03) dao 1.001 de inclinacao e 42.65 de intercepto. Conferida por sobreposicao na foto: a linha cai em cima da aresta de tinta, e a do passageiro cai 0.5 m a vante dela.",
+   "fronteira_inferior": "theta <= 121.1 - 6.44*(x - 41.5) graus a partir da crista",
+   "nota_inferior": "medida coluna a coluna convertendo a altura do limite do indigo em theta pela secao local (reta em (x,theta), NAO em (x,z) — regra do commit 22500e6). Trecho limpo x 42.6..46.8, 13 colunas. A CUNHA DO CARGUEIRO E MENOR que a de passageiros: CC-CWY da 134.4 - 8.061*(x-41.5), ou seja ~13 graus mais funda no bordo dianteiro. Diferenca conferida na sobreposicao.",
+   "limite_traseiro": "x <= 50.55 + 0.398*z  (a propria linha do BF da deriva, herdada do -300ER)"
+  },
+  "fin_bandas_2026-08-20": {
+   "fonte": "Foto de CC-CWY (refs/ref_CC-CWY_perfil_mia.jpg) RETIFICADA no plano (x,z) da deriva por afim de tres retas (BA, BF, corda da ponta), 100 px/m. Medido por varredura de colunas e por percentis nas coordenadas de banda.",
+   "coordenadas": "u = z - 0.370*x  atravessa as bandas (sobem 20.3 graus) ; e = z + 0.21*x  ao longo delas (cortes do coral descem 11.9 graus)",
+   "banda_inferior": {
+    "u": [
+     -14.32,
+     -13.27
+    ],
+    "espessura_z": 1.05,
+    "espessura_perpendicular": 0.985,
+    "coral_e": [
+     14.37,
+     16.26
+    ]
+   },
+   "banda_superior": {
+    "u": [
+     -10.56,
+     -9.6
+    ],
+    "espessura_z": 0.96,
+    "espessura_perpendicular": 0.9,
+    "coral_e": [
+     19.13,
+     21.05
+    ]
+   },
+   "cap": "TUDO acima de u=-10.56 e cinza-voo ate a ponta: a banda superior e o cap sao contiguos, nao ha indigo acima dela",
+   "filete_BA": 0.24,
+   "travessias": {
+    "lb_bot": "sai pela RAIZ (rho~0.31 da corda da raiz, x~45.6) — nao chega ao BA; cruza o BF em zeta 0.355",
+    "lb_top": "BA zeta 0.152 -> BF zeta 0.487",
+    "ub_bot": "BA zeta 0.614 -> BF zeta 0.828",
+    "ub_top": "BA zeta 0.777 -> BF zeta 0.949 (so o CORAL tem aresta superior; o cinza segue ate a ponta)"
+   },
+   "zeta": "fracao da deriva exposta em z, de z_raiz=1.83 (encontro do BF com a crista) a z_ponta=11.15 (H=9.32 m)",
+   "confirmacoes": "(1) espessura perpendicular 0.985 e 0.900 m contra os 0.96 m absolutos que a LATAM pinta na frota toda — o achado do commit f162f73 vale tambem no 767; (2) angulos internos identicos aos da familia A320 e do 787 (bandas a 20.3 graus, cortes do coral a -11.9); (3) o canto inferior-tras de cada coral TOCA o BF e o canto superior-dianteiro e cortado pelo filete do BA, exatamente como no A320.",
+   "lados": "MESMA arte em (x,z) nos dois lados — conferido na foto de estibordo de CC-CXH (as bandas sobem para tras nas duas)",
+   "acordo_render": "84% de concordancia pixel a pixel contra a foto retificada; todo o residuo e uma orla de ~0.15 m nas arestas",
+   "conferencia_cargo_2026-08-21": "A arte da deriva do cargueiro e a MESMA da de passageiros. Conferido na foto de N568LA (MIA 2026-02-20) e de N536LA: mesma estrutura cinza-coral-cinza sobre indigo, mesmo filete de BA, mesmo cap. Nenhum ajuste."
+  },
+  "marcas": {
+   "lockup_fonte": "latam_cargo_logo.svg — 'File:LATAM Cargo logo.svg' do Wikimedia Commons, DOMINIO PUBLICO (marca abaixo do limiar de originalidade). URL: https://commons.wikimedia.org/wiki/File:LATAM_Cargo_logo.svg . Um caminho coral #ed1650 (barras de cima do simbolo), sete caminhos indigo #1b0088 (barras de baixo do simbolo + 'LATAM' + 'CARGO'). E a arte oficial: as letras de 'CARGO' NAO sao fonte parecida. O arquivo FICA FORA DO GIT, como os outros SVG de marca da raiz — baixe-o para esta pasta antes de rodar b0f_marca_cargo.py.",
+   "lockup_simbolo": {
+    "x": [
+     6.94,
+     8.82
+    ],
+    "theta_topo": 39.6,
+    "nota": "medido em N568LA; o simbolo do cargueiro fica ~5 graus mais BAIXO no casco que o de passageiros (34.26 em CC-CWY) porque o bloco de texto tem duas linhas."
+   },
+   "lockup_texto": {
+    "x": [
+     9.36,
+     15.95
+    ],
+    "theta_cap": 52.6,
+    "nota": "bloco 'LATAM' + 'CARGO' colocado como UMA peca, na proporcao da propria arte oficial. 'LATAM' medido x 9.36..15.95 com cap em theta 52.6 e base em 75.0; 'CARGO' x 9.39..14.37 com cap em theta 84.3 e base em 102.7."
+   },
+   "matricula": {
+    "texto": "N536LA",
+    "x": [
+     44.3,
+     45.83
+    ],
+    "z": [
+     0.43,
+     0.802
+    ],
+    "estilo": "BRANCA dentro do indigo da cunha, os dois lados",
+    "nota": "medida em N568LA (mesma aplicacao); 1.53 m de comprimento por 0.372 m de altura. A de passageiros em CC-CWY e mais alta no casco (z 1.044..1.343) e mais espalhada (1.80 x 0.299)."
+   },
+   "titulo": {
+    "texto": "BOEING767-300F",
+    "x": [
+     37.9,
+     41.35
+    ],
+    "z": [
+     1.1,
+     1.31
+    ],
+    "estilo": "indigo obliquo sobre branco, a vante da cunha",
+    "nota": "lido em N536LA (foto de 2026-06-20): 'BOEING767-300F' com ponto medio entre 767 e 300F, estilo de casa da Boeing. Em N568LA a mesma marca ocupa x 38.09..41.4+, z 1.14..1.79 (a inclinacao do italico sobe a caixa alta)."
+   },
+   "bandeira_pais": {
+    "pais": "COLOMBIA",
+    "x": [
+     3.94,
+     4.53
+    ],
+    "theta": [
+     63.3,
+     75.3
+    ],
+    "nota": "bandeira tricolor horizontal (amarelo com metade da altura, azul, vermelho) atras do parabrisa, com o nome do pais em maiusculas finas logo abaixo; ha uma segunda bandeira na ponta da deriva. MEDIDA em N568LA com a escala do nariz (x 3.94..4.53, z 1.213..0.688). A primeira colocacao, por proporcao estimada, punha a bandeira em theta 52.0..61.6 — meio metro alta demais; quem pegou foi o close-up do nariz do gate."
+   },
+   "ventre": "SO O SIMBOLO, x 10.40..12.50, rasterizado em arco lateral simetrico a partir da quilha (altura de arco 3.36 m pela razao oficial 0.623). O ventre do cargueiro NAO leva o wordmark que a frota de passageiros leva a x 24..31 — conferido na vista de baixo de N536LA (2021-05-07). Nos perfis a marca aparece como uma lasca de coral e indigo espiando por cima da quilha: medida em N568LA, o topo do desenho cai em z=-2.12 (theta 141.6) contra a silhueta em z=-2.44 (theta 154.4).",
+   "ARMADILHA_svg": "O importador de SVG do Blender seguido de meshes.new_from_object() PERDE CONTORNOS. No 'CARGO' deste lockup ele comeu a perna do R e a palavra virava 'CAPGO' — o caminho do R tem duas subcurvas (o olho e o contorno externo) e a perna sai no externo. Aparece na textura, antes de qualquer render, e passaria por um gate de longe. O conserto e tesselar a mao: amostrar as bezier de cada spline, separar os contornos em ILHAS por aninhamento (dentro de um numero PAR de outros = borda, IMPAR = furo da menor borda que o contem) e chamar mathutils.geometry.tessellate_polygon por ilha. Jogar todos os contornos de uma vez tambem nao serve: o caminho 'LATAM' tem CINCO contornos externos, um por letra, e a palavra vira um borrao solido. Ver b0f_marca_cargo.py."
+  },
+  "janelas": {
+   "existem": false,
+   "nota": "cargueiro de fabrica: nao ha faixa de janelas para pintar."
+  },
+  "cores": {
+   "indigo": "#2A0088",
+   "coral": "#ED1651",
+   "branco_casco": "#E6E7EA",
+   "cinza_voo": "#C8CACC",
+   "nota_cargo": "amostrado na foto de N568LA ao sol: branco do casco ~#F1F2F1, indigo da cunha ~#090A27 (sombra), coral da deriva ~#E52536, banda clara da deriva ~#C1C0BB — claramente mais escura que o branco do casco, o que confirma o cinza-voo #C8CACC da textura."
+  }
+ },
+ "livery_cc_cwy_SUBSTITUIDO": "os numeros de passageiros de CC-CWY sairam deste spec; o que sobreviveu sem mudanca esta em livery_n536la.fin_bandas_2026-08-20 (a arte da deriva e identica).",
+ "duvidas_para_revisao_humana": [
+  "PORTA DE CONVES, evidencia fotografica da FROTA: nenhuma foto de licenca livre da LATAM Cargo resolve a aresta da porta fechada — nem em quadros de 5000 px no chao, com passa-alta forte. A porta no modelo vem inteira do ACAP (estacao e largura impressas, altura pelo detalhe cotado) e foi conferida numa foto de CONTROLE de outro operador (UPS N354UP em Viena), onde a aresta resolve. Se aparecer uma foto de LATAM Cargo com a porta aberta ou com luz rasante, vale remedir.",
+  "ALTURA DA PORTA: a leitura de que os 103.7 IN sao ARCO e nao extensao em z fecha em 8 mm com a foto de controle, mas e uma interpretacao de convencao de desenho. Se a Boeing quis dizer extensao vertical, o topo sobe de z=+2.082 para z=+2.33 e a porta ganha 9 graus de circunferencia.",
+  "POWERED x MANUAL cargo handling: a tabela da p.56 da duas alturas (2.56 e 2.63 m). A razao DESENHADA bate com a linha MANUAL. Nao ha fonte sobre qual sistema a LATAM Cargo usa; a diferenca e 7 cm.",
+  "LOCKUP, escala do nariz: a colocacao do lockup foi medida com a escala LOCAL do nariz (calibrada pela porta 1), nao com a escala global do perfil (calibrada pela deriva). As duas discordam ~7% na regiao do nariz porque a camera esta mais perto do nariz que da cauda. Por isso a folha comparacao_perfil.png mostra o lockup do render um pouco a vante do da foto REPROJETADA — o desvio e da reprojecao global, nao do modelo. Um mapa por trechos resolveria.",
+  "CUNHA TRASEIRA, discordancia com o passageiro: a cunha do cargueiro sai 13 graus mais rasa e 0.54 m mais atras que a de CC-CWY. As duas sao fotogrametria, em fotos e metodos diferentes. Ou a LATAM pinta mesmo uma cunha menor no cargueiro, ou uma das duas medicoes tem vies. A sobreposicao na foto de N568LA favorece a medida do cargueiro, mas seria bom remedir o passageiro pelo mesmo metodo.",
+  "SIMBOLO NO VENTRE: a orientacao (Y da arte ao longo do arco lateral) e herdada do -300ER e nao foi medida; so a extensao em x e o theta em que a marca aparece por cima da quilha foram medidos. A vista de baixo disponivel e obliqua demais para fixar a rotacao.",
+  "FILETE BRANCO DO BA DO WINGLET: existe na foto (uma linha fina no bordo de ataque da face externa) e NAO esta modelado. Precisaria identificar as faces de BA do winglet.",
+  "TOM DO INDIGO: o #2A0088 oficial renderiza mais violeta que o azul-marinho das fotos. E o valor de marca e e o mesmo da frota inteira, entao nao foi mexido aqui — mas a folha de comparacao expoe a diferenca, e ela vale para todas as aeronaves do repositorio, nao so para esta.",
+  "BCF x BDSF por matricula na frota: nenhuma fonte autoritativa encontrada. Nao afeta N536LA, que e de fabrica.",
+  "MSN / linha / datas de N536LA vem so do PlaneLogger; planespotters, airfleets, rzjets, ATDB e FR24 responderam HTTP 403."
+ ],
+ "pipeline": [
+  "0. baixe latam_cargo_logo.svg de https://commons.wikimedia.org/wiki/File:LATAM_Cargo_logo.svg para esta pasta (nao versionado, mesma regra dos outros SVG de marca da raiz).",
+  "1. b1_casco.py, b2_asas.py, b3_motores_trem.py, b4_texturas_base.py — celula, identica a do -300ER. Nao precisam rodar se o .blend ja veio do -300ER.",
+  "2. b0f_marca_cargo.py — importa e tessela o lockup oficial. RODE ANTES do b5f.",
+  "3. b5f_livery.py — toda a tinta: cunha, portas (inclusive a de conves), lockup, matricula, titulo, bandeira, ventre, deriva, parabrisa. Apaga o objeto JanelasPax.",
+  "4. b9f_winglets.py — pintura dos winglets por atribuicao de material. RODE DEPOIS do b2, que reescreve a malha das asas com um material so.",
+  "5. gate: /Applications/Blender.app/Contents/MacOS/Blender -b <blend> --python render_gate.py -- 1600 96 ; depois python3 verificacao_visual.py 'boeing 767-300F'.",
+  "6. comparacao com a foto: b7f_orto.py (render ortografico a 40 px/m) e b8f_comparacao.py (reprojeta a foto de N568LA no mesmo enquadramento e empilha). A folha fica fora do git pela politica do NOTICE.md."
+ ]
+}
