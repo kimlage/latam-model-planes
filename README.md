@@ -258,6 +258,20 @@ Three traps worth carrying to any photo measurement:
   projection.** Measuring the rear wedge by "which pixels are indigo" failed
   repeatedly because the fin is also indigo and covers the hull in side view.
 
+## The sharklet round
+
+The A321ceo build (2026-08) caught a **latent family defect**: LATAM sharklet
+blades are solid indigo on both faces (PT-MXD/PT-MXP/PT-XPB, and PS-LBO
+DSC00834 for the neo), but the master wing left the inboard face white. The
+fix — faces of `Asas` with `|y| > 17.25` above the diagonal
+`z = 0.55 + 1.2·(17.9 − |y|)` → `LATAM_Indigo` — was ported back to the
+A320neo and A321neo masters on 2026-08-20 with the constants **unchanged**,
+because the ceo's wing is the *same* ~7% oversize master mesh (identical
+448-vert topology, tips at |y| 19.142), proven by a per-face-index diff.
+Rescaling the constants by the oversize factor looks reasonable and is wrong:
+it under-selects 31 blade-root faces and renders a white step at the trailing
+edge. Each folder's `fix_sharklet_indigo.py` carries the full account.
+
 ## The SCL scenery
 
 Santiago (SCL / SCEL) is built once, in [`scenario/`](scenario/), and **linked**

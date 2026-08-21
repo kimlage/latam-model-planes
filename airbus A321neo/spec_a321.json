@@ -113,7 +113,8 @@
    "acao": "registrado, nao corrigido — modelo estatico; herdado do A320 master"
   },
   "posicoes": "trem principal 21.97 = 5.07+16.90 ACAP; inlet motor 15.40 = ACAP; portas conferidas no build (ver build_a321_fase1_geometria.py output)",
-  "fase3_2026-08-20": "build_a321_fase3_acap.py: empenagem recuada (verificada no ACAP proprio), portas erguidas (D3 reconstruida curta/elevada), aneis repintados, CamAlvoCauda 38.44->39.14; 6 angulos re-renderizados e conferidos"
+  "fase3_2026-08-20": "build_a321_fase3_acap.py: empenagem recuada (verificada no ACAP proprio), portas erguidas (D3 reconstruida curta/elevada), aneis repintados, CamAlvoCauda 38.44->39.14; 6 angulos re-renderizados e conferidos",
+  "sharklet_indigo_2026-08-20": "perfil re-renderizado antes/depois na mesma camera e comparado com o A321ceo aprovado e com a foto PS-LBO DSC00834 (Wikimedia): lamina indigo, transicao diagonal lisa, sem degrau; 6 angulos + verificacao_visual.png reconstruidos"
  },
  "confianca": {
   "oficial_acap": [
@@ -183,5 +184,9 @@
   "deriva_raiz": "fundo esticado 1.55->1.05 (z<2.05, fator 2) como no master/ceo",
   "nota_echarpe_traseira": "a fronteira traseira da echarpe (41.46+0.0538z, medida na PS-LBO em 41.23+-0.15 em z1.9) NAO e a linha do BF da deriva como o spec dizia: e a fronteira da PINTURA do casco, ~0.7-1.0 m a frente da carenagem da raiz do TE - o mesmo padrao que a foto do PT-TMN mostra no master. Ela NAO se move com o fin; mantida.",
   "uv_sash": "remap (h,c) com UV por-loop preservada: as travessias zeta/rho do fin_bandas viajam com a malha"
+ },
+ "sharklet": {
+  "pintura_2026-08-20": "lamina INDIGO macica nos dois lados, como no A321ceo (a propria PS-LBO DSC00834 mostra a face inboard indigo acima da fuselagem; tambem PT-MXD/PT-MXP/PT-XPB do ceo). 129 faces do mesh Asas com |y|>17.25 e z acima da diagonal 0.55+1.2*(17.9-|y|) -> LATAM_Indigo (fix_sharklet_indigo.py). O master herdado deixava a face inboard branca/cinza (defeito latente da familia, sinalizado na derivacao do A321ceo).",
+  "aprendizado": "as constantes do A321ceo valem SEM reescala: a asa do ceo e o MESMO mesh master ~7% oversize (448 verts, pontas em |y| 19.142), verificado por diff face-a-face (0 diferencas). Reescalar pelo fator de oversize sub-seleciona 31 faces da raiz da lamina (y 18.40-18.71, z 0.55-1.12) e rende um degrau branco no bordo de fuga. O objeto Asas tem offset so em x (+4.26), entao os limiares em y/z valem como estao."
  }
 }

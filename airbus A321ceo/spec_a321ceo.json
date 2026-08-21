@@ -102,7 +102,7 @@
  },
  "sharklet": {
   "pintura": "lamina INDIGO macica nos dois lados (CORRECAO desta derivacao: o master A320neo/A321neo deixa a lamina branca/cinza por dentro; as fotos PT-MXD/PT-MXP/PT-XPB — e a propria PS-LBO do neo — mostram indigo). 129 faces do mesh Asas com |y|>17.25 acima da transicao -> LATAM_Indigo (fix_sharklet_indigo.py). Banda coral do lado outboard NAO modelada (sem foto do outboard; simplificacao documentada).",
-  "nota_master": "defeito latente da familia sinalizado para correcao nos masters A320neo/A321neo"
+  "nota_master": "defeito latente da familia sinalizado para correcao nos masters A320neo/A321neo — CORRIGIDO em 2026-08-20 (fix_sharklet_indigo.py em cada pasta, mesmas constantes sem reescala: a asa deste ceo e o mesmo mesh master ~7% oversize)"
  },
  "verificacoes": {
   "posicoes": "conferidas no build por bbox: D1 5.04, D2 13.84, D3 24.79, D4 36.58, cargas 8.16/29.62/33.23, inlet V2500 15.39; meia-largura barril 1.99 por raycast",

@@ -286,13 +286,13 @@
   ],
   "pitch_m": 0.515,
   "primeira_x": 6.08,
-  "n_janelas": 40,
   "abertura": [
    0.229,
    0.312
   ],
   "aro_borracha_mm": 18,
   "recuo_mm": 8,
+  "n_janelas": 40,
   "nota_2026_08_20": "MANTIDA contra a pendencia do A320ceo: o ACAP desenha a fileira cheia 6.18/passo 0.5334/41 (ultima 27.58) e o CC-BFO a confirma na foto dele; mas a foto do PT-TMN (ref_PT-TMN_wikimedia.jpg, referencial ancorado na porta 4) mostra primeira ~6.05, ultima ~26.1, passo 0.50-0.52 - esta matricula cega as cavernas traseiras. Fileira e especifica da matricula; regra zero: foto da matricula > desenho generico."
  },
  "portas": {
@@ -373,19 +373,6 @@
   "sem_chevrons": true,
   "nota": "LATAM neo e EXCLUSIVAMENTE PW1100G-GTF (pesquisa 2026-08-15; pedido 2013 + acordo 2023). Fan cowl branco, lip metalico polido, bocal+tailcone longo inconel. PENDENTE: alongar tailcone vs LEAP"
  },
- "empenagem": {
-  "fin_LE": "x = 0.863*z + 28.02 (reta z 3.0..7.6; filete dorsal curva a frente abaixo de z~3)",
-  "fin_TE": "x = 0.221*z + 34.91 (raiz z1.55: 35.25; topo z8.05: 36.69)",
-  "fin_z": [
-   1.55,
-   8.05
-  ],
-  "deriva_raiz": "fundo da malha esticado 1.55->1.05 (verts z<2.05, fator 2.0) para continuar enterrada no tailcone mais fino na posicao recuada (receita do A320ceo)",
-  "estab_tip_TE_x": 36.62,
-  "estab_span": 12.45,
-  "correcao_2026_08_20": "empenagem RECUADA ~0.9-1.7 m: o master antigo usava LE 26.773+0.8393z / TE 34.60+0.0538(z-1.55) / estab tip 35.75. Dupla leitura do ACAP AC_A320 (p040 600dpi e p074 300dpi, identicas) na derivacao do A320ceo + ACAP proprio do A319 (+3.73) + render-match do A319 na foto PT-TMT. Remap (h,c) preserva a UV por-loop da Deriva, entao a arte do sash e suas travessias zeta/rho viajam com a malha.",
-  "nota_foto": "a foto 2016 do PT-TMN (1024px, perspectiva com convergencia de verticais na borda do quadro) le o fin ~0.5-1.0 m a frente do ACAP em alturas grandes; atribuido a projecao nao modelada de feicoes altas - o A319 validou a posicao da familia por render-match ortografico em foto de 4390px. GEOMETRIA vem do ACAP."
- },
  "carenagem_ventral": {
   "x": [
    10.9,
@@ -399,12 +386,12 @@
   "fonte": "workflow fotogrametrico 2026-08-16 (JetPhotos PT-TMN 1920px, calibracao dupla porta2/nariz, ±0.15m) + foto de referencia do dono (arranjo atual)",
   "fin_convencao": "h=(z-1.55)/6.5; c=(x-LE(z))/(TE(z)-LE(z)); TE reta (35.25,1.55)->(36.69,8.05) (recuada 2026-08-20 pelo ACAP); polylines [c->h] port; ESTIBORDO = MESMA imagem em (x,z)",
   "echarpe_casco": {
+   "porta2": "quase toda dentro do indigo: folha indigo + contorno branco 0.05-0.06 m",
    "resolvido_2026_08_20": "As duas descricoes anteriores contradiziam-se em ~2.2 m na crista e AMBAS cairam: a formula plana da skill (27.39+0.8393z) tinha sido construida paralela ao fin LE ERRADO do master antigo (~1.1 m a frente do real); a tabela x_front antiga (crista 31.3, workflow JetPhotos 2026-08-16) era vies de projecao do wrap na crista em foto de baixo (~1.4 m atras). Medido de novo na ref_PT-TMN_wikimedia.jpg em referencial ancorado na porta 4 (folha ACAP -0.10..1.90) + pontas nariz/cauda; residuos do ajuste <0.02 m em z 0.4..1.6.",
    "x_front": "x >= 28.51 + 0.63*z (reta; incerteza +-0.15)",
    "x_rear": "x <= interp em z: [-1.2,1.6,1.8,2.05] -> [27.75,32.80,33.36,33.85] (medido z>=1.6; abaixo, a diagonal 1.80 ate a ponta casa com o padrao da familia - CC-BFO 1.83; zona z<1.1 ocultada pelo estab na foto)",
    "baixo": "z >= -1.2 e |theta| <= 145 (quilha branca; ponta em (27.75,-1.2) - a reta frontal chega em z=-1.2 exatamente na ponta 27.6-27.75 das medicoes antigas)",
    "validacao_cruzada": "matricula atual (ate 28.80, z 0.52-0.89) folga 0.04 m da fronteira no canto traseiro-baixo; titulo (ate 29.30, z ate 1.39) folga 0.09 m - o estilo 'quase toca' da frota (CC-BFO: 'O quase toca a diagonal'). Porta 4: fronteira cruza o bordo dianteiro da folha em z~1.2 (canto superior-dianteiro no branco, resto no indigo - igual PT-MXP 2024).",
-   "porta2": "quase toda dentro do indigo: folha indigo + contorno branco 0.05-0.06 m",
    "sem_listra_fina": "a foto 2016 mostra uma listra indigo fina (~0.38 m) separada ~1 m a frente da massa; NAO pintada: as 4 campanhas recentes (CC-BFO 2022, PS-LBO 2025, PT-MXP 2024, foto atual do dono) nao a registram - detalhe da era de entrega, abandonado no arranjo atual"
   },
   "matricula_atual": "PT-TMN INDIGO sobre BRANCO x27.00-28.80 z0.52-0.89 (altura 0.40); titulo 'AIRBUS A320neo' acima x27.0-29.3 z1.22-1.39 (2016-2020 era branca DENTRO do wrap x30.2-32.0 - variacao documentada) | NAO PINTADA nesta rodada: a etapa de marcas em (x,theta) que vem depois (refazer_marcas.py) re-mediu a matricula na unica foto versionada, ref_PT-TMN_wikimedia.jpg, e a pinta BRANCA DENTRO DA CUNHA em x30.14-31.76, que e tambem o padrao da familia (A319 26.45-28.45, A320ceo 30.29-31.81, A321ceo, A321neo: todas brancas dentro do indigo). Ver marcas_xtheta_2026-08-20.matricula_variante_nao_aplicada. A fronteira dianteira da cunha NAO depende disso: sai do ajuste ancorado na porta (residuos < 0.02 m em z 0.4-1.6).",
@@ -468,10 +455,28 @@
    "limitante": "Belly_DrenoAft (aft drain mast) at x=27.83. The fuselage keel alone would allow 9.93 deg.",
    "acao": "Both numbers are below reality, so this is worth checking: the aft drain mast may sit too low or too far aft, AND the main gear leg may be modelled short. Measured while building the takeoff animation, not yet fixed.",
    "metodo": "Evaluated mesh, rotating every vertex about the main-gear contact point and finding the first z<=runway. Cheap and worth running on every aircraft."
-  }
+  },
+  "sharklet_indigo_2026-08-20": "perfil re-renderizado antes/depois na mesma camera e comparado com o A321ceo aprovado e com a foto PS-LBO DSC00834 (Wikimedia): lamina indigo, transicao diagonal lisa, sem degrau; 6 angulos + verificacao_visual.png reconstruidos"
  },
  "correcoes": {
   "deriva_2026-08-17": "Sash refeito com o desenho medido no 787-9 e transferido por (h,c). As polilinhas F1..F7 anteriores davam deriva branca com bandas grossas; a foto do PT-TMN mostra deriva indigo dominante com bandas finas de bordo a bordo.",
   "acap_2026-08-20": "Rodada das 4 pendencias do spec_a320ceo: empenagem recuada a posicao ACAP (remap (h,c) + estab +0.87), portas pax erguidas aos sills 2-3-0 (+0.55/+0.57), segundo overwing 15.66->15.28, fileira de janelas MANTIDA (foto da matricula refuta a fileira cheia do desenho para o PT-TMN). Echarpe re-resolvida na foto (ver echarpe_casco); matricula pintada; anel APU metal 36.70..37.15 adicionado (ausente). Scripts: build_a320neo_fix_geo.py + build_a320neo_fix_livery.py; camera CamAlvoCauda 31.5->32.2."
+ },
+ "empenagem": {
+  "fin_LE": "x = 0.863*z + 28.02 (reta z 3.0..7.6; filete dorsal curva a frente abaixo de z~3)",
+  "fin_TE": "x = 0.221*z + 34.91 (raiz z1.55: 35.25; topo z8.05: 36.69)",
+  "fin_z": [
+   1.55,
+   8.05
+  ],
+  "deriva_raiz": "fundo da malha esticado 1.55->1.05 (verts z<2.05, fator 2.0) para continuar enterrada no tailcone mais fino na posicao recuada (receita do A320ceo)",
+  "estab_tip_TE_x": 36.62,
+  "estab_span": 12.45,
+  "correcao_2026_08_20": "empenagem RECUADA ~0.9-1.7 m: o master antigo usava LE 26.773+0.8393z / TE 34.60+0.0538(z-1.55) / estab tip 35.75. Dupla leitura do ACAP AC_A320 (p040 600dpi e p074 300dpi, identicas) na derivacao do A320ceo + ACAP proprio do A319 (+3.73) + render-match do A319 na foto PT-TMT. Remap (h,c) preserva a UV por-loop da Deriva, entao a arte do sash e suas travessias zeta/rho viajam com a malha.",
+  "nota_foto": "a foto 2016 do PT-TMN (1024px, perspectiva com convergencia de verticais na borda do quadro) le o fin ~0.5-1.0 m a frente do ACAP em alturas grandes; atribuido a projecao nao modelada de feicoes altas - o A319 validou a posicao da familia por render-match ortografico em foto de 4390px. GEOMETRIA vem do ACAP."
+ },
+ "sharklet": {
+  "pintura_2026-08-20": "lamina INDIGO macica nos dois lados, como no A321ceo (fotos PT-MXD/PT-MXP/PT-XPB e PS-LBO DSC00834: face inboard indigo, ponta cinza abaixo da transicao). 129 faces do mesh Asas com |y|>17.25 e z acima da diagonal 0.55+1.2*(17.9-|y|) -> LATAM_Indigo (fix_sharklet_indigo.py). O master deixava a face inboard branca/cinza (defeito latente da familia, sinalizado na derivacao do A321ceo).",
+  "aprendizado": "as constantes do A321ceo valem SEM reescala: a asa do ceo e o MESMO mesh master ~7% oversize (448 verts, pontas em |y| 19.142), verificado por diff face-a-face (0 diferencas). Reescalar pelo fator de oversize sub-seleciona 31 faces da raiz da lamina (y 18.40-18.71, z 0.55-1.12) e rende um degrau branco no bordo de fuga."
  }
 }
