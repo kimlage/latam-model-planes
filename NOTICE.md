@@ -43,6 +43,8 @@ licences above. To reproduce the pipeline from scratch, get them from the source
 | `airbus_a320neo_logo.svg`, `airbus_a321neo_logo.svg`, `dreamliner_logo.svg` | Manufacturer titles | Wikimedia Commons |
 | `ref_CC-BGP_wikimedia.jpg`, `ref_PT-TMN_wikimedia.jpg` | Reference photographs of the registrations | Wikimedia Commons / JetPhotos / Planespotters |
 | `airbus A321neo/ref_PS-LBO_wikimedia_*.jpg` | PS-LBO reference photographs (CC BY-SA 4.0, share-alike — cited, not shipped) | credits in `airbus A321neo/refs_manifest.json` |
+| `boeing 767-300F/refs/*`, `boeing 777-300ER/refs/*`, `boeing 787-8/refs/*`, `boeing 787-9/refs/*` | N536LA / N568LA, PT-MU*, CC-BBF and 787 head-on reference photographs (CC0 / CC BY / CC BY-SA) | full URL, author, licence and date for each in the folder's `refs/manifest.json` or `refs_manifest.json` |
+| `boeing 777-300ER/B777_APR_boeing.pdf` | 777 *Airplane Characteristics* D6-58329-2 | Boeing, **Airport Compatibility / ACAPs** section (free) |
 | `boeing 767-300ER/refs/ref_*`, `refs/view_*.png`, `refs/crop_*.png` | CC-CWY and sister-ship photographs and the crops derived from them (CC BY 4.0 / CC BY-SA 4.0 / CC BY 2.0) | full URL, author, licence and date for each in `boeing 767-300ER/refs/manifest.json` |
 
 The manufacturer documents are free downloads, but **free to download is not

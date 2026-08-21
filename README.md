@@ -7,8 +7,8 @@ dimensions have to match the manufacturer's document, and the paint has to match
 a photograph of that specific registration**. The bar is not "it looks like an
 airliner" — it is a LATAM engineer recognising their own aircraft.
 
-**The whole LATAM passenger fleet — nine types, nine registrations**, every
-one gated against photographs of its own airframe:
+**The whole LATAM passenger fleet — nine types, nine registrations** — plus
+the first freighter, every one gated against photographs of its own airframe:
 
 | | |
 |---|---|
@@ -16,10 +16,14 @@ one gated against photographs of its own airframe:
 | <img src="airbus%20A319/render_hero.png" width="440"><br>**Airbus A319 (ceo)** · PT-TMT · 33.84 m<br>[`A319_LATAM.blend`](airbus%20A319/A319_LATAM.blend) | <img src="airbus%20A320ceo/render_hero.png" width="440"><br>**Airbus A320ceo** · CC-BFO · 37.57 m<br>[`A320ceo_LATAM.blend`](airbus%20A320ceo/A320ceo_LATAM.blend) |
 | <img src="airbus%20A321ceo/render_hero.png" width="440"><br>**Airbus A321-231 (ceo)** · PT-MXP · 44.51 m<br>[`A321ceo_LATAM.blend`](airbus%20A321ceo/A321ceo_LATAM.blend) | <img src="airbus%20A321neo/render_hero.png" width="440"><br>**Airbus A321neo (ACF)** · PS-LBA · 44.51 m<br>[`A321neo_LATAM.blend`](airbus%20A321neo/A321neo_LATAM.blend) |
 | <img src="boeing%20787-8/render_hero.png" width="440"><br>**Boeing 787-8 Dreamliner** · CC-BBF · 56.72 m<br>[`B788_LATAM.blend`](boeing%20787-8/B788_LATAM.blend) | <img src="boeing%20767-300ER/render_hero.png" width="440"><br>**Boeing 767-300ER** · CC-CWY · 54.94 m<br>[`B763_LATAM.blend`](boeing%20767-300ER/B763_LATAM.blend) |
-| <img src="boeing%20777-300ER/render_hero.png" width="440"><br>**Boeing 777-300ER** · PT-MUG · 73.86 m<br>[`B77W_LATAM.blend`](boeing%20777-300ER/B77W_LATAM.blend) | |
+| <img src="boeing%20777-300ER/render_hero.png" width="440"><br>**Boeing 777-300ER** · PT-MUG · 73.86 m<br>[`B77W_LATAM.blend`](boeing%20777-300ER/B77W_LATAM.blend) | <img src="boeing%20767-300F/render_hero.png" width="440"><br>**Boeing 767-300F** · N536LA · 54.94 m<br>*LATAM Cargo Colombia*<br>[`B763F_LATAM_CARGO.blend`](boeing%20767-300F/B763F_LATAM_CARGO.blend) |
 
-Together they cover all 356 passenger aircraft LATAM operates. The A320ceo
-alone accounts for 135 of them; the A321neo, 19.
+Together they cover all 356 passenger aircraft LATAM operates — the A320ceo
+alone accounts for 135 of them — and the freighter opens the 19-aircraft
+cargo fleet. LATAM Cargo is not the passenger livery repainted: the hull is
+white to the belly, the rear wedge is smaller, the lockup runs LATAM over
+CARGO, the winglets are indigo outboard and coral inboard, and the belly
+carries the symbol alone. Only the fin sash passes through unchanged.
 
 ![A320neo departing RWY 17R at Santiago, seen head-on as the camera flies formation and cranes up around its starboard bow](airbus%20A320neo/a320_scl_v12.gif)
 
