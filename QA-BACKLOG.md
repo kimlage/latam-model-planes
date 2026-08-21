@@ -124,6 +124,28 @@ illegible at the grazing 11 m angle; unambiguous now.
 
 ---
 
+## A320 family: the wingspan is 2.4-2.8 m over
+
+Found by the export pipeline (`457cbfe`), which compared every exported
+bounding box against the aircraft's own spec. The four Boeings agree to a few
+centimetres. All five Airbus do not:
+
+| Aircraft | declared span | model measures | over by |
+|---|---|---|---|
+| A320neo, A320ceo, A321ceo, A321neo | 35.80 m | **38.23 m** | +2.43 m (6.8%) |
+| A319 | 34.10 m | **36.92 m** | +2.82 m (8.3%) |
+
+Blender measures the same figure directly on the masters, so this is the
+geometry, not the exporter. The A321ceo build had already flagged it in
+passing as an "inherited family deviation" — this is the second independent
+sighting, now with numbers.
+
+It is a MASTER defect: the A320neo is the family parent, so every derivation
+inherited it. Fixing it means the wing planform, which is upstream of the
+sharklets/fences, the engine stations and every gate render.
+
+---
+
 ## Fleet-wide, recorded but not scheduled
 
 - **Tailstrike angles** run short across the A320 family (7.75° modelled
