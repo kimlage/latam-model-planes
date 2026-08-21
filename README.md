@@ -21,6 +21,35 @@ one gated against photographs of its own airframe:
 Together they cover all 356 passenger aircraft LATAM operates. The A320ceo
 alone accounts for 135 of them; the A321neo, 19.
 
+![A320neo departing RWY 17R at Santiago, seen head-on as the camera flies formation and cranes up around its starboard bow](airbus%20A320neo/a320_scl_v12.gif)
+
+*A320neo departing 17R at Santiago — 240 frames, 9.6 s. The camera flies
+formation in the aircraft's own coordinate frame from the first frame to the
+last, opening 130 m off the nose with the jet at 42% of the frame — titles,
+nose and gear legible — through the rotation, then craning up and away so
+the terminals, the LATAM base and the cordillera open around it. The move is
+measured rather than eyeballed — see [§8 of the scenery
+manual](scenario/README.md).*
+
+![Aerial survey of SCL: terminals, tower and the LATAM base](scenario/scl_base_v7.gif)
+
+*The second clip: a northbound aerial survey of the whole airport — it
+opens on the T1/T2 terminal core with its piers and parked fleet, crosses
+the control tower, and closes on the LATAM base — where one of
+every type in this repository is parked — both runways crossing the frame
+end to end
+([`scenario/base_flyover.py`](scenario/base_flyover.py)).*
+
+*The version history is kept in the repository: every `a320_scl_v*.gif` is
+one improvement round over the one before — ground weathering, buildings,
+the base detail, margin scrub, farmland, runway furniture, and two camera
+rebuilds. Earlier clips for comparison: the
+[first SCL camera](airbus%20A320neo/a320_scl.gif),
+a [no-scenery pass](airbus%20A320neo/a320_decolagem_v2.gif) and an
+[orbit-in-place clip](airbus%20A320neo/a320_voo.gif).*
+
+---
+
 The A319 is a spec-level derivation of the A320neo master: same nose and
 cross-section, the two constant-section plugs removed (1.60 m forward of the
 wing, 2.13 m aft), tail translated 3.73 m forward, empennage repositioned per
@@ -59,33 +88,6 @@ inlet 11.19, the empennage moved to where the ACAP draws it, pax doors raised
 to the ceo sill table, a 41-window row, indigo sharklets, and the rear wedge
 re-anchored to door 2 after a three-cause forensic on the photo rulers
 (`airbus A320ceo/spec_a320ceo.json`).
-
-![A320neo departing RWY 17R at Santiago, seen head-on as the camera flies formation and cranes up around its starboard bow](airbus%20A320neo/a320_scl_v12.gif)
-
-*A320neo departing 17R at Santiago — 240 frames, 9.6 s. The camera flies
-formation in the aircraft's own coordinate frame from the first frame to the
-last, opening 130 m off the nose with the jet at 42% of the frame — titles,
-nose and gear legible — through the rotation, then craning up and away so
-the terminals, the LATAM base and the cordillera open around it. The move is
-measured rather than eyeballed — see [§8 of the scenery
-manual](scenario/README.md).*
-
-![Aerial survey of SCL: terminals, tower and the LATAM base](scenario/scl_base_v7.gif)
-
-*The second clip: a northbound aerial survey of the whole airport — it
-opens on the T1/T2 terminal core with its piers and parked fleet, crosses
-the control tower, and closes on the LATAM base — where one of
-every type in this repository is parked — both runways crossing the frame
-end to end
-([`scenario/base_flyover.py`](scenario/base_flyover.py)).*
-
-*The version history is kept in the repository: every `a320_scl_v*.gif` is
-one improvement round over the one before — ground weathering, buildings,
-the base detail, margin scrub, farmland, runway furniture, and two camera
-rebuilds. Earlier clips for comparison: the
-[first SCL camera](airbus%20A320neo/a320_scl.gif),
-a [no-scenery pass](airbus%20A320neo/a320_decolagem_v2.gif) and an
-[orbit-in-place clip](airbus%20A320neo/a320_voo.gif).*
 
 ---
 
