@@ -184,6 +184,27 @@ sharklets/fences, the engine stations and every gate render.
 
 ---
 
+## Licensing: photo pixels are still in git history
+
+Closed going forward in `0da5329` — five `comparacao_fin_sash.png` sheets were
+removed from the index and ignored, because each is roughly two thirds
+photograph (PT-TMN, PS-LBO, CC-BBB) and `NOTICE.md` records those images as
+**"cited, not shipped"**: CC BY-SA share-alike is incompatible with the CC BY
+4.0 the models ship under.
+
+**Still open, and an owner decision, not an agent one:** those pixels remain in
+the repository's history, so a clone still carries them. Options, in
+increasing order of disruption: leave it and rely on the current tree being
+clean; rewrite history for the five paths; or relicense the affected sheets'
+photographs by replacing them with CC0/CC BY sources and regenerating.
+
+Worth noting how it happened, because it is a pattern rather than a slip: the
+sheets were committed by an early round, and two later rounds independently
+declined to commit theirs and flagged the inconsistency — the policy was
+written after the practice, and nobody went back to reconcile the two.
+
+---
+
 ## Fleet-wide, recorded but not scheduled
 
 - **Tailstrike angles** run short across the A320 family (7.75° modelled
