@@ -16,10 +16,11 @@ Ate 2026-08-21 o spec guardava o para-brisa como poligonos em (x, z) —
 `parabrisa_lado_esq.no1_frontal` etc. — e o builder os convertia numa FAIXA
 que fechava na crista.  Uma faixa em z vira uma faixa em THETA que nunca chega
 a theta = 0: medido na propria NoseMask antiga do PT-TMN, o vidro vivia em
-theta 6,0..70,7 graus e o seu |y| minimo era 0,213 m, enquanto a moldura
-(canal R) corria theta 0..72 e FECHAVA ATRAVES do plano de simetria sobre a
-crista.  Essa banda preta arqueada e a "cunha preta larga no topo do
-para-brisa" do backlog — no lugar dela mora um montante central estreito.
+|theta| 5,5..69,3 graus e o seu |y| minimo era 0,112 m, enquanto o selo
+(canal R) chegava a |theta| 0,06 e |y| 0,001 e FECHAVA ATRAVES do plano de
+simetria sobre x 1,40..2,00.  Essa banda preta arqueada e a "cunha preta larga
+no topo do para-brisa" do backlog — no lugar dela mora um montante central
+estreito, e na familia A320 ele e BRANCO.
 
 A causa e a regra que o 767 escreveu em f2f96cd e que o 777 (22500e6) e o
 proprio 767 (d401766) reaprenderam: feature em casco curvo se mede na
