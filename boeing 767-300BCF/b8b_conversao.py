@@ -25,6 +25,7 @@ esta mais perto do nariz que do leme), entao os recortes sao gerados com uma
 folga generosa e a comparacao e de APARENCIA — o tampao le como contorno claro e
 nao como vidro? a placa aparece? — e nao de estacao.  As estacoes vem da ACAP.
 """
+import json
 import os
 import sys
 import tempfile
@@ -60,22 +61,55 @@ def da_foto(x0, x1, z0, z1, alt_px):
     return c.resize((int(c.width * alt_px / c.height), alt_px), Image.LANCZOS)
 
 
+def mapa_do_render(ren):
+    """px/m e a linha da crista do render de perfil, LIDOS DE cameras_gate.json.
+
+    Nao se mede a escala na silhueta: o gate ja grava a provenienciada camera ao
+    lado dos renders — distancia, lente e a largura do quadro no plano do alvo.
+    Com isso o mapa e exato em vez de estimado, e continua valendo se alguem
+    reenquadrar o gate.  A camera de perfil e perpendicular ao eixo, entao o
+    quadro e simetrico em torno do alvo; a 165 m sobre um casco de 5 m de
+    profundidade a diferenca de escala entre a pele proxima e o plano do eixo e
+    de 1.5%, o que basta para uma comparacao de APARENCIA.
+    """
+    cam = json.load(open(os.path.join(BASE, "cameras_gate.json")))["cameras"]["CamPerfil"]
+    ppm = ren.width / cam["W"]                       # px por metro no plano do eixo
+    x_centro, z_centro = cam["alvo"][0], cam["alvo"][2]
+    x0_px = ren.width / 2.0 - x_centro * ppm         # coluna de x = 0
+    y_crista = ren.height / 2.0 - (2.705 - z_centro) * ppm
+    return ppm, y_crista, x0_px
+
+
+def do_render(ren, ppm, y_crista, x0_px, x0, x1, z0, z1, alt_px):
+    a = int(round(x0_px + x0 * ppm))
+    b = int(round(x0_px + x1 * ppm))
+    t = int(round(y_crista + (2.705 - z1) * ppm))
+    u = int(round(y_crista + (2.705 - z0) * ppm))
+    a, b = max(0, min(a, b)), min(ren.width, max(a, b))
+    t, u = max(0, min(t, u)), min(ren.height, max(t, u))
+    if b - a < 4 or u - t < 4:
+        return None
+    c = ren.crop((a, t, b, u))
+    return c.resize((int(c.width * alt_px / c.height), alt_px), Image.LANCZOS)
+
+
 def main(saida):
     if not os.path.exists(RENDER):
         sys.exit("falta render_perfil.png — rode o gate primeiro")
     ren = Image.open(RENDER).convert("RGB")
+    ppm, y_crista, x0_px = mapa_do_render(ren)
+    print("render: %.2f px/m, crista na linha %d, nariz na coluna %d"
+          % (ppm, y_crista, x0_px))
     tiras = []
     for rot, x0, x1, z0, z1 in REGIOES:
-        f = da_foto(x0, x1, z0, z1, 320)
-        # o render de perfil e ortografico o bastante no meio do casco para um
-        # recorte proporcional servir de comparacao de aparencia
-        rw = int(ren.width * (x1 - x0) / 55.5)
-        rx = int(ren.width * x0 / 55.5)
-        r = ren.crop((max(0, rx), 0, min(ren.width, rx + rw), ren.height))
-        r = r.resize((f.width, int(r.height * f.width / max(r.width, 1))),
-                     Image.LANCZOS)
+        f = da_foto(x0, x1, z0, z1, 300)
+        r = do_render(ren, ppm, y_crista, x0_px, x0, x1, z0, z1, 300)
+        if r is None:
+            continue
         tiras.append((rot, f, r))
-    w = max(t[1].width for t in tiras)
+    if not tiras:
+        sys.exit("nada recortado — confira o mapa do render")
+    w = max(max(t[1].width, t[2].width) for t in tiras)
     h = sum(t[1].height + t[2].height + 44 for t in tiras) + 12
     sheet = Image.new("RGB", (w + 12, h), (12, 12, 15))
     d = ImageDraw.Draw(sheet)
