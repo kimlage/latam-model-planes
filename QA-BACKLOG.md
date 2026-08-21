@@ -235,7 +235,25 @@ written after the practice, and nobody went back to reconcile the two.
 three docstrings still quote the old name: `airbus A320neo/fix_sharklet_indigo.py`,
 `airbus A321ceo/fix_sharklet_indigo.py` and `boeing 787-9/nose_art.py`.
 
-A peer session is fixing the 787-9 one now. The two Airbus files are deferred
-until the wingspan/door round lands, because that round is consolidating
-per-aircraft builder copies into family modules and may retire those scripts
-outright — in which case the edit would be moot.
+The peer session fixed the 787-9 docstring (`765d4b7` on its own branch) and
+handed the rest back. The two Boeing spec `fonte` fields are done here. **Still
+open, deferred on purpose:** the two Airbus docstrings and the two Airbus spec
+`fonte` fields (`airbus A321neo/spec_a321.json`, `airbus A321ceo/spec_a321ceo.json`)
+— all four sit in folders the wingspan/door round is mid-way through, and that
+round is folding per-aircraft builder copies into family modules, so those
+scripts may be retired outright.
+
+Two things the peer found that outlive the rename, and are the reason this is
+not a find-and-replace:
+
+- **`refs_fetch.py` names `refs_manifest.json` on purpose.** It scans for that
+  filename as a STRAY legacy manifest left behind in a folder. A blanket
+  substitution across the repo would rename the very string the guard hunts
+  for and disarm it silently. Verified: the check is real.
+- **`airbus A320neo/fix_sharklet_indigo.py` says "all in refs_manifest.json",
+  and that was never true.** Its sentence cites PT-MXD, PT-MXP and PT-XPB —
+  which are in `airbus A321ceo/refs/manifest.json` — alongside PS-LBO, which
+  lives in `airbus A321neo/refs/manifest.json`. Manifests were per-folder under
+  the old name too. Fixing the path without fixing "all in" would tidy a
+  sentence that is still wrong. Also note that docstring wraps at 78 columns
+  and the new path pushes it to ~85, so lines 3-7 want a re-wrap.

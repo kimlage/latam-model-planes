@@ -2,7 +2,7 @@
  "aeronave": "Boeing 787-8 Dreamliner",
  "operador": "LATAM Airlines Group",
  "matricula_modelada": "CC-BBF",
- "fonte": "Boeing APR D6-58333 Rev P (Dezembro 2024), secoes 2.2.1 (p.2-5), 2.3.1 (p.2-8) e 2.7.1 (p.2-16), rasterizadas a 300/600 dpi; derivacao geometrica do B789_LATAM.blend aprovado; fotogrametria de CC-BBF e CC-BBB (refs_manifest.json)",
+ "fonte": "Boeing APR D6-58333 Rev P (Dezembro 2024), secoes 2.2.1 (p.2-5), 2.3.1 (p.2-8) e 2.7.1 (p.2-16), rasterizadas a 300/600 dpi; derivacao geometrica do B789_LATAM.blend aprovado; fotogrametria de CC-BBF e CC-BBB (refs/manifest.json)",
  "datum": "x=0 na ponta do nariz e CRESCE PARA A RE (a cauda esta em x=+56.72); z=0 no centro da secao constante; y=+ estibordo; solo z=-4.88; pose nivelada",
  "dimensoes_gerais": {
   "comprimento": 56.72,

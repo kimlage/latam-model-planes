@@ -262,7 +262,7 @@
   "nota": "flush, sem molduras salientes; olho do piloto z+0.60 y+-0.53",
   "montantes_2026-08-21": {
    "modelo": "O montante do 787 e pintado NA COR DO CASCO, com um selo escuro de cada lado. Head-on, portanto, o que se ve e uma MANCHA ESCURA por vidro (vidro + selo) e uma FRESTA CLARA entre elas. A mascara antiga pintava o montante INTEIRO de escuro — e por isso que as barras liam como 'barras pretas largas': a fresta clara simplesmente nao existia. Agora os quatro vidros sao o envelope do envidracado menos duas faixas de |y| (o montante central, centrado no plano de simetria, e o do meio), o canal R da NoseMask leva SO o selo, e o miolo do montante fica com a tinta do casco.",
-   "fonte": "Duas fotos head-on de licenca livre (refs_manifest.json): A7-BCC (Qatar 787-8, Bene Riobo, CC BY-SA 4.0) e N805AN (American 787-8, Eric Salard, CC BY-SA 2.0). As medidas sao da FRESTA CLARA, normalizadas pela MEIA-LARGURA DA MANCHA ESCURA — a unica normalizacao imune a escala, lente e distancia. As duas fotos, com lentes, distancias e elevacoes diferentes, concordam em 2% na fresta central e 8% na do meio.",
+   "fonte": "Duas fotos head-on de licenca livre (refs/manifest.json): A7-BCC (Qatar 787-8, Bene Riobo, CC BY-SA 4.0) e N805AN (American 787-8, Eric Salard, CC BY-SA 2.0). As medidas sao da FRESTA CLARA, normalizadas pela MEIA-LARGURA DA MANCHA ESCURA — a unica normalizacao imune a escala, lente e distancia. As duas fotos, com lentes, distancias e elevacoes diferentes, concordam em 2% na fresta central e 8% na do meio.",
    "por_foto": {
     "A7-BCC": {
      "fresta_central": 0.0733,
