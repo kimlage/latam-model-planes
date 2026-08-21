@@ -18,16 +18,32 @@ plane of symmetry and the centre post — the "V" — is missing.
 
 | Aircraft | Symptom |
 |---|---|
-| **767-300ER** | Glazing stops short of the centreline; a jagged-edged black seal band arches across the crown joining both sides. No centre post, no V. One pane also renders light instead of dark glass. |
 | **A319, A320ceo, A320neo, A321ceo, A321neo** | Wide black wedge at the top of the windshield where a narrow centre post belongs. Plus a vertical crease on the radome's plane of symmetry converging to a point low on the nose. |
 
 **Method that worked on the 777** (`boeing 777-300ER/spec_77w.json`, commit
-`22500e6`): re-measure on the APR **front** view at high dpi, self-calibrated
-by fitting the fuselage circle from its own centre; store polygons in
-`(|y|, z)` and put each vertex **on the surface** by bisection — the hull
-coupling then generates the V and the 3D wrap by itself. Do not dilate the
-seal by a single angle: use the **local** section radius, or the seal comes
-out ~25% thin exactly at the crown, where the centre post is.
+`22500e6`) **and then on the 767** (`boeing 767-300ER/spec_763.json`):
+re-measure on the manufacturer's **front** view at high dpi, self-calibrated
+by fitting the drawn fuselage section from its own centre; store polygons in
+`(|y|, z)` and put each vertex **on the surface** — the hull coupling then
+generates the V and the 3D wrap by itself. Do not dilate the seal by a single
+angle: use the **local** section radius, or the seal comes out ~25% thin
+exactly at the crown, where the centre post is.
+
+Three traps the 767 added to that recipe, all of which cost ~10% each and
+none of which are visible without a real head-on photograph:
+
+- **The drawn section may not be the real one.** On ACAP D6-58328 p.2-9 the
+  front view draws the fuselage as a *circle* (5.545 x 5.466 m) where the
+  767 is 5.03 x 5.41. The wingspan in the same view is right to 0.07%, so it
+  is the section outline alone that is oversize. Read `(|y|, z)` normalised
+  by the **drawn** section and remultiplied by the **true** one.
+- **The front view can flatten the glazing.** Its glazing is 0.610 m tall
+  against 0.666 m in the side view of the same sheet, and all three head-on
+  photographs side with the side view.
+- **Set-back and seal must live in the same space.** Head-on, a seal of arc
+  `s` on the surface shows as `s·cos(theta)`, while a set-back done in the
+  `(|y|, z)` plane shows in full. Mixing them left the outboard mullion 29%
+  wide and the narrow No.3 pane 19% thin while the inboard one closed to 1%.
 
 The A320 family stores its windshield as `(x, z)` polygons — the flawed
 method — but its builder converts them to a band closing at the crown, which

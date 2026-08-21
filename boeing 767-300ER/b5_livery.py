@@ -495,64 +495,366 @@ if jp:
     print(f"[janelas] {len(fora)} faces apagadas atras de x=43.35")
 
 # ================================================ 10b. parabrisa (NoseMask)
-# R = moldura fosca, G = vidro.  Contorno medido na foto de CC-CWY no
-# enquadramento ortografico (x 1.60..3.25, z 0.60..1.33): o parabrisa do 767 e
-# GRANDE e vai quase ate o radome.  A mascara herdada dava uma fresta de
-# x 1.63..2.50 por z 0.75..1.25, com um terco da area — o nariz lia como um
-# bulbo branco sem cabine.
-CONTORNO = [(1.60, 0.62), (1.62, 0.95), (1.90, 1.22), (2.40, 1.33),
-            (2.95, 1.31), (3.25, 1.18), (3.22, 0.82), (2.60, 0.66),
-            (2.00, 0.60)]
+# SEIS vidros, tres por lado, que envolvem a FRENTE do nariz e se encontram
+# num montante central no plano de simetria.  R = selo escuro, G = vidro.
+#
+# O que estava errado ate 2026-08-21: a mascara era UM poligono unico em
+# (x, z) — CONTORNO = [(1.60,0.62) ... (3.25,1.18) ...] — rasterizado contra
+# GZ = zc + rz*cos(theta), mais uma "moldura" que era o mesmo poligono
+# dilatado 0.115 m.  Uma faixa em z vira uma faixa em THETA que nunca chega a
+# theta = 0: medido na propria mascara antiga, o vidro vivia em theta
+# 21.2..66.6 e o seu |y| minimo era 0.472 — 0.945 m de pintura branca entre
+# os dois lados, onde mora o montante central. Os dois lados nunca se tocavam,
+# nao havia montante central e nao havia V.  Pior, onde a moldura dilatada
+# passava da crista do casco a faixa fechava POR CIMA do plano de simetria —
+# a banda preta de borda serrilhada arqueada sobre o nariz que o gate
+# head-on de aa2d27d expos.  E os "montantes" eram dois retangulos verticais
+# em x, nao os montantes reais, o que dava 4 vidros em vez de 6.
+#
+# A causa e a regra que este proprio 767 escreveu em f2f96cd e que o 777
+# reaprendeu em 22500e6: feature em casco curvo se mede na superficie
+# desenvolvida, nunca na projecao (x, z), que achata o que sobe o ombro.
+#
+# Metodo correto: os poligonos vem da VISTA FRONTAL do ACAP em (|y|, z) —
+# projecao ao longo de x, logo y e z sao exatos — e a estacao x de cada
+# vertice sai de por o ponto NA SUPERFICIE por raycast ao longo de +x, que e
+# a propria definicao da projecao frontal.  O acoplamento com o casco produz
+# sozinho o V e o contorno 3D; nada e decalque.  Ver spec_763.json
+# ("parabrisa"), inclusive a anisotropia do desenho, que custava 10% em |y|.
+PB = spec["parabrisa"]
+PANES_YZ = [[list(p) for p in PB["no1_frontal_yz"]],
+            [list(p) for p in PB["no2_deslizante_yz"]],
+            [list(p) for p in PB["no3_kick_yz"]]]
+SELO_M = PB["selo_m"]                     # selo escuro na superficie
+FOLGA_M = PB["folga_desenho_m"]           # recuo EM ARCO: o ACAP desenha a
+                                          # ABERTURA, a foto mostra o VIDRO
+FIL_M = PB["filete_canto_m"]
+MC_Y = PB["montante_central_meia_largura"]
+CINTA_M = PB["cinta_moldura_m"]
+
+_fus = D.objects["Fuselagem"]
+_fev = _fus.evaluated_get(bpy.context.evaluated_depsgraph_get())
+from mathutils import Vector  # noqa: E402
 
 
-def _offset(poly, d):
-    cx = sum(p[0] for p in poly) / len(poly)
-    cz = sum(p[1] for p in poly) / len(poly)
+def x_de_yz(y, z):
+    """Estacao x de (|y|, z) NA SUPERFICIE, por raycast de frente ao longo
+    de +x.  Primeiro impacto = exatamente o que a vista frontal desenha.
+    Usar o casco avaliado pega de graca a pinca do cockpit, o duplo lobo e o
+    encolhimento do subsurf — nada disso precisa ser replicado aqui."""
+    hit, loc, _n, _i = _fev.ray_cast(Vector((-6.0, float(y), float(z))),
+                                     Vector((1.0, 0.0, 0.0)))[:4]
+    if not hit:
+        raise ValueError(f"parabrisa: (|y|={y:.3f}, z={z:.3f}) nao pousa no casco")
+    return float(loc.x)
+
+
+def theta_de_yz(x, y, z):
+    """Mesma formula da UV gravada em b1_casco.py: atan2(y, z - zc(x))."""
+    zc, _rz = zc_rz(np.array([float(x)]))
+    return math.degrees(math.atan2(abs(float(y)), float(z) - float(zc[0])))
+
+
+def arredonda(poly, r, n=7):
+    """Filete de raio r em cada canto, feito em (|y|, z) antes do mapeamento
+    — mais barato e mais previsivel que uma abertura morfologica na grade."""
     out = []
-    for (x, z) in poly:
-        dx, dz = x - cx, (z - cz) * 3.0        # z pesa mais: a banda e baixa
-        n = math.hypot(dx, dz) or 1.0
-        out.append((x + d * dx / n, z + d * dz / n / 3.0))
+    m = len(poly)
+    for i in range(m):
+        p = np.array(poly[i], float)
+        a = np.array(poly[i - 1], float)
+        b = np.array(poly[(i + 1) % m], float)
+        ua = (a - p) / max(np.linalg.norm(a - p), 1e-9)
+        ub = (b - p) / max(np.linalg.norm(b - p), 1e-9)
+        cosang = float(np.clip(ua @ ub, -1.0, 1.0))
+        t = r / max(math.tan(math.acos(cosang) / 2.0), 1e-6)
+        t = min(t, 0.45 * np.linalg.norm(a - p), 0.45 * np.linalg.norm(b - p))
+        pa, pb = p + ua * t, p + ub * t
+        for k in range(n + 1):
+            s = k / n
+            q = (1 - s) ** 2 * pa + 2 * (1 - s) * s * p + s ** 2 * pb
+            out.append((float(q[0]), float(q[1])))
     return out
 
 
-NX_M, NZ_M = 3.60, 1.60
-nx_m = int(NX_M * 900)
-nz_m = int(NZ_M * 900)
-X0M, X1M, Z0M, Z1M = 1.20, 1.20 + NX_M, 0.20, 0.20 + NZ_M
-vidro = fill_tris(leque(CONTORNO), X0M, X1M, Z0M, Z1M, nx_m, nz_m)
-moldura = fill_tris(leque(_offset(CONTORNO, 0.115)), X0M, X1M, Z0M, Z1M, nx_m, nz_m)
-# montantes entre os 3 paineis por lado (o 767 tem para-brisa + no.2 + no.3)
-for xp in (2.16, 2.78):
-    post = fill_tris([[(xp - 0.045, 0.4), (xp + 0.045, 0.4), (xp + 0.045, 1.5)],
-                      [(xp - 0.045, 0.4), (xp + 0.045, 1.5), (xp - 0.045, 1.5)]],
-                     X0M, X1M, Z0M, Z1M, nx_m, nz_m)
-    vidro &= ~post
-nose_r = np.zeros((H, W), np.float32)
-nose_g = np.zeros((H, W), np.float32)
-sel = (GX >= X0M) & (GX <= X1M) & (GZ >= Z0M) & (GZ <= Z1M)
-ixm = np.clip(((GX[sel] - X0M) / NX_M * nx_m).astype(int), 0, nx_m - 1)
-jzm = np.clip(((GZ[sel] - Z0M) / NZ_M * nz_m).astype(int), 0, nz_m - 1)
-r, c = np.where(sel)
-hm = moldura[jzm, ixm]
-nose_r[r[hm], c[hm]] = 1.0
-hv = vidro[jzm, ixm]
-nose_g[r[hv], c[hv]] = 1.0
-nose_r[nose_g > 0.5] = 0.0
+def para_xtheta(poly_yz, n=6):
+    """(|y|, z) -> (x, theta em graus), densificando cada aresta: o
+    mapeamento e nao linear, uma aresta reta em (|y|,z) e curva em (x,theta)."""
+    out = []
+    m = len(poly_yz)
+    for i in range(m):
+        y0, z0 = poly_yz[i]
+        y1, z1 = poly_yz[(i + 1) % m]
+        for k in range(n):
+            t = k / n
+            y, z = y0 + t * (y1 - y0), z0 + t * (z1 - z0)
+            x = x_de_yz(y, z)
+            out.append((x, theta_de_yz(x, y, z)))
+    return out
+
+
+def leque_centro(poly):
+    """Fan a partir do centroide: os poligonos mapeados tem arestas curvas e
+    o fan a partir do vertice 0 deixaria buraco."""
+    cx = sum(p[0] for p in poly) / len(poly)
+    ct = sum(p[1] for p in poly) / len(poly)
+    return [[(cx, ct), poly[i], poly[(i + 1) % len(poly)]]
+            for i in range(len(poly))]
+
+
+# O ACAP separa os dois No.1 por apenas 4 cm — a 1:200 e a separacao minima
+# que o traco permite, nao a aeronave.  A foto head-on manda (ver spec).  A
+# aresta interna da ABERTURA vai para MC_Y - FOLGA para que o recuo em arco
+# a deixe em MC_Y; perto do plano de simetria o arco corre praticamente ao
+# longo de y, entao a conta fecha em metros.
+for _v in (0, 3):
+    PANES_YZ[0][_v][0] = MC_Y - FOLGA_M
+
+# O montante No.2/No.3 do ACAP fica para FORA do que a foto mostra, e o erro
+# cai todo no painel mais estreito: o desenho da No.2 19% largo e No.3 11%
+# estreito, com a borda EXTERNA do No.3 batendo.  Nao e o painel, e a
+# fronteira.  Um numero so, para dentro, nos dois lados do mesmo montante —
+# o vao entre eles nao muda.
+_A23 = PB["ajuste_montante_23_m"]
+for _v in (1, 2):                    # No.2: externo-topo, externo-base
+    PANES_YZ[1][_v][0] -= _A23
+for _v in (0, 3):                    # No.3: interno-topo, interno-base
+    PANES_YZ[2][_v][0] -= _A23
+
+# A vista frontal achata o envidracado ~9% na vertical: a vista LATERAL da
+# mesma prancha da 0.666 m de altura contra 0.610, e as tres fotos head-on
+# (h/meia-largura 0.403, 0.419, 0.435) caem em cima da LATERAL, nao da
+# frontal (0.390).  Escala so em z, em torno do centro do envidracado, de
+# modo que |y| continue vindo da frontal — a lateral nao ve y nenhum.
+EZ = PB["estica_z"]
+EZC = PB["estica_z_centro"]
+for _p in PANES_YZ:
+    for _v in _p:
+        _v[1] = EZC + (_v[1] - EZC) * EZ
+
+PANES_XT = [para_xtheta(arredonda(p, FIL_M), n=6) for p in PANES_YZ]
+_allx = [p[0] for pn in PANES_XT for p in pn]
+_allt = [p[1] for pn in PANES_XT for p in pn]
+for _nome, _pn in zip(("No.1 frontal", "No.2 deslizante", "No.3 kick"), PANES_XT):
+    _xs = [p[0] for p in _pn]
+    _ts = [p[1] for p in _pn]
+    print(f"[parabrisa] {_nome:16s} x {min(_xs):.3f}..{max(_xs):.3f}  "
+          f"theta {min(_ts):.1f}..{max(_ts):.1f} graus")
+print(f"[parabrisa] envidracado inteiro: x {min(_allx):.3f}..{max(_allx):.3f}  "
+      f"theta {min(_allt):.1f}..{max(_allt):.1f} graus")
+
+# Zona morta do montante central: |y| <= MC_Y - SELO_M sobre toda a altura do
+# No.1.  Sem ela a dilatacao do selo (e mais ainda a da cinta) atravessaria o
+# plano de simetria e fecharia por cima da crista — que e literalmente o
+# defeito que estamos consertando, so que em cinza.
+_z1 = [p[1] for p in PANES_YZ[0]]
+_POSTE_YZ = [(0.0, max(_z1) + 0.10), (max(0.0, MC_Y - SELO_M), max(_z1) + 0.10),
+             (max(0.0, MC_Y - SELO_M), min(_z1) - 0.10), (0.0, min(_z1) - 0.10)]
+POSTE_XT = para_xtheta(_POSTE_YZ, n=10)
+
+# NoseMask tem resolucao PROPRIA (2x a do casco): o parabrisa ocupa ~2% do
+# dominio u e uma mascara binaria vira serrilha grossa no close-up do nariz.
+NW, NH = W * 2, H * 2
+nose_mask = np.zeros((NH, NW, 3), np.float32)
+
+PX0, PX1 = min(_allx) - 0.30, max(_allx) + 0.30
+PT0, PT1 = 0.0, max(_allt) + 8.0
+npx, npt = 2600, 1800
+_nuu = (np.arange(NW) + 0.5) / NW * LUV
+_nvv = (np.arange(NH) + 0.5) / NH * 2 * math.pi - math.pi
+NGX = np.repeat(_nuu[None, :], NH, axis=0)
+NGD = np.degrees(np.abs(np.repeat(_nvv[:, None], NW, axis=1)))
+dx_tex = LUV / NW
+dt_tex = 360.0 / NH
+sx_m = (PX1 - PX0) / npx                    # metros por celula em x
+st_g = (PT1 - PT0) / npt                    # graus por celula em theta
+
+
+def _raio_local(x):
+    """Raio medio da secao em x: media do semi-eixo vertical (rz) com a
+    meia-largura (w2 do spec).  E ele que converte metros de arco em graus de
+    theta; no nariz vai de ~0.9 m a ~1.9 m ao longo do proprio parabrisa."""
+    x = np.asarray(x, float)
+    _zc, _rz = zc_rz(x)
+    _ry = np.interp(x, _nx, np.array([s[3] for s in nose]))
+    return 0.5 * (_rz + np.maximum(_ry, 0.05))
+
+
+def _dil_eixo(m, r, eixo):
+    """Dilatacao de caixa por raio r ao longo de um eixo, por duplicacao
+    binaria: 1, 2, 4, ... — O(log r) passadas em vez de O(r)."""
+    if r <= 0:
+        return m
+    out = m.copy()
+    d = 1
+    while d <= r:
+        sh = np.zeros_like(out)
+        if eixo == 0:
+            sh[d:, :] = out[:-d, :]
+            out = out | sh
+            sh = np.zeros_like(out)
+            sh[:-d, :] = out[d:, :]
+        else:
+            sh[:, d:] = out[:, :-d]
+            out = out | sh
+            sh = np.zeros_like(out)
+            sh[:, :-d] = out[:, d:]
+        out = out | sh
+        d *= 2
+    return out
+
+
+def _dil_octo(m, rx, rt):
+    """Octogono ~ uniao de dois retangulos: evita o canto quadrado."""
+    a = _dil_eixo(_dil_eixo(m, rx, 1), max(1, rt // 2), 0)
+    b = _dil_eixo(_dil_eixo(m, max(1, rx // 2), 1), rt, 0)
+    return a | b
+
+
+def _dil_metrico(m, metros, nb=10):
+    """Dilata por `metros` de ARCO REAL.
+
+    Um disco fixo em (x, theta) nao e um disco em metros: o raio da secao vai
+    de ~0.9 m em x=1.3 a ~1.9 m em x=3.2, entao o mesmo numero de graus vale
+    o dobro de arco atras.  Um raio unico em graus deixa o selo ~25% fino
+    perto da crista — que e exatamente onde fica o montante central, o
+    detalhe que o dono olha primeiro.  Resolvido por faixas de x.
+    """
+    out = np.zeros_like(m)
+    bordas = np.linspace(PX0, PX1, nb + 1)
+    rx = max(1, int(round(metros / sx_m)))
+    for k in range(nb):
+        xa, xb = bordas[k], bordas[k + 1]
+        r = float(_raio_local(np.array([0.5 * (xa + xb)]))[0])
+        rt = max(1, int(round(metros * math.degrees(1.0 / r) / st_g)))
+        ia = max(0, int((xa - PX0) / sx_m) - rx - 1)
+        ib = min(npx, int((xb - PX0) / sx_m) + rx + 2)
+        d = _dil_octo(m[:, ia:ib], rx, rt)
+        ja = max(0, int((xa - PX0) / sx_m))
+        jb = min(npx, int((xb - PX0) / sx_m) + 1)
+        out[:, ja:jb] |= d[:, ja - ia:jb - ia]
+    return out
+
+
+def _ero_metrico(m, metros, nb=10):
+    """Erosao por `metros` de ARCO REAL: dilatar o complemento."""
+    return ~_dil_metrico(~m, metros, nb)
+
+
+# A abertura desenhada no ACAP recua para virar VIDRO VISIVEL — a moldura
+# cavalga a borda — e depois o selo escuro cresce de volta.  As DUAS coisas
+# tem de acontecer NA SUPERFICIE, em metros de arco.
+#
+# Foi aqui que a primeira tentativa errou: o recuo estava no plano (|y|,z) e
+# so o selo na superficie.  Head-on, um selo de arco s aparece com largura
+# s*cos(theta), enquanto um recuo no plano aparece inteiro — entao nos vidros
+# que ja subiram o ombro os dois nao se cancelam.  No montante No.2/No.3
+# (theta ~50-58 graus, cos ~0.6) o vao saia 29% largo e o No.3, que e o
+# painel estreito, saia 19% fino.  Com recuo e selo ambos em arco o erro cai
+# para poucos por cento nos dois.  Mesma familia de erro que o 25% do selo
+# na crista: metros de arco != graus de theta.
+abertura_f = np.zeros((npt, npx), bool)
+for _pn in PANES_XT:
+    abertura_f |= fill_tris(leque_centro(_pn), PX0, PX1, PT0, PT1, npx, npt)
+vidro_f = _ero_metrico(abertura_f, FOLGA_M)
+poste_f = fill_tris(leque_centro(POSTE_XT), PX0, PX1, PT0, PT1, npx, npt)
+# O selo MANTEM o vidro dentro dele. Se ele fosse so o anel (& ~vidro_f), no
+# texel de borda ficariam R=0.5 e G=0.5, e o shader — Mix(tinta, selo, R) e
+# depois Mix(., vidro, G) — deixaria 25% de TINTA aparecer entre o vidro e o
+# selo: um fio branco contornando cada painel, bem visivel no close do nariz.
+# Com o selo cheio, R=1 em todo o conjunto e o G so decide quanto e vidro.
+selo_f = _dil_metrico(vidro_f, SELO_M) & ~poste_f
+
+
+def pinta_grade(arr, canal):
+    """Cobertura EXATA do texel por imagem integral.
+
+    As duas grades sao uniformes em (x, theta), entao a media de area sai de
+    uma soma cumulativa 2D — sem amostragem. O supersample 4x4 que estava
+    aqui media 16 amostras de uma celula que cobre ~27 celulas da grade fina:
+    o ruido de cobertura que sobrava desenhava um dente de serra na borda
+    quase horizontal do selo, exatamente o defeito de "borda serrilhada" que
+    esta correcao existe para eliminar.
+    """
+    I = np.zeros((npt + 1, npx + 1), np.float64)
+    I[1:, 1:] = np.cumsum(np.cumsum(arr.astype(np.float64), 0), 1)
+    sel = (NGX >= PX0) & (NGX <= PX1) & (NGD >= PT0) & (NGD <= PT1)
+    r, c = np.where(sel)
+    i0 = np.clip(np.round((NGX[sel] - 0.5 * dx_tex - PX0) / sx_m).astype(int), 0, npx)
+    i1 = np.clip(np.round((NGX[sel] + 0.5 * dx_tex - PX0) / sx_m).astype(int), 0, npx)
+    j0 = np.clip(np.round((NGD[sel] - 0.5 * dt_tex - PT0) / st_g).astype(int), 0, npt)
+    j1 = np.clip(np.round((NGD[sel] + 0.5 * dt_tex - PT0) / st_g).astype(int), 0, npt)
+    i1 = np.maximum(i1, i0 + 1)
+    j1 = np.maximum(j1, j0 + 1)
+    soma = I[j1, i1] - I[j0, i1] - I[j1, i0] + I[j0, i0]
+    nose_mask[r, c, canal] = np.maximum(nose_mask[r, c, canal],
+                                        (soma / ((i1 - i0) * (j1 - j0))).astype(np.float32))
+
+
+pinta_grade(selo_f, 0)                                          # R = selo
+pinta_grade(vidro_f, 1)                                         # G = vidro
+
+# Cinta clara da moldura.  Nas fotos head-on de 767 a moldura do parabrisa e
+# BRANCA/prateada (nao preta como no 777), levemente mais fosca que a pintura
+# do casco, e e ela que faz os seis vidros lerem como UM conjunto em vez de
+# seis adesivos.  Vai na LiveryTex (cor base), nao na NoseMask: e tinta.
+CINTA_COR = (0xD8, 0xD9, 0xDC)
+cinta_f = _dil_metrico(vidro_f | selo_f, CINTA_M) & ~(vidro_f | selo_f) & ~poste_f
+_selc = (GX >= PX0) & (GX <= PX1) & (np.degrees(GABS) >= PT0) & (np.degrees(GABS) <= PT1)
+if _selc.any():
+    _r, _c = np.where(_selc)
+    _ix = np.clip(((GX[_selc] - PX0) / (PX1 - PX0) * npx).astype(int), 0, npx - 1)
+    _jt = np.clip(((np.degrees(GABS[_selc]) - PT0) / (PT1 - PT0) * npt).astype(int),
+                  0, npt - 1)
+    _h = cinta_f[_jt, _ix]
+    tex[_r[_h], _c[_h]] = CINTA_COR
+    print(f"[parabrisa] cinta da moldura {int(_h.sum())} texels na LiveryTex")
+    grava("LiveryTex", tex, False, "sRGB")      # a cinta entra depois do item 8
+
+# area real do envidracado sobre a superficie, celula a celula com o raio
+# local — o numero antes/depois que o commit cita.
+_area = 0.0
+_jj, _ii = np.where(vidro_f)
+if len(_ii):
+    _xc = PX0 + (_ii + 0.5) * sx_m
+    _area = float(np.sum(sx_m * math.radians(st_g) * _raio_local(_xc))) * 2.0
+print(f"[parabrisa] area de vidro na superficie: {_area:.3f} m2 (os 6 vidros)")
+
 img = D.images.get("NoseMask")
-if img is None or tuple(img.size) != (W, H):
+if img is None or tuple(img.size) != (NW, NH):
     if img:
         D.images.remove(img)
-    img = D.images.new("NoseMask", W, H, alpha=False, float_buffer=False)
-px = np.ones((H, W, 4), np.float32)
-px[..., 0] = nose_r
-px[..., 1] = nose_g
-px[..., 2] = 0.0
+    img = D.images.new("NoseMask", NW, NH, alpha=False, float_buffer=False)
+px = np.ones((NH, NW, 4), np.float32)
+px[..., :3] = nose_mask
 img.colorspace_settings.name = "Non-Color"
 img.pixels.foreach_set(px.ravel())
 img.pack()
-print(f"[parabrisa] vidro={int((nose_g>0.5).sum())} texels, "
-      f"moldura={int((nose_r>0.5).sum())}")
+print(f"[parabrisa] selo {float(nose_mask[...,0].sum()):.0f} / vidro "
+      f"{float(nose_mask[...,1].sum()):.0f} texels (cobertura, {NW}x{NH})")
+
+# Religar o no de imagem do parabrisa: trocar a resolucao da NoseMask obriga a
+# apagar e recriar a imagem, e apagar deixa o no ORFAO.  Um no de imagem vazio
+# nao pinta nada de errado — pinta TUDO de errado: o Separate Color devolve
+# zero, o Mix Shader some com a tinta e o nariz inteiro renderiza no material
+# do selo.  Foi o que aconteceu na primeira passada desta correcao.
+#
+# ATENCAO: identidade de no NAO funciona no RNA do Blender — `l.from_node is
+# no` e sempre falso, porque cada acesso devolve um wrapper novo.  Comparar
+# por NOME.  Era exatamente esse o bug, e ele falhava em silencio.
+_nt = D.materials["FuselagemPaint"].node_tree
+_sep = next((n for n in _nt.nodes if n.type == "SEPARATE_COLOR"), None)
+_alvo = None
+if _sep is not None:
+    for _l in _nt.links:
+        if _l.to_node.name == _sep.name and _l.from_node.type == "TEX_IMAGE":
+            _alvo = _nt.nodes[_l.from_node.name]
+            break
+if _alvo is None:
+    raise RuntimeError("parabrisa: no de imagem da NoseMask nao encontrado")
+_alvo.image = img
+_alvo.image.colorspace_settings.name = "Non-Color"
+print(f"[parabrisa] no '{_alvo.name}' religado a NoseMask {NW}x{NH}")
 
 # ============================================ 11. materiais e exposicao
 # O branco do casco saia a 161/255 contra 236/255 na foto de CC-CWY medida no
@@ -580,6 +882,31 @@ if b:
     b.inputs["Base Color"].default_value = (0.34, 0.34, 0.35, 1.0)
     b.inputs["Metallic"].default_value = 0.80
     b.inputs["Roughness"].default_value = 0.30
+
+# ---- vidro do parabrisa: o painel que renderizava CLARO --------------------
+# Diagnostico, porque a hipotese obvia estava errada: nao ha atribuicao de
+# material por painel.  Os seis vidros sao UMA regiao do canal G da NoseMask
+# alimentando UM BSDF, e os parametros do 767 eram identicos aos do 777
+# aprovado (Roughness 0.05, Coat 0.85, Coat Roughness 0.03).  O painel claro e
+# o reflexo ESPECULAR do CloudCard — uma area light de 60x20 m com 8000 W em
+# (15, -25, 30) — num vidro quase espelho.  O mesmo reflexo aparece no
+# render_headon do 777, la como uma lasca fina; no 767 o nariz e muito mais
+# rombudo e os paineis maiores, entao o lobo cobre um painel inteiro e le como
+# vidro faltando.  Reflexo em parabrisa e real; borda dura e artefato.  Basta
+# afastar o lobo do espelho puro: a mancha vira brilho com gradiente.
+_ntv = D.materials["FuselagemPaint"].node_tree
+_glass = _ntv.nodes.get("Principled BSDF.002")
+if _glass:
+    _glass.inputs["Roughness"].default_value = 0.14
+    _glass.inputs["Coat Weight"].default_value = 0.55
+    _glass.inputs["Coat Roughness"].default_value = 0.11
+    print("[parabrisa] vidro: rough 0.05->0.14, coat 0.85->0.55, "
+          "coat rough 0.03->0.11 (lobo do CloudCard)")
+_selo = _ntv.nodes.get("Principled BSDF.001")
+if _selo:
+    # selo de borracha, nao pintura preta brilhante
+    _selo.inputs["Base Color"].default_value = (0.020, 0.021, 0.023, 1.0)
+    _selo.inputs["Roughness"].default_value = 0.68
 
 sol = D.objects.get("Sol")
 if sol:

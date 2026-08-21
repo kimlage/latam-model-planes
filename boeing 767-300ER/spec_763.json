@@ -227,11 +227,103 @@
   "razao_contorno_medida": 0.9195
  },
  "parabrisa": {
-  "fonte": "p29 vista frontal + lateral @600dpi; 6 vidros (2 frontais em V profundo + 2 laterais + 2 traseiros pequenos), estilo 757",
-  "banda_lateral": "x 1.50..3.04, z +0.44..+1.20 (medido na p33/p29 lateral)",
-  "banda_frontal": "meia-larguras ate 1.71 em z 0.62..1.23 (vista frontal p29)",
-  "detalhe_paines": "poligonos por medir na foto ref_CC-CXJ_nariz_lan.jpg (6000px)",
-  "aplicacao": "mascara UV NoseMask (R=moldura, G=vidro) como nos outros tipos"
+  "fonte": "VISTA FRONTAL do ACAP D6-58328 p.2-9 (pagina 29) rasterizada a 4800 dpi (pdftoppm -r 4800 -x 18800 -y 38800 -W 4800 -H 5200), auto-calibrada pela propria secao desenhada: ajuste de ELIPSE por raios a partir do centro, cx=2234.6 cy=2649.7, semi-eixo y 1015.98 px, semi-eixo z 1001.43 px, rms relativo 0.20%. Poligonos = contorno das ABERTURAS dos vidros, media dos dois lados (discordancia maxima esquerda/direita 6 mm). Substitui a medicao anterior, que era um contorno unico em (x,z) medido na foto de CC-CXJ.",
+  "anisotropia_do_desenho": "ARMADILHA MEDIDA, e o motivo de a medicao anterior errar 10%: nesta pagina a secao da fuselagem na vista frontal e desenhada CIRCULAR - 5.545 m de largura por 5.466 m de altura no eixo do traco (razao z/y = 0.986) - enquanto o 767 real tem 5.03 x 5.41 (razao 1.0755). Nao e a vista inteira que esta esticada: a envergadura medida NA MESMA vista da 47.537 m contra 47.57 impressos (0.07%), e a largura da fuselagem na VISTA SUPERIOR da 5.010 contra 5.03. So o contorno da secao na vista frontal e que foi desenhado ~10% largo demais. Portanto y e z sao lidos NORMALIZADOS pela secao desenhada e remultiplicados pela secao verdadeira: y = (px-cx)/1015.98 * 2.515 ; z = (cy-py)/1001.43 * 2.705. Ler a escala isotropica do desenho (366.45 px/m a 4800 dpi, aferida na bitola de 9.3 m e na propria barra de escala) daria |y|max 1.724 em vez de 1.564 - foi esse numero que gerou a nota antiga 'vidros ate |y|~1.71'.",
+  "metodo": "Poligonos em (|y|, z). A vista frontal e uma projecao AO LONGO DE x, portanto y e z sao exatos e so x se perde. A estacao x de cada vertice sai de por o ponto NA SUPERFICIE, por RAYCAST no casco ja subdividido: raio de (-6, y, z) na direcao +x, primeiro impacto. Isso e a propria definicao da projecao frontal e dispensa replicar a secao analitica - pega de graca a pinca do cockpit, o duplo lobo e o encolhimento do subsurf. theta sai de atan2(|y|, z - zc(x)), que e exatamente a formula da UV gravada em b1_casco.py. O acoplamento com o casco produz sozinho o V no plano de simetria e o contorno 3D. NUNCA medir o parabrisa na projecao lateral nem montar a mascara em (x,z): e a regra de f2f96cd, escrita neste proprio 767, e foi ela que o parabrisa antigo violava.",
+  "ordem_dos_vertices": "interno-topo, externo-topo, externo-base, interno-base",
+  "no1_frontal_yz": [
+   [
+    0.0198,
+    1.1148
+   ],
+   [
+    0.7055,
+    1.1364
+   ],
+   [
+    0.8355,
+    0.7312
+   ],
+   [
+    0.0198,
+    0.7663
+   ]
+  ],
+  "no2_deslizante_yz": [
+   [
+    0.7624,
+    1.1607
+   ],
+   [
+    1.1486,
+    1.1661
+   ],
+   [
+    1.3392,
+    0.5948
+   ],
+   [
+    0.8874,
+    0.7352
+   ]
+  ],
+  "no3_kick_yz": [
+   [
+    1.187,
+    1.1742
+   ],
+   [
+    1.3491,
+    1.1809
+   ],
+   [
+    1.5645,
+    0.6596
+   ],
+   [
+    1.3801,
+    0.5705
+   ]
+  ],
+  "montante_central_meia_largura": 0.095,
+  "montante_central_nota": "|y| da borda do VIDRO No.1 no plano de simetria, constante em z (no 767 o montante central e um poste reto - o desenho poe os dois vertices internos na mesma coluna, e a foto confirma vao constante entre 25% e 35% da altura). NAO e o que o ACAP desenha: o desenho da |y| = 0.0198, ou seja um montante de 4 cm, que nao e fisico - a 1:200 o desenhista separou os dois vidros pelo minimo. A foto head-on de EI-CXO mede o poste branco em 0.106 da meia-largura do envidracado = 0.166 m; com o selo de 0.018 de cada lado isso poe a borda do vidro em 0.101. Um montante central de ~15 cm e o que a aeronave tem.",
+  "selo_m": 0.018,
+  "folga_desenho_m": 0.02,
+  "folga_desenho_nota": "RECUO da abertura, EM METROS DE ARCO SOBRE A SUPERFICIE (erosao na grade (x,theta) com o raio LOCAL da secao), nao no plano (|y|,z). O ACAP desenha a ABERTURA estrutural; a foto mostra o VIDRO visivel, menor, porque a moldura cavalga a borda. Depois o selo de 0.018 cresce de volta, tambem em arco. Sinal contrario ao do 777 (22500e6), onde o desenho ENGORDAVA os montantes.\nPOR QUE EM ARCO: head-on, um selo de arco s aparece com largura s*cos(theta); um recuo feito no plano aparece inteiro. Nos vidros que ja subiram o ombro os dois deixam de se cancelar. Com o recuo no plano, o montante No.2/No.3 (theta ~50-58 graus) saia 29% largo e o No.3 19% fino, enquanto o No.1/No.2 (theta ~35) fechava em 1%. Em arco os dois caem para -2% e -8%. E a mesma familia de erro do selo 25% fino na crista: metro de arco nao e grau de theta.",
+  "filete_canto_m": 0.012,
+  "cinta_moldura_m": 0.075,
+  "aplicacao": "mascara UV NoseMask (x,theta) 8192x2048, cobertura EXATA do texel por imagem integral (as duas grades sao uniformes em (x,theta), entao a media de area sai de uma soma cumulativa 2D). G = vidro, R = selo escuro de 0.018 m NA SUPERFICIE, dilatado por faixas de x com o raio LOCAL da secao — um raio unico em graus deixa o selo ~25% fino perto da crista, que e onde fica o montante central.\nO R inclui a area do vidro DENTRO dele. Se o selo fosse so o anel, no texel de borda ficariam R=0.5 e G=0.5 e o shader — Mix(tinta, selo, R) e depois Mix(., vidro, G) — deixaria ~25% de TINTA aparecer entre o vidro e o selo: um fio branco contornando cada painel, bem visivel no close do nariz. Com o selo cheio, R=1 em todo o conjunto e o G so decide quanto e vidro.\nCantos por filete no poligono em (|y|,z), nao por abertura na grade. A cinta CLARA da moldura vai na LiveryTex: nas fotos head-on de 767 a moldura e branca/prateada, nao preta como no 777.",
+  "defeito_corrigido_2026-08-21": "Antes: UM poligono unico em (x,z) — CONTORNO 1.60..3.25 por z 0.60..1.33 — rasterizado contra GZ = zc + rz*cos(theta), mais uma 'moldura' que era o mesmo poligono dilatado 0.115 m, e dois montantes que eram retangulos VERTICAIS em x=2.16 e x=2.78. Medido na propria mascara antiga:\n - o vidro vivia em theta 21.2..66.6 graus e NUNCA chegava perto do plano de simetria: |y| minimo 0.472, ou seja 0.945 m de pintura branca entre os dois lados, onde mora o montante central. Sem montante, sem V.\n - a moldura dilatada ia de theta 0.0 a 68.0: em x 1.508..1.762 ela COBRIA a crista, atravessando o plano de simetria. Essa e a banda preta arqueada de borda serrilhada que o gate head-on de aa2d27d mostrou.\n - 4 vidros por conjunto em vez de 6.\nDepois: theta 3.2..65.8, x 1.315..3.268, montante central de 0.19 m de branco. Area de vidro na superficie 2.173 m2 antes contra 1.898 agora — o problema nunca foi a area, foi a POSICAO e a forma.",
+  "divergencia_conhecida": "A vista LATERAL da mesma p.2-9, medida a 4800 dpi, desenha o envidracado em x 1.430..3.021, z +0.475..+1.141. z fecha com o frontal dentro de 0.04-0.10 m, mas o limite traseiro sai 0.20 m A FRENTE do que o frontal gera (3.021 contra 3.225). E a mesma discordancia, no mesmo sentido e na mesma magnitude, que o 777 registrou em 22500e6: a arte lateral desenha o vidro so onde ele e visivel DE LADO, e a parte do No.1 que contorna a frente do nariz fica de perfil e nao e desenhada. O modelo segue o frontal, porque e o frontal que a foto head-on confirma e e o head-on que mostra o defeito. (Lida ISOTROPICAMENTE a vista frontal daria 3.506, ou seja 0.49 m atras da lateral - mais uma evidencia contra a leitura isotropica.)",
+  "estica_z": 1.0911,
+  "estica_z_centro": 0.8757,
+  "estica_z_nota": "A VISTA FRONTAL ACHATA O ENVIDRACADO EM ~9% NA VERTICAL, e as tres fotos head-on concordam com a lateral contra ela. Alturas do envidracado (abertura), todas divididas pela meia-largura de 1.5645 para ficarem sem escala: vista frontal 0.6104 m = 0.390 ; vista LATERAL da mesma p.2-9 a 4800 dpi 0.6660 m = 0.426 ; foto EI-CXO (head-on de verdade, azimute 0-5 graus, camera no nivel) 0.403 ; foto Aviano (azimute 0) 0.419 ; foto Austrian (12 graus fora, de baixo) 0.435. As fotos caem em cima da lateral, nao da frontal. Correcao: escala 1.0911 = 0.6660/0.6104 aplicada so em z, em torno de z=0.8757 (centro do envidracado), o que reproduz exatamente a altura da lateral e mantem a POSICAO que so a frontal sabe dar (a frontal e projecao ao longo de x; a lateral desenha o vidro so onde ele e visivel de lado e sai 0.20 m atras em x). |y| continua vindo da frontal: a lateral nao ve y nenhum.",
+  "filete_canto_nota": "0.012 e nao 0.055 como no 777, por duas razoes. Um filete grande come a ALTURA duas vezes (topo e base) e a meia-largura so uma, entao achata o envidracado inteiro: com 0.055 o render dava h/meia-largura 0.343 contra 0.403 na foto, e o No.3 saia 37% estreito. E a erosao do recuo ja arredonda os cantos convexos pelo proprio raio (0.020), entao o filete efetivo e ~0.032.",
+  "ajuste_montante_23_m": 0.035,
+  "ajuste_montante_23_nota": "O ACAP poe o montante No.2/No.3 para FORA do que a foto mostra, e o erro cai todo no painel mais estreito. Varredura a 30% da altura, tudo normalizado pela meia-largura do envidracado: o desenho da No.2 = 0.254 e No.3 = 0.115; a foto EI-CXO da 0.213 e 0.129 — No.2 19% largo, No.3 11% estreito, com a borda EXTERNA do No.3 batendo (0.911 desenho contra 0.905 foto). Ou seja: nao e o painel que esta errado, e a fronteira entre os dois. Correcao unica: 0.035 m para dentro na aresta externa do No.2 e na aresta interna do No.3, aplicada antes da folga; o vao entre eles nao muda. Depois disso No.2 sai +5% e No.3 +2% contra a foto.",
+  "conferencia_render_2026-08-21": {
+   "camera": "CamHeadOn do padrao de frota (cameras_canonicas.py): azimute 0, 70 m, 2.96 graus abaixo do eixo, 356 mm. render_headon.png.",
+   "foto": "refs/ws_frontal_EI-CXO_dhaka.jpg — Blue Panorama EI-CXO em Dhaka, Faisal Akram, CC BY-SA 2.0. Head-on de verdade: os dois No.3 caem a 178.5 px do eixo dos dois lados (simetria 0.6%), camera no nivel.",
+   "metodo": "Varredura de linha a 30% da altura do envidracado, na foto e no render, com tudo dividido pela MEIA-LARGURA do envidracado — adimensional, nao depende de escala, distancia nem lente. Em cada imagem o limiar e o que separa os SEIS paineis (foto 165, render 110): as exposicoes nao tem relacao nenhuma.",
+   "resultado": {
+    "altura/meia-largura": "foto 0.403, modelo 0.396 (-1.9%)",
+    "largura No.1": "foto 0.415, modelo 0.446 (+7.6%)",
+    "largura No.2": "foto 0.213, modelo 0.216 (+1.3%)",
+    "largura No.3": "foto 0.129, modelo 0.118 (-8.3%)",
+    "poste central": "foto 0.106, modelo 0.109 (+2.7%)",
+    "montante No.1/No.2": "foto 0.056, modelo 0.047 (-15.6%)",
+    "montante No.2/No.3": "foto 0.039, modelo 0.038 (-2.1%)"
+   },
+   "estabilidade": "as sete medidas mudam menos de 0.01 entre 25% e 35% da altura, entao nao e uma linha de varredura de sorte.",
+   "residuo": "o unico fora de 10% e o montante No.1/No.2, e ele tem ~10 px na foto: 1 px de limiar ja vale 10%. O desenho tambem discorda da foto na RAZAO entre os dois montantes (1.53 contra 1.44), entao um recuo unico nao fecha os dois; o compromisso poe m12 -16% e m23 -2%."
+  },
+  "vidro_material_2026-08-21": "O 'painel que renderiza CLARO' do QA-BACKLOG nao era atribuicao de material: NAO EXISTE material por painel. Os seis vidros sao uma regiao do canal G de UMA mascara alimentando UM BSDF, e os parametros do 767 eram identicos aos do 777 aprovado (Roughness 0.05, Coat 0.85, Coat Roughness 0.03). O painel claro e o reflexo especular do CloudCard — area light de 60x20 m, 8000 W, em (15,-25,30) — num vidro quase espelho; o mesmo reflexo esta no render_headon do 777, la como uma lasca fina. No 767 o nariz e bem mais rombudo e os paineis maiores, entao o lobo cobre um painel inteiro e le como vidro faltando. Reflexo em parabrisa e real, borda dura e artefato: Roughness 0.05->0.14, Coat 0.85->0.55, Coat Roughness 0.03->0.11. O selo virou borracha (0.020 base, Roughness 0.68) em vez de tinta preta brilhante. Alterado SO no 767.",
+  "duvidas_para_revisao_humana": [
+   "POSICAO em z: a vista frontal poe o centro do envidracado em z=0.876 e a lateral da mesma prancha em z=0.808 — 0.068 m de desacordo entre duas projecoes que deveriam concordar (as duas medem z direto). O modelo segue a frontal na posicao e a lateral na ALTURA. Nenhuma das fotos head-on resolve isso, porque nenhuma da uma referencia de z calibravel; as duas de perfil que temos sao de ponto alto ou com o parabrisa em 190 px contra o sol. Fica em aberto.",
+   "A pinca do lobo superior no cockpit foi calibrada contra a leitura ISOTROPICA antiga ('vidros ate |y|~1.71'), que esta agora medida em 1.564. A pinca nao foi tocada nesta correcao — mexer nela muda o casco e invalidaria os outros portoes — mas a sua justificativa caducou e ela deveria ser remedida. Ver lobo_superior_pinca.",
+   "O montante No.1/No.2 fica 16% estreito contra a foto e nao fecha junto com o No.2/No.3 (-2%): o desenho e a foto discordam na RAZAO entre os dois montantes (1.53 contra 1.44). Uma segunda foto head-on nitida e no nivel decidiria; a de EI-CXO tem so ~10 px nesse montante.",
+   "Head-on, o envidracado do modelo ocupa uma fracao menor da largura do nariz do que na foto. Como a altura/meia-largura do proprio envidracado bate em 2%, a suspeita recai sobre a FORMA DO NARIZ (rombudo demais na zona do cockpit), nao sobre o parabrisa. Nao foi possivel medir a silhueta da fuselagem em nenhuma das fotos com confianca — fundo de arvores, tremulacao de calor ou branco contra ceu branco."
+  ]
  },
  "portas_pax": {
   "porta1": {
@@ -609,7 +701,7 @@
   "baixa": "porta bulk (estacao aproximada), pinca do cockpit, marcas operacionais e desgaste"
  },
  "lobo_superior_pinca": {
-  "nota": "pinca do cockpit calibrada visualmente contra a vista frontal (vidros ate |y|~1.71 em z 0.62..1.23); parametros forca 0.30, sobe 1.2..1.2, desce 3.2..2.0, expoente 1.6"
+  "nota": "pinca do cockpit calibrada visualmente contra a vista frontal (parametros forca 0.30, sobe 1.2..1.2, desce 3.2..2.0, expoente 1.6). ATENCAO: a calibracao dizia 'vidros ate |y|~1.71 em z 0.62..1.23', numero que veio de ler a vista frontal ISOTROPICAMENTE. Medido de novo em 2026-08-21 contra a propria secao desenhada, o envidracado vai a |y| 1.564 em z 0.571..1.181 (ver parabrisa.anisotropia_do_desenho). A pinca NAO foi mexida na correcao do parabrisa — mexer nela muda o casco e invalida os outros portoes — mas a razao pela qual ela tem esses parametros caducou. Remedir."
  },
  "verificacao": {
   "gate_2026-08-20": "6 angulos canonicos + verificacao_visual.png; comparacao_perfil.png (foto reprojetada x render ortografico, 40 px/m) e comparacao_fin_sash.png (foto | render | foto) sao a evidencia.",
@@ -623,7 +715,9 @@
   "pendencias": [
    "lockup da fuselagem le claro nos 3/4 dianteiros (verniz Coat 1.0 refletindo o cartao de nuvem no ombro) — mesma receita de material da frota aprovada",
    "mapa de antenas/drenos/valvula do ventre nao tabulado para o 767 (o A320 tem em ventre_real)",
-   "porta bulk e pinca do cockpit ainda por medir"
-  ]
+   "porta bulk e pinca do cockpit ainda por medir",
+   "parabrisa refeito em 2026-08-21 (ver parabrisa.duvidas_para_revisao_humana): posicao em z com 0.068 m de desacordo entre as vistas frontal e lateral, e a pinca do cockpit calibrada contra uma medida hoje superada"
+  ],
+  "gate_2026-08-21_parabrisa": "7 angulos canonicos re-renderizados com render_gate.py (padrao de frota cameras_canonicas.py) + verificacao_visual.png; comparacao_parabrisa.png traz head-on e nose close-up ANTES (aa2d27d) x DEPOIS na MESMA camera e na mesma luz. Numeros em parabrisa.conferencia_render_2026-08-21."
  }
 }

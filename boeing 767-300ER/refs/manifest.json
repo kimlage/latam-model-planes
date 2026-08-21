@@ -143,6 +143,115 @@
       "view": "fleet-database page (status, history, config)",
       "date_taken": null,
       "notes": "Airframe status Active (updated 2026-08-05); MSN 35231, LN 961, delivered Nov 2007, C20Y213 since 2020, 2x GE engines. Engine subvariant CF6-80C2B7F per airfleets.net plane-b767-35231.htm."
+    },
+    {
+      "file": "ws_frontal_EI-CXO_dhaka.jpg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/c/c6/EI-CXO_Boeing_767-3G5%28ER%29_Blue_Panorama_Airlines_Head_On_%289552827582%29.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:EI-CXO_Boeing_767-3G5(ER)_Blue_Panorama_Airlines_Head_On_(9552827582).jpg",
+      "author": "Faisal Akram (Dhaka)",
+      "license": "CC BY-SA 2.0",
+      "registration": "EI-CXO (Boeing 767-3G5ER, Blue Panorama)",
+      "view": "head-on de verdade, azimute 0-5 graus, camera no nivel",
+      "date_taken": "2012-11-03",
+      "resolution": "1997x1331",
+      "notes": "REFERENCIA PRIMARIA do parabrisa (spec_763.json -> parabrisa.conferencia_render_2026-08-21). Simetria medida: os dois No.3 caem a 178.5 px do eixo dos dois lados (0.6%). Envidracado com 357 px, os seis paineis separam-se limpo no limiar. Moldura BRANCA, o que faz a mancha escura ser vidro+selo e nada mais. O envidracado do 767 e padrao de tipo, entao a companhia nao importa."
+    },
+    {
+      "file": "ws_frontal_rotator767_aviano.jpg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/1/16/Runway_escort_%2818050493070%29.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:Runway_escort_(18050493070).jpg",
+      "author": "Senior Airman Areca T. Wilson, U.S. Air Force",
+      "license": "Public domain (obra do governo federal dos EUA)",
+      "registration": "nao identificada (Boeing 767, categoria 'Boeing 767 front views' do Commons)",
+      "view": "head-on, azimute 0",
+      "date_taken": "2015-05-20",
+      "resolution": "6095x4354",
+      "notes": "Azimute perfeito, mas 6 K enganam: tremulacao de calor e teleobjetiva deixam o envidracado com ~400 px moles. Serviu para confirmar a razao altura/meia-largura (0.419) e a simetria, nao para cantos."
+    },
+    {
+      "file": "ws_frontal_austrian767-300ER_manchester.jpg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Aircraft_front_view20.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:Aircraft_front_view20.jpg",
+      "author": "Riik@mctr (Flickr riikkeary)",
+      "license": "CC BY-SA 2.0",
+      "registration": "nao declarada (Boeing 767-300ER, Austrian Airlines)",
+      "view": "quase frontal, ~10-15 graus fora do eixo e um pouco de baixo",
+      "date_taken": "2015-06-29",
+      "resolution": "1959x1233",
+      "notes": "O maior envidracado do conjunto (~500 px). Azimute e elevacao tiram credito da razao altura/meia-largura (da 0.435, alta), mas os contornos dos paineis e a moldura sao os mais nitidos."
+    },
+    {
+      "file": "ws_frontal_N534LA_miami.jpg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/2/2d/02142019_LATAM_Cargo_B763F_N534LA_KMIA_NASEDITnose_%2840237117303%29.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:02142019_LATAM_Cargo_B763F_N534LA_KMIA_NASEDITnose_(40237117303).jpg",
+      "author": "Nathan Coats (Seattle)",
+      "license": "CC BY-SA 2.0",
+      "registration": "N534LA (Boeing 767-300F, LATAM Cargo)",
+      "view": "frontal ~15-20 graus fora do eixo",
+      "date_taken": "2019-02-14",
+      "resolution": "2048x1152",
+      "notes": "A mais nitida do conjunto frontal e a unica LATAM de verdade (cargueiro). Fora do eixo demais para largura de painel; boa para a forma do conjunto."
+    },
+    {
+      "file": "ws_frontal_JA657J_memanbetsu.jpg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/2/24/Boeing_767-300ER_%28Japan_Airlines%29_02.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:Boeing_767-300ER_(Japan_Airlines)_02.jpg",
+      "author": "usuario do Commons '221.20'",
+      "license": "Public domain (PD-self)",
+      "registration": "JA657J (Boeing 767-300ER, Japan Airlines)",
+      "view": "azimute 5-10 graus mas de um ponto ALTO: encurtamento vertical forte",
+      "date_taken": "2012-08-10",
+      "resolution": "4224x2376",
+      "notes": "Larguras horizontais e posicao do montante central medem; proporcao vertical nao. Arquivo e MPO (JPEG multi-imagem de compacta Sony); PIL e o macOS leem normal."
+    },
+    {
+      "file": "ws_frontal_JA602A_osaka-itami.jpg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/e/e7/JA602A_Boeing_767_ANA_All_Nippon_Airways_Nose_On_%287581604612%29.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:JA602A_Boeing_767_ANA_All_Nippon_Airways_Nose_On_(7581604612).jpg",
+      "author": "Aeroprints.com",
+      "license": "CC BY-SA 3.0",
+      "registration": "JA602A (Boeing 767-381ER, ANA)",
+      "view": "azimute 3-8 graus, de cima",
+      "date_taken": "2012-07-16",
+      "resolution": "2304x1536",
+      "notes": "Mesma ressalva de elevacao da JA657J. A cheatline azul da um marcador de simetria util."
+    },
+    {
+      "file": "ws_detail_aircanada767_vancouver.jpg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/5/57/CYVR_-_Vancouver_Intl_%283804780105%29.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:CYVR_-_Vancouver_Intl_(3804780105).jpg",
+      "author": "abdallahh (Montreal)",
+      "license": "CC BY 2.0",
+      "registration": "nao declarada (Boeing 767, Air Canada)",
+      "view": "tres quartos dianteiro ~30-40 graus, ao nivel dos olhos e muito perto",
+      "date_taken": "2009-07-27",
+      "resolution": "3072x2304",
+      "notes": "Nao serve para azimute. Serve para a MOLDURA: fileiras de rebite, secao dos montantes, No.2 aberto, pivos dos limpadores. Foi ela que fixou a moldura como clara/prateada e nao preta."
+    },
+    {
+      "file": "ws_profile_CS-TKS_nosedetail.jpg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/1/1d/EUROATLANTIC_BOEING_767_CS-TKS_NOSE_DETAIL_%2851406781592%29.jpg",
+      "page_url": "https://commons.wikimedia.org/wiki/File:EUROATLANTIC_BOEING_767_CS-TKS_NOSE_DETAIL_(51406781592).jpg",
+      "author": "Simon Butler (Halesowen, Reino Unido)",
+      "license": "CC BY 2.0",
+      "registration": "CS-TKS (Boeing 767-300ER, EuroAtlantic Airways)",
+      "view": "perfil ~85-90 graus, mas de um ponto alto de terminal",
+      "date_taken": "2021-08-23",
+      "resolution": "3731x2398",
+      "notes": "Contorno dos No.1/No.2/No.3 de lado. A elevacao impede calibrar z; usada so qualitativamente."
+    },
+    {
+      "file": "ws_profile_C-FOGJ_calgary.png",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/3/3b/WestJet_767-300_in_Calgary_%28Quintin_Soloviev%29.png",
+      "page_url": "https://commons.wikimedia.org/wiki/File:WestJet_767-300_in_Calgary_(Quintin_Soloviev).png",
+      "author": "Quintin Soloviev",
+      "license": "CC BY-SA 4.0",
+      "registration": "C-FOGJ (Boeing 767-300ER, WestJet)",
+      "view": "perfil 90 graus, camera no nivel",
+      "date_taken": "2020-01-18",
+      "resolution": "7952x5304",
+      "notes": "Perfil de manual para o contorno do nariz. O parabrisa em si tem ~190 px e esta contra sol baixo de inverno: nao mede vidro."
     }
-  ]
+  ],
+  "parabrisa_2026-08-21": "As oito frames head-on/quase-frontais e as duas de perfil acima entraram para a correcao do parabrisa. Nenhuma e da LATAM (a N534LA e LATAM Cargo): o envidracado do 767 e PADRAO DE TIPO, entao qualquer 767-300ER resolve a geometria, e o que se pede delas e azimute e nitidez, nao pintura. A medicao usada no gate esta em spec_763.json -> parabrisa."
 }
