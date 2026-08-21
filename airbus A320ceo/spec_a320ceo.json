@@ -22,13 +22,23 @@
   "pax_fwd_x": 5.04,
   "pax_aft_x": 29.53,
   "pax_aft_nota": "fig 2-7-0-991-003 sheet 2: cota 29.53 ao CENTRO da porta (validada pelos overwing na mesma figura); fig -024 diz 29.64 (referencia do ponto critico da folha aberta). Folha modelada 29.14..30.15 (herdada do master, centro 29.65).",
-  "overwing_x": [14.43, 15.28],
-  "overwing_nota": "ACAP: pares em 14.43 E 15.28 (passo 0.85). O master neo usa 14.43/15.66 (+1.23) - passo 0.38 maior que o ACAP; mantido o do master na malha (diferenca 0.4 m no 2o hatch, anotada como pendencia do master).",
-  "carga": [8.16, 22.69, 26.29],
+  "overwing_x": [
+   14.43,
+   15.28
+  ],
+  "overwing_nota": "ACAP: pares em 14.43 E 15.28 (passo 0.85; foto CC-BFO mede 0.86). O mesh herdava o 15.66 do master (passo 1.23) e ficou registrado como pendencia; corrigido em 2026-08-20 junto com o master (build_a320ceo_geo3.py) e aneis repintados por build_a320ceo_livery.py.",
+  "carga": [
+   8.16,
+   22.69,
+   26.29
+  ],
   "pax_z_correcao_2026_08_20": "portas pax ERGUIDAS vs master: tabela 2-3-0 (solo z=-3.67): D1 sill 3.381 -> folha z -0.30..1.76; D4 sill 3.615 -> folha z -0.10..1.90. Master tinha -0.85..1.21 / -0.67..1.33 (~0.55 baixo). Foto CC-BFO confirma independente: porta1 -0.35..1.55, porta2 topo ~1.85 (calibre vertical = altura da folha 155px/1.99m). PENDENCIA equivalente no master neo e no A319."
  },
  "janelas_cabine": {
-  "z_cinto": [0.52, 0.86],
+  "z_cinto": [
+   0.52,
+   0.86
+  ],
   "pitch_m": 0.5334,
   "primeira_x": 6.18,
   "n_janelas": 41,
@@ -48,7 +58,10 @@
  "empenagem": {
   "fin_LE": "x = 0.863*z + 28.02 (reta z 3.0..7.6; filete dorsal curva a frente abaixo de z~3 ate a crista em ~29.7)",
   "fin_TE": "x = 0.221*z + 34.91 (raiz z1.55: 35.25; topo z8.05: 36.69)",
-  "fin_z": [1.55, 8.05],
+  "fin_z": [
+   1.55,
+   8.05
+  ],
   "estab_shift_vs_master": 0.87,
   "estab_tip_TE_x": 36.62,
   "estab_span": 12.45,
@@ -79,13 +92,16 @@
   "resolucao": "tres causas somadas, todas confirmadas: (1) OCLUSAO REAL - a raiz do estab (cinza claro) e sua sombra cortam o contorno da porta 2 na foto stbd: a primeira leitura da largura dava 0.70 m; o zoom 5x mostra o contorno verdadeiro 2787..2867 px = ~1.0 m (folha 0.89 + contorno pintado). (2) VIES PROJETIVO - entre os overwings (15.28) e a cauda (37.57) nao havia ancora: o ajuste Moebius de 5 ancoras poe a porta 2 em 28.8 m; com a porta ancorada no ACAP o residuo e +37px (~0.5 m) - distorcao de lente/projecao real da foto, nao geometria do aviao. Posicoes ABSOLUTAS na zona da cauda carregam +-0.4-0.5 m; por isso a livery da cauda foi medida RELATIVA a porta 2/janelas. (3) A hipotese 'ponta = fronteira da pintura do APU' foi testada e REFUTADA (piora o passo de janela implicado). GEOMETRIA vem do ACAP; a foto da a PINTURA.",
   "verificacao_ortografica": "fig 2-7-0 do proprio ACAP: ultima janela -> centro porta 2 = 1.95 m no desenho vs 1.7 m na foto (+-0.2) - o contorno visto na foto E a porta 2."
  },
- "pendencias_para_o_master_neo": [
-  "empenagem ~0.9-1.7 m a frente do ACAP (fin TE topo 34.95 vs 36.69; ja apontado pelo A319, agora confirmado no ACAP do proprio A320)",
-  "portas pax ~0.55 m baixas vs tabela de sills 2-3-0 (D1 3.381 / D4 3.615)",
-  "fileira de janelas termina ~1.3 m cedo (40 @ 0.515 desde 6.08 vs ACAP primeira 6.18 / ultima 27.58 / passo ~0.53)",
-  "segundo overwing em 15.66 vs ACAP 15.28",
-  "spec_a320 'cauda_livery.echarpe_casco.x_front(z)' (crista 31.3) contradiz a formula plana do proprio projeto (27.39+0.8393z -> 29.1 na crista) - as duas descrevem o PT-TMN e diferem 2.2 m"
- ],
+ "pendencias_para_o_master_neo": {
+  "resolvidas_2026_08_20": "rodada aplicada no master (build_a320neo_fix_geo.py + build_a320neo_fix_livery.py; ver spec_a320.json correcoes.acap_2026-08-20)",
+  "itens": [
+   "RESOLVIDA - empenagem recuada a posicao ACAP (remap (h,c) LE 28.02+0.863z / TE 34.91+0.221z, estab +0.87, raiz esticada 1.55->1.05)",
+   "RESOLVIDA - portas pax erguidas +0.55/+0.57 aos sills 2-3-0; foto PT-TMN confirma independente",
+   "RESOLVIDA COMO CORRETA NO MASTER - fileira de janelas MANTIDA em 40 @ 0.515 desde 6.08: a foto do PT-TMN (referencial ancorado na porta 4) mostra ultima janela ~26.1 e passo 0.50-0.52 - esta matricula cega as cavernas traseiras; a fileira cheia do desenho (ate 27.58) vale para o CC-BFO (confirmada na foto dele) e segue no ceo. Fileira e por matricula.",
+   "RESOLVIDA - segundo overwing recuado 15.66 -> 15.28",
+   "RESOLVIDA - echarpe re-medida na ref_PT-TMN_wikimedia.jpg: x_front = 28.51+0.63z (AS DUAS candidatas cairam: a formula plana andava com o fin errado, ~1.1 m a frente; a crista 31.3 da tabela era vies do wrap na crista). Validacao: matricula/titulo atuais folgam 0.04/0.09 m - o estilo 'quase toca' visto no proprio CC-BFO."
+  ]
+ },
  "verificacoes": {
   "tailstrike": "herdada do master a limitacao do Belly_DrenoAft (7.75 graus) - mesma geometria de trem/ventre, nao corrigida aqui"
  },

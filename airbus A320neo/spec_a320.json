@@ -286,12 +286,14 @@
   ],
   "pitch_m": 0.515,
   "primeira_x": 6.08,
+  "n_janelas": 40,
   "abertura": [
    0.229,
    0.312
   ],
   "aro_borracha_mm": 18,
-  "recuo_mm": 8
+  "recuo_mm": 8,
+  "nota_2026_08_20": "MANTIDA contra a pendencia do A320ceo: o ACAP desenha a fileira cheia 6.18/passo 0.5334/41 (ultima 27.58) e o CC-BFO a confirma na foto dele; mas a foto do PT-TMN (ref_PT-TMN_wikimedia.jpg, referencial ancorado na porta 4) mostra primeira ~6.05, ultima ~26.1, passo 0.50-0.52 - esta matricula cega as cavernas traseiras. Fileira e especifica da matricula; regra zero: foto da matricula > desenho generico."
  },
  "portas": {
   "pax": {
@@ -311,7 +313,18 @@
    ],
    "faixa_far_mm": 50,
    "porta1_x": 5.04,
-   "porta2_x": 29.64
+   "porta2_x": 29.64,
+   "z_folha_2026_08_20": {
+    "porta1": [
+     -0.3,
+     1.76
+    ],
+    "porta2": [
+     -0.1,
+     1.9
+    ],
+    "fonte": "ERGUIDAS +0.55/+0.57 vs o master antigo: tabela de sills ACAP 2-3-0 (solo z=-3.67, D1 3.381 / D4 3.615), achada na derivacao do A320ceo e confirmada na foto CC-BFO; a foto do PT-TMN confirma independente (centro da porta 4 medido em z 0.81+-0.15 no referencial ancorado; o antigo 0.33 fica excluido)"
+   }
   },
   "overwing_tipo3": {
    "folha": [
@@ -320,9 +333,10 @@
    ],
    "x": [
     14.43,
-    15.66
+    15.28
    ],
-   "sulco_mm": 7
+   "sulco_mm": 7,
+   "nota_2026_08_20": "segundo overwing recuado 15.66 -> 15.28 (ACAP fig 2-7-0-991-003: pares em 14.43 E 15.28, passo 0.85; o 15.66 antigo dava passo 1.23)"
   },
   "carga_lado_direito": {
    "fwd": [
@@ -359,6 +373,19 @@
   "sem_chevrons": true,
   "nota": "LATAM neo e EXCLUSIVAMENTE PW1100G-GTF (pesquisa 2026-08-15; pedido 2013 + acordo 2023). Fan cowl branco, lip metalico polido, bocal+tailcone longo inconel. PENDENTE: alongar tailcone vs LEAP"
  },
+ "empenagem": {
+  "fin_LE": "x = 0.863*z + 28.02 (reta z 3.0..7.6; filete dorsal curva a frente abaixo de z~3)",
+  "fin_TE": "x = 0.221*z + 34.91 (raiz z1.55: 35.25; topo z8.05: 36.69)",
+  "fin_z": [
+   1.55,
+   8.05
+  ],
+  "deriva_raiz": "fundo da malha esticado 1.55->1.05 (verts z<2.05, fator 2.0) para continuar enterrada no tailcone mais fino na posicao recuada (receita do A320ceo)",
+  "estab_tip_TE_x": 36.62,
+  "estab_span": 12.45,
+  "correcao_2026_08_20": "empenagem RECUADA ~0.9-1.7 m: o master antigo usava LE 26.773+0.8393z / TE 34.60+0.0538(z-1.55) / estab tip 35.75. Dupla leitura do ACAP AC_A320 (p040 600dpi e p074 300dpi, identicas) na derivacao do A320ceo + ACAP proprio do A319 (+3.73) + render-match do A319 na foto PT-TMT. Remap (h,c) preserva a UV por-loop da Deriva, entao a arte do sash e suas travessias zeta/rho viajam com a malha.",
+  "nota_foto": "a foto 2016 do PT-TMN (1024px, perspectiva com convergencia de verticais na borda do quadro) le o fin ~0.5-1.0 m a frente do ACAP em alturas grandes; atribuido a projecao nao modelada de feicoes altas - o A319 validou a posicao da familia por render-match ortografico em foto de 4390px. GEOMETRIA vem do ACAP."
+ },
  "carenagem_ventral": {
   "x": [
    10.9,
@@ -370,112 +397,17 @@
  },
  "cauda_livery": {
   "fonte": "workflow fotogrametrico 2026-08-16 (JetPhotos PT-TMN 1920px, calibracao dupla porta2/nariz, ±0.15m) + foto de referencia do dono (arranjo atual)",
-  "fin_convencao": "h=(z-1.55)/6.5; c=(x-LE(z))/(TE(z)-LE(z)); TE reta (34.60,1.55)->(34.95,8.05); polylines [c->h] port; ESTIBORDO = MESMA imagem em (x,z) (espelhado, alturas coincidem no BF; a fita NAO da a volta pelo BA)",
+  "fin_convencao": "h=(z-1.55)/6.5; c=(x-LE(z))/(TE(z)-LE(z)); TE reta (35.25,1.55)->(36.69,8.05) (recuada 2026-08-20 pelo ACAP); polylines [c->h] port; ESTIBORDO = MESMA imagem em (x,z)",
   "echarpe_casco": {
-   "nota": "NAO e wrap circunferencial: echarpe diagonal ~44-50 graus com ponta em (27.60,-1.20); ventre/keel BRANCOS; tailcone todo branco; anel APU metal",
-   "x_front(z)": [
-    [
-     2.05,
-     31.3
-    ],
-    [
-     1.55,
-     30.1
-    ],
-    [
-     1.43,
-     30.04
-    ],
-    [
-     1.1,
-     29.57
-    ],
-    [
-     0.78,
-     29.27
-    ],
-    [
-     0.46,
-     28.99
-    ],
-    [
-     0.13,
-     28.73
-    ],
-    [
-     -0.19,
-     28.45
-    ],
-    [
-     -0.51,
-     28.17
-    ],
-    [
-     -0.84,
-     27.89
-    ],
-    [
-     -1.05,
-     27.69
-    ],
-    [
-     -1.2,
-     27.6
-    ]
-   ],
-   "x_rear(z)": [
-    [
-     2.05,
-     35.4
-    ],
-    [
-     1.8,
-     35.3
-    ],
-    [
-     1.32,
-     34.25
-    ],
-    [
-     1.0,
-     33.17
-    ],
-    [
-     0.67,
-     32.16
-    ],
-    [
-     0.35,
-     31.7
-    ],
-    [
-     0.0,
-     30.82
-    ],
-    [
-     -0.3,
-     30.06
-    ],
-    [
-     -0.51,
-     29.61
-    ],
-    [
-     -0.84,
-     28.58
-    ],
-    [
-     -1.05,
-     28.02
-    ],
-    [
-     -1.2,
-     27.6
-    ]
-   ],
-   "porta2": "quase toda dentro do indigo: folha indigo + contorno branco 0.05-0.06 m"
+   "resolvido_2026_08_20": "As duas descricoes anteriores contradiziam-se em ~2.2 m na crista e AMBAS cairam: a formula plana da skill (27.39+0.8393z) tinha sido construida paralela ao fin LE ERRADO do master antigo (~1.1 m a frente do real); a tabela x_front antiga (crista 31.3, workflow JetPhotos 2026-08-16) era vies de projecao do wrap na crista em foto de baixo (~1.4 m atras). Medido de novo na ref_PT-TMN_wikimedia.jpg em referencial ancorado na porta 4 (folha ACAP -0.10..1.90) + pontas nariz/cauda; residuos do ajuste <0.02 m em z 0.4..1.6.",
+   "x_front": "x >= 28.51 + 0.63*z (reta; incerteza +-0.15)",
+   "x_rear": "x <= interp em z: [-1.2,1.6,1.8,2.05] -> [27.75,32.80,33.36,33.85] (medido z>=1.6; abaixo, a diagonal 1.80 ate a ponta casa com o padrao da familia - CC-BFO 1.83; zona z<1.1 ocultada pelo estab na foto)",
+   "baixo": "z >= -1.2 e |theta| <= 145 (quilha branca; ponta em (27.75,-1.2) - a reta frontal chega em z=-1.2 exatamente na ponta 27.6-27.75 das medicoes antigas)",
+   "validacao_cruzada": "matricula atual (ate 28.80, z 0.52-0.89) folga 0.04 m da fronteira no canto traseiro-baixo; titulo (ate 29.30, z ate 1.39) folga 0.09 m - o estilo 'quase toca' da frota (CC-BFO: 'O quase toca a diagonal'). Porta 4: fronteira cruza o bordo dianteiro da folha em z~1.2 (canto superior-dianteiro no branco, resto no indigo - igual PT-MXP 2024).",
+   "porta2": "quase toda dentro do indigo: folha indigo + contorno branco 0.05-0.06 m",
+   "sem_listra_fina": "a foto 2016 mostra uma listra indigo fina (~0.38 m) separada ~1 m a frente da massa; NAO pintada: as 4 campanhas recentes (CC-BFO 2022, PS-LBO 2025, PT-MXP 2024, foto atual do dono) nao a registram - detalhe da era de entrega, abandonado no arranjo atual"
   },
-  "matricula_atual": "PT-TMN INDIGO sobre BRANCO x27.00-28.80 z0.52-0.89 (altura 0.40); titulo 'AIRBUS A320neo' acima x27.0-29.3 z1.22-1.39 (2016-2020 era branca DENTRO do wrap x30.2-32.0 — variacao documentada)",
+  "matricula_atual": "PT-TMN INDIGO sobre BRANCO x27.00-28.80 z0.52-0.89 (altura 0.40); titulo 'AIRBUS A320neo' acima x27.0-29.3 z1.22-1.39 (2016-2020 era branca DENTRO do wrap x30.2-32.0 - variacao documentada) | NAO PINTADA nesta rodada: a etapa de marcas em (x,theta) que vem depois (refazer_marcas.py) re-mediu a matricula na unica foto versionada, ref_PT-TMN_wikimedia.jpg, e a pinta BRANCA DENTRO DA CUNHA em x30.14-31.76, que e tambem o padrao da familia (A319 26.45-28.45, A320ceo 30.29-31.81, A321ceo, A321neo: todas brancas dentro do indigo). Ver marcas_xtheta_2026-08-20.matricula_variante_nao_aplicada. A fronteira dianteira da cunha NAO depende disso: sai do ajuste ancorado na porta (residuos < 0.02 m em z 0.4-1.6).",
   "hstab": "extradorso INDIGO (arranjo atual/foto do dono; 2016-2020 era cinza claro), intradorso branco, BA metal",
   "fin_bandas_2026-08-20": {
    "fonte": "Medido nas fotos PS-LBO DSC00896 (5822 px, estibordo, deriva ~780 px de altura) e DSC00834 (5020 px, bombordo), em 'airbus A321neo/'; conferido em PT-TMN (ref_PT-TMN_wikimedia.jpg retificada, ~150 px — consistente dentro de +-0.1 de zeta) e PT-TMT (tmt bank photo). Template unico da familia A320. 2026-08-20.",
@@ -508,7 +440,8 @@
    },
    "uv": "Deriva: u=0.125*x-3.425 ; v=0.142857*z-0.2 (dominio x 27.4..35.4, z 1.4..8.4) — inalterada",
    "SUBSTITUI": "fin_bandas_medidas_2026_08_17 (transferencia (h,c) do 787, b=z-0.24x depois c=z-0.372x): dava bandas de 0.80 m (real 0.96), banda inferior cruzando o BF em zeta 0.39-0.52 (foto: 0.37 e o TOPO dela; o fundo esta em 0.09-0.22 conforme a foto), coral da banda inferior comecando so no meio da corda e fugindo pelo BF, cinza do BA da banda inferior com metade do comprimento da banda, e ponta atras da banda superior em INDIGO onde a foto mostra o cap cinza. Era isso que fazia as faixas parecerem nao-paralelas e distorcidas no render.",
-   "nota_polylines": "As polilinhas F0..F7 (fin_fronteiras) foram removidas: obsoletas duas vezes (substituidas pela medicao de 2026-08-17, que por sua vez foi substituida por esta secao)."
+   "nota_polylines": "As polilinhas F0..F7 (fin_fronteiras) foram removidas: obsoletas duas vezes (substituidas pela medicao de 2026-08-17, que por sua vez foi substituida por esta secao).",
+   "pos_remap_2026_08_20": "A Deriva foi remapeada (h,c) para a posicao ACAP (LE 28.02+0.863z, TE 34.91+0.221z) com UV por-loop preservada: a arte estica com a malha e as travessias zeta/rho dos bordos (a ancoragem desta receita) se mantem. As retas_resultantes acima estao em coordenadas do planform ANTIGO; no novo planform as travessias e que valem. Alongamento da raiz (z<2.05 -> 1.05) estica a arte verticalmente so na zona enterrada."
   }
  },
  "ventre_real": {
@@ -518,7 +451,7 @@
   "weathering": "frota jovem = leve: leque de spray do trem do nariz (x6-14, 12-16%), escorridos tan dos drenos (1-3m), grime nas portas do trem — pintado em LiveryTex/Fac com fac fracionario"
  },
  "texturas_do_blend": {
-  "LiveryTex+LiveryFac": "marcas oficiais rasterizadas em (x,theta) 4096x1024; mascara em imagem SEPARADA Non-Color (alfa de float nao sobrevive pack/reload)",
+  "LiveryTex+LiveryFac": "marcas oficiais rasterizadas em (x,theta) 4096x1024; mascara em imagem SEPARADA Non-Color (alfa de float nao sobrevive pack/reload) | repintura cirurgica 2026-08-20: cauda x>=26 apagada e repintada (echarpe resolvida + porta 2 + titulo do mesh oficial + matricula nova + anel APU); aneis porta 1/overwing 2 re-lidos das malhas corrigidas",
   "NoseMask": "para-brisa (R=moldura, G=vidro)",
   "PanelBump": "juncoes circunferenciais + lap joints, bump 2.2mm",
   "FinSashE/FinSashD": "sash da deriva por lado (conteudo identico nos dois lados); REGENERADAS 2026-08-20 do template medido em foto (cauda_livery.fin_bandas_2026-08-20)"
@@ -538,6 +471,7 @@
   }
  },
  "correcoes": {
-  "deriva_2026-08-17": "Sash refeito com o desenho medido no 787-9 e transferido por (h,c). As polilinhas F1..F7 anteriores davam deriva branca com bandas grossas; a foto do PT-TMN mostra deriva indigo dominante com bandas finas de bordo a bordo."
+  "deriva_2026-08-17": "Sash refeito com o desenho medido no 787-9 e transferido por (h,c). As polilinhas F1..F7 anteriores davam deriva branca com bandas grossas; a foto do PT-TMN mostra deriva indigo dominante com bandas finas de bordo a bordo.",
+  "acap_2026-08-20": "Rodada das 4 pendencias do spec_a320ceo: empenagem recuada a posicao ACAP (remap (h,c) + estab +0.87), portas pax erguidas aos sills 2-3-0 (+0.55/+0.57), segundo overwing 15.66->15.28, fileira de janelas MANTIDA (foto da matricula refuta a fileira cheia do desenho para o PT-TMN). Echarpe re-resolvida na foto (ver echarpe_casco); matricula pintada; anel APU metal 36.70..37.15 adicionado (ausente). Scripts: build_a320neo_fix_geo.py + build_a320neo_fix_livery.py; camera CamAlvoCauda 31.5->32.2."
  }
 }

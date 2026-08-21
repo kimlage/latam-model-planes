@@ -44,7 +44,18 @@
   ],
   "carga_bulk_x": 22.57,
   "carga_bulk_nota": "estimada mantendo a distancia porta4->bulk do A320 (3.24 m adiante); ACAP nao cota o bulk na fig de localizacao",
-  "fonte": "ACAP 2-7-0 fig 991-002 sheet 2 (5.04/12.83/25.81/8.16/20.56 FROM NOSE)"
+  "fonte": "ACAP 2-7-0 fig 991-002 sheet 2 (5.04/12.83/25.81/8.16/20.56 FROM NOSE)",
+  "z_folha_2026_08_20": {
+   "porta1": [
+    -0.3,
+    1.76
+   ],
+   "porta2_aft": [
+    -0.1,
+    1.9
+   ],
+   "fonte": "ERGUIDAS +0.55/+0.57: herdavam o z baixo do master A320neo; tabela de sills ACAP 2-3-0 do A320 (mesma secao/mesmas estacoes de porta: D4 25.81 = 29.54-3.73), achada na derivacao do A320ceo e confirmada nas fotos CC-BFO e PT-TMN. Aneis/contornos repintados por build_a319_livery.py, que le as malhas. Empenagem e janelas NAO mudaram (ACAP proprio + render-match PT-TMT)."
+  }
  },
  "trem": {
   "nariz_x": 5.07,
@@ -93,7 +104,8 @@
  },
  "verificacoes": {
   "render_match_2026-08-20": "camera ortografica casada com a foto ref_sdu_00 (escala 79.7 px/m, rolagem 15.6 graus): silhueta, deriva, echarpe, trem, motor e proporcoes conferem lado a lado; fileira de janelas corrigida 33->35",
-  "tailstrike_2026-08-20": "Rotacionando sobre o contato do trem principal (16.11, 0, -3.67): 9.75 graus limitado pelo Belly_DrenoAft (x24.1), casco sozinho 12.21. Real ~13.9. MESMA limitacao herdada do master A320 (dreno aft possivelmente baixo/atras demais) — registrada, nao corrigida aqui."
+  "tailstrike_2026-08-20": "Rotacionando sobre o contato do trem principal (16.11, 0, -3.67): 9.75 graus limitado pelo Belly_DrenoAft (x24.1), casco sozinho 12.21. Real ~13.9. MESMA limitacao herdada do master A320 (dreno aft possivelmente baixo/atras demais) — registrada, nao corrigida aqui.",
+  "portas_2026-08-20": "rodada de correcao do master aplicada aqui so nas portas; 6 angulos re-renderizados e conferidos (build_a319_fix_portas.py)"
  },
  "livery_pt_tmt": {
   "fonte": "fotogrametria ref_sdu_00.jpg (perfil, CC0, 2023-09-11): transform de similaridade ancorada em nariz + TE da deriva (ACAP); leitura da fronteira em imagem RETIFICADA para o plano (x,z) com grade metrica (insp_wedge_rect2.png), regua local = porta 4 do ACAP; confirmacao da forma na foto do PR-MBU (ref_sdu_04)",

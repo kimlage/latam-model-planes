@@ -14,7 +14,7 @@
   "altura": 11.76,
   "fuselagem_largura": 3.95,
   "fuselagem_altura": 4.14,
-  "entre_eixos": 16.90,
+  "entre_eixos": 16.9,
   "bitola": 7.59,
   "fonte": "ACAP A321 Rev 35, FIGURE-2-2-0-991-005-A01 sheets 3-4 (Sharklet, ON A/C A321-100 A321-200; texto bruto linhas 3297-3560)"
  },
@@ -43,16 +43,38 @@
   "porta2_x": 13.84,
   "porta3_x": 24.79,
   "porta4_x": 36.58,
-  "carga": {"fwd": 8.16, "aft": 29.62, "bulk": 33.22},
+  "carga": {
+   "fwd": 8.16,
+   "aft": 29.62,
+   "bulk": 33.22
+  },
   "config": "ceo: 4 pares de portas full-size (D1, D2 a frente da asa, D3 atras da asa, D4 traseira), SEM saidas overwing — confirmado nas fotos PT-MXP 2017/2024, PT-XPB, PT-MXD e na Fig 2-7-0-991-004 sheet 1",
   "folhas": {
    "d1_d4": "0.81 x 1.85, soleira z=-0.67 (herdadas do master)",
    "d2_d3": "0.76 x 1.52, MESMA linha de soleira da D1 (z=-0.67, topo z=0.85) — lidas na foto PT-XPB (D2 118 px vs D1 154 px, fundos coincidentes) e coerentes com Fig 2-7-0-991-034 (1.52 m 'TOP OF FLOOR' na secao B-B). INCERTEZA +-0.05-0.10 m: a Fig -034 tambem imprime 1.73 m (vao com porta aberta) e a tabela 2-3-0 da soleiras D2/D3 0.27 m acima da D4 (3.90 vs 3.63) — leitura da tabela conflita com a foto; a foto ganhou. Duvida registrada para revisao humana."
   },
-  "nota_posicoes": "cargas fwd/aft do ceo ficam 0.40 m a frente das do neo-ACF (8.16/29.62 vs 8.56/30.02); bulk identica 33.22; D3 do ceo 2.03 m a frente da D3 do ACF (24.79 vs 26.82)"
+  "nota_posicoes": "cargas fwd/aft do ceo ficam 0.40 m a frente das do neo-ACF (8.16/29.62 vs 8.56/30.02); bulk identica 33.22; D3 do ceo 2.03 m a frente da D3 do ACF (24.79 vs 26.82)",
+  "z_folha_2026_08_20": {
+   "d1": [
+    -0.3,
+    1.76
+   ],
+   "d2_d3": [
+    0.02,
+    1.71
+   ],
+   "d4": [
+    -0.1,
+    1.9
+   ],
+   "fonte": "D1/D4: sills ACAP 2-3-0 da familia (+0.55/+0.57). D2/D3: ACAP FIGURE-2-7-0-991-034 (bloco A321-100/200/neo): saidas de 1.52 m com sill 0.39 m ACIMA do piso; a tabela 2-3-0 concorda (D2/D3 0.27 acima da D4). REVOGA a leitura 'mesma soleira da D1' da foto PT-XPB: aquela comparacao usava como regua a D1 do modelo, que estava ela mesma 0.55 m baixa - 'fundos coincidentes' contra regua errada. A duvida registrada em folhas.d2_d3 fica RESOLVIDA a favor do ACAP (duas fontes independentes concordam)."
+  }
  },
  "janelas_cabine": {
-  "z_cinto": [0.52, 0.86],
+  "z_cinto": [
+   0.52,
+   0.86
+  ],
   "pitch_m": 0.515,
   "primeira_x": 6.08,
   "n_janelas_modelo": 57,
@@ -87,13 +109,50 @@
   "clearance_nacelle": "fundo da nacelle z -3.05 -> 0.62 m acima da pista (-3.67); ACAP V2500 0.78. Discrepancia 0.16 herdada da geometria do master (mesma receita do A319); registrada",
   "envergadura_modelo": "a asa do master A320 tem envergadura 7% acima do real (38.28 vs 35.8 do A319/A320; aqui ponta em |y|=19.14). Desvio herdado e ja documentado no spec_a319; nao corrigido aqui para nao divergir da familia",
   "tailstrike": "geometria de trem/dreno identica a do A321neo -> vale o achado do spec_a321: 6.14 graus ate o Belly_DrenoAft tocar (real ~9.5-11). Herdado, nao corrigido",
-  "gate_2026-08-20": "6 angulos renderizados; comparacao lado a lado com ref_PT-MXP_2024_gig.jpg (cauda espelhada), ref_PT-XPB_sbgr.jpg (perfil) e ref_PT-MXD_2021_cwb.jpg; zoom no canto BF-da-deriva x estab x tailcone conferido contra o mesmo crop do master neo (artefatos de serrilhado identicos aos do master aprovado, nada introduzido pela derivacao); ver verificacao_visual.png"
+  "gate_2026-08-20": "6 angulos renderizados; comparacao lado a lado com ref_PT-MXP_2024_gig.jpg (cauda espelhada), ref_PT-XPB_sbgr.jpg (perfil) e ref_PT-MXD_2021_cwb.jpg; zoom no canto BF-da-deriva x estab x tailcone conferido contra o mesmo crop do master neo (artefatos de serrilhado identicos aos do master aprovado, nada introduzido pela derivacao); ver verificacao_visual.png",
+  "fase3_2026-08-20": "build_a321ceo_fase3_acap.py: empenagem recuada, D1/D4 erguidas, saidas D2/D3 elevadas ao sill do ACAP, aneis repintados das malhas, folha D4 re-dividida; 6 angulos re-renderizados e conferidos"
  },
  "confianca": {
-  "oficial_acap": ["comprimento", "envergadura", "altura", "entre_eixos", "bitola", "portas_ceo posicoes", "carga", "inlet_x V2500", "clearance nacelle"],
-  "derivado_do_a321neo_validado": ["casco/secao/UV", "asa+sharklet", "empenagem", "trem", "wedge (3 fronteiras)", "fin sash", "lockups LATAM", "ventre/antenas", "materiais"],
-  "derivado_do_a319_validado": ["fatores de escala da nacelle V2500 (0.846/0.88)"],
-  "fotogrametria": ["echarpe frontal re-verificada (XPB, rms 0.06)", "titulo posicao (2 fotos)", "matricula estilo/lados", "folhas D2/D3 tamanho", "hstab claro", "sharklets presentes", "nacelle branca"],
+  "oficial_acap": [
+   "comprimento",
+   "envergadura",
+   "altura",
+   "entre_eixos",
+   "bitola",
+   "portas_ceo posicoes",
+   "carga",
+   "inlet_x V2500",
+   "clearance nacelle"
+  ],
+  "derivado_do_a321neo_validado": [
+   "casco/secao/UV",
+   "asa+sharklet",
+   "empenagem",
+   "trem",
+   "wedge (3 fronteiras)",
+   "fin sash",
+   "lockups LATAM",
+   "ventre/antenas",
+   "materiais"
+  ],
+  "derivado_do_a319_validado": [
+   "fatores de escala da nacelle V2500 (0.846/0.88)"
+  ],
+  "fotogrametria": [
+   "echarpe frontal re-verificada (XPB, rms 0.06)",
+   "titulo posicao (2 fotos)",
+   "matricula estilo/lados",
+   "folhas D2/D3 tamanho",
+   "hstab claro",
+   "sharklets presentes",
+   "nacelle branca"
+  ],
   "incerteza_fotogrametria": "+-0.10-0.30 m conforme regiao; folhas D2/D3 +-0.05-0.10"
+ },
+ "empenagem_2026_08_20": {
+  "fin_LE": "x = 0.863*z + 34.96",
+  "fin_TE": "x = 0.221*z + 41.85 (raiz 42.19, topo 43.63)",
+  "estab_tip_TE_x": 43.56,
+  "fonte": "mesma celula do A321neo: correcao verificada no ACAP A321 (TE medido 0.222z+41.93, ver spec_a321.json empenagem_2026_08_20); remap (h,c) com UV por-loop preservada + raiz esticada 1.55->1.05; a traseira da echarpe (41.46+0.0538z) fica ~0.7 m a frente da carenagem da raiz do TE - e fronteira de PINTURA, nao a linha do BF como o spec dizia; mantida como medida na XPB."
  }
 }
