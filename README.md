@@ -26,7 +26,7 @@ white to the belly, the rear wedge is smaller, the lockup runs LATAM over
 CARGO, the winglets are indigo outboard and coral inboard, and the belly
 carries the symbol alone. Only the fin sash passes through unchanged.
 
-![A320neo departing RWY 17R at Santiago, seen head-on as the camera flies formation and cranes up around its starboard bow](airbus%20A320neo/a320_scl_v12.gif)
+![A320neo departing RWY 17R at Santiago, seen head-on as the camera flies formation and cranes up around its starboard bow](airbus%20A320neo/a320_scl_v13.gif)
 
 *A320neo departing 17R at Santiago — 240 frames, 9.6 s. The camera flies
 formation in the aircraft's own coordinate frame from the first frame to the
@@ -126,7 +126,7 @@ rebuild from it.
    paint as a UV texture in `(x, θ)` — never as a 3D shell. → skill `livery-latam`
 5. **Details** — doors, windows, gear, engines, antennas, belly. The standard is
    a complete, connected aircraft, not a painted hull.
-6. **Visual gate** — seven canonical angles, contact sheet, comparison against
+6. **Visual gate** — eight canonical angles, contact sheet, comparison against
    the photo. → skill `verificacao-visual`
 
 ```bash
@@ -135,7 +135,7 @@ rebuild from it.
 python3 verificacao_visual.py "boeing 787-9"
 ```
 
-The seven cameras come from the fleet standard in
+The eight cameras come from the fleet standard in
 [`cameras_canonicas.py`](cameras_canonicas.py): the **distance** is fixed at
 `3.00 x length` for whole-aircraft angles and `1.25 x length` for the nose
 close-ups (90–250 m and 70–150 m), and the lens is derived from it, so every
