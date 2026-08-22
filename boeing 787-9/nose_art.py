@@ -77,7 +77,7 @@ FONTES
   imagem embutida 1208x1708 (201 dpi nativos), rasterizada a 600 dpi.
   Vista lateral: estacao da junta do radome. Vista superior: meia-largura do
   nariz (confere o casco em 1.3%). Vista frontal: envidracado e oval do radome.
-- Fotos head-on CC BY / CC BY-SA, creditadas em refs_manifest.json:
+- Fotos head-on CC BY / CC BY-SA, creditadas em refs/manifest.json:
   A7-BCC (Bene Riobo, CC BY-SA 4.0) e N805AN (Eric Salard, CC BY-SA 2.0).
 
 ------------------------------------------------------------------------------
