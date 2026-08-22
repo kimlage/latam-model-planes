@@ -525,10 +525,18 @@ MARCAS = {
         # wedge's own forward-boundary rule (spec_a320.json -> echarpe_casco)
         dict(op="apagar", x=(26.80, 29.15), th=(36, 58),
              base="fronteira", nome="titulo antigo"),
-        dict(op="pintar", malha=("MarkAirbusNeo_E", "MarkAirbusNeo_D"),
+        dict(op="pintar", malha="MarkAirbusNeo_E",
              plano=("x", "y"), x=(26.42, 28.72), th_topo=43.1, cor=TITULO,
              nome="titulo AIRBUS A320neo"),
-        dict(op="pintar", malha=("Reg_E", "Reg_D"), plano=("x", "z"),
+        # The starboard registration left by the FIRST run of this file was
+        # mirrored twice (see the note in `fazer_marcas`) and read 'NMT-TP'.
+        # Erase before repainting, on BOTH sides so the new ink lands on clean
+        # paint. Box measured on the texture itself: the white ink spans
+        # x 30.137..31.752, theta 56.4..71.9, and the box below is 68% indigo,
+        # 0.1% white hull -- so "indigo" is the base to restore, not "branco".
+        dict(op="apagar", x=(30.05, 31.85), th=(54, 74), base="indigo",
+             alvos=[BRANCO_MARCA], nome="matricula anterior"),
+        dict(op="pintar", malha="Reg_E", plano=("x", "z"),
              x=(30.14, 31.76), th_topo=57.0, cor=BRANCO_MARCA,
              nome="matricula PT-TMN"),
     ],
@@ -551,7 +559,7 @@ MARCAS = {
              alvos=[INDIGO], nome="matricula fantasma"),
         dict(op="apagar", x=(43.90, 48.40), th=(79, 88), base="branco",
              alvos=[(0xB7, 0xBC, 0xC1)], nome="fantasma DREAMLINER"),
-        dict(op="pintar", malha=("Reg787_E", "Reg787_D"), plano=("x", "y"),
+        dict(op="pintar", malha="Reg787_E", plano=("x", "y"),
              # photo (CC-BGP) puts it 0.85..2.62 m aft of door 4 = x 50.51..52.28;
              # nudged 0.35 m aft so it clears the MODEL's wedge edge (x 50.76 at
              # theta 62), whose forward boundary sits slightly aft of the real one
@@ -574,16 +582,30 @@ def fazer_marcas(cs, tag):
             cs.espelhar_faixa(m["x"][0], m["x"][1], m["th"][0], m["th"][1],
                               m["tinta"], nome=m["nome"])
         elif m["op"] == "pintar":
-            for lado, malha in ((-1, m["malha"][0]), (1, m["malha"][1])):
-                tris, bb = tris_xy(malha, m["plano"])
-                if not tris:
-                    print(f"   [pintar]  {m['nome']}: mesh {malha} missing"); continue
-                razao = (bb[1] - bb[0]) / (bb[3] - bb[2])
-                larg = m["x"][1] - m["x"][0]
-                alt = m.get("altura") or larg / razao
-                xm = 0.5 * (m["x"][0] + m["x"][1])
-                s_topo = float(cs.arc(np.array([xm]),
-                                      np.array([math.radians(m["th_topo"])]))[0])
+            # ONE art source for both flanks; the flank decides the mirror.
+            # This used to read a mesh PER SIDE -- ("Reg_E", "Reg_D") -- and
+            # still pass espelha=(lado > 0), which silently assumes the two
+            # meshes hold the SAME artwork. They do not: on the A319 and the
+            # A320neo, Reg_D is a separate datablock that is ALREADY the
+            # x-mirror of Reg_E (rasterized and compared: 0.9% disagreement
+            # mirrored against 93% straight). Mirroring it again put the
+            # A320neo's registration back to front on the starboard side, where
+            # it read 'NMT-TP'; the A319 escaped only because its registration
+            # is painted by build_a319_livery.py and never came through here.
+            # The marks that came out right -- MarkAirbusNeo and Reg787 -- are
+            # exactly the ones whose _D object SHARES the _E mesh datablock, so
+            # they were only mirrored once, and that coincidence hid the fault.
+            # Stating the art once removes the question.
+            tris, bb = tris_xy(m["malha"], m["plano"])
+            if not tris:
+                print(f"   [pintar]  {m['nome']}: mesh {m['malha']} missing"); continue
+            razao = (bb[1] - bb[0]) / (bb[3] - bb[2])
+            larg = m["x"][1] - m["x"][0]
+            alt = m.get("altura") or larg / razao
+            xm = 0.5 * (m["x"][0] + m["x"][1])
+            s_topo = float(cs.arc(np.array([xm]),
+                                  np.array([math.radians(m["th_topo"])]))[0])
+            for lado in (-1, 1):
                 cs.pintar(tris, bb, m["x"][0], m["x"][1], s_topo, alt, m["cor"],
                           lado, espelha=(lado > 0), modo=m.get("modo", "z"),
                           nome=f"{m['nome']} {'port' if lado < 0 else 'stbd'}")

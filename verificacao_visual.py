@@ -4,11 +4,16 @@
 Usage: python3 verificacao_visual.py "airbus A320neo"
 
 Joins the canonical renders (front, nose, side profile, hero, tail, low front,
-head-on) into a single labelled image, for side-by-side checking against the
+head-on, starboard profile) into a single labelled image, for side-by-side checking against the
 reference photos before calling the model finished. Part of the project's
 standard flow (see README.md / aircraft pipeline).
 
-The renders come from `render_gate.py`, which builds the seven cameras with the
+The starboard profile is the mirror of the side profile and is read AS A PAIR
+with it: same framing, same lens, other flank. Anything asymmetric that does not
+survive the mirror -- a registration, a type title, the brand lockup -- is a
+defect, and until this panel existed nothing in the gate could see it.
+
+The renders come from `render_gate.py`, which builds the eight cameras with the
 fleet standard in `cameras_canonicas.py` and drops a `cameras_gate.json` next to
 them. When that file is present each panel is labelled with the lens and the
 distance that produced it, so the sheet carries its own camera provenance.
@@ -27,6 +32,8 @@ VISTAS = [
     ("render_cauda.png", "CamCauda", "TAIL (fin sash / hull wedge / registration)"),
     ("render_frente_baixa.png", "CamBarriga", "LOW FRONT (belly / fairing / gear / nacelles)"),
     ("render_headon.png", "CamHeadOn", "HEAD-ON (windshield V, frontal section)"),
+    ("render_estibordo.png", "CamEstibordo",
+     "STARBOARD PROFILE (mirror of the side profile: marks must READ)"),
 ]
 
 

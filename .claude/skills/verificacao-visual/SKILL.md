@@ -27,7 +27,7 @@ Two commands, always in this order:
 python3 verificacao_visual.py "airbus A320neo"
 ```
 
-`render_gate.py` builds the **seven** canonical cameras from the fleet standard
+`render_gate.py` builds the **eight** canonical cameras from the fleet standard
 in `cameras_canonicas.py` and renders them. Both scripts are at the root and
 work on any aircraft in the repository — there is no longer a per-aircraft
 camera list to drift. The old per-aircraft entry points
@@ -43,8 +43,9 @@ same standard.
 | `render_cauda.png` | tail | fin sash, hull sash, registration, stabilizers |
 | `render_frente_baixa.png` | low front | belly, fairing, landing gear, nacelles |
 | `render_headon.png` | **head-on** | windshield wrap and the frontal section |
+| `render_estibordo.png` | **starboard profile** | the other flank — read as a pair with the side profile |
 
-Outputs: the seven renders, `cameras_gate.json` (the camera provenance) and
+Outputs: the eight renders, `cameras_gate.json` (the camera provenance) and
 `verificacao_visual.png`, all in the aircraft's folder. Each panel of the sheet
 is labelled with the lens and the distance that produced it.
 
@@ -135,6 +136,33 @@ fuselage diameter (wider than the 777's original windshield-specific crop, so
 the frontal section reads too). Anything about symmetry, about the plane of
 symmetry, or about how a feature wraps around the front shows up here and
 nowhere else.
+
+### The eighth angle — and the half of the fleet nobody had looked at
+
+`CamEstibordo` exists because the seven angles before it all sat at **y < 0**
+(or on the axis). The gate had never rendered the starboard side of any
+aircraft in the fleet, so an entire class of defect was structurally invisible
+to it, not merely missed.
+
+The class: hull paint is a texture in `(x, theta)` and **the same u serves both
+flanks**, but seen from starboard the skin's `+x` runs to the *left* of frame.
+Any asymmetric mark must therefore be mirrored on that side. When it is not, it
+reads backwards — and no port angle can tell you. Found this way, all at once:
+the registration and type title of the 767-300ER, the 767-300F and the
+777-300ER (reading `YWC-CC`, `AL635N`, `GUM-TP`), and the registration of the
+A320neo, that one from mirroring *twice*. The 787-8's lockup had been caught by
+the same trick a round earlier, with a starboard camera built by hand for the
+occasion; the fix was to stop building it by hand.
+
+It is a **profile**, not a 3/4, and it is deliberately the exact mirror of
+`CamPerfil` — same target, same framing, same lens, other flank. Read the two
+panels as a pair: anything asymmetric that does not survive the mirror is a
+defect. A profile also puts the whole flank in one frame, so the lockup, the
+type title, the registration, the doors and the window line are all under
+review at once.
+
+**When you add an aircraft, read the registration in `render_estibordo.png`
+out loud.** If it reads backwards, the paint code is missing its mirror.
 
 ## Compare, do not admire
 

@@ -142,6 +142,25 @@
    "elev": -2.0958,
    "piso": false,
    "h_pista": 1.6
+  },
+  "CamEstibordo": {
+   "d": 102.03,
+   "lens": 91.29,
+   "W": 40.2353,
+   "modo": "quadro",
+   "loc": [
+    16.9,
+    102.03,
+    0.3
+   ],
+   "alvo": [
+    16.9,
+    0.0,
+    0.3
+   ],
+   "elev": 0.0,
+   "piso": false,
+   "h_pista": 3.975
   }
  }
 }

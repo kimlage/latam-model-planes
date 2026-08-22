@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Padrao de camera do gate visual - PADRAO DE FROTA (v2).
 
-Executado DENTRO do Blender. Constroi as SETE cameras canonicas de qualquer
+Executado DENTRO do Blender. Constroi as OITO cameras canonicas de qualquer
 aeronave do repositorio a partir da propria geometria, sem tocar no .blend em
 disco (as cameras sao montadas em memoria, na hora do render).
 
@@ -63,7 +63,7 @@ na altura do para-brisa a partir da altura do olho da 2,99 graus contra os
 3 graus dele. Uma regra que reencontra um numero medido por outro caminho.
 
 ------------------------------------------------------------------------------
-OS SETE ANGULOS
+OS OITO ANGULOS
 ------------------------------------------------------------------------------
   CamFrontal   3/4 frontal        proporcao do nariz, para-brisa, motores
   CamNariz     close-up do NARIZ  vidro, radome, contorno da porta 1
@@ -71,8 +71,31 @@ OS SETE ANGULOS
   CamHero      3/4 classico       leitura geral; e o render que entrega
   CamCauda     cauda              faixa da deriva, cunha do casco, matricula
   CamBarriga   frontal baixa      barriga, carenagem, trem, nacelles
-  CamHeadOn    de frente (NOVO)   para-brisa e secao frontal - o unico angulo
+  CamHeadOn    de frente          para-brisa e secao frontal - o unico angulo
                                   que pega o "V" do vidro do 777
+  CamEstibordo perfil de ESTIBORDO o outro bordo - o unico angulo que ve a
+                                  metade da pele que o gate nunca julgou
+
+CamEstibordo foi ACRESCENTADA. As sete cameras anteriores tinham todas a
+componente y negativa (CamPerfil -1.0, CamNariz -0.687, CamFrontal -0.459,
+CamHero -0.630, CamCauda -0.719, CamBarriga -0.585) ou estavam no eixo
+(CamHeadOn). Em outras palavras: o gate julgava sempre BOMBORDO, e a pele de
+estibordo de toda a frota nunca passou por nenhum quadro.
+
+O que se escondia ali era uma classe inteira de defeito, nao um caso. A pintura
+do casco e uma textura em (x, theta) e o mesmo u vale para os dois bordos, mas
+visto de estibordo o +x da pele aponta para a ESQUERDA da tela: qualquer marca
+assimetrica tem de ser espelhada naquele lado. Quando nao e, ela sai ao
+contrario - e nenhum dos sete angulos podia dizer. Assim passaram a matricula e
+o titulo de tipo do 767-300ER, do 767-300F e do 777-300ER (lendo 'YWC-CC',
+'AL635N', 'GUM-TP') e a matricula da A320neo, esta por espelhamento a MAIS.
+O lockup do 787-8 ja tinha sido pego uma vez pelo mesmo caminho, com uma camera
+de estibordo montada a mao para a ocasiao; o que faltava era torna-la padrao.
+
+E o PERFIL de estibordo, e nao um 3/4, porque o perfil poe a pele inteira de
+frente: lockup, titulo, matricula, portas e janelas no mesmo quadro, e a
+comparacao direta com CamPerfil - a mesma foto espelhada - torna a diferenca
+obvia sem precisar ler letra por letra.
 
 CamNariz foi RE-ESPECIFICADA. Nas cinco Airbus ela estava em (11; 7,5; 1,6)
 olhando para tras: o quadro caia sobre a PORTA 1 e as janelas de cabine, e o
@@ -119,6 +142,7 @@ DIRECOES = {
         "CamHero": (-0.7760, -0.6300, 0.0320),
         "CamCauda": (0.6930, -0.7190, -0.0510),
         "CamBarriga": (-0.8100, -0.5850, -0.0410),
+        "CamEstibordo": (0.0, 1.0, 0.0),
     },
     "boeing": {
         "CamFrontal": (-0.8890, -0.4590, -0.0090),
@@ -127,6 +151,7 @@ DIRECOES = {
         "CamHero": (-0.7760, -0.6300, 0.0350),
         "CamCauda": (0.6190, -0.7590, 0.2000),
         "CamBarriga": (-0.8100, -0.5850, -0.0220),
+        "CamEstibordo": (0.0, 1.0, 0.0),
     },
 }
 
@@ -139,6 +164,7 @@ ALVOS = {
     "CamCauda": "CamAlvoCauda",
     "CamBarriga": "CamAlvoBarriga",
     "CamHeadOn": "CamAlvoHeadOn",
+    "CamEstibordo": "CamAlvoEstibordo",
 }
 
 PERTO = ("CamNariz", "CamHeadOn")     # usam D_PERTO; o resto usa D_LONGE
@@ -168,6 +194,8 @@ VISTAS = [
     ("CamCauda", "render_cauda.png"),
     ("CamBarriga", "render_frente_baixa.png"),
     ("CamHeadOn", "render_headon.png"),
+    # depois de CamPerfil: reaproveita o enquadramento dela (ver `aplicar`)
+    ("CamEstibordo", "render_estibordo.png"),
 ]
 
 CENARIO = ("pista", "cenario", "scenario", "scenery", "ground", "solo", "hdri")
@@ -329,7 +357,7 @@ def _posicionar(alvo_pos, azimute, dz, D, z_solo):
 
 
 def aplicar(scene=None, verbose=True):
-    """Monta as sete cameras canonicas no padrao de frota. Devolve o relatorio."""
+    """Monta as oito cameras canonicas no padrao de frota. Devolve o relatorio."""
     scene = scene or bpy.context.scene
     bpy.context.view_layer.update()   # matrix_world fresca: senao `antes` mente
     m = medir(scene)
@@ -359,6 +387,9 @@ def aplicar(scene=None, verbose=True):
                 pos = (p.x, 0.0, p.z)
             else:
                 pos = (m["x_tip"] + m["L"] / 2.0, 0.0, m["z_c"] + 0.3)
+        elif nome == "CamEstibordo":
+            # o mesmo ponto de mira de CamPerfil (y = 0, logo nao espelha)
+            pos = tuple(rel["cameras"]["CamPerfil"]["alvo"])
         elif nome == "CamHeadOn":
             nariz = bpy.data.objects.get("CamAlvoNariz")
             x = nariz.matrix_world.translation.x if nariz is not None \
@@ -378,6 +409,14 @@ def aplicar(scene=None, verbose=True):
         elif nome == "CamHeadOn":
             W = W_HEADON * m["d_fus"]
             dz = (m["z_solo"] + OLHO) - pos[2]
+        elif nome == "CamEstibordo":
+            # NAO se deriva de camera nenhuma no .blend (nao existe em nenhum) e
+            # NAO leva enquadramento proprio: copia o de CamPerfil, ja resolvido
+            # nesta mesma passagem. As duas so servem de par se forem a MESMA
+            # foto espelhada - e a comparacao que faz o defeito saltar.
+            cp = rel["cameras"]["CamPerfil"]
+            W = cp["W"]
+            dz = cp["loc"][2] - cp["alvo"][2]
         elif orig is not None:
             W = SENSOR * (orig[0] - Vector(pos)).length / orig[1]
             dz = orig[0].z - pos[2]
@@ -404,7 +443,7 @@ def aplicar(scene=None, verbose=True):
         # ampliadas. Nos angulos em que a fuselagem cabia inteira no quadro,
         # casa-se o PREENCHIMENTO da silhueta em vez de W, e o assunto volta a
         # ocupar o quadro como antes.
-        if orig is not None and verts:
+        if orig is not None and verts and nome != "CamEstibordo":
             g_velho = _ganho(orig[0], pos, res_x, res_y, verts)
             cheio = g_velho * orig[1]
             if cheio <= LIM_SILHUETA:
@@ -442,7 +481,7 @@ def aplicar(scene=None, verbose=True):
 # --------------------------------------------------------------- render
 
 def renderizar(pasta, larg=1600, amostras=96, alvos=None, scene=None):
-    """Aplica o padrao e renderiza os sete angulos em `pasta`."""
+    """Aplica o padrao e renderiza os oito angulos em `pasta`."""
     import os
     scene = scene or bpy.context.scene
     # resolucao ANTES de aplicar: o preenchimento da silhueta depende do aspecto
