@@ -630,6 +630,54 @@ no indigo.
   modelo estavam certos; a foto tambem — mal lida. A matricula e consistente
   com a caixa atual dentro de +-0.4 m. O titulo segue em aberto (abaixo).
 
+### resolvido
+
+1. **A PORTA 4 DO MODELO ESTA CERTA. A RETIFICACAO E QUE ENCOLHE ~3% EM x.**
+   Fechado 2026-08-22 pela segunda medicao. Era: "a porta 4, o titulo e a
+   matricula estao ~1.2..2.0 m atras do real; ou a derivacao dos plugs errou ou
+   o ACAP nao e a PT-TMT". Nenhuma das duas.
+
+   *O ACAP.* `A319_ACAP_airbus.pdf` pagina 74 — figura 2-7-0-991-002 folha 2,
+   **ON A/C A319-100** — IMPRIME as estacoes a partir do nariz: 5.04 / 12.83 /
+   13.68 / 25.81 / 8.16 / 20.56 m, todas cotadas contra a mesma linha de
+   chamada no nariz. `25.81` nao e derivado nem medido em raster: e a cota
+   publicada. A derivacao A320-menos-plugs (29.54 - 3.73) cai no mesmo lugar.
+
+   *A foto.* Medida SEM homografia. As janelas da cabine sao uma regua
+   projetiva sobre a MESMA pele que as marcas: 29 delas ajustam
+   `t(n) = (an+b)/(cn+1)` com rms 2.2 px. Nessa regua as duas portas pax distam
+   **38.77 +- 0.3 passos de janela**. Ancorando a regua nas duas cotas
+   impressas (5.04 e 25.81) o passo sai **0.535 m** — a caverna de 21 in — e
+   entao tudo fecha:
+
+   | marca | foto (regua ACAP) | modelo | delta |
+   |---|---|---|---|
+   | porta 1 / porta 4 | ancoras | 5.04 / 25.81 | — |
+   | porta de carga traseira | 20.41 | 20.56 (ACAP impresso) | **-0.15** |
+   | fileira de janelas | 6.08..23.72, **34** | 6.08..23.59, **35** | pontas +0.00/+0.13 |
+   | matricula PT-TMT | 26.45..28.37 | 26.41..28.21 (ja movida) | +0.04/+0.16 |
+   | titulo AIRBUS A319 | 22.13..23.89 | 23.45..25.20 | **-1.32** |
+   | fronteira da cunha em z 0.69 | 25.02 | 24.19 (regra) | **+0.83** |
+
+   A porta de carga e a checagem independente: ela nao entrou na ancoragem e
+   cai a 0.15 m da sua cota impressa. A regua esta em
+   `conferir_regua_janelas.py`, que reproduz a tabela toda.
+
+   *O que produziu o "1.21 m".* O passo de janela do modelo, **0.515 m**,
+   herdado do master A320neo. Com ele, 38.77 passos viram 19.97 m em vez de
+   20.77, e a porta 4 "anda" 0.8 m. A homografia de `conferir_echarpe.json`
+   reproduz o mesmo encolhimento — le o passo fotografado como 0.5152 m — e
+   leva o erro a ~1.2 m la em x 25.8. Medido contra as cotas impressas, H^-1
+   poe a porta 1 em 4.55, a porta 4 em 24.53 e a fileira em 5.55..22.50:
+
+       x_real ~= 0.313 + 1.039 * x_H
+
+   *Por que a deriva nao denunciou.* BA e BF sao duas retas quase verticais em
+   x 26..32. Casa-las fixa POSICAO e INCLINACAO; quase nao fixa ESCALA em x.
+   O controle estava certo e mesmo assim nao controlava o que falhou. A regua
+   das janelas nao tem esse ponto cego: fica sobre a pele, ao lado das marcas,
+   e o passo e conhecido.
+
 ### em aberto
 
 1. ~~O titulo do A319 ainda precisa de arte~~ — **fechado 2026-08-27**
@@ -674,3 +722,12 @@ no indigo.
    AERONAVE-ALVO (CC-CXE para o BCF, N536LA para o -300F), estab mascarado
    para a inferior, e a questao do tamanho da matricula resolvida antes de
    mover qualquer tinta.
+6. **O PASSO DE JANELA DO A319 (E DO MASTER A320neo) ESTA 3% CURTO.**
+   `janelas_cabine`: 35 janelas, passo 0.515, primeira 6.08 — herdado do
+   master. O `spec_a320ceo` ja registra o conserto E o diagnostico: "fig
+   2-7-0-991-003 (primeira 6.18, ultima 27.58, passo 0.529-0.536 = caverna de
+   21 in) ... Master neo usa 40 @ 0.515 desde 6.08 — pendencia do master, nao
+   corrigida la." A foto do PT-TMT poe a fileira em 6.08..23.72 com **34**
+   janelas: as PONTAS do modelo estao certas (+0.00 / +0.13 m), o que sobra e
+   uma janela: mesmo trecho de casco, com 35 janelas onde a aeronave tem 34.
+   Corrigir aqui e no master; mexe na geometria, entao e rodada com rebuild.

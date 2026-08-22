@@ -106,10 +106,11 @@
   "pitch_m": 0.515,
   "primeira_x": 6.08,
   "n_janelas": 35,
-  "nota": "master A320 usa 40; comecou em 33 (-7 cavernas) mas o render-match contra a foto mostrou a fileira chegando ate ~x24.3, logo antes da echarpe -> 35"
+  "nota": "master A320 usa 40; comecou em 33 (-7 cavernas) mas o render-match contra a foto mostrou a fileira chegando ate ~x24.3, logo antes da echarpe -> 35",
+  "pendencia_2026_08_22": "PASSO 3% CURTO. 0.515 e 35 janelas vieram do master A320neo, que o proprio spec_a320ceo ja marca como pendencia ('fig 2-7-0-991-003 ... passo 0.529-0.536 = caverna de 21 in ... Master neo usa 40 @ 0.515 desde 6.08 - pendencia do master, nao corrigida la'). A foto do PT-TMT, medida com as portas pax nas cotas impressas do ACAP, poe a fileira em 6.08..23.72 com 34 janelas (passo 0.535, medido por conferir_regua_janelas.py): as PONTAS do modelo estao certas (+0.00/+0.13 m), sobra UMA janela. NAO corrigido aqui: mexe na geometria e pede rebuild, no master primeiro."
  },
  "verificacoes": {
-  "render_match_2026-08-20": "camera ortografica casada com a foto ref_sdu_00 (escala 79.7 px/m, rolagem 15.6 graus): silhueta, deriva, echarpe, trem, motor e proporcoes conferem lado a lado; fileira de janelas corrigida 33->35",
+  "render_match_2026-08-20": "camera ortografica casada com a foto ref_sdu_00 (escala 79.7 px/m, rolagem 15.6 graus): silhueta, deriva, echarpe, trem, motor e proporcoes conferem lado a lado; fileira de janelas corrigida 33->35 | 2026-08-22: o '33->35' desta linha e o DEFEITO, nao a validacao — o render-match herdou o passo curto do master (0.515). A foto poe 34 janelas em 6.08..23.72; ver janelas_cabine.pendencia_2026_08_22.",
   "tailstrike_2026-08-20": "Rotacionando sobre o contato do trem principal (16.11, 0, -3.67): 9.75 graus limitado pelo Belly_DrenoAft (x24.1), casco sozinho 12.21. Real ~13.9. MESMA limitacao herdada do master A320 (dreno aft possivelmente baixo/atras demais) — registrada, nao corrigida aqui.",
   "portas_2026-08-20": "rodada de correcao do master aplicada aqui so nas portas; 6 angulos re-renderizados e conferidos (build_a319_fix_portas.py)"
  },
