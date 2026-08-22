@@ -420,6 +420,49 @@ This also settles a question the 787-8 build raised: its photos gave the symbol
 it is the same art with a different split, and "the same height" had been
 measured in z on a mark that crosses θ 29–76°.
 
+### EVERY asymmetric mark is mirrored on starboard — count the mirrors
+
+The hull texture is `(x, θ)` and **the same u serves both flanks**. Seen from
+starboard the skin's `+x` runs to the **left** of frame (the nose is on the
+right), so art painted with x increasing to the right comes out reversed there.
+Registration, type title, lockup, country name, nose art — anything that is not
+its own mirror image — has to be flipped for `lado = +1`.
+
+It is not enough to *intend* the mirror; count how many the pixel actually gets.
+Both failure modes have shipped in this repository:
+
+- **Zero mirrors.** `for lado in (-1, 1)` with one set of triangles and no
+  `espelha`. The 767-300ER, the 767-300F and the 777-300ER all read their
+  registration backwards this way (`YWC-CC`, `AL635N`, `GUM-TP`), for as long as
+  those aircraft existed. In the same files the *lockup* passed `espelha=True`
+  correctly — the two calls sat a dozen lines apart.
+- **Two mirrors.** `refazer_marcas.py` took a mesh **per side**,
+  `("Reg_E", "Reg_D")`, *and* passed `espelha=(lado > 0)`. On the A319 and the
+  A320neo, `Reg_D` is a separate datablock that is **already** the x-mirror of
+  `Reg_E`, so the flip was applied twice and the A320neo read `NMT-TP`. The
+  marks that survived — `MarkAirbusNeo`, `Reg787` — were exactly the ones whose
+  `_D` object *shares* the `_E` mesh datablock.
+
+The rule that removes the question: **state the art once, let the flank decide
+the flip.** One canonical source mesh, `espelha=(lado > 0)`. Never infer the
+mirror from which mesh you were handed.
+
+Two things that follow, and are easy to get wrong on the way past:
+
+- **The italic shear rides along.** `Xc = X + cis*(Y - ay)` is applied before
+  the flip, so mirroring the box also mirrors the slant — which is correct: on
+  the real aircraft the letters lean the same way *in reading order* on both
+  flanks. Do not "fix" it by negating `cis`.
+- **Read the effective colour, not `LiveryTex`.** The shader shows
+  `mix(base, LiveryTex, LiveryFac)`. An erase that zeroes Fac leaves the dead
+  ink sitting in Tex, so a raw dump of the texture shows ghosts and overlaps
+  that no render has. Composite with Fac before you believe what you are
+  looking at — the A321neo looks broken in Tex and is clean on the aeroplane.
+
+The gate now has an eighth angle, `render_estibordo.png`, that is the exact
+mirror of `render_perfil.png`; read the pair side by side. See skill
+`verificacao-visual`.
+
 ### Starboard is mirrored PART BY PART, never as a block
 
 The `_D` mesh in these blends is the whole lockup rotated 180°. Painting from it

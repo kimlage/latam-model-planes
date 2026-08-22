@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Renderiza os SETE angulos canonicos do gate visual, em qualquer aeronave.
+"""Renderiza os OITO angulos canonicos do gate visual, em qualquer aeronave.
 
     /Applications/Blender.app/Contents/MacOS/Blender -b "<aeronave>/<X>.blend" \
         --python render_gate.py -- [largura] [amostras] [alvos...]

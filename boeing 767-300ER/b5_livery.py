@@ -326,16 +326,30 @@ else:
     print("[logo] AVISO: malhas do lockup nao encontradas")
 
 # ============================================ 6. matricula e titulo de tipo
+# ESPELHAMENTO A ESTIBORDO. Vista de estibordo, o +x da pele aponta para a
+# ESQUERDA da tela (o nariz fica a direita). Uma marca de texto pintada com x
+# crescendo para a direita na textura sai portanto ao contrario naquele lado.
+# O lockup acima ja passava espelha=True para lado=+1; a matricula e o titulo
+# de tipo NAO passavam, e a estibordo a matricula lia 'YWC-CC'.
+#
+# Isto nunca podia ter aparecido no gate: as sete cameras canonicas DE ENTAO
+# tinham a componente y negativa (ou estavam no eixo), ou seja olhavam todas
+# para bombordo. O padrao ganhou por isto uma oitava, CamEstibordo.
+# Foi preciso renderizar de proposito um angulo de estibordo para ver.
+# A foto refs/ref_CC-CWY_perfil_mia.jpg e de bombordo e nao podia acusar.
+#
 # matricula BRANCA dentro do indigo: x 44.12..45.92, z 1.044..1.343 (medido)
 tr, bbr = texto_tris("CC-CWY")
-for lado in (-1, 1):
-    marca(encaixa(tr, bbr, 44.12, 45.92, 1.044, 1.343), 44.12, 45.92,
+for lado, esp in ((-1, False), (1, True)):
+    marca(encaixa(tr, bbr, 44.12, 45.92, 1.044, 1.343, espelha=esp), 44.12, 45.92,
           1.044, 1.343, (0xF2, 0xF3, 0xF5), lado, ppm=760)
 # titulo de tipo, escuro sobre branco, obliquo: x 37.41..40.68, z 1.083..1.269
 tt, bbt = texto_tris("BOEING 767-300ER")
-for lado in (-1, 1):
-    marca(encaixa(tt, bbt, 37.41, 40.68, 1.083, 1.269, cis=0.20), 37.41, 40.68,
-          1.083, 1.269, TITULO, lado, ppm=760)
+for lado, esp in ((-1, False), (1, True)):
+    # o italico tambem tem de inclinar para o mesmo lado: espelhar a caixa
+    # inverteria o cisalhamento, entao o sinal acompanha.
+    marca(encaixa(tt, bbt, 37.41, 40.68, 1.083, 1.269, espelha=esp, cis=0.20),
+          37.41, 40.68, 1.083, 1.269, TITULO, lado, ppm=760)
 
 # =================================================== 7. barriga e desgaste
 if tri_all and tri_c:

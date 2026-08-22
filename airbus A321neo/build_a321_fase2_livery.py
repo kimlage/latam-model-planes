@@ -236,6 +236,15 @@ def text_mesh(body, size, name):
 
 # --- registration PS-LBA, white inside the wedge (factory style, press photo)
 NAVY = np.array([0.110, 0.180, 0.388])
+# NOTA (auditoria de espelhamento da frota): os dois lacos `for lado in
+# ("E", "D")` abaixo rasterizam OS MESMOS triangulos nos dois bordos, e
+# raster_side() so troca o SINAL DE THETA -- nunca o x. Vista de estibordo a
+# pele corre para o outro lado, entao a matricula e o titulo saiam ao
+# contrario. Isto NAO e corrigido aqui: quem corrige e
+# build_a321_fase2b_espelho.py, que apaga as duas marcas do lado D e as repinta
+# espelhadas, e e ele que tem de rodar depois deste arquivo. Deixado como esta
+# para que o par de scripts continue descrevendo o que de facto aconteceu; se
+# um dia este arquivo for a unica fonte, o espelho tem de vir para ca.
 for lado in ("E", "D"):
     mo = text_mesh("PS-LBA", 1.0, "RegTmp")
     xs = [v.co.x for v in mo.data.vertices]; ys = [v.co.y for v in mo.data.vertices]

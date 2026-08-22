@@ -1,4 +1,4 @@
-"""Renderiza os SETE angulos canonicos do gate visual do 787-8.
+"""Renderiza os OITO angulos canonicos do gate visual do 787-8.
 
   /Applications/Blender.app/Contents/MacOS/Blender -b "boeing 787-8/B788_LATAM.blend" \
       --python "boeing 787-8/render_canonicos.py" -- [largura] [amostras] [alvos...]

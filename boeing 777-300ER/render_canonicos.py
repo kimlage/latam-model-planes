@@ -1,4 +1,4 @@
-"""Renderiza os SETE angulos canonicos do gate visual do 777-300ER.
+"""Renderiza os OITO angulos canonicos do gate visual do 777-300ER.
 
   /Applications/Blender.app/Contents/MacOS/Blender -b "boeing 777-300ER/B77W_LATAM.blend" \
       --python "boeing 777-300ER/render_canonicos.py" -- [largura] [amostras] [alvos...]
