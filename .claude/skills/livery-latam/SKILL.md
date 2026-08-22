@@ -221,6 +221,24 @@ Anchor the edges by those crossings — fractions of the exposed fin along
 LE/TE/root — and the artwork lands right even if the model's planform taper is
 imperfect (`spec_*.json → fin_bandas_2026-08-20`).
 
+**Check the crossings in an elevation, not in the gate.** A crossing is a length
+measured *along* a fin edge, so it can only be read in an orthographic view of
+the fin, in the same `(x,z)` domain the texture is rasterized in. The seven gate
+cameras are perspective at 90–250 m and CamCauda still foreshortens the root.
+The panel is `render_fin_ortho.py` in the repository root:
+
+```bash
+/Applications/Blender.app/Contents/MacOS/Blender -b "<aircraft>/<MASTER>.blend" \
+    --python render_fin_ortho.py -- 1300 96
+```
+
+It writes `render_fin_ortho.png` beside the master, framed on the `Deriva`
+bounding box, so it re-centres itself when the fin moves. **Re-run it in any
+round that moves the empennage or repaints the fin** — the 2026-08-20 panels
+were shot from a scratchpad, and the ACAP empennage round of 2026-08-21 left
+three of them showing a fin the fleet no longer had, with nothing committed to
+refresh them.
+
 ### Rectifying the photo is what unlocks the measurement
 
 The fin is **flat**, so a photo of it is a homography — and for a telephoto
