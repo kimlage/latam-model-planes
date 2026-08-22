@@ -396,14 +396,56 @@ desenha; o numero abaixo e a mediana de "foto menos regra".
 | 787-8 | -0.12 +-0.16 (n=6) | sem leitura | sem controle | concorda |
 | 787-9 | +0.38 +-0.18 (n=24) | -6.0 +-4.1 (n=10) | sem controle | concorda |
 
+### resolvido
+
+1. **A PORTA 4 DO MODELO ESTA CERTA. A RETIFICACAO E QUE ENCOLHE ~3% EM x.**
+   Fechado 2026-08-22 pela segunda medicao. Era: "a porta 4, o titulo e a
+   matricula estao ~1.2..2.0 m atras do real; ou a derivacao dos plugs errou ou
+   o ACAP nao e a PT-TMT". Nenhuma das duas.
+
+   *O ACAP.* `A319_ACAP_airbus.pdf` pagina 74 — figura 2-7-0-991-002 folha 2,
+   **ON A/C A319-100** — IMPRIME as estacoes a partir do nariz: 5.04 / 12.83 /
+   13.68 / 25.81 / 8.16 / 20.56 m, todas cotadas contra a mesma linha de
+   chamada no nariz. `25.81` nao e derivado nem medido em raster: e a cota
+   publicada. A derivacao A320-menos-plugs (29.54 - 3.73) cai no mesmo lugar.
+
+   *A foto.* Medida SEM homografia. As janelas da cabine sao uma regua
+   projetiva sobre a MESMA pele que as marcas: 29 delas ajustam
+   `t(n) = (an+b)/(cn+1)` com rms 2.2 px. Nessa regua as duas portas pax distam
+   **38.77 +- 0.3 passos de janela**. Ancorando a regua nas duas cotas
+   impressas (5.04 e 25.81) o passo sai **0.535 m** — a caverna de 21 in — e
+   entao tudo fecha:
+
+   | marca | foto (regua ACAP) | modelo | delta |
+   |---|---|---|---|
+   | porta 1 / porta 4 | ancoras | 5.04 / 25.81 | — |
+   | porta de carga traseira | 20.41 | 20.56 (ACAP impresso) | **-0.15** |
+   | fileira de janelas | 6.08..23.72, **34** | 6.08..23.59, **35** | pontas +0.00/+0.13 |
+   | matricula PT-TMT | 26.45..28.37 | 26.41..28.21 (ja movida) | +0.04/+0.16 |
+   | titulo AIRBUS A319 | 22.13..23.89 | 23.45..25.20 | **-1.32** |
+   | fronteira da cunha em z 0.69 | 25.02 | 24.19 (regra) | **+0.83** |
+
+   A porta de carga e a checagem independente: ela nao entrou na ancoragem e
+   cai a 0.15 m da sua cota impressa. A regua esta em
+   `conferir_regua_janelas.py`, que reproduz a tabela toda.
+
+   *O que produziu o "1.21 m".* O passo de janela do modelo, **0.515 m**,
+   herdado do master A320neo. Com ele, 38.77 passos viram 19.97 m em vez de
+   20.77, e a porta 4 "anda" 0.8 m. A homografia de `conferir_echarpe.json`
+   reproduz o mesmo encolhimento — le o passo fotografado como 0.5152 m — e
+   leva o erro a ~1.2 m la em x 25.8. Medido contra as cotas impressas, H^-1
+   poe a porta 1 em 4.55, a porta 4 em 24.53 e a fileira em 5.55..22.50:
+
+       x_real ~= 0.313 + 1.039 * x_H
+
+   *Por que a deriva nao denunciou.* BA e BF sao duas retas quase verticais em
+   x 26..32. Casa-las fixa POSICAO e INCLINACAO; quase nao fixa ESCALA em x.
+   O controle estava certo e mesmo assim nao controlava o que falhou. A regua
+   das janelas nao tem esse ponto cego: fica sobre a pele, ao lado das marcas,
+   e o passo e conhecido.
+
 ### em aberto
 
-1. **A PORTA 4, O TITULO E A MATRICULA DO A319 ESTAO ~1.2..2.0 m ATRAS DO REAL.**
-   Medido na mesma retificacao que valida a deriva a 0.07 m: a porta 4 da PT-TMT
-   esta em x 24.60 (modelo 25.81), a matricula em 25.20..27.00 (modelo
-   26.46..28.44), o titulo em ~21.2..22.7 (modelo 23.45..25.20). O desenho do
-   ACAP concorda com o MODELO na porta, entao ou a derivacao dos plugs errou ou
-   o ACAP nao e a PT-TMT. A cunha nao foi ancorada nessas marcas por isso.
 2. **O `Reg_E` do A319 guarda PT-TMN, nao PT-TMT.** Pintar a matricula por
    `refazer_marcas.py` escreve a matricula do master. Os glifos certos existem
    so como tinta; `fix_matricula_a319.py` os move como tinta.
@@ -416,3 +458,30 @@ desenha; o numero abaixo e a mediana de "foto menos regra".
    e onde a paralaxe morde. Dos onze, so o 787-9 deu n=10.
 5. **As duas fotos de carga (N568LA, CC-CXE) tem a ASA cruzando a cunha.** Os
    numeros acima para o -300F e o -300BCF valem pouco; falta foto util.
+6. **O PASSO DE JANELA DO A319 (E DO MASTER A320neo) ESTA 3% CURTO.**
+   `janelas_cabine`: 35 janelas, passo 0.515, primeira 6.08 — herdado do
+   master. O `spec_a320ceo` ja registra o conserto E o diagnostico: "fig
+   2-7-0-991-003 (primeira 6.18, ultima 27.58, passo 0.529-0.536 = caverna de
+   21 in) ... Master neo usa 40 @ 0.515 desde 6.08 — pendencia do master, nao
+   corrigida la." A foto do PT-TMT poe a fileira em 6.08..23.72 com **34**
+   janelas: as PONTAS do modelo estao certas (+0.00 / +0.13 m), o que sobra e
+   uma janela: mesmo trecho de casco, com 35 janelas onde a aeronave tem 34.
+   Corrigir aqui e no master; mexe na geometria, entao e rodada com rebuild.
+7. **A FRONTEIRA DIANTEIRA DA CUNHA ESTA ~0.8 m A VANTE.** A regra
+   `x >= 23.50 + 1.00*z` foi remedida em 29664d9 pela homografia curta. Na
+   regua das janelas o branco vira indigo em **x 25.02** na altura do cinto
+   (z 0.69) contra os 24.19 que a regra da. A INCLINACAO esta certa — medida
+   1.02 contra 1.00 em tres alturas — e so o intercepto: ~24.32, nao 23.50.
+   `echarpe_lower` esta ancorada em `x - 24.60`, que e literalmente a estacao
+   errada da porta, e por isso tambem anda.
+8. **TODA MEDICAO FEITA PELA HOMOGRAFIA DO A319 HERDA O ENCOLHIMENTO** — a
+   linha do A319 na tabela acima (dianteira +0.33 +-0.40), `echarpe_fronteira`,
+   `echarpe_lower` e `echarpe_rear`. Refazer H antes de usar
+   `conferir_echarpe.py` no A319 outra vez. As outras dez homografias NAO foram
+   conferidas contra cota impressa; nada garante que estejam limpas, e o teste
+   e barato onde houver fileira de janelas visivel.
+9. **A COMPENSACAO DE 6.6 GRAUS EM THETA DA MATRICULA PERDEU A PREMISSA.**
+   `fix_matricula_a319.py` subiu os glifos 6.6 graus acima do que a foto mostra
+   "porque a porta do modelo esta 1.21 m atras da real". Nao esta. Em x a
+   matricula ja cai a +0.04/+0.16 m da foto; a faixa de theta precisa ser
+   remedida direto na foto, sem a compensacao.

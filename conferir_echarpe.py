@@ -33,6 +33,24 @@ cone together are unmistakable) and are CONTROLLED on the fin: on the A319, the
 fin's leading and trailing edges land within 0.07 m and 0.17 m of the model's
 over z 2.5..7.0. Where a control like that is not available the tile says so.
 
+WHAT THE FIN CONTROL DOES NOT CATCH — READ THIS BEFORE TRUSTING A NUMBER BELOW.
+The fin's two edges are near-vertical lines standing at x 26..32. Matching them
+pins the WHERE and the LEAN; it barely pins the SCALE along x, because both
+lines sit at nearly the same station. The A319's homography passes that control
+and is still about **3% short in x**: measured against the stations the A319's
+ACAP prints (5.04 / 20.56 / 25.81 m from the nose, fig 2-7-0-991-002 sheet 2),
+H^-1 puts the forward door at 4.55, the aft door at 24.53 and the cabin window
+row at 5.55..22.50, i.e.
+
+    x_real ~= 0.313 + 1.039 * x_H
+
+That shortfall is what made the A319's aft door look 1.2 m out of place; it is
+not (QA-BACKLOG.md, 2026-08-22, item 1). The cure is a control that lies on the
+SKIN, beside the marks, with a known spacing: the cabin window row. Fit
+t(n) = (a n + b)/(c n + 1) through the photographed windows and read features
+off that, in window pitches — no plane assumption, no scale to get wrong. The
+other ten homographies here have NOT been checked against a printed station.
+
 WHAT THE COLOURS MEAN.
     green   the photograph agrees: white outside the boundary, paint inside
     red     the photograph disagrees
