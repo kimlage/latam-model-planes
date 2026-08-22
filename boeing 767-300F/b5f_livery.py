@@ -492,10 +492,23 @@ print("[bandeira] COLOMBIA escrito abaixo")
 # matricula BRANCA dentro do indigo da cunha (medida em N568LA, mesma
 # aplicacao): x 44.30..45.83, z 0.430..0.802.  Fica mais BAIXA no casco e mais
 # compacta que a de passageiros de CC-CWY (x 44.12..45.92, z 1.044..1.343).
+#
+# ESPELHAMENTO A ESTIBORDO. Vista de estibordo, o +x da pele aponta para a
+# ESQUERDA da tela (o nariz fica a direita).  Uma marca de texto pintada com x
+# crescendo para a direita na textura sai portanto ao contrario naquele lado.
+# O lockup CARGO acima ja passava espelha=True para lado=+1; a matricula e o
+# titulo de tipo NAO passavam, e a estibordo a matricula lia 'AL635N'.
+#
+# Isto nunca podia ter aparecido no gate: as sete cameras canonicas DE ENTAO
+# tinham a componente y negativa (ou estavam no eixo), ou seja olhavam todas
+# para bombordo. O padrao ganhou por isto uma oitava, CamEstibordo.
+# A foto refs/ref_N536LA_mia23a.jpg e de estibordo e mostra as duas marcas
+# lendo normalmente, como tem de ser.
 mr = spec["livery_n536la"]["marcas"]["matricula"]
 tr, bbr = texto_tris(mr["texto"])
-for lado in (-1, 1):
-    marca(encaixa(tr, bbr, mr["x"][0], mr["x"][1], mr["z"][0], mr["z"][1]),
+for lado, esp in ((-1, False), (1, True)):
+    marca(encaixa(tr, bbr, mr["x"][0], mr["x"][1], mr["z"][0], mr["z"][1],
+                  espelha=esp),
           mr["x"][0], mr["x"][1], mr["z"][0], mr["z"][1],
           (0xF2, 0xF3, 0xF5), lado, ppm=760)
 # titulo de tipo: 'BOEING767-300F' lido na foto de N536LA de 2026-06-20.  As
@@ -503,9 +516,11 @@ for lado in (-1, 1):
 # 'BOEING 767-300ER' — anomalia real, nao erro de leitura.
 tt_ = spec["livery_n536la"]["marcas"]["titulo"]
 tt, bbt = texto_tris(tt_["texto"])
-for lado in (-1, 1):
+for lado, esp in ((-1, False), (1, True)):
+    # o italico tambem tem de inclinar para o mesmo lado: espelhar a caixa
+    # inverteria o cisalhamento, entao o sinal acompanha.
     marca(encaixa(tt, bbt, tt_["x"][0], tt_["x"][1], tt_["z"][0], tt_["z"][1],
-                  cis=0.20),
+                  espelha=esp, cis=0.20),
           tt_["x"][0], tt_["x"][1], tt_["z"][0], tt_["z"][1], TITULO, lado, ppm=760)
 
 # =================================================== 7. barriga e desgaste

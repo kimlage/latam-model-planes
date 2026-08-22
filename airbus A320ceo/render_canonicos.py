@@ -1,4 +1,4 @@
-"""Renderiza os SETE angulos canonicos do gate visual do A320ceo.
+"""Renderiza os OITO angulos canonicos do gate visual do A320ceo.
 
   /Applications/Blender.app/Contents/MacOS/Blender -b "airbus A320ceo/A320ceo_LATAM.blend" \
       --python "airbus A320ceo/render_canonicos.py" -- [largura] [amostras] [alvos...]
