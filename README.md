@@ -309,6 +309,42 @@ Three traps worth carrying to any photo measurement:
   projection.** Measuring the rear wedge by "which pixels are indigo" failed
   repeatedly because the fin is also indigo and covers the hull in side view.
 
+### The wedge is painted, not edited
+
+The three lines above are the *rule*. Getting them onto the texture is a second
+problem, and for a long time eleven builders solved it eleven ways — after which
+every script that touched the tail changed the wedge **conditionally**: only
+where the texel was already flat, only away from the crown, only where two rules
+disagreed. Each condition has a complement, and each complement kept old paint:
+a skipped anti-aliased edge texel is a **dotted boundary**, a skipped patch of
+the old wedge is a **detached splinter**, a skipped band at the crown is a
+**rectangular hole**, and `Fac = 0` used as an eraser prints a **white rectangle**
+into the indigo because it restores the hull base whatever was underneath. All
+four were on the aircraft at once in 2026-08-22, on three different types.
+
+`latam_livery_kit` now carries one implementation, the way the doors got one in
+`22500e6`:
+
+- `secoes_do_casco(ob)` reads `z(x, θ) = zc(x) + rz(x)·cos θ` from the **mesh**,
+  in world coordinates, one entry per station. A hand-spliced table is
+  discontinuous where its halves meet, and a discontinuity in `z(x)` is a step
+  in any boundary written as `x ≥ x₀ + k·z` — the 767's splice at `x = 41.0`
+  jumps `Δzc = +0.117 m` and put a **3.0° notch** in its wedge's lower edge.
+- `cobertura_echarpe(...)` rasterizes the rule with supersampling, so the edge is
+  anti-aliased rather than cut.
+- `reparar_echarpe(...)` writes it back **only** where the current effective
+  colour lies on the white→indigo segment: registration glyphs, door rings,
+  windows, grooves and coral are protected by their own colour, not by a
+  geometric guard.
+
+```bash
+/Applications/Blender.app/Contents/MacOS/Blender -b "airbus A321neo/A321neo_LATAM.blend" \
+    --python reparar_echarpe.py -- a321neo --seco     # measure; drop --seco to write
+```
+
+`reparar_echarpe.py` holds every type's rule with its source named, so
+`--seco` is also the audit: the number it prints is the size of the defect.
+
 Those band edges are recorded as **crossings** — fractions of the exposed fin at
 which each edge cuts the LE, the TE and the root — so checking one means
 measuring along an edge, which needs an *elevation* of the fin. None of the seven

@@ -370,6 +370,41 @@ stabilizer × tailcone junction comes out wrong — that was the last defect poi
 out, with the rest of the tail already approved. Check that corner zoomed in,
 always.
 
+### Error 6 — editing the wedge instead of rasterizing it
+
+The one that produced holes, splinters and dotted boundaries on three different
+types at once, and the reason `latam_livery_kit` now carries **one** écharpe
+implementation (`secoes_do_casco`, `cobertura_echarpe`, `reparar_echarpe`) with
+`reparar_echarpe.py` driving it.
+
+Every builder painted its wedge once, and then every later script that touched
+the tail changed it **conditionally**. Each condition has a complement, and the
+complement keeps the old paint:
+
+| condition | complement | what the owner sees |
+|---|---|---|
+| `nova & ~velha & flat_w` (A321) | any anti-aliased edge texel inside the band that changed | **dotted boundary** |
+| `velha & ~nova & flat_i` (A321) | any old-wedge texel that was not exactly flat indigo | **detached splinter** |
+| `np.abs(np.sin(THg)) > 0.10` (787-8) | `\|theta\| <= 5.74°` | **rectangular block across the crown** |
+| `fac[m] = 0` as "erase" (fleet) | the base restored is hull white **whatever was underneath** | **white rectangle inside the indigo** |
+
+So: **paint the wedge absolutely, from its rule, over the whole tail zone, with
+supersampling; never as a difference of two rules and never gated on the texel
+already being flat.** If a repair has to leave marks alone, protect them by
+COLOUR — a texel is safe to write only if its effective colour lies on the
+white→indigo segment — not by a geometric guard like `|sin θ|`. And an erase
+inside the wedge must state its base (`refazer_marcas.Casco._basemap`,
+`base="indigo"` / `"fronteira"`), never write `Fac = 0`.
+
+Underneath all four sits the bridge: the rule lives in `(x, z)` and the texture
+in `(x, θ)`, joined by `z(x, θ) = zc(x) + rz(x)·cos θ`. **Build that table from
+the mesh, in world coordinates, one entry per station.** A hand-spliced table is
+discontinuous at the splice and a discontinuity in `z(x)` is a step in any
+boundary written as `x >= x0 + k·z`: the 767's `zc_rz()` joins the constant
+mid-section to `cauda_estacoes` at `x = 41.0` with `Δzc = +0.117 m` and
+`Δrz = −0.117 m`, and its wedge's lower edge jumps from `|θ| 114.02` to `117.04`
+right there.
+
 ## The paint lives on the DEVELOPED surface — measure in (x, θ), never in (x, z)
 
 This is the single error that had propagated furthest through the fleet. It was

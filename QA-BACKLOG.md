@@ -9,34 +9,125 @@ survives, suspect the instrument before the model**.
 
 ---
 
-## A321ceo and A321neo: a white rectangle inside the indigo wedge
+## The 787 wedges sit aft of the rules they were validated against
 
-Found by the starboard sweep, but it is **not** a mirroring defect — it is on
-both flanks, in mirror-consistent positions, so it was always visible in
-`render_perfil.png` and nobody had looked.
+Found by the fleet-wide tail audit that fixed the wedge rasterizer. Both
+Dreamliners' painted wedge is a rigid translation of the rule in their own
+builders/specs, aft along x:
 
-A block of pure hull white (`0xE6E7EA`) sits **inside** the indigo wedge, just
-above and forward of the registration. Its aft edge is at `x = 38.441` on both
-masters, and it reaches up to `theta ~ 44.5`; it is a clean rectangle, not a
-glyph shape, so it is the footprint of an **erase box that restored the wrong
-base** — white where the wedge is indigo. `refazer_marcas.Casco._basemap`
-warns about exactly this ("a wrong guess punches white letters into the
-indigo, which is exactly what happened once here"); an `apagar` in that region
-needs `base="indigo"`, or `base="fronteira"` if the box straddles the edge.
+| aircraft | forward edge | aft edge | residual after the offset |
+|---|---|---|---|
+| 787-8 CC-BBF | **+0.48 m** | +0.15 m | 3.8% of the flat wedge |
+| 787-9 CC-BGK | **+0.56 m** | +0.65 m | 1.20% |
 
-Both A321s carry it identically, which points at the shared derivation rather
-than at one build. The A319, A320ceo and A320neo are clean — checked by
-looking for hull white enclosed by indigo in the same window.
+Both offsets were fitted by minimising the disagreement between the rule and
+the flat paint over the tail zone (0.01 m steps). With them in place both
+wedges are otherwise clean — smooth boundary, no hole, no splinter — so this is
+a **siting** question, not a rasterization one, and `reparar_echarpe.py` carries
+the offsets explicitly so its repair removes defects without moving the wedge.
 
-What must not be assumed while fixing it: which script left it. The candidates
-that erase in that region are `fix_reg_ghosts.py`, `fix_titulo_a321.py` and the
-`apagar` entries in `refazer_marcas.MARCAS`, and the marks currently in the
-texture came from more than one of them. Measure the rectangle first, then find
-the box whose corners match it — do not repaint over it, or the next erase
-inherits the same wrong base.
+Why it is probably the -9 that is wrong and the -8 that inherited it: the -8's
+texture is a piecewise COLUMN RESAMPLE of the -9's (`build_788_livery.py`,
+"two plug bands removed, 3-zone mapping"), so whatever the -9's wedge is, the
+-8's is that shape pushed through a non-uniform map — which is exactly how two
+different offsets arise from one error. The -9's builder is **not in the
+repository**; only `extract_b789.py` and `nose_art.py` are. The rule quoted in
+`latam_livery_kit`'s own header (`x >= 48.77 + 0.992 z`, `theta <= 117.0 - 5.2
+(x - 48.70)`, `x <= 57.14 + 0.3858 z`) is therefore the only written record, and
+nothing says whether it or the paint is the measurement.
 
-To see it: `python3 verificacao_visual.py "airbus A321ceo"`, side-profile panel,
-just above `PT-MXP`.
+Settling it needs one profile photograph of CC-BGK or CC-BBF with the fin
+trailing edge and the wedge boundary both visible, rectified the way
+`spec_763.livery_cc_cwy.fin_bandas_2026-08-20` describes. Until then **do not
+"correct" one Dreamliner against the other**. Their offsets are not the same
+(0.08 m apart forward, 0.50 m apart aft), and that difference is itself
+evidence: a rigid error would carry across unchanged, a resampled one would not.
+Copying the -9's numbers onto the -8 would erase the only clue there is.
+
+---
+
+## The wedge rasterizer is shared now; the eleven builders are not
+
+`latam_livery_kit.secoes_do_casco` / `cobertura_echarpe` / `reparar_echarpe`
+were added by the tail round and `reparar_echarpe.py` drives them, but **the
+per-aircraft builders were not rewritten to call them**. Each still carries its
+own copy of the (x, z) -> (x, theta) bridge, so re-running any builder puts its
+own defect back. Three specific ones:
+
+- `boeing 767-300ER/b5_livery.py`, `767-300F/b5f_livery.py` and
+  `767-300BCF/b5b_livery.py` still define `zc_rz()` with the splice at
+  **x = 41.0** — the constant mid-section below, `spec_763.cauda_estacoes`
+  above, `dzc = +0.117 m` and `drz = -0.117 m` across one station. Only the
+  -300ER's wedge crosses that station (the freighters' starts at x 41.55), so
+  only the -300ER showed the 3.0-degree step; the splice is in all three.
+- `airbus A321neo/build_a321_fase2_livery.py` and
+  `A321ceo/build_a321ceo_fase2_livery.py` still re-solve the wedge as a
+  DIFFERENCE of two rules gated on `flat_w` / `flat_i`, and still erase with
+  `fac[m] = 0`. The two boxes that punched white into the indigo are
+  `box(36.9, 38.45, 0.95, 1.50)` ("old reg, remapped") and
+  `box(33.70, 37.05, 1.10, 1.55)` ("old type titles").
+- `boeing 787-8/build_788_livery.py` still guards its white-in-wedge refill with
+  `np.abs(np.sin(THg)) > 0.10`, which skips `|theta| <= 5.74` deg.
+
+Rewriting them is not a texture round: their wedge paint comes before every
+mark, so re-running one re-does the registration, the titles, the lockup and
+the door rings, and those went through `refazer_marcas.py` afterwards. The
+honest sequence is to make `refazer_marcas.py` the only thing that paints marks
+and let the builders paint nothing but flat livery — a round of its own.
+
+Also left, deliberately: **seven of the eleven wedge boundaries are still a
+hard binary cut**, painted by `mask -> colour` with no anti-aliasing. Measured
+by `reparar_echarpe.py --seco`, the boundary texels that would change if they
+were anti-aliased are A319 4627, A320ceo 5583, A320neo 4535, 767-300F 2340,
+767-300BCF 2310, 777-300ER 3109, 787-9 3851. It is cosmetic at this scale — one
+texel is 9-18 mm on the hull against 32 mm per rendered pixel at the gate's
+`CamCauda` — and repainting them means re-rendering seven aircraft for a
+change no angle in the gate can resolve. The 777 was already supersampled by
+its own builder; it is where the shared function came from.
+
+---
+
+## Reported as tail defects, measured, and NOT defects
+
+Kept because the same three reports will come back otherwise, and each one was
+a reasonable thing to see.
+
+- **A320neo PT-TMN: "a large white gap in the wedge."** There is none in the
+  paint. The A320neo's wedge mask was differenced against the A320ceo's, which
+  shares its hull, its UV and its texture size: 41776 texels indigo on the ceo
+  and not the neo, 12396 the other way, and **all of it is a rim** — the ceo's
+  aft boundary sits about 0.2 m further aft, and the two forward boundaries
+  differ by one to two texels. Against the neo's own published rule the paint
+  agrees to 1.31%. What the tail render shows is the wedge's real shape seen at
+  `CamCauda`: the forward boundary is `x >= 28.51 + 0.63 z`, which is furthest
+  AFT at the crown, so between the fin fillet and the horizontal stabiliser the
+  hull is genuinely white — and it is white in `ref_PT-TMN_wikimedia.jpg` too.
+- **"The registration is cut by the door frame."** True on all five Airbus and
+  true on the aeroplane. Measured on the textures: the first glyph starts
+  +0.140 m (A319), +0.149 (A320ceo), +0.261 (A320neo), +0.152 (A321ceo) and
+  +0.152 (A321neo) aft of the door leaf's aft edge. The leaf is a 3-D object
+  seated 10 mm proud of the hull (`kit.assentar_na_secao`), so at `CamCauda`'s
+  oblique angle it occludes the first glyph — exactly as the door frame clips
+  the "P" of PT-TMN in the reference photograph. The six Boeings cannot show
+  this at all: their doors are paint, not geometry.
+- **A319: the wedge runs forward over the type title.** Real, and already its
+  own entry below — but the wedge's SHAPE is not the fault. The A319's forward
+  boundary is a quadratic swoosh leaning the opposite way from the A320's
+  (forward at the crown, sweeping aft going down), photo-measured on PT-TMT and
+  confirmed on PR-MBU: `spec_a319.livery_pt_tmt.echarpe_fronteira`. It is
+  type-specific art. Do not straighten it into the A320's line.
+
+The fin sash was audited the same way and is clean fleet-wide. Crossings were
+read off the `FinSashE` texture in the fin's own (x, z) domain, normalised as
+zeta along the fin's own silhouette, root to tip. A320ceo, A320neo, A321ceo and
+A321neo agree to **0.001 zeta** on every crossing (LE 0.184, 0.605, 0.899; TE
+0.315, 0.368, 0.502, 0.803); the three 767s agree to 0.001; the two 787s agree
+to 0.001. Against `spec_a320.cauda_livery.fin_bandas_2026-08-20` the LE
+crossings land within 0.001-0.020 of the declared 0.175 / 0.585 / 0.90. The
+A319 sits up to 0.036 off the family template, which is its fin-root stretch
+(its fin cage bottoms at z 1.55 against the A320's 1.05), not its art. The
+777's single grey mass at the tip and the freighters' shallower wedge are the
+type-specific art `f162f73` established and were left alone.
 
 ---
 
@@ -129,31 +220,6 @@ APR's **top** view gives the nose half-width to 1.3% of the model, after
 normalising by the section the drawing itself draws (3.3% oversize in the top
 view, 11% in the front view — the 767's trap again). This needs one head-on at
 eye level on a light nose.
-
----
-
-## A321ceo / A321neo: the rear écharpe splinter and its dotted boundary
-
-What is left of the old "broken M" entry. The **wordmark half is fixed**: the
-bisection was the forward plug's +4.27 m shifting the texture columns aft of
-its station, cutting the mark into "LATAN" plus an orphan 0.385 m of the "M" at
-x 15.77–16.16. Both A321s were re-rasterized in `(x, θ)` and the orphan station
-now measures **0 indigo texels**.
-
-Still open on both: the rear écharpe carries a **detached indigo splinter** and
-a **dotted lower boundary** where the wedge meets the TE root fairing. Present
-before and after the marks round — it is a wedge-rasterization defect, not a
-brand one.
-
-Worth keeping from the original entry: this was **already visible in the old
-profile render**, which barely changed under the new cameras. It did not hide —
-it was looked at and passed.
-
-Looked at again during the windshield round (2026-08-21) and **not** fixed: the
-splinter and the dotted edge live where the wedge's forward straight line
-`x >= 28.51 + 0.63 z` meets the keel cut `z >= -1.2, |theta| <= 145`, which is
-the echarpe rasteriser, not the nose mask. Fixing it means re-running the wedge
-paint on both A321s, which is a different round from this one.
 
 ---
 

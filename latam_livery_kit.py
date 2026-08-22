@@ -490,3 +490,135 @@ def assentar_na_secao(ob, rx, rzc, rrz, rry, saliencia=0.010, grau=2):
         v.co = Mi @ mathutils.Vector((p[0], p[1], p[2]))
     ob.data.update()
     return float(np.median(t)), float(np.median(t_novo))
+
+
+# ------------------------------------------------------------- rear echarpe
+# A ECHARPE NUNCA FOI RASTERIZADA — ELA VINHA SENDO EDITADA.
+#
+# As portas ganharam uma implementacao unica em 22500e6 (`grade_arco` e as tres
+# funcoes acima). A echarpe traseira nao ganhou: cada um dos onze builders
+# escreveu a sua, e depois do build TODO script que encosta na cauda — remap dos
+# plugs, apagar fantasma, mover matricula, repintar anel — altera a cunha
+# CONDICIONALMENTE:
+#
+#   * `to_indigo = nova & ~velha & flat_w` / `to_white = velha & ~nova & flat_i`
+#     (A321): so pinta o texel que JA e exatamente chapado. Todo texel de borda
+#     anti-serrilhada dentro da faixa que mudou fica de fora — e a FRONTEIRA
+#     PONTILHADA; todo texel da cunha velha que nao era indigo puro fica para
+#     tras — e a LASCA DESTACADA.
+#   * `np.abs(np.sin(THG)) > 0.10` (787-8): o reparo pula |theta| <= 5.74 graus.
+#     A tira de textura velha que sobra na crista e um BURACO RETANGULAR.
+#   * `fac[m] = 0` como "apagar" (A321, A320neo, 787): devolve o branco do casco
+#     INCONDICIONALMENTE. Uma caixa de apagar que cruza a cunha imprime um
+#     RETANGULO BRANCO no indigo. `refazer_marcas.Casco._basemap` e o unico
+#     lugar do repositorio que resolveu isso (base="indigo"/"fronteira") — e
+#     avisa no proprio docstring.
+#
+# Toda condicao tem um complemento, e o complemento fica segurando tinta velha.
+#
+# Por baixo dos tres ha uma quarta coisa: a regra da cunha vive em (x, z) e a
+# textura em (x, theta), e a ponte e a tabela de secoes z(x, theta) = zc(x) +
+# rz(x)*cos(theta) — que cada builder tambem faz do seu jeito. A do 767 e
+# emendada em x = 41.0 (secao constante de um lado, `cauda_estacoes` do outro)
+# sem restricao de continuidade: zc salta +0.117 m e rz -0.117 m NUMA estacao,
+# e a fronteira inferior da cunha da um DEGRAU DE 3.0 GRAUS ali.
+#
+# `secoes_do_casco` le a tabela da MALHA (mundo, uma entrada por estacao, sem
+# emenda). `cobertura_echarpe` rasteriza a regra com supersampling, absoluta.
+# `reparar_echarpe` reescreve so onde a cor efetiva atual esta SOBRE o segmento
+# branco->indigo: glifo, anel, janela e sulco nunca sao tocados.
+
+def secoes_do_casco(ob):
+    """(rx, rzc, rrz, rry) do casco em coordenadas de MUNDO, uma por estacao.
+
+    E a ponte entre a regra da cunha, escrita em (x, z), e a textura, escrita em
+    (x, theta). Tabelas emendadas a mao (uma secao constante colada a uma tabela
+    de cauda numa estacao) sao DESCONTINUAS na emenda, e uma descontinuidade em
+    z(x) e um degrau em qualquer fronteira escrita como x >= x0 + k*z.
+    """
+    import numpy as np
+    M = ob.matrix_world
+    P = np.array([(M @ v.co)[:] for v in ob.data.vertices], float)
+    key = np.round(P[:, 0], 4)
+    rx, rzc, rrz, rry = [], [], [], []
+    for k in np.unique(key):
+        q = P[key == k]
+        if len(q) < 8:
+            continue
+        rx.append(float(k))
+        rzc.append(0.5 * (q[:, 2].max() + q[:, 2].min()))
+        rrz.append(0.5 * (q[:, 2].max() - q[:, 2].min()))
+        rry.append(0.5 * (q[:, 1].max() - q[:, 1].min()))
+    o = np.argsort(rx)
+    return (np.array(rx)[o], np.array(rzc)[o],
+            np.array(rrz)[o], np.array(rry)[o])
+
+
+def cobertura_echarpe(regra, rx, rzc, rrz, x0, L, W, H, ss=3):
+    """Cobertura 0..1 da cunha sobre a grade de texels, com supersampling.
+
+    `regra(X, Z, THdeg) -> bool` e a regra da propria aeronave, em (x, z) e
+    graus a partir da crista. O supersampling e o que troca uma borda em
+    escada por uma borda anti-serrilhada: a cunha e pintada, nao recortada.
+    """
+    import numpy as np
+    acc = np.zeros((H, W), np.float32)
+    for iy in range(ss):
+        th = ((np.arange(H) + (iy + 0.5) / ss) / H - 0.5) * 2 * math.pi
+        ct = np.cos(th)[:, None]
+        Td = np.degrees(np.abs(th))[:, None] * np.ones((1, W))
+        for ix in range(ss):
+            xs = x0 + L * (np.arange(W) + (ix + 0.5) / ss) / W
+            Z = np.interp(xs, rx, rzc)[None, :] + np.interp(xs, rx, rrz)[None, :] * ct
+            X = np.broadcast_to(xs, (H, W))
+            acc += regra(X, Z, Td)
+    return acc / (ss * ss)
+
+
+def decompor_chapado(ef, branco, indigo, tol=0.045):
+    """(t, chapado): posicao no segmento branco->indigo e se o texel esta NELE.
+
+    `chapado` e falso para tudo que e MARCA — glifo da matricula, anel de porta,
+    janela, sulco, titulo, coral. E a unica salvaguarda de que o reparo precisa:
+    nada fora do segmento e reescrito.
+    """
+    import numpy as np
+    b = np.asarray(branco, np.float32)
+    d = np.asarray(indigo, np.float32) - b
+    t = ((ef - b[None, None, :]) * d[None, None, :]).sum(2) / float((d * d).sum())
+    tc = np.clip(t, 0.0, 1.0)
+    resid = np.abs(ef - (b[None, None, :] + d[None, None, :] * tc[..., None])).sum(2)
+    return tc, resid < tol
+
+
+def reparar_echarpe(tex, fac, cov, zona, branco, indigo,
+                    tol=0.045, limiar=0.10, base=None):
+    """Reescreve a echarpe NO LUGAR, a partir da cobertura absoluta `cov`.
+
+    tex/fac: (H, W, >=3) float, as duas imagens do shader; a cor que o
+    espectador ve e mix(base, tex, fac). `zona` e a janela em x (bool (H, W)).
+
+    So sao reescritos os texels que (a) estao na zona, (b) tem cor efetiva SOBRE
+    o segmento branco->indigo, (c) nao encostam em nenhuma marca, e (d)
+    discordam da cobertura por mais que `limiar`. Devolve o numero de texels
+    escritos — que e a medida do defeito.
+    """
+    import numpy as np
+    b = np.asarray(branco if base is None else base, np.float32)
+    ef = b[None, None, :] * (1.0 - fac[..., 0:1]) + tex[..., :3] * fac[..., 0:1]
+    t, chapado = decompor_chapado(ef, b, indigo, tol)
+    marca = ~chapado                       # dilatacao 3x3 em numpy puro:
+    perto = marca.copy()                   # Blender nao traz scipy
+    for dy in (-1, 0, 1):
+        for dx in (-1, 0, 1):
+            perto |= np.roll(np.roll(marca, dy, 0), dx, 1)
+    muda = chapado & zona & ~perto & (np.abs(t - cov) > limiar)
+    novo = b[None, None, :] + (np.asarray(indigo, np.float32) - b)[None, None, :] * cov[..., None]
+    tex[..., :3][muda] = novo[muda]
+    if tex.shape[2] > 3:
+        tex[..., 3][muda] = 1.0
+    for k in range(min(3, fac.shape[2])):
+        fac[..., k][muda] = 1.0
+    if fac.shape[2] > 3:
+        fac[..., 3][muda] = 1.0
+    return int(muda.sum()), muda
