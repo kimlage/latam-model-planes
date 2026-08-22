@@ -7,6 +7,20 @@
 `--seco` (dry) measures and reports without writing anything.
 
 ------------------------------------------------------------------------------
+2026-08-22 — THE RULES THEMSELVES WENT ON TRIAL
+------------------------------------------------------------------------------
+The round below repaired the PAINT against each aeroplane's published RULE. It
+never asked whether the rule was right. Every rule has now been straddled
+against its own registration's photograph: the photograph is rectified onto the
+model's (x, z) by a homography fitted to the hull silhouette, and the skin is
+sampled 0.35 m each side of the boundary the rule draws. Ten of the eleven put
+white outside and paint inside. The A319 did not — its rule leaned the wrong way and reached |theta|
+150 — and the 777's forward boundary sat 0.86 m too far aft. Both are replaced
+here (see `_r_a319` and `_r_77w`), and their `auditoria` flags are gone with
+them. `conferir_echarpe.py` is the test, and it stays runnable.
+
+
+------------------------------------------------------------------------------
 WHY THIS EXISTS
 ------------------------------------------------------------------------------
 The owner looked at the eleven tails and said several were wrong: a white
@@ -73,14 +87,20 @@ import math
 import os
 import sys
 
-import bpy
 import numpy as np
 
 RAIZ = os.path.dirname(os.path.abspath(__file__))
 if RAIZ not in sys.path:
     sys.path.insert(0, RAIZ)
 
-import latam_livery_kit as kit  # noqa: E402
+# The rule table below is DATA, and `conferir_echarpe.py` — which puts those
+# rules on trial against the photographs — has to read it from plain python.
+# So Blender is optional at import time and required only to run the repair.
+try:
+    import bpy
+    import latam_livery_kit as kit
+except ImportError:  # pragma: no cover - outside Blender
+    bpy = kit = None
 
 BRANCO = np.array([0xE6, 0xE7, 0xEA], np.float32) / 255.0   # hull base
 INDIGO = np.array([0x2A, 0x00, 0x88], np.float32) / 255.0
@@ -91,6 +111,20 @@ INDIGO = np.array([0x2A, 0x00, 0x88], np.float32) / 255.0
 #   has drifted from the published rule, the offset is written INTO the rule and
 #   said out loud there.
 # zona: (x0, x1) window the repair is allowed to write in.
+# poupar: (x0, x1, th0, th1) boxes the repair must NOT write in, |theta| in
+#   degrees. The colour test protects marks because a mark is off the
+#   white->indigo segment — but a mark painted in PURE INDIGO on white sits ON
+#   that segment and is therefore invisible to it. The A319's "AIRBUS A319"
+#   title is exactly that, and its art no longer exists in the blend, so it
+#   cannot be repainted if it is lost. Inside the box the old paint stays, so
+#   the box has to be chosen where the OLD and NEW boundaries nearly agree. On
+#   the A319 they cross at z = 1.135 and the title's ink sits at z 1.04..1.21,
+#   astride that crossing: over |theta| 55.5..63.5 the two boundaries are never
+#   more than 0.16 m apart, which is the size of the step left at the box's
+#   edges. Choosing the band by eye instead put a 0.35 m notch in the wedge.
+#   The 777's "BOEING 777-300" is the same case and easier: it sits at
+#   x 55.8..58.7, and BOTH boundaries are aft of x 59.3 at its height, so the
+#   spared box is white either way and leaves no step at all.
 # auditoria: True means "measured clean, do not write" — the entry exists so the
 #   next round can re-measure with one command instead of re-deriving the rule.
 #   `--forcar` overrides it, deliberately and visibly.
@@ -121,14 +155,31 @@ def _r_788(X, Z, T):
 
 
 def _r_a319(X, Z, T):
-    # airbus A319/build_a319_livery.py + spec_a319.livery_pt_tmt.echarpe_fronteira.
-    # The A319's forward boundary is a SWOOSH that leans the OTHER WAY from the
-    # A320's — forward at the crown, sweeping aft going down. Photo-measured on
-    # PT-TMT and confirmed on PR-MBU: it is type-specific art, not a defect.
-    zz = np.clip(Z, -1.05, 2.4)
-    return ((X >= 25.511 - 1.003 * zz + 0.203 * zz * zz) &
-            (X <= 31.30 + 0.10 * Z) &
-            (Z >= -1.05 + 0.26 * (X - 26.9)) & (T <= 150.0))
+    # RE-MEASURED 2026-08-22 on ref_sdu_00.jpg (PT-TMT, CC0), rectified onto the
+    # model's own (x, z) by a homography fitted to the hull silhouette; the fin
+    # is the control, and its leading and trailing edges land within 0.07 m and
+    # 0.17 m of the model's over z 2.5..7.0, so the frame is the model's frame.
+    #
+    # The rule this replaces leaned the WRONG WAY. It read the forward boundary
+    # as a swoosh going FORWARD at the crown and AFT at the keel, and let the
+    # paint down to |theta| <= 150 — nearly the whole circumference. Sampled
+    # straight off the photograph on a 0.25 m grid, the crown is WHITE over the
+    # whole of x 21.5..29 and nothing below z = -0.8 is painted anywhere. The
+    # boundary is a straight line leaning the same way as the rest of the fleet:
+    #
+    #   forward   x >= 23.50 + 1.00*z      z -0.75..+1.25, first paint per row
+    #                                      lands on 0.25 m grid steps exactly
+    #   lower     theta <= 99.2 - 7.887*(x - 24.60)   rms 1.6 deg over 7 rows
+    #   rear      x <= 30.30 + 0.10*z      paint ends 30.0..30.3 at z 1.25..1.75
+    #                                      (was 31.30, never measured)
+    #
+    # Straddling the boundary at +-0.35 m: the published rule scored 4 right and
+    # 8 wrong on the forward edge and 1 right / 6 wrong on the lower one; this
+    # rule scores 9/1 and 2/0, with the rest landing on the door outline or on
+    # the shaded keel where the photograph cannot say.
+    return ((X >= 23.50 + 1.00 * Z) &
+            (T <= np.clip(99.2 - 7.887 * (X - 24.60), 0.0, 180.0)) &
+            (X <= 30.30 + 0.10 * Z))
 
 
 def _r_a320ceo(X, Z, T):
@@ -156,7 +207,28 @@ def _r_77w(X, Z, T):
     # boeing 777-300ER/build_77w_fase2_livery.py — the one builder that already
     # rasterized its wedge absolutely, with supersampling. This module is that
     # mechanism made shared.
-    return ((X >= 59.11 + 1.058 * Z) &
+    #
+    # FORWARD BOUNDARY RE-MEASURED 2026-08-22 on ref_PT-MUG_2022_FRA.jpg, the
+    # same photograph the published rule cites. Sampled on a 0.25 m grid over
+    # z -0.50..+2.50, the first painted column per row is
+    #
+    #     -0.50 -> 57.75   0.00 -> 58.25   1.00 -> 59.50   2.50 -> 60.75
+    #
+    # a straight line of slope 1.00 through x = 58.25 at z = 0 — 0.86 m FORWARD
+    # of the published 59.11. The rectification is controlled on the fin, whose
+    # straight leading and trailing edges land within 0.18 m and 0.18 m of the
+    # model's over z 6..11.5, so the disagreement is the rule's, not the frame's.
+    # Written below parallel to that leading edge (x = 57.996 + 1.0104 z, the
+    # value spec_77w calls "conferido em pixel"), which fits the eight sampled
+    # rows to 0.02 m: the wedge starts 0.25 m aft of the fin's leading edge in x,
+    # 0.18 m perpendicular, where the spec said 0.78 m perpendicular.
+    #
+    # Only the forward boundary moves, and it moves FORWARD, so nothing that was
+    # painted becomes white: the registration and the titles keep their ground.
+    # The lower boundary could not be re-read — PT-MUG's lower flank is in deep
+    # shadow in this frame and the colour test has no opinion there — and the
+    # rear boundary is the fin's own trailing edge. Both are left as published.
+    return ((X >= 58.25 + 1.0104 * Z) &
             (T <= np.clip(108.1 + 1.03 * (X - 60.0), 0.0, 180.0)) &
             (X <= 68.254 + 0.396 * Z))
 
@@ -186,8 +258,10 @@ FROTA = {
                     nota="crown block left by |sin theta| > 0.10"),
     # --- audited with --seco and found clean; kept here so the next round can
     #     re-measure them with one command instead of re-deriving the rules
-    "a319":    dict(regra=_r_a319, zona=(20.0, 34.2), auditoria=True,
-                    nota="swoosh boundary, type-specific; 4627 texels of hard cut"),
+    "a319":    dict(regra=_r_a319, zona=(20.0, 34.2),
+                    poupar=[(23.35, 25.00, 55.5, 63.5)],
+                    nota="rule re-measured: the swoosh leaned the wrong way and "
+                         "the paint reached |theta| 150"),
     "a320ceo": dict(regra=_r_a320ceo, zona=(26.0, 38.0), auditoria=True,
                     nota="clean; 5583 texels of hard cut"),
     "a320neo": dict(regra=_r_a320neo, zona=(26.0, 38.0), auditoria=True,
@@ -196,8 +270,9 @@ FROTA = {
                     nota="clean; freighter wedge is smaller ON PURPOSE"),
     "b763bcf": dict(regra=_r_763carga, zona=(38.0, 55.5), auditoria=True,
                     nota="clean; freighter wedge is smaller ON PURPOSE"),
-    "b77w":    dict(regra=_r_77w, zona=(50.0, 74.5), auditoria=True,
-                    nota="clean; its builder already supersampled"),
+    "b77w":    dict(regra=_r_77w, zona=(50.0, 74.5),
+                    poupar=[(55.20, 59.00, 62.0, 81.0)],
+                    nota="forward boundary re-measured: 0.86 m too far aft"),
     "b789":    dict(regra=_r_789, zona=(44.0, 63.5), auditoria=True,
                     nota="clean once its own offset is applied"),
 }
@@ -226,6 +301,8 @@ def mapa_uv(ob):
 
 
 def main():
+    if bpy is None:
+        sys.exit("reparar_echarpe repairs paint; run it inside Blender")
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
     tag = argv[0]
     cfg = FROTA[tag]
@@ -249,10 +326,16 @@ def main():
     cov = kit.cobertura_echarpe(cfg["regra"], rx, rzc, rrz, x0, L, W, H, ss=3)
     x = x0 + L * (np.arange(W) + 0.5) / W
     za, zb = cfg["zona"]
-    zona = np.broadcast_to(((x >= za) & (x <= zb))[None, :], (H, W))
+    zona = np.array(np.broadcast_to(((x >= za) & (x <= zb))[None, :], (H, W)))
+    th = ((np.arange(H) + 0.5) / H - 0.5) * 2 * math.pi
+    thg = np.degrees(np.abs(th))[:, None]
+    for px0, px1, pt0, pt1 in cfg.get("poupar", []):
+        zona &= ~(((x >= px0) & (x <= px1))[None, :] &
+                  ((thg >= pt0) & (thg <= pt1)))
+        print("[echarpe] poupado x %.2f..%.2f  |theta| %.0f..%.0f"
+              % (px0, px1, pt0, pt1))
 
     n, muda = kit.reparar_echarpe(tex, fac, cov, zona, BRANCO, INDIGO)
-    th = ((np.arange(H) + 0.5) / H - 0.5) * 2 * math.pi
     if n:
         ys, xs = np.nonzero(muda)
         print("[echarpe] %d texels rewritten  x %.3f..%.3f  |theta| %.1f..%.1f"

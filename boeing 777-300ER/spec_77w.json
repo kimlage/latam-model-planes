@@ -593,10 +593,12 @@
   "metodo": "Deriva: retificacao afim por TRES retas (BA reto, BF, corda da ponta) medidas na silhueta contra o ceu, escala pinada pela corda da ponta; as duas fotos concordam dentro de 0.2-0.4 m. Casco: quadro local do casco (crista+quilha = eixo, 6.20 m = escala z), escala x pinada em PORTA 5 (x=59.66 do APR) e na ponta da cauda; validado — o centro medido da porta 5 caiu em 59.67. Elevacao da camera na foto FRA: +16.5 graus (resolvida pela linha de janelas em z=+0.55), usada para converter u da silhueta em theta.",
   "fuselagem": "branca #E6E7EA; SEM cheatline; cunha indigo so na traseira",
   "cunha_indigo": {
-   "dianteira": "x >= 59.11 + 1.058*z   (rms 0.21 m, 49 colunas; paralela ao BA reto da deriva, 0.78 m perpendicular atras dele)",
+   "dianteira": "x >= 58.25 + 1.0104*z — RE-MEDIDA 2026-08-22 na propria ref_PT-MUG_2022_FRA.jpg. Amostrando a pele numa grade de 0.25 m, a primeira coluna pintada por linha da -0.50 -> 57.75, 0.00 -> 58.25, 1.00 -> 59.50, 2.50 -> 60.75: uma reta de inclinacao 1.00 passando por 58.25 em z=0, ou seja 0.86 m A VANTE do 59.11 + 1.058z anterior. Escrita paralela ao BA reto da deriva (57.996 + 1.0104z, o valor 'conferido em pixel' deste mesmo spec), o que ajusta as oito linhas amostradas a 0.02 m.",
    "inferior": "theta <= 108.1 + 1.03*(x-60) graus desde a crista (rms 4.1 graus, 179 colunas)",
    "traseira": "x <= 68.254 + 0.396*z  (a propria linha do BF da deriva; atras disso a carenagem do BF e o cone ficam CLAROS)",
-   "nota": "a cunha engole a PORTA 5 (centro x=59.66): a fronteira dianteira passa logo a vante dela"
+   "nota": "a cunha engole a PORTA 5 (centro x=59.66): a fronteira dianteira passa logo a vante dela",
+   "nota_dianteira_2026_08_22": "A retificacao e CONTROLADA na deriva: o BA e o BF da foto caem a 0.18 m dos do modelo em z 6..11.5, entao a discordancia de 0.86 m e da regra e nao do referencial. Em distancia perpendicular a cunha comeca 0.18 m atras do BA, onde o texto anterior dizia 0.78 m. Repintada por reparar_echarpe.py (31762 texels); a fronteira so anda PARA A FRENTE, entao nada que era indigo virou branco e a matricula e os titulos ficaram onde estavam.",
+   "nota_inferior_2026_08_22": "A fronteira INFERIOR nao pode ser relida nesta foto: o flanco baixo da PT-MUG esta em sombra profunda e o teste de cor nao tem opiniao la. Mantida como publicada (108.1 + 1.03*(x-60)); a tinta chega pelo menos a z = -0.50 em x = 60, o que e compativel."
   },
   "matricula": "PT-MUG BRANCA dentro do indigo, x 60.64..62.37 (1.73 m), altura ~0.55 m, topo z~1.35",
   "titulo_tipo": "'BOEING 777-300' INDIGO sobre branco, x 55.84..58.55 (2.70 m), z 0.72..1.17, logo acima da linha de janelas e a vante da cunha",

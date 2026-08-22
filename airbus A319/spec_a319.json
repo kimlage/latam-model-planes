@@ -113,20 +113,22 @@
  },
  "livery_pt_tmt": {
   "fonte": "fotogrametria ref_sdu_00.jpg (perfil, CC0, 2023-09-11): transform de similaridade ancorada em nariz + TE da deriva (ACAP); leitura da fronteira em imagem RETIFICADA para o plano (x,z) com grade metrica (insp_wedge_rect2.png), regua local = porta 4 do ACAP; confirmacao da forma na foto do PR-MBU (ref_sdu_04)",
-  "echarpe_fronteira": "CURVA (swoosh), NAO reta, e com inclinacao OPOSTA a do A320/PT-TMN: adiante na crista, varrendo para TRAS ao descer. Quadratica x_b(z) = 25.511 - 1.003*z + 0.203*z^2 ajustada aos pontos (2.10,24.25) (1.00,24.85) (0.00,25.45) (-0.70,26.10) (-1.00,26.90); clamp z -1.05..2.4",
-  "echarpe_lower": "z >= -1.05 + 0.26*(x-26.9) (linha baixa subindo para o tailcone) e |theta| <= 150 (quilha branca)",
-  "echarpe_rear": "x <= 31.30 + 0.10*z (aresta da carenagem da raiz do TE da deriva); tailcone branco, anel APU metalico x 33.05-33.45",
+  "echarpe_fronteira": "x >= 23.50 + 1.00*z  — RETA, e leaning the SAME way as the rest of the fleet (aft as z rises). RE-MEDIDA 2026-08-22 na ref_sdu_00.jpg (PT-TMT, CC0), retificada para o (x,z) do proprio modelo por homografia ajustada a silhueta do casco; o CONTROLE e a deriva, cujo BA e BF caem a 0.07 m e 0.17 m dos do modelo em z 2.5..7.0. Amostrando a foto numa grade de 0.25 m, o primeiro texel pintado por linha cai exatamente nos passos da grade de z -0.75 a +1.25. SUBSTITUI o swoosh 25.511 - 1.003z + 0.203z^2, que inclinava para o lado ERRADO (a vante na crista, a re na quilha).",
+  "echarpe_lower": "theta <= 99.2 - 7.887*(x - 24.60) graus a partir da crista (rms 1.6 graus, 7 estacoes limpas em x 22.9..26.4). SUBSTITUI 'z >= -1.05 + 0.26*(x-26.9) e |theta| <= 150': na foto NADA abaixo de z = -0.80 esta pintado, em nenhuma estacao, e a crista e BRANCA em todo o trecho x 21.5..29.",
+  "echarpe_rear": "x <= 30.30 + 0.10*z — a tinta acaba em x 30.0..30.3 em z 1.25..1.75 na foto; o 31.30 anterior nunca foi medido. A carenagem da raiz do BF da deriva cobre boa parte desse trecho, entao a incerteza aqui e +-0.3 m.",
   "porta4": "a folha SEGUE a fronteira (parte baixa branca — confirmado no PR-MBU); contorno branco 0.058 m pintado por cima",
-  "matricula": "PT-TMT BRANCA dentro do indigo, x 26.45-28.45, z 0.22-0.66 (altura 0.44); glifos do mesh Reg oficial do master reombinados P,T,-,T,M,T",
+  "matricula": "PT-TMT BRANCA dentro do indigo. MOVIDA 2026-08-22: os glifos foram reamostrados de x 26.456..28.443 / |theta| 80.3..104.9 (razao 3.1) para x 26.41..28.21 / |theta| 56.5..67.7 (razao 5.2, a da foto), por 'airbus A319/fix_matricula_a319.py'. A caixa e ancorada na porta 4 (centro + 0.60 .. + 2.40 m), como a foto a da; a faixa de theta esta 6.6 graus ACIMA da foto porque a porta do modelo esta 1.21 m atras da real e leva a matricula para onde a fronteira inferior ja subiu.",
   "titulo": "'AIRBUS A319' indigo sobre branco, logo acima da fronteira, x 23.45-25.20, z 1.04-1.21; glifos swirl+AIRBUS+A+3 do SVG oficial airbus_a320neo_logo.svg; '1' e '9' reconstruidos ('1' = stem do I; '9' = anel + haste) (DESVIO documentado: nao existe SVG oficial 'A319' no Commons)",
   "hstab": "extradorso INDIGO como no PT-TMN atual (foto PT-TMT confirma topo escuro), intradorso branco",
   "fence": "outboard indigo com banda coral diagonal; inboard branco/cinza (foto ref_sdu_01)",
   "lockup": "LATAM + simbolo coral: MESMA posicao do A320 (fuselagem dianteira identica): E x5.7-11.9, D idem espelhado, barriga x5.9",
-  "weathering": "PT-TMT e airframe 2004: sujeira moderada — leque do trem do nariz, escorridos dos drenos, grime portas do trem (fac 0.15-0.35)"
+  "weathering": "PT-TMT e airframe 2004: sujeira moderada — leque do trem do nariz, escorridos dos drenos, grime portas do trem (fac 0.15-0.35)",
+  "echarpe_teste_2026_08_22": "TESTE DE ESTRADO (straddle): a pele e amostrada 0.35 m de cada lado da fronteira que a regra desenha, e 7 graus de cada lado da inferior. A regra publicada acertava 4 e errava 8 na dianteira, 1 e 6 na inferior; a nova acerta 9 e erra 1, e 2 e 0 — o resto cai no contorno da porta ou na quilha em sombra, onde a foto nao tem opiniao.",
+  "achado_geometria_2026_08_22": "A PORTA 4, O TITULO E A MATRICULA DO MODELO ESTAO ~1.2..2.0 m ATRAS DO QUE A FOTO MOSTRA. Medido na mesma retificacao que valida a deriva a 0.07 m: a porta 4 da PT-TMT esta em x 24.60 (modelo 25.81), a matricula em x 25.20..27.00 (modelo 26.46..28.44) e o titulo em x ~21.2..22.7 (modelo 23.45..25.20). A cunha NAO foi ancorada nessas marcas justamente por isso; foi ancorada no casco e na deriva. Corrigir as marcas e outra rodada."
  },
  "ventre": "componentes do spec_a320 ventre_real com shifts: zona nariz (DME1/ATC/TCAS/dreno fwd) mantida; zona carenagem (ram-air/packs/DME2/placas RA) -1.60; zona traseira (VHF2/beacon inf/dreno aft/outflow/APU) -3.73 com ajuste para nao colidir com a carenagem",
  "texturas": {
-  "LiveryTex+LiveryFac": "regeneradas 4096x1024 (x,theta), comprimento_uv=34.2, supersample 2x",
+  "LiveryTex+LiveryFac": "regeneradas 4096x1024 (x,theta), comprimento_uv=34.2, supersample 2x Cunha traseira repintada 2026-08-22 por reparar_echarpe.py (401243 texels).",
   "NoseMask": "reamostrada do master (nariz identico em metros; so muda a escala u)",
   "FinSashE/D": "REGENERADAS 2026-08-20 na planform propria do A319 a partir do template medido em foto (fin_bandas_2026-08-20); nao sao mais as texturas do master reutilizadas",
   "PanelBump": "regenerada: juncoes circunferenciais nas cavernas novas + lap joints"

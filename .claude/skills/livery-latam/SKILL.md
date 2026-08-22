@@ -370,6 +370,51 @@ stabilizer × tailcone junction comes out wrong — that was the last defect poi
 out, with the rest of the tail already approved. Check that corner zoomed in,
 always.
 
+### Error 7 — auditing the paint against the rule and calling it verified
+
+The subtlest one, and it survived a whole adversarial round. `reparar_echarpe`
+makes the paint agree with the rule the type publishes. An audit that measures
+that agreement — "against the neo's own published rule the paint agrees to
+1.31%" — has verified **internal consistency** and nothing else. It has not
+asked whether the rule is the aeroplane.
+
+Ask the other question with `conferir_echarpe.py`. It rectifies the
+registration's photograph onto the model's own `(x, z)` and samples the skin
+crossing the boundary the rule draws: white outside, paint inside, or the rule
+is wrong. Nothing is fitted; the answer is a count.
+
+Two things make it trustworthy, and both are worth copying into any
+photogrammetry here:
+
+* **Control the rectification on something the model and the photograph share
+  and that is NOT what you are measuring.** The fin is it: it lives in the
+  `y = 0` plane, so no parallax, and its straight leading and trailing edges are
+  unmistakable. On the A319 they land within 0.04 m and 0.06 m; on the 777
+  within 0.18 m. Without that control a fit to the hull silhouette alone is
+  **degenerate in x** — the mid-fuselage is a cylinder and the tail-cone tip
+  hides under the stabiliser, and the first fit here took the stabiliser tip for
+  the tail cone and put the A319's aft door two metres out.
+* **Never read a curved 3-D boundary off an oblique frame without saying what
+  the obliquity costs.** Rectifying onto `y = 0` maps a point at true theta to
+  `z = zc + rz·cos(theta − phi)`, where phi is the camera's elevation above the
+  fuselage's horizontal plane: every theta you read is off by phi. A feature at
+  a KNOWN theta — the cabin window row — is how you measure phi, and if you
+  cannot measure it, say the lower boundary is unread rather than guessing.
+
+What it found on 2026-08-22: nine of eleven rules put white outside and paint
+inside. The A319's forward boundary leaned the **wrong way** — forward at the
+crown, aft at the keel — and let the paint down to `|theta| <= 150`, nearly the
+whole circumference; the photograph gives `x >= 23.50 + 1.00 z` and
+`theta <= 99.2 − 7.887 (x − 24.60)`, with the crown white throughout and nothing
+below `z = −0.80` painted anywhere. The 777's started 0.86 m too far aft. Both
+had been passed by the previous round as "type-specific".
+
+**A mark painted in flat indigo on white hull is invisible to the colour guard**
+of Error 6, because it lies exactly ON the white→indigo segment. Type titles are
+that, and repainting a wedge erases them. `reparar_echarpe` takes `poupar`
+boxes for them — choose the box where the OLD and NEW boundaries nearly agree,
+or the box's own edges become a notch in the paint.
+
 ### Error 6 — editing the wedge instead of rasterizing it
 
 The one that produced holes, splinters and dotted boundaries on three different

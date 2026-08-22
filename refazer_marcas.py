@@ -513,6 +513,11 @@ MARCAS = {
         # type title: the source art no longer exists in the blend (only
         # "AIRBUS A3" survived; the wedge was painted over the rest), so it is
         # left alone and reported instead of being moved half-complete.
+        #
+        # NOTE 2026-08-22: the A319's `Reg_E` mesh does NOT hold PT-TMT — it
+        # still holds the master A320neo's PT-TMN, which is why the registration
+        # cannot be repainted from art here. The 2026-08-22 wedge round moves the
+        # painted glyphs instead; see `airbus A319/fix_matricula_a319.py`.
     ],
     "a320ceo": [
         dict(op="apagar", x=(5.62, 6.125), th=(35, 62), base="branco",

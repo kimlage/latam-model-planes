@@ -374,3 +374,45 @@ The two bullets above were crossed in the first version of this entry, which is
 worth a moment: whoever picks this up would grep the A320neo file for "all in",
 find nothing, and lose trust in the whole entry. A peer session caught it by
 running the grep instead of reading the prose.
+
+## 2026-08-22 — a écharpe traseira posta em julgamento contra a foto
+
+O que a rodada de `d981dd8` mediu foi a TINTA contra a REGRA. Esta mediu a regra
+contra a aeronave. `conferir_echarpe.py` retifica a foto da matricula para o
+(x, z) do proprio modelo e amostra a pele atravessando a fronteira que a regra
+desenha; o numero abaixo e a mediana de "foto menos regra".
+
+| tipo | dianteira (m) | inferior (graus) | controle na deriva | veredito |
+|---|---|---|---|---|
+| A319 | +0.33 +-0.40 (n=15) | +18.5 (n=2) | BA/BF a 0.04/0.06 m | **corrigida** — a regra antiga inclinava ao contrario e ia a \|theta\| 150 |
+| A320ceo | +0.65 +-0.19 (n=14) | +4.5 (n=2) | sem controle | dentro da resolucao; nao mexida |
+| A320neo | +0.70 +-0.07 (n=8) | +19.5 (n=3) | sem controle | idem |
+| A321ceo | +0.12 +-0.05 (n=18) | -1.5 (n=3) | sem controle | concorda |
+| A321neo | +0.78 +-0.07 (n=22) | -7.0 (n=4) | sem controle | dentro da resolucao; nao mexida |
+| 767-300ER | -0.53 +-0.05 (n=9) | sem leitura | sem controle | idem |
+| 767-300F | -0.48 +-0.06 (n=4) | +13.0 (n=2) | sem controle | asa cruza a cunha na foto |
+| 767-300BCF | +1.30 +-0.06 (n=4) | -10.5 (n=1) | sem controle | asa cruza a cunha na foto |
+| 777-300ER | -0.86 (grade 0.25 m, 8 linhas) | sem leitura | BA/BF a 0.18/0.18 m | **corrigida** — comecava 0.86 m atras demais |
+| 787-8 | -0.12 +-0.16 (n=6) | sem leitura | sem controle | concorda |
+| 787-9 | +0.38 +-0.18 (n=24) | -6.0 +-4.1 (n=10) | sem controle | concorda |
+
+### em aberto
+
+1. **A PORTA 4, O TITULO E A MATRICULA DO A319 ESTAO ~1.2..2.0 m ATRAS DO REAL.**
+   Medido na mesma retificacao que valida a deriva a 0.07 m: a porta 4 da PT-TMT
+   esta em x 24.60 (modelo 25.81), a matricula em 25.20..27.00 (modelo
+   26.46..28.44), o titulo em ~21.2..22.7 (modelo 23.45..25.20). O desenho do
+   ACAP concorda com o MODELO na porta, entao ou a derivacao dos plugs errou ou
+   o ACAP nao e a PT-TMT. A cunha nao foi ancorada nessas marcas por isso.
+2. **O `Reg_E` do A319 guarda PT-TMN, nao PT-TMT.** Pintar a matricula por
+   `refazer_marcas.py` escreve a matricula do master. Os glifos certos existem
+   so como tinta; `fix_matricula_a319.py` os move como tinta.
+3. **Marca indigo sobre branco e invisivel ao teste de cor** de
+   `reparar_echarpe`: ela esta SOBRE o segmento branco->indigo. Os titulos do
+   A319 e do 777 so sobreviveram porque a regra ganhou caixas `poupar`. Toda
+   marca chapada de indigo precisa de uma.
+4. **As fronteiras INFERIORES quase nao puderam ser lidas**: o flanco baixo esta
+   em sombra em quase todas as fotos e o ventre so aparece em vista obliqua, que
+   e onde a paralaxe morde. Dos onze, so o 787-9 deu n=10.
+5. **As duas fotos de carga (N568LA, CC-CXE) tem a ASA cruzando a cunha.** Os
+   numeros acima para o -300F e o -300BCF valem pouco; falta foto util.
