@@ -1,0 +1,147 @@
+{
+  "frame": {
+    "origin_lat": -21.8818417,
+    "origin_lon": -47.9039639,
+    "origin_desc": "published threshold of RWY 02, SDSC",
+    "datum_m_amsl": 807.0,
+    "datum_desc": "z = 0 at 807.0 m AMSL (published SDSC aerodrome elevation, 2648 ft)",
+    "axes": "x=East, y=North, z=Up; metres; WGS84 local ENU tangent frame",
+    "note": "z already contains the Earth-curvature drop: a point 60 km away sits ~282 m lower than a flat-plane approximation would put it. On a plateau with no relief this drop IS the horizon."
+  },
+  "dem": {
+    "primary": "Copernicus DEM GLO-30 (WorldDEM-30), 1 arcsec, EGM2008 orthometric",
+    "control": "SRTM v3 1 arcsec (NASA/USGS), EGM96 orthometric"
+  },
+  "grids": {
+    "terrain_sdsc_near_30m": {
+      "file": "terrain_sdsc_near_30m.npy",
+      "dtype": "float32",
+      "shape": [
+        1001,
+        1001
+      ],
+      "step_m": 30.0,
+      "x_min_m": -15000.0,
+      "x_max_m": 15000.0,
+      "y_min_m": -15000.0,
+      "y_max_m": 15000.0,
+      "row_order": "row 0 = y_min (south); column 0 = x_min (west)",
+      "z_min_m": -308.05133056640625,
+      "z_max_m": 109.75199127197266,
+      "z_units": "metres above the 807 m datum",
+      "lat_range": [
+        -22.017290156411345,
+        -21.746323269883458
+      ],
+      "lon_range": [
+        -48.04922748261032,
+        -47.75870590166214
+      ],
+      "nan_nodes": 0,
+      "png": {
+        "file": "terrain_sdsc_near_30m.png",
+        "bitdepth": 16,
+        "decode": "z_m = png/65535 * (z_max_png - z_min_png) + z_min_png",
+        "z_min_png": -308.05133056640625,
+        "z_max_png": 109.75199127197266,
+        "row_order": "PNG row 0 = y_max (north), i.e. flipped vs the .npy"
+      }
+    },
+    "terrain_sdsc_60m": {
+      "file": "terrain_sdsc_60m.npy",
+      "dtype": "float32",
+      "shape": [
+        1668,
+        1668
+      ],
+      "step_m": 60.0,
+      "x_min_m": -50000.0,
+      "x_max_m": 50020.0,
+      "y_min_m": -50000.0,
+      "y_max_m": 50020.0,
+      "row_order": "row 0 = y_min (south); column 0 = x_min (west)",
+      "z_min_m": -640.066162109375,
+      "z_max_m": 165.2830047607422,
+      "z_units": "metres above the 807 m datum",
+      "lat_range": [
+        -22.33333493269081,
+        -21.429424901570812
+      ],
+      "lon_range": [
+        -48.38926715829956,
+        -47.4184700326606
+      ],
+      "nan_nodes": 0,
+      "png": {
+        "file": "terrain_sdsc_60m.png",
+        "bitdepth": 16,
+        "decode": "z_m = png/65535 * (z_max_png - z_min_png) + z_min_png",
+        "z_min_png": -640.066162109375,
+        "z_max_png": 165.2830047607422,
+        "row_order": "PNG row 0 = y_max (north), i.e. flipped vs the .npy"
+      }
+    },
+    "terrain_sdsc_far_180m": {
+      "file": "terrain_sdsc_far_180m.npy",
+      "dtype": "float32",
+      "shape": [
+        1334,
+        1334
+      ],
+      "step_m": 180.0,
+      "x_min_m": -120000.0,
+      "x_max_m": 119940.0,
+      "y_min_m": -120000.0,
+      "y_max_m": 119940.0,
+      "row_order": "row 0 = y_min (south); column 0 = x_min (west)",
+      "z_min_m": -2586.262451171875,
+      "z_max_m": 163.45816040039062,
+      "z_units": "metres above the 807 m datum",
+      "lat_range": [
+        -22.96548377594704,
+        -20.794539735558295
+      ],
+      "lon_range": [
+        -49.074065610459435,
+        -46.73448542819112
+      ],
+      "nan_nodes": 0,
+      "png": {
+        "file": "terrain_sdsc_far_180m.png",
+        "bitdepth": 16,
+        "decode": "z_m = png/65535 * (z_max_png - z_min_png) + z_min_png",
+        "z_min_png": -2586.262451171875,
+        "z_max_png": 163.45816040039062,
+        "row_order": "PNG row 0 = y_max (north), i.e. flipped vs the .npy"
+      }
+    }
+  },
+  "reference_points_enu": {
+    "THR02": {
+      "x_m": -0.0,
+      "y_m": -0.0,
+      "z_m": -2.33,
+      "lat": -21.8818417,
+      "lon": -47.9039639,
+      "hdg_true": 1.02,
+      "source": "AISWEB/ROTAER declared distances + SDSC IAC"
+    },
+    "THR20": {
+      "x_m": 29.01,
+      "y_m": 1619.92,
+      "z_m": -12.39,
+      "lat": -21.8672139,
+      "lon": -47.9036833,
+      "hdg_true": 181.02,
+      "source": "AISWEB/ROTAER declared distances + SDSC IAC"
+    },
+    "ARP": {
+      "x_m": 65.21,
+      "y_m": 603.85,
+      "z_m": 0.11,
+      "lat": -21.876389,
+      "lon": -47.903333,
+      "source": "ROTAER 21 52 35S/047 54 12W (whole-second precision)"
+    }
+  }
+}

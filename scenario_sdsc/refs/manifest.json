@@ -1,0 +1,175 @@
+{
+ "schema": "latam-refs/1",
+ "subject": "scenario_sdsc",
+ "policy": "Reference photographs are cited here, never committed. They are CC BY / CC BY-SA / GFDL works: share-alike conflicts with the CC BY 4.0 this project's assets ship under, and CC BY would require carrying the credit inside the file. This manifest records URL, author, licence and date for every one of them so the survey can be reproduced. Re-download them with `python3 refs_fetch.py scenario_sdsc` from the repository root; check the rule is holding with `python3 refs_fetch.py --verificar`. See NOTICE.md and sdsc_references.md.",
+ "photos": [
+  {
+   "file": "refs/sdsc_field_from_sp318_2013.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/d/db/Aeroporto_de_S%C3%A3o_Carlos_visto_da_Rod._Engenheiro_Thales_de_Lorena_Peixoto_J%C3%BAnior-SP-318._O_Aeroporto_Estadual_de_S%C3%A3o_Carlos_-_M%C3%A1rio_Pereira_Lopes_foi_constru%C3%ADdo_na_d%C3%A9cada_de_1970%2C_pela_Companhia_Br_-_panoramio.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Aeroporto_de_S%C3%A3o_Carlos_visto_da_Rod._Engenheiro_Thales_de_Lorena_Peixoto_J%C3%BAnior-SP-318._O_Aeroporto_Estadual_de_S%C3%A3o_Carlos_-_M%C3%A1rio_Pereira_Lopes_foi_constru%C3%ADdo_na_d%C3%A9cada_de_1970,_pela_Companhia_Br_-_panoramio.jpg",
+   "author": "MARCO AURÉLIO ESPARZ",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "date": "2013-12-12",
+   "resolution": "4000x3000",
+   "gps": [-21.871416, -47.908630],
+   "notes": "The aerodrome seen from the SP-318 highway, WEST of the field. Highest-resolution free view of SDSC itself."
+  },
+  {
+   "file": "refs/mro_centro_manutencao_2006.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Centro_de_Manuten%C3%A7%C3%A3o_de_Aeronaves_ao_lado_do_Museu_TAM_em_S%C3%A3o_Carlos_-_panoramio.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Centro_de_Manuten%C3%A7%C3%A3o_de_Aeronaves_ao_lado_do_Museu_TAM_em_S%C3%A3o_Carlos_-_panoramio.jpg",
+   "author": "MARCO AURÉLIO ESPARZ",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "date": "2006-12-27",
+   "resolution": "2048x1536",
+   "gps": [-21.865203, -47.894661],
+   "notes": "'Centro de Manutencao de Aeronaves ao lado do Museu TAM' - the MRO hangar line seen from the museum side."
+  },
+  {
+   "file": "refs/mro_centro_manutencao_2007.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Centro_de_Manuten%C3%A7%C3%A3o_de_Aeronaves_-_TAM_-_S%C3%A3o_Carlos_-_panoramio.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Centro_de_Manuten%C3%A7%C3%A3o_de_Aeronaves_-_TAM_-_S%C3%A3o_Carlos_-_panoramio.jpg",
+   "author": "MARCO AURÉLIO ESPARZ",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "date": "2007-08-22",
+   "resolution": "2048x1536",
+   "gps": [-21.865083, -47.895584],
+   "notes": "Second view of the maintenance centre, a year later."
+  },
+  {
+   "file": "refs/mro_centro_tecnologico_2009.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/a/ae/Vista_do_Centro_Tecnol%C3%B3gico_TAM_%28Revis%C3%A3o_e_Manuten%C3%A7%C3%A3o_de_Aeronaves%29_-_S%C3%A3o_Carlos_-_panoramio.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Vista_do_Centro_Tecnol%C3%B3gico_TAM_(Revis%C3%A3o_e_Manuten%C3%A7%C3%A3o_de_Aeronaves)_-_S%C3%A3o_Carlos_-_panoramio.jpg",
+   "author": "MARCO AURÉLIO ESPARZ",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "date": "2009-11-19",
+   "resolution": "2048x1536",
+   "gps": [-21.862933, -47.899146],
+   "notes": "'Vista do Centro Tecnologico TAM (Revisao e Manutencao de Aeronaves)' - taken from NORTH-WEST of the MRO, i.e. looking back at the hangar line across the field."
+  },
+  {
+   "file": "refs/mro_centro_tecnologico_2010.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Centro_Tecnol%C3%B3gico_TAM%2C_Anexo_ao_Museu_Asas_de_Um_Sonho_-_The_technological_center_TAM_building_is_annexed_to_the_Wings_of_a_Dream_Museum_at_S%C3%A3o_Carlos_Airport_-_panoramio.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Centro_Tecnol%C3%B3gico_TAM,_Anexo_ao_Museu_Asas_de_Um_Sonho_-_The_technological_center_TAM_building_is_annexed_to_the_Wings_of_a_Dream_Museum_at_S%C3%A3o_Carlos_Airport_-_panoramio.jpg",
+   "author": "MARCO AURÉLIO ESPARZ",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "date": "2010-07-07",
+   "resolution": "2048x1536",
+   "gps": [-21.865322, -47.895927],
+   "notes": "The Centro Tecnologico TAM block that adjoins the museum; categorised on Commons under 'Airbus A320 of TAM Linhas Aereas', so an aircraft is in frame."
+  },
+  {
+   "file": "refs/museu_tam_2011.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/1/1d/Museu_TAM_em_S%C3%A3o_Carlos._Com_mais_de_90_aeronaves_expostas%2C_%C3%A9_o_maior_museu_de_avia%C3%A7%C3%A3o_do_mundo_mantido_por_uma_companhia_a%C3%A9rea_privada._-_panoramio.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Museu_TAM_em_S%C3%A3o_Carlos._Com_mais_de_90_aeronaves_expostas,_%C3%A9_o_maior_museu_de_avia%C3%A7%C3%A3o_do_mundo_mantido_por_uma_companhia_a%C3%A9rea_privada._-_panoramio.jpg",
+   "author": "MARCO AURÉLIO ESPARZ",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "date": "2011-08-12",
+   "resolution": "4000x3000",
+   "gps": [-21.866164, -47.894586],
+   "notes": "The Museu TAM hall, on the MRO site. Records the museum's own building envelope, which OSM confuses with the MRO."
+  },
+  {
+   "file": "refs/museu_entrada_2014.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Museu_TAM_-_Entrada.JPG",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Museu_TAM_-_Entrada.JPG",
+   "author": "JCMA",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "date": "2014-07-31",
+   "resolution": "4320x3240",
+   "notes": "Main entrance of the museum building, high resolution: cladding, colour, glazing on the site."
+  },
+  {
+   "file": "refs/museu_entrada_2010.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/8/85/Entrada_do_Museu_Asas_de_Um_Sonho_01.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Entrada_do_Museu_Asas_de_Um_Sonho_01.jpg",
+   "author": "MARCO AURELIO ESPARZ",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "date": "2010-07-07",
+   "resolution": "2048x1493",
+   "gps": [-21.866597, -47.899704],
+   "notes": "Museum entrance from further west, with the site's access road."
+  },
+  {
+   "file": "refs/mro_airbus_esquadrilha_2010.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/6/65/Esquadrilha_da_Fuma%C3%A7a_e_o_Airbus_-_Brazilian_Air_Force_Smoke_Squadron_and_Airbus_-_Museu_TAM_-_panoramio.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Esquadrilha_da_Fuma%C3%A7a_e_o_Airbus_-_Brazilian_Air_Force_Smoke_Squadron_and_Airbus_-_Museu_TAM_-_panoramio.jpg",
+   "author": "MARCO AURÉLIO ESPARZ",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "date": "2010-07-07",
+   "resolution": "2048x1536",
+   "gps": [-21.865840, -47.896142],
+   "notes": "An Airbus on the site with the Esquadrilha da Fumaca overhead - gives aircraft-to-building scale on the MRO ramp."
+  },
+  {
+   "file": "refs/ga_cessna150_2007.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/3/30/Cessna_150J_AN1206240.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Cessna_150J_AN1206240.jpg",
+   "author": "Renato Spilimbergo Carvalho",
+   "license": "GFDL 1.2",
+   "license_url": "https://www.gnu.org/licenses/old-licenses/fdl-1.2.html",
+   "date": "2007-03-25",
+   "resolution": "1070x748",
+   "notes": "Cessna 150J on the SDSC GA apron. Commons category 'Cessna 150 at Sao Carlos Airport'. Background: Aeroclube apron surface, hangars, vegetation, sky."
+  },
+  {
+   "file": "refs/ga_cessna170_2007.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/b/b0/Cessna_170A_AN1202925.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Cessna_170A_AN1202925.jpg",
+   "author": "Renato Spilimbergo Carvalho",
+   "license": "GFDL 1.2",
+   "license_url": "https://www.gnu.org/licenses/old-licenses/fdl-1.2.html",
+   "date": "2007-03-25",
+   "resolution": "1080x726",
+   "notes": "Cessna 170A on the SDSC GA apron, same session."
+  },
+  {
+   "file": "refs/ga_taylorcraft_2007.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Taylorcraft_BC-12D_Twosome_AN1203564.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Taylorcraft_BC-12D_Twosome_AN1203564.jpg",
+   "author": "Renato Spilimbergo Carvalho",
+   "license": "GFDL 1.2",
+   "license_url": "https://www.gnu.org/licenses/old-licenses/fdl-1.2.html",
+   "date": "2007-03-25",
+   "resolution": "1045x748",
+   "notes": "Taylorcraft BC-12D on the SDSC GA apron, same session."
+  },
+  {
+   "file": "refs/agua_vermelha_avenida.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/6/6f/%C3%81gua_Vermelha_-_Avenida.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:%C3%81gua_Vermelha_-_Avenida.jpg",
+   "author": "Niels A. Sørensen",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "date": "unknown",
+   "resolution": "1024x768",
+   "notes": "The Agua Vermelha district next to the aerodrome: local vegetation, ground colour, building stock and sky for the surround."
+  },
+  {
+   "file_note": "LATAM press release: 'LATAM inaugura hangar de R$ 40 milhoes no maior centro de manutencao aeronautica da America do Sul' (2025-09-26)",
+   "url": "https://www.latamairlines.com/br/pt/imprensa/noticias/latam-inaugura-hangar-de-r--40-milhoes-no-maior-centro-de-manute",
+   "page_url": "https://www.latamairlines.com/br/pt/imprensa/noticias/latam-inaugura-hangar-de-r--40-milhoes-no-maior-centro-de-manute",
+   "author": "LATAM Airlines Group",
+   "license": "All rights reserved - CITATION ONLY, not downloaded, not usable as an asset",
+   "date": "2025-09-26",
+   "notes": "Primary source for hangar 9. The page returned HTTP 403 to this survey; the same release is reproduced by CNN Brasil and others (see sdsc_references.md). Its photographs may NOT be copied into this repository."
+  },
+  {
+   "file_note": "CNN Brasil, 'Latam inaugura hangar de R$ 40 milhoes para ampliar centro de manutencao' (2025-09-26)",
+   "url": "https://www.cnnbrasil.com.br/economia/negocios/latam-inaugura-hangar-de-r-40-milhoes-para-ampliar-centro-de-manutencao/",
+   "author": "CNN Brasil",
+   "license": "All rights reserved - CITATION ONLY, read for the figures, images not usable",
+   "date": "2025-09-26",
+   "notes": "Confirms 95 000 m2, 9 hangars, 22 workshops, ~2000 staff, >60% of the group fleet's scheduled maintenance, EASA/FAA/DGAC, and hangar 9's capability set."
+  }
+ ]
+}

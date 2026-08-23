@@ -1,0 +1,258 @@
+{
+ "_what": "Wind climatology at SDSC, for choosing the departure runway. NOT an on-field anemometer record.",
+ "_source": {
+  "dataset": "ERA5 reanalysis, hourly 10 m wind, via the Open-Meteo Historical Weather API",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=-21.8818&longitude=-47.9040&start_date=2021-01-01&end_date=2025-12-31&hourly=wind_speed_10m,wind_direction_10m&wind_speed_unit=kn",
+  "grid_point_returned": {
+   "lat": -21.898067,
+   "lon": -47.913666,
+   "elevation_m": 805.0
+  },
+  "period": "2021-01-01 .. 2025-12-31, 43824 hours",
+  "licence": "ERA5: Copernicus Climate Change Service (C3S) / ECMWF, free use with attribution. Open-Meteo API data: CC BY 4.0.",
+  "caveat": "ERA5 is a ~25 km reanalysis, not an anemometer on the field. It is reliable for the PREVAILING direction and for which runway end is favoured on average; it is not a substitute for the actual SDSC wind record, which this survey could NOT obtain - SDSC is absent from the Iowa State ASOS archive and REDEMET needs an API key."
+ },
+ "runway_track_true_deg": 1.026,
+ "summary": {
+  "mean_speed_kt": 6.02,
+  "calm_below_3kt_pct": 11.5,
+  "favours_rwy_02_pct_all_hours": 53.4,
+  "favours_rwy_20_pct_all_hours": 46.6,
+  "favours_rwy_02_pct_ad_open_hours": 63.2,
+  "favours_rwy_20_pct_ad_open_hours": 36.8,
+  "ad_open_hours": "10:00-20:00 local (UTC-3) = 13-23 UTC, the published AD HR SER",
+  "mean_crosswind_kt": 4.16,
+  "crosswind_over_15kt_pct": 0.03,
+  "verdict": "The runway is nearly true north-south and the prevailing wind is E to SE, so at SDSC the wind is mostly a light CROSSWIND: |crosswind| averages 4.2 kt and exceeds 15 kt in 0.03% of hours. Along the runway the split is nearly even, tilting to RWY 02 - 53.4% of all hours and 63.2% of the hours the aerodrome is open. RWY 02 is also the DOWNHILL direction (THR 02 2640 ft, THR 20 2607 ft). Neither the wind nor the slope forces the choice; both lean 02."
+ },
+ "rose_16pt": [
+  {
+   "sector": "N",
+   "pct": 6.01,
+   "mean_speed_kt": 5.47
+  },
+  {
+   "sector": "NNE",
+   "pct": 5.87,
+   "mean_speed_kt": 5.24
+  },
+  {
+   "sector": "NE",
+   "pct": 8.49,
+   "mean_speed_kt": 5.51
+  },
+  {
+   "sector": "ENE",
+   "pct": 12.79,
+   "mean_speed_kt": 6.13
+  },
+  {
+   "sector": "E",
+   "pct": 11.95,
+   "mean_speed_kt": 5.48
+  },
+  {
+   "sector": "ESE",
+   "pct": 8.49,
+   "mean_speed_kt": 5.27
+  },
+  {
+   "sector": "SE",
+   "pct": 16.4,
+   "mean_speed_kt": 7.72
+  },
+  {
+   "sector": "SSE",
+   "pct": 7.64,
+   "mean_speed_kt": 7.58
+  },
+  {
+   "sector": "S",
+   "pct": 2.33,
+   "mean_speed_kt": 4.28
+  },
+  {
+   "sector": "SSW",
+   "pct": 1.75,
+   "mean_speed_kt": 4.27
+  },
+  {
+   "sector": "SW",
+   "pct": 2.05,
+   "mean_speed_kt": 4.43
+  },
+  {
+   "sector": "WSW",
+   "pct": 2.23,
+   "mean_speed_kt": 5.15
+  },
+  {
+   "sector": "W",
+   "pct": 2.63,
+   "mean_speed_kt": 5.74
+  },
+  {
+   "sector": "WNW",
+   "pct": 2.7,
+   "mean_speed_kt": 5.73
+  },
+  {
+   "sector": "NW",
+   "pct": 3.63,
+   "mean_speed_kt": 5.64
+  },
+  {
+   "sector": "NNW",
+   "pct": 5.07,
+   "mean_speed_kt": 5.85
+  }
+ ],
+ "by_month_favours_02_pct": [
+  {
+   "month": 1,
+   "pct": 65.9
+  },
+  {
+   "month": 2,
+   "pct": 67.0
+  },
+  {
+   "month": 3,
+   "pct": 64.7
+  },
+  {
+   "month": 4,
+   "pct": 55.3
+  },
+  {
+   "month": 5,
+   "pct": 67.3
+  },
+  {
+   "month": 6,
+   "pct": 66.8
+  },
+  {
+   "month": 7,
+   "pct": 70.7
+  },
+  {
+   "month": 8,
+   "pct": 65.2
+  },
+  {
+   "month": 9,
+   "pct": 60.0
+  },
+  {
+   "month": 10,
+   "pct": 58.4
+  },
+  {
+   "month": 11,
+   "pct": 53.3
+  },
+  {
+   "month": 12,
+   "pct": 63.5
+  }
+ ],
+ "by_hour_utc_favours_02_pct": [
+  {
+   "hour_utc": 0,
+   "pct": 25.2
+  },
+  {
+   "hour_utc": 1,
+   "pct": 28.6
+  },
+  {
+   "hour_utc": 2,
+   "pct": 29.7
+  },
+  {
+   "hour_utc": 3,
+   "pct": 32.1
+  },
+  {
+   "hour_utc": 4,
+   "pct": 34.8
+  },
+  {
+   "hour_utc": 5,
+   "pct": 38.1
+  },
+  {
+   "hour_utc": 6,
+   "pct": 41.3
+  },
+  {
+   "hour_utc": 7,
+   "pct": 45.3
+  },
+  {
+   "hour_utc": 8,
+   "pct": 49.1
+  },
+  {
+   "hour_utc": 9,
+   "pct": 53.6
+  },
+  {
+   "hour_utc": 10,
+   "pct": 59.1
+  },
+  {
+   "hour_utc": 11,
+   "pct": 70.5
+  },
+  {
+   "hour_utc": 12,
+   "pct": 78.8
+  },
+  {
+   "hour_utc": 13,
+   "pct": 83.4
+  },
+  {
+   "hour_utc": 14,
+   "pct": 85.4
+  },
+  {
+   "hour_utc": 15,
+   "pct": 84.4
+  },
+  {
+   "hour_utc": 16,
+   "pct": 81.6
+  },
+  {
+   "hour_utc": 17,
+   "pct": 75.3
+  },
+  {
+   "hour_utc": 18,
+   "pct": 67.9
+  },
+  {
+   "hour_utc": 19,
+   "pct": 59.9
+  },
+  {
+   "hour_utc": 20,
+   "pct": 52.2
+  },
+  {
+   "hour_utc": 21,
+   "pct": 43.3
+  },
+  {
+   "hour_utc": 22,
+   "pct": 34.3
+  },
+  {
+   "hour_utc": 23,
+   "pct": 27.3
+  }
+ ]
+}

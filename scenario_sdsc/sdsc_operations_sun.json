@@ -1,0 +1,272 @@
+{
+ "_what": "Solar geometry at SDSC, computed (NOAA algorithm) in this repo, not quoted.",
+ "_note": "Latitude -21.88: the sun passes almost overhead at local noon in summer and is never lower than 44 deg at noon in winter. Compare Santiago at -33.4. For a low, raking light on a northbound RWY 02 departure the sun must be in the WEST, i.e. late afternoon - which also puts it behind a camera placed west of the runway looking east at the MRO.",
+ "site": {
+  "lat": -21.8818417,
+  "lon": -47.9039639,
+  "utc_offset_h": -3,
+  "no_dst": "Brazil abolished DST in 2019"
+ },
+ "samples": [
+  {
+   "occasion": "summer solstice",
+   "date": "2026-12-21",
+   "local_time": "08:00",
+   "elevation_deg": 32.85,
+   "azimuth_deg": 104.53
+  },
+  {
+   "occasion": "summer solstice",
+   "date": "2026-12-21",
+   "local_time": "10:00",
+   "elevation_deg": 60.1,
+   "azimuth_deg": 99.29
+  },
+  {
+   "occasion": "summer solstice",
+   "date": "2026-12-21",
+   "local_time": "12:00",
+   "elevation_deg": 87.26,
+   "azimuth_deg": 125.12
+  },
+  {
+   "occasion": "summer solstice",
+   "date": "2026-12-21",
+   "local_time": "14:00",
+   "elevation_deg": 64.57,
+   "azimuth_deg": 261.17
+  },
+  {
+   "occasion": "summer solstice",
+   "date": "2026-12-21",
+   "local_time": "16:00",
+   "elevation_deg": 37.24,
+   "azimuth_deg": 256.52
+  },
+  {
+   "occasion": "summer solstice",
+   "date": "2026-12-21",
+   "local_time": "17:00",
+   "elevation_deg": 23.81,
+   "azimuth_deg": 253.07
+  },
+  {
+   "occasion": "summer solstice",
+   "date": "2026-12-21",
+   "local_time": "18:00",
+   "elevation_deg": 10.66,
+   "azimuth_deg": 248.86
+  },
+  {
+   "occasion": "equinox (Mar)",
+   "date": "2026-03-21",
+   "local_time": "08:00",
+   "elevation_deg": 23.24,
+   "azimuth_deg": 79.67
+  },
+  {
+   "occasion": "equinox (Mar)",
+   "date": "2026-03-21",
+   "local_time": "10:00",
+   "elevation_deg": 49.52,
+   "azimuth_deg": 61.23
+  },
+  {
+   "occasion": "equinox (Mar)",
+   "date": "2026-03-21",
+   "local_time": "12:00",
+   "elevation_deg": 67.25,
+   "azimuth_deg": 12.18
+  },
+  {
+   "occasion": "equinox (Mar)",
+   "date": "2026-03-21",
+   "local_time": "14:00",
+   "elevation_deg": 56.71,
+   "azimuth_deg": 308.8
+  },
+  {
+   "occasion": "equinox (Mar)",
+   "date": "2026-03-21",
+   "local_time": "16:00",
+   "elevation_deg": 31.65,
+   "azimuth_deg": 284.95
+  },
+  {
+   "occasion": "equinox (Mar)",
+   "date": "2026-03-21",
+   "local_time": "17:00",
+   "elevation_deg": 18.0,
+   "azimuth_deg": 278.05
+  },
+  {
+   "occasion": "equinox (Mar)",
+   "date": "2026-03-21",
+   "local_time": "18:00",
+   "elevation_deg": 4.14,
+   "azimuth_deg": 272.21
+  },
+  {
+   "occasion": "winter solstice",
+   "date": "2026-06-21",
+   "local_time": "08:00",
+   "elevation_deg": 13.51,
+   "azimuth_deg": 57.5
+  },
+  {
+   "occasion": "winter solstice",
+   "date": "2026-06-21",
+   "local_time": "10:00",
+   "elevation_deg": 34.25,
+   "azimuth_deg": 37.62
+  },
+  {
+   "occasion": "winter solstice",
+   "date": "2026-06-21",
+   "local_time": "12:00",
+   "elevation_deg": 44.56,
+   "azimuth_deg": 4.34
+  },
+  {
+   "occasion": "winter solstice",
+   "date": "2026-06-21",
+   "local_time": "14:00",
+   "elevation_deg": 37.8,
+   "azimuth_deg": 328.64
+  },
+  {
+   "occasion": "winter solstice",
+   "date": "2026-06-21",
+   "local_time": "16:00",
+   "elevation_deg": 18.67,
+   "azimuth_deg": 306.03
+  },
+  {
+   "occasion": "winter solstice",
+   "date": "2026-06-21",
+   "local_time": "17:00",
+   "elevation_deg": 6.9,
+   "azimuth_deg": 298.71
+  },
+  {
+   "occasion": "equinox (Sep)",
+   "date": "2026-09-23",
+   "local_time": "08:00",
+   "elevation_deg": 26.81,
+   "azimuth_deg": 78.51
+  },
+  {
+   "occasion": "equinox (Sep)",
+   "date": "2026-09-23",
+   "local_time": "10:00",
+   "elevation_deg": 52.82,
+   "azimuth_deg": 58.46
+  },
+  {
+   "occasion": "equinox (Sep)",
+   "date": "2026-09-23",
+   "local_time": "12:00",
+   "elevation_deg": 68.34,
+   "azimuth_deg": 2.68
+  },
+  {
+   "occasion": "equinox (Sep)",
+   "date": "2026-09-23",
+   "local_time": "14:00",
+   "elevation_deg": 54.41,
+   "azimuth_deg": 303.53
+  },
+  {
+   "occasion": "equinox (Sep)",
+   "date": "2026-09-23",
+   "local_time": "16:00",
+   "elevation_deg": 28.66,
+   "azimuth_deg": 282.3
+  },
+  {
+   "occasion": "equinox (Sep)",
+   "date": "2026-09-23",
+   "local_time": "17:00",
+   "elevation_deg": 14.92,
+   "azimuth_deg": 275.78
+  },
+  {
+   "occasion": "equinox (Sep)",
+   "date": "2026-09-23",
+   "local_time": "18:00",
+   "elevation_deg": 1.02,
+   "azimuth_deg": 270.05
+  },
+  {
+   "occasion": "hangar 9 inauguration",
+   "date": "2025-09-26",
+   "local_time": "08:00",
+   "elevation_deg": 27.58,
+   "azimuth_deg": 79.67
+  },
+  {
+   "occasion": "hangar 9 inauguration",
+   "date": "2025-09-26",
+   "local_time": "10:00",
+   "elevation_deg": 53.81,
+   "azimuth_deg": 59.86
+  },
+  {
+   "occasion": "hangar 9 inauguration",
+   "date": "2025-09-26",
+   "local_time": "12:00",
+   "elevation_deg": 69.61,
+   "azimuth_deg": 2.03
+  },
+  {
+   "occasion": "hangar 9 inauguration",
+   "date": "2025-09-26",
+   "local_time": "14:00",
+   "elevation_deg": 54.98,
+   "azimuth_deg": 301.52
+  },
+  {
+   "occasion": "hangar 9 inauguration",
+   "date": "2025-09-26",
+   "local_time": "16:00",
+   "elevation_deg": 28.93,
+   "azimuth_deg": 280.85
+  },
+  {
+   "occasion": "hangar 9 inauguration",
+   "date": "2025-09-26",
+   "local_time": "17:00",
+   "elevation_deg": 15.14,
+   "azimuth_deg": 274.46
+  },
+  {
+   "occasion": "hangar 9 inauguration",
+   "date": "2025-09-26",
+   "local_time": "18:00",
+   "elevation_deg": 1.23,
+   "azimuth_deg": 268.77
+  }
+ ],
+ "sunset_local": {
+  "2026-12-21": {
+   "time": "18:54",
+   "azimuth_deg": 244.2
+  },
+  "2026-03-21": {
+   "time": "18:21",
+   "azimuth_deg": 270.2
+  },
+  "2026-06-21": {
+   "time": "17:37",
+   "azimuth_deg": 295.0
+  },
+  "2026-09-23": {
+   "time": "18:08",
+   "azimuth_deg": 269.3
+  },
+  "2025-09-26": {
+   "time": "18:09",
+   "azimuth_deg": 267.9
+  }
+ }
+}

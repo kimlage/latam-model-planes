@@ -139,3 +139,33 @@ export/alta/
 export/web/*.usdz
 export/*/textures_*/
 export/.rel_*.json
+
+# ---------------------------------------------------------------------------
+# SDSC scenario: raw elevation tiles (~1.4 GB) and their normalised copies.
+# Reproduce with scenario_sdsc/fetch_dem.sh
+# The derived heightfields under scenario_sdsc/terrain/ ARE committed.
+# ---------------------------------------------------------------------------
+scenario_sdsc/dem/
+scenario_sdsc/dem_cop/
+scenario_sdsc/dem_cop_hgt/
+scenario_sdsc/dem_srtm_clean/
+scenario_sdsc/terrain/_fine_profile.npy
+
+# The raw Overpass dump (1 MB of JSON). build_osm.py re-downloads it; only the
+# converted scenario_sdsc/sdsc_osm.json is committed.
+scenario_sdsc/sdsc_osm_raw.json
+
+# ---------------------------------------------------------------------------
+# SDSC scenario: third-party reference photographs. Credited in
+# scenario_sdsc/sdsc_references.md and scenario_sdsc/refs/manifest.json, but
+# CC BY-SA / GFDL - share-alike conflicts with this repo's CC BY 4.0 asset
+# licence, so we cite them instead of shipping them. Same rule as everywhere.
+# ---------------------------------------------------------------------------
+scenario_sdsc/refs/*.jpg
+scenario_sdsc/refs/*.jpeg
+scenario_sdsc/refs/*.png
+scenario_sdsc/refs/*.JPG
+scenario_sdsc/refs/_map_*.png
+
+# SDSC scenery: render outputs
+scenario_sdsc/checks/

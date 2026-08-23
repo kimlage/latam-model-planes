@@ -1,0 +1,309 @@
+{
+ "_what": "Official survey constants for SDSC (Aeroporto Estadual Mario Pereira Lopes, Sao Carlos/SP) and for the LATAM MRO on the field. Every value carries the source that published it. Values here OVERRIDE anything in sdsc_osm.json or terrain/terrain_meta.json that disagrees. Sibling of ../scenario/scl_aip_corrections.json.",
+ "_surveyed_on": "2026-08-23",
+ "_sources": {
+  "rotaer": {
+   "name": "AISWEB / DECEA - ROTAER entry for SDSC, and the aerodrome's DISTANCIA(S) DECLARADA(S) table",
+   "url": "https://aisweb.decea.mil.br/?i=aerodromos&codigo=SDSC",
+   "amendment": "site AMDT 34/26; ROTAER D-AMDT 42/25",
+   "fetched": "2026-08-23",
+   "how": "page fetched with curl and the HTML stripped to text, so the figures below are the published strings, not a paraphrase"
+  },
+  "iac_02": {
+   "name": "SDSC IAC RNP Z RWY 02 (chart id SDSC_IAC_00B)",
+   "url": "https://aisweb.decea.gov.br/download/?arquivo=b7dc8153-dc83-4bd8-98fdb84f1aed3df3&apikey=1587263166",
+   "amendment": "AIRAC AMDT 2512A1, 27 NOV 25",
+   "how": "PDF downloaded and its text layer extracted"
+  },
+  "iac_20": {
+   "name": "SDSC IAC RNP Y RWY 20 (chart id SDSC_IAC_00A)",
+   "url": "https://aisweb.decea.gov.br/download/?arquivo=2e060fa8-8d9e-49dd-add1b90be1a3eef0&apikey=1587263166",
+   "amendment": "AIRAC AMDT 2512A1, 27 NOV 25"
+  },
+  "dem": "Copernicus DEM GLO-30 (primary) and SRTM v3 (control) - see TERRAIN.md",
+  "osm": "OpenStreetMap via Overpass, 2026-08-23 - see sdsc_osm.json",
+  "licence": "Brazilian State aeronautical information (DECEA/ICA). Official data, quoted as fact for engineering use; the charts are NOT redistributed in this repository - only the numbers and the URLs.",
+  "there_is_no_ADC": "SDSC is a VFR aerodrome. DECEA publishes NO aerodrome chart (ADC) and no visual chart for it - only the two RNP approach charts above. Everything an ADC would normally give (marking layout, taxiway designators, apron plan, stand numbering, lighting layout) is therefore UNPUBLISHED for this field. That is the single biggest survey gap here, and it is a gap in the source, not in the search."
+ },
+
+ "aerodrome": {
+  "icao": "SDSC",
+  "iata": "QSC",
+  "ciad": "SP0029",
+  "name": "Mario Pereira Lopes",
+  "full_name_pt": "Aeroporto Estadual de Sao Carlos - Mario Pereira Lopes",
+  "old_name": "Aerodromo Francisco Pereira Lopes",
+  "locality": "SAO CARLOS, SP - district of Agua Vermelha",
+  "position_relative_to_city": "12 km North (ROTAER field '12N')",
+  "category": "AD INTL PUB",
+  "operator": "REDE VOA SP SPE",
+  "operator_note": "The 2021 concession. OSM still tags operator=DAESP, which is stale.",
+  "arp": {
+   "published": "21 52 35S / 047 54 12W",
+   "lat": -21.876389,
+   "lon": -47.903333,
+   "xy_m": [65.2, 603.77],
+   "precision_note": "Published to whole seconds only, i.e. +/- ~15 m north-south and ~14 m east-west. Do not use it as a survey point; it is a label."
+  },
+  "elevation": {
+   "value_m": 807.0,
+   "value_ft": 2648,
+   "source": "ROTAER '807 (2648)'; the two IAC charts both print 'AD ELEV: 2648'",
+   "dem_check": "Copernicus GLO-30 reads 806.0 m and SRTM v3 807.2 m at THR 02 - a 1.2 m spread around the published threshold elevation. The datum z = 0 at 807.0 m AMSL is CONFIRMED."
+  },
+  "magnetic_variation": {
+   "value_deg_west": 22.0,
+   "annual_change": "04' W",
+   "epoch": "AIRAC AMDT 2512A1, 27 NOV 25",
+   "source": "both IAC charts, 'VAR 22 W - VA/CHG: 04'W'",
+   "consequence": "This is the fact that makes SDSC read wrong on a map. The runway is almost exactly TRUE NORTH-SOUTH - measured true bearing 001.026 deg - and is designated 02/20 only because Brazil's westerly variation here is 22 deg. 001 + 22 = 023 -> '02'. The IAC charts confirm it independently: final course 023 deg MAG on RWY 02 and 203 deg MAG on RWY 20. Model the runway on the TRUE bearing, never on the designator.",
+   "not_published_by": "ROTAER does not carry a VAR field for this aerodrome; the value comes from the approach charts."
+  },
+  "operation": {
+   "type": "VFR",
+   "fir": "SBBS (CINDACTA 1)",
+   "afis": {"frequency_mhz": 128.125, "callsign": "RADIO SAO CARLOS"},
+   "atis": {"frequency_mhz": 127.70, "callsign": "ATIS ACADEMIA", "source": "IAC charts"},
+   "approach_control": "APP ACADEMIA 120.10 / 122.40 / 122.80 / 124.90 / 135.45 (IAC charts)",
+   "hours": "AD HR SER MON TIL SAT 1000-2000, SUN 1000-1800 local. Demais horarios O/R.",
+   "utc_offset": -3,
+   "night_lighting": "Balizamento Noturno O/R MNM 04HR - the runway lights are switched on by request only, minimum four hours' notice",
+   "lighting_codes_rotaer": ["L21", "L23", "L26", "L12", "L14", "L15"],
+   "aerodrome_beacon": {"published": "215238S/0475432W", "xy_m": [-509.0, 511.5],
+                        "note": "ROTAER note [1], 'COORD ABN'. West of the runway, abeam the Aeroclube."},
+   "departure_rule": "ROTAER: after take-off, aircraft keep below 5000 ft AMSL under VFR and call Controle Academia.",
+   "international_status_note": "AD is INTL but the international opening is occasional, by prior arrangement, and is expressly RESTRICTED to private flights bringing aircraft in or out for maintenance and repair. Scheduled and non-scheduled public passenger and cargo services may NOT use it internationally. In other words the aerodrome's international status exists because of the MRO."
+  }
+ },
+
+ "runways": [
+  {
+   "designation": "02/20",
+   "pavement_length_m": 1720,
+   "width_m": 45,
+   "surface": "ASPH",
+   "pcn": "47/F/A/X/T",
+   "pcn_expanded": "PCN 47, Flexible pavement, subgrade category A (high strength), tyre pressure category X (high), evaluated by Technical method",
+   "source": "ROTAER runway line: '02 - L12 - (1720x45 ASPH 47/F/A/X/T L14, L15) - L12 - 20'",
+   "true_bearing_deg": {"02": 1.026, "20": 181.026},
+   "true_bearing_source": "COMPUTED here from the two published threshold coordinates, in exact WGS84 ENU. Cross-checks against the charts: 1.026 + 22.0 (VAR W) = 23.03 deg magnetic against a published final course of 023 deg. Agreement 0.03 deg.",
+   "magnetic_bearing_deg": {"02": 23, "20": 203},
+   "magnetic_bearing_source": "IAC charts, 'FINAL CRS 023' and 'FINAL CRS 203'",
+   "thresholds": {
+    "02": {
+     "published": "S 21 52 54.63  W 047 54 14.27",
+     "lat": -21.8818417, "lon": -47.9039639,
+     "xy_m": [0.0, 0.0],
+     "elev_ft": 2640, "elev_m": 804.67,
+     "elev_source": "IAC RNP Z RWY 02, 'THR ELEV 2640'",
+     "geoid_undulation_m": -6.381,
+     "geoid_source": "ROTAER declared-distance table, 'ALT. GEOIDAL'",
+     "displaced_m": 52,
+     "displaced_source": "ROTAER, 'THR 02 deslocada em 52M'",
+     "note": "This point is the scene ORIGIN."
+    },
+    "20": {
+     "published": "S 21 52 01.97  W 047 54 13.26",
+     "lat": -21.8672139, "lon": -47.9036833,
+     "xy_m": [29.0, 1619.72],
+     "elev_ft": 2607, "elev_m": 794.61,
+     "elev_source": "IAC RNP Y RWY 20, 'THR ELEV 2607'",
+     "geoid_undulation_m": -6.398,
+     "displaced_m": 48,
+     "displaced_source": "ROTAER, 'THR 20 deslocada em 48M'"
+    }
+   },
+   "threshold_to_threshold_m": {
+    "measured_in_frame": 1619.98,
+    "expected_from_published": 1620.0,
+    "expected_how": "1720 pavement - 52 displaced at 02 - 48 displaced at 20",
+    "agreement_m": 0.02,
+    "comment": "0.02 m. Three independent published quantities - the two threshold coordinates and the two displacements - close on each other. The published survey is internally consistent and the frame is right."
+   },
+   "pavement_ends_derived": {
+    "how": "the published thresholds walked back along the measured true track by the published displacements",
+    "south_02_end": {"xy_m": [-0.93, -51.99], "lat": -21.8823112, "lon": -47.9039729},
+    "north_20_end": {"xy_m": [29.86, 1667.71], "lat": -21.8667824, "lon": -47.903675},
+    "length_m": 1719.98,
+    "status": "DERIVED, not published. DECEA publishes the thresholds and the displacements, not the pavement ends."
+   },
+   "declared_distances_m": {
+    "source": "ROTAER DISTANCIA(S) DECLARADA(S) table",
+    "02": {"TORA": 1672, "TODA": 1672, "ASDA": 1720, "LDA": 1668},
+    "20": {"TORA": 1668, "TODA": 1668, "ASDA": 1720, "LDA": 1672},
+    "the_number_that_matters": "TORA. A departure from RWY 02 has 1672 m of take-off run, from RWY 20 1668 m. Not 1720.",
+    "internal_structure": {
+     "observed": "LDA = 1720 - (own displacement). TORA = 1720 - (FAR end's displacement). ASDA = 1720 in both directions.",
+     "reading": "INFERRED, not published: the pattern is what you get if the last ~48 m at the north end and ~52 m at the south end count as stopway - inside ASDA, outside TORA - as well as being displaced thresholds. DECEA publishes no stopway/clearway declaration for SDSC, so this reading is an inference from arithmetic. TODA = TORA means there is no clearway either way.",
+     "do_not": "Do not 'simplify' this to a 1720 m runway. Whichever reading is right, the usable take-off run is 1672 m."
+    }
+   },
+   "slope": {
+    "published_fall_m": 10.06,
+    "published_fall_pct": 0.62,
+    "direction": "downhill toward RWY 20 (north)",
+    "from": "published THR elevations 2640 ft at 02 and 2607 ft at 20, over the measured 1620 m between them",
+    "dem_check": "Copernicus GLO-30 gives 806.0 m at THR 02 and 794.0 m at THR 20 - a 12.0 m fall, 0.74%. Same sign, same order. SRTM gives 807.2 / 783.2, i.e. 24 m, and is the outlier; SRTM reads 11.4 m low at THR 20.",
+    "why_it_matters": "This runway is NOT level. Over 1.6 km the far threshold sits 10 m lower than the near one, which is visible in any long lens down the centreline, changes where the horizon cuts a departing aircraft, and means a RWY 02 take-off is downhill and a RWY 20 take-off uphill. Build the runway flat and it will be wrong by a whole aircraft height at the far end."
+   },
+   "osm_divergence": {
+    "osm_way": "way/35448784",
+    "osm_tags": "length=1720, width=45, surface=asphalt, ref=02/20",
+    "osm_centreline_measured_m": 1710.56,
+    "delta_m": 9.4,
+    "osm_implied_displacements_m": {"south": 46.7, "north": 44.8},
+    "published_displacements_m": {"south": 52, "north": 48},
+    "verdict": "OSM's own length TAG says 1720 and agrees with DECEA; OSM's GEOMETRY is 9.4 m short and its ends fall a few metres inside the derived pavement ends. Use the AIP thresholds and the derived pavement ends for the runway; use OSM only for the taxiways, aprons and footprints."
+   }
+  }
+ ],
+
+ "divergences_recorded_not_split": [
+  {
+   "subject": "runway length, historic",
+   "a": "1720 x 45 m - DECEA/ROTAER today, and OSM's length tag",
+   "b": "'we increased the runway from 1400 m to over 1700 m' - Geraldo Alckmin at the hangar 9 inauguration, 2025-09-26, referring to the 2001 works",
+   "c": "1460 x 30 m before 2001 - Portuguese Wikipedia",
+   "resolution": "No conflict about TODAY. 1720 x 45 m is the published current value and is what to build. The pre-2001 figure differs between the two accounts (1400 vs 1460 m) and is not needed."
+  },
+  {
+   "subject": "runway extension to 3000 x 60 m",
+   "a": "A request to extend the runway to 3000 x 60 m is described as pending approval by DAESP and the environmental agencies (secondary reporting, via the Portuguese Wikipedia article on the airport).",
+   "b": "DECEA publishes 1720 x 45 m, with no AIP supplement or NOTAM for works.",
+   "resolution": "PROPOSED, NOT BUILT. Build 1720 x 45 m. Recorded here because a search will surface the 3000 m figure and it must not be mistaken for the current runway.",
+   "confidence": "low - this is secondary reporting; the survey could not find a primary DAESP or Rede Voa document for it"
+  },
+  {
+   "subject": "share of the LATAM group fleet maintained at Sao Carlos",
+   "a": "'more than 60% of the scheduled maintenance of the whole LATAM group fleet' - the 2025-09-26 release, as reproduced by CNN Brasil and others",
+   "b": "'about 70% of all the airline's scheduled maintenance in Latin America' - CNN Brasil feature on the site",
+   "resolution": "Both are LATAM's own figures over different denominators ('the group fleet' vs 'Latin America'). Not reconciled here. Quote whichever with its source; do not average them."
+  },
+  {
+   "subject": "MRO site area",
+   "a": "95 000 m2 - LATAM, repeated by every outlet",
+   "b": "684 088 m2 - the area of the OSM landuse=industrial polygon named 'TAM MRO'",
+   "c": "78 527 m2 - the sum of every building footprint OSM maps inside that polygon",
+   "resolution": "These measure different things and none of them is wrong. 95 000 m2 is almost certainly BUILT area (LATAM says 'parque industrial de 95 mil metros quadrados'); 684 088 m2 is the fenced site; 78 527 m2 is what OSM has traced of the buildings, which is incomplete and eight years stale. Do not quote 95 000 m2 as a site footprint."
+  },
+  {
+   "subject": "the OSM polygon's identity",
+   "a": "name = 'TAM MRO', website = tammro.com.br - the maintenance base",
+   "b": "name:en = 'TAM Museum', wikidata = Q3868501, wikipedia = pt:Museu TAM - the aviation museum",
+   "resolution": "One OSM relation (relation/7422930) carries BOTH. The museum (Museu Asas de um Sonho / Museu TAM) really did sit on this site and closed in 2016; the polygon is the MRO. The museum tags on it are wrong. Anyone following the wikidata link will end up modelling a museum."
+  }
+ ],
+
+ "latam_mro": {
+  "name": "LATAM MRO Sao Carlos",
+  "inaugurated": "February 2001 (as TAM MRO)",
+  "site_area_m2_published": 95000,
+  "site_area_published_wording": "'parque industrial de 95 mil metros quadrados' - LATAM",
+  "hangars": 9,
+  "workshops": 22,
+  "workshop_examples": ["landing gear", "electronics", "escape slides", "thermoplastics", "upholstery"],
+  "staff": "about 2 000",
+  "aircraft_per_year": 270,
+  "simultaneous_aircraft": "up to 16",
+  "stay_length": "one week to 40 days depending on the check",
+  "certifications": ["ANAC (Brazil)", "EASA (Europe)", "FAA (United States)", "DGAC (Chile)"],
+  "types_maintained": {
+   "confirmed_current": ["Airbus A320 family (A319/A320/A321, ceo and neo)", "Boeing 767", "Boeing 787"],
+   "confirmed_visited": ["Airbus A330-200 (largest type before 2020)", "Airbus A350-900 (PR-XTK, first landing 14 Oct 2020)"],
+   "explicitly_NOT_here": "Boeing 777 - CNN Brasil's feature on the site states 777 maintenance is done at Guarulhos instead.",
+   "coming": "Embraer E195-E2, expected in the LATAM fleet from H2 2026, with further expansion anticipated"
+  },
+  "hangar_9": {
+   "inaugurated": "2025-09-26",
+   "investment_brl": 40000000,
+   "build_time": "10 months",
+   "direct_jobs": 300,
+   "purpose": ["heavy maintenance (checks) of the Boeing 787 fleet, previously done outside Brazil",
+               "painting of large aircraft",
+               "preventive maintenance of up to three Airbus A320-family aircraft simultaneously"],
+   "attended_by": "the Vice-President of Brazil, Geraldo Alckmin, and LATAM Brasil executives",
+   "dimensions": null,
+   "position_on_site": null,
+   "GAP": "NO published dimension, height, door span, area or site position for hangar 9 was found in any source - LATAM's own release, Aeroflap, Panrotas, CNN Brasil, Diario do Turismo, Rede Voa or Times Brasil. It is also NOT in OpenStreetMap: every MRO building in OSM is version 1 from a single tracing session on 2017-07-27, eight years before hangar 9 existed. Phase 2 must locate and size it from imagery or a photograph, and must not invent it."
+  },
+  "geometry_in_frame": {
+   "site_bbox_xy_m": {"min": [380.4, 1148.4], "max": [1444.6, 2069.4]},
+   "site_extent_m": {"east_west": 1064.2, "north_south": 921.0},
+   "largest_mapped_building": {
+    "osm_id": "relation/7422965",
+    "osm_tags": "building=yes - NOT tagged as a hangar, and not named",
+    "min_area_box_m": {"long": 471.5, "short": 137.3, "long_axis_bearing_deg_true": 1.1},
+    "footprint_m2": 43140,
+    "centroid_xy_m": [1021.1, 1751.0],
+    "measured_height_m": {
+     "above_its_platform": 12.9,
+     "p90": 10.6,
+     "platform_m_amsl": 770.9,
+     "method": "Copernicus GLO-30 DSM: maximum inside the footprint shrunk by 8 m, minus the median of a 45-115 m ring outside it. 54 distinct 30 m cells fall inside, so this one building IS resolvable by a 30 m grid.",
+     "caveat": "A 30 m DSM smears roof edges inward, so 12.9 m is a FLOOR on the true ridge height, not the ridge height. Every other building on the site is narrower than ~90 m and cannot be measured this way at all - their numbers came out between 0.0 and 5.2 m, which is nonsense, and they are not recorded."
+    }
+   },
+   "platform_elevation": {
+    "value_m_amsl": "about 770 (apron), 763-790 across the site",
+    "below_thr02_m": 35,
+    "below_thr20_m": 25,
+    "source": "Copernicus GLO-30, sampled over the site",
+    "srtm_check": "SRTM agrees within about 4 m across the block",
+    "why_it_matters": "The MRO does not sit at runway level. The ground falls about 40 m per kilometre eastward from the runway into the corrego valley, and the base is on the low ground. From the runway you look slightly DOWN at the hangars.",
+    "confidence": "measured but UNCONFIRMED against a photograph or a levelling survey. A 30 m DSM over a graded industrial platform is exactly the kind of thing that can be wrong, and this figure is scene-defining. Phase 2 should check it before building."
+   },
+   "relation_to_runway_02": {
+    "along_takeoff_roll_m": {"site": [1155, 2095], "buildings": [1602, 1937]},
+    "lateral_offset_m": {"site": [360, 1407], "buildings": [797, 1287]},
+    "side_when_departing_02": "right",
+    "side_when_departing_20": "left, and behind from the start of the roll",
+    "comment": "The MRO buildings come abeam between 1600 and 1940 m into a RWY 02 roll. TORA is 1672 m and a light A320 rotates well before that, so on RWY 02 the base passes on the right AT or JUST AFTER rotation and stays in frame through the initial climb. Compare Santiago, where the LATAM base is 620-720 m off the centreline; here it is 800-1290 m, roughly twice as far, and it is a smaller object. It will read as a distant line of hangars, not as a wall."
+   }
+  }
+ },
+
+ "which_latam_types_can_operate_here": {
+  "_status": "Answered from EVIDENCE of what actually operates there, plus the published field limits. No performance calculation was made and none should be quoted from this file.",
+  "field_limits": {
+   "tora_m": {"02": 1672, "20": 1668},
+   "asda_m": 1720,
+   "lda_m": {"02": 1668, "20": 1672},
+   "elevation_ft": 2648,
+   "iso_density_altitude_note": "ISA at 2648 ft is +9.8 C. A 30 C afternoon is ISA+20, which puts the density altitude near 5 000 ft. Sao Carlos is a hot, high-ish, SHORT field - all three at once.",
+   "pcn": "47/F/A/X/T",
+   "pcn_note": "The final T means the pavement was evaluated by technical study, and operations above the published PCN are possible by agreement with the aerodrome operator. That, plus the fact that aircraft arrive empty, is how a 787 gets in and out of a PCN 47 field."
+  },
+  "evidence": [
+   {"type": "Airbus A319 / A320 / A321 (ceo and neo)", "verdict": "yes - routine",
+    "evidence": "the A320 family is the base's core workload; hangar 9 alone takes three A320s at once"},
+   {"type": "Boeing 767-300ER / 767-300F", "verdict": "yes - routine",
+    "evidence": "LATAM lists the 767 among the types maintained at Sao Carlos; a TAM widebody is visible on the field in the 2013 reference photograph"},
+   {"type": "Boeing 787-8 / 787-9", "verdict": "yes",
+    "evidence": "hangar 9, inaugurated 2025-09-26, exists specifically for 787 heavy maintenance, bringing home checks previously done abroad; the Portuguese Wikipedia article records the first major 787-9 overhaul there in February 2026"},
+   {"type": "Airbus A330-200", "verdict": "yes - historically the largest, before 2020",
+    "evidence": "reported as the largest type to have landed at SDSC before the A350"},
+   {"type": "Airbus A350-900", "verdict": "yes - demonstrated, but exceptional",
+    "evidence": "PR-XTK landed 14 Oct 2020 at 11:51 from Confins, the largest aircraft ever received by the base, and reported as the shortest runway an A350 had used in Brazil. It came for maintenance and long-term storage during the pandemic groundings, not as routine traffic."},
+   {"type": "Boeing 777-300ER", "verdict": "NO - not maintained here",
+    "evidence": "CNN Brasil's feature on the base states that 777 maintenance is carried out at Guarulhos instead. No evidence of a 777 movement at SDSC was found."},
+   {"type": "Embraer E195-E2", "verdict": "expected from H2 2026",
+    "evidence": "reported as the reason for further expansion of the base"}
+  ],
+  "for_the_departure_clip": {
+   "safest_choice": "Airbus A320neo or A321neo on RWY 02.",
+   "why": "It is the type the field handles every day, it is comfortably inside 1672 m at a ferry weight, and it is already built in this repository.",
+   "most_striking_choice": "Boeing 787-9 on RWY 02, empty, leaving after a check in hangar 9.",
+   "why_striking": "It is the reason hangar 9 was built, it is true to 2026, and a 787 rotating off a 1672 m strip is the whole story of this base in one shot.",
+   "what_must_be_right": "A widebody leaving SDSC is a FERRY flight: no passengers, no cargo, minimum fuel. If the clip shows a 787 lifting off with 1672 m of runway it should look like a very light aeroplane - early rotation, steep initial climb - not like a full transatlantic departure.",
+   "do_not": "Do not put a 777-300ER on this runway. It is the one LATAM type with positive evidence AGAINST it operating here."
+  }
+ },
+
+ "confirmed_no_change_needed": {
+  "true_bearing": "computed 1.026 deg from the published thresholds; + VAR 22 W = 023 deg magnetic against the charts' published 023 deg final course. Delta 0.03 deg.",
+  "threshold_separation": "1619.98 m measured against 1620 m implied by the published pavement length and displacements. Delta 0.02 m.",
+  "aerodrome_elevation": "807 m published; Copernicus 806.0 and SRTM 807.2 at THR 02.",
+  "runway_slope": "10.06 m published fall; Copernicus 12.0 m. Independent confirmation that the runway is not level.",
+  "delivered_heightfield": "ray-casting the 30+60+180 m grid stack reproduces the DEM-derived horizon to 0.011 deg rms, 0.043 deg max over all 72 azimuths."
+ }
+}
