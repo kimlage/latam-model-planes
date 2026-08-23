@@ -1378,8 +1378,30 @@ def build_ground(d, P, c_ground):
     # aerodrome pad now stops 400 m outside the fence, so the cane starts where
     # a camera on the field can still resolve it - hence a 120 m inner grid out
     # to 4 km, and a 400 m outer one beyond that where haze has taken over.
-    for tag, reach, step2, mat_ in (("Inner", 4200.0, 120.0, P["cane"]),
-                                    ("Outer", 9000.0, 400.0, P["cane"])):
+    # STEP AND HEIGHT ARE BOTH MEASURED, and they were both wrong. This sheet
+    # and the terrain mesh are two samplings of the SAME DEM - this one linear
+    # between its own nodes, the terrain one at 30 m - so wherever the coarse
+    # chord dips under the fine surface the TERRAIN material shows through and
+    # the far field renders as a mottle of two different farmland shaders. At
+    # the shipped 120 m / -0.55 that happened over 39% of the ring, in patches
+    # up to a kilometre across, and it is plainly visible in the aerial tour:
+    # a hard-edged rectangle of the wrong green at 4-7 km. Sampled over 30 000
+    # random points inside the inner ring:
+    #
+    #     step  offset   terrain wins   worst
+    #      120   -0.55       39.3%     -13.80 m
+    #       60   -0.55       21.0%      -5.99 m
+    #       40   -0.55       10.6%      -3.67 m
+    #       60   +0.45        2.6%      -4.99 m     <- shipped
+    #       40   +0.25        0.9%      -2.87 m
+    #
+    # 60 m and +0.45 leaves the cane 1.25 m clear of the terrain, which at the
+    # 1-9 km this ring is seen from is 0.02 deg, and costs the field 38 000
+    # faces it can easily afford. The alternative - keeping 120 m and raising
+    # the sheet until it always wins - needs +14 m, which is a cliff at the
+    # aerodrome-pad boundary.
+    for tag, reach, step2, mat_ in (("Inner", 4200.0, 60.0, P["cane"]),
+                                    ("Outer", 9000.0, 200.0, P["cane"])):
         gx0, gx1 = min(xs) - reach, max(xs) + reach
         gy0, gy1 = min(ys) - reach, max(ys) + reach
         hole = (x0, x1, y0, y1) if tag == "Inner" else \
@@ -1394,7 +1416,7 @@ def build_ground(d, P, c_ground):
             y = gy0 + j * step2
             for i in range(nx):
                 x = gx0 + i * step2
-                row.append(bm.verts.new((x, y, G.dem(x, y) - 0.55)))
+                row.append(bm.verts.new((x, y, G.dem(x, y) + 0.45)))
             grid.append(row)
         for j in range(ny - 1):
             for i in range(nx - 1):
