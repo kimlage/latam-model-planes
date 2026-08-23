@@ -18,6 +18,22 @@ scenario_sdsc/
   load_terrain.py          heightfield -> mesh
   blender_assets.cats.txt  Asset Browser catalogues
 
+  --- the three clips (section 8) -------------------------------------------
+  shot_common.py           the RWY 02 frame, the graded ground and the curve
+                           helpers, all three clips share them, and NO bpy so
+                           every shot can be solved offline in a second
+  place_aircraft.py        A320neo take-off rig onto THR 02, riding the grade
+  takeoff_camera.py        clip 1, the RWY 02 departure   -> a320_sdsc_v1.gif
+  hangar_tow.py            clip 2, the 787-9 into hangar 9 -> b789_hangar9_v1.gif
+  base_flyover.py          clip 3, the aerial tour        -> sdsc_base_v1.gif
+  render_clip.py           frames on the GPU, shared by all three
+  verify_gifs.py           the GIF timing gate - a real parser, not a byte scan
+  sdsc_takeoff.blend       the placed A320neo, 140 frames, no camera yet
+  sdsc_takeoff_v1.blend    clip 1's scene
+  sdsc_hangar_tow.blend    clip 2's scene
+  sdsc_base_flyover.blend  clip 3's scene
+  ac_curve_sdsc.json       the graded aircraft track, for offline tuning
+
   sdsc_aip_survey.json     the survey constants, every value with its source     <- read first
   sdsc_osm.json            aerodrome + MRO geometry in the local frame (ODbL)
   sdsc_osm_plan.png        the plan, drawn                    <- the build's check image
@@ -542,6 +558,34 @@ phase 3 wants a crisper tour, `HAZE_VIS_KM` is the one knob — raise it and say
 because the Andes climb 5 km; the whole 240 km plate here is farmland, so the
 terrain material is a cane-and-pasture cell patchwork and the only ramp is haze.
 
+**The cane surround and the terrain mesh are two samplings of the same DEM, and
+they used to fight.** `build_ground` drapes a cane sheet from the aerodrome pad
+out to 9 km; the terrain tiers sample the same Copernicus grid at 30 m. Wherever
+the sheet's coarse chord dipped under the fine surface the TERRAIN material won,
+so the far field rendered as a mottle of two different farmland shaders — in
+patches up to a kilometre across, with hard straight edges. Phase 3's aerial tour
+is the first camera to look out at 4–7 km at a shallow angle and it is plainly
+visible there. Measured over 30 000 random points inside the inner ring:
+
+| step | offset | terrain wins | worst |
+|---|---|---|---|
+| 120 m | −0.55 | **39.3%** | −13.80 m |
+| 60 m | −0.55 | 21.0% | −5.99 m |
+| 40 m | −0.55 | 10.6% | −3.67 m |
+| **60 m** | **+0.45** | **2.6%** | −4.99 m |
+| 40 m | +0.25 | 0.9% | −2.87 m |
+
+Shipped at **60 m and +0.45** — the sheet sits 1.25 m clear of the terrain,
+which at 1–9 km is 0.02°, and the ring costs 38 000 faces the field can afford.
+Keeping 120 m and raising the sheet until it always wins needs +14 m, which is a
+cliff at the aerodrome-pad boundary. The outer ring goes 400 m → 200 m for the
+same reason.
+
+The **terrain tiers themselves still interleave** the same way — a shallow ray
+past 12 km alternates between `SDSC_Terrain_Near` (30 m) and `SDSC_Terrain_Mid`
+(60 m). They share one material, so it costs shading rather than colour, and it
+is left standing; see §8, still open.
+
 ---
 
 ## 5. Licences — read before publishing anything built from here
@@ -633,6 +677,11 @@ to check about it is that it stays **empty**.
 ---
 
 ## 7. What phase 3 needs — the three clips
+
+> **Phase 3 shot them.** This section is left exactly as phase 2 wrote it,
+> because it is the brief the clips were built against and it is worth reading
+> before §8, which is what they turned out to be. Where §8 disagrees with §7 it
+> says so and gives the measurement.
 
 Phase 2 built the field. Nothing is animated and no aircraft is placed: the three
 clips are phase 3's.
@@ -730,3 +779,360 @@ one — it is why hangar 9 was built, it is true to 2026, and a Dreamliner rotat
 flight**: no payload, minimum fuel. It must look like a very light aeroplane — early
 rotation, steep initial climb — not a full transatlantic departure. **Do not put a
 777-300ER on this runway.**
+
+---
+
+## 8. The three clips, as shot
+
+Three GIFs, all **25 fps exactly** — a GIF delay is an integer number of
+centiseconds, so 25 fps is 4 cs every frame while 24 fps alternates 4 and 5 and
+reads as stutter. Two are 800 px wide; the aerial tour is 720, because it is the
+one clip in which every pixel changes every frame and 800 px will not fit the
+~15 MB budget at any palette size.
+
+```bash
+python3 scenario_sdsc/verify_gifs.py scenario_sdsc/*.gif   # must exit 0
+``` Every one is verified after encoding with a real
+parser (`PIL.ImageSequence`), never with a byte scan for `0x21F904`: that
+pattern occurs by chance inside LZW data and has reported a phantom 311-second
+delay in this repository before. `verify_gifs.py` is that gate and it exits
+non-zero on any frame whose delay is not 40 ms.
+
+| clip | file | frames | subject | GIF |
+|---|---|---|---|---|
+| 1. departure | `a320_sdsc_v1.gif` | 240 (9.6 s) | **A320neo**, RWY 02, ferry | 14.09 MB / 800 px / 128 colours |
+| 2. the tow | `b789_hangar9_v1.gif` | 400 (16.0 s) | **787-9** into hangar 9 | 14.70 MB / **720 px** / 96 colours |
+| 3. aerial tour | `sdsc_base_v1.gif` | 240 (9.6 s) | the whole base | 14.10 MB / **720 px** / 88 colours |
+
+Each script carries its full reasoning — what was tried, what was rejected and
+the measurement that forced it — in its module docstring. That is the primary
+documentation; this is the index.
+
+### Why two different aeroplanes
+
+The **787-9 gets the hangar**, because hangar 9 exists for 787 heavy maintenance
+and phase 2 sized its 78 × 20.5 m door from a 787-9's 60.1 m span and 17 m fin.
+Putting anything else through it would throw away the only reason the building
+is in the model.
+
+The **A320neo gets the departure**, for three reasons and one of them is
+prudence: it is the base's core workload, it is the type this repository already
+has a take-off rig for (`airbus A320neo/A320neo_decolagem.blend`, with the
+tailstrike angle and the gear sequence already checked), and using the 787 for
+both clips would have made the departure a repeat of the tow. Between them the
+two clips say what the base is: widebodies come in for their checks, narrowbodies
+go out after theirs.
+
+**No 777-300ER anywhere.** CNN Brasil states 777 maintenance is done at
+Guarulhos; it is the one type with positive evidence against
+(`RECOGNITION.md` §5.6).
+
+### The anchor this field offers
+
+Santiago pins the Andes crest at a constant fraction of frame height and lets
+everything move against it. Here the whole 360° terrain horizon spans **−0.35°
+to +1.33°**, and across the NNE→ENE sector the departure looks through it
+averages **−0.10°** and never leaves ±0.31° (`terrain/horizon_fine_0p1deg.csv`).
+
+So the anchor is not a shape, it is a **level**. The horizon here is a
+ruler-straight edge, which is a *stronger* thing to pin than a mountain,
+because tilt and roll error show against a straight line instantly. All three
+clips drive their tilt off it: the departure holds it at v 0.62 → 0.76, the
+tour at v 0.81 → 0.84. The tow is the exception and it has a different anchor —
+the 78 × 20.5 m door, held from u 0.45…0.77 at the start to u 0.28…0.80 at the
+close.
+
+### Clip 1 — the departure
+
+```bash
+blender -b "airbus A320neo/A320neo_decolagem.blend" \
+    -P scenario_sdsc/place_aircraft.py -- --out scenario_sdsc/sdsc_takeoff.blend
+blender -b scenario_sdsc/sdsc_takeoff.blend \
+    -P scenario_sdsc/takeoff_camera.py -- --out scenario_sdsc/sdsc_takeoff_v1.blend
+blender -b scenario_sdsc/sdsc_takeoff_v1.blend -P scenario/camera_metrics.py
+blender -b scenario_sdsc/sdsc_takeoff_v1.blend -P scenario_sdsc/render_clip.py \
+    -- --out /tmp/frames_sdsc_dep/
+ffmpeg -y -framerate 25 -start_number 1 -i /tmp/frames_sdsc_dep/%04d.png \
+  -vf "scale=800:-1:flags=lanczos,split[a][b];\
+[a]palettegen=max_colors=128:stats_mode=diff[p];\
+[b][p]paletteuse=dither=none:diff_mode=rectangle" \
+  -loop 0 scenario_sdsc/a320_sdsc_v1.gif
+```
+
+`python3 scenario_sdsc/takeoff_camera.py` solves the same shot **offline in a
+second** and prints every number below except the ray-cast ones. Use it to tune;
+use `camera_metrics.py` to believe.
+
+One orbit flown in the aeroplane's own coordinates from frame 1 to frame 240 —
+no dolly, no hand-over, because Santiago's five rebuilds showed the stiffness
+lived in the seam between coordinate frames. Camera on the port quarter,
+psi 122° → 111°, 112 → 176 m out, 95 → 162 m west of the centreline, lens
+50 → 42 mm, plus about a metre of slow sinusoidal sway because formation flight
+is not a rail.
+
+**Three things this runway imposed, all of them measured:**
+
+- **The wheels ride downhill.** THR 02 is at z = −2.33 and the runway falls
+  0.62%, so `place_aircraft.py` bakes the grade into the pivot's own z channel
+  rather than into the parent Empty — one transform cannot express a slope. The
+  wheels sit within 0.000 m of the pavement for every frame of the roll, and the
+  offset is smoothstepped to a stop across lift-off so the 0.36 m/s of sink the
+  grade is worth does not appear as a velocity step at rotation.
+- **It is a ferry flight.** Lift-off at **1 150 m of a 1 672 m TORA** — 522 m,
+  31%, still ahead of it — and the climb-out is extended at 16.0 m/s against
+  76 m/s, a 21% gradient, holding 15.5° of pitch. A revenue departure profile on
+  this runway would be wrong.
+- **The camera cannot fly where it wants.** The RWY 20 PAPI stands at lateral
+  +20…+68 m west at along ~1 320 m, exactly where a tight chase would be at
+  exactly the frame it would be at eye height. This one stays 130 m clear at its
+  closest. The other constraint is flow: a low broadside at 7 m measures 1.36
+  frame-widths/s in the central band, which is parallax and no pan change
+  touches it.
+
+**The reveal is terrain, not camera work.** The MRO platform is 35 m below the
+runway and the runway is a crest, so from the camera's opening position the
+sight line to the MRO apron clears the ground by **−5.5 m** — it does not clear
+it. The base is behind the hill; only the tallest roofs show. `mro_clr` in the
+printed report goes positive at **frame 78**, nine frames after the wheels
+leave, and reaches **+10.9 m** at the close, and by then the apron, the nose-in
+line and hangar 9 are all open. This is phase 2's negative check
+`checks/ground_sp318_from_west.png` seen from the other side.
+
+Measured in the scene by `../scenario/camera_metrics.py`:
+
+| | |
+|---|---|
+| screen flow, central band | median **0.050**, p90 0.069, max 0.073 w/s |
+| frames above 0.5 / 1.0 w/s | **0 of 239** / 0 of 239 |
+| screen flow, whole frame | median 0.076, p90 0.166, max 0.175 w/s |
+| nearest scenery in frame | **67 m, `SDSC_AerodromeGround`** — grass, not a tree |
+| worst foreground parallax | 47°/s (Santiago's tree-line disaster was 582°/s) |
+| aeroplane edge margin | 24.87% |
+| aeroplane in frame | 40.4% → 24.4% of frame width, v 0.35 → 0.46 |
+| camera speed | 47 → 79 m/s |
+
+The body max/min flow ratio is 8.7 against the skill's "keep it under ~5:1".
+It is not a hitch: the range is 0.008 → 0.073 w/s, a monotonic ramp from a
+camera locked to the aeroplane during the roll to one craning at the close. A
+ratio between two numbers an order of magnitude below the comfort threshold is
+not a speed change the eye can see.
+
+### Clip 2 — the tow into hangar 9
+
+```bash
+blender -b --factory-startup scenario_sdsc/sdsc_field.blend \
+    -P scenario_sdsc/hangar_tow.py -- --out scenario_sdsc/sdsc_hangar_tow.blend
+blender -b scenario_sdsc/sdsc_hangar_tow.blend -P scenario/camera_metrics.py \
+    -- --pivot B789_Tow
+blender -b scenario_sdsc/sdsc_hangar_tow.blend -P scenario_sdsc/render_clip.py \
+    -- --out /tmp/frames_sdsc_tow/
+```
+
+then the same `ffmpeg` line at **720 px / 96 colours**. This clip is 400
+frames against the others' 240, so it pays 67% more before a single palette
+decision is made; 800 px does not fit at any palette size. Measured on these
+frames: 800/128 = 20.08 MB, 800/96 = 17.75, 800/80 = 15.20, 700/96 = 14.25,
+**720/96 = 14.70**, 720/80 = 12.63. 720/96 keeps the colour depth the dark
+hangar interior needs and still lands inside the budget.
+
+**This clip opens `sdsc_field.blend` directly instead of linking it**, and that
+is deliberate: it has to delete `SDSC_AC_H9` (the parked proxy stands exactly
+where the towed aeroplane goes) and rebuild hangar 9's north wall. Re-running
+the script is the propagation; the shared asset is never edited.
+
+**What the shared scenery does not have, built locally in this file.**
+At the 0.8–1.9 km the field file is designed for, hangar 9's door is correctly a
+dark rectangle *painted on a solid wall* — `build_scenery.py` makes it as a
+1.6 m thick box of `SDSC_HangarInterior`. An aeroplane cannot be towed through
+that. So `hangar_tow.py` cuts a real 78 × 20.5 m opening, stacks the door leaves
+in jamb pockets either side, widens the floor from door-width to the full
+128 × 93 m bay, and hangs six high-bay light lines under phase 2's red space
+frame. **The lamps are load-bearing, not decoration:** the door faces north and
+the shipped sun is at azimuth 274.46°, so no direct sunlight enters it at any
+hour of the shipped rig — without them the interior is a black slot and nothing
+phase 2 built behind that door can be seen at all.
+
+It also moves the fascia band and the LATAM lockup off the opening and onto the
+two wall panels flanking it, for the same reason: a band drawn across a hole
+hangs in mid-air.
+
+**A defect this clip found in the shared build.** Hangar 9's wordmark was
+rendering **mirrored**. `place_wordmark()` lays the lockup out along world
++X × `facing`, and a wall whose outward normal is north needs `facing = −1`
+because an observer north of it sees +X on their left; the build passed +1. The
+west-facing run on the hangar line has the opposite handedness and was right all
+along, which is why the two disagreed and nobody noticed — no camera had ever
+been close enough to read it. Fixed in `build_scenery.py`; **`sdsc_field.blend`
+was rebuilt** and the fix is in the shared asset, not in the clip.
+
+**The tow is a tractrix, and it is solved backwards.** What separates a tow from
+an aeroplane sliding along a spline is that the aeroplane does not follow the
+nose gear's path: the main gear cuts the corner and the tail swings the other
+way. The first attempt drove that forward — a "turn then straight" nose-gear
+path with the aeroplane trailing on a 25.83 m link — and it is **wrong**, for a
+reason worth writing down: a trailer needs three or four wheelbases to settle,
+and after the 19 m of straight this hangar allows, the fuselage was still 9.3°
+off square with one wingtip at 4.0 m of clearance against the other's 14.7.
+
+So the **aeroplane's heading** is the control curve, its main gear integrates
+along it, and the nose gear is derived at `N = M + W·(sin h, cos h)`. The tug
+then follows N. That guarantees square at the door and produces the nose-wheel
+steering for free — it is `atan(W·dh/ds)`, so the wheels swing out to start the
+turn and return to centre to stop it. The eight `TremNariz_*` parts are
+re-parented to an empty on the strut axis so they can actually turn.
+
+| | |
+|---|---|
+| path | 42 m, heading 197° → **180.0°** (hangar 9 is axis-aligned, not on the runway track) |
+| speed | 3.4 m/s (12 km/h) on the apron → 1.0 m/s (3.6 km/h) at the threshold |
+| off-tracking | main gear **3.65 m** inside the nose-gear line, tail **5.01 m** outside it |
+| nose-wheel steer | 0 → **−18.84°** → 0 |
+| square to the door | from frame 304 of 400 |
+| tug across the door plane | frame 85 (21%) |
+| nose across the door plane | frame 115 (29%) |
+| wingtips at frame 400 | x 719.9 and 780.1 in an opening x 711…789 — **8.94 m each side** |
+| fin | 16.48 m in a 20.5 m door, **4.02 m under the lintel** |
+
+**Why this clip is 400 frames when the others are 240.** A 787 does not enter a
+hangar in 9.6 seconds. At a real tow speed the aeroplane covers 42 m in 16 s,
+and speeding it up is the one lie this shot cannot afford. What 42 m does not
+buy is the fin passing under the lintel: the fin is 55 m behind the nose, which
+is 22 more seconds of tow, and no framing recovers it. It is given as a number
+instead — the row above.
+
+**Slow shots fail differently.** The risk is not disorientation, it is stepping:
+a gentle move shows every quantisation in the curves. So the camera path is
+PCHIP rather than a chain of smoothsteps (zero derivative at every knot would
+read as the camera stopping six times), every f-curve is baked per frame and set
+LINEAR, and the report prints the *minimum* screen flow as well as the maximum.
+The camera is one continuous push, 58 m in 16 s, 30 m down to 17 m above the
+platform — **above the platform, which is 35 m below the runway; "runway eye
+height" over here is 35 m in the air.**
+
+Measured in the scene by `camera_metrics.py --pivot B789_Tow`:
+
+| | |
+|---|---|
+| screen flow, central band | median **0.011**, p90 0.017, max 0.017 w/s |
+| frames above 0.5 / 1.0 w/s | **0 of 399** / 0 of 399 |
+| worst single probe in frame | 0.036 w/s |
+| body max/min ratio | 2.0 |
+| nearest scenery in frame | **59 m, `SDSC_FloodlightMasts`** — hangar 9's own apron mast |
+| worst foreground parallax | 3.9°/s |
+| aeroplane edge margin | 12.52% |
+| camera speed | 3 → 4 m/s |
+
+That mast is the one piece of thin geometry close enough to matter. It measures
+12.1 px of shaft and steps **1.9 px per frame** at 3 m/s, so the coupling that
+made Santiago's light masts strobe — thin geometry stepping 68 px behind a 10 px
+shutter — cannot arise. It sits at u 0.93, clear of the doorway.
+
+### Clip 3 — the aerial tour
+
+```bash
+blender -b --factory-startup scenario_sdsc/sdsc_field.blend \
+    -P scenario_sdsc/base_flyover.py -- --out scenario_sdsc/sdsc_base_flyover.blend
+blender -b scenario_sdsc/sdsc_base_flyover.blend -P scenario/camera_metrics.py \
+    -- --pivot none
+blender -b scenario_sdsc/sdsc_base_flyover.blend -P scenario_sdsc/render_clip.py \
+    -- --out /tmp/frames_sdsc_tour/
+```
+
+then the same `ffmpeg` line — but at **720 px, not 800, and 88 colours**. This
+is the clip in which every pixel changes every frame, so it quantises worst:
+800 px lands at 17–20 MB whatever the palette. Santiago's flyover shipped at
+720 px / 72 for exactly the same reason. The ladder, measured on these frames:
+
+| width | colours | size |
+|---|---|---|
+| 800 | 128 | 20 MB |
+| 800 | 72 | 17 MB |
+| 760 | 80 | 14.96 MB |
+| **720** | **88** | **14.10 MB** |
+| 720 | 80 | 13.50 MB |
+| 660 | 88 | 12.46 MB |
+
+Santiago's flyover works for three reasons and all three transfer: **one
+continuous move at constant rate** (a straight line, linear in every control
+value), **a travelling aim** on a different line from the camera's, and **the
+sun never in front of the lens**. Here the sun is 177° off the lens axis at
+frame 1 and 163° at frame 240.
+
+The aim runs Aeroclube → mid-field cluster → hangar 9 → hangar line, and those
+are very nearly collinear on this field: the straight line from (−212, 456) to
+(900, 1800) passes within 30 m of the mid-field apron. One lerp gives the whole
+tour. The camera line **converges** on it by about 6°; a parallel line was tried
+first and is the trap — it holds the bearing exactly constant, which sounds
+ideal and makes the entire world slide sideways at 0.34 w/s with nothing growing
+and nothing arriving.
+
+**Phase 2's haze question, answered by not touching the knob.** §4b warns that
+at 400–700 m the slant range across this field is 3–8 km and offers
+`HAZE_VIS_KM`. This clip flies **lower and closer instead**: 230 → 292 m above
+the plateau at 209 m/s, 930 → 1 038 m from the aim, so the haze term stays at
+16% and the shared calibration is left alone. The cost is that the whole field
+is never in one frame; that is what the travelling aim is for.
+
+What is in frame, and for how long, of 240:
+
+| | | | |
+|---|---|---|---|
+| Aeroclube | 1…32 | hangar 9 | 90…240 |
+| runway, mid-point | 1…93 | MRO hangar bay | 127…240 |
+| mid-field apron | 1…156 | hangar-line north end | 181…240 |
+| chequerboard tower | 10…167 | Museu TAM block | 46…240 |
+
+**This is also the shot that caught the cane/terrain fight.** It is the first
+camera on the field to look OUT at 4–7 km at a shallow angle — every check frame
+before it is either ground-level, where haze closes at 2 km, or steeply down —
+and it rendered the far field as a mottle of two farmland shaders with hard
+straight edges. Diagnosis, the measurement and the fix are in §4b. The general
+lesson is worth keeping: **a new camera angle is a test the scenery has never
+taken.**
+
+Three of the field's six nose-in proxies are replaced by the models this
+repository actually built — the **787-9** on hangar 9's stand, a **767-300ER**
+and an **A320neo** on the hangar frontage — placed by evaluating the meshes and
+putting the WHEELS on the apron, not by trusting any convention about where a
+master's origin sits. The apron here is at z = −37.05.
+
+Measured in the scene by `camera_metrics.py --pivot none`:
+
+| | |
+|---|---|
+| screen flow, central band | median **0.053**, p90 0.058, max 0.061 w/s |
+| frames above 0.5 / 1.0 w/s | **0 of 239** / 0 of 239 |
+| screen flow, whole frame | median 0.079, p90 0.081, max 0.082 w/s |
+| worst single probe in frame | 0.384 w/s |
+| body max/min ratio | **1.3** — the constant rate, measured |
+| nearest scenery in frame | 571 m, `SDSC_AerodromeGround` |
+| worst foreground parallax | 20.9°/s |
+| camera speed | 209 m/s, constant |
+
+A body ratio of 1.3 across 240 frames is what "one continuous move at constant
+rate" looks like when it is measured rather than asserted. The whole-frame and
+central-band numbers barely differ, which is the other signature: at 230 m there
+is nothing near enough to streak at the bottom edge.
+
+### Still open after phase 3
+
+- **The fin has never been through the door.** Clip 2 stops with the wingspan in
+  the opening; the 4.02 m of lintel clearance is arithmetic, not a frame.
+- **The shared `sdsc_field.blend` still has a painted-on door.** Only
+  `sdsc_hangar_tow.blend` has a real opening. If another clip ever needs to look
+  into hangar 9, the opening should move into `build_scenery.py` — it is about
+  forty lines and it would cost the field file nothing.
+- **The tug is inference.** A towbar tractor of plausible size in plausible
+  colours; no photograph of LATAM's São Carlos ground equipment was found.
+- **The interior lighting is inference too.** Six high-bay lines at 17.6 m,
+  tuned by render to about 2 W/m² on the floor, i.e. an interior clearly dimmer
+  than the sunlit apron. No source says what hangar 9 is lit with.
+- **The runway leaves the tour early** (frame 93). A camera that keeps both the
+  1 720 m of pavement and the base would have to be much further out, and the
+  haze answer above rules that out.
+- **The terrain tiers still interleave with each other.** Fixing the cane sheet
+  (§4b) fixed the visible half of a two-part problem; a shallow ray past ~12 km
+  still alternates between `SDSC_Terrain_Near` (30 m) and `SDSC_Terrain_Mid`
+  (60 m). They carry the same material, so it costs shading rather than colour,
+  and at 12 km the haze term is over 90%. The fix is the same shape as the cane
+  one — the tiers need to be exclusive rather than overlapping.

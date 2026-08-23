@@ -101,6 +101,56 @@ a [no-scenery pass](airbus%20A320neo/a320_decolagem_v2.gif) and an
 
 ---
 
+### São Carlos — the second base
+
+**SDSC / Aeroporto Estadual Mário Pereira Lopes**, Água Vermelha, São Carlos/SP:
+LATAM's heavy-maintenance base — nine hangars, 22 workshops, ~2 000 people,
+~270 aircraft a year, and **hangar 9**, opened 26 September 2025 for Boeing 787
+heavy maintenance. Built in [`scenario_sdsc/`](scenario_sdsc/) and linked the
+same way Santiago is. Three clips, and none of them is Santiago with the labels
+changed — this field is short, it is not level, and its base sits 35 m below its
+runway.
+
+![A320neo departing RWY 02 at São Carlos, the camera flying formation off its port quarter as the LATAM maintenance base rises out of the ground behind it](scenario_sdsc/a320_sdsc_v1.gif)
+
+*A320neo lifting off **RWY 02** — 240 frames, 9.6 s. TORA here is 1 672 m and
+anything leaving is a ferry flight, so it goes early: the wheels leave at
+1 150 m with 522 m of runway still ahead. The runway falls 0.62% and the wheels
+ride it down. **The reveal is the terrain, not the camera:** the maintenance
+base is 35 m below the runway and behind its crest, so at frame 1 the sight line
+to the MRO apron misses by 5.5 m — you cannot see the base from the runway. It
+breaks the crest at frame 78, nine frames after rotation, and by the close the
+apron, the nose-in line and hangar 9 are all open behind the climbing jet.
+([`scenario_sdsc/takeoff_camera.py`](scenario_sdsc/takeoff_camera.py))*
+
+![A Boeing 787-9 towed nose-first into hangar 9, the tug and towbar ahead of it and the aircraft passing out of the sunlight into the lit interior](scenario_sdsc/b789_hangar9_v1.gif)
+
+*A **787-9** towed into **hangar 9** — 400 frames, 16.0 s, and the clip nothing
+in this repository had done before. The aeroplane is not a choice: the hangar was
+built for 787 heavy maintenance and its 78 × 20.5 m door is sized off a 787-9's
+60.1 m span. The tow is solved as a **tractrix run backwards** — the aeroplane's
+heading is the control curve, the main gear integrates along it and the nose gear
+is derived, so the tug's track and the nose-wheel steering fall out of the maths
+and the aeroplane is guaranteed square to the door. The main gear cuts 3.65 m
+inside the nose-gear line, the tail swings 5.01 m outside it, and at the last
+frame the wingtips sit in the opening with 8.94 m to spare each side. It is
+400 frames because a 787 does not enter a hangar in ten seconds.
+([`scenario_sdsc/hangar_tow.py`](scenario_sdsc/hangar_tow.py))*
+
+![Aerial tour of the São Carlos base: the Aeroclube, the runway, the mid-field cluster and the LATAM MRO with hangar 9](scenario_sdsc/sdsc_base_v1.gif)
+
+*The aerial tour — 240 frames, 9.6 s, one straight line at constant rate with a
+travelling aim, the São Carlos answer to the Santiago survey above. It opens over
+the Aeroclube and the runway, crosses the mid-field cluster with its
+chequerboard tower, and settles on the MRO: the 471 m hangar line, the nose-in
+row, and hangar 9 standing apart from everything OpenStreetMap traced in 2017.
+**There is no horizon here** — the whole 360° band spans −0.35° to +1.33° — so
+the anchor is not a shape but a level: a ruler-straight edge held at v 0.81 to
+0.84 for all 240 frames.
+([`scenario_sdsc/base_flyover.py`](scenario_sdsc/base_flyover.py))*
+
+---
+
 The A319 is a spec-level derivation of the A320neo master: same nose and
 cross-section, the two constant-section plugs removed (1.60 m forward of the
 wing, 2.13 m aft), tail translated 3.73 m forward, empennage repositioned per
@@ -400,6 +450,52 @@ blender -b "airbus A320neo/A320neo_scl.blend" -P scenario/takeoff_camera.py \
     -- --out "airbus A320neo/A320neo_scl_v2.blend"                       # shoot
 blender -b "airbus A320neo/A320neo_scl_v2.blend" -P scenario/camera_metrics.py   # judge
 ```
+
+## The SDSC scenery — São Carlos
+
+The LATAM MRO base, built once in [`scenario_sdsc/`](scenario_sdsc/) and linked
+the same way. `scenario_sdsc/README.md` is the manual — §7 is the brief phase 2
+wrote for the clips, §8 is what they turned out to be — and
+`scenario_sdsc/RECOGNITION.md` is the short list of what makes the place
+recognisable and what would make it wrong.
+
+Four facts about this field that Santiago has no version of:
+
+- **The runway is 02/20 but its true track is 001.026°.** Magnetic variation is
+  22° W. Build it on 020° and the whole field is rotated 19° against the
+  terrain, the footprints and the sun.
+- **The runway is not level.** THR 02 is at z = −2.33 m and it falls 10.06 m —
+  0.62% — to THR 20. z = 0 is the published *aerodrome* elevation, not the
+  pavement.
+- **The MRO platform is 35 m below the runway**, measured against Copernicus
+  over 348 samples inside the apron polygon. A camera at "runway eye height"
+  over the base is 35 m in the air, and the base cannot be seen from the runway
+  at all.
+- **There is no skyline.** The whole 360° horizon band spans −0.35° to +1.33°,
+  and at a third of azimuths the horizon is vegetation and hangars inside
+  1.5 km, not terrain.
+
+On a **RWY 02** departure the base is on the **RIGHT**, abeam at 1 602–1 937 m
+into the roll — at or just after rotation — and 797–1 287 m out. The Aeroclube
+is the only thing on the left. Build it mirrored and a mechanic sees their own
+base on the wrong side.
+
+```bash
+blender -b --factory-startup -P scenario_sdsc/build_scenery.py -- --field    # ~10 s
+blender -b --factory-startup -P scenario_sdsc/build_scenery.py -- --terrain  # ~90 s
+blender -b "airbus A320neo/A320neo_decolagem.blend" \
+    -P scenario_sdsc/place_aircraft.py -- --out scenario_sdsc/sdsc_takeoff.blend
+blender -b scenario_sdsc/sdsc_takeoff.blend \
+    -P scenario_sdsc/takeoff_camera.py -- --out scenario_sdsc/sdsc_takeoff_v1.blend
+blender -b --factory-startup scenario_sdsc/sdsc_field.blend \
+    -P scenario_sdsc/hangar_tow.py -- --out scenario_sdsc/sdsc_hangar_tow.blend
+blender -b --factory-startup scenario_sdsc/sdsc_field.blend \
+    -P scenario_sdsc/base_flyover.py -- --out scenario_sdsc/sdsc_base_flyover.blend
+```
+
+Each of the three clip scripts also runs **without Blender** —
+`python3 scenario_sdsc/takeoff_camera.py` — and prints the whole shot's geometry
+in a second instead of a minute.
 
 ## Portable exports — outside Blender
 
