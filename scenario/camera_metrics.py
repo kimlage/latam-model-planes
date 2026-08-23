@@ -3,6 +3,12 @@
 
     blender -b "airbus A320neo/A320neo_scl.blend" -P scenario/camera_metrics.py
     blender -b <file>.blend -P scenario/camera_metrics.py -- --json out.json
+    blender -b <file>.blend -P scenario/camera_metrics.py -- --pivot B789_Tow
+
+``--pivot`` names the Empty the subject hangs from; it defaults to ``AviaoPivo``,
+which is what every Santiago file calls it. A scene with no moving subject at all
+- the SDSC aerial tour, say - passes ``--pivot none`` and gets everything except
+the silhouette and the edge-margin columns.
 
 Degrees per second is the wrong unit. What the eye reads is how much of the
 FRAME WIDTH the world crosses per second, and that is (angular rate / HFOV) -
@@ -76,16 +82,24 @@ def main():
 
     scn = bpy.context.scene
     cam = scn.camera
-    piv = bpy.data.objects["AviaoPivo"]
+    pivot_name = a[a.index("--pivot") + 1] if "--pivot" in a else "AviaoPivo"
+    piv = bpy.data.objects.get(pivot_name)
+    if piv is None and pivot_name != "none":
+        print("!! no object %r; measuring without a subject" % pivot_name)
     fps = scn.render.fps / scn.render.fps_base
     res_x, res_y = scn.render.resolution_x, scn.render.resolution_y
     aspect = res_x / res_y
     f0, f1 = scn.frame_start, scn.frame_end
 
     dg = bpy.context.evaluated_depsgraph_get()
-    full, cloud = silhouette_cloud(piv, dg)
-    aircraft = set(o.name for o in descendants(piv)) | {piv.name}
-    print("silhouette cloud: %d points (thinned from %d)" % (len(cloud), len(full)))
+    if piv is None:
+        cloud, aircraft = [], set()
+        print("no subject: skipping the silhouette and edge-margin columns")
+    else:
+        full, cloud = silhouette_cloud(piv, dg)
+        aircraft = set(o.name for o in descendants(piv)) | {piv.name}
+        print("silhouette cloud: %d points (thinned from %d)"
+              % (len(cloud), len(full)))
 
     probes = [((i + 0.5) / GRID_X, (j + 0.5) / GRID_Y)
               for j in range(GRID_Y) for i in range(GRID_X)]
@@ -121,8 +135,8 @@ def main():
                 if dist < near[0]:
                     near = (dist, ob.name, u, v)
 
-        m = piv.matrix_world
-        xs, ys, ok = [], [], True
+        m = piv.matrix_world if piv is not None else None
+        xs, ys, ok = [], [], bool(cloud)
         for p in cloud:
             co = world_to_camera_view(scn, cam, m @ p)
             if co.z <= 0:
@@ -236,9 +250,11 @@ def main():
               % (min(mp), max(r["mast_px_max"] for r in rows
                               if "mast_px_max" in r), res_x))
     mg = [r["margin"] for r in rows if r["margin"] == r["margin"]]
-    mf = min(rows, key=lambda r: r["margin"] if r["margin"] == r["margin"] else 9)
-    print("aircraft edge margin: min %.4f (%.2f%%) at frame %d"
-          % (min(mg), 100 * min(mg), mf["f"]))
+    if mg:
+        mf = min(rows, key=lambda r: r["margin"]
+                 if r["margin"] == r["margin"] else 9)
+        print("aircraft edge margin: min %.4f (%.2f%%) at frame %d"
+              % (min(mg), 100 * min(mg), mf["f"]))
     cs = [r["cam_speed"] for r in rows if "cam_speed" in r]
     print("camera speed %.0f..%.0f m/s" % (min(cs), max(cs)))
 

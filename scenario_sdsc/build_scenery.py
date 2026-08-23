@@ -1678,8 +1678,14 @@ def build_hangar9(P, c_mro):
            (h["x1"], h["y1"] + 0.5, band_z1), (h["x0"], h["y1"] + 0.5, band_z1))]
     bm.faces.new(vs)
     bm_to_object(bm, "SDSC_Hangar9_Band", P["band"], c_mro)
+    # facing = -1, and it is not cosmetic. The lockup is laid out along world
+    # +X * facing; this wall's outward normal is NORTH, and an observer standing
+    # north of it sees world +X on their LEFT. Built with facing=+1 the wordmark
+    # renders MIRRORED - which is what it did until the hangar-9 tow clip put a
+    # camera close enough to read it. The west-facing run below has the opposite
+    # handedness and was right all along, which is why the two disagreed.
     place_wordmark(P, c_mro, "SDSC_Hangar9", face_y=h["y1"] + 0.7,
-                   x_centre=cx, z_base=band_z0 + 0.8, cap_m=3.2, facing=+1)
+                   x_centre=cx, z_base=band_z0 + 0.8, cap_m=3.2, facing=-1)
 
 
 def place_wordmark(P, collection, tag, face_y, x_centre, z_base, cap_m,
@@ -1687,6 +1693,12 @@ def place_wordmark(P, collection, tag, face_y, x_centre, z_base, cap_m,
     """The LATAM lockup on a north- or south-facing fascia, from the OFFICIAL
     SVG via latam_livery_kit - never a lookalike font, the same rule the fleet
     livery follows.
+
+    `facing` is the handedness, NOT the wall's normal: the lockup runs along
+    world +X * facing. A wall whose outward normal is NORTH needs facing = -1
+    (an observer north of it sees +X on their left); a SOUTH-facing wall needs
+    +1. Getting it wrong renders the wordmark mirrored and nothing else changes,
+    which is why it survived until a camera got close enough to read it.
 
     THE CHOICE OF MARK IS INFERENCE. Every photograph of this base carries the
     TAM wordmark on a maroon band, because every photograph is 2006-2014. The
