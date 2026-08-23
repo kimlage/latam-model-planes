@@ -1,0 +1,9 @@
+# This is an Asset Catalog Definition file for Blender.
+VERSION 1
+
+c4a71e30-2b5d-4f8a-9d11-7e3a5c2d0021:SDSC Scenery:SDSC Scenery
+c4a71e30-2b5d-4f8a-9d11-7e3a5c2d0022:SDSC Scenery/Collections:Collections
+c4a71e30-2b5d-4f8a-9d11-7e3a5c2d0023:SDSC Scenery/Furniture:Furniture
+c4a71e30-2b5d-4f8a-9d11-7e3a5c2d0024:SDSC Scenery/Markings:Markings
+c4a71e30-2b5d-4f8a-9d11-7e3a5c2d0025:SDSC Scenery/Aircraft:Aircraft
+c4a71e30-2b5d-4f8a-9d11-7e3a5c2d0026:SDSC Scenery/Materials:Materials

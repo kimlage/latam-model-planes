@@ -68,6 +68,35 @@ URL, author, licence, date, resolution, GPS). Re-download with
 | file | author / licence | date | what it proves |
 |---|---|---|---|
 | `refs/sdsc_field_from_sp318_2013.jpg` | MARCO AURÉLIO ESPARZ, CC BY-SA 3.0 | 2013-12-12 | **The best photograph of the set, and it is nearly the framing of the clip.** Taken from the SP-318 at (x −482, y +1156) in this frame — 480 m *west* of the runway centreline — looking east across the field at the MRO 1.3 km away. It gives: a **shallow-arched, light-grey barrel-vault hangar** with a **dark red / maroon** volume beside it; a **TAM widebody** parked in front, tail-on to the camera; **four tall floodlight masts** with lamp clusters, clearly the tallest built objects on the field; a slim **orange-and-white chequerboard tower** (the Brazilian obstruction-marking pattern) with whip antennas; a **guyed lattice antenna mast**; a derelict multi-storey concrete building at the far left; a **wire fence on square concrete posts**; and the horizon, which is **flat** — a low, distant tree and field line, nothing more. December = wet season: the grass is vivid green and the sky is solid overcast. |
+
+> **CORRECTION, made in phase 2 while building from this photograph.** The row
+> above reads `sdsc_field_from_sp318_2013.jpg` as the LATAM MRO at 1.3 km. It is
+> not. It is the **mid-field apron and the isolated 35 m hangar** at (335, 1141),
+> about 1.1 km from the road. Three independent reasons, all re-measurable:
+>
+> 1. **The sight line to the MRO is blocked.** The runway is a local crest — its
+>    surface is 796 m where the line from the recorded camera point crosses it —
+>    and the Copernicus grid puts that camera point at 792.6 m. Anything beyond
+>    the crest has to stand above ~800 m to be seen. The MRO platform is 770 m and
+>    its roofs reach 784 m. `render_checks.py ground` renders this deliberately as
+>    `ground_sp318_from_west.png`: from the real ground west of the runway the MRO
+>    is invisible, which is the correct behaviour and the check for it.
+> 2. **The parked widebody's fin top stands ABOVE the horizon in the frame.** That
+>    is distance-free and focal-length-free: it bounds the camera at less than the
+>    aeroplane's own height (17.4 m) above the plane it stands on. The MRO apron is
+>    ~23 m below the SP-318; the mid-field apron is 1.7 m below the runway and
+>    ~7 m below the road, which is exactly what the frame measures.
+> 3. **The arch is the wrong size for the MRO and the right size for the mid-field
+>    hangar.** By the horizon-ratio method the vault is 12.7 m to the apex and
+>    ~32 m across at the distance that implies. `relation/7422970` is 35.4 × 35.4 m.
+>
+> So the chequerboard tower, the guyed lattice mast, the cylindrical tank, the
+> derelict concrete block and the four floodlight masts in that frame are all at
+> the **mid-field**, 314 m right of a RWY 02 roll at 1 146 m along it — which is
+> where a departure passes closest to anything on the right. `build_scenery.py`
+> builds them there, in `SDSC_Midfield`. What the frame still proves about the
+> *base* is unchanged: nothing in it was ever the source for the hangar line.
+
 | `refs/mro_centro_tecnologico_2009.jpg` | MARCO AURÉLIO ESPARZ, CC BY-SA 3.0 | 2009-11-19 | **The best exterior of the hangar line.** From (x +490, y +2120) — north-west of the base — across a **sugar-cane field**. Two large hangars side by side: light-grey ribbed metal walls, very shallow roof pitch, each carrying a **broad dark-red/maroon fascia band under the eave with a large "TAM" wordmark**, one in red on white and one in white on maroon. **Five or six TAM aircraft parked nose-in in a line along the frontage**, which is what an MRO ramp looks like. Low white buildings behind. Horizon dead flat. Hazy white sky. |
 | `refs/mro_centro_manutencao_2007.jpg` | MARCO AURÉLIO ESPARZ, CC BY-SA 3.0 | 2007-08-22 | Interior looking out of an **open hangar door**, TAM A319 PR-MBE inside. Gives the door proportion, the light spilling in, and the pale polished floor. |
 | `refs/agua_vermelha_avenida.jpg` | Niels A. Sørensen, CC BY-SA 3.0 | — | The **Água Vermelha** district beside the field: large-crowned tropical trees, low houses with red pantile roofs, a tarmac avenue, deep blue dry-season sky. This is the surround. |

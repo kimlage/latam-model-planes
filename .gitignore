@@ -169,3 +169,10 @@ scenario_sdsc/refs/_map_*.png
 
 # SDSC scenery: render outputs
 scenario_sdsc/checks/
+
+# SDSC scenery: the terrain .blend is ~108 MB of mesh generated in ~90 s from the
+# committed heightfields. Same rule as scenario/scl_terrain.blend. Rebuild with
+#   blender -b --factory-startup -P scenario_sdsc/build_scenery.py -- --terrain
+# scenario_sdsc/sdsc_field.blend (~1 MB) IS committed - it is the shared asset.
+scenario_sdsc/sdsc_terrain.blend
+scenario_sdsc/*.blend1

@@ -215,6 +215,29 @@ This is measured and both DEMs agree, but it is **unconfirmed against a photogra
 a levelling survey**, and it is exactly the kind of thing a 30 m DSM can get wrong
 over a graded industrial platform. Phase 2 should check it before building.
 
+> **Phase 2 checked it, and it stands.** Sampled properly rather than at a point,
+> the apron polygon gives a **median of 769.9 m over 348 grid points, p10–p90
+> 769.3–771.3** — a 2 m spread over 35 729 m², which is a graded platform, not
+> noise. 34.8 m below the published THR 02.
+>
+> `refs/mro_centro_tecnologico_2009.jpg` agrees independently: that camera sits at
+> (498, 2094) where the grid reads 762.4 m, and the photograph shows the hangar line
+> standing on an embankment **above** the cane field with the buildings' feet hidden
+> behind the bank — which is what an 8 m rise looks like from there.
+>
+> And the one frame that appeared to contradict it does not, because it is not of
+> the MRO: see `sdsc_references.md` §2.1. The sight line from the SP-318 to the base
+> is **blocked by the runway crest** — the runway surface is 796 m where that line
+> crosses it and the road is at 792.6 m — so from the west of this field the LATAM
+> MRO cannot be seen at all. `render_checks.py ground` renders that as a deliberate
+> negative check, `ground_sp318_from_west.png`.
+>
+> `build_scenery.py` therefore grades the aerodrome to a **function**, not a
+> constant: the published runway slope over the strip, 769.9 m over the MRO,
+> 795.9 m over the mid-field apron, 804.9 m at the Aeroclube, and the raw DEM
+> between. The terrain mesh is pushed onto the same function before it is blended
+> back out. Flattening this aerodrome to one z would put the MRO 35 m in the air.
+
 One building *is* resolvable at 30 m: `relation/7422965`, 471 × 137 m, reads
 **+12.9 m** above its platform (p90 +10.6 m) across 54 distinct grid cells. Because a
 30 m DSM smears roof edges inward, that is a **floor** on the true ridge, not the

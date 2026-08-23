@@ -60,8 +60,12 @@ object seen from higher up.
 4. **Sugar cane.** The field is surrounded by cane and pasture, right up to the
    boundary. `refs/mro_centro_tecnologico_2009.jpg` is taken *through* a cane field
    with the hangars on the skyline.
-5. **The floodlight masts** are the tallest built objects and stand clearly above the
-   hangars — four of them are visible in `refs/sdsc_field_from_sp318_2013.jpg`.
+5. **The floodlight masts** are the tallest built objects over the ramps — four of
+   them are visible in `refs/sdsc_field_from_sp318_2013.jpg`. **But they are short.**
+   Measured in that frame against the hangar beside them (`sdsc_references.md` §2.1,
+   the phase-2 correction), the lamp clusters sit within about a metre of a 12.7 m
+   apex. These are ~16 m masts, not the 30 m high-masts an international apron
+   carries, and Santiago's figure must not be copied across.
 
 ---
 
