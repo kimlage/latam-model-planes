@@ -539,6 +539,13 @@ or the runway 35 m underground.
 **`SDSC_Operations`** under `SDSC_Field`; plus `SDSC_Light` and `SDSC_Anchors`
 at the top level.
 
+`SDSC_ParkedAircraft` now holds **only the five Aeroclube light aircraft**.
+Phase 5 (§9) moved the ten airliner stands into `fleet_placement.py`, which
+builds a top-level **`SDSC_Fleet`** collection of collection-instance empties in
+each CLIP file rather than in the shared field. That is why a check frame
+rendered off the bare `sdsc_field.blend` must call `populate()` first, and why
+`render_checks.py` does.
+
 Polygon budget: the field is **134 019** faces, the terrain **3.7 M** (180 m tier
 decimated ×3, 60 m and 30 m tiers full). The field is deliberately cheap — it is
 background, and the MRO is seen from 0.8–1.9 km in the departure and 0.4–1.0 km
@@ -556,12 +563,19 @@ in the tour.
 | `SDSC_Water` | 1 874 | 62 km of stream, 8 water bodies |
 | everything else | 2 726 | runway, taxiways, aprons, parked aircraft, mid-field, Aeroclube |
 
+The **fleet** is not in that budget and does not want to be: ten real masters
+arrive as links, ~330 k triangles of *unique* geometry per type, instanced. §9.5
+is what they cost.
+
 Santiago's field is ~42 000 faces on purpose and this one was 66 455 after the
 cane fix. Trebling it buys a village, 158 km of road, 62 km of watercourse, a
 gallery forest that was missing entirely, and a ramp with an operation on it —
 against a terrain mesh 28× larger that has always been affordable. The rule that
-did not change: **simple proxies that read at 200–700 m**, not detailed models
-nobody sees. Every car is ten faces; every GSE unit is two boxes.
+did not change for the *kit*: **simple proxies that read at 200–700 m**, not
+detailed models nobody sees. Every car is ten faces; every GSE unit is two
+boxes. The **aeroplanes** are the deliberate exception, and phase 5 (§9) is the
+argument for it: a car at 400 m is a coloured box to anybody, but an airliner
+has a silhouette people know, and the owner spotted the difference from a GIF.
 
 ---
 
@@ -701,7 +715,7 @@ never colour** — which is why it survived three phases.
 | **ERA5 via Open-Meteo** | `sdsc_operations_wind.json` | ERA5: Copernicus C3S / ECMWF, free use with attribution. Open-Meteo data: **CC BY 4.0**. |
 | **Wikimedia Commons photographs** | the appearance of the hangars, the apron, the interiors, the ground | CC BY-SA 3.0 / 4.0 and **GFDL 1.2** per `refs/manifest.json`. **Git-ignored** — share-alike conflicts with this repo's asset licence. MARCO AURÉLIO ESPARZ (8 of 13) and Renato Spilimbergo Carvalho (3) carry this survey and deserve named credit. |
 | **LATAM / Aeroflap / CNN Brasil / Rede Voa / aeroin press** | figures about the base and hangar 9 | All rights reserved. **Read for numbers only; nothing downloaded, nothing usable as an asset.** |
-| **LATAM brand** | the wordmark and brandmark on the hangar line and on hangar 9, and the fins of the parked proxies | Trademark. Depiction of LATAM's own base; not a licence to reuse the marks. The lockup comes from `../latam_logo_indigo.svg` via `latam_livery_kit`, the same official outlines the fleet livery uses. |
+| **LATAM brand** | the wordmark and brandmark on the hangar line and on hangar 9, and the full livery of the ten real masters now parked on the ramp (§9) | Trademark. Depiction of LATAM's own base; not a licence to reuse the marks. The lockup comes from `../latam_logo_indigo.svg` via `latam_livery_kit`, the same official outlines the fleet livery uses. |
 | **ICAO Annex 14** | the marking pattern the runway follows, since SDSC has no ADC | ICAO ©. Used as a specification reference, quoted only in short fragments. |
 
 ---
@@ -734,10 +748,22 @@ author and licence, and no photograph is tracked by or exposed to git.
 blender -b --factory-startup scenario_sdsc/sdsc_field.blend \
     -P scenario_sdsc/render_checks.py -- plan mro
 blender -b --factory-startup scenario_sdsc/sdsc_field.blend \
-    -P scenario_sdsc/render_checks.py -- ground horizon tour ops
+    -P scenario_sdsc/render_checks.py -- ground horizon tour ops fleet
 ```
 
-Output lands in `scenario_sdsc/checks/`.
+Output lands in `scenario_sdsc/checks/`. Every check populates the ramp from
+`fleet_placement.py` first (§9), because the aeroplanes are no longer in the
+field file.
+
+**`fleet` is phase 5's check** — `fleet_line`, `fleet_cowls`,
+`fleet_engine_off`, `fleet_jacked`. It is where the claim in §9.4 is tested:
+whether the heavy-check states survived the switch from proxies that were built
+with them to masters that have none. All four stand at 55–95 m above the
+platform on purpose; the first pass put the three close cameras on the ramp at
+7–9 m and rendered three black frames, because the hangar line's west face is at
+x = 931 and the free-standing 44 × 42 m hangar `way/708700156` sits in the middle
+of the apron, so a station picked off a plan is inside a building more often than
+not.
 
 **`plan` is the check that matters.** It renders an orthographic top-down framed to
 match `sdsc_osm_plan.png` exactly — x −500…1700, y −400…2300 — so the two go side by
@@ -757,7 +783,7 @@ the same against `sdsc_osm_plan_mro.png`. What the pair shows today:
 | **roads, watercourses, landuse** | **now in both.** Phase 4: 287 ways / 158.5 km, 71 streams / 62 km, 8 water bodies, 35 landuse polygons. The line that used to read *"in the plan, not in the build"* is closed |
 | **Água Vermelha** | in both — the mapped grid plus 300 declared-inference houses (§3) |
 | **the staff car parks** | **the aisles match the plan** — they are OSM's own service ways. The cars are inference |
-| the MRO ramp | now has an operation on it: 6 of 9 aeroplanes apart, 71 dock pieces, 75 GSE, 30 containers, a gate |
+| the MRO ramp | now has an operation on it: 6 of 9 aeroplanes apart, 71 dock pieces, 75 GSE, 28 containers, a gate — and since phase 5 the aeroplanes are the **real masters**, ten of them, eight types (§9) |
 
 **`ground` frames the departure clip's stations**, all of them looking RIGHT of a
 RWY 02 roll because that is where the base is. Two of them are deliberate negative
@@ -917,13 +943,24 @@ rotation, steep initial climb — not a full transatlantic departure. **Do not p
 
 ## 8. The three clips, as shot
 
-> **Phase 4 re-shot all three.** The scenery under them changed — the surround
-> was built and the ramp got an operation on it (§3) — so `_v1` is history and
-> `_v2` is what the clips are now. Nothing about the camera work changed: the
-> paths, the lenses, the frame counts and the reasoning below are phase 3's,
-> re-rendered against a different world. The measured metrics at the end of each
-> clip's block are **phase 4's re-measurement**, and the phase 3 numbers are
-> kept beside them so the two can be compared.
+> **Phase 5 re-shot all three again, and `_v3` is what the clips are now.**
+> What changed is on the ramp: the nine airliners on the MRO stands and the
+> widebody on the mid-field apron were low-poly proxies and are now ten of the
+> eleven real masters, placed by `fleet_placement.py`. **§9 is the whole
+> reckoning** — the type mapping, which heavy-check states survived the switch
+> and which one had to be authored, why it links rather than appends, and what
+> it costs per frame.
+>
+> Phase 4 had re-shot them for a different reason: the surround was built and
+> the ramp got an operation on it (§3), so `_v1` became history and `_v2` was
+> the clip. Nothing about the camera work has changed in either round — the
+> paths, the lenses, the frame counts and the reasoning below are still
+> phase 3's, re-rendered against a changing world. The measured metrics at the
+> end of each clip's block are **re-measured every round**; §9.7 is phase 5's,
+> beside phase 4's, because detailed models at the stands change what the
+> nearest in-frame object is and that is exactly the class of defect that bit
+> Santiago. (It did not recur: the near field is the same three objects at the
+> same three distances.)
 
 Three GIFs, all **25 fps exactly** — a GIF delay is an integer number of
 centiseconds, so 25 fps is 4 cs every frame while 24 fps alternates 4 and 5 and
@@ -1077,9 +1114,17 @@ frames: 800/128 = 20.08 MB, 800/96 = 17.75, 800/80 = 15.20, 700/96 = 14.25,
 hangar interior needs and still lands inside the budget.
 
 **This clip opens `sdsc_field.blend` directly instead of linking it**, and that
-is deliberate: it has to delete `SDSC_AC_H9` (the parked proxy stands exactly
-where the towed aeroplane goes) and rebuild hangar 9's north wall. Re-running
-the script is the propagation; the shared asset is never edited.
+is deliberate: it has to rebuild hangar 9's north wall, and it has to leave
+hangar 9's stand empty because the towed aeroplane goes there. Since phase 5 the
+second half is one argument — `F.populate(scn, skip=("H9",))` — rather than a
+proxy deletion. Re-running the script is the propagation; the shared asset is
+never edited.
+
+**The towed 787-9 is still APPENDED, not instanced**, and it is the one place a
+clip departs from `fleet_placement.py`: the tow re-parents `TremNariz*` to a
+steering empty so the nose gear tracks the towbar, and you cannot re-parent
+inside a collection instance. One aircraft's worth of unique geometry, for the
+one aircraft the clip is about.
 
 **What the shared scenery does not have, built locally in this file.**
 At the 0.8–1.9 km the field file is designed for, hangar 9's door is correctly a
@@ -1231,11 +1276,13 @@ straight edges. Diagnosis, the measurement and the fix are in §4b. The general
 lesson is worth keeping: **a new camera angle is a test the scenery has never
 taken.**
 
-Three of the field's six nose-in proxies are replaced by the models this
-repository actually built — the **787-9** on hangar 9's stand, a **767-300ER**
-and an **A320neo** on the hangar frontage — placed by evaluating the meshes and
-putting the WHEELS on the apron, not by trusting any convention about where a
-master's origin sits. The apron here is at z = −37.05.
+Phase 3 shipped this clip with three of the nose-in proxies hand-swapped for
+real masters, in `base_flyover.py` itself, and that tuple is what the owner's
+complaint eventually landed on: everything outside those three entries was still
+a proxy. **Phase 5 took the whole business out of this script.** The ramp is now
+ten real masters of eight types, from `fleet_placement.py`, and this file's
+entire contribution is `F.populate(scn)`. §9 is the reckoning. The apron here is
+at z = −37.05 and the wheels are seated on it to 0.000 m, measured.
 
 Measured in the scene by `camera_metrics.py --pivot none`:
 
@@ -1277,3 +1324,226 @@ is nothing near enough to streak at the bottom edge.
   — worth ±6.7 m of z at the 30/60 seam and ±35 m at the 60/180 one. Measured,
   then fixed the cane fix's way: a deliberate underlap plus a ramped 7 m / 32 m
   bias. §4b has the numbers.
+
+---
+
+## 9. Phase 5 — the real aeroplanes on the ramp
+
+> The owner watched `b789_hangar9_v2.gif` and said the towed 787-9 is the real
+> master but there is an undetailed aeroplane standing behind it. He was right,
+> and the reason is worth naming: phase 4 parked **fifteen low-poly proxies** on
+> this field and `base_flyover.py` then hand-swapped **three** of them — in its
+> own file, as a tuple — for the models this repository had built. Everything
+> outside those three entries was still a proxy, in every clip.
+>
+> Phase 5 replaced the three-entry special case with **one module**,
+> [`fleet_placement.py`](fleet_placement.py), and gave every airliner stand on
+> the field a real master.
+
+### 9.1 What the module is
+
+One table, four callers. The table says which of the eleven masters stands where;
+the stand's **position, heading and state** stay in `build_scenery.MRO_STANDS`
+and `OUTFIELD_STANDS`, which is also what the maintenance kit and the GSE are
+laid out from, so there is exactly one set of coordinates in the repository.
+
+```python
+import fleet_placement as F
+F.populate(scn)                     # takeoff_camera.py, base_flyover.py
+F.populate(scn, skip=("H9",))       # hangar_tow.py — its 787 is being towed on
+```
+
+`render_checks.py` calls it too, and has to: the ramp aeroplanes are no longer
+part of `sdsc_field.blend`, so a check frame rendered off the bare field would
+show an empty apron and would have stopped being a check of what the clips see.
+
+`build_scenery.py` reads the same table the other way round. `airliner_proxy()`
+is **kept and still wired up** — a stand whose `FLEET` entry is `None` gets its
+proxy back, and `proxy_stands()` reports which. Nothing uses it today; the
+escape hatch is real, and §9.5 is the measurement that would justify pulling it.
+
+### 9.2 Instance, do not duplicate — and why linking, not appending
+
+A master at render subdivision is **307 000 – 356 000 triangles**, measured on
+all eleven. Fifteen unique copies would be ~5 M and the tow clip is 400 frames.
+
+Santiago's `../scenario/base_flyover.py` **appends** each master and duplicates
+hierarchies with `ob.copy()`, which shares the mesh datablock. That is not an
+instance as far as Cycles is concerned: **Cycles keys geometry on the OBJECT
+whenever the object carries modifiers**, and every master mesh here has
+SUBSURF / MIRROR / BEVEL, so two objects sharing one modified mesh still export
+as two geometries. Appending also copies every mesh into the shot file, and the
+three clip `.blend`s are committed.
+
+So this module **links** the four sub-collections and puts an
+`instance_type='COLLECTION'` empty at each stand. The depsgraph then hands
+Cycles the *same evaluated object* with N matrices — one geometry, N instances —
+and the file gains a library reference instead of mesh data:
+
+| file | v2 (appended / proxies) | v3 (linked instances) |
+|---|---|---|
+| `sdsc_field.blend` | 3.30 MB | 3.37 MB |
+| `sdsc_takeoff_v1.blend` | 3.22 MB | 3.55 MB |
+| `sdsc_hangar_tow.blend` | 4.09 MB | 4.42 MB |
+| `sdsc_base_flyover.blend` | 4.91 MB | **3.69 MB** |
+
+The tour file got *smaller*: its three appended masters became three links.
+
+**Linking the master's TOP collection is what does not work**, and Santiago's
+docstring says why — the parts hang from parent empties that live outside the
+sub-collections, so an instance disassembles into a fin on the apron. Linking
+the four sub-collections is fine, and it was verified rather than assumed:
+**every object in `01_Estrutura` / `02_Motores` / `03_Trem` / `04_Detalhes`, in
+all eleven masters, is a world-coordinate root with no parent.**
+
+The one deliberate exception is the towed 787-9 in `hangar_tow.py`, which is
+still appended: the tow re-parents `TremNariz*` to a steering empty so the nose
+gear tracks the towbar, and you cannot re-parent inside a collection instance.
+One aircraft's worth of unique geometry, for the one aircraft the clip is about.
+
+### 9.3 The type mapping, and the evidence for each
+
+Ten stands, eight of the eleven masters. Everything below comes from the table
+in §7 and `sdsc_aip_survey.json`.
+
+| stand | state | type | why |
+|---|---|---|---|
+| `ROW0` | parked | **767-300ER** | the widebody LATAM lists among the types maintained here |
+| `ROW1` | parked | **A320neo** | the everyday type, and the one the departure clip flies |
+| `H9` | parked | **787-9** | hangar 9 exists for 787 heavy maintenance |
+| `N0` | jacked | **767-300F**, LATAM Cargo | the freighter is an evidenced variant, and it puts the cargo livery on a ramp that would otherwise be all passenger white |
+| `N1` | docked | **A321neo** | |
+| `N2` | engine_off | **A320ceo** | |
+| `N3` | cowls | **A320neo** | shares `ROW1`'s linked geometry |
+| `N4` | cowls | **A319** | the shortest of the family — length is what reads at 300 m |
+| `N5` | docked | **A321ceo** | |
+| `MID` | parked | **767-300ER** | the mid-field apron, 26 m below the runway crest, where the 2013 reference photograph has a TAM widebody. Shares `ROW0`'s geometry |
+
+Six of the ten are A320-family, ceo and neo, in three different lengths. That is
+not decoration: *"the A320 family is the base's core workload; hangar 9 alone
+takes three A320s at once."*
+
+**Two gaps are declared, not papered over.**
+
+* **No A330.** The A330-200 is recorded as the largest type here before 2020 and
+  there is no A330 master in this repository. The "wide" stands are 767s, which
+  is the type with *current* evidence.
+* **No light aircraft.** The five Aeroclube GA aeroplanes stay `ga_proxy()` and
+  are now **the only proxies on this field** — 180–280 m off a RWY 02 roll,
+  which is close enough to be worth saying out loud.
+
+**No 777-300ER anywhere**, and it is not in the module's `TYPES` table at all.
+CNN Brasil states 777 maintenance is done at Guarulhos; it is the one type with
+positive evidence *against*.
+
+### 9.4 The states — this is a heavy-check base, not a terminal apron
+
+`MRO_STANDS` deliberately shows aircraft **apart**. That is what distinguishes an
+MRO from a gate row, the proxies were built with the states, and the masters have
+none. What each one could honestly become:
+
+| state | on a real master | verdict |
+|---|---|---|
+| `parked` | all four collections | trivial |
+| `docked` | all four collections | **survives unchanged.** `docked` was never an airframe state — the nose dock, tail dock, wing docks and towers that make it read are `build_maintenance`'s kit and they are already standing round the stand |
+| `jacked` | all four, lifted `JACK_LIFT` = 0.55 m | **survives.** Gear stays DOWN and the tyres hang clear of the concrete over the jacks, which is a jacking for a weighing or a strut change. Gear *retracted* on jacks would be a gear swing, and that is not what the kit under it shows |
+| `engine_off` | **`02_Motores` is a separate collection, and that is the opening.** This stand does not instance it: it appends a local copy, bakes it at render subdivision, and deletes every face on the **port** side except the pylon's | **survives exactly.** One engine, one bare pylon — the proxy's own semantics — and `build_maintenance` already has the removed engine on its cradle and the dolly beside the wing. Port is local −Y: the nose is local −X and up is +Z, so left = up × forward |
+| `cowls` | **the one state the masters cannot hold** | see below |
+
+**`cowls` could not be taken off the shelf, and it is not silently dropped.**
+There is no fan-cowl door in any master's geometry to hinge — `Motor_Nacelle`
+(Airbus, mirrored) and `Nacelle_E` / `Nacelle_D` (Boeing) are single lofted,
+subsurfed skins. Hiding the skin was tried on paper and rejected: it gives
+"engine stripped to the core", a real state but a *different* one, and at 300 m
+it reads as a thinner engine rather than an opened one.
+
+So **the doors are authored by the module** and that has to be said plainly: two
+panels per engine, hinged on the nacelle crown at 55°, are new geometry that is
+not part of any master. What is *not* invented is their size and position — the
+nacelle's crown line, centre, radius and length are **measured off the evaluated
+master** and the panels are built in the master's own local frame, so they sit on
+the real nacelle and scale with the type. It is the same construction
+`airliner_proxy(engines="open")` uses, moved onto a real aeroplane, and the state
+it reproduces is photographed on this site: `refs/mro_centro_tecnologico_2010.jpg`,
+an A320 with the fan cowls open and the core exposed.
+
+`checks/fleet_cowls.png` is the frame that says whether the doors sit on the
+nacelle or float beside it. Look at it before believing this paragraph.
+
+### 9.5 What it costs, measured
+
+Whole-scene triangles, and the marginal cost of one frame at 960 × 540 on the
+M3 Max — *marginal*, not the first frame, because a 240-frame job pays the sync
+and BVH build once. Measured as `(t(6 frames) − t(1 frame)) / 5` on the same
+frame range before and after.
+
+| clip | triangles v2 → v3 | s/frame v2 → v3 | 
+|---|---|---|
+| departure, f118–123 | 7.86 M → 9.69 M | 2.22 → 20.77 |
+| the tow, f200–205 | 7.84 M → 9.50 M | 7.52 → 19.40 |
+| the tour, f200–205 | 8.22 M → 9.50 M | 5.09 → 13.48 |
+
+**Where the cost is, and it is not where it looks.** Two controlled experiments
+on the tour, which is the clip with no hero aircraft:
+
+| tour, marginal s/frame | |
+|---|---|
+| no aircraft at all | 5.09 |
+| 10 aircraft, **3** types | 9.79 |
+| 10 aircraft, **8** types | 13.48 |
+| 10 aircraft, 8 types, **subdivision capped at level 1** | 15.28 |
+
+So ~0.47 s/frame per *aeroplane* and ~0.74 s/frame per *type*, and **capping the
+subdivision made it slower, not faster** — the geometry LOD idea is dead, the
+cost is the number of distinct materials and texture sets, not the triangles.
+Collapsing the six A320-family aircraft onto one type would buy back 3.7 s/frame
+on the tour, about 15 minutes; it was not taken, because ceo/neo and
+A319/A320/A321 are the evidenced workload of this base and 8 % of one render is
+what that truth costs.
+
+**Nothing stayed a proxy for cost reasons.** The honest answer here was that all
+ten stands could carry a real master and the clips still render in one sitting —
+about 4 hours for all three against about 2.5 for v2. The only proxies left on
+this field are the five Aeroclube light aircraft, and they are proxies because
+**no light-aircraft master exists**, not because of render time.
+
+### 9.6 The placement verifies itself, and it caught something
+
+Santiago's rule, generalised: nothing trusts a convention about where a master's
+origin is or how big it is. Each aircraft is rotated nose-to-heading, its
+**evaluated** envelope is measured through the depsgraph — collection instances
+included — and the root is moved so the centre lands on the stand and the lowest
+point, the tyres, lands on the apron. Then it is measured again and printed.
+**Wheels seated to 0.000 m on all ten.**
+
+On top of that `populate()` runs a **pairwise 2-D overlap check** across every
+aircraft it placed, which the proxy table could not do because the proxies were
+nominal boxes. It found one on the first run: the phase-4 `wide` proxy was
+47.6 m of span and a real 767-300ER is **51.2**, which put its starboard wingtip
+**1.6 m inside** the A320 parked next door on the hangar frontage. `ROW0` moved
+4 m south and `ROW1` 5 m north; the gap is now 7.4 m, about what a real ramp
+keeps between wingtips. Overlaps: **0**.
+
+### 9.7 The camera metrics, re-measured
+
+Detailed models at the stands change what the nearest in-frame object is, which
+is exactly the class of defect that bit Santiago. Re-measured on all three v3
+files with `../scenario/camera_metrics.py`:
+
+| | departure | the tow | the tour |
+|---|---|---|---|
+| nearest scenery in frame | 67 m, `SDSC_MownGrass` | **59 m, `SDSC_FloodlightMasts`** | 571 m, `SDSC_AerodromeGround` |
+| phase 4 said | 67 m, `SDSC_AerodromeGround` | 59 m, `SDSC_FloodlightMasts` | 571 m, `SDSC_AerodromeGround` |
+| worst foreground parallax | 47.5°/s (was 47) | 3.9°/s (unchanged) | 20.9°/s (unchanged) |
+| aeroplane edge margin | 24.87% (unchanged) | 12.52% (unchanged) | — |
+| body max/min flow ratio | 9.0 (was 8.7) | 2.0 (unchanged) | 1.3 (unchanged) |
+| central-band frames > 0.5 w/s | 0 of 239 | 0 of 399 | 0 of 239 |
+
+**No detailed model became the nearest object in any clip.** The near field is
+grass at 67 m in the departure, hangar 9's own apron mast at 59 m in the tow, and
+the aerodrome ground at 571 m in the tour — the same three as phase 4, at the
+same three distances. The departure's nearest hit changes *name* only, from the
+aerodrome pad to the mown-grass sheet, which are adjacent surfaces at the same
+station; the body ratio moves 8.7 → 9.0 because some of the flow probes now land
+on an aeroplane instead of on the apron behind it, and both numbers are an order
+of magnitude below the comfort threshold.

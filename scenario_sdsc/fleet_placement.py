@@ -150,9 +150,12 @@ TYPES = {
     "B763F":   os.path.join("boeing 767-300F", "B763F_LATAM_CARGO.blend"),
     "B788":    os.path.join("boeing 787-8", "B788_LATAM.blend"),
     "B789":    os.path.join("boeing 787-9", "B789_LATAM.blend"),
-    # B763BCF and B77W exist as masters and are deliberately NOT used on this
-    # ramp: the BCF adds nothing the -300F does not already say, and the 777
-    # has positive evidence against it operating at SDSC at all.
+    # B788 is listed and currently unplaced: there is one widebody stand at
+    # hangar 9 and it belongs to the -9, which is the type the building was
+    # announced for. It is here so a second dream stand is one line of FLEET.
+    # B763BCF and B77W exist as masters and are deliberately NOT in this table:
+    # the BCF adds nothing the -300F does not already say, and the 777 has
+    # positive evidence against it operating at SDSC at all.
 }
 
 #: stand tag -> type key, or None to leave the stand a proxy.

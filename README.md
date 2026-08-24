@@ -111,7 +111,7 @@ same way Santiago is. Three clips, and none of them is Santiago with the labels
 changed — this field is short, it is not level, and its base sits 35 m below its
 runway.
 
-![A320neo departing RWY 02 at São Carlos, the camera flying formation off its port quarter as the LATAM maintenance base rises out of the ground behind it](scenario_sdsc/a320_sdsc_v2.gif)
+![A320neo departing RWY 02 at São Carlos, the camera flying formation off its port quarter as the LATAM maintenance base rises out of the ground behind it](scenario_sdsc/a320_sdsc_v3.gif)
 
 *A320neo lifting off **RWY 02** — 240 frames, 9.6 s. TORA here is 1 672 m and
 anything leaving is a ferry flight, so it goes early: the wheels leave at
@@ -123,7 +123,7 @@ breaks the crest at frame 78, nine frames after rotation, and by the close the
 apron, the nose-in line and hangar 9 are all open behind the climbing jet.
 ([`scenario_sdsc/takeoff_camera.py`](scenario_sdsc/takeoff_camera.py))*
 
-![A Boeing 787-9 towed nose-first into hangar 9, the tug and towbar ahead of it and the aircraft passing out of the sunlight into the lit interior](scenario_sdsc/b789_hangar9_v2.gif)
+![A Boeing 787-9 towed nose-first into hangar 9, the tug and towbar ahead of it and the aircraft passing out of the sunlight into the lit interior](scenario_sdsc/b789_hangar9_v3.gif)
 
 *A **787-9** towed into **hangar 9** — 400 frames, 16.0 s, and the clip nothing
 in this repository had done before. The aeroplane is not a choice: the hangar was
@@ -137,7 +137,7 @@ frame the wingtips sit in the opening with 8.94 m to spare each side. It is
 400 frames because a 787 does not enter a hangar in ten seconds.
 ([`scenario_sdsc/hangar_tow.py`](scenario_sdsc/hangar_tow.py))*
 
-![Aerial tour of the São Carlos base: the Aeroclube, the runway, the mid-field cluster and the LATAM MRO with hangar 9](scenario_sdsc/sdsc_base_v2.gif)
+![Aerial tour of the São Carlos base: the Aeroclube, the runway, the mid-field cluster and the LATAM MRO with hangar 9](scenario_sdsc/sdsc_base_v3.gif)
 
 *The aerial tour — 240 frames, 9.6 s, one straight line at constant rate with a
 travelling aim, the São Carlos answer to the Santiago survey above. It opens over
@@ -148,6 +148,21 @@ row, and hangar 9 standing apart from everything OpenStreetMap traced in 2017.
 the anchor is not a shape but a level: a ruler-straight edge held at v 0.81 to
 0.84 for all 240 frames.
 ([`scenario_sdsc/base_flyover.py`](scenario_sdsc/base_flyover.py))*
+
+**All three are `_v3`, and what changed is on the ramp.** The nine airliners on
+the MRO stands and the widebody on the mid-field apron were low-poly proxies;
+they are now ten of the eleven real masters — the whole A320 family in three
+lengths, a 767-300ER, a LATAM Cargo 767-300F on jacks, and the 787-9 on
+hangar 9's stand. One module,
+[`scenario_sdsc/fleet_placement.py`](scenario_sdsc/fleet_placement.py), places
+them for all three clips: it *links* the masters' four sub-collections and puts a
+collection-instance empty at each stand, so ten detailed aeroplanes cost the shot
+files about 0.3 MB rather than 40, and Cycles syncs each type's geometry once
+however many stands use it. It is a **heavy-check** base, so the states had to
+survive the switch — `docked` and `jacked` come free, `engine_off` is an append
+of `02_Motores` with the port side deleted, and the open fan cowls had to be
+*built*, because no master has a cowl door to hinge. `scenario_sdsc/README.md`
+§9 is the whole reckoning, including what it costs per frame.*
 
 ---
 
@@ -496,6 +511,17 @@ blender -b --factory-startup scenario_sdsc/sdsc_field.blend \
 Each of the three clip scripts also runs **without Blender** —
 `python3 scenario_sdsc/takeoff_camera.py` — and prints the whole shot's geometry
 in a second instead of a minute.
+
+All three of them call one shared module,
+[`scenario_sdsc/fleet_placement.py`](scenario_sdsc/fleet_placement.py), to put
+the **real aircraft masters** on the MRO stands: one table of stand → type, the
+heavy-check states worked out on real geometry, and a self-verifying placement
+that seats the wheels on the apron and then checks no two aeroplanes are inside
+each other. It links and instances rather than appending, so the shot files stay
+small and Cycles syncs each type once. `scenario_sdsc/README.md` §9 has the
+mapping, the states and the per-frame cost; `python3
+scenario_sdsc/fleet_placement.py` prints the table and checks the masters are on
+disk.
 
 ## Portable exports — outside Blender
 
