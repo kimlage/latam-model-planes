@@ -130,6 +130,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
 import shot_common as S                                       # noqa: E402
+import fleet_placement as F                                   # noqa: E402
 
 FRAME_END = 240             # 9.6 s at 25 fps
 SRC_END = 140               # where the shipped A320neo action stops
@@ -506,7 +507,17 @@ def main():
     cam.data.sensor_fit = "HORIZONTAL"
     cam.data.sensor_width = S.SENSOR
 
-    # ---- 3. render settings ----------------------------------------------
+    # ---- 3. the ramp -------------------------------------------------------
+    # The MRO goes past on the RIGHT between 1 600 and 1 940 m of the roll, so
+    # the nose-in line is in this frame from rotation to the close - at 800 to
+    # 1 900 m, where an A320 is 15-37 px wide. Detailed models are not free at
+    # that size, but a fin shape and an engine count are exactly what those
+    # pixels carry, and this clip shares the fleet module with the other two:
+    # the field it links no longer has proxies on those stands, so the
+    # aeroplanes are instanced here, locally, from the same table.
+    F.populate(scn)
+
+    # ---- 4. render settings ----------------------------------------------
     scn.render.fps = 25
     scn.render.fps_base = 1.0
     scn.frame_start, scn.frame_end = 1, FRAME_END

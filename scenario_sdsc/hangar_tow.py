@@ -51,10 +51,21 @@ file and never in `sdsc_field.blend`**, replaces four things:
    hangar line, "one run on each face that really exists" — and the LATAM lockup
    moves onto the eastern panel, which is the one inside this camera's frame for
    all 400 frames.
-4. **The stand is cleared.** `SDSC_AC_H9`, the parked 787 proxy, stands exactly
-   where the towed one has to be. It is deleted here — which is why this script
-   opens `sdsc_field.blend` directly instead of linking it: re-running the
-   script IS the propagation, and the shared asset is left untouched.
+4. **The stand is cleared.** Hangar 9's stand is where the towed aeroplane has
+   to be, so nothing is parked on it: `fleet_placement.populate(skip=("H9",))`
+   is how this clip says so, and it is one argument rather than a special case.
+   Everything else on that ramp — the nine other stands, eight real masters,
+   the heavy-check states — comes from the same call. Phase 4's `SDSC_AC_H9`
+   proxy is not built any more and its deletion below is left in as a no-op for
+   an older field file. This is also why the script opens `sdsc_field.blend`
+   directly instead of linking it: re-running the script IS the propagation,
+   and the shared asset is left untouched.
+
+   **The towed 787-9 is still APPENDED here, not instanced**, and that is the
+   one place this file departs from the module: the tow needs `TremNariz*`
+   re-parented to a steering empty so the nose gear tracks the towbar, and you
+   cannot re-parent inside a collection instance. One aircraft's worth of
+   unique geometry, for the one aircraft the clip is about.
 
    While a camera was finally close enough to read that lockup it turned out to
    be **mirrored** — `place_wordmark` lays it out along world +X × `facing` and
@@ -164,6 +175,7 @@ ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 
 import shot_common as S                                       # noqa: E402
+import fleet_placement as F                                   # noqa: E402
 
 B789 = os.path.join(ROOT, "boeing 787-9", "B789_LATAM.blend")
 TERRAIN = os.path.join(HERE, "sdsc_terrain.blend")
@@ -540,7 +552,9 @@ def main():
             except ValueError:
                 pass
 
-    # ---- 1. clear the stand and the painted-on door ------------------------
+    # ---- 1. the ramp, the stand and the painted-on door --------------------
+    # Every stand but hangar 9's, which is where the towed aeroplane goes.
+    F.populate(scn, skip=("H9",))
     for nm in ("SDSC_AC_H9", "SDSC_ACFin_H9", "SDSC_Hangar9",
                "SDSC_Hangar9_Door", "SDSC_Hangar9_Floor",
                "SDSC_Hangar9_Band"):

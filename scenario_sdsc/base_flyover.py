@@ -99,15 +99,16 @@ never taken.** Nothing about this was visible from any station phase 2 checked.
 
 THE POPULATED RAMP
 ------------------
-Santiago's owner asked for the detailed models rather than the low-poly proxies
-on the ramp, and the same applies. Three of the field's six nose-in proxies are
-replaced by the real ones: the **787-9** on hangar 9's stand, because that is
-the type the building exists for; a **767-300ER** and an **A320neo** on the
-hangar frontage, the two types LATAM is documented as maintaining here. Placed
-by the same self-verifying envelope Santiago uses — the meshes are evaluated and
-the WHEELS put on the apron — rather than by trusting any convention about
-where a master's origin is. **No 777-300ER anywhere on this field**: CNN Brasil
-puts 777 maintenance at Guarulhos, and it is the one type with evidence against.
+Phase 3 shipped this clip with three of the nose-in proxies hand-swapped for
+real masters, right here in this file, and the owner caught what that left
+behind: everything else on the ramp was still a low-poly proxy. Phase 5 took
+the whole business out of this script. `fleet_placement.py` owns it now — ten
+stands, eight of the eleven masters, the heavy-check states worked out one by
+one, and the same self-verifying envelope on every one of them. This clip calls
+`F.populate(scn)` and says nothing else about aeroplanes.
+
+**No 777-300ER anywhere on this field**: CNN Brasil puts 777 maintenance at
+Guarulhos, and it is the one type with evidence against.
 """
 import math
 import os
@@ -118,6 +119,7 @@ ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 
 import shot_common as S                                       # noqa: E402
+import fleet_placement as F                                   # noqa: E402
 
 TERRAIN = os.path.join(HERE, "sdsc_terrain.blend")
 FRAME_END = 240                     # 9.6 s at 25 fps
@@ -223,20 +225,8 @@ def report(rs):
 # ---------------------------------------------------------------------------
 # Blender side
 # ---------------------------------------------------------------------------
-MASTERS = (
-    # (tag, master file, the proxy it replaces, stand xy, heading deg)
-    ("B789", os.path.join(ROOT, "boeing 787-9", "B789_LATAM.blend"),
-     ("SDSC_AC_H9", "SDSC_ACFin_H9"), (750.0, 1722.0), 181.0),
-    ("B763", os.path.join(ROOT, "boeing 767-300ER", "B763_LATAM.blend"),
-     ("SDSC_AC_ROW0", "SDSC_ACFin_ROW0"), (904.0, 1790.0), 91.0),
-    ("A320neo", os.path.join(ROOT, "airbus A320neo", "A320neo_LATAM.blend"),
-     ("SDSC_AC_ROW1", "SDSC_ACFin_ROW1"), (900.0, 1832.0), 91.0),
-)
-
-
 def main():
     import bpy
-    import mathutils
 
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
     out = argv[argv.index("--out") + 1] if "--out" in argv else \
@@ -258,54 +248,11 @@ def main():
     else:
         print("!! sdsc_terrain.blend missing - build_scenery.py -- --terrain")
 
-    # ---- the detailed models, on the stands their proxies held -------------
-    for tag, path, proxies, stand, heading in MASTERS:
-        if not os.path.exists(path):
-            print("!! master missing:", path)
-            continue
-        for nm in proxies:
-            ob = bpy.data.objects.get(nm)
-            if ob is not None:
-                bpy.data.objects.remove(ob, do_unlink=True)
-        with bpy.data.libraries.load(path, link=False) as (src, dst):
-            dst.collections = [c for c in src.collections
-                               if c in ("01_Estrutura", "02_Motores",
-                                        "03_Trem", "04_Detalhes")]
-        root = bpy.data.objects.new("SDSC_Hero_" + tag, None)
-        scn.collection.objects.link(root)
-        obs = []
-        for c in dst.collections:
-            if c is None:
-                continue
-            scn.collection.children.link(c)
-            for ob in c.all_objects:
-                obs.append(ob)
-                if ob.parent is None:
-                    ob.parent = root
-        # every master in this repository has its nose along local -X; Rz maps
-        # (-1, 0) to (-cos, -sin), so this puts the nose on the given heading
-        h = math.radians(heading)
-        root.rotation_euler = (0.0, 0.0,
-                               math.atan2(-math.cos(h), -math.sin(h)))
-        bpy.context.view_layer.update()
-        dg = bpy.context.evaluated_depsgraph_get()
-        lo = mathutils.Vector((1e9, 1e9, 1e9))
-        hi = mathutils.Vector((-1e9, -1e9, -1e9))
-        for ob in obs:
-            if ob.type != "MESH" or ob.hide_render:
-                continue
-            mw = ob.evaluated_get(dg).matrix_world
-            for cn in ob.bound_box:
-                w = mw @ mathutils.Vector(cn)
-                lo = mathutils.Vector(map(min, lo, w))
-                hi = mathutils.Vector(map(max, hi, w))
-        root.location.x += stand[0] - (lo.x + hi.x) * 0.5
-        root.location.y += stand[1] - (lo.y + hi.y) * 0.5
-        # THE WHEELS ON THE APRON, and the apron here is 35 m below the datum
-        root.location.z += (S.Z_MRO_PLATFORM + S.Z_APRON) - lo.z
-        bpy.context.view_layer.update()
-        print("detailed %-8s at %s  span %.1f x %.1f m"
-              % (tag, stand, hi.x - lo.x, hi.y - lo.y))
+    # ---- the aeroplanes, from the shared module ---------------------------
+    # Ten stands, eight types, every heavy-check state reproduced or declared:
+    # fleet_placement.py's docstring is the reasoning and this is the whole of
+    # the call site. It was a three-entry tuple in this file until phase 5.
+    F.populate(scn)
 
     # ---- the camera --------------------------------------------------------
     cd = bpy.data.cameras.new("CamTour")

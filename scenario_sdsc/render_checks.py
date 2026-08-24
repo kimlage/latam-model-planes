@@ -20,6 +20,8 @@ Checks
               empty - and must NOT look too clean, because a third of it is
               vegetation, not terrain.
     tour      three frames of the aerial tour phase 3 will fly
+    fleet     the real masters on the MRO stands, close enough to see whether
+              the heavy-check states survived the switch off the proxies
 
 Output lands in scenario_sdsc/checks/.
 """
@@ -250,11 +252,79 @@ def check_ops():
         render(os.path.join(OUT, "%s.png" % tag), res=res, samples=64)
 
 
+def _look_at(tag, eye, aim, lens):
+    dx, dy = aim[0] - eye[0], aim[1] - eye[1]
+    horiz = math.hypot(dx, dy)
+    az = math.atan2(dx, dy)
+    el = math.atan2(aim[2] - eye[2], horiz)
+    c = cam("Chk_" + tag, eye, (math.pi / 2.0 + el, 0.0, -az), lens=lens)
+    bpy.context.scene.camera = c
+    return c
+
+
+def check_fleet():
+    """THE STATES, close enough to argue about.
+
+    `MRO_STANDS` shows this line APART - that is what makes it an MRO and not
+    a gate row - and phase 5 had to reproduce those states on real models that
+    have none. These four frames are where that claim is tested:
+
+      fleet_line        the whole heavy-check line from 210 m southwest, which
+                        is about the range the aerial tour flies it at
+      fleet_cowls       N3's open fan cowls from 50 m. The doors are the one
+                        piece of geometry on this ramp that is NOT part of a
+                        master - no master has a cowl door to hinge - and this
+                        is the frame that says whether they sit on the real
+                        nacelle or float beside it
+      fleet_engine_off  N2 from the PORT side, which is the side the engine
+                        came off: one bare pylon, the engine on its cradle and
+                        the dolly, all built by build_maintenance
+      fleet_jacked      N0, the LATAM Cargo 767-300F, 0.55 m up on its jacks
+                        with the tyres hanging clear of the concrete
+    """
+    link_terrain()
+    Z = 769.9 - 807.0
+    # ALL FOUR STAND ABOVE THE HANGARS, ON PURPOSE. The first pass put the
+    # three close cameras on the ramp at 7-9 m and rendered three black frames:
+    # the hangar line's west face is at x = 931 and the free-standing 44 x 42 m
+    # hangar way/708700156 sits in the middle of the apron, so an eye-level
+    # station picked off a plan is inside a building more often than not. At
+    # Z + 55..95 nothing on this platform is in the way and the long lens does
+    # the closing instead.
+    for (tag, eye, aim, lens) in (
+            ("fleet_line", (700.0, 1700.0, Z + 95.0),
+             (940.0, 1950.0, Z + 6.0), 45.0),
+            ("fleet_cowls", (930.0, 1930.0, Z + 60.0),
+             (980.0, 2004.0, Z + 4.0), 135.0),
+            ("fleet_engine_off", (1060.0, 1900.0, Z + 60.0),
+             (985.0, 1957.0, Z + 3.0), 120.0),
+            ("fleet_jacked", (940.0, 1880.0, Z + 55.0),
+             (870.0, 1948.0, Z + 4.0), 90.0)):
+        _look_at(tag, eye, aim, lens)
+        render(os.path.join(OUT, "%s.png" % tag), res=(1280, 720), samples=64)
+
+
+def populate_fleet():
+    """The ramp aeroplanes are no longer part of `sdsc_field.blend`.
+
+    Phase 5 moved them into `fleet_placement.py`, which links the real masters
+    and instances them at each stand when a CLIP file is built. A check frame
+    rendered off the bare field would therefore show an empty ramp and would
+    stop being a check of what the clips actually see - so every check
+    populates the field first, exactly as the three clip scripts do."""
+    sys.path.insert(0, HERE)
+    import fleet_placement as F
+    if bpy.data.collections.get("SDSC_Fleet") is None:
+        F.populate(bpy.context.scene)
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     todo = args() or ["plan"]
     table = {"plan": check_plan, "mro": check_mro, "ground": check_ground,
-             "horizon": check_horizon, "tour": check_tour, "ops": check_ops}
+             "horizon": check_horizon, "tour": check_tour, "ops": check_ops,
+             "fleet": check_fleet}
+    populate_fleet()
     for t in todo:
         table[t]()
 

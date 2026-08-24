@@ -56,6 +56,8 @@ from mathutils import Vector
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
+if HERE not in sys.path:
+    sys.path.insert(0, HERE)
 
 # ---------------------------------------------------------------------------
 # Survey constants. Everything on this page comes from sdsc_aip_survey.json or
@@ -3079,13 +3081,25 @@ def build_cane_yards(P, c_bldg):
 # and refs/mro_centro_tecnologico_2009.jpg has a stripped fuselage inside a
 # dock ON THE APRON, not in a hangar.
 #
-# ROW0, ROW1 and H9 are left WHOLE on purpose: base_flyover.py swaps those
-# three proxies for the real 767-300ER, A320neo and 787-9 this repository
-# built, and a hero model with its engines missing would be a different lie.
+# THE AEROPLANES THEMSELVES ARE NO LONGER BUILT HERE. Phase 5 gave every stand
+# in this table one of the eleven real masters, through `fleet_placement.py`;
+# what stays in this file is the STAND - its position, heading and state - plus
+# all the kit that state implies, because the docks, jacks, cradles and GSE are
+# scenery and the aeroplane is not. `fleet_placement.FLEET` says which type
+# stands where and its docstring says what each state could honestly become on
+# a real model. `airliner_proxy()` below is kept and still wired up: a stand
+# whose FLEET entry is None gets its proxy back, which is the escape hatch if
+# the render cost of a detailed aeroplane at some far stand ever stops being
+# worth it. Nothing uses it at present.
 MRO_STANDS = (
     # tag     type      x       y      hdg    state
-    ("ROW0", "wide",   904.0, 1790.0,  91.0, "parked"),
-    ("ROW1", "narrow", 900.0, 1832.0,  91.0, "parked"),
+    # ROW0 moved 4 m south and ROW1 5 m north of the phase-4 stands: the
+    # proxies were nominal boxes (a "wide" was 47.6 m of span) and the real
+    # 767-300ER is 51.2 m, which put its starboard wingtip 1.6 m INSIDE the
+    # A320's. fleet_placement's pairwise envelope check is what found it, and
+    # the gap is now 7.4 m - about what a real ramp keeps between wingtips.
+    ("ROW0", "wide",   904.0, 1786.0,  91.0, "parked"),
+    ("ROW1", "narrow", 900.0, 1837.0,  91.0, "parked"),
     ("H9",   "dream",  750.0, 1725.0, 181.0, "parked"),
     ("N0",   "wide",   870.0, 1950.0, 181.0, "jacked"),
     ("N1",   "narrow", 878.0, 1888.0, 181.0, "docked"),
@@ -3103,6 +3117,15 @@ AC_TYPES = {"narrow": (37.6, 35.8, 11.76, 1.98, 2.40),   # A320 family
             "wide": (54.9, 47.6, 15.85, 2.52, 3.00),     # 767-300ER
             "dream": (62.8, 60.1, 17.02, 2.85, 3.20)}    # 787-9
 JACK_LIFT = 0.55
+
+# Stands that are NOT on the MRO platform, in the same shape as MRO_STANDS with
+# the apron's own z on the end. The mid-field apron sits 26 m below the runway
+# crest and the 2013 reference photograph has a TAM widebody parked on it; that
+# is the whole list.
+OUTFIELD_STANDS = (
+    # tag    type     x      y       hdg    state     apron z
+    ("MID", "wide", 300.0, 1140.0, 181.0, "parked", Z_MIDFIELD_APRON),
+)
 
 
 def ac_axes(hdg):
@@ -3781,12 +3804,28 @@ def build_parked_aircraft(P, c_park):
 
     Types are chosen from the evidence table in sdsc_aip_survey.json: A320
     family and 767 routinely, 787 since hangar 9, A330 historically. NOT a
-    777-300ER - CNN Brasil states 777 maintenance is done at Guarulhos."""
+    777-300ER - CNN Brasil states 777 maintenance is done at Guarulhos.
+
+    WHAT THIS FUNCTION STILL BUILDS, AFTER PHASE 5
+    ----------------------------------------------
+    The five Aeroclube light aircraft, and a proxy for any airliner stand
+    `fleet_placement.FLEET` maps to None. Every other stand gets one of the
+    eleven real masters, instanced into each clip file by
+    `fleet_placement.populate()` - so the ramp aeroplanes are no longer part of
+    the shared field asset and `render_checks.py` populates the field before it
+    looks at it. The stand table, the maintenance kit and the GSE are untouched
+    and stay here: a dock is scenery, an aeroplane is not.
+
+    There is no light-aircraft master in this repository, so the Aeroclube
+    apron is the one place proxies survive on this field - and it is 180-280 m
+    off a RWY 02 roll, which is close enough that it is worth saying out loud
+    rather than leaving to be noticed."""
     # One proxy mesh per (type, engine state, jacked) actually used. The state
     # table is MRO_STANDS at the top of the operation section: this is a
     # heavy-check base with 16 aircraft in work at once, so most of the line is
-    # APART - cowls open, an engine off, an airframe on jacks - and only the
-    # three stands base_flyover.py swaps for real models are left whole.
+    # APART - cowls open, an engine off, an airframe on jacks. Those states are
+    # what fleet_placement.py had to reproduce on real models, and its docstring
+    # records which of them survived the switch and which one had to be built.
     protos = {}
 
     def proto(key, engines, lift):
@@ -3823,7 +3862,12 @@ def build_parked_aircraft(P, c_park):
     # hangar that stands in the middle of that apron.
     ENGINE_STATE = {"parked": "on", "jacked": "on", "docked": "on",
                     "cowls": "open", "engine_off": "off"}
+    import fleet_placement as fleet
+    kept = fleet.proxy_stands(MRO_STANDS + tuple(s[:6] for s
+                                                 in OUTFIELD_STANDS))
     for (tag, key, x, y, hdg, state) in MRO_STANDS:
+        if fleet.is_real(tag):
+            continue
         place(key, x, y, hdg, tag, engines=ENGINE_STATE[state],
               lift=JACK_LIFT if state == "jacked" else 0.0)
 
@@ -3836,10 +3880,15 @@ def build_parked_aircraft(P, c_park):
         ob.rotation_euler = (0.0, 0.0, math.radians(90.0 - 271.0))
         c_park.objects.link(ob)
         n += 1
-    # and one widebody on the mid-field apron, which is what the 2013
-    # photograph shows parked there
-    place("wide", 300.0, 1140.0, 181.0, "MID", z=Z_MIDFIELD_APRON)
-    print("parked aircraft:", n)
+    # and the outfield stands - the mid-field widebody the 2013 photograph
+    # shows - for whatever fleet_placement does not own
+    for (tag, key, x, y, hdg, state, z) in OUTFIELD_STANDS:
+        if fleet.is_real(tag):
+            continue
+        place(key, x, y, hdg, tag, z=z, engines=ENGINE_STATE[state],
+              lift=JACK_LIFT if state == "jacked" else 0.0)
+    print("parked proxies: %d (%d GA + %d airliner stands: %s)"
+          % (n, 5, len(kept), ", ".join(kept) or "none - all real masters"))
 
 
 # ---------------------------------------------------------------------------
@@ -4067,8 +4116,11 @@ def mark_assets():
             ("SDSC_Hangar9", cats[1],
              "HANGAR 9 - declared inference. No published dimension, no OSM "
              "footprint. Sized from the 787-9 it holds."),
-            ("SDSC_AC_ROW0", cats[4], "low-poly 767-300ER proxy, LATAM"),
-            ("SDSC_AC_H9", cats[4], "low-poly 787-9 proxy, LATAM")):
+            # The airliner proxies are gone (fleet_placement.py owns those
+            # stands now); the Aeroclube light aircraft are what is left.
+            ("SDSC_GA_0", cats[4], "low-poly high-wing single, Aeroclube - "
+                                   "the one aircraft type with no master in "
+                                   "this repository")):
         ob = bpy.data.objects.get(name)
         if ob:
             _mark(ob, cat, note)
