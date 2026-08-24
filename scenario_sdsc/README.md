@@ -1579,3 +1579,35 @@ aerodrome pad to the mown-grass sheet, which are adjacent surfaces at the same
 station; the body ratio moves 8.7 → 9.0 because some of the flow probes now land
 on an aeroplane instead of on the apron behind it, and both numbers are an order
 of magnitude below the comfort threshold.
+
+### 9.8 Still open after phase 5
+
+- **The open fan-cowl doors are authored geometry.** Their *position and size*
+  are measured off each master's nacelle, but the doors themselves are two
+  quads per engine that no master contains and no drawing in this repository
+  specifies. They reproduce the state
+  `refs/mro_centro_tecnologico_2010.jpg` photographs on this site; the panel
+  angle (55°) and the fraction of the nacelle they cover (the forward 6–58%)
+  are chosen to read at 300 m, not measured off that photograph.
+- **No A330 and no light aircraft.** The A330-200 is recorded as the largest
+  type here before 2020 and there is no master for it; the five Aeroclube GA
+  aeroplanes are the only proxies left on this field, 180–280 m off a RWY 02
+  roll, because there is no light-aircraft master either.
+- **Four wingtips overhang the mapped concrete** — `N0`, `N1`, `N2` and `MID`.
+  The criterion applied is the fuselage strip, and the check reports the
+  wingtips every run. Whether the real apron is bigger than
+  `relation/7422967` is not knowable from OSM; it was traced in 2017 and
+  hangar 9 was not there either.
+- **The mid-field stand was not re-solved.** `MID` is the only stand off the
+  MRO platform and the concrete solver was run over the MRO block only; its
+  767 keeps phase 4's position, with a wingtip over the edge.
+- **The tow clip still appends its 787-9.** It is the one aircraft in the three
+  clips that is not an instance, because the tow re-parents the nose gear to a
+  steering empty and you cannot re-parent inside a collection instance.
+- **The 787-8 is in the type table and unplaced.** There is one widebody stand
+  at hangar 9 and it belongs to the -9. A second dream stand is one line.
+- **`build_scenery` still keys the maintenance kit off `AC_TYPES`**, the
+  nominal proxy dimensions, not off the real master the stand now carries. The
+  docks and towers are sized from a 37.6 m "narrow" and a 54.9 m "wide"; the
+  A319 at `N4` is 34.0 m and the 787-9 at `H9` is 62.9 m. Nothing looks wrong
+  at the ranges these clips fly, and it is the obvious next thing to tighten.

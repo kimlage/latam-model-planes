@@ -101,10 +101,22 @@ where a master's origin is or how big it is. Each aircraft is rotated
 nose-to-heading, then its EVALUATED envelope is measured through the depsgraph
 (instances included) and the root is moved so the CENTRE lands on the stand and
 the LOWEST point — the tyres — lands on the apron. Then it is measured again
-and printed. On top of that `populate` runs a pairwise 2-D overlap check across
-every aircraft it placed and shouts about any wingtip inside another aeroplane,
-which the proxy table could not do because the proxies were nominal boxes and
-the real spans are not.
+and printed. On top of that `populate` runs two checks the proxy table could
+not, because the proxies were nominal boxes and the real spans are not:
+
+  * a PAIRWISE 2-D OVERLAP check, which shouts about any wingtip inside another
+    aeroplane. It found one on the first run: the phase-4 `wide` proxy was
+    47.6 m of span and a real 767-300ER is 51.2, which put its starboard
+    wingtip 1.6 m inside the A320 next door on the hangar frontage.
+  * `_on_concrete`, which RAY-CASTS down at the centre and at the nose, tail
+    and both wingtips and reads what is underneath. It found that stand N0 -
+    the jacked LATAM Cargo 767-300F - was standing on `SDSC_AerodromeGround`.
+    It sits in a notch of the mapped apron polygon, 5 cm below the concrete and
+    the same pale grey in a render, and it had shipped in v2 that way.
+
+Both fixes went into `build_scenery.MRO_STANDS`, where the stand table belongs,
+and its comment carries the concrete map and the fuselage-strip criterion the
+nine stands were re-solved against.
 
 TYPES, AND WHY EACH ONE
 =======================
