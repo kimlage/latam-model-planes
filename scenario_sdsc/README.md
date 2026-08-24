@@ -1516,13 +1516,45 @@ included — and the root is moved so the centre lands on the stand and the lowe
 point, the tyres, lands on the apron. Then it is measured again and printed.
 **Wheels seated to 0.000 m on all ten.**
 
-On top of that `populate()` runs a **pairwise 2-D overlap check** across every
-aircraft it placed, which the proxy table could not do because the proxies were
-nominal boxes. It found one on the first run: the phase-4 `wide` proxy was
-47.6 m of span and a real 767-300ER is **51.2**, which put its starboard wingtip
-**1.6 m inside** the A320 parked next door on the hangar frontage. `ROW0` moved
-4 m south and `ROW1` 5 m north; the gap is now 7.4 m, about what a real ramp
-keeps between wingtips. Overlaps: **0**.
+On top of that `populate()` runs two checks the proxy table could not, because
+the proxies were nominal boxes and the real spans are not. **Both found
+something.**
+
+**A pairwise 2-D overlap check.** The phase-4 `wide` proxy was 47.6 m of span
+and a real 767-300ER is **51.2**, which put its starboard wingtip **1.6 m
+inside** the A320 parked next door on the hangar frontage. Overlaps now: **0**.
+
+**A ray-cast down at the centre and at the nose, tail and both wingtips**,
+stepping past the aeroplane, its gear and the kit round it — a naive cast from
+above answers `Fuselagem` for all ten and says nothing. Stand `N0` came back
+`SDSC_AerodromeGround`: **the jacked LATAM Cargo 767-300F was standing on
+dirt.** It sits in a notch of the mapped apron polygon, 5 cm below the concrete
+and the same pale grey in a render, which is why it had shipped in `_v2`
+unnoticed. Five more aeroplanes had a wingtip over the edge.
+
+Phase 4's test had been a 21 m circle — a narrowbody half-span — against
+`relation/7422967`, and it stopped being enough the moment real models went on
+the stands. Ray-cast at 2 m over the whole MRO block, `SDSC_ApronConcrete` is
+**10 632 cells of 38 409**: a deep frontage block from y 1770 to 1920, and above
+it only three fingers, 10 to 50 m wide, at x ≈ 880, 920–930 and 970–1020.
+
+So the nine stands were **re-solved against that map**, with the criterion a
+ramp actually has — the **fuselage strip on pavement**, 13 m wide, which covers
+the belly and the main-gear track of every type here (A320 7.6 m, 767 9.3 m,
+787 10.8 m) — envelopes 8 m clear of each other and clear of every mapped
+building, each stand taking the **nearest** solution to where phase 4 had put
+it, so the composition is phase 4's and only the error is gone:
+
+| stand | moved | |
+|---|---|---|
+| `H9`, `N2`, `N4` | 0 m | already right |
+| `ROW0`, `ROW1`, `N1`, `N5` | 1–3 m | wingtip clearance and the strip |
+| `N0` | **7 m** | off the dirt and onto the concrete |
+| `N3` | **13 m** | onto its finger |
+
+**A wingtip may overhang, and four still do.** Real ramps end somewhere and a
+bounding box is mostly empty air; the check reports it every run rather than
+pretending otherwise. Aircraft not standing on concrete: **0**.
 
 ### 9.7 The camera metrics, re-measured
 
