@@ -14,7 +14,8 @@ scenario_sdsc/
   sdsc_field.blend         the aerodrome    collections SDSC_Field, SDSC_Light, SDSC_Anchors
   sdsc_terrain.blend       the plateau      collection  SDSC_Terrain        (not committed)
   build_scenery.py         rebuilds both from the data in this folder
-  render_checks.py         the visual checks (plan / mro / ground / horizon / tour)
+  render_checks.py         the visual checks
+                           (plan / mro / ground / horizon / tour / ops)
   load_terrain.py          heightfield -> mesh
   blender_assets.cats.txt  Asset Browser catalogues
 
@@ -38,6 +39,7 @@ scenario_sdsc/
   sdsc_osm.json            aerodrome + MRO geometry in the local frame (ODbL)
   sdsc_osm_plan.png        the plan, drawn                    <- the build's check image
   sdsc_osm_plan_mro.png    the MRO block, drawn
+                           (roads / water / landuse are in BOTH from phase 4)
   sdsc_operations_wind.json  which runway the wind favours (ERA5 2021-2025)
   sdsc_operations_sun.json   solar geometry, computed here
   sdsc_references.md       what each photograph proves, and what I could NOT establish
@@ -194,6 +196,13 @@ OpenStreetMap via Overpass, **2026-08-23**, converted to the frame above. Counts
 
 Plus two derived blocks: `latam_mro` (the site, its members, its projection onto the
 02 roll) and `departure_02_landmarks` (77 features projected onto the take-off roll).
+
+**All of it is now built.** Phases 2 and 3 used the runway, taxiways, aprons,
+hangars, terminals, buildings and the boundary ring, and left the 330 roads, 80
+water features and 35 landuse polygons in the plan only. §3 has what each of
+them became and which side of the honesty line it lands on. The one thing in
+this file that is still not built is `other` — 102 `man_made` nodes, of which 94
+are untagged and 6 are water towers.
 
 **Multipolygon rings are stitched.** The aerodrome boundary is cut into 18 separate
 ways and the MRO site into 6. Taking the longest member — the obvious shortcut —
@@ -416,6 +425,53 @@ source:
 - **Colours.** Read qualitatively off the photographs, never sampled
   photometrically — the same rule `../scenario/` follows.
 
+#### Inference in the surround — phase 4
+
+Phase 2 left "roads, water and landuse tint in the plan and not the build, as at
+Santiago". At Santiago that was defensible: the city is 15 km out and the
+farmland grid carried the middle distance. Here the field is 1.7 × 2.2 km and
+the surroundings fill the frame of every aerial, so the same omission rendered
+an aerodrome floating on coloured ground. **330 roads, 80 water features and 35
+landuse polygons were already in `sdsc_osm.json` and are now built.**
+
+| element | side | what it rests on |
+|---|---|---|
+| **158.5 km of road**, 287 ways | **data** | every centreline, class and `surface` tag from OSM. Includes the **SP-318**, whose two carriageways are mapped apart, 620–700 m west of the runway — the road `refs/sdsc_field_from_sp318_2013.jpg` was shot from |
+| **paved vs unpaved** — 70.4 km against 88.1 km | **data** | OSM's own `surface` tag. Not cosmetic: 35 of the 101 `unclassified` ways are tagged unpaved, and an unpaved road in this soil is a bright red-orange line, not a black one |
+| road **widths** (8.5 m motorway → 3.5 m track) | *estimated by me* | **not one way here carries a `width` or `lanes` tag.** An untagged `surface` is read as paved, which is the majority reading |
+| **62.0 km of stream**, 7 water bodies, 1 wetland | **data** | every centreline and shoreline. Includes **way/154922934, a 71 772 m² reservoir at (1097, 1137)** — a kilometre south-west of the MRO, in frame for most of the tour, and simply not built before |
+| stream **widths** (3.5 / 5 / 7 m) and water **levels** | *estimated by me* | no width tag; the level is the 40th percentile of the ground under each shoreline. The 30 m DEM does not resolve a channel, so the streams lie **on** the ground rather than in it |
+| **19 km² of farmland parcels** — Fazenda São Roberto, Chile, Palmeiras, Santo Antônio, do Saltinho, Bela Vista | **data** | the mapped polygons, which replace `build_ground`'s **procedural** parcel pattern with surveyed boundaries. From 230–700 m up, that is the difference between a landscape and a texture |
+| which **crop** each parcel carries | *estimated by me* | four-way palette (cane, cut cane, tilled, pasture) dealt by a hash of the OSM id. **Nothing in OSM says.** |
+| **Água Vermelha**: 2 residential polygons (75 201 m²), the street grid, 14 footprints incl. the Capela de São Roque, the Unidade de Saúde da Família, the Assembleia de Deus | **data** | the mapped village |
+| **300 infill houses** in it | *estimated by me* | 14 footprints in 7.5 ha is an under-mapping, not a hamlet. `refs/agua_vermelha_avenida.jpg` shows a continuous frontage of single-storey rendered houses under red pantile. One house per ~17 m of mapped frontage, jittered; `VILLAGE_INFILL = False` rebuilds with only the 14 surveyed footprints |
+| **541 power poles + conductors** on the road verges | *estimated by me* — **presence photographed, route not** | a conductor is strung right across the top of `refs/sdsc_field_from_sp318_2013.jpg`, shot from the SP-318 verge, and `refs/agua_vermelha_avenida.jpg` shows the poles. **OSM's extract carries no `power` way at all**, so the line follows the motorway/secondary/tertiary verges inside 3 km, at the standard rural 52 m / 9.2 m |
+| **3 cane-loading yards** | *declared inference, no source at all* | there is nothing in OSM. They are here because 19 km² of surveyed farmland with no sign that anyone works it is the less true of the two |
+| **the gallery forest on the watercourses** | **data** (the courses) / *estimated by me* (the trees) | `build_trees` had a latent bug: it read `w["xy_m"]`, and a way-type water feature carries its polyline under `polygon_xy_m`. **The riparian loop never ran** — every tree in phase 3's scene came from the aerodrome boundary ring. Fixed; the count went 276 → 1 171 |
+
+#### Inference in the operation — phase 4
+
+This is a working MRO — **~2 000 people, 22 workshops, ~270 aircraft a year, 16
+in work at once** — and phase 2 built none of it. Whole aeroplanes parked
+nose-in on an empty slab is what a *model* of a base looks like.
+
+| element | side | what it rests on |
+|---|---|---|
+| **the car parks' geometry**, 766 m of aisle in four grids | **data**, and it was a surprise | OSM has no `amenity=parking` here, but it maps the MRO's landside circulation as `service` ways — and four of those clusters are unmistakable **aisle grids**: parallel 60–120 m runs 18–46 m apart inside closed loops. `_aisles()` finds them by that geometric test, not by a hand-written list, so a future OSM refresh moves them by itself |
+| that those aisles are **staff** parking; the 22 m slab; the 2.65 m bay pitch; **541 cars** at 72% of 560 bays | *estimated by me* | nothing published says how many of the 2 000 staff drive. **The mapped aisles hold ~560 cars, which is short of what 2 000 people need** — recorded below as still open, not silently filled with an invented overflow lot |
+| **the maintenance kit is yellow, the tool trolleys red** | **photographed** | `refs/mro_centro_manutencao_2006.jpg` (a Fokker 100 in a bay on this site) and `refs/mro_centro_tecnologico_2010.jpg` (an A320 with the fan cowls open) are both full of yellow tubular access towers, yellow wing docks and yellow rolling stairs, with red trolleys between them |
+| **aircraft apart** — 6 of 9 stands: cowls open, an engine off, an airframe on jacks, two in full dock | **photographed as a state**, *inferred as an allocation* | `refs/mro_centro_tecnologico_2010.jpg` is the cowls-open A320; `refs/mro_centro_tecnologico_2009.jpg` has a stripped fuselage inside a tall dock **out on the apron**. No photograph says which aeroplane is in what check on a given day. ROW0, ROW1 and H9 are deliberately left whole — `base_flyover.py` swaps those three for the real 767-300ER, A320neo and 787-9 this repository built, and a hero model with its engines missing would be a different lie |
+| **71 pieces** of dock, tower, stair, jack, engine cradle and trolley | *estimated by me* | positions and counts. Nothing surveys a ramp's kit |
+| **75 GSE units** — tugs with towbars, GPUs, air-start, belt loaders, stairs, vans, bowsers, cherry pickers | *estimated by me, all of it* | **no photograph of LATAM's São Carlos ground fleet was found** and OSM maps no vehicle. What is not inference is that an apron working 270 aircraft a year has these on it. `refs/mro_centro_tecnologico_2009.jpg` shows small dark vehicles clustered at the nose of every aeroplane in the line; that is the level this reproduces |
+| **30 containers** in blocks against the hangar line | **photographed** (that they are there) / *inferred* (where) | white ISO boxes along the apron in the 2009 frame, a dark red skip on the hangar floor in the 2010 one. Placed by walking the **mapped apron polygon's own edge**, so none stands on grass |
+| **the gate and guard house** | *estimated by me*, with the position constrained | the wall and its black mesh are photographed (`refs/mro_airbus_esquadrilha_2010.jpg`) and phase 2 drew its line. Four mapped service ways — way/510750444, /445, /446, /510750640 — cross that run at **x = 914–930**, which is where the landside road really enters the airside, so the wall opens there. The guard house, canopy and boom are mine |
+
+**Every stand was checked against the mapped concrete.** A 21 m circle — a
+narrowbody half-span — round each of the nine has to lie inside apron
+`relation/7422967` and clear of every mapped MRO footprint. The first pass put
+two aeroplanes on the grass west of the ramp and one on a building; the plan
+check caught it. The same rule now places the containers and the GSE rows.
+
 ### Divergences left standing, not silently split
 
 Full text in `sdsc_aip_survey.json` → `divergences_recorded_not_split`.
@@ -479,12 +535,33 @@ or the runway 35 m underground.
 
 `SDSC_Runway`, `SDSC_Taxiways`, `SDSC_Aprons`, `SDSC_Ground`, `SDSC_Buildings`,
 `SDSC_LATAM_MRO`, `SDSC_Aeroclube`, `SDSC_Midfield`, `SDSC_Vegetation`,
-`SDSC_Furniture`, `SDSC_ParkedAircraft` under `SDSC_Field`; plus `SDSC_Light` and
-`SDSC_Anchors` at the top level.
+`SDSC_Furniture`, `SDSC_ParkedAircraft`, **`SDSC_Roads`**, **`SDSC_Water`**,
+**`SDSC_Operations`** under `SDSC_Field`; plus `SDSC_Light` and `SDSC_Anchors`
+at the top level.
 
-Polygon budget: the field is **~37 000** faces, the terrain **3.7 M** (180 m tier
+Polygon budget: the field is **134 019** faces, the terrain **3.7 M** (180 m tier
 decimated ×3, 60 m and 30 m tiers full). The field is deliberately cheap — it is
-background, and the MRO is seen from 0.8–1.9 km.
+background, and the MRO is seen from 0.8–1.9 km in the departure and 0.4–1.0 km
+in the tour.
+
+| collection | faces | what dominates |
+|---|---|---|
+| `SDSC_Ground` | 51 378 | the cane sheet's 60 m inner ring (27 468, the price of the fix in §4b) and the 25 m aerodrome pad; then 4 931 crop cells |
+| `SDSC_Vegetation` | 46 317 | 1 171 trees. **276 of them before phase 4** — the riparian rows had never run |
+| `SDSC_Furniture` | 8 824 | 541 power poles and their conductors, floodlight masts, PAPI, windsock |
+| `SDSC_Operations` | 7 151 | 541 cars, 75 GSE units, 71 dock pieces, 30 containers, the aisle slabs |
+| `SDSC_LATAM_MRO` | 6 393 | hangar 9, the frontage, the perimeter wall, the gate |
+| `SDSC_Roads` | 5 685 | 158.5 km of centreline, resampled to 30 m so it lies on the ground |
+| `SDSC_Buildings` | 3 671 | 300 village houses and their roofs, the field sheds |
+| `SDSC_Water` | 1 874 | 62 km of stream, 8 water bodies |
+| everything else | 2 726 | runway, taxiways, aprons, parked aircraft, mid-field, Aeroclube |
+
+Santiago's field is ~42 000 faces on purpose and this one was 66 455 after the
+cane fix. Trebling it buys a village, 158 km of road, 62 km of watercourse, a
+gallery forest that was missing entirely, and a ramp with an operation on it —
+against a terrain mesh 28× larger that has always been affordable. The rule that
+did not change: **simple proxies that read at 200–700 m**, not detailed models
+nobody sees. Every car is ten faces; every GSE unit is two boxes.
 
 ---
 
@@ -581,10 +658,36 @@ Keeping 120 m and raising the sheet until it always wins needs +14 m, which is a
 cliff at the aerodrome-pad boundary. The outer ring goes 400 m → 200 m for the
 same reason.
 
-The **terrain tiers themselves still interleave** the same way — a shallow ray
-past 12 km alternates between `SDSC_Terrain_Near` (30 m) and `SDSC_Terrain_Mid`
-(60 m). They share one material, so it costs shading rather than colour, and it
-is left standing; see §8, still open.
+The **terrain tiers used to interleave the same way, and phase 4 closed it.**
+Same bug, one level up, and the arithmetic is worth writing down because
+"`mask_inner` drops the coarse faces inside the fine tier's box" sounds like it
+tiles and does not.
+
+`load_terrain.build()` dropped coarse faces whose **centre** fell inside the fine
+tier's box. The two lattices are not aligned — the near grid's nodes are at
+`−15000 + 30i`, the mid grid's at `−50000 + 60k`, and **no node is shared** — so
+the mid tier's last kept face ended at x = −15 020 where the near tier starts at
+−15 000, and on the other side its first kept face started at 14 980 where the
+near tier ends at 15 000. **A 20 m gap on one side and a 20 m overlap on the
+other**, in both axes. Measured over 40 000 random points in a 200 m band inside
+that boundary:
+
+| seam | coarse − fine | mean | p99 | max | min |
+|---|---|---|---|---|---|
+| 30 m / 60 m at 15 km | 200 m band | −0.00 | +1.73 | **+6.35** | −6.67 m |
+| 60 m / 180 m at 50 km | 600 m band | −0.03 | +7.18 | **+30.82** | −34.97 m |
+
+±6.7 m of z-fight along a boundary at 15 km is exactly "a shallow ray past 12 km
+alternates between Near and Mid". The fix is the cane fix's shape: make the
+overlap **deliberate** — shrink the mask by two coarse cells so the coarse tier
+always underlaps and never gaps — and then **bias the coarse tier down** by more
+than the measured worst case, ramped back to zero outside so there is no cliff.
+**7 m over 1 500 m** at the 30/60 seam, **32 m over 6 000 m** at the 60/180 one.
+The residual is a 7 m step at a 15 km seam, which is 0.02° from anywhere a camera
+stands in this project, under a haze term over 90%.
+
+Like the cane, the tiers carry one material, so this always cost **shading and
+never colour** — which is why it survived three phases.
 
 ---
 
@@ -631,7 +734,7 @@ author and licence, and no photograph is tracked by or exposed to git.
 blender -b --factory-startup scenario_sdsc/sdsc_field.blend \
     -P scenario_sdsc/render_checks.py -- plan mro
 blender -b --factory-startup scenario_sdsc/sdsc_field.blend \
-    -P scenario_sdsc/render_checks.py -- ground horizon tour
+    -P scenario_sdsc/render_checks.py -- ground horizon tour ops
 ```
 
 Output lands in `scenario_sdsc/checks/`.
@@ -651,7 +754,10 @@ the same against `sdsc_osm_plan_mro.png`. What the pair shows today:
 | the 1 163 m MRO taxiway diagonal | matches |
 | the long farm sheds south-east of the field | matches |
 | **hangar 9** | present in the build, absent from the plan — **correct**, it is 2025 and OSM was traced in 2017 |
-| roads, watercourses, landuse tint | in the plan, not in the build — `../scenario/` does not build them either |
+| **roads, watercourses, landuse** | **now in both.** Phase 4: 287 ways / 158.5 km, 71 streams / 62 km, 8 water bodies, 35 landuse polygons. The line that used to read *"in the plan, not in the build"* is closed |
+| **Água Vermelha** | in both — the mapped grid plus 300 declared-inference houses (§3) |
+| **the staff car parks** | **the aisles match the plan** — they are OSM's own service ways. The cars are inference |
+| the MRO ramp | now has an operation on it: 6 of 9 aeroplanes apart, 71 dock pieces, 75 GSE, 30 containers, a gate |
 
 **`ground` frames the departure clip's stations**, all of them looking RIGHT of a
 RWY 02 roll because that is where the base is. Two of them are deliberate negative
@@ -673,6 +779,33 @@ mid-field cluster on the shoulders; west shows the one real feature, the low ris
 
 `terrain/horizon_silhouette.png` remains the numerical horizon check, and the thing
 to check about it is that it stays **empty**.
+
+**`ops` is phase 4's check, and it is framed at the distances the tour flies.**
+The aerial tour is 230–292 m above the plateau and 930–1 038 m from its aim, so
+the MRO ramp goes past at 400–900 m slant. `check_ops` stands at exactly those
+ranges:
+
+| frame | what it is for |
+|---|---|
+| `ops_ramp_low.png` | the nose-in line from 240 m, 470 m out — the docks, the towers, the cowls, the loose engine, the GSE, the container blocks |
+| `ops_carpark.png` | the landside from 260 m — the mapped aisle grids with cars in them |
+| `ops_gate.png` | **eye level at the gate, 60 m out.** The one frame close enough to say whether the kit holds up at all, and the only frame in the project that looks at the perimeter wall from the landside |
+| `ops_village.png` | Água Vermelha from 300 m, which is where the tour's south leg passes it |
+
+Four things were only visible in these frames and each of them was a build
+error, not a taste call:
+
+- **a GSE row and a container row standing on the grass** west of the ramp.
+  Both are now placed against the *mapped* apron polygon — `_on_concrete()` — and
+  the containers walk its own edge rather than sitting at hand-picked spots.
+- **black rectangles 200 m west of anything**: the car-park aisle test fired on
+  pairs of 7 m kerb stubs at x = 470–583 and laid 22 m of asphalt over them. An
+  aisle now has to be **25 m or longer at both ends of the parallel pair**.
+- **yellow ironing boards.** The wing docks were built the length of a wing
+  chord and stood *outboard* of the wing. 8 × 2.4 m at 0.24 span puts them under
+  it, where a dock goes.
+- **a 100 m single file of containers**, end-on, reading as a goods train. They
+  are stacked in blocks now, long axis along the wall.
 
 ---
 
@@ -783,6 +916,14 @@ rotation, steep initial climb — not a full transatlantic departure. **Do not p
 ---
 
 ## 8. The three clips, as shot
+
+> **Phase 4 re-shot all three.** The scenery under them changed — the surround
+> was built and the ramp got an operation on it (§3) — so `_v1` is history and
+> `_v2` is what the clips are now. Nothing about the camera work changed: the
+> paths, the lenses, the frame counts and the reasoning below are phase 3's,
+> re-rendered against a different world. The measured metrics at the end of each
+> clip's block are **phase 4's re-measurement**, and the phase 3 numbers are
+> kept beside them so the two can be compared.
 
 Three GIFs, all **25 fps exactly** — a GIF delay is an integer number of
 centiseconds, so 25 fps is 4 cs every frame while 24 fps alternates 4 and 5 and
@@ -1130,9 +1271,9 @@ is nothing near enough to streak at the bottom edge.
 - **The runway leaves the tour early** (frame 93). A camera that keeps both the
   1 720 m of pavement and the base would have to be much further out, and the
   haze answer above rules that out.
-- **The terrain tiers still interleave with each other.** Fixing the cane sheet
-  (§4b) fixed the visible half of a two-part problem; a shallow ray past ~12 km
-  still alternates between `SDSC_Terrain_Near` (30 m) and `SDSC_Terrain_Mid`
-  (60 m). They carry the same material, so it costs shading rather than colour,
-  and at 12 km the haze term is over 90%. The fix is the same shape as the cane
-  one — the tiers need to be exclusive rather than overlapping.
+- ~~**The terrain tiers still interleave with each other.**~~ **Closed in phase
+  4.** The mask was dropping coarse faces by their centre, and the lattices are
+  not aligned, so it left a 20 m gap on one side and a 20 m overlap on the other
+  — worth ±6.7 m of z at the 30/60 seam and ±35 m at the 60/180 one. Measured,
+  then fixed the cane fix's way: a deliberate underlap plus a ramped 7 m / 32 m
+  bias. §4b has the numbers.

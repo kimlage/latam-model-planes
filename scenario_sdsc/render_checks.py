@@ -211,11 +211,50 @@ def check_tour():
         render(os.path.join(OUT, "%s.png" % tag), res=(1280, 720), samples=64)
 
 
+def check_ops():
+    """THE OPERATION, at the distances the aerial tour actually flies it.
+
+    The tour is 230-292 m above the plateau and 930-1 038 m from its aim, so
+    the MRO ramp goes past at 400-900 m slant. These four frames stand at
+    exactly those ranges and look at the four things phase 4 added:
+
+      ops_ramp_low     the nose-in line from 240 m, 470 m out - the docks,
+                       the stands, the cowls, the loose engine, the GSE
+      ops_carpark      the landside from 260 m - the mapped aisle grids with
+                       cars in them, and the gate on the perimeter wall
+      ops_gate         eye level at the gate, 60 m out - the one frame close
+                       enough to say whether the kit holds up at all
+      ops_village      Agua Vermelha from 300 m, which is where the tour's
+                       south leg passes it
+
+    An empty apron reads as a model of a base; this is the check that says
+    whether it now reads as a workplace."""
+    link_terrain()
+    scn = bpy.context.scene
+    Z_MRO = 769.9 - 807.0
+    for (tag, loc, rot, lens, res) in (
+            ("ops_ramp_low", (600.0, 1620.0, Z_MRO + 240.0),
+             (math.radians(66.0), 0.0, math.radians(-52.0)), 50.0,
+             (1280, 720)),
+            ("ops_carpark", (700.0, 1180.0, Z_MRO + 260.0),
+             (math.radians(58.0), 0.0, math.radians(-18.0)), 42.0,
+             (1280, 720)),
+            ("ops_gate", (880.0, 1470.0, Z_MRO + 6.0),
+             (math.radians(88.0), 0.0, math.radians(-28.0)), 45.0,
+             (1280, 720)),
+            ("ops_village", (-200.0, -900.0, 300.0),
+             (math.radians(70.0), 0.0, math.radians(-160.0)), 40.0,
+             (1280, 720))):
+        c = cam("Chk_" + tag, loc, rot, lens=lens)
+        scn.camera = c
+        render(os.path.join(OUT, "%s.png" % tag), res=res, samples=64)
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
     todo = args() or ["plan"]
     table = {"plan": check_plan, "mro": check_mro, "ground": check_ground,
-             "horizon": check_horizon, "tour": check_tour}
+             "horizon": check_horizon, "tour": check_tour, "ops": check_ops}
     for t in todo:
         table[t]()
 
