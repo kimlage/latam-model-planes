@@ -111,7 +111,7 @@ same way Santiago is. Three clips, and none of them is Santiago with the labels
 changed — this field is short, it is not level, and its base sits 35 m below its
 runway.
 
-![A320neo departing RWY 02 at São Carlos, the camera flying formation off its port quarter as the LATAM maintenance base rises out of the ground behind it](scenario_sdsc/a320_sdsc_v1.gif)
+![A320neo departing RWY 02 at São Carlos, the camera flying formation off its port quarter as the LATAM maintenance base rises out of the ground behind it](scenario_sdsc/a320_sdsc_v2.gif)
 
 *A320neo lifting off **RWY 02** — 240 frames, 9.6 s. TORA here is 1 672 m and
 anything leaving is a ferry flight, so it goes early: the wheels leave at
@@ -123,7 +123,7 @@ breaks the crest at frame 78, nine frames after rotation, and by the close the
 apron, the nose-in line and hangar 9 are all open behind the climbing jet.
 ([`scenario_sdsc/takeoff_camera.py`](scenario_sdsc/takeoff_camera.py))*
 
-![A Boeing 787-9 towed nose-first into hangar 9, the tug and towbar ahead of it and the aircraft passing out of the sunlight into the lit interior](scenario_sdsc/b789_hangar9_v1.gif)
+![A Boeing 787-9 towed nose-first into hangar 9, the tug and towbar ahead of it and the aircraft passing out of the sunlight into the lit interior](scenario_sdsc/b789_hangar9_v2.gif)
 
 *A **787-9** towed into **hangar 9** — 400 frames, 16.0 s, and the clip nothing
 in this repository had done before. The aeroplane is not a choice: the hangar was
@@ -137,7 +137,7 @@ frame the wingtips sit in the opening with 8.94 m to spare each side. It is
 400 frames because a 787 does not enter a hangar in ten seconds.
 ([`scenario_sdsc/hangar_tow.py`](scenario_sdsc/hangar_tow.py))*
 
-![Aerial tour of the São Carlos base: the Aeroclube, the runway, the mid-field cluster and the LATAM MRO with hangar 9](scenario_sdsc/sdsc_base_v1.gif)
+![Aerial tour of the São Carlos base: the Aeroclube, the runway, the mid-field cluster and the LATAM MRO with hangar 9](scenario_sdsc/sdsc_base_v2.gif)
 
 *The aerial tour — 240 frames, 9.6 s, one straight line at constant rate with a
 travelling aim, the São Carlos answer to the Santiago survey above. It opens over
