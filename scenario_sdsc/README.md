@@ -976,11 +976,21 @@ pattern occurs by chance inside LZW data and has reported a phantom 311-second
 delay in this repository before. `verify_gifs.py` is that gate and it exits
 non-zero on any frame whose delay is not 40 ms.
 
-| clip | file | frames | subject | GIF |
-|---|---|---|---|---|
-| 1. departure | `a320_sdsc_v1.gif` | 240 (9.6 s) | **A320neo**, RWY 02, ferry | 14.09 MB / 800 px / 128 colours |
-| 2. the tow | `b789_hangar9_v1.gif` | 400 (16.0 s) | **787-9** into hangar 9 | 14.70 MB / **720 px** / 96 colours |
-| 3. aerial tour | `sdsc_base_v1.gif` | 240 (9.6 s) | the whole base | 14.10 MB / **720 px** / 88 colours |
+| clip | file | frames | subject | GIF | v2 | v1 |
+|---|---|---|---|---|---|---|
+| 1. departure | `a320_sdsc_v3.gif` | 240 (9.6 s) | **A320neo**, RWY 02, ferry | 13.06 MB / 800 px / 128 | 12.96 / 800 / 128 | 14.09 / 800 / 128 |
+| 2. the tow | `b789_hangar9_v3.gif` | 400 (16.0 s) | **787-9** into hangar 9 | 14.81 MB / **680 px** / 80 | 13.91 / 680 / 80 | 14.70 / 720 / 96 |
+| 3. aerial tour | `sdsc_base_v3.gif` | 240 (9.6 s) | the whole base | 13.08 MB / **680 px** / 80 | 13.18 / 680 / 80 | 14.10 / 720 / 88 |
+
+The v3 encodes use exactly the knobs v2 settled on; the busier ramp cost 0.1 MB
+on the departure, 0.9 on the tow and 0.1 MB *less* on the tour, and all three
+are inside the budget. The
+ladders, measured on these frames:
+
+| clip | ladder |
+|---|---|
+| the tow | 680/80 = **14.81 MB**, 680/72 = 13.98, 660/80 = 13.65 |
+| the tour | 680/80 = **13.08 MB**, 680/72 = 12.58, 660/80 = 12.41 |
 
 Each script carries its full reasoning — what was tried, what was rejected and
 the measurement that forced it — in its module docstring. That is the primary
@@ -1477,11 +1487,22 @@ M3 Max — *marginal*, not the first frame, because a 240-frame job pays the syn
 and BVH build once. Measured as `(t(6 frames) − t(1 frame)) / 5` on the same
 frame range before and after.
 
-| clip | triangles v2 → v3 | s/frame v2 → v3 | 
-|---|---|---|
-| departure, f118–123 | 7.86 M → 9.69 M | 2.22 → 20.77 |
-| the tow, f200–205 | 7.84 M → 9.50 M | 7.52 → 19.40 |
-| the tour, f200–205 | 8.22 M → 9.50 M | 5.09 → 13.48 |
+| clip | triangles v2 → v3 | s/frame v2 → v3 | v3 whole clip, wall clock |
+|---|---|---|---|
+| departure, f118–123 | 7.86 M → 9.69 M | 2.22 → 20.77 | 240 frames in **54.5 min** (13.6 s/frame) |
+| the tow, f200–205 | 7.84 M → 9.50 M | 7.52 → 19.40 | 400 frames in 175 min (26.2 s/frame) |
+| the tour, f200–205 | 8.22 M → 9.50 M | 5.09 → 13.48 | 240 frames in 101 min (25.3 s/frame) |
+
+**The wall-clock column is not a clean measurement and is here for planning
+only.** The machine was shared while these ran — another GPU application, and
+then a memory wall: 82 MB free, 42 GB in the compressor, Blender paged down from
+8.4 GB resident to 1.1 and taking five minutes a frame. The departure ran
+essentially unimpeded and is the honest one. The tow's second half was re-run
+through a **chunked, resumable driver** — 30 frames per Blender process,
+skipping whatever is already on disk — which is worth keeping whatever the
+machine is doing: it turns a lost long run into a lost chunk. The middle column,
+measured as `(t(6 frames) − t(1 frame)) / 5` on the same frame range before and
+after, is the controlled comparison.
 
 **Where the cost is, and it is not where it looks.** Two controlled experiments
 on the tour, which is the clip with no hero aircraft:
