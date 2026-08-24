@@ -3093,26 +3093,44 @@ def build_cane_yards(P, c_bldg):
 # worth it. Nothing uses it at present.
 MRO_STANDS = (
     # tag     type      x       y      hdg    state
-    # ROW0 moved 4 m south and ROW1 5 m north of the phase-4 stands: the
-    # proxies were nominal boxes (a "wide" was 47.6 m of span) and the real
-    # 767-300ER is 51.2 m, which put its starboard wingtip 1.6 m INSIDE the
-    # A320's. fleet_placement's pairwise envelope check is what found it, and
-    # the gap is now 7.4 m - about what a real ramp keeps between wingtips.
-    ("ROW0", "wide",   904.0, 1786.0,  91.0, "parked"),
-    ("ROW1", "narrow", 900.0, 1837.0,  91.0, "parked"),
+    ("ROW0", "wide",   902.0, 1786.0,  91.0, "parked"),
+    ("ROW1", "narrow", 900.0, 1838.0,  91.0, "parked"),
     ("H9",   "dream",  750.0, 1725.0, 181.0, "parked"),
-    ("N0",   "wide",   870.0, 1950.0, 181.0, "jacked"),
-    ("N1",   "narrow", 878.0, 1888.0, 181.0, "docked"),
+    ("N0",   "wide",   877.0, 1950.0, 181.0, "jacked"),
+    ("N1",   "narrow", 881.0, 1888.0, 181.0, "docked"),
     ("N2",   "narrow", 980.0, 1958.0, 181.0, "engine_off"),
-    ("N3",   "narrow", 980.0, 2004.0, 181.0, "cowls"),
+    ("N3",   "narrow", 993.0, 2004.0, 181.0, "cowls"),
     ("N4",   "narrow", 997.0, 1911.0, 181.0, "cowls"),
-    ("N5",   "narrow", 850.0, 1836.0, 181.0, "docked"),
+    ("N5",   "narrow", 848.5, 1835.0, 181.0, "docked"),
 )
-# Every stand above except H9 (which has hangar 9's own apron, itself declared
-# inference) was checked against the mapped apron polygon relation/7422967: a
-# 21 m circle round each - a narrowbody half-span - lies inside the concrete
-# and clear of every mapped MRO footprint. The first attempt put two of them on
-# the grass west of the ramp, which the plan check caught.
+# THE POSITIONS ABOVE ARE PHASE 5'S, AND THEY ARE SOLVED, NOT PICKED.
+#
+# Phase 4 checked a 21 m circle round each stand - a narrowbody half-span -
+# against the mapped apron polygon relation/7422967, and its first attempt had
+# put two stands on the grass west of the ramp. That test stopped being enough
+# the moment real models went on the stands: the aeroplanes are 34 to 63 m
+# across, and this apron is not one slab. Ray-cast at 2 m over x 690..1042,
+# y 1640..2072, the built `SDSC_ApronConcrete` is **10 632 cells of 38 409** -
+# a deep frontage block from y 1770 to 1920, and above that only three
+# fingers, 10 to 50 m wide, at x ~880, x ~920-930 and x ~970-1020.
+#
+# Measured against that map, phase 4's N0 was standing on `SDSC_AerodromeGround`
+# - the jacked LATAM Cargo 767 was on dirt, 5 cm below the concrete and the
+# same pale grey in a render, which is why nobody saw it - and five more
+# aeroplanes had a wingtip over the edge.
+#
+# So the nine stands were re-solved against the concrete itself, with the
+# criterion a ramp actually has: **the fuselage strip on pavement** - the belly
+# and the main-gear track, 13 m wide, which covers every type here (A320 7.6 m,
+# 767 9.3 m, 787 10.8 m) - full envelopes 8 m clear of each other, and clear of
+# every mapped building. A WINGTIP MAY OVERHANG: real ramps end somewhere, and
+# a bounding box is mostly empty air. Each stand then took the nearest solution
+# to where phase 4 had put it, so the composition is phase 4's and only the
+# error is gone: H9, N2 and N4 did not move at all, ROW0/ROW1/N1/N5 moved 1 to
+# 3 m, N0 moved 7 m onto the concrete and N3 moved 13 m onto its finger.
+#
+# `fleet_placement._on_concrete()` re-runs the test after every placement, by
+# ray-cast, on whatever the clip file actually contains.
 AC_TYPES = {"narrow": (37.6, 35.8, 11.76, 1.98, 2.40),   # A320 family
             "wide": (54.9, 47.6, 15.85, 2.52, 3.00),     # 767-300ER
             "dream": (62.8, 60.1, 17.02, 2.85, 3.20)}    # 787-9

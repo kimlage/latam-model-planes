@@ -454,6 +454,75 @@ def _place_one(scn, coll, tag, type_key, x, y, hdg, state, apron_z, lift):
                 apron=apron_z, lift=lift, local=len(local))
 
 
+def _on_concrete(rows):
+    """Is each aeroplane standing on CONCRETE, at its real size?
+
+    Phase 4 checked a 21 m circle round each stand - a narrowbody half-span -
+    against the mapped apron polygon `relation/7422967`, and its first attempt
+    had put two stands on the grass. Two things make that check insufficient
+    now: the real spans are 34 to 63 m, so a 21 m circle no longer covers the
+    aeroplane, and the built apron is not that polygon - `SDSC_ApronConcrete`
+    is drawn from several mapped ways plus hangar 9's declared stand.
+
+    So this asks the scene instead of the survey: RAY-CAST straight down at the
+    centre and the four corners of the evaluated envelope and read what is
+    under them. It tests what was actually built, which is the only thing the
+    camera can see.
+
+    It caught one, and it had been there since phase 4: stand N0 sits in a
+    notch of the apron polygon, so the jacked LATAM Cargo 767-300F was standing
+    on `SDSC_AerodromeGround`, 5 cm below the concrete and the same pale grey
+    in a render. A wingtip over the apron edge is not automatically wrong -
+    real ramps end somewhere - so corners report and only a CENTRE off the
+    concrete raises."""
+    import bpy
+    from mathutils import Vector
+    dg = bpy.context.evaluated_depsgraph_get()
+    scn = bpy.context.scene
+
+    GROUND = ("Concrete", "Apron", "Ground", "Terrain", "Grass", "Taxi",
+              "Runway", "Cropland", "Cane", "Marks")
+
+    def under(px, py, top):
+        """What is the ground under (px, py)? Cast down and step past the
+        aeroplane, its gear and any kit standing round it: a naive cast from
+        above answers `Fuselagem` for all ten and says nothing."""
+        z = top + 60.0
+        for _ in range(12):
+            hit, loc, _, _, ob, _ = scn.ray_cast(
+                dg, Vector((px, py, z)), Vector((0.0, 0.0, -1.0)))
+            if not hit:
+                return "NOTHING"
+            if any(k in ob.name for k in GROUND):
+                return ob.name
+            z = loc.z - 0.01
+        return ob.name
+
+    bad = 0
+    for r in rows:
+        cx, cy = 0.5 * (r["x0"] + r["x1"]), 0.5 * (r["y0"] + r["y1"])
+        top = r["z1"]
+        centre = under(cx, cy, top)
+        # the four EXTREMA, not the bbox corners: for an axis-aligned
+        # aeroplane those are the nose, the tail and the two wingtips, and a
+        # box corner is empty air 25 m off the wing where nothing stands
+        tips = [under(px, py, top) for (px, py) in
+                ((cx, r["y0"]), (cx, r["y1"]),
+                 (r["x0"], cy), (r["x1"], cy))]
+        n_ok = sum(1 for c in tips if "Concrete" in c or "Apron" in c)
+        if "Concrete" not in centre and "Apron" not in centre:
+            bad += 1
+            print("!! %s CENTRE is standing on %s, not concrete"
+                  % (r["tag"], centre))
+        elif n_ok < 4:
+            print("  %-5s nose/tail/wingtips: %d of 4 over concrete (%s)"
+                  % (r["tag"], n_ok,
+                     ", ".join(sorted({c for c in tips
+                                       if "Concrete" not in c
+                                       and "Apron" not in c}))))
+    print("fleet: %d aircraft not standing on concrete" % bad)
+
+
 def populate(scn=None, skip=(), collection="SDSC_Fleet", quiet=False):
     """Put the real masters on every stand this module owns.
 
@@ -530,6 +599,10 @@ def report(rows):
                 print("!! %s and %s overlap by %.1f x %.1f m"
                       % (a["tag"], b["tag"], ox, oy))
     print("fleet: %d envelope overlaps" % bad)
+    try:
+        _on_concrete(rows)
+    except Exception as exc:                    # no OSM json in this file
+        print("fleet: concrete check skipped (%s)" % exc)
 
 
 if __name__ == "__main__":
