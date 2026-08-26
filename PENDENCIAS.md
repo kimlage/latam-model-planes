@@ -36,9 +36,12 @@ eles tocam.
    disponíveis) — precisa de foto de ângulo melhor.
 8. **Export GLB desatualizado** vs rodadas de QA — rodar `export_frota.py`
    depois da rodada da tinta (mecânico).
-9. **Outras bases além de GRU** — aguardando definição de escopo do dono.
-10. **E195-E2** (chega no 2º semestre de 2026) — aguardando decisão: modelar
-    quando houver foto de matrícula LATAM real, ou antes com mockups.
+9. ~~Outras bases além de GRU~~ — **decidido (2026-08-26): só GRU por
+   enquanto**; o ciclo fecha com 3 bases (SCL, São Carlos, GRU) em qualidade
+   máxima antes de qualquer ampliação.
+10. **E195-E2** — **decidido (2026-08-26): modelar quando houver foto de
+    matrícula LATAM real** (chega no 2º semestre de 2026; o padrão do projeto
+    exige foto da matrícula específica).
 
 ## Micro (não fazer isoladamente)
 
