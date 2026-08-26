@@ -177,11 +177,11 @@ def check_ground():
         # the climb-out: ESE into the LOWEST horizon sector
         ("climbout_ese", roll_point(3400.0, 0.0, 120.0),
          roll_point(6000.0, 0.0, 40.0), 35.0),
-        # the city at the fence, NE corner - eye ON the ramp inside the
-        # fence (the first pass stood outside at a z below the DSM surface
-        # and rendered the underside of the city sheet)
-        ("city_fence_ne", (2550.0, 1350.0, -5.5),
-         (3300.0, 2350.0, 60.0), 40.0),
+        # the city at the fence, NE corner - eye on the 901 ramp looking
+        # ENE along the fence at the Cabucu-flank fabric (two earlier eyes
+        # ended up under the river ribbon / behind the DSM hill)
+        ("city_fence_ne", (2480.0, 1150.0, 10.0),
+         (3400.0, 1750.0, 60.0), 45.0),
     )
     for (tag, eye, aim, lens) in shots:
         _look_at(tag, eye, aim, lens)

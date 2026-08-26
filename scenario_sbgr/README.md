@@ -468,7 +468,13 @@ LOD by camera reach (§8: the clips fly the 10L roll and an aerial tour):
 the NE corner, the 901 row and the north frontage are foreground and carry
 door/band/lockup detail; gates the camera never approaches get
 pier-and-jetbridge massing; the BASP side and the city are background tint
-and boxes. Render-cost measurement of the populated ramp is in §9.8.
+and boxes.
+
+**The fleet's marginal render cost, measured** (960×540, 64 samples,
+Cycles/Metal, the south-side composition frame — the heaviest ramp view):
+empty ramp 9.2 s, populated 15.8 s — **+6.6 s (+71 %) for sixteen aircraft**,
++2.8 M instanced triangles over 11 shared geometries. The instancing is what
+makes that affordable: appended copies would have cost sixteen geometries.
 
 ### 9.8 The gate
 
