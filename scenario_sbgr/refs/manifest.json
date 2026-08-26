@@ -1,0 +1,204 @@
+{
+ "schema": "latam-refs/1",
+ "subject": "scenario_sbgr",
+ "policy": "Reference photographs are cited here, never committed. They are CC BY / CC BY-SA works: share-alike conflicts with the CC BY 4.0 this project's assets ship under, and CC BY would require carrying the credit inside the file. This manifest records URL, author, licence and date for every one of them so the survey can be reproduced. Re-download them with `python3 refs_fetch.py scenario_sbgr` from the repository root; check the rule is holding with `python3 refs_fetch.py --verificar`. See NOTICE.md and sbgr_references.md.",
+ "photos": [
+  {
+   "file": "refs/latam_777_tam_livery_taxiing_2017.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/777-300ER_LATAM_SBGR_(34390933921).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:777-300ER_LATAM_SBGR_(34390933921).jpg",
+   "author": "Rafael Luiz Canossa",
+   "license": "CC BY-SA 2.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+   "date": "2017-01-26",
+   "resolution": "4138x2759",
+   "notes": "LATAM group 777-300ER PT-MUH taxiing at SBGR - in the legacy TAM livery ('The Magic Red Carpet'). The taxiway signs behind it read '09L G' and '<-27 <-B G ^09': the OLD designators, pre-2019. Ground furniture, sign style, grass and tree line, and the proof that free photographs of GRU mostly predate the renumbering AND the current livery."
+  },
+  {
+   "file": "refs/ne_apron_tam_widebodies_dome_2013.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Decolando_da_pista_09_L_do_Aeroporto_Internacional_de_S%C3%A3o_Paulo-Guarulhos_(SBGR-GRU)._%C3%81rea_rec%C3%A9m_constru%C3%ADda_pr%C3%B3xima_ao_Terminal_de_Passageiros_3_(TPS_3)._Ao_fundo%2C_o_Rio_Baviquiru-Gua%C3%A7u_que_circ_-_panoramio.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Decolando_da_pista_09_L_do_Aeroporto_Internacional_de_S%C3%A3o_Paulo-Guarulhos_(SBGR-GRU)._%C3%81rea_rec%C3%A9m_constru%C3%ADda_pr%C3%B3xima_ao_Terminal_de_Passageiros_3_(TPS_3)._Ao_fundo%2C_o_Rio_Baviquiru-Gua%C3%A7u_que_circ_-_panoramio.jpg",
+   "author": "MARCO AURÉLIO ESPARZ",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "date": "2013-11-30",
+   "resolution": "4000x3000",
+   "gps": [
+    -23.422416,
+    -46.454701
+   ],
+   "notes": "THE photograph of the maintenance corner, nine years before the hangar: the then-new NE remote apron with painted stand numbers 901-912, five TAM/American widebodies (777s among them) parked on it, an INFLATABLE white dome structure on the spot where the permanent LATAM hangar now stands, a building under construction at frame left, the green Baquirivu belt and the city of Guarulhos climbing the hills behind. Proves the apron layout, stand numbering, the dark asphalt, the red-soil cuts - and that the hangar is post-2013, agreeing with the DSM dating."
+  },
+  {
+   "file": "refs/latam_cargo_767_north_rwy_cantareira_2023.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/S%C3%A3o_Paulo-Guarulhos_International_Airport_by_Darafsh_07_44_07_750000.jpeg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:S%C3%A3o_Paulo-Guarulhos_International_Airport_by_Darafsh_07_44_07_750000.jpeg",
+   "author": "Darafsh",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "date": "2023-11-15",
+   "resolution": "original on Commons",
+   "gps": [
+    -23.431036,
+    -46.462514
+   ],
+   "notes": "Taken from the SOUTH runway looking north: a LATAM Cargo 767 rolling on the north runway, a LATAM widebody at the left edge, the approach-light masts - and the whole green wall of the Cabucu/Cantareira ridge standing behind, favela climbing its flank. This single frame IS the phase-3 composition answer: aircraft on the north runway + ridge behind, seen from the south side. Current LATAM colours, 2023."
+  },
+  {
+   "file": "refs/rwy28l_rollout_terminals_tower_2023.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Flight_Montevideo_to_S%C3%A3o_Paulo_2023_65.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Flight_Montevideo_to_S%C3%A3o_Paulo_2023_65.jpg",
+   "author": "Mike Peel",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "date": "2023-11-19",
+   "resolution": "original on Commons",
+   "gps": [
+    -23.428439,
+    -46.461067
+   ],
+   "notes": "Rolling out on 28L in the rain, down-runway view WNW: grooved wet pavement, the parallel runway to the right, and the terminal frontage with the TWR silhouette breaking the horizon. Shows how FLAT the field is - no SDSC crest anywhere - and what the north-side skyline looks like from the south runway."
+  },
+  {
+   "file": "refs/thr_09l_lineup_dawn_2012.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Oceanair_6304_cleared_for_takeoff_09L_(7980468614).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Oceanair_6304_cleared_for_takeoff_09L_(7980468614).jpg",
+   "author": "Joao Carlos Medau",
+   "license": "CC BY 2.0",
+   "license_url": "https://creativecommons.org/licenses/by/2.0",
+   "date": "2012-09-12",
+   "resolution": "1920x1435",
+   "gps": [
+    -23.430834,
+    -46.480667
+   ],
+   "notes": "Cockpit view lined up on then-09L (today's 10L) at dawn, fog burning off, sun dead ahead down the runway - the exact morning east-flow departure the survey's sun table predicts (June sunrise at 065 true vs track 074). Threshold stripes, displaced-threshold arrows, centreline joint pattern. This is the departure clip's opening frame, photographed from the flight deck."
+  },
+  {
+   "file": "refs/tower_closeup_2024.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Torre_de_Controle_do_Aeroporto_Internacional_de_Guarulhos.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Torre_de_Controle_do_Aeroporto_Internacional_de_Guarulhos.jpg",
+   "author": "Alexandro Dias",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "date": "2024-05-25",
+   "resolution": "1920x1200",
+   "notes": "The control tower close up, 2024: bare concrete shaft, two-ring gallery under a glazed cab, white radome ball above. LATAM tails at the pier behind it. The best appearance reference for the one structure the ADC georef places but OSM does not map."
+  },
+  {
+   "file": "refs/t2_tower_t3_construction_2013.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Terminal_2%2C_Torre_de_Controle_e_Terminal_3_(Em_constru%C3%A7%C3%A3o%2C_inaugurado_em_maio_de_2014_a_1%C2%BA_fase)_no_Aeroporto_Internacional_de_S%C3%A3o_Paulo-Guarulhos_(GRU_Airport)_-_panoramio.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Terminal_2%2C_Torre_de_Controle_e_Terminal_3_(Em_constru%C3%A7%C3%A3o%2C_inaugurado_em_maio_de_2014_a_1%C2%BA_fase)_no_Aeroporto_Internacional_de_S%C3%A3o_Paulo-Guarulhos_(GRU_Airport)_-_panoramio.jpg",
+   "author": "MARCO AURÉLIO ESPARZ",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "date": "2013-11-30",
+   "resolution": "4000x3000",
+   "gps": [
+    -23.433155,
+    -46.483662
+   ],
+   "notes": "From a taxiing aircraft: Terminal 2's long concrete frontage, the TWR with its radar ball, T3's construction cranes, American 777s and a Delta 767 under tow, and the forest of floodlight masts. Confirms the tower's position among the terminals (matching the ADC georef) and the mast pattern along the frontage."
+  },
+  {
+   "file": "refs/ramp_heavies_cantareira_2013.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aeroporto_Internacional_de_S%C3%A3o_Paulo-Guarulhos_(SBGR-GRU)_e_ao_fundo_a_Serra_da_Cantareira%2C_onde_o_avi%C3%A3o_Learjet_PT-LSD_levando_os_cantores_do_grupo_Mamonas_Assassinas_se_espatifou_em_2_de_mar%C3%A7o_de_1996_-_panoramio.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Aeroporto_Internacional_de_S%C3%A3o_Paulo-Guarulhos_(SBGR-GRU)_e_ao_fundo_a_Serra_da_Cantareira%2C_onde_o_avi%C3%A3o_Learjet_PT-LSD_levando_os_cantores_do_grupo_Mamonas_Assassinas_se_espatifou_em_2_de_mar%C3%A7o_de_1996_-_panoramio.jpg",
+   "author": "MARCO AURÉLIO ESPARZ",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "date": "2013-11-30",
+   "resolution": "4000x3000",
+   "gps": [
+    -23.433588,
+    -46.483533
+   ],
+   "notes": "The ramp line of heavies (Swiss A340, TAM fleet, TAP) with the Serra da Cantareira as the whole backdrop, from ground level on the field. The photographer's own caption names the Serra. Ground-truth for the horizon profile's 1.8-3.1 deg northern wall as seen from the apron."
+  },
+  {
+   "file": "refs/west_taxi_queue_hills_2013.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aeroporto_Internacional_de_S%C3%A3o_Paulo-Guarulhos_(SBGR-GRU)%2C_popularmente_chamado_de_Cumbica._Cabeceira_da_Pista_09_L_com_3000_x_45_mts_a_749_m_(2_457_ft)_de_altura._A_pista_09_L_%C3%A9_a_maior_pista_do_aeroporto_-_panoramio.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Aeroporto_Internacional_de_S%C3%A3o_Paulo-Guarulhos_(SBGR-GRU)%2C_popularmente_chamado_de_Cumbica._Cabeceira_da_Pista_09_L_com_3000_x_45_mts_a_749_m_(2_457_ft)_de_altura._A_pista_09_L_%C3%A9_a_maior_pista_do_aeroporto_-_panoramio.jpg",
+   "author": "MARCO AURÉLIO ESPARZ",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "date": "2013-11-30",
+   "resolution": "4000x3000",
+   "gps": [
+    -23.4341,
+    -46.482654
+   ],
+   "notes": "The west-end taxi queue by the 09L/10L threshold: TAM A321 and GOL 737 waiting, T2 pier tails behind, the northern hills over everything. NOTE the caption's own error: it says '3000 x 45' AND 'the longest runway' - 09L was the 3700 m one. Captions are not survey data; the declared-distance table is."
+  },
+  {
+   "file": "refs/t3_apron_747_a330_masts_2023.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/GRU_Airport%2C_Guarulhos%2C_Brazil_Nov_15%2C_2023_06-22-44_AM.jpeg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:GRU_Airport%2C_Guarulhos%2C_Brazil_Nov_15%2C_2023_06-22-44_AM.jpeg",
+   "author": "Darafsh",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "date": "2023-11-15",
+   "resolution": "original on Commons",
+   "gps": [
+    -23.423972,
+    -46.472964
+   ],
+   "notes": "T3 apron working at dawn: Lufthansa 747-8 and Delta A330 nose to tail, a marshaller on the pink-edged apron lanes, and the floodlight mast pattern (lattice head on concrete shaft) close enough to count members. Apron surface patchwork, current markings."
+  },
+  {
+   "file": "refs/remote_stands_masts_city_2026.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aeroporto_de_Guarulhos_em_Julho_de_2026.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Aeroporto_de_Guarulhos_em_Julho_de_2026.jpg",
+   "author": "Boaventuravinicius",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "date": "2026-07-08",
+   "resolution": "1920x1339",
+   "gps": [
+    -23.4242719,
+    -46.4743623
+   ],
+   "notes": "The NEWEST free photograph found (July 2026): remote stands with Delta, Air Canada, United and a LATAM tail, TWO floodlight mast designs side by side, warehouse sheds on the north fence and the low-rise city on the hill behind the green belt. What the field looks like NOW - colours, kit, skyline."
+  },
+  {
+   "file": "refs/climbout_north_city_2013.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Decolando_da_pista_09_L_do_Aeroporto_Internacional_de_S%C3%A3o_Paulo-Guarulhos_(SBGR-GRU)._%C3%80_esquerda_o_Rio_Baviquiru-Gua%C3%A7u_que_circunda_o_Aeroporto_de_Cumbica_e_margeia_a_via_de_acesso_ao_aeroporto%2C_Ro_-_panoramio.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Decolando_da_pista_09_L_do_Aeroporto_Internacional_de_S%C3%A3o_Paulo-Guarulhos_(SBGR-GRU)._%C3%80_esquerda_o_Rio_Baviquiru-Gua%C3%A7u_que_circunda_o_Aeroporto_de_Cumbica_e_margeia_a_via_de_acesso_ao_aeroporto%2C_Ro_-_panoramio.jpg",
+   "author": "MARCO AURÉLIO ESPARZ",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "date": "2013-11-30",
+   "resolution": "4000x3000",
+   "gps": [
+    -23.427624,
+    -46.458886
+   ],
+   "notes": "Seconds after a 09L departure, looking north-left: Guarulhos sprawl to the horizon, hills under cloud, red-soil vacant lots at the fence. The climb-out surround is CITY, wall to wall - the anti-Sao-Carlos. The caption names the Rio Baquirivu-Guacu ('Baviquiru', sic) and the access road under the wing."
+  },
+  {
+   "file": "refs/city_fence_taxiway_2023.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/S%C3%A3o_Paulo-Guarulhos_International_Airport_by_Darafsh_07_43_35_498000.jpeg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:S%C3%A3o_Paulo-Guarulhos_International_Airport_by_Darafsh_07_43_35_498000.jpeg",
+   "author": "Darafsh",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "date": "2023-11-15",
+   "resolution": "original on Commons",
+   "gps": [
+    -23.426964,
+    -46.462294
+   ],
+   "notes": "A TAP A330neo holding short with the city fabric pressed right against the fence line behind it - sheds, houses, a school of mid-rises, hills beyond. From inside the field the city IS the middle distance at GRU; there is no empty ring."
+  },
+  {
+   "file_note": "citation only - PD tower record",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/AeroportoGuarulhos_Torre2.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:AeroportoGuarulhos_Torre2.jpg",
+   "author": "Bruno Dantas",
+   "license": "Public domain",
+   "date": "2007-01-11",
+   "resolution": "1492x1856",
+   "notes": "The tower in 2007, public domain - cited for completeness; not fetched or visually verified in this survey."
+  }
+ ]
+}
