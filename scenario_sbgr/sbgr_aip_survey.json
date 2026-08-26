@@ -1,0 +1,461 @@
+{
+ "_what": "Official survey constants for SBGR (Aeroporto Internacional de Sao Paulo/Guarulhos - Governador Andre Franco Montoro) and for the LATAM maintenance base on its north-east corner, every value with its source. Read this before touching sbgr_osm.json or the terrain.",
+ "_surveyed_on": "2026-08-26",
+ "_sources": {
+  "rotaer": {
+   "name": "AISWEB / DECEA - ROTAER entry for SBGR, and the aerodrome's DISTANCIA(S) DECLARADA(S) table",
+   "url": "https://aisweb.decea.mil.br/?i=aerodromos&codigo=SBGR",
+   "amendment": "site AMDT 34/26; ROTAER D-AMDT 26/26",
+   "fetched": "2026-08-26",
+   "how": "page fetched with curl and the HTML stripped to text, so the figures below are the published strings"
+  },
+  "adc": {
+   "name": "SBGR ADC - Aerodrome Chart (chart id SBGR_ADC_02U)",
+   "url": "https://aisweb.decea.mil.br/download/?arquivo=de0b4a8e-6ed9-490d-a508bff12741f16f&apikey=1587263166",
+   "amendment": "AIRAC AMDT 2605A1, 14 MAY 26",
+   "how": "PDF downloaded, text layer extracted; the chart's own graticule was affine-fitted so its labels (HANGAR LATAM among them) could be read off in WGS84. Unlike SDSC, SBGR HAS an ADC - runway strips, stopways, the clearway and the approach lighting are published, not inferred."
+  },
+  "iac": {
+   "name": "SBGR IAC charts used for THR elevations and VAR",
+   "charts": {
+    "ILS N CAT I & II RWY 10L": {
+     "id": "SBGR_IAC_05E",
+     "amendment": "AIRAC AMDT 2209A1",
+     "url": "https://aisweb.decea.mil.br/download/?arquivo=e793dae6-20da-4fd9-b345779b12ede1fa&apikey=1587263166"
+    },
+    "ILS M RWY 28R": {
+     "id": "SBGR_IAC_06D",
+     "amendment": "AIRAC AMDT 2603A1",
+     "url": "https://aisweb.decea.mil.br/download/?arquivo=99f0a802-9dee-4e1e-b7eb13c7d1429627&apikey=1587263166"
+    },
+    "ILS Q RWY 10R": {
+     "id": "SBGR_IAC_04P",
+     "amendment": "AIRAC AMDT 2209A1",
+     "url": "https://aisweb.decea.mil.br/download/?arquivo=24459b88-6053-4e80-b5f355c35a84d283&apikey=1587263166"
+    },
+    "ILS Y RWY 28L": {
+     "id": "SBGR_IAC_03Z",
+     "amendment": "AIRAC AMDT 2209A1",
+     "url": "https://aisweb.decea.mil.br/download/?arquivo=9fc9ea6a-5475-424e-b13953245dca4b42&apikey=1587263166"
+    }
+   }
+  },
+  "agmc": {
+   "name": "SBGR AGMC ground movement charts (DEP 10L/10R/28L/28R, ARR 10R)",
+   "example_id": "SBGR_AGMC_02T (DEP 10L)",
+   "url": "https://aisweb.decea.mil.br/download/?arquivo=159c8a2a-6bbb-4733-a6453c24bffa0dc6&apikey=1587263166",
+   "why_cited": "the SET of charts is itself evidence: DEParture ground charts exist for all four runway ends, an ARRival ground chart only for 10R - see which_runway_for_the_departure_clip"
+  },
+  "aoc": {
+   "name": "AD 2 SBGR A/B (Aerodrome Obstacle Charts, SBGR_AOC_03F/03G)",
+   "url": "https://aisweb.decea.mil.br/download/?arquivo=ff112654-98c4-4faf-83beed844664d91e&apikey=1587263166"
+  },
+  "pdc": {
+   "name": "SBGR PDC 1/2/3 (Parking/Docking Charts, SBGR_PDC_02V/02X/02Y)",
+   "url": "https://aisweb.decea.mil.br/download/?arquivo=8613c506-8e3d-4cd5-b96792ac4755cad1&apikey=1587263166",
+   "note": "stand numbers and apron subdivisions are PUBLISHED at SBGR - phase 2 should extract stand geometry from these rather than inventing it; 215 aeroway=parking_position nodes in OSM cover much of it already"
+  },
+  "dem": "Copernicus DEM GLO-30 (primary) and SRTM v3 (control) - see TERRAIN.md",
+  "osm": "OpenStreetMap via Overpass, 2026-08-26 - see sbgr_osm.json",
+  "licence": "Brazilian State aeronautical information (DECEA/ICA). Official data, quoted as fact for engineering use. Charts are NOT redistributed - only the numbers and the URLs.",
+  "eaip_not_retrieved": "DECEA's eAIP (aisweb.decea.mil.br/eaip) renders its index by script and the AD 2 SBGR text could not be fetched non-interactively. It almost certainly carries the threshold coordinates to hundredths of a second; the ROTAER/ADC strings used here are WHOLE seconds. See threshold_precision under divergences."
+ },
+ "aerodrome": {
+  "icao": "SBGR",
+  "iata": "GRU",
+  "ciad": "SP0002",
+  "name": "Governador Andre Franco Montoro",
+  "full_name_pt": "Aeroporto Internacional de Sao Paulo/Guarulhos - Governador Andre Franco Montoro",
+  "locality": "GUARULHOS, SP - Cumbica",
+  "position_relative_to_city": "24 km NE of Sao Paulo (ROTAER field '24/NE')",
+  "category": "AD INTL PUB/MIL",
+  "military_note": "PUB/MIL: the Base Aerea de Sao Paulo (BASP) occupies the south side - pátio 13, the 4o Esquadrao de Transporte Aereo hangars. The airfield began as a 1940s air base; the civil airport opened over it in 1985.",
+  "operator": "GRU Airport (concessionaire); TWR/GND/ATIS operated by NAV Brasil (ROTAER note [8])",
+  "arp": {
+   "published": "23 26 08S / 046 28 23W",
+   "lat": -23.4355556,
+   "lon": -46.4730556,
+   "xy_m": [
+    965.13,
+    -153.85
+   ],
+   "precision_note": "whole seconds, +/- ~30 m. Mid-field, between the runways."
+  },
+  "elevation": {
+   "value_m": 750.0,
+   "value_ft": 2461,
+   "source": "ROTAER '750 (2461)'; the ADC prints 'AD ELEV: 2461'' and TDZE 2461' in the RWY 10R touchdown zone",
+   "high_point_note": "the aerodrome high point IS the RWY 10R TDZ - the field falls gently east and north from there",
+   "dem_check": "Copernicus reads 744-746 m and SRTM 744-751 m over the four thresholds against published 744.0-747.1 m; agreement 1-4 m. GRU is FLAT - total published relief across both runways is 3 m, against SDSC's 10 m on one."
+  },
+  "magnetic_variation": {
+   "value_deg_west": 22.0,
+   "epoch": "IAC charts in force 2026 (AIRAC AMDT 2209A1..2605A1), 'VAR 22 W' box",
+   "consequence": "the designators are magnetic: 10L/28R and 10R/28L on a TRUE bearing of ~073.65 / 253.65. Build on the designator and the field is rotated ~21 deg against the terrain and the sun.",
+   "designator_history": "the runways were 09/27 until mid-2019, renumbered 10/28 when the growing westward variation carried the magnetic bearing past 095 deg. Old photographs and old scenery say 09L/09R - both names are the same pavement."
+  },
+  "operation": {
+   "type": "VFR IFR (IFR in practice: VFR ops restricted to HEL/MIL/RNAV1-incapable, ROTAER)",
+   "hours": "H24 (no closing hours published; INTL PUB/MIL)",
+   "utc_offset": -3,
+   "fir": "SBBS (CRCEA-SE)",
+   "twr": "TORRE GUARULHOS 118.400 / 132.750 / 135.200 (121.500 EMERG)",
+   "gnd": "SOLO GUARULHOS 121.700 / 126.900",
+   "ops": "OPERACOES GUARULHOS 122.500; TRAFEGO GUARULHOS 121.000",
+   "atis": "D-ATIS 127.750",
+   "rffs": "CAT 10 (civil)",
+   "ils": {
+    "10L": "ILS/DME IUC 110.7 - CAT I & II (ADC: CAT-II)",
+    "10R": "ILS/DME IGH 111.7 - CAT II & III (ADC: CAT-III)",
+    "28L": "ILS/DME IBC 111.1 - CAT I",
+    "28R": "ILS/DME IGS 111.9 - CAT I"
+   },
+   "quiet_hours_note": "turboprop and piston LDG/TKOF prohibited 0930-1300 and 2200-0200 UTC except MIL/MEDEVAC/RBAC-121/129 - the traffic mix in any clip is jets",
+   "wildlife_note": "ROTAER records vulture concentration (urubus) in the 10/28 approach sectors, and kites (pipas) in the ATZ GND/1500FT mainly JAN, FEB, JUL, DEC - both are true Sao Paulo texture"
+  }
+ },
+ "runways": [
+  {
+   "designation": "10L/28R",
+   "role": "the NORTH runway - the take-off runway (see which_runway_for_the_departure_clip)",
+   "pavement_length_m": 3700,
+   "width_m": 45,
+   "surface": "ASPH",
+   "pcr": "790/F/C/X/T",
+   "pcr_note": "ROTAER footnote [9] and the ADC column header both say PCR - the post-2024 ICAO Pavement Classification RATING, not classic PCN. 790 is not comparable with SDSC's PCN 47; do not convert.",
+   "category": "RWY 10L CAT-II, RWY 28R CAT-I (ADC); ALSF-2 approach lights on 10L, ALSF-1 on 28R; PAPI both ends (MEHT 57 / 61.48 ft)",
+   "stopways_m": "60 x 45 at EACH end (ADC 'SWY' column) - published, unlike SDSC where the stopway reading was inference",
+   "clearway": "none (TODA = TORA both directions)",
+   "strip_m": "3940 x 300 (ADC)",
+   "source": "ROTAER runway line '10L ... (3700x45 ASPH 790/F/C/X/T ...) ... 28R' + ADC physical characteristics table",
+   "true_bearing_deg": {
+    "10L": 73.411,
+    "28R": 253.411
+   },
+   "true_bearing_source": "COMPUTED from the two published whole-second thresholds in exact WGS84 ENU. See bearing_adopted: the OSM tracing (073.661) is finer and is what the build should use.",
+   "magnetic_bearing_deg": {
+    "10L": 95,
+    "28R": 275
+   },
+   "magnetic_bearing_source": "ADC 'BRG MAG' column; IAC final courses 095/275",
+   "thresholds": {
+    "10L": {
+     "published": "S 23 26 03  W 046 28 57",
+     "lat": -23.4341667,
+     "lon": -46.4825,
+     "xy_m": [
+      -0.0,
+      0.0
+     ],
+     "elev_ft": 2445,
+     "elev_m": 745.24,
+     "elev_source": "IAC ILS N RWY 10L, 'THR ELEV 2445'",
+     "tdze_ft": 2446,
+     "geoid_undulation_m": -2.33,
+     "geoid_source": "ROTAER declared-distance table, 'ALT. GEOIDAL'",
+     "displaced_m": 90,
+     "displaced_source": "ROTAER: 'THR 10L deslocada em 90m. THR 28R deslocada em 60m.'",
+     "note": "This point is the scene ORIGIN."
+    },
+    "28R": {
+     "published": "S 23 25 30  W 046 26 57",
+     "lat": -23.425,
+     "lon": -46.4491667,
+     "xy_m": [
+      3406.62,
+      1014.82
+     ],
+     "elev_ft": 2441,
+     "elev_m": 744.02,
+     "elev_source": "IAC ILS M RWY 28R, 'THR ELEV 2441'",
+     "tdze_ft": 2442,
+     "geoid_undulation_m": -2.35,
+     "geoid_source": "ROTAER declared-distance table, 'ALT. GEOIDAL'",
+     "displaced_m": 60,
+     "displaced_source": "ROTAER: 'THR 10L deslocada em 90m. THR 28R deslocada em 60m.'"
+    }
+   },
+   "threshold_to_threshold_m": {
+    "measured_in_frame": 3554.56,
+    "expected_from_published": 3550.0,
+    "expected_how": "3700 pavement - 90 displaced at 10L - 60 displaced at 28R",
+    "agreement_m": 4.56,
+    "comment": "+4.6 m misclose on coordinates published to whole seconds (+/- ~43 m worst case) - consistent, and the OSM tracing closes the published lengths to 1.5 m. The published survey is internally consistent at its own precision."
+   },
+   "declared_distances_m": {
+    "source": "ROTAER DISTANCIA(S) DECLARADA(S) table (identical on the ADC)",
+    "10L": {
+     "TORA": 3700,
+     "TODA": 3700,
+     "ASDA": 3760,
+     "LDA": 3610
+    },
+    "28R": {
+     "TORA": 3700,
+     "TODA": 3700,
+     "ASDA": 3760,
+     "LDA": 3640
+    },
+    "the_number_that_matters": "TORA 3700 in BOTH directions - full pavement, the displaced thresholds cost only landings. A heavy 777 gets the whole 3700 m from either end.",
+    "internal_structure": "LDA = 3700 - own displacement (3610/3640); ASDA = 3700 + the 60 m stopway; TODA = TORA (no clearway). All four close exactly - nothing to infer, the ADC publishes the stopways. Contrast SDSC, where the stopway reading was mine.",
+    "intersection_departures": "ROTAER: CAT A/B/C aircraft should accept TKOF from 10L at TWY H (3400 m) and from 28R at TWY P (3460 m) - i.e. the full length is protected for the heavies"
+   },
+   "slope": {
+    "published_fall_m": 1.22,
+    "published_fall_pct": 0.03,
+    "direction": "downhill toward 28R (ESE)",
+    "from": "published THR elevations 2445 ft at 10L and 2441 ft at 28R over 3555 m",
+    "dem_check": "Copernicus reads 744.0 at THR 10L and 742.0 at THR 28R (2.0 m); same sign, same order",
+    "why_it_matters": "it doesn't, visually - THIS runway is level to within an aircraft's belly clearance. GRU is the flat one of the three bases. z = 0 is still the AD elevation, 4.8 m above THR 10L: do not build the pavement at z=0."
+   }
+  },
+  {
+   "designation": "10R/28L",
+   "role": "the SOUTH runway - CAT III, the landing runway in east flow",
+   "pavement_length_m": 3000,
+   "width_m": 45,
+   "surface": "ASPH",
+   "pcr": "810/F/C/X/T",
+   "pcr_note": "PCR, not classic PCN - see the north runway's note",
+   "category": "RWY 10R CAT-III, RWY 28L CAT-I (ADC); ALSF-2 on 10R, ALSF-1 on 28L; PAPI both ends (MEHT 63 / 71 ft)",
+   "stopways_m": "60 x 45 at EACH end (ADC)",
+   "clearway": "300 x 150 at the 28L end, serving RWY 10R departures (TODA 3300)",
+   "strip_m": "3240 x 280 (ADC; the 280 is read from a jumbled table cell - low confidence, see divergences)",
+   "source": "ROTAER runway line '10R ... (3000x45 ASPH 810/F/C/X/T ...) ... 28L' + ADC",
+   "true_bearing_deg": {
+    "10R": 73.281,
+    "28L": 253.281
+   },
+   "true_bearing_source": "COMPUTED from the published whole-second thresholds; see bearing_adopted",
+   "magnetic_bearing_deg": {
+    "10R": 95,
+    "28L": 275
+   },
+   "thresholds": {
+    "10R": {
+     "published": "S 23 26 20  W 046 29 13",
+     "lat": -23.4388889,
+     "lon": -46.4869444,
+     "xy_m": [
+      -454.16,
+      -522.99
+     ],
+     "elev_ft": 2451,
+     "elev_m": 747.06,
+     "elev_source": "IAC ILS Q RWY 10R, 'THR ELEV 2451'",
+     "tdze_ft": 2461,
+     "geoid_undulation_m": -2.33,
+     "geoid_source": "ROTAER declared-distance table, 'ALT. GEOIDAL'"
+    },
+    "28L": {
+     "published": "S 23 25 52  W 046 27 32",
+     "lat": -23.4311111,
+     "lon": -46.4588889,
+     "xy_m": [
+      2412.91,
+      338.21
+     ],
+     "elev_ft": 2446,
+     "elev_m": 745.54,
+     "elev_source": "IAC ILS Y RWY 28L, 'THR ELEV 2446'",
+     "tdze_ft": 2451,
+     "geoid_undulation_m": -2.35,
+     "geoid_source": "ROTAER declared-distance table, 'ALT. GEOIDAL'"
+    }
+   },
+   "threshold_to_threshold_m": {
+    "measured_in_frame": 2993.63,
+    "expected_from_published": 3000.0,
+    "expected_how": "3000 pavement, no displaced thresholds",
+    "agreement_m": -6.37,
+    "comment": "-6.4 m misclose at whole-second precision; OSM closes 3000.0 exactly."
+   },
+   "declared_distances_m": {
+    "source": "ROTAER DISTANCIA(S) DECLARADA(S) table",
+    "10R": {
+     "TORA": 3000,
+     "TODA": 3300,
+     "ASDA": 3060,
+     "LDA": 3000
+    },
+    "28L": {
+     "TORA": 3000,
+     "TODA": 3000,
+     "ASDA": 3060,
+     "LDA": 3000
+    },
+    "internal_structure": "TODA 10R = 3000 + the 300 m clearway; ASDA = 3000 + the 60 m stopway; LDA = full pavement (no displacement). Publishes clean."
+   },
+   "slope": {
+    "published_fall_m": 1.52,
+    "published_fall_pct": 0.05,
+    "direction": "downhill toward 28L (ESE)",
+    "from": "published THR elevations 2451 / 2446 ft over 2994 m",
+    "dem_check": "Copernicus 746.0 / 744.0 - agrees",
+    "why_it_matters": "it doesn't - level. The 10R TDZ is the aerodrome high point (TDZE = AD ELEV 2461 ft)."
+   }
+  }
+ ],
+ "latam_maintenance": {
+  "name": "LATAM maintenance hangar, Guarulhos",
+  "what_it_is": "LATAM's line/heavy maintenance hangar on the NORTH-EAST corner of SBGR - the hangar where LATAM's Boeing 777-300ER fleet is maintained. The 777 is the one type this repository models that has no scenery presence yet, and this is its home.",
+  "evidence": [
+   {
+    "claim": "the hangar exists, is LATAM's, and is where the ADC puts it",
+    "source": "SBGR ADC (SBGR_ADC_02U): the chart face prints 'HANGAR LATAM' at georeferenced lat -23.4203 lon -46.4580 (the label; the AGMC DEP 10L chart prints the same label at -23.4201 -46.4598). OSM way/778050745, building=hangar, name='Latam Airlines', centre -23.42186 -46.46010, sits directly under both labels."
+   },
+   {
+    "claim": "777 maintenance is done at Guarulhos",
+    "source": "CNN Brasil feature on the Sao Carlos MRO, recorded during the SDSC survey (../scenario_sdsc/sdsc_aip_survey.json -> types_maintained.explicitly_NOT_here): 777 maintenance is done at Guarulhos instead of Sao Carlos."
+   },
+   {
+    "claim": "LATAM (as TAM Linhas Aereas) is the wide-body heavy-recovery holder at GRU",
+    "source": "ROTAER RMK: 'Recovery Kit (Capacidade para remocao de ACFT com envergadura BTN 65M e 80M) sob responsabilidade da TAM Linhas Aereas ... AVBL' - the airline's GRU base holds the state kit for moving a disabled 777/747-class airframe. AIP-side evidence that LATAM's heavy operation lives here."
+   }
+  ],
+  "hangar_osm": {
+   "osm_id": "way/778050745",
+   "centre_lat": -23.42186,
+   "centre_lon": -46.4601,
+   "centre_xy_m": [
+    2289.31,
+    1362.79
+   ],
+   "footprint_m2": 9997.6,
+   "min_area_box": {
+    "long_m": 136.8,
+    "short_m": 92.2,
+    "long_axis_bearing_deg_true": 73.7
+   },
+   "orientation_note": "long axis parallel to the runways; doors face SSE onto its own 32 892 m2 apron (way/778050217, 86 m away)"
+  },
+  "height": {
+   "measured": null,
+   "why_not": "Copernicus GLO-30 is a 2011-2014 DSM and it reads FLAT GROUND (744-745 m, +0.9 m over the footprint) under this hangar - and equally flat under Terminal 3, which opened in 2014. The DSM predates both. So the DSM DATES the hangar (built after ~2014) instead of measuring it. No published height was found either: any height phase 2 gives it is an ESTIMATE and must be declared (a 777-300ER is 18.5 m tall; the door must clear that)."
+  },
+  "relation_to_runway_10L": {
+   "along_takeoff_roll_m": 2575.0,
+   "lateral_offset_m": 653.8,
+   "side_when_departing_10L": "left",
+   "note": "hangar CENTRE projected on the 10L track from THR 10L; the physical roll starts at -90 m. A heavy 777 at high weight rotates roughly 2200-2900 m into a 3700 m roll: the aeroplane lifts off ABEAM ITS OWN HANGAR, on the left, 650 m out. The SDSC geometry (base abeam at rotation) repeats here without being asked for."
+  },
+  "relation_to_runway_28R": {
+   "along_takeoff_roll_m": 975.0,
+   "side_when_departing_28R": "right",
+   "note": "in west flow the hangar is 975 m into the 28R roll, right side - the aircraft passes it still on the ground"
+  },
+  "neighbours": [
+   {
+    "name": "American Airlines hangar",
+    "osm_id": "way/777394328",
+    "centre_xy_m": [
+     2032.77,
+     1272.01
+    ],
+    "min_area_box": {
+     "long_m": 178.6,
+     "short_m": 95.0,
+     "long_axis_bearing_deg_true": 164.7
+    },
+    "note": "immediately WSW of the LATAM hangar, long axis PERPENDICULAR to the runways, also labelled on the ADC ('HANGAR AMERICAN AIRLINES'). The pair is what makes the NE corner recognisable from the air. DSM reads a +7.2 m floor over it (2011-2014 epoch), so it is the OLDER of the two."
+   },
+   {
+    "name": "GRU control tower (TWR) + AIS/MET",
+    "position_xy_m": [
+     301.49,
+     1321.99
+    ],
+    "how": "the ADC prints 'TWR' with 'AIS/MET' beside it at georeferenced -23.4222 -46.4795, north side between Terminal 2 and Terminal 3. LABEL POSITION, +/- ~100 m - the tower is NOT in the OSM extract as a tagged object. Phase 2 must place it from this georef plus photographs; do not invent a position elsewhere.",
+    "confidence": "label georef only"
+   },
+   {
+    "name": "SCI / RFFS fire station",
+    "position_xy_m": [
+     2237.99,
+     -66.99
+    ],
+    "how": "ADC label 'SCI' georef, mid-field between the runways at the east half"
+   }
+  ],
+  "osm_survey_note": "the NE-corner hangars, their apron and the parking positions are RECENT, well-drawn OSM work (way ids in the 777-778 M range, ~2020); this is not SDSC's stale 2017 one-session tracing. sbgr_osm.json carries 215 parking positions, 171 gates and 25 named apron polygons (Patio 1-7)."
+ },
+ "which_runway_for_the_departure_clip": {
+  "_status": "Answered from the AIP's own structure plus ERA5 climatology. GRU is ATC-flow, parallel dependent runways ~375 m apart, operated segregated; nothing here is a published 'preferential runway' declaration, and the AD 2 SBGR eAIP text (which may contain one) was not retrievable - recorded under divergences.",
+  "the_answer": "LATAM heavies depart RWY 10L - the north runway, full 3700 m, in the east flow that stands ~2/3 of the time. In west flow the same pavement is 28R. The 777 clip is a 10L departure.",
+  "evidence": [
+   "AGMC chart set: DEP ground charts exist for 10L, 10R, 28L AND 28R, but the only ARR ground chart is for 10R - in east flow, arrivals go to the south runway, departures to the north",
+   "CAT III is on 10R (south runway) - the low-visibility LANDING runway; the north runway is CAT II landing at best",
+   "ROTAER intersection-departure notes name only 10L (TWY H, 3400 m) and 28R (TWY P, 3460 m) - i.e. the ends where CAT A/B/C traffic is asked to leave the full length free are both on the NORTH runway: it is the departure runway in both flows",
+   "TORA: the north runway gives 3700 m against the south's 3000; a 777-300ER at long-haul weight wants the 3700",
+   "ERA5 2021-2025 (sbgr_operations_wind.json): 67.4% of all hours favour the 10s; mornings ~78%, but 12:00-15:00 local dips to 39-46% as the sea-breeze/NW turn comes through - a late-afternoon west-flow departure (28R) is not rare"
+  ],
+  "for_phase_3": {
+   "protagonist": "Boeing 777-300ER, the type maintained here and absent from all scenery so far",
+   "geometry": "on a 10L departure the LATAM hangar is on the LEFT, abeam at 2575 m - at rotation for a heavy - 654 m out. Terminal 3 is on the left at ~980 m along, 760 m out; Terminal 2 at ~325 m along, 770 m out; the whole terminal frontage plays past the first half of the roll, then the maintenance base takes over exactly when the nose comes up.",
+   "composition_not_terrain": "GRU is flat along the runway, but the horizon is NOT empty: the Cabucu/Cantareira wall stands at 1.8-3.1 deg across the whole northern sector, 4-14 km away - BEHIND the aircraft as seen from the south side of the field. One south-side camera frame can hold the rotating 777, its own hangar line, and the Serra behind both. That is the SDSC terrain-reveal, inverted: there the terrain appeared as the aircraft climbed; here it stands as the backdrop the whole time. The 10L climb-out itself heads ESE into the LOWEST horizon sector (0.24-0.66 deg) - sky, like SDSC's.",
+   "light": "late afternoon puts the sun W-NW behind a south-west camera and rakes the north-side hangar frontage; but check the flow - 12:00-15:00 local is when west flow is most likely, and a 28R departure mirrors everything. 17:00 local is back to 62% east flow. sbgr_operations_sun.json has the numbers."
+  }
+ },
+ "divergences_recorded_not_split": [
+  {
+   "subject": "threshold coordinate precision",
+   "a": "ROTAER and ADC publish the four thresholds to WHOLE SECONDS (S 23 26 03 ...), i.e. +/- ~31 m N-S / ~28 m E-W",
+   "b": "OSM's runway tracing closes the published pavement lengths to 1.5 m (10L/28R: 3698.5 m vs 3700; 10R/28L: 3000.0 vs 3000) and holds the two centrelines parallel to 0.015 deg",
+   "c": "DECEA's eAIP AD 2 SBGR text (script-rendered, not retrieved) likely carries centisecond thresholds",
+   "resolution": "origin = the published THR 10L string, exactly as printed; RELATIVE geometry (bearing, centreline shape) = the OSM tracing; both recorded. If the eAIP text is ever retrieved, re-anchor lib/frame.py and everything downstream re-derives."
+  },
+  {
+   "subject": "true bearing",
+   "a": "73.411 / 73.281 deg from the published whole-second thresholds (0.13 deg apart for parallel runways)",
+   "b": "73.661 / 73.646 deg from the OSM tracing (parallel to 0.015 deg)",
+   "resolution": "bearing_adopted = 073.65 true. The 0.25 deg gap is inside the coordinate rounding; not averaged, chosen for stated reasons."
+  },
+  {
+   "subject": "magnetic variation",
+   "a": "VAR 22 W - the IAC charts' printed box",
+   "b": "~21.4 W - IGRF-era 2026 value (context, not computed in this repo)",
+   "c": "the 2019 renumbering 09/27 -> 10/28 says the magnetic bearing crossed 095 around then",
+   "resolution": "record the chart's 22 W as the published value; never use VAR to BUILD anything - the build uses the true bearing."
+  },
+  {
+   "subject": "PCN vs PCR",
+   "a": "810/F/C/X/T and 790/F/C/X/T look like enormous PCNs",
+   "b": "ROTAER footnote [9] and the ADC column header say PCR - the new ICAO ACR/PCR system",
+   "resolution": "quoted as PCR. Do not compare with SDSC's PCN 47/F/A/X/T; different scales."
+  },
+  {
+   "subject": "south strip width",
+   "a": "ADC physical table reads STRIP 3940 x 300 (north) and 3240 x 280 (south) after un-jumbling the text layer",
+   "b": "280 m is an odd strip width for a CAT III runway",
+   "resolution": "low confidence in the '280'; the 3940/3240 lengths are arithmetic-clean (pavement + 2 x 120). Phase 2 should not hang anything on strip width."
+  },
+  {
+   "subject": "'Patio 7' appears twice in OSM",
+   "a": "way/305005127 (south side, by the BASP/GA hangars, 19 011 m2) is named 'Patio 7'",
+   "b": "way/777391967 and way/777391968 (east cargo side, 24 458 + 25 138 m2) are also named 'Patio 7'",
+   "resolution": "recorded; the PDC charts are the authority on apron numbering if phase 2 needs it. Not resolved here."
+  },
+  {
+   "subject": "who runs the maintenance hangar day-to-day",
+   "a": "ADC/AGMC label it HANGAR LATAM; OSM names it 'Latam Airlines'",
+   "b": "no free-licence, current photograph of the hangar facade was found to confirm present-day branding (see sbgr_references.md)",
+   "resolution": "built as LATAM on the charts' authority; facade appearance is phase-2 inference until a photograph is found."
+  }
+ ],
+ "confirmed_no_change_needed": {
+  "geometry_closure": "both runways' published lengths, displacements and OSM tracings close (see runways[*].threshold_to_threshold_m)",
+  "designator_arithmetic": "073.65 true + 22 W = 095.65 ~ 095 MAG on both runways",
+  "elevations": "published THR elevations vs Copernicus/SRTM: spreads 2-5 m, sign-consistent; the field is flat",
+  "flatness": "GRU needs NO graded-platform machinery: highest published point 2461 ft (10R TDZ), lowest 2441 ft (THR 28R) - 6.1 m across a 5 km field. The SDSC lesson (35 m platform drops) does NOT apply; the SBGR trap is the opposite - believing the DSM's building heights, which predate half the airport (see TERRAIN.md).",
+  "horizon": "delivered 30/60/180 m grid stack reproduces the DEM horizon to 0.018 deg rms / 0.056 max (verify.py)"
+ },
+ "bearing_adopted": {
+  "value_deg_true": 73.65,
+  "for_the_build": "Model BOTH runways parallel on 073.65 true, anchored at the published THR 10L. The OSM imagery tracing gives 073.661 (north) and 073.646 (south) - parallel to 0.015 deg - while the published whole-second thresholds give 73.411 / 73.281, a 0.13 deg spread that is pure coordinate rounding (31 m of northing error over 3.5 km is 0.5 deg). A 3.7 km runway is the best bearing ruler on the field and OSM traced it against imagery; DECEA rounded it to the second.",
+  "cross_checks": {
+   "designator": "073.65 + VAR 22 W = 095.65 vs published 095 MAG (chart VAR is integer-rounded)",
+   "igrf_note": "with the 2026 geomagnetic declination (~21.4 W, IGRF - COMPUTED NOWHERE here, quoted as context only) 073.65 -> 095.05 MAG, dead on the designator",
+   "sdsc_lesson": "the designator is magnetic; build on the true bearing"
+  }
+ }
+}

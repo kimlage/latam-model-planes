@@ -1,0 +1,225 @@
+{
+ "_what": "Solar geometry at SBGR, computed (NOAA algorithm) in this repo, not quoted.",
+ "_note": "Latitude -23.43 - the Tropic of Capricorn RUNS THROUGH Sao Paulo: at the December solstice the noon sun is within a degree of the zenith (89+ deg). A midday frame is shadowless. June noon is ~43 deg toward N. The only raking light is before ~09:00 and after ~16:00, exactly as at SDSC, and the afternoon flow caveat in sbgr_operations_wind.json applies to it.",
+ "site": {
+  "lat": -23.4341667,
+  "lon": -46.4825,
+  "utc_offset_h": -3,
+  "no_dst": "Brazil abolished DST in 2019"
+ },
+ "runway_track_true_deg": 73.65,
+ "samples": [
+  {
+   "label": "summer solstice 07:00",
+   "date": "2026-12-21",
+   "local_time": "07:00",
+   "elevation_deg": 21.22,
+   "azimuth_deg_true": 107.26
+  },
+  {
+   "label": "summer solstice 09:00",
+   "date": "2026-12-21",
+   "local_time": "09:00",
+   "elevation_deg": 47.98,
+   "azimuth_deg_true": 99.59
+  },
+  {
+   "label": "summer solstice 12:00",
+   "date": "2026-12-21",
+   "local_time": "12:00",
+   "elevation_deg": 89.07,
+   "azimuth_deg_true": 90.41
+  },
+  {
+   "label": "summer solstice 15:00",
+   "date": "2026-12-21",
+   "local_time": "15:00",
+   "elevation_deg": 49.82,
+   "azimuth_deg_true": 260.87
+  },
+  {
+   "label": "summer solstice 16:00",
+   "date": "2026-12-21",
+   "local_time": "16:00",
+   "elevation_deg": 36.32,
+   "azimuth_deg_true": 257.32
+  },
+  {
+   "label": "summer solstice 17:00",
+   "date": "2026-12-21",
+   "local_time": "17:00",
+   "elevation_deg": 23.01,
+   "azimuth_deg_true": 253.33
+  },
+  {
+   "label": "summer solstice 18:00",
+   "date": "2026-12-21",
+   "local_time": "18:00",
+   "elevation_deg": 10.0,
+   "azimuth_deg_true": 248.67
+  },
+  {
+   "label": "equinox 07:00",
+   "date": "2026-03-21",
+   "local_time": "07:00",
+   "elevation_deg": 10.62,
+   "azimuth_deg_true": 84.98
+  },
+  {
+   "label": "equinox 09:00",
+   "date": "2026-03-21",
+   "local_time": "09:00",
+   "elevation_deg": 37.47,
+   "azimuth_deg_true": 70.08
+  },
+  {
+   "label": "equinox 12:00",
+   "date": "2026-03-21",
+   "local_time": "12:00",
+   "elevation_deg": 65.96,
+   "azimuth_deg_true": 8.02
+  },
+  {
+   "label": "equinox 15:00",
+   "date": "2026-03-21",
+   "local_time": "15:00",
+   "elevation_deg": 42.95,
+   "azimuth_deg_true": 294.53
+  },
+  {
+   "label": "equinox 16:00",
+   "date": "2026-03-21",
+   "local_time": "16:00",
+   "elevation_deg": 29.98,
+   "azimuth_deg_true": 285.09
+  },
+  {
+   "label": "equinox 17:00",
+   "date": "2026-03-21",
+   "local_time": "17:00",
+   "elevation_deg": 16.49,
+   "azimuth_deg_true": 277.93
+  },
+  {
+   "label": "equinox 18:00",
+   "date": "2026-03-21",
+   "local_time": "18:00",
+   "elevation_deg": 2.77,
+   "azimuth_deg_true": 271.75
+  },
+  {
+   "label": "winter solstice 07:00",
+   "date": "2026-06-21",
+   "local_time": "07:00",
+   "elevation_deg": 1.84,
+   "azimuth_deg_true": 63.41
+  },
+  {
+   "label": "winter solstice 09:00",
+   "date": "2026-06-21",
+   "local_time": "09:00",
+   "elevation_deg": 24.62,
+   "azimuth_deg_true": 47.51
+  },
+  {
+   "label": "winter solstice 12:00",
+   "date": "2026-06-21",
+   "local_time": "12:00",
+   "elevation_deg": 43.09,
+   "azimuth_deg_true": 2.44
+  },
+  {
+   "label": "winter solstice 15:00",
+   "date": "2026-06-21",
+   "local_time": "15:00",
+   "elevation_deg": 27.19,
+   "azimuth_deg_true": 315.24
+  },
+  {
+   "label": "winter solstice 16:00",
+   "date": "2026-06-21",
+   "local_time": "16:00",
+   "elevation_deg": 16.7,
+   "azimuth_deg_true": 305.64
+  },
+  {
+   "label": "winter solstice 17:00",
+   "date": "2026-06-21",
+   "local_time": "17:00",
+   "elevation_deg": 5.01,
+   "azimuth_deg_true": 298.24
+  },
+  {
+   "label": "winter solstice 18:00",
+   "date": "2026-06-21",
+   "local_time": "18:00",
+   "elevation_deg": -7.44,
+   "azimuth_deg_true": 292.37
+  },
+  {
+   "label": "September equinox 07:00",
+   "date": "2026-09-22",
+   "local_time": "07:00",
+   "elevation_deg": 13.94,
+   "azimuth_deg_true": 83.56
+  },
+  {
+   "label": "September equinox 09:00",
+   "date": "2026-09-22",
+   "local_time": "09:00",
+   "elevation_deg": 40.63,
+   "azimuth_deg_true": 67.86
+  },
+  {
+   "label": "September equinox 12:00",
+   "date": "2026-09-22",
+   "local_time": "12:00",
+   "elevation_deg": 66.41,
+   "azimuth_deg_true": 359.14
+  },
+  {
+   "label": "September equinox 15:00",
+   "date": "2026-09-22",
+   "local_time": "15:00",
+   "elevation_deg": 40.1,
+   "azimuth_deg_true": 291.56
+  },
+  {
+   "label": "September equinox 16:00",
+   "date": "2026-09-22",
+   "local_time": "16:00",
+   "elevation_deg": 26.95,
+   "azimuth_deg_true": 282.84
+  },
+  {
+   "label": "September equinox 17:00",
+   "date": "2026-09-22",
+   "local_time": "17:00",
+   "elevation_deg": 13.38,
+   "azimuth_deg_true": 275.99
+  },
+  {
+   "label": "September equinox 18:00",
+   "date": "2026-09-22",
+   "local_time": "18:00",
+   "elevation_deg": -0.36,
+   "azimuth_deg_true": 269.9
+  },
+  {
+   "label": "June solstice 07:30 - morning east flow, sun low over the 10L roll",
+   "date": "2026-06-21",
+   "local_time": "07:30",
+   "elevation_deg": 7.9,
+   "azimuth_deg_true": 60.14,
+   "note": "the sun rises ~065 true in June - almost straight down the departure track; a 10L departure at breakfast points INTO it"
+  },
+  {
+   "label": "December 17:30 - the raking light on the north-side frontage",
+   "date": "2026-12-21",
+   "local_time": "17:30",
+   "elevation_deg": 16.46,
+   "azimuth_deg_true": 251.1,
+   "note": "sun 251 true, 16.5 deg up: behind a SW camera looking NE at the LATAM hangar with the Cantareira behind - the SDSC-grade raking light"
+  }
+ ]
+}

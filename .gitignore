@@ -176,3 +176,33 @@ scenario_sdsc/checks/
 # scenario_sdsc/sdsc_field.blend (~1 MB) IS committed - it is the shared asset.
 scenario_sdsc/sdsc_terrain.blend
 scenario_sdsc/*.blend1
+
+# ---------------------------------------------------------------------------
+# SBGR scenario: raw elevation tiles (~950 MB) and their normalised copies.
+# Reproduce with scenario_sbgr/fetch_dem.sh
+# The derived heightfields under scenario_sbgr/terrain/ ARE committed.
+# ---------------------------------------------------------------------------
+scenario_sbgr/dem/
+scenario_sbgr/dem_cop/
+scenario_sbgr/dem_cop_hgt/
+scenario_sbgr/dem_srtm_clean/
+scenario_sbgr/terrain/_fine_profile.npy
+
+# The raw Overpass dump (~13 MB of JSON). build_osm.py re-downloads it; only
+# the converted scenario_sbgr/sbgr_osm.json is committed.
+scenario_sbgr/sbgr_osm_raw.json
+
+# SBGR scenario: third-party reference photographs. Credited in
+# scenario_sbgr/sbgr_references.md and scenario_sbgr/refs/manifest.json, but
+# CC BY / CC BY-SA - same rule as everywhere: cited, never committed.
+scenario_sbgr/refs/*.jpg
+scenario_sbgr/refs/*.jpeg
+scenario_sbgr/refs/*.png
+scenario_sbgr/refs/*.JPG
+scenario_sbgr/refs/_map_*.png
+
+# SBGR scenery: build-phase outputs (none exist yet; the rules are ready)
+scenario_sbgr/checks/
+scenario_sbgr/sbgr_terrain.blend
+scenario_sbgr/*.blend1
+scenario_sbgr/*.log

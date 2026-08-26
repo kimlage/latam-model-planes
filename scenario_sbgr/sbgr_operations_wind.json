@@ -1,0 +1,147 @@
+{
+ "_what": "Wind climatology at SBGR, for choosing the departure runway. NOT an on-field anemometer record, and NOT the ATC flow log - GRU is an ATC-assigned flow and the tower, not the wind alone, picks the configuration. The wind says which flow is AVAILABLE most often.",
+ "_source": {
+  "dataset": "ERA5 reanalysis, hourly 10 m wind, via the Open-Meteo Historical Weather API",
+  "url": "https://archive-api.open-meteo.com/v1/archive?latitude=-23.4342&longitude=-46.4825&start_date=2021-01-01&end_date=2025-12-31&hourly=wind_speed_10m,wind_direction_10m&wind_speed_unit=kn&timezone=UTC",
+  "grid_point_used": "lat -23.44464 lon -46.46689, elevation 744 m (the API's nearest cell - on the field)",
+  "period": "2021-01-01 .. 2025-12-31, 43824 hours",
+  "fetched": "2026-08-26",
+  "licence": "ERA5: Copernicus Climate Change Service (C3S) / ECMWF, free use with attribution. Open-Meteo API data: CC BY 4.0.",
+  "caveat": "ERA5 is a ~25 km reanalysis. Reliable for prevailing direction and flow fractions; not for gusts or single days."
+ },
+ "runway_track_true_deg": 73.65,
+ "summary": {
+  "mean_speed_kt": 5.26,
+  "calm_below_3kt_pct": 20.9,
+  "favours_rwy_10_pct_all_hours": 67.4,
+  "favours_rwy_28_pct_all_hours": 32.6,
+  "favours_rwy_10_pct_noncalm": 67.5,
+  "tailwind_within_5kt_for_10_pct": 94.0,
+  "tailwind_within_5kt_for_28_pct": 87.3,
+  "mean_crosswind_kt": 3.56,
+  "crosswind_over_15kt_pct": 0.15,
+  "verdict": "East flow (RWY 10L/10R) is available ~2/3 of all hours and ~78% of morning hours; the sea-breeze/NW turn makes early-to-mid afternoon (12-15 local) the one window where west flow (28s) is the more likely configuration. Crosswind is a non-issue - the runways lie along the prevailing ESE-NW axis. With a 5 kt tailwind allowance either flow is flyable 87-94% of the time, which is why ATC demand, not wind, usually decides."
+ },
+ "by_local_hour_favours_10_pct_noncalm": {
+  "00:00": 79.4,
+  "01:00": 78.1,
+  "02:00": 78.5,
+  "03:00": 78.5,
+  "04:00": 77.9,
+  "05:00": 77.5,
+  "06:00": 78.2,
+  "07:00": 78.9,
+  "08:00": 77.9,
+  "09:00": 73.3,
+  "10:00": 65.4,
+  "11:00": 53.8,
+  "12:00": 46.1,
+  "13:00": 40.9,
+  "14:00": 39.3,
+  "15:00": 42.6,
+  "16:00": 50.6,
+  "17:00": 61.8,
+  "18:00": 70.9,
+  "19:00": 75.3,
+  "20:00": 78.9,
+  "21:00": 78.3,
+  "22:00": 78.3,
+  "23:00": 79.7
+ },
+ "by_month_favours_10_pct_noncalm": {
+  "01": 56.1,
+  "02": 60.7,
+  "03": 66.8,
+  "04": 69.4,
+  "05": 63.5,
+  "06": 58.0,
+  "07": 71.2,
+  "08": 75.1,
+  "09": 75.3,
+  "10": 73.2,
+  "11": 70.7,
+  "12": 66.0
+ },
+ "rose_16pt": [
+  {
+   "dir_deg": 0.0,
+   "pct_of_noncalm_hours": 4.26,
+   "mean_kt": 5.3
+  },
+  {
+   "dir_deg": 22.5,
+   "pct_of_noncalm_hours": 3.41,
+   "mean_kt": 4.42
+  },
+  {
+   "dir_deg": 45.0,
+   "pct_of_noncalm_hours": 6.96,
+   "mean_kt": 4.4
+  },
+  {
+   "dir_deg": 67.5,
+   "pct_of_noncalm_hours": 10.95,
+   "mean_kt": 5.41
+  },
+  {
+   "dir_deg": 90.0,
+   "pct_of_noncalm_hours": 10.61,
+   "mean_kt": 5.39
+  },
+  {
+   "dir_deg": 112.5,
+   "pct_of_noncalm_hours": 11.15,
+   "mean_kt": 5.79
+  },
+  {
+   "dir_deg": 135.0,
+   "pct_of_noncalm_hours": 10.76,
+   "mean_kt": 6.47
+  },
+  {
+   "dir_deg": 157.5,
+   "pct_of_noncalm_hours": 10.04,
+   "mean_kt": 6.85
+  },
+  {
+   "dir_deg": 180.0,
+   "pct_of_noncalm_hours": 4.62,
+   "mean_kt": 6.79
+  },
+  {
+   "dir_deg": 202.5,
+   "pct_of_noncalm_hours": 1.72,
+   "mean_kt": 5.98
+  },
+  {
+   "dir_deg": 225.0,
+   "pct_of_noncalm_hours": 1.37,
+   "mean_kt": 5.25
+  },
+  {
+   "dir_deg": 247.5,
+   "pct_of_noncalm_hours": 1.33,
+   "mean_kt": 5.46
+  },
+  {
+   "dir_deg": 270.0,
+   "pct_of_noncalm_hours": 2.54,
+   "mean_kt": 6.32
+  },
+  {
+   "dir_deg": 292.5,
+   "pct_of_noncalm_hours": 4.97,
+   "mean_kt": 7.53
+  },
+  {
+   "dir_deg": 315.0,
+   "pct_of_noncalm_hours": 8.69,
+   "mean_kt": 8.03
+  },
+  {
+   "dir_deg": 337.5,
+   "pct_of_noncalm_hours": 6.63,
+   "mean_kt": 6.71
+  }
+ ]
+}

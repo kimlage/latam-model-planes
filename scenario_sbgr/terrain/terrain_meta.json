@@ -1,0 +1,165 @@
+{
+  "frame": {
+    "origin_lat": -23.4341667,
+    "origin_lon": -46.4825,
+    "origin_desc": "published threshold of RWY 10L, SBGR (whole-second precision, +/- ~30 m; see sbgr_aip_survey.json)",
+    "datum_m_amsl": 750.0,
+    "datum_desc": "z = 0 at 750.0 m AMSL (published SBGR aerodrome elevation, 2461 ft)",
+    "axes": "x=East, y=North, z=Up; metres; WGS84 local ENU tangent frame",
+    "note": "z already contains the Earth-curvature drop: a point 60 km away sits ~282 m lower than a flat-plane approximation would put it. Over the Atlantic corner of the far tier that drop is the only thing in z."
+  },
+  "dem": {
+    "primary": "Copernicus DEM GLO-30 (WorldDEM-30), 1 arcsec, EGM2008 orthometric",
+    "control": "SRTM v3 1 arcsec (NASA/USGS), EGM96 orthometric"
+  },
+  "grids": {
+    "terrain_sbgr_near_30m": {
+      "file": "terrain_sbgr_near_30m.npy",
+      "dtype": "float32",
+      "shape": [
+        1001,
+        1001
+      ],
+      "step_m": 30.0,
+      "x_min_m": -15000.0,
+      "x_max_m": 15000.0,
+      "y_min_m": -15000.0,
+      "y_max_m": 15000.0,
+      "row_order": "row 0 = y_min (south); column 0 = x_min (west)",
+      "z_min_m": -103.54522705078125,
+      "z_max_m": 604.3895874023438,
+      "z_units": "metres above the 750 m datum",
+      "lat_range": [
+        -23.569588978880773,
+        -23.29867205805397
+      ],
+      "lon_range": [
+        -46.629415674853334,
+        -46.335584870684634
+      ],
+      "nan_nodes": 0,
+      "png": {
+        "file": "terrain_sbgr_near_30m.png",
+        "bitdepth": 16,
+        "decode": "z_m = png/65535 * (z_max_png - z_min_png) + z_min_png",
+        "z_min_png": -103.54522705078125,
+        "z_max_png": 604.3895874023438,
+        "row_order": "PNG row 0 = y_max (north), i.e. flipped vs the .npy"
+      }
+    },
+    "terrain_sbgr_60m": {
+      "file": "terrain_sbgr_60m.npy",
+      "dtype": "float32",
+      "shape": [
+        1668,
+        1668
+      ],
+      "step_m": 60.0,
+      "x_min_m": -50000.0,
+      "x_max_m": 50020.0,
+      "y_min_m": -50000.0,
+      "y_max_m": 50020.0,
+      "row_order": "row 0 = y_min (south); column 0 = x_min (west)",
+      "z_min_m": -1143.029052734375,
+      "z_max_m": 651.4629516601562,
+      "z_units": "metres above the 750 m datum",
+      "lat_range": [
+        -23.885621909054,
+        -22.981787063137528
+      ],
+      "lon_range": [
+        -46.9734079709026,
+        -45.99134152242612
+      ],
+      "nan_nodes": 0,
+      "png": {
+        "file": "terrain_sbgr_60m.png",
+        "bitdepth": 16,
+        "decode": "z_m = png/65535 * (z_max_png - z_min_png) + z_min_png",
+        "z_min_png": -1143.029052734375,
+        "z_max_png": 651.4629516601562,
+        "row_order": "PNG row 0 = y_max (north), i.e. flipped vs the .npy"
+      }
+    },
+    "terrain_sbgr_far_180m": {
+      "file": "terrain_sbgr_far_180m.npy",
+      "dtype": "float32",
+      "shape": [
+        1334,
+        1334
+      ],
+      "step_m": 180.0,
+      "x_min_m": -120000.0,
+      "x_max_m": 119940.0,
+      "y_min_m": -120000.0,
+      "y_max_m": 119940.0,
+      "row_order": "row 0 = y_min (south); column 0 = x_min (west)",
+      "z_min_m": -3012.087158203125,
+      "z_max_m": 836.5607299804688,
+      "z_units": "metres above the 750 m datum",
+      "lat_range": [
+        -24.517675501057738,
+        -22.346771820297995
+      ],
+      "lon_range": [
+        -47.666667324878226,
+        -45.29892405285833
+      ],
+      "nan_nodes": 0,
+      "png": {
+        "file": "terrain_sbgr_far_180m.png",
+        "bitdepth": 16,
+        "decode": "z_m = png/65535 * (z_max_png - z_min_png) + z_min_png",
+        "z_min_png": -3012.087158203125,
+        "z_max_png": 836.5607299804688,
+        "row_order": "PNG row 0 = y_max (north), i.e. flipped vs the .npy"
+      }
+    }
+  },
+  "reference_points_enu": {
+    "THR10L": {
+      "x_m": -0.0,
+      "y_m": -0.0,
+      "z_m": -4.76,
+      "lat": -23.4341667,
+      "lon": -46.4825,
+      "hdg_true": 73.41,
+      "source": "AISWEB/ROTAER declared distances + SBGR ADC (coords, whole seconds) + IAC (THR elevations)"
+    },
+    "THR28R": {
+      "x_m": 3407.02,
+      "y_m": 1014.94,
+      "z_m": -5.98,
+      "lat": -23.425,
+      "lon": -46.4491667,
+      "hdg_true": 253.41,
+      "source": "AISWEB/ROTAER declared distances + SBGR ADC (coords, whole seconds) + IAC (THR elevations)"
+    },
+    "THR10R": {
+      "x_m": -454.22,
+      "y_m": -523.05,
+      "z_m": -2.94,
+      "lat": -23.4388889,
+      "lon": -46.4869444,
+      "hdg_true": 73.28,
+      "source": "AISWEB/ROTAER declared distances + SBGR ADC (coords, whole seconds) + IAC (THR elevations)"
+    },
+    "THR28L": {
+      "x_m": 2413.2,
+      "y_m": 338.25,
+      "z_m": -4.46,
+      "lat": -23.4311111,
+      "lon": -46.4588889,
+      "hdg_true": 253.28,
+      "source": "AISWEB/ROTAER declared distances + SBGR ADC (coords, whole seconds) + IAC (THR elevations)"
+    },
+    "ARP": {
+      "x_m": 965.24,
+      "y_m": -153.87,
+      "z_m": 0.11,
+      "lat": -23.4355556,
+      "lon": -46.4730556,
+      "source": "ROTAER 23 26 08S/046 28 23W (whole-second precision)"
+    }
+  }
+}
