@@ -117,10 +117,10 @@ FROTA = {
                 "nome": "Boeing 787-8 Dreamliner", "matricula": "CC-BBF", "L_ref": 56.72},
     "B789":    {"pasta": "boeing 787-9",     "blend": "B789_LATAM.blend",
                 "nome": "Boeing 787-9 Dreamliner", "matricula": "CC-BGK", "L_ref": 62.81},
-    # Em construcao por outra sessao. Entra sozinha quando o master aparecer.
-    "B763F":   {"pasta": "boeing 767-300F",  "blend": "B763F_LATAM.blend",
-                "nome": "Boeing 767-300F", "matricula": "", "L_ref": 54.94,
-                "opcional": True},
+    "B763F":   {"pasta": "boeing 767-300F",  "blend": "B763F_LATAM_CARGO.blend",
+                "nome": "Boeing 767-300F", "matricula": "N536LA", "L_ref": 54.94},
+    "B763BCF": {"pasta": "boeing 767-300BCF", "blend": "B763BCF_LATAM_CARGO.blend",
+                "nome": "Boeing 767-300BCF", "matricula": "CC-CXE", "L_ref": 54.94},
 }
 
 # --------------------------------------------------------------------- LODs
