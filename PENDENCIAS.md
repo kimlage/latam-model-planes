@@ -16,7 +16,7 @@ As duas metades resolvidas com UMA aeronave repintada, não cinco:
 - **As 4 cunhas suspeitas eram paralaxe de flanco**, não tinta: a retificação
   de 08-22 era controlada na deriva (y=0) mas a pele vive em |y|~2, e o
   deslocamento y·v aparece inteiro na fronteira. Com v medido no estabilizador
-  de cada quadro e dois quadros por aeronave: A320ceo −0,03, A321neo
+  de cada quadro (e dois quadros independentes onde havia): A320ceo −0,03, A321neo
   +0,25/+0,18 (flancos opostos), 767-300ER +0,03/+0,15 — exoneradas. A320neo:
   sem veredito no quadro PT-TMN (1024 px); a frota atual (PR-XBP) veste a
   fronteira +0,95 m atrás — variante de era, registrada, não aplicada.
