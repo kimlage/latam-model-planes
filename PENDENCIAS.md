@@ -48,8 +48,9 @@ As duas metades resolvidas com UMA aeronave repintada, não cinco:
    uma foto de perfil retificável de CC-BBF ou CC-BGK. Não copiar um no outro.
 7. **Cargueiros: cunha sem veredito** (a asa cruza a cunha nas fotos
    disponíveis) — precisa de foto de ângulo melhor.
-8. **Export GLB desatualizado** vs rodadas de QA — rodar `export_frota.py`
-   depois da rodada da tinta (mecânico).
+8. ~~Export GLB desatualizado~~ — **fechado 2026-08-26**: frota portátil
+   re-exportada pós-QA e os DOIS cargueiros exportados pela primeira vez
+   (a tabela ainda os tratava como "em construção"; export/ tinha 9 de 11).
 9. ~~Outras bases além de GRU~~ — **decidido (2026-08-26): só GRU por
    enquanto**; o ciclo fecha com 3 bases (SCL, São Carlos, GRU) em qualidade
    máxima antes de qualquer ampliação.
