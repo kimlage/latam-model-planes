@@ -155,31 +155,48 @@ def _r_788(X, Z, T):
 
 
 def _r_a319(X, Z, T):
-    # RE-MEASURED 2026-08-22 on ref_sdu_00.jpg (PT-TMT, CC0), rectified onto the
-    # model's own (x, z) by a homography fitted to the hull silhouette; the fin
-    # is the control, and its leading and trailing edges land within 0.07 m and
-    # 0.17 m of the model's over z 2.5..7.0, so the frame is the model's frame.
+    # RE-MEASURED 2026-08-26 with the FLANK PARALLAX corrected. The 2026-08-22
+    # rule (x >= 23.50 + 1.00z) was read off ref_sdu_00.jpg through a homography
+    # controlled on the fin — but the fin lives in y = 0 and the paint lives on
+    # the flank, and that frame is a climbing shot with a large local azimuth:
+    # its own stabiliser pair measures the y-projection at 57.1 px per metre of
+    # y, which shifts every near-flank feature ~0.7 m per metre of |y| APPARENT
+    # forward. The 2026-08-22 numbers carried that shift whole: the same frame,
+    # parallax-corrected, puts door 4 back at the ACAP station (photo minus
+    # model -0.10 +- 0.19 m; uncorrected it reads -1.2 m, which was the QA
+    # "contradiction" — the door never moved) and the wedge boundary
+    # +0.80 +- 0.11 m AFT of the 08-22 rule.
     #
-    # The rule this replaces leaned the WRONG WAY. It read the forward boundary
-    # as a swoosh going FORWARD at the crown and AFT at the keel, and let the
-    # paint down to |theta| <= 150 — nearly the whole circumference. Sampled
-    # straight off the photograph on a 0.25 m grid, the crown is WHITE over the
-    # whole of x 21.5..29 and nothing below z = -0.8 is painted anywhere. The
-    # boundary is a straight line leaning the same way as the rest of the fleet:
+    # Two independent airframes agree on where the boundary really is. The
+    # anchor is the door-crossing fraction, which no homography can bias:
+    # the forward boundary crosses door 4's leaf at its TOP at 58% of the leaf
+    # on PT-TMT (sdu_00, corrected) and 57% on PR-MBU (sdu_04) — while the
+    # 08-22 rule puts the entire door-top row inside the indigo (fraction <= 0).
     #
-    #   forward   x >= 23.50 + 1.00*z      z -0.75..+1.25, first paint per row
-    #                                      lands on 0.25 m grid steps exactly
-    #   lower     theta <= 99.2 - 7.887*(x - 24.60)   rms 1.6 deg over 7 rows
-    #   rear      x <= 30.30 + 0.10*z      paint ends 30.0..30.3 at z 1.25..1.75
-    #                                      (was 31.30, never measured)
+    #   forward   x >= 24.26 + 1.00*z     through x(1.62) = 25.88, the measured
+    #                                     door-top crossing; slope kept at the
+    #                                     family lean, which the corrected rows
+    #                                     support (0.8..1.3). Sits 0.69 m aft of
+    #                                     the fin LE at z = 2 — the fleet's
+    #                                     characteristic offset; the 08-22 line
+    #                                     sat AHEAD of the fin LE, which no
+    #                                     LATAM tail does.
+    #   lower     theta <= 99.2 - 7.887*(x - 25.36)   the 08-22 shape carried
+    #                                     with the boundary (sdu_01, the
+    #                                     from-below frame, confirms the belly
+    #                                     stays white and the wedge tapers at
+    #                                     the door's lower-forward quadrant)
+    #   rear      x <= 30.72 + 0.220*z    the fin TE line itself (spec_a319
+    #                                     empenagem.fin_TE) — the 08-22 value
+    #                                     30.30 was the same parallax artifact
+    #                                     (corrected it reads 31.2..31.5, and
+    #                                     the fleet convention is the TE line)
     #
-    # Straddling the boundary at +-0.35 m: the published rule scored 4 right and
-    # 8 wrong on the forward edge and 1 right / 6 wrong on the lower one; this
-    # rule scores 9/1 and 2/0, with the rest landing on the door outline or on
-    # the shaded keel where the photograph cannot say.
-    return ((X >= 23.50 + 1.00 * Z) &
-            (T <= np.clip(99.2 - 7.887 * (X - 24.60), 0.0, 180.0)) &
-            (X <= 30.30 + 0.10 * Z))
+    # The direction of the 08-22 error also explains what it "found": pushing
+    # the rule forward left the crown white over x 21.5..29 in its own frame.
+    return ((X >= 24.26 + 1.00 * Z) &
+            (T <= np.clip(99.2 - 7.887 * (X - 25.36), 0.0, 180.0)) &
+            (X <= 30.72 + 0.220 * Z))
 
 
 def _r_a320ceo(X, Z, T):
@@ -259,9 +276,13 @@ FROTA = {
     # --- audited with --seco and found clean; kept here so the next round can
     #     re-measure them with one command instead of re-deriving the rules
     "a319":    dict(regra=_r_a319, zona=(20.0, 34.2),
-                    poupar=[(23.35, 25.00, 55.5, 63.5)],
-                    nota="rule re-measured: the swoosh leaned the wrong way and "
-                         "the paint reached |theta| 150"),
+                    poupar=[(23.40, 24.55, 54.5, 64.5)],
+                    nota="rule re-measured with the flank parallax corrected: "
+                         "the 08-22 line sat 0.76 m too far forward (and ahead "
+                         "of the fin LE); door 4 was never wrong. The poupar "
+                         "box hugs the surviving 'AIRBUS A3' ink (x 23.47.."
+                         "24.47), which is all on white under the new rule, so "
+                         "the box spares no stale indigo."),
     "a320ceo": dict(regra=_r_a320ceo, zona=(26.0, 38.0), auditoria=True,
                     nota="clean; 5583 texels of hard cut"),
     "a320neo": dict(regra=_r_a320neo, zona=(26.0, 38.0), auditoria=True,

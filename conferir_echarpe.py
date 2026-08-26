@@ -44,6 +44,39 @@ inside. The A319's did not — it swept the forward boundary the wrong way and l
 the paint down to |theta| 150 — and was replaced; the tile below is the
 corrected rule. The photographs are NOT committed (see NOTICE.md); fetch them
 with `python3 refs_fetch.py` before running this.
+
+------------------------------------------------------------------------------
+2026-08-26 — THE FLANK PARALLAX, AND WHAT IT HAD BEEN CHARGING
+------------------------------------------------------------------------------
+The fin control proves the homography maps the y = 0 PLANE correctly — and the
+paint does not live in that plane. A skin point at lateral offset y projects
+displaced by y * v, where v is the image projection of the aircraft's y axis;
+on a telephoto near-profile v is negligible, but on a climbing or close frame
+it reaches tens of px per metre, ALL of it in the direction that slides flank
+features forward or aft. v is measurable inside the frame itself: the two
+stabiliser tips sit at known (x, z) and +-y_tip, so the offset between the far
+tip's image position and its y = 0 projection gives v directly.
+
+Entries may therefore carry:
+    "v":    [vx, vy] px per metre of +y (starboard), measured from the frame's
+            own stabiliser; missing means 0, the old behaviour
+    "lado": +1 when the photograph shows the starboard flank, -1 for port
+    "rry":  the hull's half-width table, for y = lado * ry(x) * sin(theta)
+    "nota": printed with the verdict; "sem_veredito" replaces OK/REVER for a
+            frame that cannot answer (declared, not guessed)
+A key like "b763er@cxc" is a SECOND frame of the same aircraft: the rule tested
+is FROTA["b763er"]'s, and independent frames agreeing is what makes a verdict
+safe to act on.
+
+What the correction found: the four ~+-0.5..0.8 m "suspect wedges" of 08-22
+were flank parallax, not paint — the 767-300ER reads +0.05/+0.18 m over two
+frames, the A320ceo -0.03, the A321neo +0.25/+0.18 over two flanks. The A319's
+08-22 re-measure had CARRIED the parallax whole (its frame is a climbing shot,
+v = 57 px/m): door 4 was never off the ACAP station, and the wedge was moved
+back +0.76 m aft. The A320neo's PT-TMN frame is delivery-era paint at 1024 px
+and cannot be fin-anchored to better than +-0.3 m; the current fleet (PR-XBP)
+wears the boundary ~+0.95 m aft of PT-TMN's — an era variant, recorded, not a
+defect of the modelled registration.
 """
 import json
 import math
@@ -92,9 +125,12 @@ def aplicar(H, x, z):
     return p[0] / p[2], p[1] / p[2]
 
 
-def classe(A, H, x, z):
-    """'_' white, '#' paint, 'o' neither (shadow, ink, a placard), '?' off frame."""
+def classe(A, H, x, z, sh=(0.0, 0.0)):
+    """'_' white, '#' paint, 'o' neither (shadow, ink, a placard), '?' off frame.
+
+    `sh` is the flank-parallax shift in pixels for THIS skin point, y * v."""
     px, py = aplicar(H, x, z)
+    px += sh[0]; py += sh[1]
     ix, iy = int(round(px)), int(round(py))
     if not (3 <= ix < A.shape[1] - 3 and 3 <= iy < A.shape[0] - 3):
         return "?"
@@ -149,7 +185,15 @@ def testar(tag, cfg):
     casco = Casco(cfg)
     H = np.array(cfg["H"], float)
     A = np.asarray(Image.open(os.path.join(RAIZ, cfg["foto"])).convert("RGB")).astype(float)
-    regra = rep.FROTA[tag]["regra"]
+    regra = rep.FROTA[tag.split("@")[0]]["regra"]
+    v = np.array(cfg.get("v", (0.0, 0.0)), float)
+    lado = float(cfg.get("lado", -1))
+    rry = np.array(cfg.get("rry", cfg["rrz"]), float)
+
+    def shift(x, z):
+        th = casco.theta(np.asarray([x], float), np.asarray([z], float))[0]
+        y = lado * np.interp(x, cfg["rx"], rry) * math.sin(math.radians(th))
+        return (y * v[0], y * v[1])
     b = cfg["banda"]
     x0j = cfg["jan"][0]
     pontos = []
@@ -160,7 +204,7 @@ def testar(tag, cfg):
             continue
         passo = 0.05
         off = np.arange(-BUSCA, BUSCA + 1e-9, passo)
-        cls = [classe(A, H, xr + o, z) for o in off]
+        cls = [classe(A, H, xr + o, z, shift(xr + o, z)) for o in off]
         d = _transicao(cls, len(off) // 2, passo)
         pontos.append((xr, z, d))
         if d is not None:
@@ -177,7 +221,8 @@ def testar(tag, cfg):
         ok = zz > casco.keel(x) + 0.08
         if ok.sum() < 8:
             continue
-        cls = [classe(A, H, x, z) if k else "?" for z, k in zip(zz, ok)]
+        cls = [classe(A, H, x, z, shift(x, z)) if k else "?"
+               for z, k in zip(zz, ok)]
         d = _transicao(cls, len(off) // 2, passo)
         pontos.append((x, casco.z_of_theta(x, tr), d))
         if d is not None:
@@ -208,7 +253,7 @@ def tile(tag, cfg, pontos, sa, sb, larg=780):
     """
     x0, x1, z0, z1, ppm = cfg["jan"]
     casco = Casco(cfg)
-    regra = rep.FROTA[tag]["regra"]
+    regra = rep.FROTA[tag.split("@")[0]]["regra"]
     ppm = max(28.0, 760.0 / (x1 - x0))
     W = int((x1 - x0) * ppm); Hh = int((z1 - z0) * ppm)
     im = Image.new("RGB", (W, Hh), (26, 26, 30))
@@ -265,10 +310,16 @@ def main():
             print("%-9s  photograph missing — run refs_fetch.py" % tag)
             continue
         pontos, sa, sb = testar(tag, cfg)
-        print("%-9s %+7.2f +-%.2f m  n=%-3d   %+7.1f +-%.1f deg  n=%-3d  %s"
-              % (tag, sa[0], sa[1], sa[2], sb[0], sb[1], sb[2],
-                 "OK" if (abs(sa[0]) < TOL_X and (np.isnan(sb[0]) or abs(sb[0]) < TOL_TH))
-                 else "REVER"))
+        if cfg.get("sem_veredito"):
+            verdito = "SEM VEREDITO"
+        elif abs(sa[0]) < TOL_X and (np.isnan(sb[0]) or abs(sb[0]) < TOL_TH):
+            verdito = "OK"
+        else:
+            verdito = "REVER"
+        print("%-12s %+7.2f +-%.2f m  n=%-3d   %+7.1f +-%.1f deg  n=%-3d  %s"
+              % (tag, sa[0], sa[1], sa[2], sb[0], sb[1], sb[2], verdito))
+        if cfg.get("nota"):
+            print("             %s" % cfg["nota"])
         tiles.append(tile(tag, cfg, pontos, sa, sb))
     if not tiles:
         return

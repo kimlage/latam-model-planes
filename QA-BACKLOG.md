@@ -376,34 +376,52 @@ find nothing, and lose trust in the whole entry. A peer session caught it by
 running the grep instead of reading the prose.
 
 ## 2026-08-22 — a écharpe traseira posta em julgamento contra a foto
+## 2026-08-26 — e o julgamento posto em julgamento: a paralaxe de flanco
 
-O que a rodada de `d981dd8` mediu foi a TINTA contra a REGRA. Esta mediu a regra
-contra a aeronave. `conferir_echarpe.py` retifica a foto da matricula para o
-(x, z) do proprio modelo e amostra a pele atravessando a fronteira que a regra
-desenha; o numero abaixo e a mediana de "foto menos regra".
+O que a rodada de `d981dd8` mediu foi a TINTA contra a REGRA. A de 2026-08-22
+mediu a regra contra a foto — mas retificou a foto para o plano y = 0 (o da
+deriva, que e o do controle) e leu a PELE, que vive em |y| ~2. Um ponto do
+flanco aparece deslocado por y·v, onde v e a projecao do eixo y no quadro; num
+telefoto quase-perfil v e nada, num quadro em subida ou de camera proxima chega
+a dezenas de px por metro — e desloca TUDO que esta no flanco para a frente ou
+para tras, enquanto o controle na deriva continua perfeito. v e mensuravel
+dentro do proprio quadro (as duas pontas do estabilizador estao em (x, z)
+conhecidos e ±y): `conferir_echarpe.py` agora aceita `v`/`lado`/`rry` por
+quadro e amostra a pele no lugar certo. Os quatro "suspeitos" e a "contradicao"
+do A319 eram esse artefato:
 
-| tipo | dianteira (m) | inferior (graus) | controle na deriva | veredito |
-|---|---|---|---|---|
-| A319 | +0.33 +-0.40 (n=15) | +18.5 (n=2) | BA/BF a 0.04/0.06 m | **corrigida** — a regra antiga inclinava ao contrario e ia a \|theta\| 150 |
-| A320ceo | +0.65 +-0.19 (n=14) | +4.5 (n=2) | sem controle | dentro da resolucao; nao mexida |
-| A320neo | +0.70 +-0.07 (n=8) | +19.5 (n=3) | sem controle | idem |
-| A321ceo | +0.12 +-0.05 (n=18) | -1.5 (n=3) | sem controle | concorda |
-| A321neo | +0.78 +-0.07 (n=22) | -7.0 (n=4) | sem controle | dentro da resolucao; nao mexida |
-| 767-300ER | -0.53 +-0.05 (n=9) | sem leitura | sem controle | idem |
-| 767-300F | -0.48 +-0.06 (n=4) | +13.0 (n=2) | sem controle | asa cruza a cunha na foto |
-| 767-300BCF | +1.30 +-0.06 (n=4) | -10.5 (n=1) | sem controle | asa cruza a cunha na foto |
-| 777-300ER | -0.86 (grade 0.25 m, 8 linhas) | sem leitura | BA/BF a 0.18/0.18 m | **corrigida** — comecava 0.86 m atras demais |
-| 787-8 | -0.12 +-0.16 (n=6) | sem leitura | sem controle | concorda |
-| 787-9 | +0.38 +-0.18 (n=24) | -6.0 +-4.1 (n=10) | sem controle | concorda |
+| tipo | 08-22 (sem v) | 08-26 (com v, deriva ancorada) | veredito |
+|---|---|---|---|
+| A320ceo | +0.65 | **-0.03 +-0.22** (CC-BFO, H re-ajustado na deriva: BA 0.089/BF 0.037 m) | **exonerada** |
+| A320neo | +0.70 | sem veredito no quadro PT-TMN (1024 px, era de entrega); frota atual PR-XBP: **+0.95** | **fica** (regra ancorada na porta 4 da PT-TMN); +0.95 e VARIANTE DE ERA da frota atual, registrada |
+| A321neo | +0.78 | **+0.25 +-0.07** (DSC00682, bombordo) e **+0.18 +-0.04** (DSC00896, estibordo) | **exonerada** — dois flancos opostos, paralaxe com sinais trocados, concordam; o +0.78 vinha da DSC00834 (camera proxima) |
+| 767-300ER | -0.53 | **+0.03 +-0.04** (CC-CWY MIA) e **+0.15 +-0.08** (CC-CXC em rotacao, az local 26 graus) | **exonerada** — dois quadros, azimutes muito diferentes, concordam |
+| 777-300ER | (corrigida em 08-22) | +0.03 +-0.28; v medido e pequeno (vx -0.06 m/m) | a correcao de 08-22 **fica** (aquele quadro e quase perpendicular) |
+| A319 | (corrigida em 08-22) | a correcao de 08-22 CARREGAVA a paralaxe inteira (quadro em subida, v = 57 px/m): fronteira re-medida **+0.80 +-0.11 atras** da regra de 08-22 | **movida de novo**: +0.76 m para tras (x >= 24.26 + 1.00z), traseira restaurada a linha do BF da deriva; repintada |
+
+O criterio que tornou os vereditos seguros: **dois quadros independentes por
+aeronave** (idealmente flancos opostos — a paralaxe troca de sinal e nao
+sobrevive a concordancia) e a **fracao de cruzamento na porta**, que nenhuma
+homografia distorce: no A319 a fronteira cruza o TOPO da folha da porta 4 a
+58% (PT-TMT corrigida) e 57% (PR-MBU) — a regra de 08-22 punha o topo inteiro
+no indigo.
+
+### resolvido em 2026-08-26
+
+- **A "contradicao" da porta 4 do A319 nao existia.** Com v medido no proprio
+  quadro, a porta esta a -0.10 +-0.19 m do ACAP (sem v: -1.2 m). O ACAP e o
+  modelo estavam certos; a foto tambem — mal lida. A matricula e consistente
+  com a caixa atual dentro de +-0.4 m. O titulo segue em aberto (abaixo).
 
 ### em aberto
 
-1. **A PORTA 4, O TITULO E A MATRICULA DO A319 ESTAO ~1.2..2.0 m ATRAS DO REAL.**
-   Medido na mesma retificacao que valida a deriva a 0.07 m: a porta 4 da PT-TMT
-   esta em x 24.60 (modelo 25.81), a matricula em 25.20..27.00 (modelo
-   26.46..28.44), o titulo em ~21.2..22.7 (modelo 23.45..25.20). O desenho do
-   ACAP concorda com o MODELO na porta, entao ou a derivacao dos plugs errou ou
-   o ACAP nao e a PT-TMT. A cunha nao foi ancorada nessas marcas por isso.
+1. **O titulo do A319 ainda precisa de arte** (entrada propria acima: "AIRBUS
+   A3"). Novo dado de 08-26: com a cunha recuada a tinta sobrevivente ficou
+   INTEIRA no branco. As leituras de posicao divergem (21.4..23.2 na sdu_00
+   corrigida x 23.45..25.20 do modelo), mas a sdu_01 mostra o titulo quase
+   encostando na fronteira — o que bate com a caixa do modelo sob a fronteira
+   NOVA. Reconstruir os glifos primeiro; so mover a caixa se uma foto com
+   escala local confiavel mandar.
 2. **O `Reg_E` do A319 guarda PT-TMN, nao PT-TMT.** Pintar a matricula por
    `refazer_marcas.py` escreve a matricula do master. Os glifos certos existem
    so como tinta; `fix_matricula_a319.py` os move como tinta.
@@ -411,8 +429,10 @@ desenha; o numero abaixo e a mediana de "foto menos regra".
    `reparar_echarpe`: ela esta SOBRE o segmento branco->indigo. Os titulos do
    A319 e do 777 so sobreviveram porque a regra ganhou caixas `poupar`. Toda
    marca chapada de indigo precisa de uma.
-4. **As fronteiras INFERIORES quase nao puderam ser lidas**: o flanco baixo esta
-   em sombra em quase todas as fotos e o ventre so aparece em vista obliqua, que
-   e onde a paralaxe morde. Dos onze, so o 787-9 deu n=10.
+4. **As fronteiras INFERIORES continuam quase ilegiveis**, e 08-26 nomeou a
+   armadilha: flanco sombreado com ceu azul de preenchimento classifica sombra
+   como tinta (a320ceo: -11.5 +-8.6 graus; a319: n=2 ao poente). A inferior do
+   A319 foi TRANSPORTADA com a fronteira (+0.76), nao re-medida — confianca
+   baixa declarada no spec. Precisa de um quadro com o ventre iluminado.
 5. **As duas fotos de carga (N568LA, CC-CXE) tem a ASA cruzando a cunha.** Os
-   numeros acima para o -300F e o -300BCF valem pouco; falta foto util.
+   numeros do -300F e do -300BCF valem pouco; falta foto util. (Inalterado.)

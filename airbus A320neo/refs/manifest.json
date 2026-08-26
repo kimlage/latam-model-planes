@@ -57,6 +57,37 @@
    "view": "close do nariz em perfil quase puro, A320 VP-BWD",
    "notes": "conferencia da altura do envidracado em z contra a discordancia frontal x lateral do ACAP",
    "baixado": "2300 px de largura"
+  },
+  {
+   "file": "refs/ref_PR-XBP_teresina.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/d/d1/Airbus_em_Teresina.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Airbus_em_Teresina.jpg",
+   "author": "Alexandro Dias",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+   "date": "2024-02-26",
+   "view": "PR-XBP (A320neo LATAM Brasil atual, titulos especiais 'Conheca o Brasil') em perfil quase puro no solo em Teresina; deriva e cunha inteiras, 1920x1200",
+   "notes": "Quadro-arbitro da RODADA DA PARALAXE 2026-08-26: unico A320neo LATAM de era ATUAL com deriva ancorevel no Commons. Ajuste afim ancorado na deriva (BA 0.060 m, BF 0.015 m, tip 0.017 m); v = (4.3,12.9) px/m medido no estab distante. Fronteira da cunha ~+0.95 m ATRAS da regra da PT-TMN, porta 2 no branco: VARIANTE DE ERA da pintura, registrada em conferir_echarpe.json (a320neo@xbp), nao aplicada — o modelo e a PT-TMN."
+  },
+  {
+   "file": "refs/ref_F-WWBN_lfbo.jpg",
+   "url": "https://upload.wikimedia.org/wikipedia/commons/d/de/LATAM_AIRLINES_Airbus_A_320_NEO_F-WWBN_msn_7864_LFBO_-_TLS_nov_2017.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:LATAM_AIRLINES_Airbus_A_320_NEO_F-WWBN_msn_7864_LFBO_-_TLS_nov_2017.jpg",
+   "author": "gimbellet",
+   "license": "CC BY 2.0",
+   "license_url": "https://creativecommons.org/licenses/by/2.0/",
+   "date": "2017-11-28",
+   "view": "F-WWBN msn 7864, A320neo em pintura LATAM de fabrica, aproximacao em Toulouse, perfil estibordo contra o ceu, 1920x1280",
+   "notes": "Usada na rodada 2026-08-26 como segundo quadro de era de ENTREGA (substituicao declarada: matricula de teste da Airbus, nao PT-TMN). Diferencial porta-fronteira: -0.44 m vs a regra — mas e outro airframe e a mesma era ja diverge por airframe; superada pelo veredito PR-XBP/PT-TMN. Fica como referencia de cauda de fabrica."
+  },
+  {
+   "file_note": "citadas, nao baixadas para o repo: File:A320neo LATAM (30934637733).jpg e File:A320 NEO LATAM SBPA (36886103586).jpg (Rafael Luiz Canossa, CC BY-SA 2.0)",
+   "url": "https://commons.wikimedia.org/wiki/File:A320neo_LATAM_(30934637733).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:A320_NEO_LATAM_SBPA_(36886103586).jpg",
+   "author": "Rafael Luiz Canossa",
+   "license": "CC BY-SA 2.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+   "notes": "PT-TMN em alta resolucao (3840/4671 px) MAS com a cauda a ~50 graus do perpendicular nas duas (medido pelo tip-chord vs comprimento): paralaxe de flanco ~1.3 m/m de |y| — INUTILIZAVEIS para medir x na cunha. Registradas para ninguem re-baixar esperando mais."
   }
  ],
  "proposito": "Referencias FOTOGRAFICAS do PARA-BRISA da familia A320, usadas na correcao de 2026-08-21. O envidracado e type-standard (os ACAP do A319, A320 e A321 desenham o MESMO desenho dentro de 1.5 mm), entao estas fotos valem para as cinco aeronaves: A320neo PT-TMN, A319 PT-TMT, A320ceo CC-BFO, A321neo PS-LBA e A321ceo PT-MXP. NAO existe head-on de licenca livre de nenhuma matricula LATAM/TAM da familia no Commons — varridas todas as categorias de matricula; sao todas perfil ou 3/4.",
