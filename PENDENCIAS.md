@@ -7,8 +7,11 @@ eles tocam.
 
 ## Em andamento
 
-1. **GRU (SBGR) fase 1 — pesquisa e dados.** Terceira base: maior hub da LATAM
-   e casa da manutenção do 777-300ER (o único tipo sem presença em cenário).
+1. **GRU (SBGR) fase 3 — os três clipes** (decolagem do 777 na 10L, roll-out
+   do hangar ao anoitecer, tour aéreo). Fases 1–2 fechadas e publicadas em
+   2026-08-26: survey completo por AIP, campo construído povoado desde o
+   início, frota real instanciada, 777 em casa. Regra nova pós-reboot: frames
+   de animação renderizam DENTRO do repo (gitignored), nunca em /tmp.
 
 ## Fechado em 2026-08-26 — rodada da verdade da tinta
 
