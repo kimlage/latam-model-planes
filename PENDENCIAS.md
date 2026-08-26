@@ -7,18 +7,29 @@ eles tocam.
 
 ## Em andamento
 
-1. **Rodada da verdade da tinta (frota inteira).** Duas metades que fecham com
-   uma única re-renderização do gate:
-   - Casco branco-puro → branco real medido (QA-BACKLOG: LiveryTex 76% em
-     1.0 puro contra #E6E7EA fotografado). Afeta todo pixel de toda aeronave
-     em toda cena — o item de maior alcance do backlog.
-   - As 4 cunhas suspeitas sem controle de deriva (A320ceo +0,65 m,
-     A320neo +0,70, A321neo +0,78, 767-300ER −0,53) e a contradição do A319
-     (porta 4/título/matrícula 1,2–2,2 m à ré da foto num quadro validado pela
-     deriva, com o ACAP concordando com o modelo). Caça de fotos novas com
-     deriva utilizável; sem foto, registra-se o impasse, não se chuta.
-2. **GRU (SBGR) fase 1 — pesquisa e dados.** Terceira base: maior hub da LATAM
+1. **GRU (SBGR) fase 1 — pesquisa e dados.** Terceira base: maior hub da LATAM
    e casa da manutenção do 777-300ER (o único tipo sem presença em cenário).
+
+## Fechado em 2026-08-26 — rodada da verdade da tinta
+
+As duas metades resolvidas com UMA aeronave repintada, não cinco:
+- **As 4 cunhas suspeitas eram paralaxe de flanco**, não tinta: a retificação
+  de 08-22 era controlada na deriva (y=0) mas a pele vive em |y|~2, e o
+  deslocamento y·v aparece inteiro na fronteira. Com v medido no estabilizador
+  de cada quadro e dois quadros por aeronave: A320ceo −0,03, A321neo
+  +0,25/+0,18 (flancos opostos), 767-300ER +0,03/+0,15 — exoneradas. A320neo:
+  sem veredito no quadro PT-TMN (1024 px); a frota atual (PR-XBP) veste a
+  fronteira +0,95 m atrás — variante de era, registrada, não aplicada.
+- **A "contradição" do A319 era o mesmo artefato**: porta 4 está no ACAP
+  (−0,10±0,19 m corrigido). O que estava errado era a CORREÇÃO de 08-22 da
+  cunha, que carregava a paralaxe: fronteira movida +0,76 m para trás
+  (cruza o topo da porta 4 a 58%/57% em dois airframes), traseira restaurada
+  à linha do BF da deriva. Única repintura da rodada.
+- **O casco "branco-puro" era diagnóstico velho**: os 76% em 1.0 são texels
+  mortos (fac=0); as onze bases de shader já vestem #E6E7EA e os renders
+  seguram o branco em 0,69–0,72 sem clipe. Fechado no QA-BACKLOG com o censo;
+  a única constante defasada (PALETA) corrigida; os dois brancos-sentinela
+  (#F2F3F5 marcas, #F7F9FA arte) documentados como deliberados.
 
 ## Próximas, em ordem de impacto
 

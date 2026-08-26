@@ -35,10 +35,26 @@ import math
 import mathutils
 
 # ---------------------------------------------------------------- palette
+# THE WHITES ARE THREE, AND TWO OF THEM ARE SENTINELS (audited 2026-08-26):
+#   #E6E7EA  the hull. Every master's shader base (linear .784/.792/.820) and
+#            every visible flat white in LiveryTex. reparar_echarpe.BRANCO and
+#            refazer_marcas._basemap agree. The "76% of LiveryTex is pure 1.0"
+#            of the old QA entry is DEAD texels (fac = 0, never rendered);
+#            the gate renders keep lit whites at 0.69..0.72 with ~0.02%
+#            clipped, so the hull does read as a curved surface.
+#   #F2F3F5  refazer_marcas.BRANCO_MARCA — white MARKS (registration glyphs,
+#            door rings). Deliberately off the #E6E7EA->indigo segment so the
+#            colour guards can tell a mark from hull; at 0.20 sum-distance it
+#            clears reparar_echarpe's tol 0.045 with room. On the aeroplane it
+#            is the same paint; at these deltas no render can resolve it.
+#   #F7F9FA  COR_TEX["branco"] below — the raster white of the fin-sash art.
+#            Same sentinel logic. DO NOT "unify" these onto #E6E7EA: that is
+#            what would make white glyphs invisible to the repair guards and
+#            get them repainted indigo on the next wedge round.
 PALETA = {
     "LATAM_Indigo": ("#2A0088", 0.30, 0.0, 0.5),
     "LATAM_Coral": ("#ED1651", 0.30, 0.0, 0.5),
-    "LATAM_Branco": ("#F7F9FA", 0.30, 0.0, 0.4),
+    "LATAM_Branco": ("#E6E7EA", 0.30, 0.0, 0.4),
     "CinzaAsa": ("#C9CDD2", 0.35, 0.0, 0.0),
     "CinzaBarriga": ("#C9CDD2", 0.35, 0.0, 0.0),
     "VidroCockpit": ("#0A0E14", 0.08, 0.0, 0.8),

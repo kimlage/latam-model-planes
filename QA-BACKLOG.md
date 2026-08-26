@@ -322,12 +322,28 @@ written after the practice, and nobody went back to reconcile the two.
 - **Tailstrike angles** run short across the A320 family (7.75° modelled
   against ~11.7° real) — a short gear leg or a low belly fitting, inherited by
   every derivation. Documented in each spec.
-- **The hulls render pure white.** 76% of `LiveryTex` is exactly `1.0`,
-  against `#F5F6F8` in the specs and `#E6E7EA` in the livery rule — the
-  eurowhite the whole fleet is supposed to wear. Found on the 787s while
-  fixing their mullions, but it is fleet-level and pre-existing: a hull that
-  clips to pure white loses the shading that tells a viewer it is a curved
-  surface, which is part of why the noses read as flat in some angles.
+- **"The hulls render pure white" — CLOSED 2026-08-26 as a stale diagnosis.**
+  The 76% of `LiveryTex` at exactly `1.0` is real and INVISIBLE: those texels
+  sit under `LiveryFac = 0`, and the shader shows `mix(base, tex, fac)` — the
+  viewer sees the base. Audited across ALL ELEVEN masters: every hull's mix
+  base is `#E6E7EA` (linear .784/.792/.820), every visible flat white in the
+  textures is `#E6E7EA` (the 767/777, whose fac is 1.0 everywhere, carry it
+  baked at 85–87% of the texture), and the committed profile renders keep the
+  lit flank at 0.69–0.72 with ≤0.03% of white pixels above 252 — the shading
+  that says "curved surface" is there. Whatever round migrated the materials
+  fixed this without closing the entry. The absolute tint cannot be
+  photo-measured from the available frames (no neutral reference in any of
+  them; extrapolating a per-channel map from the indigo+coral anchors
+  diverges at the white end), so `#E6E7EA` stands on the approved recipe and
+  on internal coherence. What the audit DID find worth keeping: the fleet has
+  THREE whites on purpose — hull `#E6E7EA`, mark white `#F2F3F5`
+  (`refazer_marcas.BRANCO_MARCA`), raster-art white `#F7F9FA`
+  (`COR_TEX["branco"]`) — and the two bright ones are SENTINELS that keep
+  white glyphs and rings off the white→indigo segment the repair guards test.
+  Unifying them onto the hull white would make the guards blind to every
+  white mark. Documented in `latam_livery_kit.py`'s palette header; the one
+  stale constant (`PALETA["LATAM_Branco"]`, still `#F7F9FA` while every blend
+  already carried `#E6E7EA`) is fixed so a palette rebuild cannot regress it.
 - **787-8 height** 16.48 m vs 16.92 published, inherited from the -9 (identical
   fin top and ground line in both blends). Fixing it invalidates the per-type
   fin art measured in `f162f73` — a fleet decision, not a local one.
