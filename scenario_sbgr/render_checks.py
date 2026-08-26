@@ -163,9 +163,11 @@ def check_ground():
          (301.0, 1322.0, 30.0), 45.0),
         # THE frame: from the south runway, the north runway abeam the
         # hangars with the Cabucu/Cantareira wall behind - the 2023 LATAM
-        # Cargo composition
-        ("south_side_hangar_ridge", (2000.0, -220.0, 3.0),
-         (2400.0, 1300.0, 30.0), 70.0),
+        # Cargo composition. EYE INSIDE THE FENCE: the first pass stood at
+        # (2000, -220), which the boundary ring's SCI notch puts OUTSIDE the
+        # field, and rendered the 2.6 m fence as a wall across the frame.
+        ("south_side_hangar_ridge", (1950.0, 60.0, -2.0),
+         (2400.0, 1300.0, 25.0), 70.0),
         # abeam the LATAM hangar at rotation (2575 m along, hangar 654 m out
         # on the left)
         ("abeam_hangar_rotate", roll_point(2575.0, 0.0, 15.0),
@@ -175,9 +177,11 @@ def check_ground():
         # the climb-out: ESE into the LOWEST horizon sector
         ("climbout_ese", roll_point(3400.0, 0.0, 120.0),
          roll_point(6000.0, 0.0, 40.0), 35.0),
-        # the city at the fence, NE corner
-        ("city_fence_ne", (2600.0, 1500.0, -2.0),
-         (3200.0, 2400.0, 30.0), 40.0),
+        # the city at the fence, NE corner - eye ON the ramp inside the
+        # fence (the first pass stood outside at a z below the DSM surface
+        # and rendered the underside of the city sheet)
+        ("city_fence_ne", (2550.0, 1350.0, -5.5),
+         (3300.0, 2350.0, 60.0), 40.0),
     )
     for (tag, eye, aim, lens) in shots:
         _look_at(tag, eye, aim, lens)
@@ -206,18 +210,18 @@ def check_tour():
     high, the terminal crescent, the whole field from the south with the
     Cantareira behind, and the city ring that must NOT be empty."""
     link_terrain()
-    scn = bpy.context.scene
-    for (tag, loc, rot, lens) in (
+    # aim points, not hand-set eulers: the first pass typed a yaw sign wrong
+    # and the south frame rendered 180 deg away from the airport
+    for (tag, eye, aim, lens) in (
             ("tour_ne_corner", (2700.0, 700.0, 380.0),
-             (math.radians(60.0), 0.0, math.radians(24.0)), 40.0),
+             (2200.0, 1330.0, -8.0), 40.0),
             ("tour_terminals", (900.0, -200.0, 420.0),
-             (math.radians(62.0), 0.0, math.radians(160.0)), 40.0),
+             (100.0, 750.0, -9.0), 40.0),
             ("tour_field_south", (1200.0, -2200.0, 750.0),
-             (math.radians(64.0), 0.0, math.radians(178.0)), 30.0),
+             (1400.0, 600.0, -5.0), 30.0),
             ("tour_city_east", (3600.0, 900.0, 300.0),
-             (math.radians(70.0), 0.0, math.radians(80.0)), 35.0)):
-        c = cam("Chk_" + tag, loc, rot, lens=lens)
-        scn.camera = c
+             (2600.0, 1250.0, -8.0), 35.0)):
+        _look_at(tag, eye, aim, lens)
         render(os.path.join(OUT, "%s.png" % tag), res=(1280, 720))
 
 

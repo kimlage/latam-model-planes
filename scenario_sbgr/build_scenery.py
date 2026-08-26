@@ -177,7 +177,7 @@ SUN_AZIM_DEG = 251.10
 # humid metropolitan haze - between SCL's smog basin (14 km) and SDSC's
 # dry-season smoke (18 km). The 2023 photographs show the Cantareira wall at
 # 4-5 km still green but flattened. V is INFERRED.
-HAZE_VIS_KM = 16.0
+HAZE_VIS_KM = 22.0
 HAZE_SCALE_H = 1200.0
 
 # ---------------------------------------------------------------------------
@@ -327,8 +327,10 @@ SBGR_STANDS = (
     ("R904", "wide", 2303.0, 1124.0, HDG_IN, Z_NE_RAMP),
     ("R907", "wide", 2405.0, 1142.0, HDG_IN, Z_NE_RAMP),
     ("R910", "wide", 2315.0, 1210.0, HDG_IN, Z_NE_RAMP),
-    # the hangar stand - the 777 at its own base
-    ("HGR", "heavy", 2266.0, 1295.0, HDG_IN, Z_HGR),
+    # the hangar stand - the 777 at its own base, centred on the OPEN bay
+    # and held 18 m clear of the door line (the first pick put the nose
+    # 23 m INSIDE the closed leaves; the hangar close-up check showed it)
+    ("HGR", "heavy", 2343.0, 1275.0, HDG_IN, Z_HGR),
 )
 
 # Neutral white proxies - the honest non-LATAM presence. Stand numbers real,
@@ -969,6 +971,11 @@ def mat(name, color, rough=0.85, metal=0.0, hazy=True, emit=None):
     bsdf.inputs["Base Color"].default_value = (*color, 1.0)
     bsdf.inputs["Roughness"].default_value = rough
     bsdf.inputs["Metallic"].default_value = metal
+    if metal < 0.1:
+        try:
+            bsdf.inputs["Specular IOR Level"].default_value = 0.18
+        except KeyError:
+            pass
     if emit:
         bsdf.inputs["Emission Color"].default_value = (*emit, 1.0)
         bsdf.inputs["Emission Strength"].default_value = 1.0
@@ -1026,6 +1033,13 @@ def _blank(name, rough=0.9):
     out = nt.nodes.new("ShaderNodeOutputMaterial"); out.location = (800, 0)
     bsdf = nt.nodes.new("ShaderNodeBsdfPrincipled"); bsdf.location = (480, 0)
     bsdf.inputs["Roughness"].default_value = rough
+    # matte ground: the first horizon renders mirrored the bright summer sky
+    # at grazing incidence and the W/E pavements rendered as snow - the SCL
+    # lesson, fixed at the material this time
+    try:
+        bsdf.inputs["Specular IOR Level"].default_value = 0.18
+    except KeyError:
+        pass
     return m, nt, out, bsdf
 
 
@@ -1768,8 +1782,8 @@ def build_terminals(d, P, c_term):
             ux, uy, L = unit(ax, ay, bx, by)
             if L < 8.0:
                 continue
-            ox, oy = -uy * 0.15, ux * 0.15
-            z0, z1 = base + h * 0.35, base + h * 0.78
+            ox, oy = -uy * 0.4, ux * 0.4
+            z0, z1 = base + h * 0.30, base + h * 0.80
             vs = [bm_glass.verts.new(p) for p in
                   ((ax + ox, ay + oy, z0), (bx + ox, by + oy, z0),
                    (bx + ox, by + oy, z1), (ax + ox, ay + oy, z1))]
@@ -2204,6 +2218,11 @@ def build_masts(d, P, c_furn):
                 if all(math.dist((px, py), q) > 140.0 for q in placed):
                     placed.append((px, py))
                 t += 35.0
+    blocks = [dedupe_ring(h["polygon_xy_m"]) for h in d["hangars"]] + \
+             [dedupe_ring(t["polygon_xy_m"]) for t in d["terminals"]
+              if not (t.get("name") or "").startswith("Esta")]
+    placed = [p for p in placed
+              if not any(_ring_hit(r, p[0], p[1]) for r in blocks)]
     for k, (px, py) in enumerate(placed):
         zb = gz(px, py)
         if k % 2 == 0:
@@ -2879,17 +2898,18 @@ def build_light(P, c_light):
         nt.nodes.remove(nd)
     out = nt.nodes.new("ShaderNodeOutputWorld"); out.location = (400, 0)
     bg = nt.nodes.new("ShaderNodeBackground"); bg.location = (200, 0)
-    # Sun/sky balance carried from the SDSC white-card measurement (~2:1
-    # direct:diffuse for a 15-16 deg sun); December humid air is slightly
-    # more diffuse than SDSC's smoke, so the world gets 0.17.
-    bg.inputs["Strength"].default_value = 0.17
+    # Sun/sky balance MEASURED, not carried: a white lambertian card rendered
+    # under this rig (Raw view transform, 2026-08-26) reads sun-only 0.32
+    # against sky-only 0.14 - a 2.3:1 direct:diffuse split, inside the ~2:1
+    # band a 16 deg sun through humid air actually gives (the SCL method).
+    bg.inputs["Strength"].default_value = 0.14
     sky = nt.nodes.new("ShaderNodeTexSky"); sky.location = (-100, 0)
     configure_sky(sky)
     nt.links.new(sky.outputs[0], bg.inputs["Color"])
     nt.links.new(bg.outputs[0], out.inputs["Surface"])
 
     lamp = bpy.data.lights.new("SBGR_Sun", "SUN")
-    lamp.energy = 15.0
+    lamp.energy = 16.5
     lamp.angle = math.radians(0.545)
     lamp.color = (1.0, 0.850, 0.690)       # 16.5 deg, humid summer air mass
     ob = bpy.data.objects.new("SBGR_Sun", lamp)
@@ -2977,18 +2997,20 @@ def terrain_material():
     city = nt.nodes.new("ShaderNodeValToRGB"); city.location = (-380, 100)
     cr = city.color_ramp
     cr.elements[0].position = 0.0
-    cr.elements[0].color = (0.135, 0.118, 0.098, 1.0)   # warm roofscape
+    cr.elements[0].color = (0.140, 0.112, 0.088, 1.0)   # warm roofscape
     cr.elements[1].position = 1.0
-    cr.elements[1].color = (0.165, 0.158, 0.148, 1.0)   # concrete-grey blocks
+    cr.elements[1].color = (0.158, 0.148, 0.136, 1.0)   # concrete-grey blocks
     nt.links.new(wn.outputs["Value"], city.inputs["Fac"])
     green = nt.nodes.new("ShaderNodeValToRGB"); green.location = (-380, -160)
     gr = green.color_ramp
     gr.elements[0].position = 0.0
-    gr.elements[0].color = (0.038, 0.062, 0.022, 1.0)   # mata atlantica
+    gr.elements[0].color = (0.030, 0.056, 0.018, 1.0)   # mata atlantica
     gr.elements[1].position = 1.0
-    gr.elements[1].color = (0.065, 0.090, 0.034, 1.0)
+    gr.elements[1].color = (0.052, 0.080, 0.028, 1.0)
     nt.links.new(wn.outputs["Value"], green.inputs["Fac"])
-    hfac = _sm(nt, sep.outputs["Z"], 60.0, 180.0)       # basin -> serra
+    hfac = _sm(nt, sep.outputs["Z"], 25.0, 90.0)        # basin -> serra: the
+    # Cabucu face is forest from low on its flank (the 2023 photographs show
+    # a green wall, not a tan one); the first render read as dunes
     mix = nt.nodes.new("ShaderNodeMixRGB")
     nt.links.new(city.outputs["Color"], mix.inputs["Color1"])
     nt.links.new(green.outputs["Color"], mix.inputs["Color2"])

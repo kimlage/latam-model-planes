@@ -31,6 +31,14 @@ scenario_sbgr/
   lib/frame.py             the ENU frame. Single source of truth.
   build_osm.py  build_terrain.py  prepare_dem.py  fetch_dem.sh
   horizon.py    silhouette.py     verify.py       plot_osm_plan.py
+  --- phase 2, the build ---
+  build_scenery.py         builds sbgr_field.blend and sbgr_terrain.blend
+  load_terrain.py          the three heightfield tiers as meshes
+  fleet_placement.py       the eleven masters, linked and instanced on stand
+  render_checks.py         the visual gate: plan / latam / ground / horizon /
+                           tour / fleet, output in checks/ (git-ignored)
+  sbgr_field.blend         the aerodrome + city ring (committed)
+  sbgr_terrain.blend       the terrain (git-ignored; rebuilds in ~2 min)
 ```
 
 Reproduce the whole thing:
@@ -92,10 +100,15 @@ RWY 10R touchdown zone (TDZE = AD ELEV). **But z = 0 is the aerodrome
 elevation, not the pavement**: build the runways at z = 0 and they float
 3–6 m.
 
-### Anchors phase 2 will want
+### Anchors — built (phase 2)
 
-Not built yet — no `.blend` exists. When it is, mirror `SDSC_Anchors`:
-Empties whose **+Y points down the take-off track**.
+`SBGR_Anchors` exists in `sbgr_field.blend`: Empties whose **+Y points down
+the take-off track**. One divergence from the table below, recorded here: the
+anchors sit on the **built centrelines (the OSM tracing)** so a parented
+aircraft rolls down the middle of the pavement — `SBGR_10L_Threshold` is at
+(−2.7, 12.3, −4.76), 12.6 m from the published string this table quotes. The
+gap is the whole-second rounding the survey records; the published strings
+below stay the frame's definition.
 
 | anchor | position (x, y, z) | track |
 |---|---|---|
@@ -317,3 +330,152 @@ wall, 1.8–3.2°, 4–14 km, permanently in frame from any south-side camera.
 The SDSC terrain-reveal, inverted: there the mountains appeared as the
 aircraft climbed; here the ridge is the backdrop from brake release, and the
 photographed proof is in `refs/`.
+
+---
+
+## 9. The build — phase 2
+
+Everything below is in `build_scenery.py`, `fleet_placement.py` and
+`render_checks.py`; this section is the decisions, so they stay decisions.
+
+```bash
+blender -b --factory-startup -P scenario_sbgr/build_scenery.py -- --terrain   # ~2 min
+blender -b --factory-startup -P scenario_sbgr/build_scenery.py -- --field    # ~1 min
+blender -b --factory-startup scenario_sbgr/sbgr_field.blend \
+    -P scenario_sbgr/render_checks.py -- plan latam ground horizon tour fleet
+```
+
+### 9.1 The z reconciliation — flat field, one number
+
+Copernicus reads the four thresholds 1.2–2.8 m below their published
+elevations (EGM2008 vs the −2.33 m geoid undulation is most of it).
+`DEM_TO_PUB = +1.84` — the mean of the four offsets — shifts the DEM onto the
+published datum; the runway strips are then forced to the published threshold
+lines exactly, and each apron zone is held flat at (its own DEM median
++ 1.84). `verify_levels()` reprints the residuals every build: the four
+graded thresholds land on the published values to 0.00 m.
+
+Zone plateaus (measured medians, in-build probe 2026-08-26): terminal
+frontage + TECA **−9.20**, Pátio 9 / 901 row / hangars **−8.70**, east cargo
+−8.50, Sideral −7.00, VIP −0.20, BASP **−2.00 (clamped — the DSM reads +1.3
+there, but that is hangar roofs in a 2011–14 surface model)**. The terminal
+platform really is ~4 m below the north runway: the field falls north, as the
+ADC's "high point = RWY 10R TDZ" says.
+
+**The NE corner is ONE towable plateau (−8.70) — declared inference.** The
+DEM reads −6.93 under the hangar apron, but that epoch (2011–14) predates the
+hangar: it is pre-construction ground. A 3.6 m step against the touching
+Pátio 9 would make the hangar unreachable by a towed 777; continuity with the
+ramp is the constraint. The first build used the raw DEM figure and the fleet
+placement's own ray-cast caught the cliff.
+
+### 9.2 Runways
+
+Built ON the OSM centrelines (survey `divergences` resolution: origin =
+published string, relative geometry = the tracing): north pavement
+(−88.4, −14.0)→(3460.7, 1026.5) at 073.66 true, south (−462.6, −513.0)→
+(2415.9, 331.7) at 073.65, centrelines 373 m apart. Published displacements
+(90/60 m), stopways (60 × 45 at all four ends, ADC), the 28L clearway,
+Annex 14 marking set for LDA ≥ 2400 (12 threshold stripes, letter-then-number
+**10L/28R/10R/28L designators — the 2019 renumbering, not the 09/27 of the
+old photographs**, 400 m aiming point, six TDZ pairs, displaced-threshold
+arrows), ALSF-2/ALSF-1 approach-light skeletons per the ADC, PAPI ×4,
+localizer arrays, edge lights, 76 holding boards, 2 windsocks.
+
+### 9.3 The invented verticals — every one a movable constant
+
+| thing | built | basis |
+|---|---|---|
+| **LATAM hangar** | eave 26 m, ridge 30 m, door 100 × 20.5 m on the SSE face, one 30 m bay open; indigo fascia band + official-SVG lockup | **NO photograph, NO DSM return exists.** Sized so a 777-300ER (18.5 m tail) clears the door; branding on the charts' authority (ADC/AGMC print HANGAR LATAM). `LATAM_HANGAR` constant; flip when a photograph surfaces |
+| American hangar | eave 24 m, ridge 27.5 m, unbranded grey, door band on the apron end | DSM floor +7.2 m is smeared; a widebody door band needs ~24 m. `AA_HANGAR` |
+| TWR | concrete shaft, two-ring gallery at 42/47 m, glazed cab to 55 m, white radome ball top ≈ 61 m | shape from `tower_closeup_2024.jpg`; height from proportion vs T2 in the 2013 frame (~3.5–4× a 20 m roofline); position = ADC label georef ±100 m. `TOWER` |
+| Terminal 3 | 20 m, same band as T2 | opened 2014 — absent from the DSM. Built as T2's sibling |
+| Terminal 2 / 1 / TECA | 20 / 14 / 11 m | DSM floors +14.1 / +10.8 / +8..10 plus roof plant |
+| floodlight masts | 30 m, two designs (ring-head + lattice-rack) | the two designs are photographed side by side (2026 frame); 30 m is the international-apron band, no published figure |
+| jetbridges | 109, rotunda + sloped tunnel, one per gate within 90 m of a terminal | pier-and-jetbridge MASSING per the LOD rule — the nearest camera is 650 m out |
+
+### 9.4 The city ring — the answer to phase 1's cut
+
+Three layers, all cheap, all clipped to the fence RING by a signed-distance
+field (the first build clipped to the boundary BBOX and buried the metropolis
+under 25 km² of infield grass — caught by the plan check, which exists for
+exactly that):
+
+1. **Landuse tint** — 47 803 cells, 30 m, snapped to the near terrain tier's
+   own lattice and sampled from the same DEM, so tint and terrain are
+   parallel by construction and cannot interleave (the SDSC cane-sheet lesson
+   applied before the fact). Residential polygons on the north hills render
+   as the tighter, redder hillside fabric the photographs show climbing the
+   Cabuçu flank.
+2. **Procedural massing** — 4 200 boxes (houses 4–9 m, sheds, ~120
+   mid-rises) hashed inside the mapped residential/commercial/industrial
+   polygons within 4.2 km. The polygons are data; the boxes are not. They
+   stand on the DSM, which already contains roofs — a storey of
+   double-counting, declared, invisible under haze at 1.5+ km.
+3. **The mapped lines** — 255 km of roads, the CPTM Line 13 viaduct on piers
+   (13.5 km), the Rio Baquirivu-Guaçu and 77 km of watercourses, ~800
+   gallery/forest trees on the north belt.
+
+Beyond the tint reach the terrain's own material carries the fabric: a
+block-hash city grey below z +35 m blending to mata-atlântica green by
++110 m, so the Cabuçu and Cantareira read as the forested wall of the
+photographs, and the far tier's Atlantic corner reads as sea.
+
+### 9.5 Population — the ramp is not empty
+
+`fleet_placement.py` instances **all eleven masters** (the only base where
+that is honest) at sixteen stands: seven narrowbodies on the T2/T3 frontage,
+787-8/787-9 at T3, the two Cargo 767s at TECA III, four widebodies on the
+901 row, and **the 777-300ER at its own hangar** — plus a second 777 at
+R901. Same link-and-instance machinery as SDSC (Cycles keys geometry on the
+object; collection-instance empties share one evaluated geometry per TYPE,
+so sixteen aircraft cost eleven geometries). Stand allocation is UNPUBLISHED:
+the 901-row reading comes from the 2013 widebody photograph, the terminal
+split from the airline's public T2/T3 operation. Placement self-verifies:
+evaluated-envelope seating (wheels to 0.000 m), pairwise overlap check (it
+re-picked the T3 and 901-row stands to widebody pitch), and a ray-cast
+concrete check (it caught the NE-plateau cliff).
+
+**Non-LATAM traffic is four neutral white proxies at distant gates** — GRU's
+ramp is half other airlines' metal and this repository has no non-LATAM
+model; an anonymous white airliner 600+ m from every camera is the honest
+rendering.
+
+GSE at every occupied stand (tug + towbar, GPU, loaders, catering, stairs
+and bus at the remote row, dolly trains + ULDs at cargo, bowsers at the fuel
+tanks) — 84 clusters, positions inferred, presence not.
+
+### 9.6 Light, and the flow-honest render hour
+
+**21 December, 17:30 local: sun 16.46° up at 251.1° true**
+(`sbgr_operations_sun.json`). The raking light on the hangar frontage with
+the Cantareira behind — and the honest flow hour: 12–15 local is when west
+flow peaks (39–46 % east), by 17:00 east flow is back to 62 % (ERA5), so a
+17:30 10L departure does not fight the wind table. Sun/sky balance MEASURED
+by the white-card method: 2.3 : 1 direct:diffuse. Haze V = 19 km, H = 1200 m
+(humid metropolitan summer, between SCL's 14 and SDSC's 18 — inferred).
+
+### 9.7 The budget
+
+| piece | faces |
+|---|---|
+| field (everything in `sbgr_field.blend`) | **177 117** |
+| of which: city tint + massing | ~78 000 |
+| terrain, three tiers | 3 697 248 |
+| fleet | 11 unique master geometries, instanced 16× |
+
+LOD by camera reach (§8: the clips fly the 10L roll and an aerial tour):
+the NE corner, the 901 row and the north frontage are foreground and carry
+door/band/lockup detail; gates the camera never approaches get
+pier-and-jetbridge massing; the BASP side and the city are background tint
+and boxes. Render-cost measurement of the populated ramp is in §9.8.
+
+### 9.8 The gate
+
+`render_checks.py` renders: `plan` / `latam` (orthographic, framed to match
+`sbgr_osm_plan.png` / `sbgr_osm_plan_latam.png` EXACTLY — the checks that
+catch a silently-wrong build), `ground` (the 10L roll stations, including
+abeam-the-hangar-at-rotation and the south-side composition the 2023 LATAM
+Cargo photograph proves), `horizon` (N/E/S/W against the phase-1 ring table),
+`tour`, `fleet`. Every check populates the ramp first, exactly as the clip
+files will. `python3 refs_fetch.py --verificar` exits 0.
