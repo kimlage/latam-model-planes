@@ -384,5 +384,47 @@
    "comp_braco": 0.42,
    "comp_lamina": 0.5
   }
+ },
+ "impressao_2026-08-27": {
+  "lei": "Lei da sutileza MEDIDA: 3 faixas limpas da fuselagem em boeing 777-300ER/refs/20251011_LATAM_PT-MUC_EGLL.jpg dao juntas lendo a -0.8..-3.8% de luminancia (tipico -1..-2.5%). Alphas do pintor: junta 0.032 (787: 0.022), radome 0.055, costura/APU 0.045, leme multiplicativo 0.91. Pintor unico: refazer_marcas.py (IMPRESSAO/ASA/EMPENAGEM), tarefas impressao/asa/empenagem.",
+  "juntas_x": [
+   1.79,
+   2.65,
+   3.51,
+   4.4,
+   5.3,
+   6.96,
+   8.9,
+   10.89,
+   12.88,
+   14.87,
+   16.86,
+   18.85,
+   20.84,
+   22.83,
+   24.82,
+   26.81,
+   28.8,
+   30.79,
+   33.69,
+   35.6,
+   37.4,
+   39.2,
+   41.0,
+   42.5
+  ],
+  "radome_x": 0.96,
+  "apu_anel_x": null,
+  "costura_carenagem": "polilinha lida da PROPRIA malha BellyFairing (min|theta| por faixa de 0.5 m), alpha 0.045",
+  "asa": {
+   "linhas": "cutlines da familia lidas do plano ACAP p.45 600dpi em FRACOES de envergadura (livres de calibracao; validadas pelos pods 0.211/0.417/0.652 -> |y| 5.3/8.6/12.35 vs 4.95/8.48/12.21 do QA): flap A/B 0.265, flap/aileron 0.569, aileron ext 0.946; slats raiz 0.142, vao do pylon 0.304-0.324, cortes 0.436/0.588/0.740, fim 0.892; spoilers 5 paineis (1 interno + 4 entre kink e aileron)",
+   "infra": "UVAsa planar criado nesta rodada + AsaLinhas 2048 nova + ramo AL/AL2 no CinzaAsa (forca de linha 0.42x = a dos Boeing)",
+   "matricula": "caixa DERIVADA da lei de frota (banda do aileron, y 10.21..14.85, sob a asa D) — NAO ha quadro de intradorso de A320 LATAM no repositorio; pendencia no QA-BACKLOG; glifos = Arial Bold PT-MXP"
+  },
+  "leme": {
+   "fracao_da_corda": 0.32,
+   "foto": "familia (ref_PR-XBP_teresina.jpg)",
+   "aplicacao": "FinSashE/D escurecidas x0.91 na charneira"
+  }
  }
 }
