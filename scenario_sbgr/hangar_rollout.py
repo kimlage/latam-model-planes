@@ -78,7 +78,7 @@ BAY_C = FACE_C                    # the tow corridor runs through face centre
 
 # --- the aeroplane (B77W master, place_777.py's cited geometry) -------------
 NOSE_X, TAIL_X = 0.0, 73.95
-NOSE_GEAR_X, MAIN_GEAR_X = 5.3, 36.5
+NOSE_GEAR_X, MAIN_GEAR_X = 5.89, 37.11   # measured in the master (evaluated)
 WHEELBASE = MAIN_GEAR_X - NOSE_GEAR_X          # 31.2
 FIN_TOP = 18.5
 SPAN = 64.8
@@ -411,7 +411,10 @@ def main():
         e.parent = piv
         # master nose -X onto pivot-local +Y (same mapping place_777 proved)
         e.rotation_euler = (0.0, 0.0, -math.pi / 2.0)
-        e.location = (0.0, MAIN_GEAR_X, 0.0)
+        # master gear hangs to z = -5.670 (the GLB's "wheels at 0" was the
+        # exporter's own seating, not the master's) - lift the parts so the
+        # contact meets the pivot, or the aeroplane renders through the floor
+        e.location = (0.0, MAIN_GEAR_X, 5.670)
         scn.collection.objects.link(e)
 
     entry = solve_entry()

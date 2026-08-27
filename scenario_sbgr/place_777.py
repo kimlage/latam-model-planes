@@ -204,9 +204,16 @@ def main():
         # z ~0 (export/verificar_glb.py on B77W_alta.glb), and the published
         # 777-300ER gear geometry is a 31.22 m wheelbase with the nose leg
         # ~5.3 m aft of the nose - main-gear contact x = 36.5, z = 0.
-        print("gear survey unusable (%s) - using published geometry: "
-              "contact (36.50, 0.00)" % repr((mg_x, mg_z)))
-        mg_x, mg_z = 36.5, 0.0
+        # The GLB-derived "wheels at z 0" was WRONG: the exporter seats
+        # every aircraft on the Y=0 floor by its own rule, so the bbox told
+        # the truth about the EXPORT and a lie about the MASTER, whose gear
+        # hangs to z = -5.670 (evaluated-depsgraph minimum over 03_Trem;
+        # main cluster x 37.11). The false 0.0 sank the 777 5.7 m in both
+        # SBGR clips - belly on the runway, no gear in frame - and the
+        # owner, not the pipeline, caught it in the published GIFs.
+        print("gear survey unusable (%s) - using measured master geometry: "
+              "contact (37.11, -5.670)" % repr((mg_x, mg_z)))
+        mg_x, mg_z = 37.11, -5.670
     # master nose is −X; rig-local station axis is +Y. The fleet convention
     # (fleet_placement._heading_rot) puts a master on compass heading h with
     # world yaw atan2(−cos h, −sin h); for h = TRACK that is −163.65°, and the
