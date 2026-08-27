@@ -7,11 +7,19 @@ eles tocam.
 
 ## Em andamento
 
-1. **GRU (SBGR) fase 3 — os três clipes** (decolagem do 777 na 10L, roll-out
-   do hangar ao anoitecer, tour aéreo). Fases 1–2 fechadas e publicadas em
-   2026-08-26: survey completo por AIP, campo construído povoado desde o
-   início, frota real instanciada, 777 em casa. Regra nova pós-reboot: frames
-   de animação renderizam DENTRO do repo (gitignored), nunca em /tmp.
+1. **Re-sync SCL + São Carlos pós-rodada-da-tinta** (item de maior impacto
+   restante): os clipes da capa dessas bases ainda mostram A319/777 com a
+   cunha antiga; uma re-renderização captura cauda + cunha de uma vez.
+
+## Fechado em 2026-08-27 — GRU completa
+
+As três fases de Guarulhos entregues e publicadas: survey por AIP, campo
+povoado, entorno realista (floresta na serra, bairros, cinturão logístico —
+rodada extra após o dono apontar o vazio), e os três clipes na capa:
+decolagem do 777 na 10L (v2), tour aéreo (v2) e o roll-out de ré pela porta
+de 76 m (v1). Três reinícios de máquina e cinco stalls de agente no caminho;
+as regras que ficaram: frames dentro do repo, chunks de ≤40 frames, Metal
+fixado, blur desligado por memória, um único escritor no fim do pipeline.
 
 ## Fechado em 2026-08-26 — rodada da verdade da tinta
 
