@@ -191,6 +191,10 @@ scenario_sbgr/terrain/_fine_profile.npy
 # The raw Overpass dump (~13 MB of JSON). build_osm.py re-downloads it; only
 # the converted scenario_sbgr/sbgr_osm.json is committed.
 scenario_sbgr/sbgr_osm_raw.json
+# Same rule for the surround round's street/footprint re-query (~17 MB):
+# surround_osm.py re-downloads it; the converted sbgr_osm_surround.json is
+# what is committed.
+scenario_sbgr/sbgr_osm_streets_raw.json
 
 # SBGR scenario: third-party reference photographs. Credited in
 # scenario_sbgr/sbgr_references.md and scenario_sbgr/refs/manifest.json, but

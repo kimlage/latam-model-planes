@@ -37,9 +37,12 @@ FIVE THINGS ABOUT THIS FIELD THAT ARE NOT TRUE AT SDSC OR SCL
        the published origin string remains the frame origin. OSM's THR 10L
        lands at (-2.7, 12.3) - 12.6 m from the origin, inside the rounding.
     4. The surround is a METROPOLIS of 1.3 M people, not cane. Phase 1 cut
-       ~2 756 city footprints and ~8 550 minor streets on purpose; the answer
-       here is landuse-tinted cells + procedural massing (build_city) - see
-       the CITY block below.
+       ~2 756 city footprints and ~8 550 minor streets on purpose; the
+       surround round brought the streets and footprints BACK via the wider
+       re-query (surround_osm.py -> sbgr_osm_surround.json) after the owner
+       called the ring empty - landuse-tinted cells + street-mask fabric +
+       real-footprint and procedural massing (build_city), and the serra
+       forest over it all (build_serra_forest). See the CITY block below.
     5. The horizon is a RING (+0.12..+3.23 deg, never negative) and it is real
        terrain: the Cabucu/Cantareira wall carries the north, and a terrain
        mesh draws most of the skyline correctly (TERRAIN.md section 3). The
@@ -240,24 +243,36 @@ MAST_H = 30.0
 # THE CITY - the answer to phase 1's deliberate cut, and this build's one
 # structural addition over SDSC. ~2 756 Guarulhos footprints and ~8 550 minor
 # streets were cut from the extract; RECOGNITION.md trap 10 says the ring must
-# be city anyway. The answer, three layers, all cheap:
+# be city anyway. Three layers at first; the SURROUND ROUND (the owner's
+# verdict on the aerial tour was "o entorno esta todo muito vazio") widened
+# every one of them and added the street-mask fabric and the serra forest:
 #   1. LANDUSE TINT: every mapped landuse polygon rendered as 30 m cells
 #      snapped to the near terrain tier's OWN lattice (same nodes, same DEM
 #      sample), 0.5 m proud - so the two surfaces are parallel by construction
 #      and cannot interleave (the SDSC cane-sheet lesson, applied one tier up).
-#   2. PROCEDURAL MASSING: block-hashed boxes inside the residential /
-#      commercial / industrial polygons within CITY_REACH of the field -
-#      houses 4-9 m, sheds 8-14 m, and occasional mid-rises on the commercial
-#      cells. Positions are hash noise; the POLYGONS deciding where city
-#      exists are OSM data.
-#   3. The mapped major roads, the CPTM Line 13 rail and the Rio
-#      Baquirivu-Guacu, which are data and are built as such.
+#      PLUS, since the surround round: fabric tint on every 30 m cell the
+#      MINOR-STREET MASK (below) calls urban and no landuse polygon covers -
+#      Brazilian OSM maps streets far more completely than landuse, and the
+#      Bonsucesso/Agua Chata flank north of the Baquirivu has ~50 km of
+#      mapped streets under <1 km2 of mapped landuse.
+#   2. MASSING, three sources in order of honesty: the 13 154 re-queried REAL
+#      footprints (surround_osm.py) as min-area boxes; block-hashed boxes
+#      inside the residential/commercial/industrial polygons within
+#      CITY_REACH; and fabric boxes on urban street-mask cells nothing else
+#      covered, out to FABRIC_REACH. Big mapped industrial polygons south of
+#      the field build as the Cumbica LOGISTICS BELT - warehouse massing,
+#      60-120 m sheds, not houses.
+#   3. The mapped roads - now including the minor streets themselves - the
+#      CPTM Line 13 rail and the Rio Baquirivu-Guacu, which are data.
 # The DSM under all of it is roofs-and-canopy (TERRAIN.md section 8); the
 # massing sits ON that surface, which double-counts a storey or two and is
 # declared: at 1.5+ km under haze it reads as fabric, not as survey.
 # ---------------------------------------------------------------------------
-CITY_REACH = 4200.0       # massing beyond this is tint + terrain + haze
-CITY_BOX_BUDGET = 4200    # hard cap on procedural boxes
+CITY_REACH = 4200.0       # polygon massing beyond this: tint + terrain + haze
+FABRIC_REACH = 6500.0     # street-mask massing + real footprints reach
+TINT_REACH = 9000.0       # tint cells; beyond this the terrain shading is it
+CITY_BOX_BUDGET = 22000   # hard cap on massing structures (was 4200 before
+                          # the surround round)
 CITY_SEED = 20260826
 
 ROAD_WIDTH = {            # metres, ESTIMATED - no width/lanes tags used
@@ -364,6 +379,57 @@ def data():
         with open(os.path.join(HERE, "sbgr_osm.json")) as fh:
             _DATA = json.load(fh)
     return _DATA
+
+
+_SURROUND = None
+
+
+def surround():
+    """The surround re-query (surround_osm.py): 8 390 minor-street ways and
+    13 154 real footprints the phase-1 extract cut. Regenerate with
+    `python3 surround_osm.py`."""
+    global _SURROUND
+    if _SURROUND is None:
+        with open(os.path.join(HERE, "sbgr_osm_surround.json")) as fh:
+            _SURROUND = json.load(fh)
+    return _SURROUND
+
+
+class StreetMask:
+    """A 50 m occupancy grid of the minor-street network: a cell is URBAN
+    when a mapped street passes within ~50-100 m (one 4-neighbour dilation
+    over the rasterized polylines - a 100 m Brazilian block's interior stays
+    covered). This is the urbanization mask for the sectors where OSM
+    landuse is thin: streets and buildings are mapped far more completely
+    than landuse in Brazil, so where the streets are IS where the city is.
+    Its complement above the forest line is where the serra is."""
+
+    STEP = 50.0
+
+    def __init__(self, streets):
+        cells = set()
+        for s in streets:
+            pts = s["pts"]
+            for a, b in zip(pts, pts[1:]):
+                L = math.hypot(b[0] - a[0], b[1] - a[1])
+                n = max(1, int(L / 25.0))
+                for k in range(n + 1):
+                    t = k / n
+                    cells.add((int(math.floor((a[0] + (b[0] - a[0]) * t)
+                                              / self.STEP)),
+                               int(math.floor((a[1] + (b[1] - a[1]) * t)
+                                              / self.STEP))))
+        grown = set(cells)
+        for (i, j) in cells:
+            grown.update(((i + 1, j), (i - 1, j), (i, j + 1), (i, j - 1)))
+        self.cells = grown
+
+    def key(self, x, y):
+        return (int(math.floor(x / self.STEP)),
+                int(math.floor(y / self.STEP)))
+
+    def urban(self, x, y):
+        return self.key(x, y) in self.cells
 
 
 def wipe():
@@ -1323,6 +1389,10 @@ def palette():
         foliage=mat("SBGR_Foliage", (0.042, 0.072, 0.022), 0.92),
         foliage2=mat("SBGR_FoliageDeep", (0.030, 0.055, 0.018), 0.92),
         trunk=mat("SBGR_TreeTrunk", (0.042, 0.033, 0.024), 0.92),
+        # the surround round's ONE new vegetation material: closed-canopy
+        # mata atlantica for the Cantareira/Cabucu wall - near-black green,
+        # darker than either foliage tint (the 2023 refs show a green WALL)
+        serra=mat("SBGR_SerraCanopy", (0.016, 0.034, 0.011), 0.95),
         fence=mat("SBGR_FenceMesh", (0.060, 0.062, 0.064), 0.60),
         jet_body=mat("SBGR_Jetbridge", (0.360, 0.362, 0.368), 0.55),
         jet_dark=mat("SBGR_JetbridgeDark", (0.060, 0.062, 0.066), 0.60),
@@ -1350,6 +1420,9 @@ def palette():
         tile_red=mat("SBGR_RoofTile", (0.160, 0.062, 0.038), 0.90),
         roof_fiber=mat("SBGR_RoofFiberCement", (0.185, 0.180, 0.170), 0.80),
         midrise=mat("SBGR_MidriseConcrete", (0.260, 0.252, 0.238), 0.80),
+        # the surround round's ONE new built material: the Cumbica logistics
+        # belt's big white sheds (every airport-adjacent aerial shows them)
+        warehouse=mat("SBGR_WarehouseShed", (0.300, 0.306, 0.302), 0.62),
 
         # --- the operation -------------------------------------------
         gse_white=mat("SBGR_GSEWhite", (0.480, 0.482, 0.478), 0.55),
@@ -1554,11 +1627,14 @@ def build_field():
     build_masts(d, P, c_furn)
     build_runway_furniture(d, P, c_furn)
     # ---- the surround: the city ring, and everything mapped through it
-    build_city(d, P, c_city)
+    mask = StreetMask(surround()["streets"])
+    print("street mask: %d urban 50 m cells" % len(mask.cells))
+    build_city(d, P, c_city, mask)
     build_roads(d, P, c_road)
     build_rail(d, P, c_rail)
     build_water(d, P, c_water)
     build_trees(d, P, c_veg)
+    build_serra_forest(P, c_veg, mask)
     # ---- the operation
     build_gse(d, P, c_ops)
     build_parked_proxies(P, c_ops)
@@ -2360,8 +2436,8 @@ CITY_MAT_BY_LANDUSE = {
 }
 
 
-def build_city(d, P, c_city):
-    """Three layers - tint, massing, and the north-hill favela texture.
+def build_city(d, P, c_city, mask):
+    """The surround: tint, massing, and the north-hill favela texture.
 
     LAYER 1, TINT: every mapped landuse polygon as 30 m cells snapped to the
     NEAR TERRAIN TIER'S OWN LATTICE (nodes at -15000 + 30i) and sampled with
@@ -2369,22 +2445,49 @@ def build_city(d, P, c_city):
     apart and cannot interleave at any distance. The SDSC cane-sheet lesson,
     applied before the fact. Residential polygons on the north hills (y >
     1500, ground > +25 m) use the tighter, redder hillside tint the
-    photographs show climbing the Cabucu flank.
+    photographs show climbing the Cabucu flank. Since the surround round:
+      * green/bare cells above the +30 m forest line are NOT tinted - the
+        serra owns that ground (terrain shading + build_serra_forest), which
+        also buries the hard-edged tint sawtooth phase 2's checks recorded
+        stepping down the flank;
+      * every urban STREET-MASK cell no landuse polygon covers gets the
+        residential (or hillside) tint - Bonsucesso and Agua Chata across
+        the Baquirivu valley exist in the render because their streets are
+        mapped, even though their landuse mostly is not.
 
-    LAYER 2, MASSING: procedural boxes inside the residential / commercial /
-    industrial polygons within CITY_REACH of the field. Houses 4-9 m, sheds
-    8-14 m, occasional mid-rises. Deterministic (CITY_SEED); capped at
-    CITY_BOX_BUDGET. The DSM under them is roofs-and-canopy already, which
-    double-counts a storey and is declared in the module header.
+    LAYER 2, MASSING, three sources in order of honesty, one shared budget:
+      A. the re-queried REAL footprints (min-area boxes, height from
+         building:levels where tagged, else from the building kind);
+      B. procedural boxes inside the mapped residential / commercial /
+         industrial polygons within CITY_REACH - houses 4-9 m, sheds,
+         occasional mid-rises; big industrial polygons build as the Cumbica
+         LOGISTICS BELT (40-110 m warehouses);
+      C. fabric boxes on urban street-mask cells nothing above covered,
+         nearest-first out to FABRIC_REACH.
+    Deterministic (CITY_SEED); capped at CITY_BOX_BUDGET. The DSM under all
+    of it is roofs-and-canopy already, which double-counts a storey and is
+    declared in the module header.
 
-    The tint polygons and the mapped roads are DATA. The boxes are not."""
+    The tint polygons, the streets and the footprints are DATA. The
+    procedural boxes of B and C are not."""
     import random
     rnd = random.Random(CITY_SEED)
     lat30 = -15000.0                      # the near tier's lattice origin
+    px0, px1, py0, py1 = pad_box()
+
+    def outside_fence(x, y, margin):
+        if not (px0 < x < px1 and py0 < y < py1):
+            return True                   # far outside the pad box entirely
+        return ring_dist(x, y) <= margin
+
+    def cell30(x, y):
+        return (int(math.floor((x - lat30) / 30.0)),
+                int(math.floor((y - lat30) / 30.0)))
 
     bms = {k: bmesh.new() for k in ("city_res", "city_fav", "city_ind",
                                     "city_com", "city_green", "city_bare")}
-    ncell = 0
+    tinted = set()
+    ncell = nskip_serra = 0
     for l in d["landuse"]:
         ring = l.get("polygon_xy_m") or []
         if len(ring) < 3:
@@ -2396,15 +2499,41 @@ def build_city(d, P, c_city):
         if mk is None:
             continue
         for (x, y) in _cells(dedupe_ring(ring), 30.0, lat30, lat30):
-            if ring_dist(x, y) > -30.0:
+            if not outside_fence(x, y, -30.0):
                 continue                  # the fence ring owns the inside
-            if abs(x) > 9000.0 or abs(y) > 9000.0:
+            if abs(x) > TINT_REACH or abs(y) > TINT_REACH:
                 continue                  # beyond this the terrain shading is it
             key = mk
-            if mk == "city_res" and y > 1500.0 and G.dem(x, y) > 25.0:
+            z = G.dem(x, y)
+            if mk in ("city_green", "city_bare") and z > 30.0 \
+                    and not mask.urban(x, y):
+                nskip_serra += 1
+                continue                  # the serra owns the high flank
+            if mk == "city_res" and y > 1500.0 and z > 25.0:
                 key = "city_fav"          # the hillside fabric
             _quad(bms[key], x, y, 30.0, lambda a, b: G.dem(a, b) + 0.5)
+            tinted.add(cell30(x, y))
             ncell += 1
+
+    # ---- fabric tint: urban street-mask cells with no landuse polygon ----
+    nfab = 0
+    i0 = int((-TINT_REACH - lat30) / 30.0)
+    i1 = int((TINT_REACH - lat30) / 30.0)
+    for j in range(i0, i1 + 1):
+        cy = lat30 + (j + 0.5) * 30.0
+        for i in range(i0, i1 + 1):
+            if (i, j) in tinted:
+                continue
+            cx = lat30 + (i + 0.5) * 30.0
+            if not mask.urban(cx, cy):
+                continue
+            if not outside_fence(cx, cy, -30.0):
+                continue
+            key = "city_fav" if (cy > 1500.0 and G.dem(cx, cy) > 25.0) \
+                else "city_res"
+            _quad(bms[key], cx, cy, 30.0, lambda a, b: G.dem(a, b) + 0.5)
+            tinted.add((i, j))
+            nfab += 1
     for k, bm in bms.items():
         bm_to_object(bm, "SBGR_CityTint_%s" % k.split("_")[1], P[k], c_city,
                      smooth=True)
@@ -2412,8 +2541,62 @@ def build_city(d, P, c_city):
     # ---- massing ------------------------------------------------------
     bm_a, bm_b, bm_br = bmesh.new(), bmesh.new(), bmesh.new()
     bm_rt, bm_rf = bmesh.new(), bmesh.new()
-    bm_mid, bm_shed = bmesh.new(), bmesh.new()
-    nbox = nmid = nshed = 0
+    bm_mid, bm_shed, bm_ware = bmesh.new(), bmesh.new(), bmesh.new()
+    nbox = nmid = nshed = nware = nfoot = 0
+    occupied = set()
+
+    def house(jx, jy, zb, hdg, hill, w=None, dp=None, h=None):
+        w = w or (6.0 if hill else 8.0) + rnd.random() * 5.0
+        dp = dp or (7.0 if hill else 9.0) + rnd.random() * 6.0
+        h = h or (3.2 if hill else 3.6) + rnd.random() * (4.0 if hill else 4.5)
+        wall = bm_br if hill or rnd.random() < 0.25 else \
+            (bm_a if rnd.random() < 0.6 else bm_b)
+        obox(wall, jx, jy, zb, zb + h, dp, w, hdg)
+        roof = bm_rt if rnd.random() < (0.35 if hill else 0.55) else bm_rf
+        obox(roof, jx, jy, zb + h, zb + h + 0.7, dp + 0.8, w + 0.8, hdg)
+
+    # -- A. the real footprints -----------------------------------------
+    for b in surround()["buildings"]:
+        if nbox >= CITY_BOX_BUDGET:
+            break
+        cx, cy = b["cx"], b["cy"]
+        if abs(cx) > FABRIC_REACH or abs(cy) > FABRIC_REACH:
+            continue
+        if not outside_fence(cx, cy, -35.0):
+            continue
+        L, W = min(b["long_m"], 260.0), min(b["short_m"], 120.0)
+        if L < 4.0 or W < 2.6:
+            continue
+        hdg = b["bearing_deg"]            # both are compass bearings of the
+        #                                   long axis (obox: 0 = north)
+        kind = b.get("kind") or "yes"
+        lv = b.get("levels")
+        zb = G.dem(cx, cy) + 0.3
+        big = L > 40.0 and W > 14.0
+        if kind in ("industrial", "warehouse", "hangar", "depot", "garage",
+                    "garages", "commercial", "retail", "office",
+                    "supermarket", "service") or (big and kind in
+                                                  ("yes", "roof")):
+            h = (8.0 + rnd.random() * 5.0) if big else \
+                (6.0 + rnd.random() * 3.0)
+            if lv:
+                h = max(h, 3.4 * lv)
+            obox(bm_ware if big else bm_shed, cx, cy, zb, zb + h, L, W, hdg)
+            nware += 1 if big else 0
+            nshed += 0 if big else 1
+        elif kind == "apartments" or (lv or 0) >= 4:
+            h = (3.0 * lv + 1.5) if lv else (16.0 + rnd.random() * 14.0)
+            obox(bm_mid, cx, cy, zb, zb + h, L, W, hdg)
+            nmid += 1
+        else:
+            hill = cy > 1500.0 and G.dem(cx, cy) > 25.0
+            h = 3.4 * lv if lv else None
+            house(cx, cy, zb, hdg, hill, w=W, dp=L, h=h)
+        nfoot += 1
+        nbox += 1
+        occupied.add(mask.key(cx, cy))
+
+    # -- B. procedural massing inside the mapped landuse polygons --------
     polys = []
     for l in d["landuse"]:
         ring = l.get("polygon_xy_m") or []
@@ -2428,27 +2611,44 @@ def build_city(d, P, c_city):
         cy = sum(p[1] for p in ring) / len(ring)
         if abs(cx) > CITY_REACH + 1200 or abs(cy) > CITY_REACH + 1200:
             continue
-        polys.append((kind, ring, cx, cy))
+        area = 0.0
+        for i in range(len(ring) - 1):
+            area += ring[i][0] * ring[i + 1][1] - \
+                ring[i + 1][0] * ring[i][1]
+        polys.append((kind, ring, cx, cy, abs(area) / 2.0))
     rnd.shuffle(polys)
-    for (kind, ring, cx, cy) in polys:
+    for (kind, ring, cx, cy, area) in polys:
         if nbox >= CITY_BOX_BUDGET:
             break
         res = kind == "residential"
         hill = res and cy > 1500.0
-        step = 26.0 if hill else (34.0 if res else 60.0)
+        # the logistics belt: big mapped industrial ground gets WAREHOUSE
+        # massing (Cumbica's aerials read as sheds, not houses)
+        belt = kind in ("industrial", "depot") and area > 60000.0
+        step = 26.0 if hill else (32.0 if res else (95.0 if belt else 60.0))
         for (x, y) in _cells(ring, step, lat30 + 7.0, lat30 + 7.0):
             if nbox >= CITY_BOX_BUDGET:
                 break
-            if ring_dist(x, y) > -35.0:
+            if not outside_fence(x, y, -35.0):
                 continue
             if abs(x) > CITY_REACH or abs(y) > CITY_REACH:
                 continue
-            if rnd.random() < (0.25 if hill else 0.35):
+            if mask.key(x, y) in occupied:
+                continue                  # a real footprint stands here
+            if rnd.random() < (0.25 if hill else 0.30):
                 continue                          # streets and yards
             zb = G.dem(x, y) + 0.3
             jx = x + (rnd.random() - 0.5) * step * 0.4
             jy = y + (rnd.random() - 0.5) * step * 0.4
             hdg = rnd.random() * 180.0
+            if belt:
+                obox(bm_ware, jx, jy, zb, zb + 9.0 + rnd.random() * 5.0,
+                     45.0 + rnd.random() * 65.0, 24.0 + rnd.random() * 30.0,
+                     hdg)
+                nware += 1
+                nbox += 1
+                occupied.add(mask.key(jx, jy))
+                continue
             if not res and rnd.random() < 0.75:
                 # industrial shed
                 obox(bm_shed, jx, jy, zb, zb + 7.0 + rnd.random() * 6.0,
@@ -2456,6 +2656,7 @@ def build_city(d, P, c_city):
                      hdg)
                 nshed += 1
                 nbox += 1
+                occupied.add(mask.key(jx, jy))
                 continue
             if res and not hill and rnd.random() < 0.035:
                 # a mid-rise block - Guarulhos has scattered towers
@@ -2463,16 +2664,39 @@ def build_city(d, P, c_city):
                 obox(bm_mid, jx, jy, zb, zb + h, 14.0, 12.0, hdg)
                 nmid += 1
                 nbox += 1
+                occupied.add(mask.key(jx, jy))
                 continue
-            w = (6.0 if hill else 8.0) + rnd.random() * 5.0
-            dp = (7.0 if hill else 9.0) + rnd.random() * 6.0
-            h = (3.2 if hill else 3.6) + rnd.random() * (4.0 if hill else 4.5)
-            wall = bm_br if hill or rnd.random() < 0.25 else \
-                (bm_a if rnd.random() < 0.6 else bm_b)
-            obox(wall, jx, jy, zb, zb + h, dp, w, hdg)
-            roof = bm_rt if rnd.random() < (0.35 if hill else 0.55) else bm_rf
-            obox(roof, jx, jy, zb + h, zb + h + 0.7, dp + 0.8, w + 0.8, hdg)
+            house(jx, jy, zb, hdg, hill)
             nbox += 1
+            occupied.add(mask.key(jx, jy))
+
+    # -- C. fabric massing on the street mask, nearest-first -------------
+    ncfab = 0
+    fab = sorted((k for k in mask.cells
+                  if abs((k[0] + 0.5) * mask.STEP) < FABRIC_REACH
+                  and abs((k[1] + 0.5) * mask.STEP) < FABRIC_REACH),
+                 key=lambda k: math.hypot((k[0] + 0.5) * mask.STEP - 2000.0,
+                                          (k[1] + 0.5) * mask.STEP - 300.0))
+    for k in fab:
+        if nbox >= CITY_BOX_BUDGET:
+            break
+        if k in occupied:
+            continue
+        bx = (k[0] + 0.5) * mask.STEP
+        by = (k[1] + 0.5) * mask.STEP
+        if not outside_fence(bx, by, -35.0):
+            continue
+        hill = by > 1500.0 and G.dem(bx, by) > 25.0
+        for _ in range(3 if hill else 2):
+            if rnd.random() < 0.28:
+                continue
+            jx = bx + (rnd.random() - 0.5) * mask.STEP * 0.8
+            jy = by + (rnd.random() - 0.5) * mask.STEP * 0.8
+            house(jx, jy, G.dem(jx, jy) + 0.3, rnd.random() * 180.0, hill)
+            nbox += 1
+            ncfab += 1
+        occupied.add(k)
+
     bm_to_object(bm_a, "SBGR_City_HousesA", P["house_a"], c_city)
     bm_to_object(bm_b, "SBGR_City_HousesB", P["house_b"], c_city)
     bm_to_object(bm_br, "SBGR_City_HousesBrick", P["house_brick"], c_city)
@@ -2482,8 +2706,13 @@ def build_city(d, P, c_city):
                  roof_mat=P["roof_dark"])
     bm_to_object(bm_shed, "SBGR_City_Sheds", P["city_ind"], c_city,
                  roof_mat=P["roof_pale"])
-    print("city: %d tint cells, %d boxes (%d mid-rises, %d sheds)"
-          % (ncell, nbox, nmid, nshed))
+    bm_to_object(bm_ware, "SBGR_City_Warehouses", P["warehouse"], c_city,
+                 roof_mat=P["roof_pale"])
+    print("city: %d landuse + %d fabric tint cells (%d ceded to the serra), "
+          "%d structures (%d footprints, %d mid-rises, %d sheds, "
+          "%d warehouses, %d fabric houses)"
+          % (ncell, nfab, nskip_serra, nbox, nfoot, nmid, nshed, nware,
+             ncfab))
 
 
 def build_roads(d, P, c_road):
@@ -2516,7 +2745,26 @@ def build_roads(d, P, c_road):
     bm_to_object(bm_p, "SBGR_RoadsPaved", P["road_paved"], c_road, smooth=True)
     bm_to_object(bm_d, "SBGR_RoadsUnpaved", P["road_dirt"], c_road,
                  smooth=True)
-    print("roads: %d ways  %.1f km paved  %.1f km unpaved" % (n, km_p, km_d))
+    # the minor streets themselves (surround_osm.py re-query) - the grid the
+    # fabric houses stand between; same asphalt material, a centimetre under
+    # the mapped roads so junction overlaps resolve
+    bm_m = bmesh.new()
+    km_m = 0.0
+    for s in surround()["streets"]:
+        pts = s.get("pts") or []
+        if len(pts) < 2:
+            continue
+        if all(max(abs(p[0]), abs(p[1])) > 6800.0 for p in pts):
+            continue
+        w = 6.5 if s["cls"].startswith("tertiary") else 5.5
+        pts = resample(pts, 45.0)
+        drape(bm_m, pts, w, 0.06)
+        km_m += sum(math.dist(pts[i], pts[i + 1])
+                    for i in range(len(pts) - 1)) / 1000.0
+    bm_to_object(bm_m, "SBGR_StreetsMinor", P["road_paved"], c_road,
+                 smooth=True)
+    print("roads: %d ways  %.1f km paved  %.1f km unpaved  +%.0f km minor "
+          "streets" % (n, km_p, km_d, km_m))
 
 
 def build_rail(d, P, c_rail):
@@ -2599,11 +2847,14 @@ def build_water(d, P, c_water):
 
 
 def build_trees(d, P, c_veg):
-    """The Baquirivu green belt and the mapped forest patches - the ONE green
-    gap in the city ring (RECOGNITION.md 2.3), plus gallery rows on the
-    watercourses inside 4 km. Unlike SDSC the horizon does NOT depend on
-    these (the ring is real terrain); they are the middle-ground texture.
-    Species/spacing not surveyed."""
+    """The Baquirivu green belt, the mapped forest patches - the ONE green
+    gap in the city ring (RECOGNITION.md 2.3) - gallery rows on the
+    watercourses, and (since the surround round) verge rows along the mapped
+    major roads and scattered crowns on the green landuse. Unlike SDSC the
+    horizon does NOT depend on these (the ring is real terrain); they are
+    the middle-ground texture a subtropical metropolis edge actually
+    carries. Species/spacing not surveyed. The serra's closed canopy is
+    build_serra_forest, not this."""
     import random
     rnd = random.Random(CITY_SEED + 1)
     bm_f, bm_f2, bm_t = bmesh.new(), bmesh.new(), bmesh.new()
@@ -2639,14 +2890,14 @@ def build_trees(d, P, c_veg):
         for i in range(len(pts) - 1):
             ax, ay = pts[i][:2]
             bx, by = pts[i + 1][:2]
-            if max(abs(ax), abs(ay)) > 4500:
+            if max(abs(ax), abs(ay)) > 6500:
                 continue
             ux, uy, L = unit(ax, ay, bx, by)
             if L < 1.0:
                 continue
             t = rnd.random() * 40.0
             while t < L:
-                if rnd.random() < 0.40:
+                if rnd.random() < 0.30:
                     t += 30.0 + rnd.random() * 60.0
                     continue
                 off = (rnd.random() - 0.5) * 36.0
@@ -2661,8 +2912,8 @@ def build_trees(d, P, c_veg):
                 h = 9.0 + rnd.random() * 9.0
                 plant(px, py, h, h * (0.34 + rnd.random() * 0.20),
                       deep=rnd.random() < 0.4)
-                t += 22.0 + rnd.random() * 26.0
-        if n > 900:
+                t += 18.0 + rnd.random() * 22.0
+        if n > 2400:
             break
     # mapped forest patches: clustered crowns
     for l in d["landuse"]:
@@ -2671,16 +2922,148 @@ def build_trees(d, P, c_veg):
         ring = dedupe_ring(l.get("polygon_xy_m") or [])
         if len(ring) < 3:
             continue
-        for (x, y) in _cells(ring, 45.0, -15000.0, -15000.0):
-            if abs(x) > 5500 or abs(y) > 5500 or n > 1400:
+        for (x, y) in _cells(ring, 38.0, -15000.0, -15000.0):
+            if abs(x) > 6500 or abs(y) > 6500 or n > 3400:
                 continue
             h = 10.0 + rnd.random() * 8.0
             plant(x + (rnd.random() - 0.5) * 18, y + (rnd.random() - 0.5) * 18,
                   h, h * 0.45, deep=True)
+    # verge rows along the mapped major roads - the city's aerials show the
+    # Dutra and the avenidas lined green; irregular, one side at a time
+    n_verge0 = n
+    for r in d["roads"]:
+        if n - n_verge0 > 1800:
+            break
+        hw = r.get("highway")
+        if hw not in ("motorway", "trunk", "primary", "secondary",
+                      "tertiary"):
+            continue
+        pts = r.get("polygon_xy_m") or []
+        half = ROAD_WIDTH.get(hw, 8.0) * 0.5
+        # t accumulates ALONG THE WAY, not per segment - OSM nodes come
+        # every 10-100 m and a per-segment reset plants almost nothing
+        t = rnd.random() * 60.0
+        for i in range(len(pts) - 1):
+            ax, ay = pts[i][:2]
+            bx, by = pts[i + 1][:2]
+            ux, uy, L = unit(ax, ay, bx, by) if (ax, ay) != (bx, by) \
+                else (0.0, 0.0, 0.0)
+            if L < 0.1:
+                continue
+            if max(abs(ax), abs(ay)) > 5500:
+                t = max(0.0, t - L)
+                continue
+            while t < L:
+                if rnd.random() < 0.45:
+                    t += 45.0 + rnd.random() * 70.0
+                    continue
+                side = 1.0 if rnd.random() < 0.5 else -1.0
+                off = side * (half + 4.0 + rnd.random() * 6.0)
+                px = ax + ux * t - uy * off
+                py = ay + uy * t + ux * off
+                if ring_dist(px, py) > -12.0:
+                    t += 50.0
+                    continue
+                h = 7.0 + rnd.random() * 6.0
+                plant(px, py, h, h * (0.36 + rnd.random() * 0.18),
+                      deep=rnd.random() < 0.3)
+                t += 45.0 + rnd.random() * 55.0
+            t -= L
+    # scattered crowns on the mapped green landuse (parks, cemeteries,
+    # recreation grounds - the tint alone read as felt)
+    n_park0 = n
+    for l in d["landuse"]:
+        if n - n_park0 > 900:
+            break
+        if l.get("landuse") not in ("recreation_ground", "village_green",
+                                    "cemetery", "meadow", "farmland"):
+            continue
+        ring = dedupe_ring(l.get("polygon_xy_m") or [])
+        if len(ring) < 3:
+            continue
+        for (x, y) in _cells(ring, 70.0, -15000.0, -15000.0):
+            if abs(x) > 6000 or abs(y) > 6000 or n - n_park0 > 900:
+                continue
+            if rnd.random() < 0.45 or ring_dist(x, y) > -12.0:
+                continue
+            h = 8.0 + rnd.random() * 8.0
+            plant(x + (rnd.random() - 0.5) * 30, y + (rnd.random() - 0.5) * 30,
+                  h, h * 0.42, deep=rnd.random() < 0.4)
     bm_to_object(bm_f, "SBGR_Trees", P["foliage"], c_veg, smooth=True)
     bm_to_object(bm_f2, "SBGR_TreesDeep", P["foliage2"], c_veg, smooth=True)
     bm_to_object(bm_t, "SBGR_TreeTrunks", P["trunk"], c_veg)
     print("trees:", n)
+
+
+def build_serra_forest(P, c_veg, mask):
+    """The single highest-impact change of the surround round: the
+    Cantareira/Cabucu wall is CLOSED-CANOPY Atlantic forest, not bare hill.
+    Squat crown blobs (14 verts each, one material) on a jittered 55 m
+    lattice over every cell that is high (+32 m over the datum, easing to
+    full density by +54), UNBUILT (no minor street within ~100 m - the
+    street mask carves Bonsucesso and the hillside favelas out), and outside
+    the fence. The terrain shading underneath (terrain_material) goes the
+    same near-black green, so the crowns read as canopy texture on a canopy-
+    coloured ground - and the 30 m tint sawtooth phase 2 recorded stepping
+    down this flank is buried under them. The DSM already contains the real
+    canopy height; these crowns re-texture that surface, declared."""
+    import random
+    rnd = random.Random(CITY_SEED + 5)
+    bm = bmesh.new()
+    n = 0
+    px0, px1, py0, py1 = pad_box()
+    STEP = 55.0
+    NC = int(18600.0 / STEP)
+    NJ = int((9300.0 + 6500.0) / STEP)    # y -6500..+9300: south of that is
+    #                                       beyond the tint reach, haze +
+    #                                       terrain shading own it
+    for j in reversed(range(NJ)):         # NORTH FIRST - the Cantareira wall
+        #                                   is the backdrop of every clip and
+        #                                   must never lose out to the cap
+        cy = -6500.0 + (j + 0.5) * STEP
+        for i in range(NC):
+            cx = -9300.0 + (i + 0.5) * STEP
+            z = G.dem(cx, cy)
+            if z < 32.0:
+                continue
+            if mask.urban(cx, cy):
+                continue
+            if px0 < cx < px1 and py0 < cy < py1 \
+                    and ring_dist(cx, cy) > -60.0:
+                continue
+            if rnd.random() > 0.40 + 0.58 * _smoothstep((z - 32.0) / 22.0):
+                continue
+            if max(abs(cx - 2000.0), abs(cy)) > 7200.0 and (i + j) % 2:
+                continue                  # thin the far flank; haze owns it
+            if n >= 24000:
+                break
+            px = cx + (rnd.random() - 0.5) * 40.0
+            py = cy + (rnd.random() - 0.5) * 40.0
+            h = 10.0 + rnd.random() * 7.0
+            r = h * (0.62 + rnd.random() * 0.25)
+            zb = G.dem(px, py) - 1.0
+            a0 = rnd.random() * 60.0
+            ring1 = [bm.verts.new((px + r * math.cos(math.radians(a0 + k * 60)),
+                                   py + r * math.sin(math.radians(a0 + k * 60)),
+                                   zb + 0.30 * h)) for k in range(6)]
+            r2 = r * 0.72
+            ring2 = [bm.verts.new((px + r2 * math.cos(math.radians(a0 + 30 + k * 60)),
+                                   py + r2 * math.sin(math.radians(a0 + 30 + k * 60)),
+                                   zb + 0.78 * h)) for k in range(6)]
+            top = bm.verts.new((px, py, zb + h))
+            bot = bm.verts.new((px, py, zb))
+            for k in range(6):
+                kk = (k + 1) % 6
+                try:
+                    bm.faces.new((ring1[k], ring1[kk], ring2[k]))
+                    bm.faces.new((ring2[k], ring1[kk], ring2[kk]))
+                    bm.faces.new((ring2[k], ring2[kk], top))
+                    bm.faces.new((ring1[kk], ring1[k], bot))
+                except ValueError:
+                    pass
+            n += 1
+    bm_to_object(bm, "SBGR_SerraCanopy", P["serra"], c_veg, smooth=True)
+    print("serra canopy crowns:", n)
 
 
 # ---------------------------------------------------------------------------
@@ -2978,10 +3361,18 @@ def grade_aerodrome():
 
 
 def terrain_material():
-    """Metropolis-and-serra ground: city-grey fabric on the flats, deep green
-    on the ranges, by HEIGHT above the datum - the Cantareira and the Serra do
-    Mar are forest, the basin is city. A crude but honest split: the mapped
-    landuse tint covers the near ring; this shades everything beyond it."""
+    """Metropolis-and-serra ground: city-grey fabric on the flats, CLOSED-
+    CANOPY dark green on the ranges, by HEIGHT above the datum - the
+    Cantareira and the Serra do Mar are forest, the basin is city. A crude
+    but honest split: the mapped landuse tint covers the near ring; this
+    shades everything beyond it. The surround round re-cut the split: the
+    old 25->90 m band left the whole visible flank a half-mixed tan (the
+    owner's 'bare hills'; phase 2's first render already read as dunes), so
+    the band is now 18->52 m - forest from low on the flank, the way the
+    2023 photographs show a green WALL behind the field - the greens are
+    darker (matching SBGR_SerraCanopy, so the instanced crowns read as
+    texture on the same mass), and a 45 m canopy noise replaces the 420 m
+    city block hash on the forest side."""
     m, nt, out, bsdf = _blank("SBGR_TerrainGround", 0.94)
     geo = nt.nodes.new("ShaderNodeNewGeometry"); geo.location = (-1000, 0)
     sep = nt.nodes.new("ShaderNodeSeparateXYZ"); sep.location = (-820, -200)
@@ -3001,16 +3392,23 @@ def terrain_material():
     cr.elements[1].position = 1.0
     cr.elements[1].color = (0.158, 0.148, 0.136, 1.0)   # concrete-grey blocks
     nt.links.new(wn.outputs["Value"], city.inputs["Fac"])
+    # canopy mottle: ~45 m crowns-and-shadow features, not city blocks
+    cnoise = nt.nodes.new("ShaderNodeTexNoise"); cnoise.location = (-600, -320)
+    cnoise.noise_dimensions = "3D"
+    cnoise.inputs["Scale"].default_value = 0.022
+    cnoise.inputs["Detail"].default_value = 3.0
+    cnoise.inputs["Roughness"].default_value = 0.55
+    nt.links.new(geo.outputs["Position"], cnoise.inputs["Vector"])
     green = nt.nodes.new("ShaderNodeValToRGB"); green.location = (-380, -160)
     gr = green.color_ramp
-    gr.elements[0].position = 0.0
-    gr.elements[0].color = (0.030, 0.056, 0.018, 1.0)   # mata atlantica
-    gr.elements[1].position = 1.0
-    gr.elements[1].color = (0.052, 0.080, 0.028, 1.0)
-    nt.links.new(wn.outputs["Value"], green.inputs["Fac"])
-    hfac = _sm(nt, sep.outputs["Z"], 25.0, 90.0)        # basin -> serra: the
-    # Cabucu face is forest from low on its flank (the 2023 photographs show
-    # a green wall, not a tan one); the first render read as dunes
+    gr.elements[0].position = 0.30
+    gr.elements[0].color = (0.013, 0.028, 0.009, 1.0)   # canopy shadow
+    gr.elements[1].position = 0.85
+    gr.elements[1].color = (0.034, 0.062, 0.020, 1.0)   # lit crown
+    nt.links.new(cnoise.outputs["Fac"], green.inputs["Fac"])
+    hfac = _sm(nt, sep.outputs["Z"], 18.0, 52.0)        # basin -> serra: the
+    # Cabucu face is a green wall from low on its flank; the half-mixed tan
+    # of the old 25->90 band is what the owner called empty bare hills
     mix = nt.nodes.new("ShaderNodeMixRGB")
     nt.links.new(city.outputs["Color"], mix.inputs["Color1"])
     nt.links.new(green.outputs["Color"], mix.inputs["Color2"])
