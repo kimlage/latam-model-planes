@@ -8,11 +8,18 @@ eles tocam.
 ## Em andamento — programa de aprofundamento (ordem do dono, 2026-08-27:
 ## "continuar atacando os próximos aviões e detalhes, o mais realista possível")
 
-1. **Rodada da verdade geométrica (frota)** — os defeitos MEDIDOS de casco e
-   trem, empacotando os itens micro que a regra mandava anexar a uma rodada
-   maior: ângulo de tailstrike da família A320 (7,75° modelado vs ~11,7°
-   real — visível em toda rotação), polo de valência 32 no nariz, pinch do
-   cockpit do 767, UV da coroa dos 787, altura do 787-8. EM ANDAMENTO.
+1. ~~Rodada da verdade geométrica (frota)~~ — **fechada 2026-08-27**, cinco
+   defeitos medidos e quatro corrigidos na fonte: (a) tailstrike A320 — era
+   trem 0,28 curto + carenagem 0,20 funda + quilha traseira 0,29 baixa;
+   agora 12,6°/15,0°/10,3° (A320/A319/A321), cada um entre o comprimido e o
+   estendido publicados (`trem_familia.py` + tabelas ACAP nos specs); (b)
+   polo de valência 32 — tampa quad com ápice ogiva nos ONZE cascos
+   (`nariz_quad_cap.py`; a sobra em V sob o nariz é lei de seção medida, QA
+   novo); (c) 787: altura 17,02/16,92 — a deriva era inocente, as pernas
+   eram curtas, com motor 0,52 alto e carenagem 0,33 funda corrigidos juntos
+   (`trem_787.py`); (d) UV da coroa — só o -9 carregava, 152+152 loops
+   corrigidos; (e) pinch do 767 — planta EXONERADA contra o ACAP (±0,03 m),
+   lobo superior sem fonte que o meça: fica aberto com a medição registrada.
 2. **Rodada de apêndices e luzes (frota)** — antenas VHF, pitots, AoA,
    descarregadores estáticos, beacon/strobe/nav/landing lights emissivas;
    transforma clipes e gates de uma vez. PRÓXIMA.
@@ -122,7 +129,9 @@ As duas metades resolvidas com UMA aeronave repintada, não cinco:
 
 ## Micro (não fazer isoladamente)
 
-Detalhes em `QA-BACKLOG.md`: polo de valência 32 no nariz, pinch do cockpit do
-767, UV da coroa do 787, título do A319 enterrado pela cunha, ângulos de
-tailstrike, altura do 787-8, proporção do símbolo, portas de capô autorais no
-SDSC, stand MID fora do solver, docks dimensionados pelo proxy nominal.
+Detalhes em `QA-BACKLOG.md`: vinco de quilha das seções do nariz (lei do
+expoente, medido 2026-08-27), lobo superior do cockpit do 767 (sem fonte),
+polo de valência 32 da CAUDA (~3 cm, sub-visível), zona do cone da APU dos
+A320 (0,1-0,2 acima do desenho, cota AP ambígua), título do A319 enterrado
+pela cunha, proporção do símbolo, portas de capô autorais no SDSC, stand MID
+fora do solver, docks dimensionados pelo proxy nominal.

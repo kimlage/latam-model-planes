@@ -144,51 +144,71 @@ type-specific art `f162f73` established and were left alone.
 
 ---
 
-## Fleet-wide: the nose tip is a valence-32 pole
+## FIXED 2026-08-27: the valence-32 nose pole — and what the cap taught
 
-The other half of the head-on complaint from `aa2d27d` — "a vertical crease on
-the radome's plane of symmetry converging to a point low on the nose". The
-windshield fix left it alone, because it is not paint and not the mask.
+`nariz_quad_cap.py` replaced the 32-fan with an 8x8 Coons-grid quad cap on
+all ELEVEN hulls (corners at 45 deg off the symmetry plane — the first
+attempt put a valence-3 corner on the keel and the crease showed up exactly
+there). The Catmull-Clark shrink is solved by per-vertex fixed point, and
+the lesson that cost two render rounds: **the old limit surface near the
+apex IS the defect** — a near-cone — and fitting the new cap to it
+faithfully (<=2 mm, verified) reproduced the artifact pixel for pixel. The
+shipped cap fits an OGIVE to each hull's own trusted annulus (rho
+0.55-0.95) with a minimum apex radius of 0.05 m (declared estimate; 3 px at
+600 dpi resolves nothing). Profiles preserved <=2 mm beyond x=0.35
+everywhere; tip stations move <=2-3.5 cm (the rounding itself).
 
-The fuselage cage ends in **one** vertex at (-0.040, 0, -0.716) with **32 edges
-and 32 faces**: every station behind it carries 32 vertices and they all
-converge there. Catmull-Clark keeps an extraordinary vertex of that valence
-tangent-plane continuous but lets the curvature blow up, and the paint's clear
-coat (Coat 1.0, Coat Roughness 0.05) turns that into a dark radial wedge with a
-bright specular eye at the apex. It sits on the plane of symmetry because the
-pole does, and it reads *low* on the nose because CamHeadOn is at eye height,
-2.95 m below the nose tip — we are looking at the underside of the radome.
+What the complaint contained that the pole did NOT explain, measured and
+left open:
 
-Measured on the A320neo. All five Airbus share that cage (identical station
-list) and the Boeings are built by the same recipe, so expect it fleet-wide.
-
-Fixing it is a HULL change: the tip needs a quad cap instead of a 32-fan, which
-moves every vertex of the first stations and invalidates the nose gates. Left
-open for the same reason the 767's cockpit pinch was.
+- **The nose sections' keel line carries a real normal kink** — 8.3 / 6.0 /
+  2.2 deg across the symmetry plane at x 0.1 / 0.3 / 0.6, zero by x = 4
+  (A320neo, evaluated normals at |y| 0.02). It is the ovoid exponent law
+  (e(x) rising to ~1 gives the section a finite-angle corner at the keel),
+  it focuses the under-nose "V" the clear coat shows, and the windshield
+  fit constrains the exponents — re-deriving them is its own round.
+- **The tail tip has the same valence-32 pole**, spanning ~3 cm of cone;
+  it resolves in no current render and was left.
 
 ---
 
-## 767-300ER: the cockpit pinch is now unjustified
+## 767-300ER: cockpit pinch — plan taper EXONERATED 2026-08-27, upper lobe unmeasurable
 
-Left open by the windshield fix (`d401766`). The hull's cockpit pinch was
-calibrated visually against "glazing out to |y| ~ 1.71", which turned out to
-be the isotropic misreading of a front view that draws the section oversize —
-the corrected figure is 1.564. The pinch was not touched, because changing it
-changes the hull and invalidates other gates.
+The geometry-truth round measured what could be measured: the evaluated
+hull's **max half-width per station against the ACAP p2-9 top view** (600
+dpi, normalized by the drawn constant section) agrees to **±0.03 m (≤1.5%)
+over the whole nose** — x1 1.010/1.045, x4 2.130/2.110, x7 2.521/2.515.
+The nose in PLAN is right; "too blunt" cannot live there.
 
-Two independent signals say it is worth re-measuring: head-on, the glazing
-occupies a smaller fraction of the nose width than in the photographs while
-the glazing's **own** aspect matches to 2% — which points at the nose being
-too blunt at the cockpit rather than at the glass. The fuselage silhouette
-could not be measured in any of the nine reference frames (trees, heat
-shimmer, or white against a white sky), so this needs a better photograph or
-a different method.
+The upper lobe at the cockpit (what the pinch actually shapes) has **no
+measuring source in the repo**: the front view only draws the master
+section (local width is inside the silhouette), the top view shows the max
+per station, and the nine photos yield no silhouette. The pinch stays as
+built, its stale justification replaced by the recorded measurement. Also
+recorded: the "glazing fraction of nose width" render-vs-photo comparison
+is distance-sensitive (a close head-on fattens the near nose against the
+far master section), so part of the original signal may be perspective,
+not hull. Re-measuring needs a dimensioned cockpit cross-section (SRM/NC)
+or a calibrated close head-on.
 
 Also open on the same aircraft: the glazing's z position is 0.068 m
 unresolved — the front view puts its centre at z = 0.876 and the side view of
 the same sheet at 0.808, and no photograph resolves it head-on.
 
 ---
+
+## FIXED 2026-08-27 (crown/keel UV): only the -9 carried it — 152+152 loops snapped
+
+`uv_coroa_787.py`: the -9's hull loops at v 0.50712/0.99288 snapped to
+0.5/1.0; the plane of symmetry is back at v = 0.5. The **-8 measured
+clean already** (0.5/1.0 exact — "both 787s" below was stale; some later
+-8 rebuild had already regenerated its UV). Marks repainted per REBUILD;
+the -8's texture is byte-identical, the -9's 9.1k-texel diff is the
+documented refazer re-blend class (lockup, window mirror) with the crown
+band nearly untouched — the ink was always on the right texels, the
+MAPPING displaced it on render. The radome-oval-vs-glazing question at the
+end of the entry stays open (photo ambiguity unchanged). Original entry
+kept below for the record.
 
 ## 787 family: the hull's crown and keel carry the wrong UV
 
@@ -332,9 +352,19 @@ written after the practice, and nobody went back to reconcile the two.
 
 ## Fleet-wide, recorded but not scheduled
 
-- **Tailstrike angles** run short across the A320 family (7.75° modelled
-  against ~11.7° real) — a short gear leg or a low belly fitting, inherited by
-  every derivation. Documented in each spec.
+- ~~**Tailstrike angles** run short across the A320 family~~ — **FIXED
+  2026-08-27**: it was BOTH suspects at once, plus a third — gear 0.28 short
+  (keel clearance 1.605 vs 1.885 ACAP), belly fairing 0.20 too deep (-2.443
+  vs -2.24 = jacked BF1), and the aft keel up to 0.29 low with the upsweep
+  starting 2 m late. `trem_familia.py` + per-type ACAP keel tables in each
+  spec (`estancia_e_quilha_2026-08-27`). Fuselage tailstrike now A320 12.63
+  (published 11.7c/13.5e), A319 15.02 (13.9/15.5), A321 10.32 (9.7/11.2) —
+  each static angle between compressed and extended. Residuals recorded in
+  the specs: upsweep onset smoothed by the sparse cage (≤0.07 m over the
+  first metre), the APU-cone zone (model 0.1-0.2 above the drawing, AP cota
+  ambiguous) untouched, drain-mast protrusion 0.15 m is a declared estimate,
+  and the aft mast still touches ~1.3 deg before the hull — as on the real
+  aircraft, where the published number is fuselage contact.
 - **"The hulls render pure white" — CLOSED 2026-08-26 as a stale diagnosis.**
   The 76% of `LiveryTex` at exactly `1.0` is real and INVISIBLE: those texels
   sit under `LiveryFac = 0`, and the shader shows `mix(base, tex, fac)` — the
@@ -357,9 +387,15 @@ written after the practice, and nobody went back to reconcile the two.
   white mark. Documented in `latam_livery_kit.py`'s palette header; the one
   stale constant (`PALETA["LATAM_Branco"]`, still `#F7F9FA` while every blend
   already carried `#E6E7EA`) is fixed so a palette rebuild cannot regress it.
-- **787-8 height** 16.48 m vs 16.92 published, inherited from the -9 (identical
-  fin top and ground line in both blends). Fixing it invalidates the per-type
-  fin art measured in `f162f73` — a fleet decision, not a local one.
+- ~~**787-8 height** 16.48 m vs 16.92 published~~ — **FIXED 2026-08-27, and
+  the suspicion inverted**: the FIN was innocent (keel-to-fin-top 14.57 in
+  the model vs 14.47 ±0.05 on the -9 APR side view, self-calibrated by its
+  own height extent), so the f162f73 fin art was never at risk. The LEGS
+  were short (keel clearance 1.91 vs 2.55 drawn) — and coupled to them, the
+  engines hung 0.52 too high relative to the hull (F + keel chain) and the
+  belly fairing sat 0.33 too deep (cota D). `trem_787.py`: -9 now 17.020 m
+  with F 0.70 (0.69-0.76) and D 1.75 (1.75-1.85); -8 16.920 m with declared
+  level-attitude residuals (F 0.60 vs its 0.74 min; D 1.65 vs 1.68).
 
 ---
 
