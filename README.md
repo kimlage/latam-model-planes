@@ -137,7 +137,7 @@ frame the wingtips sit in the opening with 8.94 m to spare each side. It is
 400 frames because a 787 does not enter a hangar in ten seconds.
 ([`scenario_sdsc/hangar_tow.py`](scenario_sdsc/hangar_tow.py))*
 
-![Aerial tour of the São Carlos base: the Aeroclube, the runway, the mid-field cluster and the LATAM MRO with hangar 9](scenario_sdsc/sdsc_base_v3.gif)
+![Aerial tour of the São Carlos base: the Aeroclube, the runway, the mid-field cluster and the LATAM MRO with hangar 9](scenario_sdsc/sdsc_base_v4.gif)
 
 *The aerial tour — 240 frames, 9.6 s, one straight line at constant rate with a
 travelling aim, the São Carlos answer to the Santiago survey above. It opens over

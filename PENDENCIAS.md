@@ -7,9 +7,17 @@ eles tocam.
 
 ## Em andamento
 
-1. **Re-sync SCL + São Carlos pós-rodada-da-tinta** (item de maior impacto
-   restante): os clipes da capa dessas bases ainda mostram A319/777 com a
-   cunha antiga; uma re-renderização captura cauda + cunha de uma vez.
+(vazio — os itens restantes aguardam evidência externa; ver "Próximas")
+
+## Fechado em 2026-08-27 — re-sync das bases
+
+Os sobrevoos de Santiago (v8) e São Carlos (v4) re-renderizados sobre cenas
+reconstruídas com os masters atuais: nenhum render público do projeto exibe
+mais cunha ou sash defasado. O rebuild do SDSC caiu na mesma armadilha
+documentada no do SCL (rodar sem o arquivo-base constrói cena vazia
+silenciosamente) e foi pego pelo TAMANHO anômalo do GIF (4,7 MB) — regra
+que fica: todo rebuild de cena derivada prova UM frame antes de renderizar
+o lote, sem exceção, e um GIF fora da faixa histórica é sintoma, não sorte.
 
 ## Fechado em 2026-08-27 — GRU completa
 
