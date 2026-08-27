@@ -15,7 +15,10 @@ it. So the aeroplane is not a choice, it is the building's specification made
 visible. Measured on the model actually used here (`boeing 787-9/B789_LATAM.blend`):
 
     span      60.12 m   in a 78.0 m door   ->  8.94 m of tip clearance each side
-    fin top   16.48 m   in a 20.5 m door   ->  4.02 m under the lintel
+    fin top   17.02 m   in a 20.5 m door   ->  3.48 m under the lintel
+                        (the geometry-truth round of 2026-08-27 lengthened the
+                        legs: WHEEL_Z -4.88 -> -5.42, and the fin now rides at
+                        the published 17.02 m height)
     length    62.85 m   in a 95 m hangar
     wheelbase 25.83 m   nose gear 5.41 m aft of the nose
 
@@ -120,8 +123,8 @@ fifth; the tug into the dark at frame 85 (21%); the nose across the door plane
 at frame 115 (29%); and at frame 400 the wingtips sitting in the 78 m opening at
 x 719.9 and 780.1, 8.94 m of clearance on each side. What it does not buy is the
 fin passing under the lintel — the fin is 55 m behind the nose, which is 22 more
-seconds of tow, and no framing recovers it. Stated rather than shown: 16.48 m of
-fin in a 20.5 m door is 4.02 m.
+seconds of tow, and no framing recovers it. Stated rather than shown: 17.02 m of
+fin in a 20.5 m door is 3.48 m.
 
 THE CAMERA
 ----------
@@ -196,7 +199,7 @@ AC_NOSE_X = 0.0             # model local: nose at x=0, tail at x=+62.85
 AC_TAIL_X = 62.85
 NOSE_GEAR_X = 5.41
 MAIN_GEAR_X = 31.24
-WHEEL_Z = -4.88
+WHEEL_Z = -5.42        # re-measured 2026-08-27 after trem_787.py's leg fix
 FIN_TOP_Z = 11.60
 SPAN = 60.12
 WHEELBASE = MAIN_GEAR_X - NOSE_GEAR_X         # 25.83
