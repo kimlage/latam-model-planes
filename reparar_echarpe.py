@@ -77,11 +77,13 @@ texel adjacent to one.
 
 The rules below are each aircraft's OWN, copied from its builder with the
 source named. Nothing here re-measures a wedge; the fix is the rasterizer, not
-the geometry. Where the paint has drifted from the published rule the offset is
-stated and applied, so the repair removes the defect WITHOUT moving the wedge:
-that is the case on the 787-8, whose texture is a column resample of the -9's
-and sits 0.48 m aft of the -8 rule it was validated against. Moving it back is a
-measurement round, not this one.
+the geometry. Where the paint had drifted from the published rule the offset
+used to be stated and applied so the repair would not move the wedge — that was
+the two 787s, whose drift (+0.48 on the -8, +0.56/+0.65 on the -9) was the -9
+painter's error and its column-resampled echo. The measurement round happened
+on 2026-08-27: four photographs put the real boundary ON the rule (door-4 ring
+reads, both types, opposite flanks), the offsets came out, and both wedges were
+re-rasterized here. The story lives in `_r_788`/`_r_789` and QA-BACKLOG.
 """
 import math
 import os
