@@ -835,5 +835,27 @@
     "x": 47.0
    }
   ]
+ },
+ "impressao_2026-08-27": {
+  "lei": "Lei da sutileza MEDIDA: 3 faixas limpas da fuselagem em boeing 777-300ER/refs/20251011_LATAM_PT-MUC_EGLL.jpg dao juntas lendo a -0.8..-3.8% de luminancia (tipico -1..-2.5%). Alphas do pintor: junta 0.032 (787: 0.022), radome 0.055, costura/APU 0.045, leme multiplicativo 0.91. Pintor unico: refazer_marcas.py (IMPRESSAO/ASA/EMPENAGEM), tarefas impressao/asa/empenagem.",
+  "juntas_x": [
+   14.3,
+   19.3,
+   26.6,
+   38.1
+  ],
+  "radome_x": null,
+  "apu_anel_x": 60.5,
+  "costura_carenagem": "polilinha lida da PROPRIA malha BellyFairing (min|theta| por faixa de 0.5 m), alpha 0.045",
+  "asa": {
+   "linhas": "AsaLinhas embarcada mantida",
+   "matricula": "Matricula sob a asa DIREITA, ao longo da envergadura, leitura raiz->ponta, topo dos glifos para o BA, logo avante da linha do cove — lei fotografada em 4 quadros de 3 tipos: PT-MUG (ref_PT-MUG_2022_FRA.jpg), CC-BGG (ref_bgg_mad23.jpg), N536LA (ref_N536LA_ldg26.jpg), CC-CXE (ref_CC-CXE_appr4.jpg). CC-BGG (irma de frota, mesmo tipo/era) da a banda externa; caixa y 21.16..27.54; glifos = Reg787_E (CC-BGK, a arte do casco)"
+  },
+  "leme": {
+   "fracao_da_corda": 0.33,
+   "foto": "refs/ref_bgg_mad23.jpg",
+   "aplicacao": "FinSashE/D escurecidas x0.91 na charneira"
+  },
+  "juntas_fonte": "MEDIDAS na CC-BGG (MAD, 6000 px): 3 faixas de luminancia concordantes, fracoes 0.228/0.307/0.423/0.606 nariz->cauda; candidatos coincidentes com portas do spec descartados. Radome NAO repintado (nose_art e o dono)"
  }
 }
