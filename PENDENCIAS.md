@@ -9,6 +9,29 @@ eles tocam.
 
 (vazio — os itens restantes aguardam evidência externa; ver "Próximas")
 
+## Fechado em 2026-08-27 — a caça às fotos das cunhas
+
+O item 6 caiu com quatro fotografias: CC-BGF em PEK + CC-BGG em MAD (787-9,
+flancos opostos, uma delas domínio público) e os quadros CC-BBF/CC-BBB que a
+pasta do -8 já tinha. Lidas SEM homografia — reta da fronteira × anel pintado
+da porta 4, a altura do anel (2,06 m) como escala local — as quatro dizem a
+mesma coisa: **a regra escrita era a medida** (fronteira real = regra +0,10
+±0,12 nos dois tipos, e c(-9)−c(-8) = 6,09 m = exatamente o deslocamento da
+deriva — arte de frota rígida). A tinta é que estava 0,5 m atrás, deriva do
+pintor do -9 ecoada no -8 pelo resample de colunas. As duas cunhas repintadas
+na regra, gates re-renderizados, galeria e capa atualizadas. De quebra: o "OK"
+de 08-22 dos dois 787 era artefato de uma homografia que encaixou a silhueta
+inteira num quadro que corta o nariz — instrumento antes do modelo, sempre.
+
+O item 7 andou meio caminho: as fotos com a asa limpa da cunha EXISTEM agora
+(CC-CXE appr2 — que já estava na pasta —, N536LA em pouso, N540LA em
+aproximação; manifestos com a trilha de busca completa), e as primeiras
+leituras derrubaram uma suposição: a frota cargueira não veste um layout
+único — as matrículas medem ~1,7/2,2/2,6 m em CC-CXE/N540LA/N536LA contra os
+1,53 m da caixa herdada da N568LA, e a folga fronteira→matrícula vai de ~0 m
+(CC-CXE) a ~0,8 m (N540LA). O veredito da cunha cargueira agora é uma rodada
+de medição por aeronave-alvo, não uma caça a foto. Detalhe no QA-BACKLOG §5.
+
 ## Fechado em 2026-08-27 — re-sync das bases
 
 Os sobrevoos de Santiago (v8) e São Carlos (v4) re-renderizados sobre cenas
@@ -60,10 +83,13 @@ As duas metades resolvidas com UMA aeronave repintada, não cinco:
 5. **Consolidação da pintura**: fazer de `refazer_marcas.py` o único pintor de
    marcas. Hoje os 11 builders carregam rasterizadores próprios e re-rodar
    qualquer um re-insere o defeito que a rodada das cunhas tirou (QA-BACKLOG).
-6. **787-8/-9: assentamento da cunha** (+0,48/+0,56 m vs regra) — precisa de
-   uma foto de perfil retificável de CC-BBF ou CC-BGK. Não copiar um no outro.
-7. **Cargueiros: cunha sem veredito** (a asa cruza a cunha nas fotos
-   disponíveis) — precisa de foto de ângulo melhor.
+6. ~~787-8/-9: assentamento da cunha~~ — **fechado 2026-08-27**: quatro fotos,
+   veredito pela porta 4, cunhas repintadas NA REGRA (a tinta é que derivava).
+7. **Cargueiros: cunha sem veredito — mas as fotos existem agora.** A asa não
+   é mais a desculpa (CC-CXE appr2, N536LA em pouso, N540LA em aproximação).
+   O que falta é rodada de medição por aeronave-alvo com âncora na deriva e
+   estab mascarado, porque a frota cargueira não veste um layout único
+   (matrículas de 1,7 a 2,6 m; folgas de 0 a 0,8 m) — QA-BACKLOG §5.
 8. ~~Export GLB desatualizado~~ — **fechado 2026-08-26**: frota portátil
    re-exportada pós-QA e os DOIS cargueiros exportados pela primeira vez
    (a tabela ainda os tratava como "em construção"; export/ tinha 9 de 11).

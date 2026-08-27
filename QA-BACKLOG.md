@@ -9,40 +9,43 @@ survives, suspect the instrument before the model**.
 
 ---
 
-## The 787 wedges sit aft of the rules they were validated against
+## SETTLED 2026-08-27: the 787 wedges — the record was right, the painter drifted
 
-Found by the fleet-wide tail audit that fixed the wedge rasterizer. Both
-Dreamliners' painted wedge is a rigid translation of the rule in their own
-builders/specs, aft along x:
+The old entry asked whether the rule or the paint was the measurement, and
+said settling it needed one rectifiable profile photograph. The hunt found
+four (two per type, opposite flanks: CC-BGF landing at PEK + CC-BGG on
+approach at MAD for the -9; the folder's own CC-BBF and CC-BBB frames for the
+-8), and the verdict came from a method **stronger than the rectification**:
+the boundary line fitted on >110 scan rows per frame, intersected with the
+painted door-4 ring, using the ring's own 2.06 m height as the local scale —
+no homography, no flank parallax, no lens distortion in the loop.
 
-| aircraft | forward edge | aft edge | residual after the offset |
-|---|---|---|---|
-| 787-8 CC-BBF | **+0.48 m** | +0.15 m | 3.8% of the flat wedge |
-| 787-9 CC-BGK | **+0.56 m** | +0.65 m | 1.20% |
+    787-9   ring crossings 0.872 / 0.90  ->  c = 48.90 / 48.84
+            (paint wore 49.31; the kit rule says 48.77)
+    787-8   ring crossings 0.80 / 0.96   ->  c = 42.94 / 42.61
+            (paint wore 43.17; the rule says 42.68)
 
-Both offsets were fitted by minimising the disagreement between the rule and
-the flat paint over the tail zone (0.01 m steps). With them in place both
-wedges are otherwise clean — smooth boundary, no hole, no splinter — so this is
-a **siting** question, not a rasterization one, and `reparar_echarpe.py` carries
-the offsets explicitly so its repair removes defects without moving the wedge.
+**c(-9) − c(-8) = 6.09 m — exactly the fin shift between the types.** Real
+boundary = rule + 0.10 ± 0.12 on both; the paint sat 4 sigma aft. The offsets
+were the -9 painter's drift and its column-resampled echo. Both wedges were
+re-rasterized ON the rule (`reparar_echarpe.py`, 50768 + 37836 texels), gates
+re-rendered, texture medians verified at 48.777 / 42.687.
 
-Why it is probably the -9 that is wrong and the -8 that inherited it: the -8's
-texture is a piecewise COLUMN RESAMPLE of the -9's (`build_788_livery.py`,
-"two plug bands removed, 3-zone mapping"), so whatever the -9's wedge is, the
--8's is that shape pushed through a non-uniform map — which is exactly how two
-different offsets arise from one error. The -9's builder is **not in the
-repository**; only `extract_b789.py` and `nose_art.py` are. The rule quoted in
-`latam_livery_kit`'s own header (`x >= 48.77 + 0.992 z`, `theta <= 117.0 - 5.2
-(x - 48.70)`, `x <= 57.14 + 0.3858 z`) is therefore the only written record, and
-nothing says whether it or the paint is the measurement.
+Three method lessons, kept because they will bite again:
 
-Settling it needs one profile photograph of CC-BGK or CC-BBF with the fin
-trailing edge and the wedge boundary both visible, rectified the way
-`spec_763.livery_cc_cwy.fin_bandas_2026-08-20` describes. Until then **do not
-"correct" one Dreamliner against the other**. Their offsets are not the same
-(0.08 m apart forward, 0.50 m apart aft), and that difference is itself
-evidence: a rigid error would carry across unchanged, a resampled one would not.
-Copying the -9's numbers onto the -8 would erase the only clue there is.
+- **The 08-22 trial's "OK" rows for both 787s were artifacts.** The CC-BBB
+  frame CUTS THE NOSE at x = 0 and the old homography squeezed the whole
+  silhouette into the frame — 81.6 px/m against 97 real (the door ring is
+  196 px for 2.06 m). Before fitting a silhouette, check the frame holds the
+  whole aircraft.
+- **Hull-anchored homographies carry ~0.35 m of flank bias at frame edges**
+  (lens distortion; the door-ring prediction showed +23 px on the best-behaved
+  frame). Verdicts should come from LOCAL reads; H is for finding, not proving.
+- **The blend's fin ≠ the spec's fin ≠ the photograph's fin.** The built -9
+  fin runs BF x = 57.165+0.4356z (the OLD 66.8° line) where the CORRECAO says
+  0.3858, and the photo splits the difference, ~0.2-0.3 m wide of the built
+  chord. Recorded in spec_b789 `cunha_assentada_2026-08-27.avisos_de_metodo`;
+  a fin round, not this one.
 
 ---
 
@@ -487,5 +490,30 @@ no indigo.
    como tinta (a320ceo: -11.5 +-8.6 graus; a319: n=2 ao poente). A inferior do
    A319 foi TRANSPORTADA com a fronteira (+0.76), nao re-medida — confianca
    baixa declarada no spec. Precisa de um quadro com o ventre iluminado.
-5. **As duas fotos de carga (N568LA, CC-CXE) tem a ASA cruzando a cunha.** Os
-   numeros do -300F e do -300BCF valem pouco; falta foto util. (Inalterado.)
+   *2026-08-27: o 787-9 ganhou a sua primeira leitura de ventre — o quadro da
+   CC-BGG (barriga ao sol) da +5.0 +-3.3 graus da regra, n=18, dentro da
+   tolerancia; o da CC-BGF e ao anoitecer e nao responde (n=1).*
+5. **Cargueiros, 2026-08-27: as fotos uteis EXISTEM agora — e mudaram a
+   pergunta.** A caça achou quadros com a asa LIMPA da cunha: a
+   `ref_CC-CXE_appr2.jpg` (que ja estava na pasta do BCF sem ninguem notar),
+   a `ref_N536LA_ldg26.jpg` (nova, pouso, 5765px), a `ref_N540LA_stn21.jpg`
+   (ja estava na pasta do -300F) e a `ref_N566LA_gua25.jpg` (nova; camera
+   quase na vertical — serve de documento, nao de medida). Primeiras leituras
+   locais (fronteira x matricula, mesmo flanco = sem paralaxe):
+   - na CC-CXE a fronteira dianteira (reta limpa, inclinacao 0.99, n=49
+     linhas) TOCA a ponta dianteira da caixa da matricula — a regra
+     (`x = 42.65 + 1.00z`, medida na N568LA) poe 0.85 m de folga ali. Ou a
+     cunha da CC-CXE esta 0.85 atras da regra, ou a matricula dela esta 0.85
+     a vante da caixa herdada — o desempate exige ancora na deriva.
+   - **a frota cargueira NAO e uniforme**: contra a altura da fuselagem de
+     cada quadro, a matricula mede ~1.7 m na CC-CXE, ~2.2 na N540LA e ~2.6 na
+     N536LA — a caixa de spec (1.53 x 0.372, medida na N568LA e herdada por
+     todos) nao veste a frota. Matricula-a-matricula, nao ha um "layout de
+     frota" unico para validar com um unico quadro.
+   - a fronteira INFERIOR esta enfim visivel em dois quadros, mas o
+     estabilizador de perfil cruza as colunas de medida e o classificador
+     confunde a lamina com tinta — a leitura limpa precisa mascarar o estab.
+   O que falta: uma rodada propria, com ajuste ancorado na deriva POR
+   AERONAVE-ALVO (CC-CXE para o BCF, N536LA para o -300F), estab mascarado
+   para a inferior, e a questao do tamanho da matricula resolvida antes de
+   mover qualquer tinta.

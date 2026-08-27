@@ -713,6 +713,13 @@
    "branco_casco": "#E6E7EA",
    "cinza_voo": "#C8CACC",
    "nota_cargo": "amostrado na foto de N568LA ao sol: branco do casco ~#F1F2F1, indigo da cunha ~#090A27 (sombra), coral da deriva ~#E52536, banda clara da deriva ~#C1C0BB — claramente mais escura que o branco do casco, o que confirma o cinza-voo #C8CACC da textura."
+  },
+  "cunha_verificacao_2026-08-27": {
+   "fonte": "Quadros com a ASA LIMPA da cunha, achados na caca de 2026-08-27: ref_CC-CXE_appr2.jpg (bombordo, nivelado, 5043px), ref_N536LA_ldg26.jpg (bombordo, pouso, 5765px, NOVA), ref_N540LA_stn21.jpg (bombordo, aproximacao, 4354px), ref_N566LA_gua25.jpg (NOVA; camera quase na vertical — documento, nao medida).",
+   "leitura_local_cc_cxe": "Fronteira dianteira ajustada em 49 linhas limpas (y sem a porta desativada): reta de inclinacao 0.986 (a regra preve 1.00) que TOCA a ponta dianteira da caixa da matricula nas duas linhas de referencia — a regra x=42.65+1.00z (medida na N568LA) preve 0.85 m de folga. Degenerescencia declarada: ou a cunha da CC-CXE esta ~0.85 m atras da regra, ou a matricula dela esta ~0.85 m a vante da caixa herdada; desempate so com ancora na deriva.",
+   "descoberta_frota_nao_uniforme": "Contra a altura da propria fuselagem em cada quadro, a matricula mede ~1.7 m (CC-CXE), ~2.2 m (N540LA) e ~2.6 m (N536LA) — a caixa 1.53 x 0.372 medida na N568LA e herdada pela frota inteira NAO veste os outros airframes. A folga fronteira->matricula vai de ~0 (CC-CXE) a ~0.8 m (N540LA). Nenhuma validacao de 'layout de frota' com um unico quadro e possivel.",
+   "fronteira_inferior": "Enfim visivel (o que a asa sempre cobriu), mas o estabilizador de perfil cruza as colunas de medida e o classificador de cor confunde a lamina com tinta; a leitura limpa precisa mascarar o estab. Numeros brutos da primeira tentativa (CC-CXE, colunas 3800/3950): fracao da quilha 0.26/0.28 contra 0.41/0.50 da regra — SEM confianca ate mascarar.",
+   "estado": "ABERTO como rodada de medicao por aeronave-alvo (CC-CXE para o BCF, N536LA para o -300F), nao mais como caca a foto. Ver QA-BACKLOG."
   }
  },
  "livery_cc_cwy_SUBSTITUIDO": "os numeros de passageiros de CC-CWY sairam deste spec; o que sobreviveu sem mudanca esta em livery_n536la.fin_bandas_2026-08-20 (a arte da deriva e identica).",

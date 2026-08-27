@@ -1540,7 +1540,9 @@
    0.7669,
    0.6622,
    0.5233
-  ]
+  ],
+  "sem_veredito": true,
+  "nota": "SEM VEREDITO no quadro N568LA (a asa cruza a cunha). 2026-08-27: quadros com a asa LIMPA existem agora (ref_N536LA_ldg26 nova, ref_N540LA_stn21 ja na pasta) e as primeiras leituras locais mostraram que a frota cargueira nao veste um layout unico (matriculas de 1.7 a 2.6 m contra a caixa de 1.53 herdada da N568LA) — o veredito vira rodada de medicao por aeronave-alvo com ancora na deriva e estab mascarado; ver spec_763f.livery_n536la.cunha_verificacao_2026-08-27 e QA-BACKLOG (5)."
  },
  "b763bcf": {
   "foto": "boeing 767-300BCF/refs/ref_CC-CXE_fra03.jpg",
@@ -1716,7 +1718,9 @@
    0.7669,
    0.6622,
    0.5233
-  ]
+  ],
+  "sem_veredito": true,
+  "nota": "SEM VEREDITO no quadro CC-CXE fra03 (asa cruzando). 2026-08-27: a ref_CC-CXE_appr2 (ja na pasta!) tem a asa limpa e deu a primeira leitura local: fronteira reta (inclinacao 0.99, n=49) TOCANDO a ponta da caixa da matricula, onde a regra preve 0.85 m de folga — ou a cunha da CC-CXE esta atras da regra da N568LA, ou a matricula dela esta a vante da caixa herdada. Desempate exige ancora na deriva; ver spec_763bcf.cunha_verificacao_2026-08-27."
  },
  "b77w": {
   "foto": "boeing 777-300ER/ref_PT-MUG_2022_FRA.jpg",
