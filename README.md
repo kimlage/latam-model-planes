@@ -186,7 +186,7 @@ tint cells, 22 000 structures of which 7 743 are real OSM footprints, the
 Cumbica warehouse belt, 1 303 km of minor streets, and 23 222 canopy crowns
 on the serra ([`scenario_sbgr/README.md`](scenario_sbgr/README.md) §9.4).
 
-![Boeing 777-300ER departing RWY 10L at Guarulhos, chased from its starboard quarter as the nose lifts abeam the LATAM hangar with the forested Cantareira wall behind](scenario_sbgr/b77w_sbgr_v2.gif)
+![Boeing 777-300ER departing RWY 10L at Guarulhos, chased from its starboard quarter as the nose lifts abeam the LATAM hangar with the forested Cantareira wall behind](scenario_sbgr/b77w_sbgr_v3.gif)
 
 *The **777-300ER** off **RWY 10L** — 240 frames, 9.6 s, one orbit flown in
 the aircraft's own frame from the aft-starboard quarter, no dolly, no
@@ -198,7 +198,7 @@ fabric below, both grazing-lit by the 17:30 sun dead astern of a 073°
 departure.
 ([`scenario_sbgr/takeoff_camera.py`](scenario_sbgr/takeoff_camera.py))*
 
-![A LATAM 777-300ER backing out of its maintenance hangar tail-first, the fin crossing the door line into low sunlight with the tug holding its nose](scenario_sbgr/b77w_rollout_v1.gif)
+![A LATAM 777-300ER backing out of its maintenance hangar tail-first, the fin crossing the door line into low sunlight with the tug holding its nose](scenario_sbgr/b77w_rollout_v2.gif)
 
 *The roll-out — 400 frames, 16 s, and the inversion of São Carlos's hangar
 clip: there a 787 was towed **in** nose-first; here the 777 comes **out the
@@ -222,15 +222,15 @@ forested serra behind. **The ring is never empty**: every beat holds city
 fabric or forest past the fence, which is the point of the surround round
 below. ([`scenario_sbgr/base_tour.py`](scenario_sbgr/base_tour.py))*
 
-*The departure and tour are `_v2`, the roll-out `_v1`, and the difference
-between v1 and v2 is the **surround**: the first renders showed bare tan
-hills and an empty ring — the owner's verdict was "o entorno está todo muito
-vazio" — so the round brought back the ~8 550 minor streets and ~2 756
-footprints phase 1 had deliberately cut
-([`scenario_sbgr/surround_osm.py`](scenario_sbgr/surround_osm.py)), grew the
-city from 4 200 boxes to 22 000 structures, forested the serra, and
-re-rendered all three. The v1 GIFs stay in git history, per the per-round
-rule.*
+*The version trail here carries a confession. The tour is `_v2` (the
+surround round); the departure is `_v3` and the roll-out `_v2` because their
+predecessors shipped with the 777 sunk to its belly — the placement cited
+"wheels at z 0" from the exported GLB, whose exporter seats every aircraft
+on the floor by its own rule, and the owner caught in the published GIFs
+what the pipeline's numeric checks never looked at. The gear datum is now
+measured in the master itself (contact z −5.67), and the review rule that
+came out of it is in the scenery manual: three frames of every GIF, by eye,
+before it ships.
 
 ---
 
