@@ -978,13 +978,19 @@ non-zero on any frame whose delay is not 40 ms.
 
 | clip | file | frames | subject | GIF | v2 | v1 |
 |---|---|---|---|---|---|---|
-| 1. departure | `a320_sdsc_v3.gif` | 240 (9.6 s) | **A320neo**, RWY 02, ferry | 13.06 MB / 800 px / 128 | 12.96 / 800 / 128 | 14.09 / 800 / 128 |
+| 1. departure | `a320_sdsc_v4.gif` | 240 (9.6 s) | **A320neo**, RWY 02, ferry | 12.31 MB / 800 px / 128 (v3: 13.06) | 12.96 / 800 / 128 | 14.09 / 800 / 128 |
 | 2. the tow | `b789_hangar9_v3.gif` | 400 (16.0 s) | **787-9** into hangar 9 | 14.81 MB / **680 px** / 80 | 13.91 / 680 / 80 | 14.70 / 720 / 96 |
 | 3. aerial tour | `sdsc_base_v3.gif` | 240 (9.6 s) | the whole base | 13.08 MB / **680 px** / 80 | 13.18 / 680 / 80 | 14.10 / 720 / 88 |
 
 The v3 encodes use exactly the knobs v2 settled on; the busier ramp cost 0.1 MB
 on the departure, 0.9 on the tow and 0.1 MB *less* on the tour, and all three
-are inside the budget. The
+are inside the budget. The departure's **v4** (2026-08-27) re-renders the same
+shot after the geometry-truth round — ACAP gear lengths, the drawn aft keel,
+the capped nose — from a decolagem blend re-synced to the master (mesh
+datablocks + hinge-space wheel deltas; the rig's own report seats wheel_agl at
+0.000 through the roll and lifts off at frame 69). Same knobs, 12.31 MB; the
+rotation at ~f68 now shows the tail clearing with the measured 12.6-degree
+margin instead of the old 7.75. The
 ladders, measured on these frames:
 
 | clip | ladder |

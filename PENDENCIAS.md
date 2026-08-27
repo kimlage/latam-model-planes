@@ -13,9 +13,10 @@ eles tocam.
    trem 0,28 curto + carenagem 0,20 funda + quilha traseira 0,29 baixa;
    agora 12,6°/15,0°/10,3° (A320/A319/A321), cada um entre o comprimido e o
    estendido publicados (`trem_familia.py` + tabelas ACAP nos specs); (b)
-   polo de valência 32 — tampa quad com ápice ogiva nos ONZE cascos
-   (`nariz_quad_cap.py`; a sobra em V sob o nariz é lei de seção medida, QA
-   novo); (c) 787: altura 17,02/16,92 — a deriva era inocente, as pernas
+   polo de valência 32 — tampa quad com ápice ogiva em DEZ dos onze cascos
+   (`nariz_quad_cap.py`; o 777 FICA com o polo — radome rombudo vira botão
+   na emenda da tampa, 3 variantes medidas, QA; a sobra em V sob o nariz é
+   lei de seção medida, QA novo); (c) 787: altura 17,02/16,92 — a deriva era inocente, as pernas
    eram curtas, com motor 0,52 alto e carenagem 0,33 funda corrigidos juntos
    (`trem_787.py`); (d) UV da coroa — só o -9 carregava, 152+152 loops
    corrigidos; (e) pinch do 767 — planta EXONERADA contra o ACAP (±0,03 m),
