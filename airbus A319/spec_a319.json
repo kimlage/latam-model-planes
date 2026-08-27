@@ -67,7 +67,9 @@
   "bitola": 7.59,
   "roda_principal_diam": 1.17,
   "roda_nariz_diam": 0.76,
-  "fonte": "ACAP 2-2-0 (5.07 nariz->NLG, 11.04 entre-eixos, 7.59 bitola); pernas identicas ao A320"
+  "fonte": "ACAP 2-2-0 (5.07 nariz->NLG, 11.04 entre-eixos, 7.59 bitola); pernas identicas ao A320",
+  "solo_estatico_z": -3.955,
+  "fonte_estatica": "estancia_e_quilha_2026-08-27"
  },
  "motor_v2500": {
   "modelo": "IAE V2524-A5 (A319-132)",
@@ -241,5 +243,109 @@
   },
   "residuo_apagado": "Alem do anel que o builder atual pintou, a repintura varre a vizinhanca da porta atras de tinta de anel ACROMATICA com fac alto. Motivo: quando as portas foram erguidas, a limpeza da rodada de livery so apagava texels CLAROS (`is_ring = fac > 0.05 AND R > 0.55`), e a linha ESCURA do sulco do anel antigo (R = 0.098) sobreviveu — e ela, 0.42 m de arco abaixo da porta, o contorno fino que os renders mostravam como segunda porta.",
   "pendencia": "A folha guarda 2.02 m de ARCO de altura contra os 1.93 m que o spec declara para a folha modelada (0.89 x 1.93). O assentamento preserva o tamanho, nao o corrige; redimensionar a folha e uma rodada propria."
+ },
+ "estancia_e_quilha_2026-08-27": {
+  "data": "2026-08-27",
+  "fonte": "A319 ACAP FIGURE-2-3-0-991-002 (p49-50); side view FIGURE-2-2-0-991-002 sheet 1 p42 600dpi",
+  "solo_estatico_z": -3.955,
+  "folga_quilha_estatica_m": 1.885,
+  "folga_nota": "media F1/F2 (BOTTOM FWD/AFT) na coluna vazio-manutencao, atitude nivelada; MRW comprime ~0.10 m; a atitude real varia com o CG (ate ~0.6 graus nariz-abaixo em CG dianteiro) e o modelo fica nivelado",
+  "carenagem_fundo_z": -2.24,
+  "carenagem_nota": "coluna A/C JACKED (FDL 4.60): BF1 2.26 vs F 2.43 -> 0.17 abaixo da quilha; o modelo tinha -2.443",
+  "quilha_acap_por_x": [
+   [
+    21.5,
+    -2.025
+   ],
+   [
+    22.0,
+    -1.964
+   ],
+   [
+    22.5,
+    -1.889
+   ],
+   [
+    23.0,
+    -1.813
+   ],
+   [
+    23.5,
+    -1.753
+   ],
+   [
+    24.0,
+    -1.677
+   ],
+   [
+    24.5,
+    -1.602
+   ],
+   [
+    25.0,
+    -1.481
+   ],
+   [
+    25.5,
+    -1.345
+   ],
+   [
+    26.0,
+    -1.239
+   ],
+   [
+    26.5,
+    -1.103
+   ],
+   [
+    27.0,
+    -0.997
+   ],
+   [
+    27.5,
+    -0.861
+   ],
+   [
+    28.0,
+    -0.74
+   ],
+   [
+    28.5,
+    -0.619
+   ],
+   [
+    29.0,
+    -0.499
+   ],
+   [
+    29.5,
+    -0.378
+   ],
+   [
+    30.0,
+    -0.257
+   ],
+   [
+    30.5,
+    -0.136
+   ],
+   [
+    31.0,
+    -0.015
+   ],
+   [
+    31.5,
+    0.106
+   ]
+  ],
+  "quilha_nota": "side view 600dpi, mascara amarela, ancorada na crista/quilha da secao constante (vies de traco cancela); correcao afim por anel com crista fixa e ry escalado junto (lei w=0.954*r); SO ERGUE — alem do cruzamento o modelo fica 0.1-0.2 acima do desenho no cone da APU (silhueta fina, cota AP ambigua) e fica em aberto",
+  "tailstrike_fuselagem_deg": 15.02,
+  "tailstrike_nota": "rotacao no contato do trem principal, estancia estatica vazia; publicado (FCTM) 13.9 / 15.5 — o estatico deve cair entre os dois, e cai. Os mastros de dreno (protrusao 0.15 ESTIMADA, sem cota ACAP) tocam ~1 grau antes da fuselagem, como no aviao real (sao frangiveis; o numero publicado e da fuselagem)",
+  "residuos": [
+   "onset do upsweep suavizado pela gaiola esparsa (ate 0.05-0.07 alto no 1o metro da subida)",
+   "cone de cauda x>34 (A320)/x>40 (A321)/x>29.5 (A319) nao corrigido: modelo 0.1-0.2 acima do desenho, leitura ambigua (bocal APU na silhueta)",
+   "atitude estatica real nariz-abaixo com CG dianteiro nao modelada (modelo nivelado)"
+  ],
+  "ferramenta": "airbus A320neo/trem_familia.py"
  }
 }

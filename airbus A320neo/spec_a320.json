@@ -462,7 +462,9 @@
   "principal_x": 17.71,
   "bitola": 7.59,
   "roda_principal_diam": 1.17,
-  "roda_nariz_diam": 0.76
+  "roda_nariz_diam": 0.76,
+  "solo_estatico_z": -3.955,
+  "fonte_estatica": "estancia_e_quilha_2026-08-27"
  },
  "motor_pw1100g": {
   "inlet_x": 11.14,
@@ -478,9 +480,10 @@
    10.9,
    23.4
   ],
-  "fundo_z": -2.45,
+  "fundo_z": -2.24,
   "meia_largura_max": 1.95,
-  "superelipse_n": 2.6
+  "superelipse_n": 2.6,
+  "fonte_fundo": "ACAP jacked BF1 2.26 vs F 2.43 (2026-08-27); era -2.45"
  },
  "cauda_livery": {
   "fonte": "workflow fotogrametrico 2026-08-16 (JetPhotos PT-TMN 1920px, calibracao dupla porta2/nariz, ±0.15m) + foto de referencia do dono (arranjo atual)",
@@ -554,7 +557,8 @@
    "achado": "Rotating about the main-gear contact point (17.71, 0, -3.670), the model allows only 7.75 deg of pitch before something touches the runway. The real A320 tailstrike angle is about 11.7 deg with the gear compressed.",
    "limitante": "Belly_DrenoAft (aft drain mast) at x=27.83. The fuselage keel alone would allow 9.93 deg.",
    "acao": "Both numbers are below reality, so this is worth checking: the aft drain mast may sit too low or too far aft, AND the main gear leg may be modelled short. Measured while building the takeoff animation, not yet fixed.",
-   "metodo": "Evaluated mesh, rotating every vertex about the main-gear contact point and finding the first z<=runway. Cheap and worth running on every aircraft."
+   "metodo": "Evaluated mesh, rotating every vertex about the main-gear contact point and finding the first z<=runway. Cheap and worth running on every aircraft.",
+   "resolvido_2026-08-27": "trem +0.28 (roda -3.955), carenagem erguida a -2.24, quilha traseira posta na side view do ACAP, mastro de dreno aft a 0.15 da quilha: fuselagem agora toca a 12.63 graus (publicado 11.7 comprimido/13.5 estendido; estatico entre os dois como deve). Ver estancia_e_quilha_2026-08-27."
   },
   "sharklet_indigo_2026-08-20": "perfil re-renderizado antes/depois na mesma camera e comparado com o A321ceo aprovado e com a foto PS-LBO DSC00834 (Wikimedia): lamina indigo, transicao diagonal lisa, sem degrau; 6 angulos + verificacao_visual.png reconstruidos"
  },
@@ -651,5 +655,117 @@
   },
   "residuo_apagado": "Alem do anel que o builder atual pintou, a repintura varre a vizinhanca da porta atras de tinta de anel ACROMATICA com fac alto. Motivo: quando as portas foram erguidas, a limpeza da rodada de livery so apagava texels CLAROS (`is_ring = fac > 0.05 AND R > 0.55`), e a linha ESCURA do sulco do anel antigo (R = 0.098) sobreviveu — e ela, 0.42 m de arco abaixo da porta, o contorno fino que os renders mostravam como segunda porta.",
   "pendencia": "A folha guarda 2.02 m de ARCO de altura contra os 1.93 m que o spec declara para a folha modelada (0.89 x 1.93). O assentamento preserva o tamanho, nao o corrige; redimensionar a folha e uma rodada propria."
+ },
+ "estancia_e_quilha_2026-08-27": {
+  "data": "2026-08-27",
+  "fonte": "FIGURE-2-3-0-991-004 (ceo p47-48) / -032 (neo p51); side view FIGURE-2-2-0-991-004 sheet 1 p40 600dpi",
+  "solo_estatico_z": -3.955,
+  "folga_quilha_estatica_m": 1.885,
+  "folga_nota": "media F1/F2 (BOTTOM FWD/AFT) na coluna vazio-manutencao, atitude nivelada; MRW comprime ~0.10 m; a atitude real varia com o CG (ate ~0.6 graus nariz-abaixo em CG dianteiro) e o modelo fica nivelado",
+  "carenagem_fundo_z": -2.24,
+  "carenagem_nota": "coluna A/C JACKED (FDL 4.60): BF1 2.26 vs F 2.43 -> 0.17 abaixo da quilha; o modelo tinha -2.443",
+  "quilha_acap_por_x": [
+   [
+    24.0,
+    -2.06
+   ],
+   [
+    24.5,
+    -2.045
+   ],
+   [
+    25.0,
+    -2.014
+   ],
+   [
+    25.5,
+    -1.984
+   ],
+   [
+    26.0,
+    -1.938
+   ],
+   [
+    26.5,
+    -1.892
+   ],
+   [
+    27.0,
+    -1.816
+   ],
+   [
+    27.5,
+    -1.74
+   ],
+   [
+    28.0,
+    -1.649
+   ],
+   [
+    28.5,
+    -1.542
+   ],
+   [
+    29.0,
+    -1.435
+   ],
+   [
+    29.5,
+    -1.328
+   ],
+   [
+    30.0,
+    -1.207
+   ],
+   [
+    30.5,
+    -1.1
+   ],
+   [
+    31.0,
+    -0.978
+   ],
+   [
+    31.5,
+    -0.871
+   ],
+   [
+    32.0,
+    -0.765
+   ],
+   [
+    32.5,
+    -0.627
+   ],
+   [
+    33.0,
+    -0.49
+   ],
+   [
+    33.5,
+    -0.353
+   ],
+   [
+    34.0,
+    -0.201
+   ],
+   [
+    34.5,
+    -0.064
+   ],
+   [
+    35.0,
+    0.074
+   ]
+  ],
+  "quilha_nota": "side view 600dpi, mascara amarela, ancorada na crista/quilha da secao constante (vies de traco cancela); correcao afim por anel com crista fixa e ry escalado junto (lei w=0.954*r); SO ERGUE — alem do cruzamento o modelo fica 0.1-0.2 acima do desenho no cone da APU (silhueta fina, cota AP ambigua) e fica em aberto",
+  "tailstrike_fuselagem_deg": 12.63,
+  "tailstrike_nota": "rotacao no contato do trem principal, estancia estatica vazia; publicado (FCTM) 11.7 comprimido / 13.5 estendido — o estatico deve cair entre os dois, e cai. Os mastros de dreno (protrusao 0.15 ESTIMADA, sem cota ACAP) tocam ~1 grau antes da fuselagem, como no aviao real (sao frangiveis; o numero publicado e da fuselagem)",
+  "residuos": [
+   "onset do upsweep suavizado pela gaiola esparsa (ate 0.05-0.07 alto no 1o metro da subida)",
+   "cone de cauda x>34 (A320)/x>40 (A321)/x>29.5 (A319) nao corrigido: modelo 0.1-0.2 acima do desenho, leitura ambigua (bocal APU na silhueta)",
+   "atitude estatica real nariz-abaixo com CG dianteiro nao modelada (modelo nivelado)"
+  ],
+  "ferramenta": "airbus A320neo/trem_familia.py"
  }
 }

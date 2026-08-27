@@ -4,7 +4,7 @@
   "x_tip": -0.04,
   "d_fus": 4.0082,
   "z_c": 0.0039,
-  "z_solo": -3.675,
+  "z_solo": -3.955,
   "familia": "airbus",
   "D_longe": 113.22,
   "D_perto": 70.0
@@ -27,7 +27,7 @@
    ],
    "elev": -0.2024,
    "piso": false,
-   "h_pista": 3.075
+   "h_pista": 3.355
   },
   "CamNariz": {
    "d": 70.0,
@@ -46,7 +46,7 @@
    ],
    "elev": 1.5093,
    "piso": false,
-   "h_pista": 5.8188
+   "h_pista": 6.0988
   },
   "CamPerfil": {
    "d": 113.22,
@@ -65,7 +65,7 @@
    ],
    "elev": 0.0,
    "piso": false,
-   "h_pista": 3.975
+   "h_pista": 4.255
   },
   "CamHero": {
    "d": 113.22,
@@ -84,7 +84,7 @@
    ],
    "elev": 0.6579,
    "piso": false,
-   "h_pista": 4.175
+   "h_pista": 4.455
   },
   "CamCauda": {
    "d": 113.22,
@@ -103,7 +103,7 @@
    ],
    "elev": -0.5061,
    "piso": false,
-   "h_pista": 5.175
+   "h_pista": 5.455
   },
   "CamBarriga": {
    "d": 113.22,
@@ -113,16 +113,16 @@
    "loc": [
     -79.782,
     -66.287,
-    -2.375
+    -2.4
    ],
    "alvo": [
     12.0,
     0.0,
     -1.5
    ],
-   "elev": -0.4428,
-   "piso": true,
-   "h_pista": 1.3
+   "elev": -0.4555,
+   "piso": false,
+   "h_pista": 1.555
   },
   "CamHeadOn": {
    "d": 70.0,
@@ -130,16 +130,16 @@
    "W": 5.6115,
    "modo": "quadro",
    "loc": [
-    -66.753,
+    -66.742,
     0.0,
-    -2.075
+    -2.355
    ],
    "alvo": [
     3.2,
     0.0,
     0.485
    ],
-   "elev": -2.0958,
+   "elev": -2.3252,
    "piso": false,
    "h_pista": 1.6
   },
@@ -160,7 +160,7 @@
    ],
    "elev": 0.0,
    "piso": false,
-   "h_pista": 3.975
+   "h_pista": 4.255
   }
  }
 }
