@@ -701,7 +701,12 @@
   "baixa": "porta bulk (estacao aproximada), pinca do cockpit, marcas operacionais e desgaste"
  },
  "lobo_superior_pinca": {
-  "nota": "pinca do cockpit calibrada visualmente contra a vista frontal (parametros forca 0.30, sobe 1.2..1.2, desce 3.2..2.0, expoente 1.6). ATENCAO: a calibracao dizia 'vidros ate |y|~1.71 em z 0.62..1.23', numero que veio de ler a vista frontal ISOTROPICAMENTE. Medido de novo em 2026-08-21 contra a propria secao desenhada, o envidracado vai a |y| 1.564 em z 0.571..1.181 (ver parabrisa.anisotropia_do_desenho). A pinca NAO foi mexida na correcao do parabrisa — mexer nela muda o casco e invalida os outros portoes — mas a razao pela qual ela tem esses parametros caducou. Remedir."
+  "nota": "pinca do cockpit calibrada visualmente contra a vista frontal (parametros forca 0.30, sobe 1.2..1.2, desce 3.2..2.0, expoente 1.6). ATENCAO: a calibracao dizia 'vidros ate |y|~1.71 em z 0.62..1.23', numero que veio de ler a vista frontal ISOTROPICAMENTE. Medido de novo em 2026-08-21 contra a propria secao desenhada, o envidracado vai a |y| 1.564 em z 0.571..1.181 (ver parabrisa.anisotropia_do_desenho). A pinca NAO foi mexida na correcao do parabrisa — mexer nela muda o casco e invalida os outros portoes — mas a razao pela qual ela tem esses parametros caducou. Remedir.",
+  "remedicao_2026-08-27": {
+   "plan_taper": "EXONERADO: meia-largura MAXIMA por estacao medida na malha avaliada contra a VISTA SUPERIOR do ACAP p2-9 600dpi (normalizada pela secao constante 2.515; o desenho da 2.576 com o traco): x1 1.010/1.045, x2 1.471/1.481, x3 1.828/1.833, x4 2.130/2.110, x5 2.334/2.323, x6 2.466/2.451, x7 2.521/2.515 — modelo dentro de +-0.03 m (<=1.5%) em toda a extensao. O nariz em PLANTA esta certo.",
+   "lobo_superior": "SEM FONTE que o meça: a vista frontal so desenha o contorno da secao mestre (a largura LOCAL do cockpit fica dentro da silhueta), a superior mostra o maximo por estacao (nao o lobo de cima), e nos nove quadros de referencia a silhueta nao se mede (arvores, calor, ceu branco). A pinca fica como esta, com a justificativa velha CADUCA e nenhuma nova — remedir exige uma secao cotada do cockpit (SRM/NC) ou um head-on proximo com escala local.",
+   "aviso_perspectiva": "a comparacao 'fracao do envidracado na largura do nariz' entre render (70 m) e fotos de distancia desconhecida e sensivel a DISTANCIA (o head-on real engorda o nariz proximo em relacao a secao mestre distante); parte do sinal do QA pode ser esse artefato, nao casco."
+  }
  },
  "verificacao": {
   "gate_2026-08-20": "6 angulos canonicos + verificacao_visual.png; comparacao_perfil.png (foto reprojetada x render ortografico, 40 px/m) e comparacao_fin_sash.png (foto | render | foto) sao a evidencia.",
