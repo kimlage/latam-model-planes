@@ -381,5 +381,17 @@
    ]
   },
   "fotos": "refs/ws_headon_A7-BCC_qatar_osl.jpg (Bene Riobo, CC BY-SA 4.0) e refs/ws_headon_N805AN_aa_pae.jpg (Eric Salard, CC BY-SA 2.0) — as duas de 787-8, mesmo subtipo. Nao existe head-on de LATAM em licenca livre; o nariz e o para-brisa sao padrao de tipo, e o nariz da LATAM e branco, o que faz da N805AN (American, nariz branco) o analogo mais proximo."
- }
+ },
+ "estatica_2026-08-27": {
+  "data": "2026-08-27",
+  "fonte": "APR D6-58333 REV P: 2.2.1/2.2.2 (alturas 16.92/17.02), 2.3.1/2.3.2 (cotas F, D, N), side view p21 600dpi calibrada pela propria cota de altura (49.35 px/m)",
+  "achado": "altura do modelo 16.48; a DERIVA esta certa (quilha->topo 14.57 no modelo, 14.47 +-0.05 no desenho) — o deficit era das PERNAS (folga da quilha 1.91 contra 2.55 desenhada); junto: motor pendurado 0.52 alto (fundo da nacele 1.23 abaixo da quilha contra 1.70-1.86 = F publicado + folga) e carenagem ventral 0.33 funda (1.02 abaixo da quilha contra 0.65-0.75 = cota D + folga)",
+  "solo_estatico_z": -5.32,
+  "altura_resultante_m": 16.92,
+  "fundo_nacele_z": -4.72,
+  "fundo_carenagem_z": -3.67,
+  "nota": "residuo declarado: F resultante 0.60 fica 0.14 abaixo do minimo publicado do -8 (0.74-1.07; envelope de atitude maior que o do -9); carenagem 1.65 contra D 1.68-2.08",
+  "ferramenta": "boeing 787-9/trem_787.py"
+ },
+ "uv_coroa_2026-08-27": "medido: o casco do -8 ja carrega v=0.5/1.0 exatos na coroa/quilha (a entrada do QA dizia 'both 787s'; algum rebuild posterior do -8 ja tinha limpado). Nada mudou."
 }
