@@ -393,5 +393,100 @@
   "nota": "residuo declarado: F resultante 0.60 fica 0.14 abaixo do minimo publicado do -8 (0.74-1.07; envelope de atitude maior que o do -9); carenagem 1.65 contra D 1.68-2.08",
   "ferramenta": "boeing 787-9/trem_787.py"
  },
- "uv_coroa_2026-08-27": "medido: o casco do -8 ja carrega v=0.5/1.0 exatos na coroa/quilha (a entrada do QA dizia 'both 787s'; algum rebuild posterior do -8 ja tinha limpado). Nada mudou."
+ "uv_coroa_2026-08-27": "medido: o casco do -8 ja carrega v=0.5/1.0 exatos na coroa/quilha (a entrada do QA dizia 'both 787s'; algum rebuild posterior do -8 ja tinha limpado). Nada mudou.",
+ "apendices_2026-08-27": {
+  "fonte": "Wipers (parque diagonal) e farol de taxi lidos em boeing 787-9/refs/ws_headon_A7-BCC_qatar_osl.jpg; sondas contra o parabrisa nas mesmas + insp_nose.png (787-8), +-0.3 m. Beacon VENTRAL sob a caixa da asa (o dorsal ja existia). GPS/TCAS/VHF ventral: fit tipico declarado. Farois de raiz de asa no BA (fit Boeing). Wicks 9/5/5 tipico declarado. Drenos: estimativa 0.15 m (trem_familia). Tabela vale para -8 e -9 (nariz identico); so o x do beacon ventral segue a caixa da asa de cada um.",
+  "nota_materiais": "Materiais: NENHUM novo — StrutMetal/LuzBranca/LuzVermelha/LuzVerde/CinzaEscuro/LATAM_Branco ja existentes em toda a frota. Emissao constante (strength 6.0): strobe piscando e decisao de clipe a 25 fps, fora desta rodada (PENDENCIAS item 2).",
+  "pitot": [
+   {
+    "id": "1",
+    "x": 3.6,
+    "z": 0.3
+   },
+   {
+    "id": "2",
+    "x": 4.15,
+    "z": 0.12
+   }
+  ],
+  "aoa": [
+   {
+    "x": 5.4,
+    "z": -0.25
+   }
+  ],
+  "tat": {
+   "x": 4.6,
+   "z": -0.95,
+   "lado": "D"
+  },
+  "vhf_ventre": {
+   "x": 20.0
+  },
+  "gps": [
+   {
+    "id": "1",
+    "x": 15.5
+   },
+   {
+    "id": "2",
+    "x": 16.5
+   }
+  ],
+  "tcas": {
+   "x": 10.5
+  },
+  "beacon_ventre": {
+   "x": 27.5
+  },
+  "estrobo_cauda": true,
+  "farol_asa_raiz": {
+   "y0": 3.8,
+   "y1": 4.9
+  },
+  "farol_taxi": {
+   "objeto": "TremNariz_Cilindro",
+   "z": -2.8
+  },
+  "luz_logo": {
+   "y0": 7.9,
+   "y1": 9.4
+  },
+  "wicks": {
+   "asa": [
+    4.5,
+    29.8,
+    9
+   ],
+   "estab": [
+    1.8,
+    9.5,
+    5
+   ],
+   "deriva": [
+    2.8,
+    11.3,
+    5
+   ]
+  },
+  "wipers": {
+   "pivo_yz": [
+    0.78,
+    0.28
+   ],
+   "ang": 28,
+   "comp_braco": 0.5,
+   "comp_lamina": 0.55
+  },
+  "drenos": [
+   {
+    "id": "Fwd",
+    "x": 14.5
+   },
+   {
+    "id": "Aft",
+    "x": 47.0
+   }
+  ]
+ }
 }

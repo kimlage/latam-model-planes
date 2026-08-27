@@ -743,5 +743,100 @@
   "4. b9f_winglets.py — pintura dos winglets por atribuicao de material. RODE DEPOIS do b2, que reescreve a malha das asas com um material so.",
   "5. gate: /Applications/Blender.app/Contents/MacOS/Blender -b <blend> --python render_gate.py -- 1600 96 ; depois python3 verificacao_visual.py 'boeing 767-300F'.",
   "6. comparacao com a foto: b7f_orto.py (render ortografico a 40 px/m) e b8f_comparacao.py (reprojeta a foto de N568LA no mesmo enquadramento e empilha). A folha fica fora do git pela politica do NOTICE.md."
- ]
+ ],
+ "apendices_2026-08-27": {
+  "fonte": "Sondas lidas em refs/crop_nariz.png e ref_CC-CXJ_nariz_lan.jpg (CC-CWY/CXJ) contra parabrisa e porta 1; par de pitots escalonado visivel sob as janelas. GPS/TCAS dorsais e VHF ventral: fit tipico do 767 declarado (fotos de perfil do acervo nao resolvem o ventre; estacoes +-1 m). Beacon ventral sob a caixa da asa (o dorsal ja existia). Farois de raiz de asa no BA junto a fuselagem (fit Boeing; aceso nas fotos noturnas do tipo). Wipers: parque quase horizontal na base dos paineis (fotos do tipo). Wicks 9/5/5 por lado, contagem tipica declarada. Drenos fwd/aft: protrusao 0.15 m, a MESMA estimativa declarada de trem_familia.py.",
+  "nota_materiais": "Materiais: NENHUM novo — StrutMetal/LuzBranca/LuzVermelha/LuzVerde/CinzaEscuro/LATAM_Branco ja existentes em toda a frota. Emissao constante (strength 6.0): strobe piscando e decisao de clipe a 25 fps, fora desta rodada (PENDENCIAS item 2).",
+  "pitot": [
+   {
+    "id": "1",
+    "x": 2.95,
+    "z": 0.35
+   },
+   {
+    "id": "2",
+    "x": 3.5,
+    "z": 0.18
+   }
+  ],
+  "aoa": [
+   {
+    "x": 4.6,
+    "z": -0.2
+   }
+  ],
+  "tat": {
+   "x": 3.9,
+   "z": -0.85,
+   "lado": "D"
+  },
+  "vhf_ventre": {
+   "x": 21.5
+  },
+  "gps": [
+   {
+    "id": "1",
+    "x": 14.0
+   },
+   {
+    "id": "2",
+    "x": 15.0
+   }
+  ],
+  "tcas": {
+   "x": 9.5
+  },
+  "beacon_ventre": {
+   "x": 26.0
+  },
+  "estrobo_cauda": true,
+  "farol_asa_raiz": {
+   "y0": 3.6,
+   "y1": 4.6
+  },
+  "farol_taxi": {
+   "objeto": "TremNariz_Cilindro",
+   "z": -2.55
+  },
+  "luz_logo": {
+   "y0": 7.4,
+   "y1": 8.8
+  },
+  "wicks": {
+   "asa": [
+    4.0,
+    25.2,
+    9
+   ],
+   "estab": [
+    1.8,
+    8.9,
+    5
+   ],
+   "deriva": [
+    2.8,
+    10.9,
+    5
+   ]
+  },
+  "wipers": {
+   "pivo_yz": [
+    0.8,
+    0.55
+   ],
+   "ang": 22,
+   "comp_braco": 0.45,
+   "comp_lamina": 0.5
+  },
+  "drenos": [
+   {
+    "id": "Fwd",
+    "x": 13.5
+   },
+   {
+    "id": "Aft",
+    "x": 43.0
+   }
+  ]
+ }
 }

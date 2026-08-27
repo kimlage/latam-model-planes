@@ -724,5 +724,100 @@
    "parabrisa refeito em 2026-08-21 (ver parabrisa.duvidas_para_revisao_humana): posicao em z com 0.068 m de desacordo entre as vistas frontal e lateral, e a pinca do cockpit calibrada contra uma medida hoje superada"
   ],
   "gate_2026-08-21_parabrisa": "7 angulos canonicos re-renderizados com render_gate.py (padrao de frota cameras_canonicas.py) + verificacao_visual.png; comparacao_parabrisa.png traz head-on e nose close-up ANTES (aa2d27d) x DEPOIS na MESMA camera e na mesma luz. Numeros em parabrisa.conferencia_render_2026-08-21."
+ },
+ "apendices_2026-08-27": {
+  "fonte": "Sondas lidas em refs/crop_nariz.png e ref_CC-CXJ_nariz_lan.jpg (CC-CWY/CXJ) contra parabrisa e porta 1; par de pitots escalonado visivel sob as janelas. GPS/TCAS dorsais e VHF ventral: fit tipico do 767 declarado (fotos de perfil do acervo nao resolvem o ventre; estacoes +-1 m). Beacon ventral sob a caixa da asa (o dorsal ja existia). Farois de raiz de asa no BA junto a fuselagem (fit Boeing; aceso nas fotos noturnas do tipo). Wipers: parque quase horizontal na base dos paineis (fotos do tipo). Wicks 9/5/5 por lado, contagem tipica declarada. Drenos fwd/aft: protrusao 0.15 m, a MESMA estimativa declarada de trem_familia.py.",
+  "nota_materiais": "Materiais: NENHUM novo — StrutMetal/LuzBranca/LuzVermelha/LuzVerde/CinzaEscuro/LATAM_Branco ja existentes em toda a frota. Emissao constante (strength 6.0): strobe piscando e decisao de clipe a 25 fps, fora desta rodada (PENDENCIAS item 2).",
+  "pitot": [
+   {
+    "id": "1",
+    "x": 2.95,
+    "z": 0.35
+   },
+   {
+    "id": "2",
+    "x": 3.5,
+    "z": 0.18
+   }
+  ],
+  "aoa": [
+   {
+    "x": 4.6,
+    "z": -0.2
+   }
+  ],
+  "tat": {
+   "x": 3.9,
+   "z": -0.85,
+   "lado": "D"
+  },
+  "vhf_ventre": {
+   "x": 21.5
+  },
+  "gps": [
+   {
+    "id": "1",
+    "x": 14.0
+   },
+   {
+    "id": "2",
+    "x": 15.0
+   }
+  ],
+  "tcas": {
+   "x": 9.5
+  },
+  "beacon_ventre": {
+   "x": 26.0
+  },
+  "estrobo_cauda": true,
+  "farol_asa_raiz": {
+   "y0": 3.6,
+   "y1": 4.6
+  },
+  "farol_taxi": {
+   "objeto": "TremNariz_Cilindro",
+   "z": -2.55
+  },
+  "luz_logo": {
+   "y0": 7.4,
+   "y1": 8.8
+  },
+  "wicks": {
+   "asa": [
+    4.0,
+    25.2,
+    9
+   ],
+   "estab": [
+    1.8,
+    8.9,
+    5
+   ],
+   "deriva": [
+    2.8,
+    10.9,
+    5
+   ]
+  },
+  "wipers": {
+   "pivo_yz": [
+    0.8,
+    0.55
+   ],
+   "ang": 22,
+   "comp_braco": 0.45,
+   "comp_lamina": 0.5
+  },
+  "drenos": [
+   {
+    "id": "Fwd",
+    "x": 13.5
+   },
+   {
+    "id": "Aft",
+    "x": 43.0
+   }
+  ]
  }
 }

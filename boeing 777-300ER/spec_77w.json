@@ -682,5 +682,114 @@
   "solo": "a Pista herdada do 787 estava em z=-4.89 e o trem em z=-5.67: o aviao rendia com as rodas ENTERRADAS. Pista movida para -5.67; menor z do modelo = -5.670 (roda do trem de nariz).",
   "tailstrike": "7.73 graus, limitado pela quilha em x=56.74 (inicio da conicidade). O -300ER real tem angulo baixo mesmo (por isso leva tail skid, que este modelo ainda nao tem).",
   "parabrisa": "NoseMask passou a ter resolucao propria (8192x2048) e cobertura por supersample 4x4 — com mascara binaria a 4096 o close-up do nariz mostrava serrilha grossa nas molduras. GEOMETRIA REFEITA EM 2026-08-21, ver parabrisa_6_vidros.antes_e_depois e conferencia_render_2026-08-21; camera CamHeadOn acrescentada ao render_canonicos.py porque nenhum dos seis angulos canonicos mostrava o defeito."
+ },
+ "apendices_2026-08-27": {
+  "fonte": "Wipers VERTICAIS no parque e farois de raiz de asa ACESOS lidos em refs/ws_frontal_A6-ECB_Dhaka.jpg; farol duplo de taxi na perna idem. Sondas: estacoes contra o parabrisa nas At_Sao_Paulo_2023 e ref_PT-MUG_2025_EGLL.jpg, +-0.3 m. Beacon DORSAL em x 34.5, atras da carenagem SATCOM (AntenaSAT x 29.1-32.9) — o master so tinha o ventral. Strobes de ponta na fuga (o 777 nao tinha nenhum). GPS/TCAS/VHF ventral: fit tipico declarado. Wicks 9/5/5, tipico declarado. Drenos: estimativa 0.15 m (trem_familia).",
+  "nota_materiais": "Materiais: NENHUM novo — StrutMetal/LuzBranca/LuzVermelha/LuzVerde/CinzaEscuro/LATAM_Branco ja existentes em toda a frota. Emissao constante (strength 6.0): strobe piscando e decisao de clipe a 25 fps, fora desta rodada (PENDENCIAS item 2).",
+  "objetos": {
+   "asa": [
+    "AsaE",
+    "AsaD"
+   ],
+   "estab": [
+    "EstabE",
+    "EstabD"
+   ]
+  },
+  "pitot": [
+   {
+    "id": "1",
+    "x": 4.3,
+    "z": 0.55
+   },
+   {
+    "id": "2",
+    "x": 4.95,
+    "z": 0.35
+   }
+  ],
+  "aoa": [
+   {
+    "x": 6.1,
+    "z": 0.0
+   }
+  ],
+  "tat": {
+   "x": 5.2,
+   "z": -1.0,
+   "lado": "D"
+  },
+  "vhf_ventre": {
+   "x": 22.0
+  },
+  "gps": [
+   {
+    "id": "1",
+    "x": 24.0
+   },
+   {
+    "id": "2",
+    "x": 25.2
+   }
+  ],
+  "tcas": {
+   "x": 11.0
+  },
+  "beacon_dorso": {
+   "x": 34.5
+  },
+  "estrobo_asa": {
+   "y0": 31.6,
+   "y1": 32.35
+  },
+  "estrobo_cauda": true,
+  "farol_asa_raiz": {
+   "y0": 4.0,
+   "y1": 5.2
+  },
+  "farol_taxi": {
+   "objeto": "TremNariz_Perna",
+   "z": -3.45
+  },
+  "luz_logo": {
+   "y0": 8.6,
+   "y1": 10.2
+  },
+  "wicks": {
+   "asa": [
+    5.0,
+    32.0,
+    9
+   ],
+   "estab": [
+    1.6,
+    10.3,
+    5
+   ],
+   "deriva": [
+    3.2,
+    12.6,
+    5
+   ]
+  },
+  "wipers": {
+   "pivo_yz": [
+    0.45,
+    0.25
+   ],
+   "ang": -84,
+   "comp_braco": 0.45,
+   "comp_lamina": 0.5
+  },
+  "drenos": [
+   {
+    "id": "Fwd",
+    "x": 17.0
+   },
+   {
+    "id": "Aft",
+    "x": 56.0
+   }
+  ]
  }
 }
