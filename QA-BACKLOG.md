@@ -123,6 +123,14 @@ a reasonable thing to see.
   oblique angle it occludes the first glyph — exactly as the door frame clips
   the "P" of PT-TMN in the reference photograph. The six Boeings cannot show
   this at all: their doors are paint, not geometry.
+- **Head-on gates: a dark serrated wedge floats beside the nose** (both
+  flanks, every type with geometric pax windows). Not a defect and NOT from
+  the appendages round — it is the cabin-window row stacked by the 449 mm
+  telephoto: at 70-92 m the whole forward window strip projects beside the
+  nose silhouette, and the dark panes read as one serrated mass. Verified
+  2026-08-27 on the 767: present pixel-for-pixel in the PRE-round committed
+  render, and it survives hiding every `Apx_*` object. Real head-on photos
+  show the same stacking, softer only because real panes reflect sky.
 - **A319: the wedge runs forward over the type title.** Real, and already its
   own entry below — but the wedge's SHAPE is not the fault. The A319's forward
   boundary is a quadratic swoosh leaning the opposite way from the A320's
@@ -359,6 +367,17 @@ written after the practice, and nobody went back to reconcile the two.
 
 ## Fleet-wide, recorded but not scheduled
 
+- **Appendages round 2026-08-27, declared simplifications** (all cited in
+  each spec's `apendices_2026-08-27.fonte`): wick SPACING is uniform while
+  the N536LA photo concentrates them on the outer wing panel (count is
+  consistent; redistribute only if a gate ever reads it); the A320 family's
+  retractable landing lights are deliberately NOT modelled (flush when
+  retracted — the nose-gear taxi/TO lamp is what the photos show lit); the
+  A320 pitot standby (3rd probe) is not modelled (sub-resolution at every
+  gate); all light emission is CONSTANT — a strobe/beacon flash cycle is a
+  clip-level decision at 25 fps, noted in PENDENCIAS item 2. The
+  `export/` GLB fleet is now one round behind the masters (appendages not
+  re-exported).
 - ~~**Tailstrike angles** run short across the A320 family~~ — **FIXED
   2026-08-27**: it was BOTH suspects at once, plus a third — gear 0.28 short
   (keel clearance 1.605 vs 1.885 ACAP), belly fairing 0.20 too deep (-2.443

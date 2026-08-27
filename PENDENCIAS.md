@@ -21,12 +21,34 @@ eles tocam.
    (`trem_787.py`); (d) UV da coroa — só o -9 carregava, 152+152 loops
    corrigidos; (e) pinch do 767 — planta EXONERADA contra o ACAP (±0,03 m),
    lobo superior sem fonte que o meça: fica aberto com a medição registrada.
-2. **Rodada de apêndices e luzes (frota)** — antenas VHF, pitots, AoA,
-   descarregadores estáticos, beacon/strobe/nav/landing lights emissivas;
-   transforma clipes e gates de uma vez. PRÓXIMA.
+2. ~~Rodada de apêndices e luzes (frota)~~ — **fechada 2026-08-27**: um
+   módulo de família (`apendices_familia.py`) + tabela `apendices_2026-08-27`
+   em cada spec. Sondas (pitot/AoA/TAT) nas estações lidas das fotos de
+   nariz de cada pasta; o fit de antenas dos Boeing completado (VHF ventral,
+   GPS, TCAS — a família A320 já vinha completa de fábrica); beacons
+   completados (dorsal no 777, ventral nos 767/787); strobes de ponta
+   (família A320 e 777) e de cauda (frota); faróis de raiz de asa nos
+   Boeing e farol duplo de táxi na perna do nariz na frota (o farol de asa
+   da família A320 é retrátil e viaja embutido — deliberado, no spec);
+   logo lights no estab; wicks na fuga com contagem típica DECLARADA (a
+   N536LA a 5765 px resolve a fileira externa: ~6 espigões no terço
+   externo, consistente com os 9/lado); wipers com o parque de cada
+   família lido das fotos head-on (A320 diagonal, 767 quase horizontal,
+   777 vertical paralelo, 787 diagonal baixo); drenos dos Boeing (0,15 m,
+   a estimativa declarada de `trem_familia`). ZERO materiais novos — os
+   três `Luz*` emissivos + StrutMetal + CinzaEscuro que a frota já
+   carregava; texturas byte-idênticas nas 11 (verificado por hash das
+   embaladas); 488–673 vértices por aeronave. **Emissão constante: strobe
+   piscando é decisão de clipe (25 fps), fica para a rodada de clipes.**
+   A regra que a rodada deixou: **peça nova de master nasce numa das
+   coleções nomeadas (01..05), nunca solta na raiz** — as cenas linkam
+   coleções, e o showcase da decolagem SBGR provou por diff (frames 1–60
+   byte-quase-idênticos) que objeto na raiz não viaja pelo link. Prova em
+   `scenario_sbgr/showcase_apendices_777{,_strip,_diff}.png`: beacon
+   dorsal e luzes lendo na cena real depois da correção.
 3. **Rodada de impressão de superfície (frota)** — linhas de painel e
    cutlines de comandos, matrícula sob a asa, e a arte SVG dos títulos
-   (fecha o "AIRBUS A3" do A319). DEPOIS.
+   (fecha o "AIRBUS A3" do A319). PRÓXIMA.
 4. **Detalhe de cena** — jetbridges articuladas, GSE fino, variantes de
    luz (anoitecer GRU). DEPOIS.
 
