@@ -1,4 +1,7 @@
-"""Fix: PS-LBA anti-alias fringes survived the whiteish-only erase and read as
+"""SUPERADO 2026-08-27 (pintor unico): absorvido por refazer_marcas.py (tag a321ceo).
+Fica como registro historico do que pintou o estado embarcado. NAO rodar.
+
+Fix: PS-LBA anti-alias fringes survived the whiteish-only erase and read as
 ghost strokes (one made the final P look like an R). Unconditionally refill the
 registration box with indigo, then repaint the D4 white ring and PT-MXP."""
 import bpy

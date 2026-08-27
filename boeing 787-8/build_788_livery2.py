@@ -1,4 +1,7 @@
-"""787-8 livery — STAGE 3: the two marks that stage 2 got wrong, measured on CC-BBF/CC-BBB.
+"""SUPERADO 2026-08-27 (pintor unico): absorvido por refazer_marcas.py (tag b788).
+Fica como registro historico do que pintou o estado embarcado. NAO rodar.
+
+787-8 livery — STAGE 3: the two marks that stage 2 got wrong, measured on CC-BBF/CC-BBB.
 
 Run headless:
   blender -b "boeing 787-8/B788_LATAM.blend" --python "boeing 787-8/build_788_livery2.py"

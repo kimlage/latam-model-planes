@@ -32,6 +32,15 @@ D = bpy.data
 BASE = os.path.dirname(os.path.abspath(__file__))
 log = lambda *a: print("[B788L]", *a)
 
+# CONSOLIDACAO DO PINTOR UNICO (2026-08-27). Este arquivo e o passo de
+# DERIVACAO (787-9 -> 787-8) e pinta so livery plana: erases com base
+# declarada + resample de colunas. As marcas finais do CC-BBF (lockup +0.12 m
+# espelhado parte a parte, matricula cap 0.30, simbolo do ventre) moram em
+# refazer_marcas.py (tag b788; absorveu build_788_livery2.py, que fica como
+# registro historico). Sequencia (REBUILD.md):
+#     build_788_geo -> build_788_livery (este) -> nose_art.py (787-9)
+#         -> refazer_marcas -- b788 -> reparar_echarpe -- b788
+
 L_UV_8 = 57.5
 L_UV_9 = 63.5
 S_WING = 3.04
@@ -133,7 +142,11 @@ def wedge_mask(margin=0.0):
 lum = tex[..., :3].mean(axis=2)
 inw = wedge_mask(-0.10)
 xband = (Xg >= 45.5) & (Xg <= 52.6)
-m1 = xband & inw & (lum > 0.55) & (np.abs(np.sin(THg)) > 0.10)
+# O portao `abs(sin(THg)) > 0.10` que morava aqui pulava |theta| <= 5.74 deg e
+# deixou o bloco retangular de tinta reamostrada do -9 atravessado na crista
+# (QA-BACKLOG; medido em CC-BBF: theta -5.7..+6.0, 0.40 m). A protecao certa e
+# por COR (lum > 0.55 = tinta clara sobre o indigo), nao por geometria.
+m1 = xband & inw & (lum > 0.55)
 tex[m1, :3] = INDIGO
 fac[m1, 0] = fac[m1, 1] = fac[m1, 2] = 1.0
 chroma8 = tex[..., :3].max(axis=2) - tex[..., :3].min(axis=2)
@@ -147,252 +160,11 @@ if m2.sum():
     jj, ii = np.nonzero(m2)
     log("reg erase chroma-out:", int(m2.sum()), "x %.2f..%.2f" % (Xg[0, ii.min()], Xg[0, ii.max()]))
 
-# ---------------------------------------------------------------- decal rasterizer
-def mesh_islands(me):
-    import collections
-    adj = collections.defaultdict(set)
-    for e in me.edges:
-        a, b = e.vertices
-        adj[a].add(b)
-        adj[b].add(a)
-    seen = set()
-    islands = []
-    for v0 in range(len(me.vertices)):
-        if v0 in seen:
-            continue
-        stack = [v0]
-        comp = set()
-        while stack:
-            v1 = stack.pop()
-            if v1 in comp:
-                continue
-            comp.add(v1)
-            stack.extend(adj[v1] - comp)
-        seen |= comp
-        islands.append(comp)
-    return islands
-
-
-def tris_of(ob, world=True, islands=None):
-    me = ob.data
-    me.calc_loop_triangles()
-    if world:
-        mw = mathutils.Matrix.LocRotScale(ob.location, ob.rotation_euler, ob.scale)
-        vs = [mw @ v.co for v in me.vertices]
-    else:
-        vs = [v.co.copy() for v in me.vertices]
-    keep = None
-    if islands is not None:
-        keep = set()
-        for comp in islands:
-            keep |= comp
-    tris = []
-    for t in me.loop_triangles:
-        if keep is not None and t.vertices[0] not in keep:
-            continue
-        tris.append([vs[i] for i in t.vertices])
-    return tris
-
-
-def coverage(tris2, PA, PB, gate, ss=3):
-    """anti-aliased coverage of 2D triangles sampled at texel coords (PA,PB),
-    restricted to texels passing `gate`. Supersample ss x ss per texel."""
-    xs = [p[0] for t in tris2 for p in t]
-    ys = [p[1] for t in tris2 for p in t]
-    x0, x1 = min(xs) - 0.05, max(xs) + 0.05
-    y0, y1 = min(ys) - 0.05, max(ys) + 0.05
-    res = max(int(3000 / max(x1 - x0, y1 - y0)), 400)
-    nx = max(int((x1 - x0) * res), 8)
-    ny = max(int((y1 - y0) * res), 8)
-    grid = np.zeros((ny, nx), bool)
-    gx, gy = np.meshgrid((np.arange(nx) + 0.5) / nx * (x1 - x0) + x0,
-                         (np.arange(ny) + 0.5) / ny * (y1 - y0) + y0)
-    for (ax, ay), (bx, by), (cx, cy) in tris2:
-        i0 = max(int((min(ax, bx, cx) - x0) / (x1 - x0) * nx) - 1, 0)
-        i1 = min(int((max(ax, bx, cx) - x0) / (x1 - x0) * nx) + 2, nx)
-        j0 = max(int((min(ay, by, cy) - y0) / (y1 - y0) * ny) - 1, 0)
-        j1 = min(int((max(ay, by, cy) - y0) / (y1 - y0) * ny) + 2, ny)
-        if i1 <= i0 or j1 <= j0:
-            continue
-        sx = gx[j0:j1, i0:i1]
-        sy = gy[j0:j1, i0:i1]
-        d1 = (sx - bx) * (ay - by) - (ax - bx) * (sy - by)
-        d2 = (sx - cx) * (by - cy) - (bx - cx) * (sy - cy)
-        d3 = (sx - ax) * (cy - ay) - (cx - ax) * (sy - ay)
-        inside = ~(((d1 < 0) | (d2 < 0) | (d3 < 0)) & ((d1 > 0) | (d2 > 0) | (d3 > 0)))
-        grid[j0:j1, i0:i1] |= inside
-    cov = np.zeros((H, W), np.float32)
-    jj, ii = np.nonzero(gate)
-    if len(ii) == 0:
-        return cov
-    pa = PA[jj, ii]
-    pb = PB[jj, ii]
-    acc = np.zeros(len(ii), np.float32)
-    for oa in range(ss):
-        for ob_ in range(ss):
-            # texel footprint: ~14 mm in x (u), ~18 mm along the hull arc (v)
-            da = (oa + 0.5) / ss - 0.5
-            db = (ob_ + 0.5) / ss - 0.5
-            sa = pa + da * (L_UV_8 / W)
-            sb = pb + db * 0.018
-            ci = ((sa - x0) / (x1 - x0) * nx).astype(int)
-            cj = ((sb - y0) / (y1 - y0) * ny).astype(int)
-            ok = (ci >= 0) & (ci < nx) & (cj >= 0) & (cj < ny)
-            hit = np.zeros(len(ii), bool)
-            hit[ok] = grid[cj[ok], ci[ok]]
-            acc += hit
-    cov[jj, ii] = acc / (ss * ss)
-    return cov
-
-
-def composite(cov, color, fmax=1.0):
-    m = cov > 0.003
-    a = cov[m][:, None]
-    tex[m, :3] = tex[m, :3] * (1 - a) + np.asarray(color)[None, :] * a
-    for ch in range(3):
-        fac[m, ch] = np.maximum(fac[m, ch], cov[m] * fmax)
-    return int(m.sum())
-
-
-def paint_side(obs, color, side, islands_of=None):
-    tris3 = []
-    for nm in obs:
-        ob = D.objects[nm]
-        isl = islands_of(ob) if islands_of else None
-        tris3 += tris_of(ob, world=True, islands=isl)
-    tris2 = [[(p.x, p.z) for p in t] for t in tris3]
-    gate = ((Yg < 0) if side < 0 else (Yg > 0)) & (np.abs(np.sin(THg)) > 0.30)
-    cov = coverage(tris2, Xg, Zg, gate)
-    n = composite(cov, color)
-    log("side decal", obs, "side", side, "->", n, "texels")
-
-
-# ---------------------------------------------------------------- 4. lockup repaint
-for nm in ("B789_LogoLATAM_E", "B789_LogoLATAM_E_Coral",
-           "B789_LogoLATAM_D", "B789_LogoLATAM_D_Coral",
-           "LogoBarriga", "LogoBarriga_Coral", "MarkDreamliner"):
-    ob = D.objects.get(nm)
-    if ob:
-        ob.hide_viewport = False
-bpy.context.view_layer.update()
-
-paint_side(["B789_LogoLATAM_E_Coral"], CORAL, side=-1)
-paint_side(["B789_LogoLATAM_E"], INDIGO, side=-1)
-paint_side(["B789_LogoLATAM_D_Coral"], CORAL, side=+1)
-paint_side(["B789_LogoLATAM_D"], INDIGO, side=+1)
-
-# ---------------------------------------------------------------- 5. belly symbol
-# symbol-only: islands of the indigo lockup mesh in the symbol zone (local x<1.35)
-ob = D.objects["LogoBarriga"]
-me = ob.data
-isl = mesh_islands(me)
-sym_isl = []
-for comp in isl:
-    xs = [me.vertices[i].co.x for i in comp]
-    if max(xs) < 1.35:
-        sym_isl.append(comp)
-log("belly symbol islands:", len(sym_isl), "of", len(isl))
-tris_sym = tris_of(ob, world=False, islands=sym_isl)
-obc = D.objects["LogoBarriga_Coral"]
-tris_cor = tris_of(obc, world=False)
-
-# local bbox of the symbol (indigo+coral share the frame)
-allpts = [(p.x, p.y) for t in tris_sym + tris_cor for p in t]
-lx0 = min(p[0] for p in allpts); lx1 = max(p[0] for p in allpts)
-ly0 = min(p[1] for p in allpts); ly1 = max(p[1] for p in allpts)
-# target: width 3.12 m centred at x 11.45, centred on y=0, coral tip to the nose
-sW = 3.12 / (lx1 - lx0)
-TX0 = 11.45 - 0.5 * 3.12
-TY0 = -0.5 * (ly1 - ly0) * sW
-
-
-def to_belly(tris):
-    return [[(TX0 + (p.x - lx0) * sW, TY0 + (p.y - ly0) * sW) for p in t] for t in tris]
-
-
-gate_belly = (np.cos(THg) < -0.35)
-cov = coverage(to_belly(tris_cor), Xg, Yg, gate_belly)
-n1 = composite(cov, CORAL)
-cov = coverage(to_belly(tris_sym), Xg, Yg, gate_belly)
-n2 = composite(cov, INDIGO)
-log("belly symbol painted:", n1, "+", n2, "texels at x %.2f..%.2f" % (TX0, TX0 + 3.12))
-
-# ---------------------------------------------------------------- 6. registration CC-BBF
-reg = D.objects["Reg787_E"]
-me = reg.data
-isl = mesh_islands(me)
-
-
-def ibox(comp):
-    xs = [me.vertices[i].co.x for i in comp]
-    zs = [me.vertices[i].co.y for i in comp]
-    return min(xs), max(xs), min(zs), max(zs)
-
-
-isl.sort(key=lambda c: ibox(c)[0])
-log("Reg787_E glyph islands:", len(isl), [f"{ibox(c)[0]:.3f}-{ibox(c)[1]:.3f}" for c in isl])
-vert_isl = {}
-for k, comp in enumerate(isl):
-    for i in comp:
-        vert_isl[i] = k
-me.calc_loop_triangles()
-tris_by = {k: [] for k in range(len(isl))}
-for t in me.loop_triangles:
-    k = vert_isl[t.vertices[0]]
-    tris_by[k].append([(me.vertices[i].co.x, me.vertices[i].co.y) for i in t.vertices])
-bb = [ibox(c) for c in isl]
-capH = max(b[3] for b in bb)
-hyph = min(range(len(isl)), key=lambda k: (bb[k][3] - bb[k][2]))       # thinnest = '-'
-tbar = bb[hyph][3] - bb[hyph][2]
-log("cap height %.3f, bar thickness %.3f (island %d)" % (capH, tbar, hyph))
-# sequence C C - B G K -> C C - B B F
-seq = [0, 1, 2, 3, 3]
-tris2 = []
-for pos, k in enumerate(seq):
-    slot = bb[pos]
-    dxg = 0.5 * (slot[0] + slot[1]) - 0.5 * (bb[k][0] + bb[k][1])
-    tris2 += [[(px + dxg, py) for px, py in t] for t in tris_by[k]]
-# constructed F in slot 5 (K's slot)
-s5 = bb[5]
-wF = (s5[1] - s5[0]) * 0.92
-fx0 = s5[0]
-sw = tbar * 1.10                       # stem width ~ bar thickness
-z0, z1 = 0.0, capH
-
-
-def rect(x0, x1, y0, y1):
-    return [[(x0, y0), (x1, y0), (x1, y1)], [(x0, y0), (x1, y1), (x0, y1)]]
-
-
-tris2 += rect(fx0, fx0 + sw, z0, z1)                                   # stem
-tris2 += rect(fx0, fx0 + wF, z1 - tbar, z1)                            # top arm
-zm = 0.54 * capH
-tris2 += rect(fx0, fx0 + 0.82 * wF, zm - 0.5 * tbar, zm + 0.5 * tbar)  # mid arm
-
-# world placement, measured on the CC-BBF photo (stbd): the F's forward edge at
-# x 44.26, cap height ~0.50, letters z ~0.78..1.3. Both sides identical (CC-BBB
-# port photo shows the same white-in-indigo treatment on the -8s).
-xs_l = [p[0] for t in tris2 for p in t]
-ys_l = [p[1] for t in tris2 for p in t]
-lx0, lx1 = min(xs_l), max(xs_l)
-ly0, ly1 = min(ys_l), max(ys_l)
-s = 0.50 / (ly1 - ly0)                     # cap height 0.50 m
-TX1, TZ0 = 46.90, 0.78                     # aft end so that fwd (F) edge lands at 44.26
-TX0 = TX1 - (lx1 - lx0) * s
-tris2w = [[(TX0 + (px - lx0) * s, TZ0 + (py - ly0) * s) for px, py in t] for t in tris2]
-xs = [p[0] for t in tris2w for p in t]
-zs = [p[1] for t in tris2w for p in t]
-log("reg CC-BBF world bbox x %.2f..%.2f z %.2f..%.2f" % (min(xs), max(xs), min(zs), max(zs)))
-
-gate = (Yg < 0) & (np.abs(np.sin(THg)) > 0.25)
-cov = coverage(tris2w, Xg, Zg, gate)
-n1 = composite(cov, WHITE)
-XMIR = min(xs) + max(xs)
-tris2m = [[(XMIR - px, pz) for px, pz in t] for t in tris2w]
-gate = (Yg > 0) & (np.abs(np.sin(THg)) > 0.25)
-cov = coverage(tris2m, Xg, Zg, gate)
-n2 = composite(cov, WHITE)
-log("registration painted: port", n1, "stbd", n2)
+# -------------------- MARCAS: movidas para refazer_marcas (tag b788)
+# Lockup (na posicao final +0.12 m, espelhado parte a parte), simbolo do
+# ventre e matricula CC-BBF (cap 0.30, caixa das fotos) sao pintados por
+# refazer_marcas._marcas_b788, com as constantes deste arquivo e do
+# build_788_livery2.py movidas textualmente. Este builder nao pinta marca.
 
 # ---------------------------------------------------------------- 7. write textures
 write_img(img_tex, np.concatenate([tex[..., :3], np.ones((H, W, 1), np.float32)], axis=2))

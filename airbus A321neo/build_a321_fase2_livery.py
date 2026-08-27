@@ -16,6 +16,26 @@ import bpy
 import bmesh
 import math
 import numpy as np
+import os
+import sys as _sys
+_RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _RAIZ not in _sys.path:
+    _sys.path.insert(0, _RAIZ)
+import latam_livery_kit as kit  # noqa: E402
+import reparar_echarpe as _re   # noqa: E402
+
+# CONSOLIDACAO DO PINTOR UNICO (2026-08-27). Este arquivo e o passo de
+# DERIVACAO (A320neo -> A321neo) e pinta so livery plana: remap de colunas,
+# contornos movidos, limpeza dos fantasmas do master COM BASE DECLARADA, e a
+# cunha ABSOLUTA pela regra unica (kit.cobertura_echarpe + kit.reparar_echarpe
+# — nunca mais diferenca de duas regras com portao flat_w/flat_i, nem
+# fac[m]=0 sobre a cunha: eram a fronteira pontilhada, a lasca destacada e o
+# retangulo branco do QA-BACKLOG). As marcas (matricula PS-LBA, titulo)
+# moram em refazer_marcas.py (tag a321neo); build_a321_fase2b_espelho.py
+# fica como registro historico. Sequencia (REBUILD.md):
+#     fase1 -> fase2 (este) -> fase3 -> portas_familia
+#           -> refazer_marcas -- a321neo lockup marcas
+#           -> reparar_echarpe -- a321neo
 
 D = bpy.data
 W, H = 4096, 1024
@@ -142,199 +162,38 @@ for vb in [(0.15, 0.38), (0.62, 0.85)]:
 print("outlines moved")
 
 # ------------------------------------------------ erase PT-TMN-specific marks
-m = box(3.15, 6.25, -0.85, -0.02) & bluish(tex)                  # nose titles/logo
+# BASE DECLARADA (refazer_marcas._basemap e a licao): a caixa que cruza a
+# cunha restaura INDIGO do lado de dentro e casco branco do lado de fora.
+# `fac=0` incondicional aqui era o retangulo branco dentro do indigo.
+THDEG_ = np.degrees(np.abs(THG))
+_regra = _re.FROTA["a321neo"]["regra"]
+_dentro = _regra(XG, ZG, THDEG_)
+INDIGO_F = np.array([0.165, 0.000, 0.533], np.float32)
+m = box(3.15, 6.25, -0.85, -0.02) & bluish(tex)                  # nose titles/logo (branco)
 erase(m)
-m = box(36.9, 38.45, 0.95, 1.50) & bluish(tex)                   # old reg (remapped)
-erase(m)
-m = box(33.70, 37.05, 1.10, 1.55) & bluish(tex)                  # old type titles
-erase(m)
-print("old marks erased")
+for bx in (box(36.9, 38.45, 0.95, 1.50), box(33.70, 37.05, 1.10, 1.55)):
+    m = bx & bluish(tex)
+    erase(m & ~_dentro)                       # fora da cunha: casco branco
+    tex[m & _dentro, 0:3] = INDIGO_F          # dentro: indigo chapado
+    fac[m & _dentro, 0:3] = 1.0
+print("old marks erased (base declarada)")
 
-# ------------------------------------------------ wedge re-solve
-def inside(xg, zg, thdeg, x_fwd0, k_fwd, th_lines, x_te0, k_te):
-    ok = xg >= x_fwd0 + k_fwd * zg
-    ok &= xg <= x_te0 + k_te * zg
-    cap = np.full_like(xg, -1e9)
-    for (t0, slope, xr) in th_lines:
-        cap = np.maximum(cap, t0 + slope * (xg - xr))
-    ok &= thdeg <= cap
-    return ok
+# ------------------------------------------------ cunha ABSOLUTA (regra unica)
+# A cunha e pintada pela cobertura absoluta da regra do proprio aviao
+# (reparar_echarpe._r_a321) sobre a ponte da malha, com o escritor que protege
+# marcas por COR (kit.reparar_echarpe, limiar 0.10) — o mesmo par que a rodada
+# da cauda usa para reparar. Nada de velha/nova, nada de flat_w/flat_i.
+_rxm, _rzcm, _rrzm, _rrym = kit.secoes_do_casco(fus)
+_cov = kit.cobertura_echarpe(_regra, _rxm, _rzcm, _rrzm, 0.0, L_NEW, W, H, ss=3)
+_zona = (XG > 32.0) & (XG < 43.0)
+_BR = np.array([0xE6, 0xE7, 0xEA], np.float32) / 255.0
+_n, _muda = kit.reparar_echarpe(tex, fac, _cov, _zona, _BR, INDIGO_F)
+print("wedge: %d texels rewritten (absolute)" % _n)
 
-old_in = inside(XG, ZG, THDEG, 34.33, 0.8393,
-                [(101.4, -7.58, 36.05)], 41.46, 0.0538)
-new_in = inside(XG, ZG, THDEG, 35.48, 0.822,
-                [(129.0, -23.7, 34.45), (105.3, -3.78, 36.05)], 41.46, 0.0538)
-zone = (XG > 32.0) & (XG < 43.0)
-flat_w = (np.abs(tex[..., 0:3] - BRANCO).max(axis=2) < 0.06) | (fac[..., 0] < 0.15)
-flat_i = np.abs(tex[..., 0:3] - INDIGO).max(axis=2) < 0.08
-to_white = zone & old_in & ~new_in & (flat_i | bluish(tex))
-to_indigo = zone & new_in & ~old_in & flat_w
-fac[to_white, 0:3] = 0.0
-tex[to_indigo, 0:3] = INDIGO
-fac[to_indigo, 0:3] = 1.0
-print("wedge: -%d texels, +%d texels" % (to_white.sum(), to_indigo.sum()))
-
-# ------------------------------------------------ new marks (rasterized)
-def tris_of_object(ob):
-    dg = bpy.context.evaluated_depsgraph_get()
-    me = ob.evaluated_get(dg).to_mesh()
-    me.calc_loop_triangles()
-    out = []
-    for tri in me.loop_triangles:
-        out.append([tuple(ob.matrix_world @ me.vertices[i].co) for i in tri.vertices])
-    ob.evaluated_get(dg).to_mesh_clear()
-    return out
-
-def raster_side(tris, cor, lado, fac_val=1.0, ss=2):
-    """rasterize flat (x,z) triangles onto the hull side texture via z->theta."""
-    Ws, Hs = W * ss, H * ss
-    cov = np.zeros((Hs, Ws), dtype=bool)
-    for pts in tris:
-        pix = []
-        for (x, _, z) in pts:
-            r = max(r_of(x), 1e-6)
-            ct = np.clip((z - zc_of(x)) / r, -1, 1)
-            th = math.acos(ct)
-            if lado == "E":
-                th = -th
-            u = x / L_NEW * Ws
-            v = (th + math.pi) / (2 * math.pi) * Hs
-            pix.append((u, v))
-        xs = [p[0] for p in pix]; ys = [p[1] for p in pix]
-        xlo, xhi = max(int(min(xs)), 0), min(int(max(xs)) + 1, Ws - 1)
-        ylo, yhi = max(int(min(ys)), 0), min(int(max(ys)) + 1, Hs - 1)
-        if xhi <= xlo or yhi <= ylo:
-            continue
-        gx, gy = np.meshgrid(np.arange(xlo, xhi + 1), np.arange(ylo, yhi + 1))
-        (ax, ay), (bx, by), (cx, cy) = pix
-        d1 = (gx - bx) * (ay - by) - (ax - bx) * (gy - by)
-        d2 = (gx - cx) * (by - cy) - (bx - cx) * (gy - cy)
-        d3 = (gx - ax) * (cy - ay) - (cx - ax) * (gy - ay)
-        m = ~((((d1 < 0) | (d2 < 0) | (d3 < 0)) & ((d1 > 0) | (d2 > 0) | (d3 > 0))))
-        cov[ylo:yhi + 1, xlo:xhi + 1] |= m
-    # downsample coverage to fraction
-    frac = cov.reshape(H, ss, W, ss).mean(axis=(1, 3))
-    m = frac > 0.02
-    a = frac[m][:, None]
-    tex[m, 0:3] = tex[m, 0:3] * (1 - a) + np.asarray(cor)[None, :] * a
-    fac[m, 0:3] = np.maximum(fac[m, 0:3], (a * fac_val))
-    return int(m.sum())
-
-def text_mesh(body, size, name):
-    cu = D.curves.new(name, 'FONT')
-    cu.body = body
-    cu.font = D.fonts["Arial Bold"]
-    cu.size = size
-    ob = D.objects.new(name, cu)
-    bpy.context.scene.collection.objects.link(ob)
-    dg = bpy.context.evaluated_depsgraph_get()
-    me = bpy.data.meshes.new_from_object(ob.evaluated_get(dg))
-    mo = D.objects.new(name + "_mesh", me)
-    bpy.context.scene.collection.objects.link(mo)
-    bpy.data.objects.remove(ob, do_unlink=True)
-    return mo
-
-# --- registration PS-LBA, white inside the wedge (factory style, press photo)
-NAVY = np.array([0.110, 0.180, 0.388])
-# NOTA (auditoria de espelhamento da frota): os dois lacos `for lado in
-# ("E", "D")` abaixo rasterizam OS MESMOS triangulos nos dois bordos, e
-# raster_side() so troca o SINAL DE THETA -- nunca o x. Vista de estibordo a
-# pele corre para o outro lado, entao a matricula e o titulo saiam ao
-# contrario. Isto NAO e corrigido aqui: quem corrige e
-# build_a321_fase2b_espelho.py, que apaga as duas marcas do lado D e as repinta
-# espelhadas, e e ele que tem de rodar depois deste arquivo. Deixado como esta
-# para que o par de scripts continue descrevendo o que de facto aconteceu; se
-# um dia este arquivo for a unica fonte, o espelho tem de vir para ca.
-for lado in ("E", "D"):
-    mo = text_mesh("PS-LBA", 1.0, "RegTmp")
-    xs = [v.co.x for v in mo.data.vertices]; ys = [v.co.y for v in mo.data.vertices]
-    x0b, x1b, y0b, y1b = min(xs), max(xs), min(ys), max(ys)
-    cap = y1b - y0b
-    s = 0.40 / cap
-    for v in mo.data.vertices:
-        vx = (v.co.x - x0b) * s + 36.78
-        vz = (v.co.y - y0b) * s + 0.70
-        v.co = (vx, 0.0, vz)
-    n = raster_side(tris_of_object(mo), (1.0, 1.0, 1.0), lado)
-    print("reg", lado, n, "texels; length", round((x1b - x0b) * s, 2))
-    bpy.data.objects.remove(mo, do_unlink=True)
-
-# --- title AIRBUS A321neo: reuse the AIRBUS part of the old mark + official SVG
-mark = D.objects["MarkAirbusNeo_E"]
-xs_loc = sorted(set(round(v.co.x, 4) for v in mark.data.vertices))
-# find the word gap: largest x gap in vertex positions
-gaps = [(b - a, a, b) for a, b in zip(xs_loc[:-1], xs_loc[1:])]
-gap, ga, gb = max(gaps)
-print("mark word gap: %.4f at %.3f..%.3f (local)" % (gap, ga, gb))
-# AIRBUS = local x <= ga ; measure its bbox
-airbus_v = [v.co for v in mark.data.vertices if v.co.x <= ga + 1e-5]
-ax0 = min(v.x for v in airbus_v); ax1 = max(v.x for v in airbus_v)
-ay0 = min(v.y for v in airbus_v); ay1 = max(v.y for v in airbus_v)
-cap_old = ay1 - ay0
-s = 0.145 / cap_old
-print("AIRBUS local bbox %.3fx%.3f -> scaled len %.3f" % (ax1 - ax0, cap_old, (ax1 - ax0) * s))
-
-# import the official A321neo wordmark
-import os
-svg = os.path.join(os.path.dirname(D.filepath), "..", "airbus_a321neo_logo.svg")
-before = set(D.objects)
-bpy.ops.import_curve.svg(filepath=os.path.abspath(svg))
-imported = [o for o in D.objects if o not in before]
-bmn = bmesh.new()
-dg = bpy.context.evaluated_depsgraph_get()
-for o in imported:
-    mev = o.evaluated_get(dg).to_mesh()
-    vmap = {}
-    for p in mev.polygons:
-        nv = []
-        for vi in p.vertices:
-            if vi not in vmap:
-                vmap[vi] = bmn.verts.new(o.matrix_world @ mev.vertices[vi].co)
-            nv.append(vmap[vi])
-        try:
-            bmn.faces.new(nv)
-        except ValueError:
-            pass
-    o.evaluated_get(dg).to_mesh_clear()
-for o in imported:
-    bpy.data.objects.remove(o, do_unlink=True)
-bmesh.ops.triangulate(bmn, faces=bmn.faces[:])
-me321 = D.meshes.new("a321neo_mark")
-bmn.to_mesh(me321)
-bmn.free()
-ob321 = D.objects.new("a321neo_mark", me321)
-bpy.context.scene.collection.objects.link(ob321)
-xs = [v.co.x for v in me321.vertices]; ys = [v.co.y for v in me321.vertices]
-n0, n1, m0, m1 = min(xs), max(xs), min(ys), max(ys)
-# 'A321' caps define the cap height; the neo loop rises a bit above. Use full
-# height ~1.12*cap (measured on the A320neo svg proportions) -> cap = h/1.12
-cap321 = (m1 - m0) / 1.12
-s321 = 0.145 / cap321
-len321 = (n1 - n0) * s321
-print("A321neo svg bbox %.3fx%.3f -> scaled len %.3f" % (n1 - n0, m1 - m0, len321))
-
-for lado in ("E", "D"):
-    X0 = 33.55
-    # AIRBUS part, from the old mark's LOCAL (flat) coords
-    me = mark.data
-    me.calc_loop_triangles()
-    tris = []
-    for tri in me.loop_triangles:
-        pts = [me.vertices[i].co for i in tri.vertices]
-        if max(p.x for p in pts) <= ga + 1e-5:
-            tris.append([((p.x - ax0) * s + X0, 0.0, (p.y - ay0) * s + 0.88) for p in pts])
-    n = raster_side(tris, NAVY, lado)
-    # A321neo part
-    XA = X0 + (ax1 - ax0) * s + 0.10
-    me321.calc_loop_triangles()
-    tris = []
-    for tri in me321.loop_triangles:
-        pts = [me321.vertices[i].co for i in tri.vertices]
-        tris.append([((p.x - n0) * s321 + XA, 0.0, (p.y - m0) * s321 + 0.88) for p in pts])
-    n2 = raster_side(tris, NAVY, lado)
-    print(f"title {lado}: AIRBUS {n} + A321neo {n2} texels, ends at x={round(XA+len321,2)}")
-mark.hide_viewport = True
-bpy.data.objects.remove(ob321, do_unlink=True)
+# ------------------------- MARCAS: movidas para refazer_marcas (tag a321neo)
+# Matricula PS-LBA e titulo AIRBUS A321neo — bombordo E estibordo espelhado —
+# moram em refazer_marcas.py (_marcas_a321neo), constantes do fase2/fase2b
+# movidas textualmente. Rodar refazer_marcas e o proximo passo (REBUILD.md).
 
 store("LiveryTex", tex)
 store("LiveryFac", fac)

@@ -1,4 +1,7 @@
-"""Fix: starboard (D) copies of the NEW marks must be x-mirrored in (x,theta)
+"""SUPERADO 2026-08-27 (pintor unico): absorvido por refazer_marcas.py (tag a321neo).
+Fica como registro historico do que pintou o estado embarcado. NAO rodar.
+
+Fix: starboard (D) copies of the NEW marks must be x-mirrored in (x,theta)
 texture space to read correctly on the aircraft. Erase the bad ones, repaint."""
 import bpy
 import math

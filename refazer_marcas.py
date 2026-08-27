@@ -18,6 +18,8 @@ already-correct builds (CC-CWY/767, CC-BBF/787-8).
 """
 import bpy, bmesh, math, os, sys
 import numpy as np
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import latam_livery_kit as kit  # noqa: E402
 
 # ------------------------------------------------------------------ fleet law
 RAZAO_SIMBOLO = 0.62230      # official ink bbox ratio, symbol alone
@@ -1166,6 +1168,1040 @@ def _marcas_b77w(cl):
                (69.0, 74.0, 120, 180, (0x8E, 0x88, 0x82), 0.10)])
 
 
+# ======================================================== legado A320-familia
+# build_a319_livery.py / build_a320ceo_livery.py pintavam matricula, titulo e
+# a marca do ventre numa grade supersampled 2x em (x, z) sobre a tabela de
+# aneis (que e a tabela da malha serializada — conferido zc/rz/ry identicos).
+# Movido para ca verbatim; o compositor por cobertura reproduz o downsample do
+# builder texel a texel onde o fundo e uniforme dentro do texel.
+#
+# A MATRICULA do A319 e o caso especial documentado no QA-BACKLOG: o mesh
+# Reg_E guarda o PT-TMN do master, entao pintar "a malha inteira" escreveria a
+# matricula errada. A op abaixo usa a RECOMBINACAO do proprio builder
+# (ilhas P,T,-,T,M,T do mesmo mesh) — que produz PT-TMT — e a pinta na caixa
+# FINAL da rodada 2026-08-22 (fix_matricula_a319.py: porta 4 + 0.60..+2.40 m,
+# |theta| 56.5..67.7, medida na propria foto), em BRANCO_MARCA, como o fix
+# deixou. fix_matricula_a319.py fica como registro historico; a reconstrucao
+# nao precisa mais dele.
+
+
+class CascoA320:
+    """Grades SS2 dos builders A319/A320ceo + compositor de cobertura."""
+
+    def __init__(self, rings_rel, luv):
+        import os as _os
+        raiz = _os.path.dirname(_os.path.abspath(__file__))
+        rings = json.load(open(_os.path.join(raiz, rings_rel)))
+        self.rx = np.array([r["x"] for r in rings])
+        self.rzc = np.array([r["zc"] for r in rings])
+        self.rrz = np.array([r["rz"] for r in rings])
+        self.rry = np.array([r["ry"] for r in rings])
+        self.LUV = luv
+        imT = bpy.data.images["LiveryTex"]
+        imF = bpy.data.images["LiveryFac"]
+        self.imT, self.imF = imT, imF
+        W, H = imT.size
+        self.W, self.H = W, H
+        SS2 = 2
+        self.SS2 = SS2
+        Ws, Hs = W * SS2, H * SS2
+        u = (np.arange(Ws) + 0.5) / Ws
+        v = (np.arange(Hs) + 0.5) / Hs
+        X = u * luv
+        TH = v * 2 * math.pi - math.pi
+        self.Xg = np.broadcast_to(X, (Hs, Ws))
+        self.THg = np.broadcast_to(TH[:, None], (Hs, Ws))
+        ZCg = np.interp(X, self.rx, self.rzc)[None, :]
+        RZg = np.interp(X, self.rx, self.rrz)[None, :]
+        RYg = np.interp(X, self.rx, self.rry)[None, :]
+        self.Zg = ZCg + RZg * np.cos(self.THg)
+        self.Yg = RYg * np.sin(self.THg)
+        self.THdeg = np.degrees(np.abs(self.THg))
+        buf = np.empty(W * H * 4, np.float32)
+        imT.pixels.foreach_get(buf)
+        self.t4 = buf.reshape(H, W, 4)
+        buf = np.empty(W * H * 4, np.float32)
+        imF.pixels.foreach_get(buf)
+        self.f4 = buf.reshape(H, W, 4)
+
+    # --- machinery dos builders, verbatim -------------------------------
+    @staticmethod
+    def tri_mask_2d(tris, x0, x1, y0, y1, res=600):
+        nx = max(int((x1 - x0) * res), 4)
+        ny = max(int((y1 - y0) * res), 4)
+        m = np.zeros((ny, nx), bool)
+        gx, gy = np.meshgrid(np.arange(nx) + 0.5, np.arange(ny) + 0.5)
+        gx = x0 + gx * (x1 - x0) / nx
+        gy = y0 + gy * (y1 - y0) / ny
+        for (ax, ay), (bx, by), (cx, cy) in tris:
+            lo_x = min(ax, bx, cx); hi_x = max(ax, bx, cx)
+            lo_y = min(ay, by, cy); hi_y = max(ay, by, cy)
+            i0 = max(int((lo_x - x0) / (x1 - x0) * nx) - 1, 0)
+            i1 = min(int((hi_x - x0) / (x1 - x0) * nx) + 2, nx)
+            j0 = max(int((lo_y - y0) / (y1 - y0) * ny) - 1, 0)
+            j1 = min(int((hi_y - y0) / (y1 - y0) * ny) + 2, ny)
+            if i1 <= i0 or j1 <= j0:
+                continue
+            sx = gx[j0:j1, i0:i1]; sy = gy[j0:j1, i0:i1]
+            d1 = (sx - bx) * (ay - by) - (ax - bx) * (sy - by)
+            d2 = (sx - cx) * (by - cy) - (bx - cx) * (sy - cy)
+            d3 = (sx - ax) * (cy - ay) - (cx - ax) * (sy - ay)
+            m[j0:j1, i0:i1] |= ~(((d1 < 0) | (d2 < 0) | (d3 < 0)) &
+                                 ((d1 > 0) | (d2 > 0) | (d3 > 0)))
+        return m, (x0, x1, y0, y1)
+
+    @staticmethod
+    def sample_mask(mask_info, px, py):
+        m, (x0, x1, y0, y1) = mask_info
+        ny, nx = m.shape
+        ii = ((px - x0) / (x1 - x0) * nx).astype(int)
+        jj = ((py - y0) / (y1 - y0) * ny).astype(int)
+        ok = (ii >= 0) & (ii < nx) & (jj >= 0) & (jj < ny)
+        out = np.zeros(px.shape, bool)
+        out[ok] = m[jj[ok], ii[ok]]
+        return out
+
+    @staticmethod
+    def mesh_islands(me):
+        import collections
+        adj = collections.defaultdict(set)
+        for e in me.edges:
+            a, b = e.vertices
+            adj[a].add(b); adj[b].add(a)
+        seen = set(); islands = []
+        for v0 in range(len(me.vertices)):
+            if v0 in seen:
+                continue
+            stack = [v0]; comp = set()
+            while stack:
+                v1 = stack.pop()
+                if v1 in comp:
+                    continue
+                comp.add(v1)
+                stack.extend(adj[v1] - comp)
+            seen |= comp
+            islands.append(comp)
+        return islands
+
+    @staticmethod
+    def mesh_tris_world(name):
+        import mathutils
+        ob = bpy.data.objects[name]
+        me = ob.data
+        mw = mathutils.Matrix.LocRotScale(ob.location, ob.rotation_euler,
+                                          ob.scale)
+        vs = [mw @ v.co for v in me.vertices]
+        me.calc_loop_triangles()
+        return [[vs[i] for i in t.vertices] for t in me.loop_triangles]
+
+    def compor(self, selSS, cor, nome=""):
+        """Cobertura do texel = media dos 4 subsamples (o downsample SS2 do
+        builder); tinta e fac compostos com essa cobertura."""
+        H, W, SS2 = self.H, self.W, self.SS2
+        cov = selSS.reshape(H, SS2, W, SS2).mean(axis=(1, 3)).astype(np.float32)
+        m = cov > 0
+        a = cov[m][:, None]
+        self.t4[..., :3][m] = (self.t4[..., :3][m] * (1 - a) +
+                               np.asarray(cor, np.float32)[None, :] * a)
+        self.t4[..., 3][m] = 1.0
+        for k in range(3):
+            self.f4[..., k][m] = self.f4[..., k][m] * (1 - a[:, 0]) + a[:, 0]
+        print(f"   [pintar]  {nome:24} {int(m.sum())} texels (SS2)")
+        return int(m.sum())
+
+    def salvar(self):
+        self.imT.pixels.foreach_set(self.t4.ravel())
+        self.imT.update()
+        self.imF.pixels.foreach_set(self.f4.ravel())
+        self.imF.update()
+        for im in (self.imT, self.imF):
+            if im.packed_file:
+                im.pack()
+        print("   [salvar] LiveryTex + LiveryFac atualizadas (SS2)")
+
+
+C_A320 = {1: (0.969, 0.976, 0.980), 2: (0.165, 0.000, 0.533),
+          3: (0.929, 0.086, 0.318)}
+
+
+def _ventre_a320(ca):
+    """paint_belly_decal dos builders, verbatim: LogoBarriga sobre o ventre."""
+    for nomes, c in ((["LogoBarriga_Coral"], 3), (["LogoBarriga"], 2)):
+        tris3 = []
+        for n in nomes:
+            tris3 += ca.mesh_tris_world(n)
+        t2 = [[(p.x, p.y) for p in t] for t in tris3]
+        xs = [p[0] for t in t2 for p in t]; ys = [p[1] for t in t2 for p in t]
+        mi = ca.tri_mask_2d(t2, min(xs) - 0.05, max(xs) + 0.05,
+                            min(ys) - 0.05, max(ys) + 0.05)
+        sel = ca.sample_mask(mi, ca.Xg, ca.Yg)
+        sel &= (np.cos(ca.THg) < -0.35)
+        ca.compor(sel, C_A320[c], nome=f"ventre {nomes[0]}")
+
+
+def _marcas_a319(ca):
+    """Marcas do A319 (PT-TMT): ventre, matricula recombinada, titulo."""
+    _ventre_a320(ca)
+    # --- matricula: glifos P,T,-,T,M,T recombinados de Reg_E (build_a319_livery,
+    # verbatim), pintados na caixa FINAL de fix_matricula_a319.py.
+    reg = bpy.data.objects["Reg_E"]
+    me = reg.data
+    me.calc_loop_triangles()
+    isl = ca.mesh_islands(me)
+
+    def isl_bbox(comp):
+        xs = [me.vertices[i].co.x for i in comp]
+        zs = [me.vertices[i].co.z for i in comp]
+        return min(xs), max(xs), min(zs), max(zs)
+
+    isl.sort(key=lambda c: isl_bbox(c)[0])
+    vert_isl = {}
+    for k, comp in enumerate(isl):
+        for i in comp:
+            vert_isl[i] = k
+    tris_by_isl = {k: [] for k in range(len(isl))}
+    for t in me.loop_triangles:
+        k = vert_isl[t.vertices[0]]
+        tris_by_isl[k].append([(me.vertices[i].co.x, me.vertices[i].co.z)
+                               for i in t.vertices])
+    seq = [0, 1, 2, 3, 4, 1]            # P T - T M N -> P T - T M T
+    bb = [isl_bbox(c) for c in isl]
+    tris2 = []
+    for pos, k in enumerate(seq):
+        src = tris_by_isl[k]
+        tgt_slot = bb[pos] if pos < len(bb) else bb[-1]
+        dx = (0.5 * (tgt_slot[0] + tgt_slot[1])) - (0.5 * (bb[k][0] + bb[k][1]))
+        tris2 += [[(px + dx, pz) for px, pz in t] for t in src]
+    xs = [p[0] for t in tris2 for p in t]; zs = [p[1] for t in tris2 for p in t]
+    lx0, lx1, lz0, lz1 = min(xs), max(xs), min(zs), max(zs)
+    mi = ca.tri_mask_2d(tris2, lx0 - 0.02, lx1 + 0.02, lz0 - 0.02, lz1 + 0.02,
+                        res=800)
+    # caixa FINAL (fix_matricula_a319.py): porta 4 (25.81) + 0.60..+2.40 m,
+    # |theta| 56.5..67.7; esticada para preencher a caixa, como o fix fez.
+    RX0, RX1, RT0, RT1 = 25.81 + 0.60, 25.81 + 2.40, 56.5, 67.7
+    dentro = ((ca.Xg >= RX0) & (ca.Xg <= RX1) &
+              (ca.THdeg >= RT0) & (ca.THdeg <= RT1))
+    u = np.clip((ca.Xg - RX0) / (RX1 - RX0), 0.0, 1.0)
+    vfr = np.clip((ca.THdeg - RT0) / (RT1 - RT0), 0.0, 1.0)
+    gzs = lz1 - vfr * (lz1 - lz0)
+    cor = tuple(np.array(BRANCO_MARCA, np.float32) / 255.0)
+    for lado in (-1, 1):
+        uu = u if lado < 0 else (1.0 - u)
+        gxs = lx0 + uu * (lx1 - lx0)
+        sel = dentro & ca.sample_mask(mi, gxs, gzs)
+        sel &= ((ca.Yg < 0) if lado < 0 else (ca.Yg > 0)) & \
+            (np.abs(np.sin(ca.THg)) > 0.30)
+        ca.compor(sel, cor,
+                  nome=f"matricula PT-TMT {'port' if lado < 0 else 'stbd'}")
+    # --- titulo 'AIRBUS A319' (build_a319_livery, verbatim: ilhas do
+    # MarkAirbusNeo_E + '1' da haste do I + '9' reconstruido). A cunha velha
+    # destruiu '1','9' e o swirl NA TEXTURA (QA-BACKLOG "AIRBUS A3"); esta op
+    # repinta a arte completa do builder — a unica fonte que resta.
+    mk = bpy.data.objects["MarkAirbusNeo_E"]
+    mm = mk.data
+    mm.calc_loop_triangles()
+    isl = ca.mesh_islands(mm)
+
+    def mbox(comp):
+        xs = [mm.vertices[i].co.x for i in comp]
+        ys = [mm.vertices[i].co.y for i in comp]
+        return min(xs), max(xs), min(ys), max(ys)
+
+    isl.sort(key=lambda c: mbox(c)[0])
+    vert_isl = {}
+    for k, comp in enumerate(isl):
+        for i in comp:
+            vert_isl[i] = k
+    mtris = {k: [] for k in range(len(isl))}
+    for t in mm.loop_triangles:
+        k = vert_isl[t.vertices[0]]
+        mtris[k].append([(mm.vertices[i].co.x, mm.vertices[i].co.y)
+                         for i in t.vertices])
+    n = len(isl)
+    keep = list(range(0, n - 2))
+    tris2 = []
+    for k in keep:
+        tris2 += mtris[k]
+    b3 = mbox(isl[keep[-1]])
+    gw = b3[1] - b3[0]
+    gap = 0.15 * gw
+    capz0, capz1 = b3[2], b3[3]
+    widths = [(mbox(isl[k])[1] - mbox(isl[k])[0], k) for k in keep[1:]]
+    wI, kI = sorted(widths)[0]
+    dx = (b3[1] + gap) - mbox(isl[kI])[0]
+    one_tris = [[(px + dx, py) for px, py in t] for t in mtris[kI]]
+    tris2 += one_tris
+    one_x1 = mbox(isl[kI])[1] + dx
+    bx0 = one_x1 + gap
+    bw = gw * 0.92
+    bh = (capz1 - capz0)
+    cx = bx0 + 0.5 * bw * 0.92
+    cyb = capz0 + bh * 0.62
+    r_out_x = 0.46 * bw; r_out_y = 0.40 * bh
+    r_in_x = 0.24 * bw; r_in_y = 0.20 * bh
+    NSEG = 24
+    for i in range(NSEG):
+        a0 = 2 * math.pi * i / NSEG; a1 = 2 * math.pi * (i + 1) / NSEG
+        o0 = (cx + r_out_x * math.cos(a0), cyb + r_out_y * math.sin(a0))
+        o1 = (cx + r_out_x * math.cos(a1), cyb + r_out_y * math.sin(a1))
+        i0 = (cx + r_in_x * math.cos(a0), cyb + r_in_y * math.sin(a0))
+        i1 = (cx + r_in_x * math.cos(a1), cyb + r_in_y * math.sin(a1))
+        tris2.append([o0, o1, i1]); tris2.append([o0, i1, i0])
+    sw = wI
+    sx0 = cx + r_out_x - sw
+    tris2.append([(sx0, capz0), (sx0 + sw, capz0), (sx0 + sw, cyb + 0.1 * bh)])
+    tris2.append([(sx0, capz0), (sx0 + sw, cyb + 0.1 * bh), (sx0, cyb + 0.1 * bh)])
+    xs = [p[0] for t in tris2 for p in t]; ys = [p[1] for t in tris2 for p in t]
+    lx0, lx1, ly0, ly1 = min(xs), max(xs), min(ys), max(ys)
+    TX0, TX1, TZ0, TZ1 = 23.45, 25.20, 1.040, 1.210
+    s = min((TX1 - TX0) / (lx1 - lx0), (TZ1 - TZ0) / (ly1 - ly0))
+    tris2 = [[(TX0 + (px - lx0) * s, TZ0 + (py - ly0) * s) for px, py in t]
+             for t in tris2]
+    mi = ca.tri_mask_2d(tris2, TX0 - 0.03, TX1 + 0.03, TZ0 - 0.03, TZ1 + 0.03,
+                        res=1500)
+    selp = ca.sample_mask(mi, ca.Xg, ca.Zg) & (ca.Yg < 0) & \
+        (np.abs(np.sin(ca.THg)) > 0.25)
+    XMIR = TX0 + TX1
+    sels = ca.sample_mask(mi, XMIR - ca.Xg, ca.Zg) & (ca.Yg > 0) & \
+        (np.abs(np.sin(ca.THg)) > 0.25)
+    ca.compor(selp | sels, C_A320[2], nome="titulo AIRBUS A319")
+
+
+def _marcas_a320ceo(ca):
+    """Marcas do A320ceo (CC-BFO): ventre, matricula, titulo (verbatim)."""
+    _ventre_a320(ca)
+    # --- matricula CC-BFO em Arial Bold (a fonte do master), branca no indigo
+    D = bpy.data
+    cu = D.curves.new("RegCeoTmp", type='FONT')
+    cu.body = "CC-BFO"
+    cu.font = D.fonts["Arial Bold"]
+    cu.size = 1.0
+    ob = D.objects.new("RegCeoTmp", cu)
+    bpy.context.scene.collection.objects.link(ob)
+    bpy.context.view_layer.update()
+    dg = bpy.context.evaluated_depsgraph_get()
+    me = ob.evaluated_get(dg).to_mesh()
+    me.calc_loop_triangles()
+    tris2 = [[(me.vertices[i].co.x, me.vertices[i].co.y) for i in t.vertices]
+             for t in me.loop_triangles]
+    xs = [p[0] for t in tris2 for p in t]; ys = [p[1] for t in tris2 for p in t]
+    lx0, lx1, ly0, ly1 = min(xs), max(xs), min(ys), max(ys)
+    TX0, TZ0, TZ1 = 30.29, 1.04, 1.335
+    s = (TZ1 - TZ0) / (ly1 - ly0)
+    tris2 = [[(TX0 + (px - lx0) * s, TZ0 + (py - ly0) * s) for px, py in t]
+             for t in tris2]
+    TX1 = TX0 + (lx1 - lx0) * s
+    mi = ca.tri_mask_2d(tris2, TX0 - 0.05, TX1 + 0.05, TZ0 - 0.05, TZ1 + 0.05,
+                        res=900)
+    selp = ca.sample_mask(mi, ca.Xg, ca.Zg) & (ca.Yg < 0) & \
+        (np.abs(np.sin(ca.THg)) > 0.30)
+    XMIR = TX0 + TX1
+    sels = ca.sample_mask(mi, XMIR - ca.Xg, ca.Zg) & (ca.Yg > 0) & \
+        (np.abs(np.sin(ca.THg)) > 0.30)
+    ca.compor(selp | sels, C_A320[1], nome="matricula CC-BFO")
+    ob.evaluated_get(dg).to_mesh_clear()
+    D.objects.remove(ob, do_unlink=True)
+    D.curves.remove(cu)
+    # --- titulo 'AIRBUS A320': ilhas do MarkAirbusNeo_E menos a ultima ('neo')
+    mk = D.objects["MarkAirbusNeo_E"]
+    mm = mk.data
+    mm.calc_loop_triangles()
+    isl = ca.mesh_islands(mm)
+
+    def mbox(comp):
+        xs = [mm.vertices[i].co.x for i in comp]
+        ys = [mm.vertices[i].co.y for i in comp]
+        return min(xs), max(xs), min(ys), max(ys)
+
+    isl.sort(key=lambda c: mbox(c)[0])
+    vert_isl = {}
+    for k, comp in enumerate(isl):
+        for i in comp:
+            vert_isl[i] = k
+    mtris = {k: [] for k in range(len(isl))}
+    for t in mm.loop_triangles:
+        k = vert_isl[t.vertices[0]]
+        mtris[k].append([(mm.vertices[i].co.x, mm.vertices[i].co.y)
+                         for i in t.vertices])
+    n = len(isl)
+    keep = list(range(0, n - 1))
+    tris2 = []
+    for k in keep:
+        tris2 += mtris[k]
+    xs = [p[0] for t in tris2 for p in t]; ys = [p[1] for t in tris2 for p in t]
+    lx0, lx1, ly0, ly1 = min(xs), max(xs), min(ys), max(ys)
+    TX0, TX1, TZ0, TZ1 = 26.21, 27.94, 1.040, 1.240
+    s = min((TX1 - TX0) / (lx1 - lx0), (TZ1 - TZ0) / (ly1 - ly0))
+    tris2 = [[(TX0 + (px - lx0) * s, TZ0 + (py - ly0) * s) for px, py in t]
+             for t in tris2]
+    mi = ca.tri_mask_2d(tris2, TX0 - 0.03, TX1 + 0.03, TZ0 - 0.03, TZ1 + 0.03,
+                        res=1500)
+    selp = ca.sample_mask(mi, ca.Xg, ca.Zg) & (ca.Yg < 0) & \
+        (np.abs(np.sin(ca.THg)) > 0.25)
+    XMIR = TX0 + TX1
+    sels = ca.sample_mask(mi, XMIR - ca.Xg, ca.Zg) & (ca.Yg > 0) & \
+        (np.abs(np.sin(ca.THg)) > 0.25)
+    ca.compor(selp | sels, C_A320[2], nome="titulo AIRBUS A320")
+
+
+LEGADO_A320 = {
+    "a319": ("airbus A319/a319_rings.json", 34.2, _marcas_a319),
+    "a320ceo": ("airbus A320ceo/a320ceo_rings.json", 38.0, _marcas_a320ceo),
+}
+
+
+# ========================================================== legado A321s
+# As marcas FINAIS dos dois A321 foram pintadas por
+#   airbus A321neo/build_a321_fase2_livery.py + build_a321_fase2b_espelho.py
+#   airbus A321ceo/fix_reg_ghosts.py + fix_titulo_a321.py
+# — todos com o mesmo `raster_side` (ss=2, ponte circular lida da malha).
+# Movidos para ca verbatim; os quatro arquivos ficam como registro historico.
+
+
+class CascoA321:
+    """Ponte circular (z-only) e rasterizador raster_side dos scripts A321."""
+
+    def __init__(self, luv):
+        D = bpy.data
+        self.LUV = luv
+        fus = D.objects["Fuselagem"]
+        rings = {}
+        for v in fus.data.vertices:
+            rings.setdefault(round(v.co.x, 3), []).append(v.co)
+        rx, rzc, rr = [], [], []
+        for k in sorted(rings):
+            vs = rings[k]
+            if len(vs) < 8:
+                continue
+            zmax = max(p.z for p in vs); zmin = min(p.z for p in vs)
+            rx.append(k); rzc.append((zmax + zmin) / 2)
+            rr.append((zmax - zmin) / 2)
+        self._rx = np.array(rx); self._rzc = np.array(rzc)
+        self._rr = np.array(rr)
+        self._aneis = None            # tabela (x,zc,rz,ry) p/ exclusao de anel
+        imT = D.images["LiveryTex"]; imF = D.images["LiveryFac"]
+        self.imT, self.imF = imT, imF
+        W, H = imT.size
+        self.W, self.H = W, H
+        ux = (np.arange(W) + 0.5) / W * luv
+        vv = (np.arange(H) + 0.5) / H
+        TH = vv * 2 * math.pi - math.pi
+        self.XG = np.broadcast_to(ux, (H, W))
+        self.THG = np.broadcast_to(TH[:, None], (H, W))
+        self.ZG = (np.broadcast_to(self.zc_of(ux), (H, W)) +
+                   np.broadcast_to(self.r_of(ux), (H, W)) * np.cos(self.THG))
+        self.SIDE = np.abs(np.sin(self.THG)) > 0.25
+        buf = np.empty(W * H * 4, np.float32)
+        imT.pixels.foreach_get(buf)
+        self.tex = buf.reshape(H, W, 4)
+        buf = np.empty(W * H * 4, np.float32)
+        imF.pixels.foreach_get(buf)
+        self.fac = buf.reshape(H, W, 4)
+
+    def anel_excluir(self, rings_rel, nomes):
+        """Mascara (H,W) do anel branco da porta (banda+sulco, dilatada 1
+        texel): os erases dos ops de matricula NAO podem tocar o anel — na
+        textura embarcada ele e o AA do portas_familia, pintado DEPOIS dos
+        fixes de marca, e qualquer repintura binaria aqui o degradaria."""
+        import os as _os
+        raiz = _os.path.dirname(_os.path.abspath(__file__))
+        rj = json.load(open(_os.path.join(raiz, rings_rel)))
+        rx = np.array([r["x"] for r in rj]); rzc = np.array([r["zc"] for r in rj])
+        rrz = np.array([r["rz"] for r in rj]); rry = np.array([r["ry"] for r in rj])
+        W, H = self.W, self.H
+        X = (np.arange(W) + 0.5) / W * self.LUV
+        TH = ((np.arange(H) + 0.5) / H - 0.5) * 2 * math.pi
+        WG = kit.grade_arco(rx, rrz, rry, X, TH)
+        Xg = np.broadcast_to(X, (H, W))
+        out = np.zeros((H, W), bool)
+        for nome in nomes:
+            ob = bpy.data.objects.get(nome)
+            if ob is None:
+                continue
+            cx = kit.caixa_porta_xw(ob, rx, rzc, rrz, rry)
+            banda, sulco = kit.anel_porta(Xg, WG, cx, 0.058, 0.010, 0.15)
+            out |= banda | sulco
+        per = out.copy()
+        for dy in (-1, 0, 1):
+            for dx in (-1, 0, 1):
+                per |= np.roll(np.roll(out, dy, 0), dx, 1)
+        return per
+
+    def zc_of(self, x):
+        return np.interp(x, self._rx, self._rzc)
+
+    def r_of(self, x):
+        return np.interp(x, self._rx, self._rr)
+
+    def raster_side(self, tris, cor, lado, ss=2):
+        W, H, L = self.W, self.H, self.LUV
+        Ws, Hs = W * ss, H * ss
+        cov = np.zeros((Hs, Ws), dtype=bool)
+        for pts in tris:
+            pix = []
+            for (x, _, z) in pts:
+                r = max(self.r_of(x), 1e-6)
+                ct = float(np.clip((z - self.zc_of(x)) / r, -1, 1))
+                th = math.acos(ct)
+                if lado == "E":
+                    th = -th
+                pix.append((x / L * Ws, (th + math.pi) / (2 * math.pi) * Hs))
+            xs = [p[0] for p in pix]; ys = [p[1] for p in pix]
+            xlo, xhi = max(int(min(xs)), 0), min(int(max(xs)) + 1, Ws - 1)
+            ylo, yhi = max(int(min(ys)), 0), min(int(max(ys)) + 1, Hs - 1)
+            if xhi <= xlo or yhi <= ylo:
+                continue
+            gx, gy = np.meshgrid(np.arange(xlo, xhi + 1), np.arange(ylo, yhi + 1))
+            (ax, ay), (bx, by), (cx, cy) = pix
+            d1 = (gx - bx) * (ay - by) - (ax - bx) * (gy - by)
+            d2 = (gx - cx) * (by - cy) - (bx - cx) * (gy - cy)
+            d3 = (gx - ax) * (cy - ay) - (cx - ax) * (gy - ay)
+            mm = ~((((d1 < 0) | (d2 < 0) | (d3 < 0)) &
+                    ((d1 > 0) | (d2 > 0) | (d3 > 0))))
+            cov[ylo:yhi + 1, xlo:xhi + 1] |= mm
+        frac = cov.reshape(H, ss, W, ss).mean(axis=(1, 3))
+        mm = frac > 0.02
+        a = frac[mm][:, None]
+        self.tex[mm, 0:3] = self.tex[mm, 0:3] * (1 - a) + np.asarray(cor)[None, :] * a
+        self.fac[mm, 0:3] = np.maximum(self.fac[mm, 0:3], a)
+        return int(mm.sum())
+
+    @staticmethod
+    def mirror(tris, x0, x1):
+        return [[(x0 + x1 - x, y, z) for (x, y, z) in pts] for pts in tris]
+
+    @staticmethod
+    def text_tris(body, cap, x_at, z_at):
+        D = bpy.data
+        cu = D.curves.new("t", 'FONT')
+        cu.body = body
+        cu.font = D.fonts["Arial Bold"]
+        cu.size = 1.0
+        ob = D.objects.new("t", cu)
+        bpy.context.scene.collection.objects.link(ob)
+        dg = bpy.context.evaluated_depsgraph_get()
+        me = bpy.data.meshes.new_from_object(ob.evaluated_get(dg))
+        xs = [v.co.x for v in me.vertices]; ys = [v.co.y for v in me.vertices]
+        s = cap / (max(ys) - min(ys))
+        x0b, y0b = min(xs), min(ys)
+        me.calc_loop_triangles()
+        tris = []
+        for tri in me.loop_triangles:
+            pts = [me.vertices[i].co for i in tri.vertices]
+            tris.append([((p.x - x0b) * s + x_at, 0.0, (p.y - y0b) * s + z_at)
+                         for p in pts])
+        span = (max(xs) - min(xs)) * s
+        bpy.data.objects.remove(ob, do_unlink=True)
+        bpy.data.meshes.remove(me)
+        return tris, span
+
+    def malha_titulo_321(self):
+        """AIRBUS do MarkAirbusNeo_E + glifos do SVG a321neo (fase2b, verbatim:
+        importa o SVG se a malha temporaria nao existir no blend)."""
+        D = bpy.data
+        mark = D.objects["MarkAirbusNeo_E"]
+        me = mark.data
+        me.calc_loop_triangles()
+        xs_loc = sorted(set(round(v.co.x, 4) for v in me.vertices))
+        ga = max((b - a, a) for a, b in zip(xs_loc[:-1], xs_loc[1:]))[1]
+        airbus_v = [v.co for v in me.vertices if v.co.x <= ga + 1e-5]
+        ax0 = min(v.x for v in airbus_v); ax1 = max(v.x for v in airbus_v)
+        ay0 = min(v.y for v in airbus_v); ay1 = max(v.y for v in airbus_v)
+        s_air = 0.145 / (ay1 - ay0)
+        me321 = D.meshes.get("a321neo_mark")
+        if me321 is None:
+            import os as _os
+            svg = _os.path.abspath(_os.path.join(
+                _os.path.dirname(_os.path.abspath(__file__)),
+                "airbus_a321neo_logo.svg"))
+            before = set(D.objects)
+            bpy.ops.import_curve.svg(filepath=svg)
+            imported = [o for o in D.objects if o not in before]
+            bmn = bmesh.new()
+            dg = bpy.context.evaluated_depsgraph_get()
+            for o in imported:
+                mev = o.evaluated_get(dg).to_mesh()
+                vmap = {}
+                for p in mev.polygons:
+                    nv = []
+                    for vi in p.vertices:
+                        if vi not in vmap:
+                            vmap[vi] = bmn.verts.new(o.matrix_world @
+                                                     mev.vertices[vi].co)
+                        nv.append(vmap[vi])
+                    try:
+                        bmn.faces.new(nv)
+                    except ValueError:
+                        pass
+                o.evaluated_get(dg).to_mesh_clear()
+            for o in imported:
+                bpy.data.objects.remove(o, do_unlink=True)
+            bmesh.ops.triangulate(bmn, faces=bmn.faces[:])
+            me321 = D.meshes.new("a321neo_mark")
+            bmn.to_mesh(me321)
+            bmn.free()
+        me321.calc_loop_triangles()
+        return me, ga, ax0, ax1, ay0, ay1, s_air, me321
+
+
+def _marcas_a321neo(cn):
+    """PS-LBA: matricula + titulo, port do fase2 e stbd do fase2b, verbatim."""
+    NAVY = np.array([0.110, 0.180, 0.388])
+    INDIGO_F = np.array([0.165, 0.000, 0.533])
+    # erases (base declarada). O anel branco da porta 2 e EXCLUIDO: na textura
+    # embarcada ele e o AA do portas_familia (pintado depois dos fixes) e o
+    # erase nao pode toca-lo.
+    anel = cn.anel_excluir("airbus A321neo/a321_rings.json",
+                           ("Porta2_E", "Porta2_D"))
+    D_side = cn.THG > 0
+    E_side = cn.THG < 0
+    for side in (E_side, D_side):
+        m = side & (cn.XG > 36.6) & (cn.XG < 39.3) & (cn.ZG > 0.62) & \
+            (cn.ZG < 1.18) & (cn.tex[..., 0] > 0.5) & (cn.tex[..., 1] > 0.5) & ~anel
+        cn.tex[m, 0:3] = INDIGO_F
+        cn.fac[m, 0:3] = 1.0
+        m = side & (cn.XG > 33.35) & (cn.XG < 35.62) & (cn.ZG > 0.82) & \
+            (cn.ZG < 1.12) & (cn.tex[..., 2] - cn.tex[..., 0] > 0.05)
+        cn.fac[m, 0:3] = 0.0
+    # registration: x 37.15 e a POSICAO EMBARCADA (spec_a321.json ->
+    # cauda_livery_ps_lba: "x 37.15-39.12"; o 36.78 do fase2 foi re-assentado
+    # por uma rodada posterior). Port reta, stbd espelhada (fase2b).
+    tris, span = cn.text_tris("PS-LBA", 0.40, 37.15, 0.70)
+    n = cn.raster_side(tris, (1.0, 1.0, 1.0), "E")
+    print(f"   [pintar]  matricula PS-LBA port    {n} texels")
+    n = cn.raster_side(cn.mirror(tris, 37.15, 37.15 + span), (1.0, 1.0, 1.0), "D")
+    print(f"   [pintar]  matricula PS-LBA stbd    {n} texels")
+    # title: AIRBUS + A321neo (cap 0.145, z 0.88, X0 33.55)
+    me, ga, ax0, ax1, ay0, ay1, s_air, me321 = cn.malha_titulo_321()
+    X0 = 33.55
+    tris_air = []
+    for tri in me.loop_triangles:
+        pts = [me.vertices[i].co for i in tri.vertices]
+        if max(p.x for p in pts) <= ga + 1e-5:
+            tris_air.append([((p.x - ax0) * s_air + X0, 0.0,
+                              (p.y - ay0) * s_air + 0.88) for p in pts])
+    xs = [v.co.x for v in me321.vertices]; ys = [v.co.y for v in me321.vertices]
+    n0, m0, m1 = min(xs), min(ys), max(ys)
+    s321 = 0.145 / ((m1 - m0) / 1.12)
+    XA = X0 + (ax1 - ax0) * s_air + 0.10
+    tris321 = []
+    for tri in me321.loop_triangles:
+        pts = [me321.vertices[i].co for i in tri.vertices]
+        tris321.append([((p.x - n0) * s321 + XA, 0.0,
+                         (p.y - m0) * s321 + 0.88) for p in pts])
+    xend = XA + (max(xs) - n0) * s321
+    n = cn.raster_side(tris_air + tris321, NAVY, "E")
+    print(f"   [pintar]  titulo A321neo port      {n} texels")
+    n = cn.raster_side(cn.mirror(tris_air + tris321, X0, xend), NAVY, "D")
+    print(f"   [pintar]  titulo A321neo stbd      {n} texels")
+
+
+def _marcas_a321ceo(cn):
+    """PT-MXP: fix_reg_ghosts.py + fix_titulo_a321.py, verbatim."""
+    D = bpy.data
+    INDIGO_F = np.array([0.165, 0.000, 0.533])
+    NAVY = np.array([0.110, 0.180, 0.388])
+    WHITE = np.array([1.0, 1.0, 1.0])
+    # refill indigo da zona da matricula (fix_reg_ghosts), MAS excluindo o anel
+    # D4: na textura embarcada ele e o AA do portas_familia, pintado depois dos
+    # fixes, e o refill+anel binario do fix o degradaria a cada rodada.
+    anel = cn.anel_excluir("airbus A321ceo/a321ceo_rings.json",
+                           ("Porta4_E", "Porta4_D"))
+    m = (cn.XG > 36.55) & (cn.XG < 39.30) & (cn.ZG > 0.52) & (cn.ZG < 1.28) & \
+        cn.SIDE & ~anel
+    cn.tex[m, 0:3] = INDIGO_F
+    cn.fac[m, 0:3] = 1.0
+    print(f"   [apagar]  zona da matricula -> indigo  {int(m.sum())} texels")
+    tris, span = cn.text_tris("PT-MXP", 0.40, 37.15, 0.70)
+    n = cn.raster_side(tris, (1.0, 1.0, 1.0), "E")
+    print(f"   [pintar]  matricula PT-MXP port    {n} texels")
+    n = cn.raster_side(cn.mirror(tris, 37.15, 37.15 + span), (1.0, 1.0, 1.0), "D")
+    print(f"   [pintar]  matricula PT-MXP stbd    {n} texels")
+    # titulo AIRBUS A321 (fix_titulo_a321.py): erase box + clusters <= cap
+    m = (cn.XG > 32.80) & (cn.XG < 34.95) & (cn.ZG > 0.78) & (cn.ZG < 1.18) & cn.SIDE
+    cn.fac[m, 0:3] = 0.0
+    me, ga, ax0, ax1, ay0, ay1, s_air, me321 = cn.malha_titulo_321()
+    L_air = (ax1 - ax0) * s_air
+    ivs = []
+    for tri in me321.loop_triangles:
+        pts = [me321.vertices[i].co for i in tri.vertices]
+        ivs.append((min(p.x for p in pts), max(p.x for p in pts), tri))
+    ivs.sort(key=lambda t: t[0])
+    clusters = []
+    for lo, hi, tri in ivs:
+        if clusters and lo <= clusters[-1][1] + 1e-6:
+            clusters[-1][1] = max(clusters[-1][1], hi)
+            clusters[-1][2].append(tri)
+        else:
+            clusters.append([lo, hi, [tri]])
+    span_ = clusters[-1][1]
+    keep = [c for c in clusters if c[1] <= 0.62 * span_]
+    tris321_raw = [t for c in keep for t in c[2]]
+    k0 = min(c[0] for c in keep); k1 = max(c[1] for c in keep)
+    kys = [me321.vertices[i].co.y for c in keep for t in c[2] for i in t.vertices]
+    cap321 = max(kys) - min(kys)
+    s321 = 0.145 / cap321
+    L_321 = (k1 - k0) * s321
+    ky0 = min(kys)
+    GAP = 0.10
+    X_END = 34.75
+    X0 = X_END - (L_air + GAP + L_321)
+    tris_air = []
+    for tri in me.loop_triangles:
+        pts = [me.vertices[i].co for i in tri.vertices]
+        if max(p.x for p in pts) <= ga + 1e-5:
+            tris_air.append([((p.x - ax0) * s_air + X0, 0.0,
+                              (p.y - ay0) * s_air + 0.88) for p in pts])
+    XA = X0 + L_air + GAP
+    tris_321 = []
+    for tri in tris321_raw:
+        pts = [me321.vertices[i].co for i in tri.vertices]
+        tris_321.append([((p.x - k0) * s321 + XA, 0.0,
+                          (p.y - ky0) * s321 + 0.88) for p in pts])
+    allt = tris_air + tris_321
+    n = cn.raster_side(allt, NAVY, "E")
+    print(f"   [pintar]  titulo AIRBUS A321 port  {n} texels")
+    n = cn.raster_side(cn.mirror(allt, X0, X_END), NAVY, "D")
+    print(f"   [pintar]  titulo AIRBUS A321 stbd  {n} texels")
+
+
+LEGADO_A321 = {
+    "a321neo": (45.0, _marcas_a321neo),
+    "a321ceo": (45.0, _marcas_a321ceo),
+}
+
+
+# ============================================================== legado 787-8
+# As marcas FINAIS do CC-BBF foram pintadas por build_788_livery2.py (lockup
+# subido +0.12 m e espelhado parte a parte; matricula cap 0.30 na caixa medida
+# nas fotos) e o simbolo do ventre por build_788_livery.py. Movidos para ca:
+# o lockup e o ventre verbatim; a matricula e RECONSTRUIDA da mesma arte
+# (ilhas C,C,-,B,B de Reg787_E + o F construido das metricas da propria fonte,
+# build_788_livery.py secao 6) e pintada direto na caixa FINAL do livery2
+# (x 44.40..46.03, z 1.17..1.47, cap 0.30) — o livery2 reamostrava a tinta ja
+# pintada, o que nao e re-executavel; pintar da arte e, e cai na mesma caixa.
+# NOTA: livery2 somou +0.12 m ao z dos objetos do lockup e SALVOU o blend; os
+# objetos ja estao na posicao final — nao somar de novo.
+
+
+class CascoB788:
+    """Grades e rasterizador dos scripts do 787-8 (rings json, ss=3)."""
+
+    def __init__(self):
+        import os as _os
+        raiz = _os.path.dirname(_os.path.abspath(__file__))
+        rings = json.load(open(_os.path.join(raiz, "boeing 787-8/b788_rings.json")))
+        self.L_UV = 57.5
+        rx = np.array([r["x"] for r in rings])
+        self.rx = rx
+        self.rzc = np.array([r["zc"] for r in rings])
+        self.rrz = np.array([r["rz"] for r in rings])
+        self.rry = np.array([r["ry"] for r in rings])
+        D = bpy.data
+        imT = D.images["LiveryTex"]; imF = D.images["LiveryFac"]
+        self.imT, self.imF = imT, imF
+        W, H = imT.size
+        self.W, self.H = W, H
+        X = (np.arange(W) + 0.5) / W * self.L_UV
+        TH = (np.arange(H) + 0.5) / H * 2 * math.pi - math.pi
+        self.Xg = np.broadcast_to(X, (H, W))
+        self.THg = np.broadcast_to(TH[:, None], (H, W))
+        ZCg = np.interp(X, rx, self.rzc)[None, :]
+        RZg = np.interp(X, rx, self.rrz)[None, :]
+        RYg = np.interp(X, rx, self.rry)[None, :]
+        self.Zg = ZCg + RZg * np.cos(self.THg)
+        self.Yg = RYg * np.sin(self.THg)
+        self.THdeg = np.degrees(np.abs(self.THg))
+        buf = np.empty(W * H * 4, np.float32)
+        imT.pixels.foreach_get(buf)
+        self.tex = buf.reshape(H, W, 4)
+        buf = np.empty(W * H * 4, np.float32)
+        imF.pixels.foreach_get(buf)
+        self.fac = buf.reshape(H, W, 4)
+
+    def wedge_mask(self, margin=0.0):
+        # a regra do -8 (reparar_echarpe._r_788), com a margem dos scripts
+        return ((self.Xg >= 42.68 + 0.992 * self.Zg - margin) &
+                (self.THdeg <= 117.0 - 5.2 * (self.Xg - 42.61) + margin * 5) &
+                (self.Xg <= 51.05 + 0.3858 * self.Zg + margin))
+
+    def coverage(self, tris2, PA, PB, gate, ss=3):
+        H, W = self.H, self.W
+        xs = [p[0] for t in tris2 for p in t]
+        ys = [p[1] for t in tris2 for p in t]
+        x0, x1 = min(xs) - 0.05, max(xs) + 0.05
+        y0, y1 = min(ys) - 0.05, max(ys) + 0.05
+        res = max(int(3000 / max(x1 - x0, y1 - y0)), 400)
+        nx = max(int((x1 - x0) * res), 8)
+        ny = max(int((y1 - y0) * res), 8)
+        grid = np.zeros((ny, nx), bool)
+        gx, gy = np.meshgrid((np.arange(nx) + 0.5) / nx * (x1 - x0) + x0,
+                             (np.arange(ny) + 0.5) / ny * (y1 - y0) + y0)
+        for (ax, ay), (bx, by), (cx, cy) in tris2:
+            i0 = max(int((min(ax, bx, cx) - x0) / (x1 - x0) * nx) - 1, 0)
+            i1 = min(int((max(ax, bx, cx) - x0) / (x1 - x0) * nx) + 2, nx)
+            j0 = max(int((min(ay, by, cy) - y0) / (y1 - y0) * ny) - 1, 0)
+            j1 = min(int((max(ay, by, cy) - y0) / (y1 - y0) * ny) + 2, ny)
+            if i1 <= i0 or j1 <= j0:
+                continue
+            sx = gx[j0:j1, i0:i1]
+            sy = gy[j0:j1, i0:i1]
+            d1 = (sx - bx) * (ay - by) - (ax - bx) * (sy - by)
+            d2 = (sx - cx) * (by - cy) - (bx - cx) * (sy - cy)
+            d3 = (sx - ax) * (cy - ay) - (cx - ax) * (sy - ay)
+            grid[j0:j1, i0:i1] |= ~(((d1 < 0) | (d2 < 0) | (d3 < 0)) &
+                                    ((d1 > 0) | (d2 > 0) | (d3 > 0)))
+        cov = np.zeros((H, W), np.float32)
+        jj, ii = np.nonzero(gate)
+        if len(ii) == 0:
+            return cov
+        pa = PA[jj, ii]
+        pb = PB[jj, ii]
+        acc = np.zeros(len(ii), np.float32)
+        for oa in range(ss):
+            for ob_ in range(ss):
+                sa = pa + ((oa + 0.5) / ss - 0.5) * (self.L_UV / W)
+                sb = pb + ((ob_ + 0.5) / ss - 0.5) * 0.018
+                ci = ((sa - x0) / (x1 - x0) * nx).astype(int)
+                cj = ((sb - y0) / (y1 - y0) * ny).astype(int)
+                ok = (ci >= 0) & (ci < nx) & (cj >= 0) & (cj < ny)
+                hit = np.zeros(len(ii), bool)
+                hit[ok] = grid[cj[ok], ci[ok]]
+                acc += hit
+        cov[jj, ii] = acc / (ss * ss)
+        return cov
+
+    def composite(self, cov, color):
+        m = cov > 0.003
+        a = cov[m][:, None]
+        self.tex[m, :3] = self.tex[m, :3] * (1 - a) + np.asarray(color)[None, :] * a
+        for ch in range(3):
+            self.fac[m, ch] = np.maximum(self.fac[m, ch], cov[m])
+        return int(m.sum())
+
+    @staticmethod
+    def islands_of(me):
+        import collections
+        adj = collections.defaultdict(set)
+        for e in me.edges:
+            a, b = e.vertices
+            adj[a].add(b)
+            adj[b].add(a)
+        seen, out = set(), []
+        for v0 in range(len(me.vertices)):
+            if v0 in seen:
+                continue
+            st, comp = [v0], set()
+            while st:
+                v = st.pop()
+                if v in comp:
+                    continue
+                comp.add(v)
+                st.extend(adj[v] - comp)
+            seen |= comp
+            out.append(comp)
+        return out
+
+    def salvar(self):
+        H, W = self.H, self.W
+        self.imT.pixels.foreach_set(np.concatenate(
+            [self.tex[..., :3], np.ones((H, W, 1), np.float32)],
+            axis=2).astype(np.float32).ravel())
+        self.imT.update()
+        self.imF.pixels.foreach_set(np.concatenate(
+            [self.fac[..., :1].repeat(3, axis=2),
+             np.ones((H, W, 1), np.float32)], axis=2).astype(np.float32).ravel())
+        self.imF.update()
+        for im in (self.imT, self.imF):
+            if im.packed_file:
+                im.pack()
+        print("   [salvar] LiveryTex + LiveryFac atualizadas (787-8)")
+
+
+def _marcas_b788(cb):
+    import mathutils
+    D = bpy.data
+    WHITE = np.array([0.969, 0.976, 0.980], np.float32)
+    INDIGO_F = np.array([0.165, 0.000, 0.533], np.float32)
+    CORAL_F = np.array([0.929, 0.086, 0.318], np.float32)
+    FLANK = (np.abs(np.sin(cb.THg)) > 0.30) & (cb.THdeg < 120)
+    PORT = cb.Yg < 0
+    STBD = cb.Yg > 0
+
+    def tris_of(ob):
+        me = ob.data
+        me.calc_loop_triangles()
+        mw = mathutils.Matrix.LocRotScale(ob.location, ob.rotation_euler, ob.scale)
+        vs = [mw @ v.co for v in me.vertices]
+        return [[vs[i] for i in t.vertices] for t in me.loop_triangles]
+
+    # ------------------------------------------- lockup (livery2, verbatim)
+    chroma = cb.tex[..., :3].max(axis=2) - cb.tex[..., :3].min(axis=2)
+    lum = cb.tex[..., :3].mean(axis=2)
+    lum_wht = float(WHITE.mean())
+    lockband = (cb.Xg >= 7.20) & (cb.Xg <= 16.20) & FLANK
+    m = lockband & (chroma > 0.10)
+    cb.tex[m, :3] = 1.0
+    cb.fac[m, 0] = cb.fac[m, 1] = cb.fac[m, 2] = 0.0
+    ghost = lockband & (chroma < 0.05) & (np.abs(lum - lum_wht) < 0.01) & \
+        (cb.fac[..., 0] < 0.02)
+    cb.tex[ghost, :3] = 1.0
+    print(f"   [apagar]  lockup {int(m.sum())} + ghost {int(ghost.sum())} texels")
+    for nm in ("B789_LogoLATAM_E", "B789_LogoLATAM_E_Coral"):
+        D.objects[nm].hide_viewport = False
+    bpy.context.view_layer.update()
+    for nm, color in (("B789_LogoLATAM_E_Coral", CORAL_F), ("B789_LogoLATAM_E", INDIGO_F)):
+        tris2 = [[(p.x, p.z) for p in t] for t in tris_of(D.objects[nm])]
+        cov = cb.coverage(tris2, cb.Xg, cb.Zg, PORT & FLANK)
+        print(f"   [pintar]  lockup port {nm}  {cb.composite(cov, color)} texels")
+
+    def split_symbol_letters(ob, cut=9.0):
+        me = ob.data
+        me.calc_loop_triangles()
+        mw = mathutils.Matrix.LocRotScale(ob.location, ob.rotation_euler, ob.scale)
+        vs = [mw @ v.co for v in me.vertices]
+        which = {}
+        for comp in cb.islands_of(me):
+            xs = [vs[i].x for i in comp]
+            g = 0 if max(xs) <= cut else 1
+            for i in comp:
+                which[i] = g
+        out = ([], [])
+        for t in me.loop_triangles:
+            out[which[t.vertices[0]]].append([(vs[i].x, vs[i].z)
+                                              for i in t.vertices])
+        return out
+
+    def mirror2(tris, axis):
+        return [[(2 * axis - x, z) for x, z in t] for t in tris]
+
+    sym_i, let_i = split_symbol_letters(D.objects["B789_LogoLATAM_E"])
+    sym_c, let_c = split_symbol_letters(D.objects["B789_LogoLATAM_E_Coral"])
+    sx = [x for t in sym_i + sym_c for x, _ in t]
+    lx = [x for t in let_i for x, _ in t]
+    AX_SYM = 0.5 * (min(sx) + max(sx))
+    AX_LET = 0.5 * (min(lx) + max(lx))
+    cov = cb.coverage(mirror2(sym_c, AX_SYM), cb.Xg, cb.Zg, STBD & FLANK)
+    print(f"   [pintar]  lockup stbd simbolo coral  {cb.composite(cov, CORAL_F)}")
+    cov = cb.coverage(mirror2(sym_i, AX_SYM), cb.Xg, cb.Zg, STBD & FLANK)
+    print(f"   [pintar]  lockup stbd simbolo indigo {cb.composite(cov, INDIGO_F)}")
+    cov = cb.coverage(mirror2(let_i, AX_LET), cb.Xg, cb.Zg, STBD & FLANK)
+    print(f"   [pintar]  lockup stbd wordmark       {cb.composite(cov, INDIGO_F)}")
+    for nm in ("B789_LogoLATAM_E", "B789_LogoLATAM_E_Coral",
+               "B789_LogoLATAM_D", "B789_LogoLATAM_D_Coral"):
+        D.objects[nm].hide_viewport = True
+        D.objects[nm].hide_render = True
+
+    # -------------------------------- ventre (build_788_livery, verbatim)
+    ob = D.objects["LogoBarriga"]
+    me = ob.data
+    isl = cb.islands_of(me)
+    sym_isl = []
+    for comp in isl:
+        xs = [me.vertices[i].co.x for i in comp]
+        if max(xs) < 1.35:
+            sym_isl.append(comp)
+    keep = set()
+    for comp in sym_isl:
+        keep |= comp
+    me.calc_loop_triangles()
+    tris_sym = [[(me.vertices[i].co.x, me.vertices[i].co.y)
+                 for i in t.vertices] for t in me.loop_triangles
+                if t.vertices[0] in keep]
+    obc = D.objects["LogoBarriga_Coral"]
+    mec = obc.data
+    mec.calc_loop_triangles()
+    tris_cor = [[(mec.vertices[i].co.x, mec.vertices[i].co.y)
+                 for i in t.vertices] for t in mec.loop_triangles]
+    allpts = [p for t in tris_sym + tris_cor for p in t]
+    lx0 = min(p[0] for p in allpts); lx1 = max(p[0] for p in allpts)
+    ly0 = min(p[1] for p in allpts); ly1 = max(p[1] for p in allpts)
+    sW = 3.12 / (lx1 - lx0)
+    TX0 = 11.45 - 0.5 * 3.12
+    TY0 = -0.5 * (ly1 - ly0) * sW
+
+    def to_belly(tris):
+        return [[(TX0 + (px - lx0) * sW, TY0 + (py - ly0) * sW)
+                 for px, py in t] for t in tris]
+
+    gate_belly = (np.cos(cb.THg) < -0.35)
+    cov = cb.coverage(to_belly(tris_cor), cb.Xg, cb.Yg, gate_belly)
+    n1 = cb.composite(cov, CORAL_F)
+    cov = cb.coverage(to_belly(tris_sym), cb.Xg, cb.Yg, gate_belly)
+    n2 = cb.composite(cov, INDIGO_F)
+    print(f"   [pintar]  ventre simbolo  {n1} + {n2} texels")
+
+    # ------------- matricula CC-BBF: arte do stage 2, caixa final do livery2
+    reg = D.objects["Reg787_E"]
+    me = reg.data
+    isl = cb.islands_of(me)
+
+    def ibox(comp):
+        xs = [me.vertices[i].co.x for i in comp]
+        zs = [me.vertices[i].co.y for i in comp]
+        return min(xs), max(xs), min(zs), max(zs)
+
+    isl.sort(key=lambda c: ibox(c)[0])
+    vert_isl = {}
+    for k, comp in enumerate(isl):
+        for i in comp:
+            vert_isl[i] = k
+    me.calc_loop_triangles()
+    tris_by = {k: [] for k in range(len(isl))}
+    for t in me.loop_triangles:
+        k = vert_isl[t.vertices[0]]
+        tris_by[k].append([(me.vertices[i].co.x, me.vertices[i].co.y)
+                           for i in t.vertices])
+    bb = [ibox(c) for c in isl]
+    capH = max(b[3] for b in bb)
+    hyph = min(range(len(isl)), key=lambda k: (bb[k][3] - bb[k][2]))
+    tbar = bb[hyph][3] - bb[hyph][2]
+    seq = [0, 1, 2, 3, 3]                       # C C - B B
+    tris2 = []
+    for pos, k in enumerate(seq):
+        slot = bb[pos]
+        dxg = 0.5 * (slot[0] + slot[1]) - 0.5 * (bb[k][0] + bb[k][1])
+        tris2 += [[(px + dxg, py) for px, py in t] for t in tris_by[k]]
+    s5 = bb[5]
+    wF = (s5[1] - s5[0]) * 0.92
+    fx0 = s5[0]
+    sw = tbar * 1.10
+    z0g, z1g = 0.0, capH
+
+    def rect(x0, x1, y0, y1):
+        return [[(x0, y0), (x1, y0), (x1, y1)], [(x0, y0), (x1, y1), (x0, y1)]]
+
+    tris2 += rect(fx0, fx0 + sw, z0g, z1g)
+    tris2 += rect(fx0, fx0 + wF, z1g - tbar, z1g)
+    zm = 0.54 * capH
+    tris2 += rect(fx0, fx0 + 0.82 * wF, zm - 0.5 * tbar, zm + 0.5 * tbar)
+    xs_l = [p[0] for t in tris2 for p in t]
+    ys_l = [p[1] for t in tris2 for p in t]
+    glx0, glx1 = min(xs_l), max(xs_l)
+    gly0, gly1 = min(ys_l), max(ys_l)
+    # caixa FINAL do livery2: x 44.40..46.03, z 1.17..1.47 (cap 0.30, fotos
+    # CC-BBB port / CC-BBF stbd) — esticada para preencher, como o resample fez
+    REG_X0, REG_X1, REG_Z0, REG_Z1 = 44.40, 46.03, 1.17, 1.47
+    kx = (REG_X1 - REG_X0) / (glx1 - glx0)
+    kz = (REG_Z1 - REG_Z0) / (gly1 - gly0)
+    tris2w = [[(REG_X0 + (px - glx0) * kx, REG_Z0 + (py - gly0) * kz)
+               for px, py in t] for t in tris2]
+    inw = cb.wedge_mask(-0.12)
+    # erase: o retangulo inteiro volta a indigo chapado (livery2 FLAT box)
+    FLAT = (cb.Xg >= 44.20) & (cb.Xg <= 47.10) & (cb.Zg >= 0.55) & \
+        (cb.Zg <= 1.45) & inw
+    for tag2, side in (("port", PORT), ("stbd", STBD)):
+        f = FLAT & side
+        cb.tex[f, :3] = INDIGO_F
+        cb.fac[f, 0] = cb.fac[f, 1] = cb.fac[f, 2] = 1.0
+        gate = side & (np.abs(np.sin(cb.THg)) > 0.25)
+        t2 = tris2w if tag2 == "port" else \
+            [[(REG_X0 + REG_X1 - px, pz) for px, pz in t] for t in tris2w]
+        cov = cb.coverage(t2, cb.Xg, cb.Zg, gate)
+        n = cb.composite(cov, WHITE)
+        print(f"   [pintar]  matricula CC-BBF {tag2}  {n} texels")
+
+
 LEGADO = {
     "b763er": dict(spec="boeing 767-300ER/spec_763.json", luv=55.5,
                    ponte="b763", fn=_marcas_b763er),
@@ -1185,6 +2221,17 @@ LEGADO = {
 def main():
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
     tag = argv[0]
+    if tag == "b788":
+        for o in bpy.data.objects:
+            o.hide_viewport = False
+        bpy.context.view_layer.update()
+        cb = CascoB788()
+        print(f"[b788] legado 787-8  L={cb.L_UV}  tex {cb.W}x{cb.H}")
+        _marcas_b788(cb)
+        cb.salvar()
+        bpy.ops.wm.save_mainfile()
+        print("[b788] blend saved")
+        return
     if tag in LEGADO:
         cfg = LEGADO[tag]
         for o in bpy.data.objects:
@@ -1206,6 +2253,27 @@ def main():
     if "marcas" in tarefas:
         fazer_marcas(cs, tag)
     cs.salvar()
+    if "marcas" in tarefas and tag in LEGADO_A320:
+        # as marcas legadas SS2 (ventre, matricula, titulo) leem as imagens ja
+        # salvas pelo Casco e compoem por cima — segunda passada, mesma corrida
+        rings_rel, luv, fn = LEGADO_A320[tag]
+        ca = CascoA320(rings_rel, luv)
+        print(f"[{tag}] legado A320  L={luv}  tex {ca.W}x{ca.H}")
+        fn(ca)
+        ca.salvar()
+    if "marcas" in tarefas and tag in LEGADO_A321:
+        luv, fn = LEGADO_A321[tag]
+        cn = CascoA321(luv)
+        print(f"[{tag}] legado A321  L={luv}  tex {cn.W}x{cn.H}")
+        fn(cn)
+        cn.imT.pixels.foreach_set(cn.tex.astype(np.float32).ravel())
+        cn.imT.update()
+        cn.imF.pixels.foreach_set(cn.fac.astype(np.float32).ravel())
+        cn.imF.update()
+        for im in (cn.imT, cn.imF):
+            if im.packed_file:
+                im.pack()
+        print("   [salvar] LiveryTex + LiveryFac atualizadas (A321)")
     bpy.ops.wm.save_mainfile()
     print(f"[{tag}] blend saved")
 

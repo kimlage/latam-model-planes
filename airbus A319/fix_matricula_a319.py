@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Move PT-TMT to where the photograph puts it, before the wedge is repainted.
+"""SUPERADO 2026-08-27 (pintor unico): absorvido por refazer_marcas.py (tag a319),
+que pinta a matricula da recombinacao P,T,-,T,M,T do proprio Reg_E na caixa
+FINAL medida aqui. Fica como registro historico da medicao. NAO rodar.
+
+Move PT-TMT to where the photograph puts it, before the wedge is repainted.
 
     /Applications/Blender.app/Contents/MacOS/Blender -b "airbus A319/A319_LATAM.blend" \
         --python "airbus A319/fix_matricula_a319.py" -- [--seco]

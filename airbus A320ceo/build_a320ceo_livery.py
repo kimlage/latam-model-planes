@@ -26,6 +26,15 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 import sys as _sys
 _sys.path.insert(0, os.path.dirname(BASE))
 import latam_livery_kit as kit  # noqa: E402
+import reparar_echarpe as _re   # noqa: E402
+
+# CONSOLIDACAO DO PINTOR UNICO (2026-08-27): este arquivo pinta so LIVERY
+# PLANA. As marcas — lockup (ja em refazer_marcas), matricula CC-BFO,
+# titulo AIRBUS A320, marca do ventre — moram em refazer_marcas.py (tag
+# a320ceo, secao "legado A320-familia"). Sequencia (REBUILD.md):
+#     build_a320ceo_livery.py -> portas_familia.py
+#                             -> refazer_marcas.py -- a320ceo lockup marcas
+#     (reparar_echarpe a320ceo e AUDITORIA: a borda dura embarcada fica)
 
 log = lambda *a: print("[A320ceoL]", *a)
 
@@ -75,8 +84,9 @@ def paint(mask, c, f=1.0, keep=False):
 
 # ---------------------------------------------------------------- wedge CC-BFO
 # spec_a320ceo.json livery_cc_bfo.echarpe (photo-measured):
-wedge = (Xg >= 28.60 + 0.66 * Zg) & (Xg <= 30.35 + 1.83 * Zg) \
-        & (Zg >= -1.25) & (THdeg <= 145.0)
+# Regra unica (reparar_echarpe._r_a320ceo — as mesmas constantes que este
+# arquivo publicou), avaliada na grade SS2 do builder.
+wedge = _re.FROTA["a320ceo"]["regra"](Xg, Zg, THdeg)
 paint(wedge, 2, 1.0)
 log("wedge texels:", int(wedge.sum()))
 
@@ -148,106 +158,10 @@ def paint_belly_decal(names, c):
     paint(sel, c, 1.0)
     log("belly decal", names, "->", int(sel.sum()), "texels")
 
-for ob in D.objects:
-    if ob.name.startswith(("LogoLATAM", "LogoBarriga", "Reg_", "MarkAirbus")):
-        ob.hide_viewport = False
-bpy.context.view_layer.update()
+# MARCAS: lockup, ventre, matricula e titulo movidos para refazer_marcas.py
+# (tag a320ceo) — este builder nao pinta marca nenhuma. Ver REBUILD.md.
 
-paint_side_decal(["LogoLATAM_E_Coral"], 3, side=-1)
-paint_side_decal(["LogoLATAM_E"], 2, side=-1)
-paint_side_decal(["LogoLATAM_D_Coral"], 3, side=+1)
-paint_side_decal(["LogoLATAM_D"], 2, side=+1)
-paint_belly_decal(["LogoBarriga_Coral"], 3)
-paint_belly_decal(["LogoBarriga"], 2)
-
-# ---------------------------------------------------------------- registration CC-BFO
-# Arial Bold (the master's registration font, RegPortaTrem) typeset fresh.
-cu = D.curves.new("RegCeoTmp", type='FONT')
-cu.body = "CC-BFO"
-cu.font = D.fonts["Arial Bold"]
-cu.size = 1.0
-ob = D.objects.new("RegCeoTmp", cu)
-bpy.context.scene.collection.objects.link(ob)
-bpy.context.view_layer.update()
-dg = bpy.context.evaluated_depsgraph_get()
-me = ob.evaluated_get(dg).to_mesh()
-me.calc_loop_triangles()
-tris2 = [[(me.vertices[i].co.x, me.vertices[i].co.y) for i in t.vertices]
-         for t in me.loop_triangles]
-xs = [p[0] for t in tris2 for p in t]; ys = [p[1] for t in tris2 for p in t]
-lx0, lx1, ly0, ly1 = min(xs), max(xs), min(ys), max(ys)
-TX0, TZ0, TZ1 = 30.29, 1.04, 1.335
-s = (TZ1 - TZ0) / (ly1 - ly0)
-tris2 = [[(TX0 + (px - lx0) * s, TZ0 + (py - ly0) * s) for px, py in t] for t in tris2]
-TX1 = TX0 + (lx1 - lx0) * s
-log("registration 'CC-BFO': x %.2f..%.2f (target right edge 31.80), z %.2f..%.2f"
-    % (TX0, TX1, TZ0, TZ1))
-mi = tri_mask_2d(tris2, TX0 - 0.05, TX1 + 0.05, TZ0 - 0.05, TZ1 + 0.05, res=900)
-selp = sample_mask(mi, Xg, Zg) & (Yg < 0) & (np.abs(np.sin(THg)) > 0.30)
-XMIR = TX0 + TX1
-sels = sample_mask(mi, XMIR - Xg, Zg) & (Yg > 0) & (np.abs(np.sin(THg)) > 0.30)
-paint(selp | sels, 1, 1.0)
-log("registration texels:", int((selp | sels).sum()))
-ob.evaluated_get(dg).to_mesh_clear()
-D.objects.remove(ob, do_unlink=True)
-D.curves.remove(cu)
-
-# ---------------------------------------------------------------- title AIRBUS A320
-mk = D.objects["MarkAirbusNeo_E"]
-mm = mk.data
-mm.calc_loop_triangles()
-import collections
-adj = collections.defaultdict(set)
-for e in mm.edges:
-    a, b = e.vertices
-    adj[a].add(b); adj[b].add(a)
-seen = set(); isl = []
-for v0 in range(len(mm.vertices)):
-    if v0 in seen:
-        continue
-    stack = [v0]; comp = set()
-    while stack:
-        v1 = stack.pop()
-        if v1 in comp:
-            continue
-        comp.add(v1)
-        stack.extend(adj[v1] - comp)
-    seen |= comp
-    isl.append(comp)
-
-def mbox(comp):
-    xs = [mm.vertices[i].co.x for i in comp]
-    ys = [mm.vertices[i].co.y for i in comp]
-    return min(xs), max(xs), min(ys), max(ys)
-
-isl.sort(key=lambda c: mbox(c)[0])
-log("Mark islands:", len(isl), [f"{mbox(c)[0]:.3f}" for c in isl])
-vert_isl = {}
-for k, comp in enumerate(isl):
-    for i in comp:
-        vert_isl[i] = k
-mtris = {k: [] for k in range(len(isl))}
-for t in mm.loop_triangles:
-    k = vert_isl[t.vertices[0]]
-    mtris[k].append([(mm.vertices[i].co.x, mm.vertices[i].co.y) for i in t.vertices])
-n = len(isl)
-# islands (texture-level verified): [A,I,R,B,U,S, A,3,2,0, neo] — there is no
-# swirl in this mesh and the last island is 'neo' alone. Drop it, keep the rest.
-keep = list(range(0, n - 1))
-tris2 = []
-for k in keep:
-    tris2 += mtris[k]
-xs = [p[0] for t in tris2 for p in t]; ys = [p[1] for t in tris2 for p in t]
-lx0, lx1, ly0, ly1 = min(xs), max(xs), min(ys), max(ys)
-TX0, TX1, TZ0, TZ1 = 26.21, 27.94, 1.040, 1.240
-s = min((TX1 - TX0) / (lx1 - lx0), (TZ1 - TZ0) / (ly1 - ly0))
-tris2 = [[(TX0 + (px - lx0) * s, TZ0 + (py - ly0) * s) for px, py in t] for t in tris2]
-mi = tri_mask_2d(tris2, TX0 - 0.03, TX1 + 0.03, TZ0 - 0.03, TZ1 + 0.03, res=1500)
-selp = sample_mask(mi, Xg, Zg) & (Yg < 0) & (np.abs(np.sin(THg)) > 0.25)
-XMIR = TX0 + TX1
-sels = sample_mask(mi, XMIR - Xg, Zg) & (Yg > 0) & (np.abs(np.sin(THg)) > 0.25)
-paint(selp | sels, 2, 1.0)
-log("title texels:", int((selp | sels).sum()))
+# (matricula CC-BFO e titulo AIRBUS A320: em refazer_marcas.py, tag a320ceo.)
 
 # ---------------------------------------------------------------- door outlines
 # ------------------------------------------------------------ door rings

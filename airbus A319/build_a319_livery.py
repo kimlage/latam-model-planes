@@ -26,6 +26,19 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 import sys as _sys
 _sys.path.insert(0, os.path.dirname(BASE))
 import latam_livery_kit as kit  # noqa: E402
+import reparar_echarpe as _re   # noqa: E402
+
+# CONSOLIDACAO DO PINTOR UNICO (2026-08-27): este arquivo pinta so LIVERY
+# PLANA (base, cunha, aneis de porta, desgaste, PanelBump). As marcas —
+# lockup (ja em refazer_marcas ha rodadas), matricula PT-TMT, titulo,
+# marca do ventre — moram em refazer_marcas.py (tag a319, secao "legado
+# A320-familia"). Sequencia de reconstrucao (REBUILD.md):
+#     build_a319_livery.py -> portas_familia.py (aneis AA na superficie)
+#                          -> refazer_marcas.py -- a319 lockup marcas
+#                          -> reparar_echarpe.py -- a319 --forcar
+# A cunha vem da regra unica reparar_echarpe.FROTA["a319"] — a re-medida de
+# 2026-08-26 com a paralaxe de flanco corrigida; a quadratica local deste
+# arquivo era a regra VELHA (inclinada ao contrario) e morreu com a rodada.
 
 log = lambda *a: print("[A319L]", *a)
 
@@ -79,23 +92,12 @@ def paint(mask, c, f=1.0, keep=False):
     fac[mask] = f
 
 # ---------------------------------------------------------------- écharpe (wedge)
-# PT-TMT (photo-measured, render-matched): the boundary is a curved swoosh —
-# forward at the crown, sweeping AFT going down (opposite lean to the A320's),
-# then running low toward the tailcone. Quadratic fit through the rectified
-# photo points; door 4 leaf follows the boundary (white ring outlines it).
-_bpts = np.array([(2.10, 24.25), (1.00, 24.85), (0.00, 25.45),
-                  (-0.70, 26.10), (-1.00, 26.90)])
-_A = np.stack([np.ones(len(_bpts)), _bpts[:, 0], _bpts[:, 0] ** 2], 1)
-_c = np.linalg.lstsq(_A, _bpts[:, 1], rcond=None)[0]
-def X_BOUND(z):
-    zz = np.clip(z, -1.05, 2.4)
-    return _c[0] + _c[1] * zz + _c[2] * zz * zz
-Z_LOWLINE = lambda x: -1.05 + 0.26 * (x - 26.9)      # aft low edge rising to tail
-REAR = lambda z: 31.30 + 0.10 * z                     # fin TE-root fairing edge
-wedge = (Xg >= X_BOUND(Zg)) & (Xg <= REAR(Zg)) & (Zg >= Z_LOWLINE(Xg)) \
-        & (THdeg <= 150.0)
+# Regra unica (reparar_echarpe._r_a319, re-medida 2026-08-26), avaliada na
+# grade SS2 do proprio builder sobre a tabela de aneis — que e a tabela da
+# malha serializada (conferido: zc/rz/ry identicos, x a 4 mm).
+wedge = _re.FROTA["a319"]["regra"](Xg, Zg, THdeg)
 paint(wedge, 2, 1.0)
-log("wedge texels:", int(wedge.sum()), "boundary coefs", _c.round(3))
+log("wedge texels:", int(wedge.sum()), "(regra unica _r_a319)")
 
 # ---------------------------------------------------------------- flat-mesh masks
 def mesh_islands(me):
@@ -195,139 +197,13 @@ def paint_belly_decal(names, c):
     paint(sel, c, 1.0)
     log("belly decal", names, "->", int(sel.sum()), "texels")
 
-# reveal hidden decals and refresh matrices (stale-matrix trap)
-for ob in D.objects:
-    if ob.name.startswith(("LogoLATAM", "LogoBarriga", "Reg_", "MarkAirbus")):
-        ob.hide_viewport = False
-bpy.context.view_layer.update()
+# MARCAS: lockup, ventre, matricula e titulo movidos para refazer_marcas.py
+# (tag a319) — este builder nao pinta marca nenhuma. Ver REBUILD.md.
 
-paint_side_decal(["LogoLATAM_E_Coral"], 3, side=-1)
-paint_side_decal(["LogoLATAM_E"], 2, side=-1)
-paint_side_decal(["LogoLATAM_D_Coral"], 3, side=+1)
-paint_side_decal(["LogoLATAM_D"], 2, side=+1)
-paint_belly_decal(["LogoBarriga_Coral"], 3)
-paint_belly_decal(["LogoBarriga"], 2)
-
-# ---------------------------------------------------------------- registration PT-TMT
-# glyphs from the master's official Reg_E mesh ("PT-TMN"): P T - T M N
-reg = D.objects["Reg_E"]
-me = reg.data
-me.calc_loop_triangles()
-isl = mesh_islands(me)
-# order islands by min x
-def isl_bbox(comp):
-    xs = [me.vertices[i].co.x for i in comp]
-    zs = [me.vertices[i].co.z for i in comp]
-    return min(xs), max(xs), min(zs), max(zs)
-isl.sort(key=lambda c: isl_bbox(c)[0])
-log("Reg_E islands:", len(isl), [f"{isl_bbox(c)[0]:.2f}-{isl_bbox(c)[1]:.2f}" for c in isl])
-# build triangles per island in local (x, z)
-vert_isl = {}
-for k, comp in enumerate(isl):
-    for i in comp:
-        vert_isl[i] = k
-tris_by_isl = {k: [] for k in range(len(isl))}
-for t in me.loop_triangles:
-    k = vert_isl[t.vertices[0]]
-    tris_by_isl[k].append([(me.vertices[i].co.x, me.vertices[i].co.z) for i in t.vertices])
-# sequence P T - T M N -> P T - T M T : replace last island with a copy of island 1 (T)
-seq = [0, 1, 2, 3, 4, 1]
-bb = [isl_bbox(c) for c in isl]
-tris2 = []
-for pos, k in enumerate(seq):
-    src = tris_by_isl[k]
-    tgt_slot = bb[pos] if pos < len(bb) else bb[-1]
-    # place glyph k at slot pos: align glyph centre x to slot centre x
-    dx = (0.5 * (tgt_slot[0] + tgt_slot[1])) - (0.5 * (bb[k][0] + bb[k][1]))
-    tris2 += [[(px + dx, pz) for px, pz in t] for t in src]
-# local extent -> target: x 26.30..28.10, z 0.34..0.74 (spec_a319 livery_pt_tmt)
-xs = [p[0] for t in tris2 for p in t]; zs = [p[1] for t in tris2 for p in t]
-lx0, lx1, lz0, lz1 = min(xs), max(xs), min(zs), max(zs)
-TX0, TX1, TZ0, TZ1 = 26.45, 28.45, 0.22, 0.66
-s = min((TX1 - TX0) / (lx1 - lx0), (TZ1 - TZ0) / (lz1 - lz0))
-tris2 = [[(TX0 + (px - lx0) * s, TZ0 + (pz - lz0) * s) for px, pz in t] for t in tris2]
-mi = tri_mask_2d(tris2, TX0 - 0.05, TX1 + 0.05, TZ0 - 0.05, TZ1 + 0.05, res=800)
-selp = sample_mask(mi, Xg, Zg) & (Yg < 0) & (np.abs(np.sin(THg)) > 0.30)
-XMIR = TX0 + TX1
-sels = sample_mask(mi, XMIR - Xg, Zg) & (Yg > 0) & (np.abs(np.sin(THg)) > 0.30)
-paint(selp | sels, 1, 1.0)
-log("registration texels:", int((selp | sels).sum()))
-
-# ---------------------------------------------------------------- title AIRBUS A319
-mk = D.objects["MarkAirbusNeo_E"]
-mm = mk.data
-mm.calc_loop_triangles()
-isl = mesh_islands(mm)
-def mbox(comp):
-    xs = [mm.vertices[i].co.x for i in comp]
-    ys = [mm.vertices[i].co.y for i in comp]
-    return min(xs), max(xs), min(ys), max(ys)
-isl.sort(key=lambda c: mbox(c)[0])
-log("Mark islands:", len(isl), [f"{mbox(c)[0]:.3f}" for c in isl])
-vert_isl = {}
-for k, comp in enumerate(isl):
-    for i in comp:
-        vert_isl[i] = k
-mtris = {k: [] for k in range(len(isl))}
-for t in mm.loop_triangles:
-    k = vert_isl[t.vertices[0]]
-    mtris[k].append([(mm.vertices[i].co.x, mm.vertices[i].co.y) for i in t.vertices])
-n = len(isl)
-# layout (11 islands): [swirl, A, I, R, B, U, S, A, 3, 2, 0+neo-merged]
-# keep swirl..3 (drop the last 2: '2' and the merged '0neo'); append 1 and 9.
-keep = list(range(0, n - 2))
-tris2 = []
-for k in keep:
-    tris2 += mtris[k]
-b3 = mbox(isl[keep[-1]])              # bbox of '3'
-gw = b3[1] - b3[0]                    # glyph width
-gap = 0.15 * gw
-capz0, capz1 = b3[2], b3[3]
-# find 'I' island: narrowest among kept letters
-widths = [(mbox(isl[k])[1] - mbox(isl[k])[0], k) for k in keep[1:]]
-wI, kI = sorted(widths)[0]
-# digit 1 = copy of I stem
-dx = (b3[1] + gap) - mbox(isl[kI])[0]
-one_tris = [[(px + dx, py) for px, py in t] for t in mtris[kI]]
-tris2 += one_tris
-one_x1 = mbox(isl[kI])[1] + dx
-# digit 9 = bowl (scaled '0'-like: reuse '3'? use bowl from letter 'B'? use scaled 'U'?)
-# reconstruct: ring bowl from circle approximation + stem
-import mathutils
-bx0 = one_x1 + gap
-bw = gw * 0.92
-bh = (capz1 - capz0)
-cx = bx0 + 0.5 * bw * 0.92
-cyb = capz0 + bh * 0.62               # bowl centre (upper part)
-r_out_x = 0.46 * bw; r_out_y = 0.40 * bh
-r_in_x = 0.24 * bw; r_in_y = 0.20 * bh
-ring = []
-NSEG = 24
-for i in range(NSEG):
-    a0 = 2 * math.pi * i / NSEG; a1 = 2 * math.pi * (i + 1) / NSEG
-    o0 = (cx + r_out_x * math.cos(a0), cyb + r_out_y * math.sin(a0))
-    o1 = (cx + r_out_x * math.cos(a1), cyb + r_out_y * math.sin(a1))
-    i0 = (cx + r_in_x * math.cos(a0), cyb + r_in_y * math.sin(a0))
-    i1 = (cx + r_in_x * math.cos(a1), cyb + r_in_y * math.sin(a1))
-    ring.append([o0, o1, i1]); ring.append([o0, i1, i0])
-tris2 += ring
-# stem of the 9: right side, from bowl mid down to baseline
-sw = wI
-sx0 = cx + r_out_x - sw
-tris2.append([(sx0, capz0), (sx0 + sw, capz0), (sx0 + sw, cyb + 0.1 * bh)])
-tris2.append([(sx0, capz0), (sx0 + sw, cyb + 0.1 * bh), (sx0, cyb + 0.1 * bh)])
-# target: x 24.30..26.05, z 1.22..1.39, both sides, indigo
-xs = [p[0] for t in tris2 for p in t]; ys = [p[1] for t in tris2 for p in t]
-lx0, lx1, ly0, ly1 = min(xs), max(xs), min(ys), max(ys)
-TX0, TX1, TZ0, TZ1 = 23.45, 25.20, 1.040, 1.210
-s = min((TX1 - TX0) / (lx1 - lx0), (TZ1 - TZ0) / (ly1 - ly0))
-tris2 = [[(TX0 + (px - lx0) * s, TZ0 + (py - ly0) * s) for px, py in t] for t in tris2]
-mi = tri_mask_2d(tris2, TX0 - 0.03, TX1 + 0.03, TZ0 - 0.03, TZ1 + 0.03, res=1500)
-selp = sample_mask(mi, Xg, Zg) & (Yg < 0) & (np.abs(np.sin(THg)) > 0.25)
-XMIR = TX0 + TX1
-sels = sample_mask(mi, XMIR - Xg, Zg) & (Yg > 0) & (np.abs(np.sin(THg)) > 0.25)
-paint(selp | sels, 2, 1.0)
-log("title texels:", int((selp | sels).sum()))
+# (matricula PT-TMT e titulo AIRBUS A319: em refazer_marcas.py, tag a319 —
+#  a matricula na caixa FINAL da rodada 2026-08-22, medida por
+#  fix_matricula_a319.py na propria foto; os glifos recombinados do mesmo
+#  Reg_E: P,T,-,T,M,T.)
 
 # ---------------------------------------------------------------- door outlines
 # ------------------------------------------------------------ door rings
@@ -416,19 +292,10 @@ write_image("LiveryTex", rgb4, colorspace="sRGB")
 write_image("LiveryFac", None, arr_a=fac4, colorspace="Non-Color")
 log("LiveryTex/Fac written; painted fraction %.3f" % float((fac4 > 0).mean()))
 
-# ---------------------------------------------------------------- NoseMask resample
-nm = D.images["NoseMask"]
-wn, hn = nm.size
-buf = np.empty(wn * hn * 4, np.float32)
-nm.pixels.foreach_get(buf)
-buf = buf.reshape(hn, wn, 4)
-xs_new = (np.arange(wn) + 0.5) / wn * L_UV
-cols = xs_new / 38.0 * wn                 # master used comprimento_uv = 38.0
-c0 = np.clip(cols.astype(int), 0, wn - 1)
-newbuf = buf[:, c0, :]
-nm.pixels.foreach_set(newbuf.ravel())
-nm.pack()
-log("NoseMask resampled")
+# NoseMask: NAO tocar. O bloco que reamostrava as colunas do master (38.0 ->
+# 34.2) era passo unico da DERIVACAO; a mascara embarcada e a da rodada do
+# parabrisa e reamostra-la de novo a deslocaria. Dona da NoseMask e a rodada
+# do parabrisa, nao este builder.
 
 # ---------------------------------------------------------------- PanelBump
 pb = D.images["PanelBump"]

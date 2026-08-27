@@ -1,4 +1,7 @@
-"""Fix: the SVG interval clustering merged kerned glyphs ('A3','2','1','neo'),
+"""SUPERADO 2026-08-27 (pintor unico): absorvido por refazer_marcas.py (tag a321ceo).
+Fica como registro historico do que pintou o estado embarcado. NAO rodar.
+
+Fix: the SVG interval clustering merged kerned glyphs ('A3','2','1','neo'),
 so 'neo' was kept and the painted title reads A321neo. Erase and repaint,
 dropping clusters whose max height is below cap (lowercase 'neo')."""
 import bpy
