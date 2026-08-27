@@ -1888,23 +1888,194 @@ def build_terminals(d, P, c_term):
                  roof_mat=P["roof_grey"])
 
 
+# --- the articulated frontage set (2026-08-27 scene-detail round) -----------
+# Real door-1 geometry per master type, DECLARED INFERENCE from the published
+# lengths + typical sill heights: (fuselage length, nose->door-1 centre,
+# door sill above apron, fuselage half-width). Used ONLY to aim the cab of an
+# articulated bridge at the parked fleet; the aircraft themselves are placed
+# by fleet_placement.py, which centres the evaluated world AABB on the stand -
+# so the nose position derived here is exact to ~1 m and the cab face is held
+# 0.4 m off the skin to absorb exactly that.
+DOCK_TYPES = {
+    "A319":    (33.84, 4.6, 3.40, 1.98),
+    "A320ceo": (37.57, 5.0, 3.42, 1.98),
+    "A320neo": (37.57, 5.0, 3.42, 1.98),
+    "A321ceo": (44.51, 5.5, 3.44, 1.98),
+    "A321neo": (44.51, 5.5, 3.44, 1.98),
+    "B763":    (54.94, 5.6, 4.40, 2.52),
+    "B763F":   (54.94, 5.6, 4.40, 2.52),
+    "B763BCF": (54.94, 5.6, 4.40, 2.52),
+    "B77W":    (73.86, 6.5, 5.10, 3.10),
+    "B788":    (56.72, 5.9, 4.75, 2.88),
+    "B789":    (62.81, 5.9, 4.80, 2.88),
+}
+
+
+def _tube(bm, p0, p1, w, h):
+    """A rectangular tunnel from floor point p0 to floor point p1 (3-tuples):
+    floor, roof and both side walls, with end caps left open."""
+    (x0, y0, z0), (x1, y1, z1) = p0, p1
+    ux, uy, L = unit(x0, y0, x1, y1)
+    sx, sy = -uy * w * 0.5, ux * w * 0.5
+    lo = [(x0 + sx, y0 + sy, z0), (x1 + sx, y1 + sy, z1),
+          (x1 - sx, y1 - sy, z1), (x0 - sx, y0 - sy, z0)]
+    hi = [(x, y, z + h) for (x, y, z) in lo]
+    v = [bm.verts.new(p) for p in lo + hi]
+    for f in ((0, 1, 2, 3), (4, 5, 6, 7), (0, 1, 5, 4), (3, 2, 6, 7)):
+        try:
+            bm.faces.new([v[i] for i in f])
+        except ValueError:
+            pass
+
+
+def _artic_bridge(bm_t, bm_d, rot, face_n, cab_c, cab_hdg, base, sill):
+    """One two-segment articulated jetbridge: rotunda drum at the building
+    line, tunnel A leaving along the terminal face normal, an elbow, the
+    slightly fatter telescoping tunnel B, and a cab aimed along `cab_hdg`
+    at `cab_c` with its floor at door-sill height. Support leg + wheel
+    bogie under the cab end, leg under the elbow."""
+    rx, ry = rot
+    cx, cy, cz = cab_c
+    z_r = base + 4.4                                   # tunnel floor at rotunda
+    # rotunda drum
+    post(bm_t, rx, ry, 2.0, base, z_r + 2.8)
+    post(bm_d, rx, ry, 2.15, z_r + 0.6, z_r + 2.2)     # glazing band
+    # elbow: tunnel A leaves perpendicular to the building face
+    d_rc = math.hypot(cx - rx, cy - ry)
+    a_len = max(6.0, min(16.0, 0.35 * d_rc))
+    ex, ey = rx + face_n[0] * a_len, ry + face_n[1] * a_len
+    s_tot = a_len + math.hypot(cx - ex, cy - ey)
+    z_e = z_r + (cz - z_r) * (a_len / s_tot)
+    _tube(bm_t, (rx, ry, z_r), (ex, ey, z_e), 3.4, 2.5)
+    _tube(bm_t, (ex, ey, z_e - 0.12), (cx, cy, cz - 0.12), 3.8, 2.74)
+    # dark glazing strips along both tunnels
+    for (p0, z0, p1, z1, w) in (((rx, ry), z_r, (ex, ey), z_e, 3.44),
+                                ((ex, ey), z_e - 0.12, (cx, cy), cz - 0.12,
+                                 3.84)):
+        _tube(bm_d, (p0[0], p0[1], z0 + 0.9), (p1[0], p1[1], z1 + 0.9),
+              w, 0.9)
+    # the cab, aimed along the fuselage axis when docked
+    obox(bm_t, cx, cy, cz - 0.3, cz + 2.5, 4.6, 3.4, cab_hdg)
+    obox(bm_d, cx, cy, cz + 0.6, cz + 2.3, 4.65, 3.44, cab_hdg)
+    # support portal under the telescoping end + wheel bogie
+    lx, ly = cx - 2.2 * ((cx - ex) / max(1e-6, math.hypot(cx - ex, cy - ey))), \
+        cy - 2.2 * ((cy - ey) / max(1e-6, math.hypot(cx - ex, cy - ey)))
+    post(bm_d, lx, ly, 0.32, base, cz - 0.2)
+    box(bm_d, lx - 1.1, lx + 1.1, ly - 0.55, ly + 0.55, base + 0.25,
+        base + 1.35)
+    post(bm_d, ex, ey, 0.28, base, z_e)
+
+
 def build_jetbridges(d, P, c_term):
-    """One simple jetbridge per gate node within reach of a terminal: a
-    rotunda post at the building line and a tunnel sloping down toward the
-    stand. 171 gates are mapped; the LOD rule (README section 5) is
-    pier-and-jetbridge MASSING, not detail - the closest camera is 650+ m."""
+    """Jetbridges in two tiers, DECLARED SPLIT (scene-detail round
+    2026-08-27): the T2/T3 frontage the tour and the 10L departure actually
+    see gets ARTICULATED bridges - rotunda, two-segment sloped tunnel with
+    a telescoping second barrel, cab - docked at the door-1 station of the
+    parked fleet (9 bridges, aimed with DOCK_TYPES + fleet_placement.FLEET)
+    plus 6 retracted ones at the nearest free frontage gates. Every other
+    gate keeps the massing tube per the LOD rule (README section 5): a
+    rotunda post and one sloped tunnel - those cameras stay 650+ m out."""
     rings = []
     for t in d["terminals"]:
         nm = t.get("name") or ""
         if nm.startswith("Esta"):
             continue
         rings.append(dedupe_ring(t["polygon_xy_m"]))
+
+    def ring_foot(px_, py_):
+        best_, bd_, en_ = None, 1e9, None
+        for ring in rings:
+            for i in range(len(ring)):
+                ax, ay = ring[i]
+                bx, by = ring[(i + 1) % len(ring)]
+                ux, uy, L = unit(ax, ay, bx, by)
+                t_ = max(0.0, min(L, (px_ - ax) * ux + (py_ - ay) * uy))
+                qx, qy = ax + ux * t_, ay + uy * t_
+                dd = math.hypot(px_ - qx, py_ - qy)
+                if dd < bd_:
+                    nx, ny = uy, -ux            # face normal, sign fixed below
+                    if nx * (px_ - qx) + ny * (py_ - qy) < 0:
+                        nx, ny = -nx, -ny
+                    bd_, best_, en_ = dd, (qx, qy), (nx, ny)
+        return best_, bd_, en_
+
     bm_t, bm_d = bmesh.new(), bmesh.new()
+
+    # ---- tier 1: the articulated frontage set -------------------------------
+    try:
+        sys.path.insert(0, HERE)
+        from fleet_placement import FLEET as _FLEET
+    except Exception as exc:                          # standalone terrain runs
+        print("jetbridges: fleet table unavailable (%s)" % exc)
+        _FLEET = {}
+    hero_pts = []          # (x, y) the massing pass must keep clear of
+    n_dock = 0
+    for (tag, key, x, y, hdg, zz) in SBGR_STANDS:
+        tkey = _FLEET.get(tag)
+        if tkey is None or not tag.startswith("G"):
+            continue
+        L, door_aft, sill, halfw = DOCK_TYPES[tkey]
+        h = math.radians(hdg)
+        dx, dy = math.sin(h), math.cos(h)             # nose direction
+        px_, py_ = -math.cos(h), math.sin(h)          # port side
+        # +2.0: fleet_placement centres the world AABB, not the fuselage -
+        # the real nose sits ~2 m further forward (probed +1.9/+2.1 m on
+        # G403/G402 with the depsgraph, 2026-08-27)
+        door = (x + dx * (0.5 * L + 2.0 - door_aft) + px_ * halfw,
+                y + dy * (0.5 * L + 2.0 - door_aft) + py_ * halfw)
+        cab = (door[0] + px_ * 2.1, door[1] + py_ * 2.1)   # 1.7 + 0.4 gap
+        rot, bd_, face_n = ring_foot(door[0], door[1])
+        if rot is None or bd_ > 110.0:
+            print("jetbridges: %s has no building line in reach" % tag)
+            continue
+        base = zone_z(rot[0], rot[1])
+        if base is None:
+            base = G.graded(rot[0], rot[1])
+        _artic_bridge(bm_t, bm_d, rot, face_n, (cab[0], cab[1], base + sill),
+                      hdg, base, sill)
+        hero_pts.append((x, y))
+        hero_pts.append(rot)
+        n_dock += 1
+
+    # ---- tier 2: retracted articulated bridges at free frontage gates ------
+    free = []
+    for g in d["gates"]:
+        if "xy_m" not in g:
+            continue
+        gx, gy = g["xy_m"]
+        if not (-80.0 < gx < 1000.0 and gy > 540.0):
+            continue
+        if any(math.hypot(gx - hx, gy - hy) < 45.0 for hx, hy in hero_pts):
+            continue
+        rot, bd_, face_n = ring_foot(gx, gy)
+        if rot is None or bd_ > 90.0 or bd_ < 8.0:
+            continue
+        free.append((gx, gy, rot, face_n))
+    free.sort(key=lambda r: r[0])
+    n_park = 0
+    for (gx, gy, rot, face_n) in free[::max(1, len(free) // 6)][:6]:
+        base = zone_z(rot[0], rot[1])
+        if base is None:
+            base = G.graded(rot[0], rot[1])
+        # parked: barrel drawn back near the building, cab swung ~35 deg
+        ux, uy, dd = unit(rot[0], rot[1], gx, gy)
+        reach = min(14.0, dd)
+        ca = math.degrees(math.atan2(ux, uy)) + 35.0
+        cab = (rot[0] + ux * reach, rot[1] + uy * reach)
+        _artic_bridge(bm_t, bm_d, rot, face_n,
+                      (cab[0], cab[1], base + 3.42), ca, base, 3.42)
+        hero_pts.append((gx, gy))
+        hero_pts.append(rot)
+        n_park += 1
+
+    # ---- tier 3: the massing tubes everywhere else --------------------------
     n = 0
     for g in d["gates"]:
         if "xy_m" not in g:
             continue
         gx, gy = g["xy_m"]
+        if any(math.hypot(gx - hx, gy - hy) < 45.0 for hx, hy in hero_pts):
+            continue
         best, bd = None, 1e9
         for ring in rings:
             for i in range(len(ring)):
@@ -1958,7 +2129,8 @@ def build_jetbridges(d, P, c_term):
         n += 1
     bm_to_object(bm_t, "SBGR_Jetbridges", P["jet_body"], c_term)
     bm_to_object(bm_d, "SBGR_JetbridgeDark", P["jet_dark"], c_term)
-    print("jetbridges:", n)
+    print("jetbridges: %d docked articulated + %d parked articulated + "
+          "%d massing" % (n_dock, n_park, n))
 
 
 def build_tower(P, c_term):
