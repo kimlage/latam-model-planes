@@ -21,6 +21,23 @@ import numpy as np
 BASE = os.path.dirname(os.path.abspath(__file__))
 S = json.load(open(os.path.join(BASE, "spec_77w.json")))
 
+# CONSOLIDACAO DO PINTOR UNICO (2026-08-27): este arquivo pinta so LIVERY
+# PLANA. As marcas (lockup, matricula PT-MUG, titulo, simbolo do ventre)
+# moram em refazer_marcas.py (tag b77w), constantes movidas textualmente.
+# Sequencia de reconstrucao (REBUILD.md):
+#     build_77w_fase2_livery.py -> refazer_marcas.py -- b77w
+#                               -> reparar_echarpe.py -- b77w
+# A cunha vem da regra unica reparar_echarpe.FROTA["b77w"] — que ja carrega a
+# fronteira dianteira re-medida de 2026-08-22 (x >= 58.25 + 1.0104 z; a
+# constante 59.11 deste arquivo era a que a rodada da cauda corrigiu) — sobre
+# a ponte da malha (kit.secoes_do_casco), com o mesmo supersampling ss=3 que
+# este builder inventou e o kit herdou.
+import sys as _sys
+if os.path.dirname(BASE) not in _sys.path:
+    _sys.path.insert(0, os.path.dirname(BASE))
+import latam_livery_kit as kit  # noqa: E402
+import reparar_echarpe as _re   # noqa: E402
+
 LUV = 74.5                 # dominio u do casco: u = x/LUV (igual ao uv_cilindrica)
 W, H = 4096, 1024
 FW = FH = 2048
@@ -126,31 +143,15 @@ tex[:] = BRANCO
 
 # ============================================================ 1. cunha indigo
 LV = S["livery_pt_mug"]["cunha_indigo"]
-CUNHA_X0, CUNHA_K = 59.11, 1.058              # dianteira, reta em (x,z)
-CUNHA_T0, CUNHA_R = 108.1, 1.03               # inferior, reta em (x,theta) graus
-CUNHA_TX0 = 60.0
-
-
-def cunha_cobertura(sub=3):
-    """Cobertura da cunha por supersample: a fronteira sem anti-alias vira
-    escadinha justamente na volta do filete da raiz da deriva (o defeito que
-    f162f73 teve de corrigir nos A320)."""
-    acc = np.zeros((H, W), np.float32)
-    dx = LUV / W
-    dv = 2 * math.pi / H
-    for a in range(sub):
-        for b in range(sub):
-            gx = GX + ((a + 0.5) / sub - 0.5) * dx
-            gt = GT + ((b + 0.5) / sub - 0.5) * dv
-            gab = np.abs(gt)
-            gz = _zc[None, :] + _rz[None, :] * np.cos(gt)
-            tmax = np.radians(np.clip(CUNHA_T0 + CUNHA_R * (gx - CUNHA_TX0), 0.0, 180.0))
-            acc += ((gx >= CUNHA_X0 + CUNHA_K * gz) & (gab <= tmax) &
-                    (gx <= 68.254 + 0.396 * gz))
-    return acc / (sub * sub)
-
-
-cob = cunha_cobertura()
+# Cobertura pela regra unica (reparar_echarpe._r_77w) sobre a ponte da MALHA,
+# ss=3 — o mecanismo que este builder inventou, agora compartilhado no kit.
+for _o in bpy.data.objects:
+    _o.hide_viewport = False
+bpy.context.view_layer.update()
+_casco_ob = bpy.data.objects.get("Fuselagem") or bpy.data.objects["Casco"]
+_crx, _crzc, _crrz, _crry = kit.secoes_do_casco(_casco_ob)
+cob = kit.cobertura_echarpe(_re.FROTA["b77w"]["regra"], _crx, _crzc, _crrz,
+                            0.0, LUV, W, H, ss=3)
 cunha = cob >= 0.5
 tex[...] = (np.array(BRANCO, np.float32) * (1 - cob[..., None]) +
             np.array(INDIGO, np.float32) * cob[..., None]).astype(np.uint8)
@@ -313,79 +314,13 @@ for lado in (-1, 1):
     n = marca(tris, JX0 - 0.5, JX1 + 0.5, JZ0 - 0.12, JZ1 + 0.12, VIDRO, lado, ppm=620)
 print(f"[casco] janelas pintadas: {n} texels por lado")
 
-# ============================================================ 5. marca LATAM
-tri_all, bb_all = tris_do_objeto("B77W_LogoLATAM_E")
-tri_c, bb_c = tris_do_objeto("B77W_LogoLATAM_E_Coral")
-if tri_all and tri_c:
-    corte = bb_all[0] + 0.18 * (bb_all[1] - bb_all[0])
-    tri_sim = [t for t in tri_all if max(p[0] for p in t) < corte]
-    tri_wm = [t for t in tri_all if min(p[0] for p in t) >= corte]
-    a = np.asarray(tri_sim + tri_c)
-    bb_s = (a[..., 0].min(), a[..., 0].max(), a[..., 1].min(), a[..., 1].max())
-    a = np.asarray(tri_wm)
-    bb_w = (a[..., 0].min(), a[..., 0].max(), a[..., 1].min(), a[..., 1].max())
-    rs = (bb_s[1] - bb_s[0]) / (bb_s[3] - bb_s[2])
-    rw = (bb_w[1] - bb_w[0]) / (bb_w[3] - bb_w[2])
-    # medido em PT-MUG (bombordo, foto FRA 2022):
-    SX0, SX1, S_TH = 7.91, 9.64, 46.8       # simbolo
-    WX0, WX1, W_TH = 10.34, 17.26, 51.6     # wordmark (caixa alta)
-    S_TB = S_TH + math.degrees((SX1 - SX0) / rs / 3.10)
-    W_TB = W_TH + math.degrees((WX1 - WX0) / rw / 3.10)
-    print(f"[logo] simbolo razao {rs:.3f} -> theta {S_TH:.1f}..{S_TB:.1f} (medido 46.8..95.0) | "
-          f"wordmark razao {rw:.3f} -> theta {W_TH:.1f}..{W_TB:.1f} (medido 51.6..68.4)")
-    for lado, esp in ((-1, False), (1, True)):
-        marca_th(tri_sim, bb_s, SX0, SX1, S_TH, S_TB, INDIGO, lado, esp)
-        marca_th(tri_c, bb_s, SX0, SX1, S_TH, S_TB, CORAL, lado, esp)
-        marca_th(tri_wm, bb_w, WX0, WX1, W_TH, W_TB, INDIGO, lado, esp)
-else:
-    print("[logo] AVISO: malhas do lockup nao encontradas")
-
-# ============================================ 6. matricula e titulo de tipo
-# ESPELHAMENTO A ESTIBORDO. Vista de estibordo, o +x da pele aponta para a
-# ESQUERDA da tela (o nariz fica a direita).  Uma marca de texto pintada com x
-# crescendo para a direita na textura sai portanto ao contrario naquele lado.
-# O lockup acima ja passava espelha=True para lado=+1; a matricula e o titulo
-# de tipo NAO passavam, e a estibordo a matricula lia 'GUM-TP'.
-#
-# Isto nunca podia ter aparecido no gate: as sete cameras canonicas DE ENTAO
-# tinham a componente y negativa (ou estavam no eixo), ou seja olhavam todas
-# para bombordo. O padrao ganhou por isto uma oitava, CamEstibordo.
-# Foi preciso renderizar de proposito um angulo de estibordo para ver.
-tr, bbr = texto_tris("PT-MUG")
-for lado, esp in ((-1, False), (1, True)):
-    marca(encaixa(tr, bbr, 60.64, 62.37, 0.80, 1.35, espelha=esp),
-          60.64, 62.37, 0.80, 1.35, (0xF2, 0xF3, 0xF5), lado, ppm=760)
-tt, bbt = texto_tris("BOEING 777-300")
-for lado, esp in ((-1, False), (1, True)):
-    # o italico tambem tem de inclinar para o mesmo lado: espelhar a caixa
-    # inverteria o cisalhamento, entao o sinal acompanha.
-    marca(encaixa(tt, bbt, 55.84, 58.55, 0.78, 1.12, espelha=esp, cis=0.18),
-          55.84, 58.55, 0.78, 1.12, INDIGO, lado, ppm=760)
-
-# =================================================== 7. barriga e desgaste
-if tri_all and tri_c:
-    # No ventre do PT-MUG so vai o SIMBOLO (a foto FRA mostra a bandeirinha
-    # sozinha, sem wordmark), x 11.1..14.1 medido na foto.
-    lat = (np.pi - GABS) * 3.10 * LADO
-    SBX0, SBX1 = 11.1, 14.1
-    SBH = (SBX1 - SBX0) / rs
-    nsx, nsz = max(8, int((SBX1 - SBX0) * 300)), max(8, int(SBH * 300))
-    arrS = fill_tris(encaixa(tri_sim, bb_s, SBX0, SBX1, -SBH / 2, SBH / 2),
-                     SBX0, SBX1, -SBH / 2, SBH / 2, nsx, nsz)
-    arrC = fill_tris(encaixa(tri_c, bb_s, SBX0, SBX1, -SBH / 2, SBH / 2),
-                     SBX0, SBX1, -SBH / 2, SBH / 2, nsx, nsz)
-    npix = 0
-    for (a0, cor) in ((arrS, INDIGO), (arrC, CORAL)):
-        sel = (GX >= SBX0) & (GX <= SBX1) & (np.abs(lat) <= SBH / 2)
-        if not sel.any():
-            continue
-        ix = np.clip(((GX[sel] - SBX0) / (SBX1 - SBX0) * nsx).astype(int), 0, nsx - 1)
-        jz = np.clip(((lat[sel] + SBH / 2) / SBH * nsz).astype(int), 0, nsz - 1)
-        r, c = np.where(sel)
-        h = a0[jz, ix]
-        tex[r[h], c[h]] = cor
-        npix += int(h.sum())
-    print(f"[barriga] simbolo x {SBX0}..{SBX1}, arco {SBH:.2f} m, {npix} texels")
+# =================================== 5-7. MARCAS: movidas para refazer_marcas
+# Lockup LATAM (simbolo+wordmark), matricula PT-MUG, titulo 'BOEING 777-300'
+# e o simbolo do ventre moram em refazer_marcas.py (tag b77w, secao "legado
+# 767/777"), com estas mesmas constantes e o mesmo rasterizador (raio de arco
+# 3.10), citados la. Rodar refazer_marcas e o proximo passo obrigatorio
+# (REBUILD.md). O desgaste (suja) fica aqui por ser livery plana;
+# refazer_marcas reaplica as mesmas caixas sobre a tinta do ventre.
 
 
 def suja(x0, x1, t0, t1, cor, inten):

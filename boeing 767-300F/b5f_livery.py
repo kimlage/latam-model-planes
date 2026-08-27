@@ -41,6 +41,20 @@ import numpy as np
 BASE = os.path.dirname(os.path.abspath(__file__))
 spec = json.load(open(os.path.join(BASE, "spec_763f.json")))
 
+# CONSOLIDACAO DO PINTOR UNICO (2026-08-27): este arquivo pinta so LIVERY
+# PLANA. As marcas (lockup CARGO, bandeira, matricula, titulo, simbolo do
+# ventre) moram em refazer_marcas.py (tag b763f), constantes movidas
+# textualmente. Sequencia de reconstrucao (REBUILD.md):
+#     b5f_livery.py -> refazer_marcas.py -- b763f
+#     (reparar_echarpe b763f e AUDITORIA: a borda dura embarcada fica)
+# A cunha vem da regra unica reparar_echarpe.FROTA["b763f"] sobre a ponte da
+# malha (kit.secoes_do_casco) — nao mais do zc_rz() emendado em x = 41.0.
+import sys as _sys
+if os.path.dirname(BASE) not in _sys.path:
+    _sys.path.insert(0, os.path.dirname(BASE))
+import latam_livery_kit as kit  # noqa: E402
+import reparar_echarpe as _re   # noqa: E402
+
 LUV = 55.5                 # dominio u do casco: u = x/LUV
 W, H = 4096, 1024          # LiveryTex / LiveryFac
 FW = FH = 2048             # FinSashE / FinSashD
@@ -154,12 +168,17 @@ tex[:] = BRANCO
 # As duas fronteiras foram sobrepostas na foto junto com as de passageiro: a de
 # cargueiro cai em cima da aresta de tinta, a de passageiro cai 0.5 m a vante e
 # 13 graus abaixo dela.  Ver spec_763f.json -> livery_n536la.cunha_traseira.
-CUNHA_X0, CUNHA_K = 42.65, 1.00
-CUNHA_T0, CUNHA_R = 121.1, 6.44
-
-theta_max = np.radians(np.clip(CUNHA_T0 - CUNHA_R * (GX - 41.5), 0.0, 180.0))
-cunha = ((GX >= CUNHA_X0 + CUNHA_K * GZ) & (GABS <= theta_max) &
-         (GX <= 50.55 + 0.398 * GZ))
+# Rasterizada pela regra unica (reparar_echarpe._r_763carga) sobre a ponte da
+# MALHA, binaria (ss=1): e o estado embarcado, e a auditoria da rodada da
+# cauda diz que a borda dura fica (QA-BACKLOG, 2340 texels).
+for _o in bpy.data.objects:
+    _o.hide_viewport = False
+bpy.context.view_layer.update()
+_casco_ob = bpy.data.objects.get("Fuselagem") or bpy.data.objects["Casco"]
+_crx, _crzc, _crrz, _crry = kit.secoes_do_casco(_casco_ob)
+_cov = kit.cobertura_echarpe(_re.FROTA["b763f"]["regra"], _crx, _crzc, _crrz,
+                             0.0, LUV, W, H, ss=1)
+cunha = _cov >= 0.5
 tex[cunha] = INDIGO
 base_cor = np.where(cunha[..., None], np.array(INDIGO, np.uint8),
                     np.array(BRANCO, np.uint8))
@@ -389,173 +408,13 @@ print(f"[porta conves] x {md['centro_x']:.2f} +-{md['clear'][0]/2:.2f} m, "
 # aeronave numa conversao.
 print("[janelas] nenhuma: cargueiro de fabrica (N536LA, 767-316F(ER))")
 
-# ============================================================ 5. marca LATAM CARGO
-# A arte e o lockup OFICIAL de duas linhas, importado de latam_cargo_logo.svg
-# ('File:LATAM Cargo logo.svg' do Wikimedia Commons, dominio publico) por
-# b0f_marca_cargo.py.  'CARGO' nao existe em nenhum SVG que o projeto ja
-# tivesse, e a regra da skill e categorica: marca vem do vetor, nunca de fonte
-# parecida.
-#
-# Colocacao medida em N568LA (mesma aplicacao de N536LA), com a escala do NARIZ
-# calibrada pela porta 1 (1.07 x 1.88 m): 98.1 px/m em x, 95.2 px/m em z.
-#   simbolo   x 7.02..8.72   theta do topo 39.2
-#   texto     x 9.36..15.95  theta do cap  52.6   ('LATAM' + 'CARGO' como UMA peca)
-#
-# theta da BASE nao e medido: vem da razao da propria arte oficial, resolvida
-# contra o ARCO VERDADEIRO da secao (nao contra o raio constante 2.50 que o
-# 767-300ER de passageiros usa).  Com o arco verdadeiro a razao medida fecha em
-# 3.4% no texto e 6.6% no simbolo; com 2.50 o simbolo erraria 11 graus.
-RU_S, CU_S = 2.521, 0.191
-RL_S, CL_S = 2.5075, -0.1985
-
-
-def _hw_sec(z):
-    if z >= CU_S:
-        h = RU_S * RU_S - (z - CU_S) ** 2
-    elif z <= CL_S:
-        h = RL_S * RL_S - (z - CL_S) ** 2
-    else:
-        return 2.515
-    return math.sqrt(h) if h > 0 else 0.0
-
-
-def _arco(z0, z1, n=2001):
-    zs = np.linspace(z0, z1, n)
-    ys = np.array([_hw_sec(z) for z in zs])
-    return float(np.sum(np.hypot(np.diff(ys), np.diff(zs))))
-
-
-def theta_base(th_topo_g, arco_alvo):
-    """theta (graus) tal que o arco da secao entre th_topo e ele valha arco_alvo."""
-    z_t = 2.705 * math.cos(math.radians(th_topo_g))
-    lo, hi = th_topo_g, 179.0
-    for _ in range(60):
-        mid = 0.5 * (lo + hi)
-        z_m = 2.705 * math.cos(math.radians(mid))
-        if _arco(z_m, z_t) < arco_alvo:
-            lo = mid
-        else:
-            hi = mid
-    return 0.5 * (lo + hi)
-
-
-tri_si, bb_si = tris_do_objeto("CargoLockup_Simbolo_Indigo")
-tri_sc, bb_sc = tris_do_objeto("CargoLockup_Simbolo_Coral")
-tri_tx, bb_tx = tris_do_objeto("CargoLockup_Texto")
-if tri_si and tri_sc and tri_tx:
-    a = np.asarray(tri_si + tri_sc)
-    bb_s = (a[..., 0].min(), a[..., 0].max(), a[..., 1].min(), a[..., 1].max())
-    rs = (bb_s[1] - bb_s[0]) / (bb_s[3] - bb_s[2])          # razao oficial do simbolo
-    rt = (bb_tx[1] - bb_tx[0]) / (bb_tx[3] - bb_tx[2])      # razao oficial do texto
-    SX0, SX1, S_TH = 7.02, 8.72, 39.2
-    TX0, TX1, T_TH = 9.36, 15.95, 52.6
-    S_TB = theta_base(S_TH, (SX1 - SX0) / rs)
-    T_TB = theta_base(T_TH, (TX1 - TX0) / rt)
-    print(f"[logo] razoes oficiais: simbolo {rs:.3f}, texto {rt:.3f}")
-    print(f"[logo] simbolo theta {S_TH:.1f}..{S_TB:.1f} (medido 39.2..101.3) | "
-          f"texto theta {T_TH:.1f}..{T_TB:.1f} (medido 52.6..102.7)")
-    for lado, esp in ((-1, False), (1, True)):
-        marca_th(tri_si, bb_s, SX0, SX1, S_TH, S_TB, INDIGO, lado, esp)
-        marca_th(tri_sc, bb_s, SX0, SX1, S_TH, S_TB, CORAL, lado, esp)
-        marca_th(tri_tx, bb_tx, TX0, TX1, T_TH, T_TB, INDIGO, lado, esp)
-else:
-    print("[logo] AVISO: malhas do lockup CARGO nao encontradas — rode b0f_marca_cargo.py")
-
-# bandeira nacional + nome do pais, atras do parabrisa (N536LA e da LATAM Cargo
-# Colombia: amarelo/azul/vermelho em faixas HORIZONTAIS, a amarela com metade da
-# altura).  MEDIDA em N568LA com a escala do nariz: a bandeira ocupa
-# x 3.94..4.53 e z 1.213..0.688, ou seja theta 63.3..75.3 desde a crista, com o
-# nome do pais logo abaixo.  A primeira colocacao (theta 52.0..61.6) punha a
-# bandeira meio metro alta demais no casco — visivel no close-up do nariz do
-# gate, que e exatamente o angulo que existe para isso.
-BF_X0, BF_X1 = 3.94, 4.53
-BF_T0, BF_T1 = 63.3, 75.3
-GD_ = np.degrees(GABS)
-_sel = (GX >= BF_X0) & (GX <= BF_X1) & (GD_ >= BF_T0) & (GD_ <= BF_T1)
-if _sel.any():
-    f = (GD_ - BF_T0) / (BF_T1 - BF_T0)
-    for lo, hi, cor in ((0.0, 0.50, (0xFC, 0xD1, 0x16)),
-                        (0.50, 0.75, (0x00, 0x33, 0x8D)),
-                        (0.75, 1.00, (0xC8, 0x10, 0x2E))):
-        m = _sel & (f >= lo) & (f < hi)
-        tex[m] = cor
-    print(f"[bandeira] bandeira {int(_sel.sum())} texels")
-# nome do pais em maiusculas finas logo abaixo da bandeira (medido: base da
-# bandeira em theta 75.3, texto ate theta ~78.5)
-_tp, _bbp = texto_tris("COLOMBIA")
-for _lado, _esp in ((-1, False), (1, True)):
-    marca_th(_tp, _bbp, BF_X0 - 0.02, BF_X1 + 0.02, 76.4, 78.8,
-             (0x3A, 0x3C, 0x42), _lado, _esp, ppm=760)
-print("[bandeira] COLOMBIA escrito abaixo")
-
-# ============================================ 6. matricula e titulo de tipo
-# matricula BRANCA dentro do indigo da cunha (medida em N568LA, mesma
-# aplicacao): x 44.30..45.83, z 0.430..0.802.  Fica mais BAIXA no casco e mais
-# compacta que a de passageiros de CC-CWY (x 44.12..45.92, z 1.044..1.343).
-#
-# ESPELHAMENTO A ESTIBORDO. Vista de estibordo, o +x da pele aponta para a
-# ESQUERDA da tela (o nariz fica a direita).  Uma marca de texto pintada com x
-# crescendo para a direita na textura sai portanto ao contrario naquele lado.
-# O lockup CARGO acima ja passava espelha=True para lado=+1; a matricula e o
-# titulo de tipo NAO passavam, e a estibordo a matricula lia 'AL635N'.
-#
-# Isto nunca podia ter aparecido no gate: as sete cameras canonicas DE ENTAO
-# tinham a componente y negativa (ou estavam no eixo), ou seja olhavam todas
-# para bombordo. O padrao ganhou por isto uma oitava, CamEstibordo.
-# A foto refs/ref_N536LA_mia23a.jpg e de estibordo e mostra as duas marcas
-# lendo normalmente, como tem de ser.
-mr = spec["livery_n536la"]["marcas"]["matricula"]
-tr, bbr = texto_tris(mr["texto"])
-for lado, esp in ((-1, False), (1, True)):
-    marca(encaixa(tr, bbr, mr["x"][0], mr["x"][1], mr["z"][0], mr["z"][1],
-                  espelha=esp),
-          mr["x"][0], mr["x"][1], mr["z"][0], mr["z"][1],
-          (0xF2, 0xF3, 0xF5), lado, ppm=760)
-# titulo de tipo: 'BOEING767-300F' lido na foto de N536LA de 2026-06-20.  As
-# conversoes da frota pintam 'BOEING 767-300BCF'; N418LA, de fabrica, pinta
-# 'BOEING 767-300ER' — anomalia real, nao erro de leitura.
-tt_ = spec["livery_n536la"]["marcas"]["titulo"]
-tt, bbt = texto_tris(tt_["texto"])
-for lado, esp in ((-1, False), (1, True)):
-    # o italico tambem tem de inclinar para o mesmo lado: espelhar a caixa
-    # inverteria o cisalhamento, entao o sinal acompanha.
-    marca(encaixa(tt, bbt, tt_["x"][0], tt_["x"][1], tt_["z"][0], tt_["z"][1],
-                  espelha=esp, cis=0.20),
-          tt_["x"][0], tt_["x"][1], tt_["z"][0], tt_["z"][1], TITULO, lado, ppm=760)
-
-# =================================================== 7. barriga e desgaste
-# O ventre do cargueiro NAO leva o wordmark que a frota de passageiros leva a
-# x 24..31: leva SO O SIMBOLO, e bem mais a vante.  Medido na foto de N536LA de
-# 2021-05-07 (jounigripen, CC BY 2.0), que e uma vista de baixo: a marca cai
-# entre 'CARGO' e a raiz da asa, e nos perfis ela aparece como uma lasca coral
-# e indigo espiando por cima da quilha (N568LA: x 9.20..10.46, z -1.58..-1.95,
-# ou seja theta 126..136 graus).  Rasterizado em ARCO LATERAL a partir da
-# quilha, com np.roll implicito no sinal do lado, para nao ser cortado pela
-# costura da UV.
-if tri_si and tri_sc:
-    lat = (np.pi - GABS) * 2.466 * LADO       # arco desde a quilha, com sinal
-    # a extensao LATERAL sai da razao oficial, entao o x controla o quanto o
-    # simbolo sobe pelo flanco.  Medido em N568LA: a lasca que aparece por cima
-    # da quilha comeca em theta 141.6 graus (topo do desenho a z=-2.12, contra a
-    # silhueta em -2.44), ou seja 1.68 m de arco de cada lado da quilha -> 3.36 m
-    # de altura de arco -> 2.09 m de comprimento em x pela razao 0.623.
-    BX0, BX1 = 10.40, 12.50                   # simbolo no ventre
-    BH = (BX1 - BX0) / rs                     # altura (arco) pela razao oficial
-    nx, nz = max(8, int((BX1 - BX0) * 300)), max(8, int(BH * 300))
-    arrI = fill_tris(encaixa(tri_si, bb_s, BX0, BX1, -BH / 2, BH / 2),
-                     BX0, BX1, -BH / 2, BH / 2, nx, nz)
-    arrC = fill_tris(encaixa(tri_sc, bb_s, BX0, BX1, -BH / 2, BH / 2),
-                     BX0, BX1, -BH / 2, BH / 2, nx, nz)
-    for (a0, cor) in ((arrI, INDIGO), (arrC, CORAL)):
-        sel = (GX >= BX0) & (GX <= BX1) & (np.abs(lat) <= BH / 2)
-        if not sel.any():
-            continue
-        ix = np.clip(((GX[sel] - BX0) / (BX1 - BX0) * nx).astype(int), 0, nx - 1)
-        jz = np.clip(((lat[sel] + BH / 2) / BH * nz).astype(int), 0, nz - 1)
-        r, c = np.where(sel)
-        h = a0[jz, ix]
-        tex[r[h], c[h]] = cor
-    print(f"[ventre] simbolo x {BX0}..{BX1}, altura de arco {BH:.2f} m")
+# =================================== 5-7. MARCAS: movidas para refazer_marcas
+# Lockup LATAM CARGO, bandeira nacional + COLOMBIA, matricula, titulo de tipo
+# e o simbolo do ventre moram em refazer_marcas.py (tag b763f, secao "legado
+# 767/777"), com estas mesmas constantes e o mesmo rasterizador, citados la.
+# Rodar refazer_marcas e o proximo passo obrigatorio (REBUILD.md). O desgaste
+# (suja) fica aqui por ser livery plana; refazer_marcas reaplica as mesmas
+# caixas sobre a tinta do ventre que ele pinta.
 
 
 def suja(x0, x1, t0, t1, cor, inten):

@@ -1,6 +1,28 @@
-"""Etapa 5 — livery LATAM do CC-CWY, medida na foto (refs/ref_CC-CWY_perfil_mia.jpg).
+"""Etapa 5 — livery PLANA do CC-CWY (consolidacao do pintor unico, 2026-08-27).
 
 /Applications/Blender.app/Contents/MacOS/Blender -b "boeing 767-300ER/B763_LATAM.blend" --python "boeing 767-300ER/b5_livery.py"
+
+ESTE ARQUIVO SO PINTA LIVERY PLANA: base branca, cunha indigo, portas,
+janelas, deriva, parabrisa, desgaste. AS MARCAS — lockup LATAM, matricula,
+titulo de tipo, marca do ventre — moram em `refazer_marcas.py` (tag b763er),
+com as constantes deste arquivo movidas para la textualmente. A sequencia de
+reconstrucao e SEMPRE:
+
+    b5_livery.py  ->  refazer_marcas.py -- b763er lockup marcas
+                  ->  reparar_echarpe.py -- b763er        (fecha a borda)
+
+Ver REBUILD.md na raiz. Motivo (QA-BACKLOG "The wedge rasterizer is shared
+now"): rodar um builder que pinta marcas re-insere as marcas por cima do que
+as rodadas posteriores corrigiram.
+
+A CUNHA vem da regra unica em `reparar_echarpe.FROTA["b763er"]` sobre a ponte
+z(x,theta) lida da MALHA (`latam_livery_kit.secoes_do_casco`) — o `zc_rz()`
+local, emendado em x = 41.0 (dzc +0.117 / drz -0.117 numa estacao), fica
+apenas para posicionar portas/janelas/parabrisa, que foram autoradas nele;
+usa-lo na cunha era o degrau de 3.0 graus que a rodada da cauda mediu.
+Pintada BINARIA de proposito: e o que a textura embarcada tem, e o
+anti-alias da borda e o passo final do `reparar_echarpe` (so no -300ER; nos
+cargueiros a auditoria diz que a borda dura embarcada fica — QA-BACKLOG).
 
 Tudo o que e tinta vira textura: (x,theta) no casco (LiveryTex/LiveryFac) e
 planar (x,z) na deriva (FinSashE/FinSashD). Nada de decalque 3D.
@@ -20,6 +42,13 @@ import numpy as np
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 spec = json.load(open(os.path.join(BASE, "spec_763.json")))
+
+# regra da cunha e ponte de secoes: as UNICAS implementacoes, na raiz
+import sys as _sys
+if os.path.dirname(BASE) not in _sys.path:
+    _sys.path.insert(0, os.path.dirname(BASE))
+import latam_livery_kit as kit  # noqa: E402
+import reparar_echarpe as _re   # noqa: E402
 
 LUV = 55.5                 # dominio u do casco: u = x/LUV
 W, H = 4096, 1024          # LiveryTex / LiveryFac
@@ -120,16 +149,22 @@ tex = np.zeros((H, W, 3), np.uint8)
 tex[:] = BRANCO
 
 # ============================================================ 1. cunha indigo
-# medido em CC-CWY 2026-08-20:
+# medido em CC-CWY 2026-08-20 (a regra vive em reparar_echarpe._r_763er):
 #   fronteira dianteira  x = 42.11 + 1.008 z   (paralela ao BA reto da deriva,
 #                                               0.72 m atras dele; rms 0.21 m)
 #   fronteira inferior   theta <= 134.4 - 8.061 (x-41.5)  graus  (rms 1.4 graus)
 #   limite traseiro      x <= 50.55 + 0.398 z  (a propria linha do BF da deriva)
-CUNHA_X0, CUNHA_K = 42.11, 1.008
-CUNHA_T0, CUNHA_R = 134.4, 8.061
-theta_max = np.radians(np.clip(CUNHA_T0 - CUNHA_R * (GX - 41.5), 0.0, 180.0))
-cunha = ((GX >= CUNHA_X0 + CUNHA_K * GZ) & (GABS <= theta_max) &
-         (GX <= 50.55 + 0.398 * GZ))
+# Rasterizada pela ponte da MALHA (secoes_do_casco), nao pelo zc_rz() emendado:
+# a emenda em x = 41.0 dava o degrau de 3.0 graus na fronteira inferior.
+# Binaria (ss=1) porque e o estado embarcado; reparar_echarpe fecha a borda.
+for _o in bpy.data.objects:
+    _o.hide_viewport = False
+bpy.context.view_layer.update()
+_casco_ob = bpy.data.objects.get("Fuselagem") or bpy.data.objects["Casco"]
+_crx, _crzc, _crrz, _crry = kit.secoes_do_casco(_casco_ob)
+_cov = kit.cobertura_echarpe(_re.FROTA["b763er"]["regra"], _crx, _crzc, _crrz,
+                             0.0, LUV, W, H, ss=1)
+cunha = _cov >= 0.5
 tex[cunha] = INDIGO
 base_cor = np.where(cunha[..., None], np.array(INDIGO, np.uint8),
                     np.array(BRANCO, np.uint8))
@@ -293,94 +328,16 @@ for lado in (-1, 1):
         tris += leque(rrect(cx - 0.115, cx + 0.115, JZ0, JZ1, 0.0, 0.055))
     marca(tris, JX0 - 0.4, JX1 + 0.4, JZ0 - 0.1, JZ1 + 0.1, VIDRO, lado, ppm=620)
 
-# ============================================================ 5. marca LATAM
-# A arte oficial e importada do 787 (bpy.data.libraries.load na sessao anterior):
-# mesma marca, mesma geometria, sem risco de deriva.  Simbolo e wordmark sao
-# colocados SEPARADAMENTE, cada um na sua propria razao oficial, porque o CC-CWY
-# usa o simbolo ~30% maior em relacao ao wordmark do que o lockup padrao
-# (medido: simbolo 1.70 m de largura por 2.73 m de arco; wordmark 6.65 x 0.99).
-tri_all, bb_all = tris_do_objeto("B789_LogoLATAM_E")
-tri_c, bb_c = tris_do_objeto("B789_LogoLATAM_E_Coral")
-if tri_all and tri_c:
-    tri_sim = [t for t in tri_all if max(p[0] for p in t) < 1.10]
-    tri_wm = [t for t in tri_all if min(p[0] for p in t) >= 1.10]
-    a = np.asarray(tri_sim + tri_c)
-    bb_s = (a[..., 0].min(), a[..., 0].max(), a[..., 1].min(), a[..., 1].max())
-    a = np.asarray(tri_wm)
-    bb_w = (a[..., 0].min(), a[..., 0].max(), a[..., 1].min(), a[..., 1].max())
-    rs = (bb_s[1] - bb_s[0]) / (bb_s[3] - bb_s[2])
-    rw = (bb_w[1] - bb_w[0]) / (bb_w[3] - bb_w[2])
-    # medido em CC-CWY (bombordo, 2026-08-20):
-    SX0, SX1, S_TH = 6.98, 8.68, 34.26      # simbolo: x e theta do topo
-    WX0, WX1, W_TH = 9.15, 15.80, 37.21     # wordmark: x e theta do topo (cap)
-    S_TB = S_TH + math.degrees((SX1 - SX0) / rs / 2.50)
-    W_TB = W_TH + math.degrees((WX1 - WX0) / rw / 2.50)
-    print(f"[logo] simbolo razao {rs:.3f} -> theta {S_TH:.1f}..{S_TB:.1f} "
-          f"(medido 34.3..94.4) | wordmark razao {rw:.3f} -> theta "
-          f"{W_TH:.1f}..{W_TB:.1f} (medido 37.2..59.4)")
-    for lado, esp in ((-1, False), (1, True)):
-        marca_th(tri_sim, bb_s, SX0, SX1, S_TH, S_TB, INDIGO, lado, esp)
-        marca_th(tri_c, bb_s, SX0, SX1, S_TH, S_TB, CORAL, lado, esp)
-        marca_th(tri_wm, bb_w, WX0, WX1, W_TH, W_TB, INDIGO, lado, esp)
-else:
-    print("[logo] AVISO: malhas do lockup nao encontradas")
-
-# ============================================ 6. matricula e titulo de tipo
-# ESPELHAMENTO A ESTIBORDO. Vista de estibordo, o +x da pele aponta para a
-# ESQUERDA da tela (o nariz fica a direita). Uma marca de texto pintada com x
-# crescendo para a direita na textura sai portanto ao contrario naquele lado.
-# O lockup acima ja passava espelha=True para lado=+1; a matricula e o titulo
-# de tipo NAO passavam, e a estibordo a matricula lia 'YWC-CC'.
+# =================================== 5-7. MARCAS: movidas para refazer_marcas
+# Lockup LATAM (simbolo+wordmark), matricula CC-CWY, titulo de tipo e a marca
+# do ventre moram em `refazer_marcas.py` (tag b763er, secao "legado 767/777"),
+# com estas mesmas constantes e o mesmo rasterizador, citados la. Este arquivo
+# nao pinta marca nenhuma — rodar refazer_marcas e o proximo passo obrigatorio
+# da sequencia de reconstrucao (REBUILD.md).
 #
-# Isto nunca podia ter aparecido no gate: as sete cameras canonicas DE ENTAO
-# tinham a componente y negativa (ou estavam no eixo), ou seja olhavam todas
-# para bombordo. O padrao ganhou por isto uma oitava, CamEstibordo.
-# Foi preciso renderizar de proposito um angulo de estibordo para ver.
-# A foto refs/ref_CC-CWY_perfil_mia.jpg e de bombordo e nao podia acusar.
-#
-# matricula BRANCA dentro do indigo: x 44.12..45.92, z 1.044..1.343 (medido)
-tr, bbr = texto_tris("CC-CWY")
-for lado, esp in ((-1, False), (1, True)):
-    marca(encaixa(tr, bbr, 44.12, 45.92, 1.044, 1.343, espelha=esp), 44.12, 45.92,
-          1.044, 1.343, (0xF2, 0xF3, 0xF5), lado, ppm=760)
-# titulo de tipo, escuro sobre branco, obliquo: x 37.41..40.68, z 1.083..1.269
-tt, bbt = texto_tris("BOEING 767-300ER")
-for lado, esp in ((-1, False), (1, True)):
-    # o italico tambem tem de inclinar para o mesmo lado: espelhar a caixa
-    # inverteria o cisalhamento, entao o sinal acompanha.
-    marca(encaixa(tt, bbt, 37.41, 40.68, 1.083, 1.269, espelha=esp, cis=0.20),
-          37.41, 40.68, 1.083, 1.269, TITULO, lado, ppm=760)
-
-# =================================================== 7. barriga e desgaste
-if tri_all and tri_c:
-    # arco lateral a partir da quilha, com sinal do lado -> espaco desenvolvido
-    lat = (np.pi - GABS) * 2.466 * LADO
-    BX0, BX1 = 24.0, 31.0                      # wordmark no ventre
-    BH = (BX1 - BX0) / rw
-    nx, nz = int((BX1 - BX0) * 300), max(8, int(BH * 300))
-    arr = fill_tris(encaixa(tri_wm, bb_w, BX0, BX1, -BH / 2, BH / 2),
-                    BX0, BX1, -BH / 2, BH / 2, nx, nz)
-    SBX1 = BX0 - 0.45
-    SBX0 = SBX1 - (BH * rs) * (bb_s[1] - bb_s[0]) / (bb_s[1] - bb_s[0])
-    SBH = BH * 2.0                             # simbolo 2x a altura do cap
-    SBX0 = SBX1 - SBH * rs
-    nsx, nsz = max(8, int((SBX1 - SBX0) * 300)), max(8, int(SBH * 300))
-    arrS = fill_tris(encaixa(tri_sim, bb_s, SBX0, SBX1, -SBH / 2, SBH / 2),
-                     SBX0, SBX1, -SBH / 2, SBH / 2, nsx, nsz)
-    arrC = fill_tris(encaixa(tri_c, bb_s, SBX0, SBX1, -SBH / 2, SBH / 2),
-                     SBX0, SBX1, -SBH / 2, SBH / 2, nsx, nsz)
-    for (a0, X0b, X1b, Hb, nX, nZ, cor) in (
-            (arr, BX0, BX1, BH, nx, nz, INDIGO),
-            (arrS, SBX0, SBX1, SBH, nsx, nsz, INDIGO),
-            (arrC, SBX0, SBX1, SBH, nsx, nsz, CORAL)):
-        sel = (GX >= X0b) & (GX <= X1b) & (np.abs(lat) <= Hb / 2)
-        if not sel.any():
-            continue
-        ix = np.clip(((GX[sel] - X0b) / (X1b - X0b) * nX).astype(int), 0, nX - 1)
-        jz = np.clip(((lat[sel] + Hb / 2) / Hb * nZ).astype(int), 0, nZ - 1)
-        r, c = np.where(sel)
-        h = a0[jz, ix]
-        tex[r[h], c[h]] = cor
+# O desgaste (suja) fica AQUI porque e livery plana; refazer_marcas reaplica as
+# mesmas caixas sobre a tinta do ventre que ele proprio pinta, preservando a
+# ordem original (marca antes, sujeira por cima).
 
 
 def suja(x0, x1, t0, t1, cor, inten):

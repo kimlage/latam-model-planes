@@ -616,9 +616,587 @@ def fazer_marcas(cs, tag):
                           nome=f"{m['nome']} {'port' if lado < 0 else 'stbd'}")
 
 
+# ============================================================ legado 767 / 777
+# CONSOLIDACAO DO PINTOR UNICO (2026-08-27, QA-BACKLOG "The wedge rasterizer is
+# shared now; the eleven builders are not"): os builders Boeing agora pintam so
+# livery plana, e as marcas deles moram AQUI — rasterizador e constantes
+# movidos TEXTUALMENTE de:
+#     boeing 767-300ER/b5_livery.py   secoes 5-7   (CC-CWY)
+#     boeing 767-300F/b5f_livery.py   secoes 5-7   (N536LA)
+#     boeing 767-300BCF/b5b_livery.py secoes 5-7   (CC-CXE)
+#     boeing 777-300ER/build_77w_fase2_livery.py secoes 5-7 (PT-MUG)
+#
+# A PONTE z(x, theta) destas marcas e o zc_rz() DO PROPRIO BUILDER (tabelas do
+# spec, com a emenda em x = 41.0 e tudo): as marcas foram AUTORADAS nela, e
+# troca-la pela ponte da malha as moveria ate ~1 grau de theta — mover marca e
+# rodada de textura com gate, nao de encanamento. A cunha, essa sim, saiu da
+# ponte emendada (ver os builders e reparar_echarpe).
+#
+# O rasterizador e o dos builders, BINARIO e uint8, de proposito: reproduz a
+# textura embarcada byte a byte. Reaplicar a mesma marca no mesmo lugar e
+# idempotente; se um dia uma marca MUDAR de lugar, apague a antiga com
+# Casco.apagar (base declarada) antes de pintar a nova.
+import json
+
+
+class CascoLegado:
+    """Grades (x, theta, z) e leitura uint8 da LiveryTex, como nos builders."""
+
+    def __init__(self, spec_rel, luv, ponte):
+        import os as _os
+        raiz = _os.path.dirname(_os.path.abspath(__file__))
+        spec = json.load(open(_os.path.join(raiz, spec_rel)))
+        self.spec = spec
+        self.LUV = luv
+        imT = bpy.data.images["LiveryTex"]
+        imF = bpy.data.images["LiveryFac"]
+        self.imT, self.imF = imT, imF
+        W, H = imT.size
+        self.W, self.H = W, H
+        nose = spec["nariz_estacoes"]
+        self._nx = np.array([s[0] for s in nose])
+        self._nc = np.array([s[1] for s in nose])
+        self._nk = np.array([s[2] for s in nose])
+        if ponte == "b763":
+            tail = spec["cauda_estacoes"]
+            self._tx = np.array([s[0] for s in tail])
+            self._tzc = np.array([s[1] for s in tail])
+            self._trz = np.array([s[2] for s in tail])
+
+            def zc_rz(x):           # b5_livery.py, verbatim
+                x = np.asarray(x, float)
+                zc = np.zeros_like(x)
+                rz = np.full_like(x, 2.705)
+                m = x <= 7.5
+                if m.any():
+                    c = np.interp(x[m], self._nx, self._nc)
+                    k = np.interp(x[m], self._nx, self._nk)
+                    zc[m] = (c + k) / 2.0
+                    rz[m] = (c - k) / 2.0
+                m = x >= 41.0
+                if m.any():
+                    zc[m] = np.interp(x[m], self._tx, self._tzc)
+                    rz[m] = np.interp(x[m], self._tx, self._trz)
+                return zc, rz
+        else:                        # "b77w": build_77w_fase2_livery.py, verbatim
+            self._nw = np.array([s[3] for s in nose])
+            tail = spec["cauda"]
+            self._tx = np.array([s[0] for s in tail])
+            self._tzc = np.array([s[1] for s in tail])
+            self._trz = np.array([s[2] for s in tail])
+            XC0, XC1 = spec["secao_constante_x"]
+
+            def zc_rz(x):
+                x = np.asarray(x, float)
+                zc = np.zeros_like(x)
+                rz = np.full_like(x, 3.10)
+                m = x <= XC0
+                if m.any():
+                    c = np.interp(x[m], self._nx, self._nc)
+                    k = np.interp(x[m], self._nx, self._nk)
+                    zc[m] = (c + k) / 2.0
+                    rz[m] = (c - k) / 2.0
+                m = x >= XC1
+                if m.any():
+                    zc[m] = np.interp(x[m], self._tx, self._tzc)
+                    rz[m] = np.interp(x[m], self._tx, self._trz)
+                return zc, rz
+        self.zc_rz = zc_rz
+        uu = (np.arange(W) + 0.5) / W
+        vv = (np.arange(H) + 0.5) / H
+        UX = uu * luv
+        VT = vv * 2 * math.pi - math.pi
+        self.GX = np.repeat(UX[None, :], H, axis=0)
+        GT = np.repeat(VT[:, None], W, axis=1)
+        _zc, _rz = zc_rz(UX)
+        self.GZ = _zc[None, :] + _rz[None, :] * np.cos(GT)
+        self.GABS = np.abs(GT)
+        self.LADO = np.where(GT < 0, -1, 1)
+        buf = np.empty(W * H * 4, np.float32)
+        imT.pixels.foreach_get(buf)
+        self._t4 = buf.reshape(H, W, 4)
+        self.tex = np.round(self._t4[..., :3] * 255.0).astype(np.uint8)
+        buf = np.empty(W * H * 4, np.float32)
+        imF.pixels.foreach_get(buf)
+        self._f4 = buf.reshape(H, W, 4)
+        self.pintado = np.zeros((H, W), bool)
+
+    # --- rasterizador dos builders (fill_tris/leque/marca/marca_th), verbatim
+    def fill_tris(self, tris, x0, x1, z0, z1, nx, nz):
+        out = np.zeros((nz, nx), bool)
+        if not tris:
+            return out
+        sx = (x1 - x0) / nx
+        sz = (z1 - z0) / nz
+        T = np.asarray(tris, np.float64)
+        P = np.empty_like(T)
+        P[..., 0] = (T[..., 0] - x0) / sx - 0.5
+        P[..., 1] = (T[..., 1] - z0) / sz - 0.5
+        for k in range(P.shape[0]):
+            a, b, c = P[k]
+            i0 = max(0, int(math.floor(min(a[0], b[0], c[0]))))
+            i1 = min(nx - 1, int(math.ceil(max(a[0], b[0], c[0]))))
+            j0 = max(0, int(math.floor(min(a[1], b[1], c[1]))))
+            j1 = min(nz - 1, int(math.ceil(max(a[1], b[1], c[1]))))
+            if i1 < i0 or j1 < j0:
+                continue
+            d = (b[1] - c[1]) * (a[0] - c[0]) + (c[0] - b[0]) * (a[1] - c[1])
+            if abs(d) < 1e-12:
+                continue
+            ii = np.arange(i0, i1 + 1)[None, :]
+            jj = np.arange(j0, j1 + 1)[:, None]
+            l1 = ((b[1] - c[1]) * (ii - c[0]) + (c[0] - b[0]) * (jj - c[1])) / d
+            l2 = ((c[1] - a[1]) * (ii - c[0]) + (a[0] - c[0]) * (jj - c[1])) / d
+            l3 = 1.0 - l1 - l2
+            m = (l1 >= -1e-9) & (l2 >= -1e-9) & (l3 >= -1e-9)
+            out[j0:j1 + 1, i0:i1 + 1] |= m
+        return out
+
+    @staticmethod
+    def leque(poly):
+        return [[poly[0], poly[i], poly[i + 1]] for i in range(1, len(poly) - 1)]
+
+    def marca(self, tris, x0, x1, z0, z1, cor, lado, ppm=460):
+        nx = max(8, int(round((x1 - x0) * ppm)))
+        nz = max(8, int(round((z1 - z0) * ppm)))
+        arr = self.fill_tris(tris, x0, x1, z0, z1, nx, nz)
+        if not arr.any():
+            return 0
+        sel = (self.GX >= x0) & (self.GX <= x1) & (self.GZ >= z0) & (self.GZ <= z1)
+        if lado:
+            sel &= (self.LADO == lado)
+        if not sel.any():
+            return 0
+        ix = np.clip(((self.GX[sel] - x0) / (x1 - x0) * nx).astype(int), 0, nx - 1)
+        jz = np.clip(((self.GZ[sel] - z0) / (z1 - z0) * nz).astype(int), 0, nz - 1)
+        hit = arr[jz, ix]
+        r, c = np.where(sel)
+        r, c = r[hit], c[hit]
+        self.tex[r, c] = cor
+        self.pintado[r, c] = True
+        return int(hit.sum())
+
+    def marca_th(self, tris, bb, x0, x1, th_topo, th_base, cor, lado,
+                 espelha=False, ppm=460, raio=2.50):
+        """b5: raio 2.50 (767); build_77w: raio 3.10 (777)."""
+        ax, bx, ay, by = bb
+        sx = (x1 - x0) / max(bx - ax, 1e-9)
+        st = (th_base - th_topo) / max(by - ay, 1e-9)
+        polys = []
+        for t in tris:
+            p = []
+            for X, Y in t:
+                xm = (x1 - (X - ax) * sx) if espelha else (x0 + (X - ax) * sx)
+                p.append((xm, th_base - (Y - ay) * st))
+            polys.append(p)
+        nx = max(8, int(round((x1 - x0) * ppm)))
+        nt = max(8, int(round(math.radians(th_base - th_topo) * raio * ppm)))
+        arr = self.fill_tris(polys, x0, x1, th_topo, th_base, nx, nt)
+        if not arr.any():
+            return 0
+        GD = np.degrees(self.GABS)
+        sel = (self.GX >= x0) & (self.GX <= x1) & (GD >= th_topo) & (GD <= th_base)
+        if lado:
+            sel &= (self.LADO == lado)
+        if not sel.any():
+            return 0
+        ix = np.clip(((self.GX[sel] - x0) / (x1 - x0) * nx).astype(int), 0, nx - 1)
+        jt = np.clip(((GD[sel] - th_topo) / (th_base - th_topo) * nt).astype(int),
+                     0, nt - 1)
+        hit = arr[jt, ix]
+        r, c = np.where(sel)
+        self.tex[r[hit], c[hit]] = cor
+        self.pintado[r[hit], c[hit]] = True
+        return int(hit.sum())
+
+    def tris_do_objeto(self, nome):
+        ob = bpy.data.objects.get(nome)
+        if ob is None:
+            return [], None
+        bm = bmesh.new()
+        bm.from_mesh(ob.data)
+        bmesh.ops.triangulate(bm, faces=bm.faces[:])
+        tris = [[(v.co.x, v.co.y) for v in f.verts] for f in bm.faces]
+        bm.free()
+        if not tris:
+            return [], None
+        a = np.asarray(tris)
+        return tris, (a[..., 0].min(), a[..., 0].max(),
+                      a[..., 1].min(), a[..., 1].max())
+
+    def texto_tris_b(self, txt):
+        """texto_tris() dos builders Boeing: fonte padrao do Blender."""
+        cu = bpy.data.curves.new(type="FONT", name="_tmp_txt")
+        cu.body = txt
+        ob = bpy.data.objects.new("_tmp_txt", cu)
+        bpy.context.scene.collection.objects.link(ob)
+        dg = bpy.context.evaluated_depsgraph_get()
+        me = bpy.data.meshes.new_from_object(ob.evaluated_get(dg))
+        bm = bmesh.new()
+        bm.from_mesh(me)
+        bmesh.ops.triangulate(bm, faces=bm.faces[:])
+        tris = [[(v.co.x, v.co.y) for v in f.verts] for f in bm.faces]
+        bm.free()
+        bpy.data.meshes.remove(me)
+        bpy.data.objects.remove(ob)
+        bpy.data.curves.remove(cu)
+        a = np.asarray(tris)
+        return tris, (a[..., 0].min(), a[..., 0].max(),
+                      a[..., 1].min(), a[..., 1].max())
+
+    @staticmethod
+    def encaixa(tris, bb, x0, x1, z0, z1, espelha=False, cis=0.0):
+        ax, bx, ay, by = bb
+        sx = (x1 - x0) / max(bx - ax, 1e-9)
+        sz = (z1 - z0) / max(by - ay, 1e-9)
+        out = []
+        for t in tris:
+            p = []
+            for X, Y in t:
+                Xc = X + cis * (Y - ay)
+                xm = (x1 - (Xc - ax) * sx) if espelha else (x0 + (Xc - ax) * sx)
+                p.append((xm, z0 + (Y - ay) * sz))
+            out.append(p)
+        return out
+
+    def resuja(self, caixas):
+        """Reaplica o desgaste dos builders SO sobre a tinta pintada aqui.
+        O builder aplica as mesmas caixas sobre a base; a ordem original
+        (marca antes, sujeira por cima) fica preservada texel a texel."""
+        for x0, x1, t0, t1, cor, inten in caixas:
+            m = ((self.GX >= x0) & (self.GX <= x1) &
+                 (self.GABS >= math.radians(t0)) &
+                 (self.GABS <= math.radians(t1)) & self.pintado)
+            if m.any():
+                self.tex[m] = (self.tex[m] * (1 - inten) +
+                               np.array(cor) * inten).astype(np.uint8)
+
+    def salvar(self):
+        self._t4[..., :3] = self.tex.astype(np.float32) / 255.0
+        self._t4[..., 3] = 1.0
+        f = self._f4
+        f[..., 0][self.pintado] = 1.0
+        f[..., 1][self.pintado] = 1.0
+        f[..., 2][self.pintado] = 1.0
+        self.imT.pixels.foreach_set(self._t4.ravel())
+        self.imT.update()
+        self.imF.pixels.foreach_set(f.ravel())
+        self.imF.update()
+        for im in (self.imT, self.imF):
+            if im.packed_file:
+                im.pack()
+        print("   [salvar] LiveryTex + LiveryFac atualizadas "
+              f"({int(self.pintado.sum())} texels de marca)")
+
+
+SUJA_763 = [(5.2, 12.5, 156, 180, (0x9A, 0x93, 0x88), 0.09),
+            (12.5, 17.5, 150, 172, (0xA8, 0xA2, 0x99), 0.05),
+            (27.5, 34.0, 150, 180, (0x9E, 0x98, 0x8E), 0.07)]
+BRANCO_763 = (0xF2, 0xF3, 0xF5)
+
+
+def _marcas_b763er(cl):
+    """boeing 767-300ER/b5_livery.py secoes 5-7, verbatim (CC-CWY)."""
+    tri_all, bb_all = cl.tris_do_objeto("B789_LogoLATAM_E")
+    tri_c, bb_c = cl.tris_do_objeto("B789_LogoLATAM_E_Coral")
+    if not tri_all or not tri_c:
+        raise SystemExit("[logo] malhas do lockup nao encontradas")
+    tri_sim = [t for t in tri_all if max(p[0] for p in t) < 1.10]
+    tri_wm = [t for t in tri_all if min(p[0] for p in t) >= 1.10]
+    a = np.asarray(tri_sim + tri_c)
+    bb_s = (a[..., 0].min(), a[..., 0].max(), a[..., 1].min(), a[..., 1].max())
+    a = np.asarray(tri_wm)
+    bb_w = (a[..., 0].min(), a[..., 0].max(), a[..., 1].min(), a[..., 1].max())
+    rs = (bb_s[1] - bb_s[0]) / (bb_s[3] - bb_s[2])
+    rw = (bb_w[1] - bb_w[0]) / (bb_w[3] - bb_w[2])
+    # medido em CC-CWY (bombordo, 2026-08-20):
+    SX0, SX1, S_TH = 6.98, 8.68, 34.26
+    WX0, WX1, W_TH = 9.15, 15.80, 37.21
+    S_TB = S_TH + math.degrees((SX1 - SX0) / rs / 2.50)
+    W_TB = W_TH + math.degrees((WX1 - WX0) / rw / 2.50)
+    print(f"   [logo] simbolo {rs:.3f} th {S_TH:.1f}..{S_TB:.1f} | "
+          f"wordmark {rw:.3f} th {W_TH:.1f}..{W_TB:.1f}")
+    INDIGO_T, CORAL_T = tuple(INDIGO), tuple(CORAL)
+    for lado, esp in ((-1, False), (1, True)):
+        cl.marca_th(tri_sim, bb_s, SX0, SX1, S_TH, S_TB, INDIGO_T, lado, esp)
+        cl.marca_th(tri_c, bb_s, SX0, SX1, S_TH, S_TB, CORAL_T, lado, esp)
+        cl.marca_th(tri_wm, bb_w, WX0, WX1, W_TH, W_TB, INDIGO_T, lado, esp)
+    # matricula BRANCA dentro do indigo: x 44.12..45.92, z 1.044..1.343
+    tr, bbr = cl.texto_tris_b("CC-CWY")
+    for lado, esp in ((-1, False), (1, True)):
+        cl.marca(cl.encaixa(tr, bbr, 44.12, 45.92, 1.044, 1.343, espelha=esp),
+                 44.12, 45.92, 1.044, 1.343, BRANCO_763, lado, ppm=760)
+    # titulo de tipo, obliquo: x 37.41..40.68, z 1.083..1.269
+    tt, bbt = cl.texto_tris_b("BOEING 767-300ER")
+    for lado, esp in ((-1, False), (1, True)):
+        cl.marca(cl.encaixa(tt, bbt, 37.41, 40.68, 1.083, 1.269, espelha=esp,
+                            cis=0.20),
+                 37.41, 40.68, 1.083, 1.269, TITULO, lado, ppm=760)
+    # barriga: wordmark x 24..31 + simbolo, arco lateral raio 2.466
+    lat = (np.pi - cl.GABS) * 2.466 * cl.LADO
+    BX0, BX1 = 24.0, 31.0
+    BH = (BX1 - BX0) / rw
+    nx, nz = int((BX1 - BX0) * 300), max(8, int(BH * 300))
+    arr = cl.fill_tris(cl.encaixa(tri_wm, bb_w, BX0, BX1, -BH / 2, BH / 2),
+                       BX0, BX1, -BH / 2, BH / 2, nx, nz)
+    SBH = BH * 2.0
+    SBX1 = BX0 - 0.45
+    SBX0 = SBX1 - SBH * rs
+    nsx, nsz = max(8, int((SBX1 - SBX0) * 300)), max(8, int(SBH * 300))
+    arrS = cl.fill_tris(cl.encaixa(tri_sim, bb_s, SBX0, SBX1, -SBH / 2, SBH / 2),
+                        SBX0, SBX1, -SBH / 2, SBH / 2, nsx, nsz)
+    arrC = cl.fill_tris(cl.encaixa(tri_c, bb_s, SBX0, SBX1, -SBH / 2, SBH / 2),
+                        SBX0, SBX1, -SBH / 2, SBH / 2, nsx, nsz)
+    for (a0, X0b, X1b, Hb, nX, nZ, cor) in (
+            (arr, BX0, BX1, BH, nx, nz, INDIGO_T),
+            (arrS, SBX0, SBX1, SBH, nsx, nsz, INDIGO_T),
+            (arrC, SBX0, SBX1, SBH, nsx, nsz, CORAL_T)):
+        sel = (cl.GX >= X0b) & (cl.GX <= X1b) & (np.abs(lat) <= Hb / 2)
+        if not sel.any():
+            continue
+        ix = np.clip(((cl.GX[sel] - X0b) / (X1b - X0b) * nX).astype(int),
+                     0, nX - 1)
+        jz = np.clip(((lat[sel] + Hb / 2) / Hb * nZ).astype(int), 0, nZ - 1)
+        r, c = np.where(sel)
+        h = a0[jz, ix]
+        cl.tex[r[h], c[h]] = cor
+        cl.pintado[r[h], c[h]] = True
+    cl.resuja(SUJA_763)
+
+
+def _marcas_carga(cl, spec_key, bandeira, texto_pais):
+    """b5f_livery.py / b5b_livery.py secoes 5-7, verbatim.
+    bandeira: "colombia" (N536LA) ou "chile" (CC-CXE)."""
+    INDIGO_T, CORAL_T = tuple(INDIGO), tuple(CORAL)
+    RU_S, CU_S = 2.521, 0.191
+    RL_S, CL_S = 2.5075, -0.1985
+
+    def _hw_sec(z):
+        if z >= CU_S:
+            h = RU_S * RU_S - (z - CU_S) ** 2
+        elif z <= CL_S:
+            h = RL_S * RL_S - (z - CL_S) ** 2
+        else:
+            return 2.515
+        return math.sqrt(h) if h > 0 else 0.0
+
+    def _arco(z0, z1, n=2001):
+        zs = np.linspace(z0, z1, n)
+        ys = np.array([_hw_sec(z) for z in zs])
+        return float(np.sum(np.hypot(np.diff(ys), np.diff(zs))))
+
+    def theta_base(th_topo_g, arco_alvo):
+        z_t = 2.705 * math.cos(math.radians(th_topo_g))
+        lo, hi = th_topo_g, 179.0
+        for _ in range(60):
+            mid = 0.5 * (lo + hi)
+            z_m = 2.705 * math.cos(math.radians(mid))
+            if _arco(z_m, z_t) < arco_alvo:
+                lo = mid
+            else:
+                hi = mid
+        return 0.5 * (lo + hi)
+
+    tri_si, bb_si = cl.tris_do_objeto("CargoLockup_Simbolo_Indigo")
+    tri_sc, bb_sc = cl.tris_do_objeto("CargoLockup_Simbolo_Coral")
+    tri_tx, bb_tx = cl.tris_do_objeto("CargoLockup_Texto")
+    if not (tri_si and tri_sc and tri_tx):
+        raise SystemExit("[logo] malhas do lockup CARGO nao encontradas")
+    a = np.asarray(tri_si + tri_sc)
+    bb_s = (a[..., 0].min(), a[..., 0].max(), a[..., 1].min(), a[..., 1].max())
+    rs = (bb_s[1] - bb_s[0]) / (bb_s[3] - bb_s[2])
+    rt = (bb_tx[1] - bb_tx[0]) / (bb_tx[3] - bb_tx[2])
+    SX0, SX1, S_TH = 7.02, 8.72, 39.2
+    TX0, TX1, T_TH = 9.36, 15.95, 52.6
+    S_TB = theta_base(S_TH, (SX1 - SX0) / rs)
+    T_TB = theta_base(T_TH, (TX1 - TX0) / rt)
+    print(f"   [logo] CARGO simbolo th {S_TH:.1f}..{S_TB:.1f} | "
+          f"texto th {T_TH:.1f}..{T_TB:.1f}")
+    for lado, esp in ((-1, False), (1, True)):
+        cl.marca_th(tri_si, bb_s, SX0, SX1, S_TH, S_TB, INDIGO_T, lado, esp)
+        cl.marca_th(tri_sc, bb_s, SX0, SX1, S_TH, S_TB, CORAL_T, lado, esp)
+        cl.marca_th(tri_tx, bb_tx, TX0, TX1, T_TH, T_TB, INDIGO_T, lado, esp)
+
+    GD_ = np.degrees(cl.GABS)
+    BF_T0, BF_T1 = 63.3, 75.3
+    if bandeira == "colombia":
+        BF_X0, BF_X1 = 3.94, 4.53
+        _sel = ((cl.GX >= BF_X0) & (cl.GX <= BF_X1) &
+                (GD_ >= BF_T0) & (GD_ <= BF_T1))
+        if _sel.any():
+            f = (GD_ - BF_T0) / (BF_T1 - BF_T0)
+            for lo, hi, cor in ((0.0, 0.50, (0xFC, 0xD1, 0x16)),
+                                (0.50, 0.75, (0x00, 0x33, 0x8D)),
+                                (0.75, 1.00, (0xC8, 0x10, 0x2E))):
+                m = _sel & (f >= lo) & (f < hi)
+                cl.tex[m] = cor
+            cl.pintado[_sel] = True
+        _tp, _bbp = cl.texto_tris_b(texto_pais)
+        for _lado, _esp in ((-1, False), (1, True)):
+            cl.marca_th(_tp, _bbp, BF_X0 - 0.02, BF_X1 + 0.02, 76.4, 78.8,
+                        (0x3A, 0x3C, 0x42), _lado, _esp, ppm=760)
+    else:                                     # chile (b5b_livery.py, verbatim)
+        _rz_bf = float(cl.zc_rz(np.array([4.23]))[1][0])
+        BF_ARCO = math.radians(BF_T1 - BF_T0) * _rz_bf
+        BF_X0 = 3.94
+        BF_X1 = BF_X0 + 1.5 * BF_ARCO
+        _sel = ((cl.GX >= BF_X0) & (cl.GX <= BF_X1) &
+                (GD_ >= BF_T0) & (GD_ <= BF_T1))
+        if _sel.any():
+            fx = (cl.GX - BF_X0) / (BF_X1 - BF_X0)
+            ft = (GD_ - BF_T0) / (BF_T1 - BF_T0)
+            cl.tex[_sel & (ft < 0.5)] = (0xF2, 0xF3, 0xF5)
+            cl.tex[_sel & (ft >= 0.5)] = (0xD5, 0x2B, 0x1E)
+            cl.tex[_sel & (ft < 0.5) & (fx < 1.0 / 3.0)] = (0x0A, 0x39, 0x81)
+            _lado_c = (BF_X1 - BF_X0) / 3.0
+            _cxs = BF_X0 + _lado_c / 2.0
+            _cts = BF_T0 + (BF_T1 - BF_T0) * 0.25
+            _R = 0.30 * _lado_c
+            _u = (cl.GX - _cxs) / _R
+            _v = np.radians(GD_ - _cts) * _rz_bf / _R
+            _ang = np.arctan2(_u, -_v)
+            _rr = np.hypot(_u, _v)
+            _BETA = math.radians(18.0)
+            _aa = np.abs(np.mod(_ang + np.pi / 5.0, 2 * np.pi / 5.0) - np.pi / 5.0)
+            _lim = math.sin(_BETA) / np.sin(_aa + _BETA)
+            cl.tex[_sel & (_rr <= _lim)] = (0xF2, 0xF3, 0xF5)
+            cl.pintado[_sel] = True
+        _tp, _bbp = cl.texto_tris_b(texto_pais)
+        for _lado, _esp in ((-1, False), (1, True)):
+            cl.marca_th(_tp, _bbp, BF_X0 + 0.10, BF_X1 - 0.10, 76.4, 78.8,
+                        (0x3A, 0x3C, 0x42), _lado, _esp, ppm=760)
+
+    mr = cl.spec[spec_key]["marcas"]["matricula"]
+    tr, bbr = cl.texto_tris_b(mr["texto"])
+    for lado, esp in ((-1, False), (1, True)):
+        cl.marca(cl.encaixa(tr, bbr, mr["x"][0], mr["x"][1], mr["z"][0],
+                            mr["z"][1], espelha=esp),
+                 mr["x"][0], mr["x"][1], mr["z"][0], mr["z"][1],
+                 BRANCO_763, lado, ppm=760)
+    tt_ = cl.spec[spec_key]["marcas"]["titulo"]
+    tt, bbt = cl.texto_tris_b(tt_["texto"])
+    for lado, esp in ((-1, False), (1, True)):
+        cl.marca(cl.encaixa(tt, bbt, tt_["x"][0], tt_["x"][1], tt_["z"][0],
+                            tt_["z"][1], espelha=esp, cis=0.20),
+                 tt_["x"][0], tt_["x"][1], tt_["z"][0], tt_["z"][1],
+                 TITULO, lado, ppm=760)
+    # ventre: SO o simbolo, x 10.40..12.50
+    lat = (np.pi - cl.GABS) * 2.466 * cl.LADO
+    BX0, BX1 = 10.40, 12.50
+    BH = (BX1 - BX0) / rs
+    nx, nz = max(8, int((BX1 - BX0) * 300)), max(8, int(BH * 300))
+    arrI = cl.fill_tris(cl.encaixa(tri_si, bb_s, BX0, BX1, -BH / 2, BH / 2),
+                        BX0, BX1, -BH / 2, BH / 2, nx, nz)
+    arrC = cl.fill_tris(cl.encaixa(tri_sc, bb_s, BX0, BX1, -BH / 2, BH / 2),
+                        BX0, BX1, -BH / 2, BH / 2, nx, nz)
+    for (a0, cor) in ((arrI, INDIGO_T), (arrC, CORAL_T)):
+        sel = (cl.GX >= BX0) & (cl.GX <= BX1) & (np.abs(lat) <= BH / 2)
+        if not sel.any():
+            continue
+        ix = np.clip(((cl.GX[sel] - BX0) / (BX1 - BX0) * nx).astype(int),
+                     0, nx - 1)
+        jz = np.clip(((lat[sel] + BH / 2) / BH * nz).astype(int), 0, nz - 1)
+        r, c = np.where(sel)
+        h = a0[jz, ix]
+        cl.tex[r[h], c[h]] = cor
+        cl.pintado[r[h], c[h]] = True
+    cl.resuja(SUJA_763)
+
+
+def _marcas_b77w(cl):
+    """boeing 777-300ER/build_77w_fase2_livery.py secoes 5-7, verbatim (PT-MUG)."""
+    INDIGO_T, CORAL_T = tuple(INDIGO), tuple(CORAL)
+    tri_all, bb_all = cl.tris_do_objeto("B77W_LogoLATAM_E")
+    tri_c, bb_c = cl.tris_do_objeto("B77W_LogoLATAM_E_Coral")
+    if not tri_all or not tri_c:
+        raise SystemExit("[logo] malhas do lockup nao encontradas")
+    corte = bb_all[0] + 0.18 * (bb_all[1] - bb_all[0])
+    tri_sim = [t for t in tri_all if max(p[0] for p in t) < corte]
+    tri_wm = [t for t in tri_all if min(p[0] for p in t) >= corte]
+    a = np.asarray(tri_sim + tri_c)
+    bb_s = (a[..., 0].min(), a[..., 0].max(), a[..., 1].min(), a[..., 1].max())
+    a = np.asarray(tri_wm)
+    bb_w = (a[..., 0].min(), a[..., 0].max(), a[..., 1].min(), a[..., 1].max())
+    rs = (bb_s[1] - bb_s[0]) / (bb_s[3] - bb_s[2])
+    rw = (bb_w[1] - bb_w[0]) / (bb_w[3] - bb_w[2])
+    SX0, SX1, S_TH = 7.91, 9.64, 46.8
+    WX0, WX1, W_TH = 10.34, 17.26, 51.6
+    S_TB = S_TH + math.degrees((SX1 - SX0) / rs / 3.10)
+    W_TB = W_TH + math.degrees((WX1 - WX0) / rw / 3.10)
+    print(f"   [logo] simbolo {rs:.3f} th {S_TH:.1f}..{S_TB:.1f} | "
+          f"wordmark {rw:.3f} th {W_TH:.1f}..{W_TB:.1f}")
+    for lado, esp in ((-1, False), (1, True)):
+        cl.marca_th(tri_sim, bb_s, SX0, SX1, S_TH, S_TB, INDIGO_T, lado, esp,
+                    raio=3.10)
+        cl.marca_th(tri_c, bb_s, SX0, SX1, S_TH, S_TB, CORAL_T, lado, esp,
+                    raio=3.10)
+        cl.marca_th(tri_wm, bb_w, WX0, WX1, W_TH, W_TB, INDIGO_T, lado, esp,
+                    raio=3.10)
+    tr, bbr = cl.texto_tris_b("PT-MUG")
+    for lado, esp in ((-1, False), (1, True)):
+        cl.marca(cl.encaixa(tr, bbr, 60.64, 62.37, 0.80, 1.35, espelha=esp),
+                 60.64, 62.37, 0.80, 1.35, BRANCO_763, lado, ppm=760)
+    tt, bbt = cl.texto_tris_b("BOEING 777-300")
+    for lado, esp in ((-1, False), (1, True)):
+        cl.marca(cl.encaixa(tt, bbt, 55.84, 58.55, 0.78, 1.12, espelha=esp,
+                            cis=0.18),
+                 55.84, 58.55, 0.78, 1.12, INDIGO_T, lado, ppm=760)
+    # ventre do PT-MUG: SO o simbolo, x 11.1..14.1
+    lat = (np.pi - cl.GABS) * 3.10 * cl.LADO
+    SBX0, SBX1 = 11.1, 14.1
+    SBH = (SBX1 - SBX0) / rs
+    nsx, nsz = max(8, int((SBX1 - SBX0) * 300)), max(8, int(SBH * 300))
+    arrS = cl.fill_tris(cl.encaixa(tri_sim, bb_s, SBX0, SBX1, -SBH / 2, SBH / 2),
+                        SBX0, SBX1, -SBH / 2, SBH / 2, nsx, nsz)
+    arrC = cl.fill_tris(cl.encaixa(tri_c, bb_s, SBX0, SBX1, -SBH / 2, SBH / 2),
+                        SBX0, SBX1, -SBH / 2, SBH / 2, nsx, nsz)
+    for (a0, cor) in ((arrS, INDIGO_T), (arrC, CORAL_T)):
+        sel = (cl.GX >= SBX0) & (cl.GX <= SBX1) & (np.abs(lat) <= SBH / 2)
+        if not sel.any():
+            continue
+        ix = np.clip(((cl.GX[sel] - SBX0) / (SBX1 - SBX0) * nsx).astype(int),
+                     0, nsx - 1)
+        jz = np.clip(((lat[sel] + SBH / 2) / SBH * nsz).astype(int), 0, nsz - 1)
+        r, c = np.where(sel)
+        h = a0[jz, ix]
+        cl.tex[r[h], c[h]] = cor
+        cl.pintado[r[h], c[h]] = True
+    cl.resuja([(6.5, 14.0, 156, 180, (0x9A, 0x93, 0x88), 0.08),
+               (38.0, 46.0, 150, 180, (0x9E, 0x98, 0x8E), 0.06),
+               (69.0, 74.0, 120, 180, (0x8E, 0x88, 0x82), 0.10)])
+
+
+LEGADO = {
+    "b763er": dict(spec="boeing 767-300ER/spec_763.json", luv=55.5,
+                   ponte="b763", fn=_marcas_b763er),
+    "b763f": dict(spec="boeing 767-300F/spec_763f.json", luv=55.5,
+                  ponte="b763",
+                  fn=lambda cl: _marcas_carga(cl, "livery_n536la",
+                                              "colombia", "COLOMBIA")),
+    "b763bcf": dict(spec="boeing 767-300BCF/spec_763bcf.json", luv=55.5,
+                    ponte="b763",
+                    fn=lambda cl: _marcas_carga(cl, "livery_cc_cxe",
+                                                "chile", "CHILE")),
+    "b77w": dict(spec="boeing 777-300ER/spec_77w.json", luv=74.5,
+                 ponte="b77w", fn=_marcas_b77w),
+}
+
+
 def main():
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
     tag = argv[0]
+    if tag in LEGADO:
+        cfg = LEGADO[tag]
+        for o in bpy.data.objects:
+            o.hide_viewport = False
+        bpy.context.view_layer.update()
+        cl = CascoLegado(cfg["spec"], cfg["luv"], cfg["ponte"])
+        print(f"[{tag}] legado  L={cl.LUV}  tex {cl.W}x{cl.H}")
+        cfg["fn"](cl)
+        cl.salvar()
+        bpy.ops.wm.save_mainfile()
+        print(f"[{tag}] blend saved")
+        return
     tarefas = argv[1:] or ["lockup"]
     cfg = FROTA[tag]
     cs = Casco()
