@@ -1393,78 +1393,14 @@ def _marcas_a319(ca):
             (np.abs(np.sin(ca.THg)) > 0.30)
         ca.compor(sel, cor,
                   nome=f"matricula PT-TMT {'port' if lado < 0 else 'stbd'}")
-    # --- titulo 'AIRBUS A319' (build_a319_livery, verbatim: ilhas do
-    # MarkAirbusNeo_E + '1' da haste do I + '9' reconstruido). A cunha velha
-    # destruiu '1','9' e o swirl NA TEXTURA (QA-BACKLOG "AIRBUS A3"); esta op
-    # repinta a arte completa do builder — a unica fonte que resta.
-    mk = bpy.data.objects["MarkAirbusNeo_E"]
-    mm = mk.data
-    mm.calc_loop_triangles()
-    isl = ca.mesh_islands(mm)
-
-    def mbox(comp):
-        xs = [mm.vertices[i].co.x for i in comp]
-        ys = [mm.vertices[i].co.y for i in comp]
-        return min(xs), max(xs), min(ys), max(ys)
-
-    isl.sort(key=lambda c: mbox(c)[0])
-    vert_isl = {}
-    for k, comp in enumerate(isl):
-        for i in comp:
-            vert_isl[i] = k
-    mtris = {k: [] for k in range(len(isl))}
-    for t in mm.loop_triangles:
-        k = vert_isl[t.vertices[0]]
-        mtris[k].append([(mm.vertices[i].co.x, mm.vertices[i].co.y)
-                         for i in t.vertices])
-    n = len(isl)
-    keep = list(range(0, n - 2))
-    tris2 = []
-    for k in keep:
-        tris2 += mtris[k]
-    b3 = mbox(isl[keep[-1]])
-    gw = b3[1] - b3[0]
-    gap = 0.15 * gw
-    capz0, capz1 = b3[2], b3[3]
-    widths = [(mbox(isl[k])[1] - mbox(isl[k])[0], k) for k in keep[1:]]
-    wI, kI = sorted(widths)[0]
-    dx = (b3[1] + gap) - mbox(isl[kI])[0]
-    one_tris = [[(px + dx, py) for px, py in t] for t in mtris[kI]]
-    tris2 += one_tris
-    one_x1 = mbox(isl[kI])[1] + dx
-    bx0 = one_x1 + gap
-    bw = gw * 0.92
-    bh = (capz1 - capz0)
-    cx = bx0 + 0.5 * bw * 0.92
-    cyb = capz0 + bh * 0.62
-    r_out_x = 0.46 * bw; r_out_y = 0.40 * bh
-    r_in_x = 0.24 * bw; r_in_y = 0.20 * bh
-    NSEG = 24
-    for i in range(NSEG):
-        a0 = 2 * math.pi * i / NSEG; a1 = 2 * math.pi * (i + 1) / NSEG
-        o0 = (cx + r_out_x * math.cos(a0), cyb + r_out_y * math.sin(a0))
-        o1 = (cx + r_out_x * math.cos(a1), cyb + r_out_y * math.sin(a1))
-        i0 = (cx + r_in_x * math.cos(a0), cyb + r_in_y * math.sin(a0))
-        i1 = (cx + r_in_x * math.cos(a1), cyb + r_in_y * math.sin(a1))
-        tris2.append([o0, o1, i1]); tris2.append([o0, i1, i0])
-    sw = wI
-    sx0 = cx + r_out_x - sw
-    tris2.append([(sx0, capz0), (sx0 + sw, capz0), (sx0 + sw, cyb + 0.1 * bh)])
-    tris2.append([(sx0, capz0), (sx0 + sw, cyb + 0.1 * bh), (sx0, cyb + 0.1 * bh)])
-    xs = [p[0] for t in tris2 for p in t]; ys = [p[1] for t in tris2 for p in t]
-    lx0, lx1, ly0, ly1 = min(xs), max(xs), min(ys), max(ys)
-    TX0, TX1, TZ0, TZ1 = 23.45, 25.20, 1.040, 1.210
-    s = min((TX1 - TX0) / (lx1 - lx0), (TZ1 - TZ0) / (ly1 - ly0))
-    tris2 = [[(TX0 + (px - lx0) * s, TZ0 + (py - ly0) * s) for px, py in t]
-             for t in tris2]
-    mi = ca.tri_mask_2d(tris2, TX0 - 0.03, TX1 + 0.03, TZ0 - 0.03, TZ1 + 0.03,
-                        res=1500)
-    selp = ca.sample_mask(mi, ca.Xg, ca.Zg) & (ca.Yg < 0) & \
-        (np.abs(np.sin(ca.THg)) > 0.25)
-    XMIR = TX0 + TX1
-    sels = ca.sample_mask(mi, XMIR - ca.Xg, ca.Zg) & (ca.Yg > 0) & \
-        (np.abs(np.sin(ca.THg)) > 0.25)
-    ca.compor(selp | sels, C_A320[2], nome="titulo AIRBUS A319")
+    # --- titulo 'AIRBUS A319': DESDE 2026-08-27 pintado pela tarefa
+    # `titulo` (fazer_titulo_a319, ponte moderna) com arte SVG real — ilhas
+    # do MarkAirbusNeo_E + '1' do airbus_a321neo_logo.svg + '9' do bojo do
+    # '0'. O bloco legado (ilhas + '1' da haste do I + '9' de aneis NSEG)
+    # que vivia aqui pintava uma aproximacao em indigo e foi APOSENTADO —
+    # rodar `-- a319 lockup marcas titulo` reproduz a textura embarcada.
+    print("   [titulo] a319: pintado pela tarefa 'titulo' (arte SVG); "
+          "bloco legado aposentado")
 
 
 def _marcas_a320ceo(ca):
@@ -2202,6 +2138,1043 @@ def _marcas_b788(cb):
         print(f"   [pintar]  matricula CC-BBF {tag2}  {n} texels")
 
 
+# ========================================== IMPRESSAO DE SUPERFICIE 2026-08-27
+# A rodada da impressao: linhas de painel e cutlines de comandos em (x,theta),
+# matricula sob a asa, linha do leme na deriva. TUDO por este arquivo (o pintor
+# unico); os builders nao pintam nada disto.
+#
+# LEI DA SUTILEZA (medida, nao estimada): tres faixas limpas da fuselagem em
+# refs/20251011_LATAM_PT-MUC_EGLL.jpg (6016 px, flanco ao sol) dao juntas
+# circunferenciais lendo como quedas de luminancia de 0.8-3.8% (tipico 1-2.5%);
+# so portas/recortes profundos passam de 5%. A tinta abaixo compoe
+# ef' = ef*(1-a*cov) + cor*a*cov com a=ALPHA_*; com COR_PRINT sobre o branco
+# do casco (#E6E7EA) a queda resultante e ~0.83*a — a tabela:
+ALPHA_JUNTA = 0.032      # -> ~2.7% de queda (dentro do 1-3.8% medido)
+ALPHA_RADOME = 0.055     # a junta do radome le mais forte (painel dieletrico)
+ALPHA_CARENAGEM = 0.045  # costura da carenagem ventral no casco
+ALPHA_APU = 0.045        # anel da parede de fogo do APU
+ALPHA_LEME = 0.09        # linha do leme sobre a arte da deriva (multiplicativa)
+COR_PRINT = (0x55, 0x57, 0x5B)
+
+
+def _sock(node, ident, saida=False):
+    for sk in (node.outputs if saida else node.inputs):
+        if sk.identifier == ident:
+            return sk
+    raise KeyError(ident + " nao existe em " + node.name)
+
+
+class Impressao:
+    """Linhas de painel sobre a LiveryTex, pela ponte moderna (Casco).
+    Marca NOVA e autorada na ponte da malha — a regra de REBUILD.md sobre
+    pontes legadas vale para marcas que ja existiam, nao para estas."""
+
+    def __init__(self, cs):
+        self.cs = cs
+        self.cor = np.array(COR_PRINT, np.float32) / 255.0
+
+    def _compor(self, r0, r1, c0, c1, cov, alpha, nome):
+        cs = self.cs
+        ef = cs.efetiva(r0, r1, c0, c1)
+        a = (cov * alpha)[..., None]
+        novo = ef * (1 - a) + self.cor[None, None, :] * a
+        cs.escrever(r0, r1, c0, c1, novo, cov > 0.02)
+        n = int((cov > 0.02).sum())
+        print(f"   [imprimir] {nome:28} {n:6d} texels  alpha {alpha:.3f}")
+        return n
+
+    def anel(self, x_m, alpha, larg_m, nome):
+        """Junta circunferencial: coluna de texels na estacao x, todas as
+        linhas. A junta real cruza tinta, janela e cunha — e na foto tambem."""
+        cs = self.cs
+        cc = float(cs.col_of_x(x_m))
+        half = 0.5 * larg_m / (cs.L / cs.W)
+        c0 = max(0, int(math.floor(cc - half - 1)))
+        c1 = min(cs.W - 1, int(math.ceil(cc + half + 1)))
+        cols = np.arange(c0, c1 + 1, dtype=float)
+        cov1 = np.clip(half + 0.5 - np.abs(cols - cc), 0.0, 1.0)
+        cov = np.broadcast_to(cov1[None, :], (cs.H, c1 - c0 + 1)).copy()
+        return self._compor(0, cs.H - 1, c0, c1, cov, alpha, nome)
+
+    def polilinha(self, xs, ths_deg, alpha, larg_m, nome, lados=(-1, 1)):
+        """Linha em (x, theta): por coluna, theta(x) interpolado; cobertura
+        vertical em queda linear sobre larg_m convertido a linhas locais."""
+        cs = self.cs
+        xs = np.asarray(xs, float)
+        ths = np.radians(np.asarray(ths_deg, float))
+        c0 = max(0, int(cs.col_of_x(xs.min())))
+        c1 = min(cs.W - 1, int(cs.col_of_x(xs.max())))
+        if c1 <= c0:
+            return 0
+        colx = cs.x_of_col(np.arange(c0, c1 + 1))
+        thx = np.interp(colx, xs, ths)
+        n = 0
+        for lado in lados:
+            rc = cs.row_of_th(lado * thx)
+            # metros de arco por linha de texel, na estacao media
+            xm = float(colx.mean())
+            s1 = float(cs.arc(np.array([xm]), np.array([math.pi * 0.98]))[0])
+            m_por_linha = abs(s1) * 2 / (cs.H * 0.98)
+            half = 0.5 * larg_m / max(m_por_linha, 1e-6)
+            r0 = max(0, int(np.floor(rc.min() - half - 1)))
+            r1 = min(cs.H - 1, int(np.ceil(rc.max() + half + 1)))
+            rows = np.arange(r0, r1 + 1, dtype=float)
+            cov = np.clip(half + 0.5 - np.abs(rows[:, None] - rc[None, :]),
+                          0.0, 1.0)
+            n += self._compor(r0, r1, c0, c1, cov, alpha,
+                              f"{nome} {'E' if lado < 0 else 'D'}")
+        return n
+
+    def costura_carenagem(self, alpha=None, nome="costura carenagem"):
+        """A costura da carenagem ventral LIDA DA PROPRIA MALHA: por faixa de
+        x, o vertice da carenagem mais proximo da crista (menor |theta| do
+        lado) e a borda; a polilinha detectada e pintada no casco."""
+        ob = bpy.data.objects.get("BellyFairing")
+        if ob is None:
+            print("   [imprimir] costura: sem BellyFairing, pulando")
+            return 0
+        cs = self.cs
+        M = ob.matrix_world
+        P = np.array([tuple(M @ v.co) for v in ob.data.vertices])
+        # theta do vertice contra a secao local do casco
+        i = cs._i(P[:, 0])
+        th = np.empty(len(P))
+        for k in range(len(P)):
+            e = cs.est[i[k]]
+            zz = e[3]; tt = e[1]
+            # z(theta) monotono por metade; usar o lado do vertice
+            m = tt >= 0 if P[k, 1] >= 0 else tt <= 0
+            th[k] = abs(np.interp(P[k, 2], zz[m][np.argsort(zz[m])],
+                                  np.abs(tt[m])[np.argsort(zz[m])]))
+        xb = np.arange(math.floor(P[:, 0].min()), math.ceil(P[:, 0].max()), 0.5)
+        xs, ts = [], []
+        for a, b in zip(xb[:-1], xb[1:]):
+            m = (P[:, 0] >= a) & (P[:, 0] < b)
+            if m.sum() < 3:
+                continue
+            xs.append(0.5 * (a + b)); ts.append(np.degrees(th[m].min()))
+        if len(xs) < 4:
+            print("   [imprimir] costura: malha insuficiente")
+            return 0
+        return self.polilinha(xs, ts, alpha or ALPHA_CARENAGEM, 0.04, nome)
+
+
+# juntas: estacoes citadas dos geradores de PanelBump por tipo (a mesma
+# tabela que ja embarcou como BUMP vira agora impressao sutil de COR);
+# a320ceo/neo: padrao do builder do A319 + deslocamento dos plugs do ACAP
+# (a tabela do A319 e a unica da familia com builder proprio; o PanelBump
+# dos dois A320 estava DESEMPACOTADO no master — regenerado nesta rodada).
+_J_A320 = [1.55, 2.65, 4.4, 5.96, 6.96, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0,
+           20.0, 22.0, 24.0, 26.04, 29.04, 32.04, 35.04, 36.7]
+_J_A321 = ([0.96, 1.79, 2.65, 3.51, 4.4, 5.3, 6.96] +
+           [8.9 + 1.99 * k for k in range(12)] +
+           [33.69, 35.6, 37.4, 39.2, 41.0, 42.5])
+IMPRESSAO = {
+    "a319": dict(juntas=[2.65, 4.4, 5.96, 6.96, 8.0, 10.0, 12.0, 14.0, 16.0,
+                         18.0, 20.0, 22.27, 25.27, 28.27, 31.27, 33.0],
+                 radome=1.55, apu=None, carenagem=True),
+    "a320ceo": dict(juntas=_J_A320[1:], radome=1.55, apu=None, carenagem=True,
+                    pb_regen=True),
+    "a320neo": dict(juntas=_J_A320[1:], radome=1.55, apu=None, carenagem=True,
+                    pb_regen=True),
+    "a321ceo": dict(juntas=_J_A321[1:], radome=0.96, apu=None, carenagem=True),
+    "a321neo": dict(juntas=_J_A321[1:], radome=0.96, apu=None, carenagem=True),
+    "b763er": dict(juntas=[10.3, 16.8, 23.3, 29.8, 36.3, 42.8, 47.5],
+                   radome=2.0, apu=51.8, carenagem=True),
+    "b763f": dict(juntas=[10.3, 16.8, 23.3, 29.8, 36.3, 42.8, 47.5],
+                  radome=2.0, apu=51.8, carenagem=True),
+    "b763bcf": dict(juntas=[10.3, 16.8, 23.3, 29.8, 36.3, 42.8, 47.5],
+                    radome=2.0, apu=51.8, carenagem=True),
+    "b77w": dict(juntas=[10.0, 22.6, 33.5, 44.9, 51.5, 56.0, 62.0, 68.0],
+                 radome=2.05, apu=71.5, carenagem=True),
+    # 787: fuselagem composita — so as emendas de barril. As do -9 foram
+    # MEDIDAS na foto da CC-BGG (MAD, 6000 px, tres faixas de luminancia
+    # concordantes; candidatos coincidentes com portas do spec descartados):
+    # fracoes 0.228/0.307/0.423/0.606 do nariz->cauda = x 14.3/19.3/26.6/38.1.
+    # As do -8 sao a MESMA tabela deslocada pelos plugs da derivacao (-3.05
+    # avante da asa, -3.05 atras), declarado. Radome JA PINTADO por nose_art.
+    "b788": dict(juntas=[11.25, 16.25, 23.55, 35.05], radome=None,
+                 apu=54.2, carenagem=True, alpha_juntas=0.022),
+    "b789": dict(juntas=[14.3, 19.3, 26.6, 38.1], radome=None,
+                 apu=60.5, carenagem=True, alpha_juntas=0.022),
+}
+
+
+def fazer_impressao(cs, tag):
+    cfg = IMPRESSAO[tag]
+    imp = Impressao(cs)
+    a_j = cfg.get("alpha_juntas", ALPHA_JUNTA)
+    for xj in cfg["juntas"]:
+        imp.anel(xj, a_j, 0.030, f"junta x={xj:.2f}")
+    if cfg.get("radome"):
+        imp.anel(cfg["radome"], ALPHA_RADOME, 0.045, "junta do radome")
+    if cfg.get("apu"):
+        imp.anel(cfg["apu"], ALPHA_APU, 0.040, "anel do APU")
+    if cfg.get("carenagem"):
+        imp.costura_carenagem()
+    if cfg.get("pb_regen"):
+        _panelbump_a320()
+
+
+def _panelbump_a320():
+    """A320ceo/neo: o PanelBump do master estava sem pixels (packed=False).
+    Regenerado no padrao do builder do A319 (juntas 0.42, lap joints 0.46
+    sobre 0.5 neutro) com a tabela _J_A320, e EMPACOTADO."""
+    pb = bpy.data.images["PanelBump"]
+    wp, hp = pb.size
+    fus = bpy.data.objects.get("Fuselagem")
+    xs = [v.co.x for v in fus.data.vertices]
+    L = max(xs) - min(xs)
+    L = 38.0 if L > 36.0 else 34.2
+    arr = np.full((hp, wp), 0.5, np.float32)
+    xs_pb = (np.arange(wp) + 0.5) / wp * L
+    for j in [1.55] + _J_A320[1:]:
+        col = int(np.argmin(np.abs(xs_pb - j)))
+        arr[:, max(col - 1, 0):col + 1] = 0.42
+    for vv in (0.36, 0.30, 0.64, 0.70, 0.14, 0.86):
+        row = int(vv * hp)
+        arr[row:row + 1, :] = 0.46
+    out = np.empty((hp, wp, 4), np.float32)
+    out[..., 0] = arr; out[..., 1] = arr; out[..., 2] = arr; out[..., 3] = 1.0
+    pb.pixels.foreach_set(out.ravel())
+    pb.pack()
+    print(f"   [imprimir] PanelBump regenerado e empacotado (L={L})")
+
+
+# ------------------------------------------------------------------ asa
+# Linhas de comando da asa + matricula sob a asa DIREITA.
+#
+# A LEI DA MATRICULA SOB A ASA (fotografada, nao suposta): quatro quadros de
+# tres tipos mostram a mesma convencao — a matricula vive sob a asa DIREITA
+# (estibordo), corre ao longo da envergadura lendo da raiz para a ponta, com o
+# topo dos glifos para o bordo de ataque, logo a frente da linha do flap/
+# aileron: PT-MUG (ref_PT-MUG_2022_FRA.jpg), CC-BGG (ref_bgg_mad23.jpg),
+# N536LA (ref_N536LA_ldg26.jpg), CC-CXE (ref_CC-CXE_appr4.jpg). Vista de
+# baixo com o BA para cima, a leitura raiz->ponta e da esquerda para a
+# direita — pintar em (y, -x) SEM espelho reproduz isso (verificado no gate
+# CamBarriga).
+COR_REG_ASA = (0x24, 0x26, 0x2B)   # nas fotos a tinta le como grafite escuro
+
+
+class Asa:
+    """Textura AsaLinhas (plan-form (x,y) -> UVAsa) + shader CinzaAsa.
+    R = cutlines dos dois lados, G = spoilers (so extradorso),
+    B = matricula (so intradorso). Cria a infraestrutura onde falta
+    (familia A320) e repara onde ela morreu (ver cada master)."""
+
+    W = H = 2048
+
+    def __init__(self, nomes_asa, dominio=None):
+        D = bpy.data
+        self.obs = [D.objects[n] for n in nomes_asa if D.objects.get(n)]
+        if not self.obs:
+            raise SystemExit(f"asa nao encontrada: {nomes_asa}")
+        # dominio planar: existente (ajuste por minimos quadrados da UV
+        # embarcada) ou novo a partir da caixa do proprio conjunto
+        uv_existente = all(o.data.uv_layers.get("UVAsa") for o in self.obs)
+        if uv_existente and dominio is None:
+            X, Y, U, V = [], [], [], []
+            for o in self.obs:
+                me = o.data
+                uvl = me.uv_layers["UVAsa"].data
+                M = o.matrix_world
+                for poly in me.polygons:
+                    for li in poly.loop_indices:
+                        co = M @ me.vertices[me.loops[li].vertex_index].co
+                        u, v = uvl[li].uv
+                        X.append(co.x); Y.append(co.y); U.append(u); V.append(v)
+            X = np.array(X); Y = np.array(Y)
+            U = np.array(U); V = np.array(V)
+            au = np.polyfit(X, U, 1); av = np.polyfit(Y, V, 1)
+            self.X0 = -au[1] / au[0]; self.DX = 1.0 / au[0]
+            self.Y0 = -av[1] / av[0]; self.DY = 1.0 / av[0]
+            print(f"   [asa] dominio UVAsa embarcado: x {self.X0:.2f}+{self.DX:.2f}"
+                  f"  y {self.Y0:.2f}+{self.DY:.2f}")
+        else:
+            if dominio is None:
+                P = self._verts()
+                x0 = math.floor(P[:, 0].min() - 1)
+                x1 = math.ceil(P[:, 0].max() + 1)
+                ym = math.ceil(np.abs(P[:, 1]).max() + 1)
+                dominio = (x0, x1 - x0, -ym, 2 * ym)
+            self.X0, self.DX, self.Y0, self.DY = dominio
+            for o in self.obs:
+                me = o.data
+                uva = me.uv_layers.get("UVAsa") or me.uv_layers.new(name="UVAsa")
+                M = o.matrix_world
+                for loop in me.loops:
+                    co = M @ me.vertices[loop.vertex_index].co
+                    uva.data[loop.index].uv = ((co.x - self.X0) / self.DX,
+                                               (co.y - self.Y0) / self.DY)
+            print(f"   [asa] UVAsa criado: x {self.X0}+{self.DX}  "
+                  f"y {self.Y0}+{self.DY}")
+        img = D.images.get("AsaLinhas")
+        if img is None:
+            img = D.images.new("AsaLinhas", self.W, self.H, alpha=False,
+                               float_buffer=False)
+            img.colorspace_settings.name = "Non-Color"
+            buf = np.zeros((self.H, self.W, 4), np.float32)
+            buf[..., 3] = 1.0
+            img.pixels.foreach_set(buf.ravel())
+            print("   [asa] AsaLinhas criada (2048, zerada)")
+        self.img = img
+        self.W, self.H = img.size
+        buf = np.empty(self.W * self.H * 4, np.float32)
+        img.pixels.foreach_get(buf)
+        self.arr = buf.reshape(self.H, self.W, 4)
+
+    def _verts(self, so_cinza=False):
+        out = []
+        for o in self.obs:
+            me = o.data
+            M = o.matrix_world
+            if so_cinza:
+                idx = {i for i, ms in enumerate(o.material_slots)
+                       if ms.material and ms.material.name.startswith("CinzaAsa")}
+                vs = set()
+                for p in me.polygons:
+                    if p.material_index in idx:
+                        vs.update(p.vertices)
+                out += [tuple(M @ me.vertices[i].co) for i in vs]
+            else:
+                out += [tuple(M @ v.co) for v in me.vertices]
+        return np.array(out)
+
+    # --- bordos da propria malha ---------------------------------------
+    def bordos(self):
+        P = self._verts(so_cinza=True)
+        ya = np.abs(P[:, 1])
+        bins = np.arange(0, ya.max() + 0.4, 0.4)
+        ys, le, te = [], [], []
+        for a, b in zip(bins[:-1], bins[1:]):
+            m = (ya >= a) & (ya < b)
+            if m.sum() < 2:
+                continue
+            ys.append(0.5 * (a + b))
+            le.append(P[m, 0].min())
+            te.append(P[m, 0].max())
+        self.ys = np.array(ys); self.le = np.array(le); self.te = np.array(te)
+        self.y_ponta = float(self.ys.max())
+        # raiz EXPOSTA: o mesh entra na fuselagem; a lei de fracao de
+        # envergadura conta da lateral da carenagem (~0.12 da meia-envergadura)
+        self.y_raiz = max(float(self.ys.min()), 0.12 * self.y_ponta)
+        return self.ys, self.le, self.te
+
+    def _le(self, y):
+        return np.interp(np.abs(y), self.ys, self.le)
+
+    def _te(self, y):
+        return np.interp(np.abs(y), self.ys, self.te)
+
+    # --- desenho ---------------------------------------------------------
+    def _px(self, x, y):
+        return ((x - self.X0) / self.DX * self.W,
+                (y - self.Y0) / self.DY * self.H)
+
+    def seg(self, x0, y0, x1, y1, canal, forca=1.0, esp_px=2):
+        n = int(max(abs(x1 - x0), abs(y1 - y0)) * 30) + 2
+        for i in range(n + 1):
+            t = i / n
+            px, py = self._px(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t)
+            px, py = int(px), int(py)
+            h = esp_px // 2
+            if 0 <= px < self.W and 0 <= py < self.H:
+                self.arr[max(0, py - h):py + h + 1,
+                         max(0, px - h):px + h + 1, canal] = \
+                    np.maximum(self.arr[max(0, py - h):py + h + 1,
+                                        max(0, px - h):px + h + 1, canal], forca)
+
+    def linhas_familia_a320(self):
+        """Cutlines da familia A320, lidas do plano do ACAP p.45 (600 dpi)
+        em FRACOES de envergadura (raiz da carenagem -> ponta), livres de
+        calibracao: validadas pelos pods de flap-track (0.211/0.417/0.652 ->
+        |y| 5.3/8.6/12.35 contra 4.95/8.48/12.21 lidos em vetor, QA-BACKLOG).
+        flap A/B 0.265; flap/aileron 0.569; aileron ext 0.946; slats: raiz
+        0.142, vao do pylon 0.304-0.324, cortes 0.436/0.588/0.740, fim 0.892."""
+        self.bordos()
+        yr, yp = self.y_raiz, self.y_ponta
+        span = yp - yr
+
+        def Y(eta):
+            return yr + eta * span
+
+        for sgn in (-1, 1):
+            # bordo de fuga: linha do cove + cortes chordwise
+            zonas = [(0.01, 0.265, 0.70), (0.265, 0.569, 0.70),
+                     (0.569, 0.946, 0.68)]
+            for (e0, e1, cf) in zonas:
+                y0, y1 = sgn * Y(e0), sgn * Y(e1)
+                xc0 = self._le(y0) + (self._te(y0) - self._le(y0)) * cf
+                xc1 = self._le(y1) + (self._te(y1) - self._le(y1)) * cf
+                self.seg(xc0, y0, xc1, y1, 0, 1.0, 2)
+                for yy, xc in ((y0, xc0), (y1, xc1)):
+                    self.seg(xc, yy, self._te(yy), yy, 0, 1.0, 3)
+            # spoilers (so extradorso): 1 interno + 4 entre kink e aileron
+            for (e0, e1) in ((0.05, 0.14), (0.30, 0.36), (0.36, 0.43),
+                             (0.43, 0.50), (0.50, 0.565)):
+                for cf in (0.57, 0.70):
+                    self.seg(self._le(sgn * Y(e0)) + (self._te(sgn * Y(e0)) -
+                             self._le(sgn * Y(e0))) * cf, sgn * Y(e0),
+                             self._le(sgn * Y(e1)) + (self._te(sgn * Y(e1)) -
+                             self._le(sgn * Y(e1))) * cf, sgn * Y(e1), 1, 1.0, 2)
+                for ee in (e0, e1):
+                    y = sgn * Y(ee)
+                    xa = self._le(y) + (self._te(y) - self._le(y)) * 0.57
+                    xb = self._le(y) + (self._te(y) - self._le(y)) * 0.70
+                    self.seg(xa, y, xb, y, 1, 1.0, 2)
+            # slats: linha da fenda a 0.45 m do BA + cortes
+            cortes = [0.142, 0.304, 0.324, 0.436, 0.588, 0.740, 0.892]
+            for (e0, e1) in ((0.142, 0.304), (0.324, 0.436), (0.436, 0.588),
+                             (0.588, 0.740), (0.740, 0.892)):
+                y0, y1 = sgn * Y(e0), sgn * Y(e1)
+                self.seg(self._le(y0) + 0.45, y0, self._le(y1) + 0.45, y1,
+                         0, 0.85, 2)
+            for ee in cortes:
+                y = sgn * Y(ee)
+                self.seg(self._le(y), y, self._le(y) + 0.45, y, 0, 0.85, 2)
+        print("   [asa] cutlines familia A320 desenhadas (R/G)")
+
+    def linhas_777(self):
+        """Cutlines do 777-300ER, medidas no intradorso da PT-MUG
+        (ref_PT-MUG_2022_FRA.jpg) com as canoas do modelo como ancoras
+        (y 9.0/14.5/19.5); declarado +-1 m. Flaperon atras do motor
+        (y 8.0-11.0), flap interno 3.9-8.0, flap externo 11.0-24.6,
+        aileron 24.6-29.6; slats com vao no pylon (7.5-11.7) e cortes a
+        cada ~4 m. Spoilers deferidos (sem foto do extradorso)."""
+        self.bordos()
+
+        def cove(y, cf):
+            return self._le(y) + (self._te(y) - self._le(y)) * cf
+
+        for sgn in (-1, 1):
+            zonas = [(3.9, 8.0, 0.72), (8.0, 11.0, 0.70), (11.0, 24.6, 0.72),
+                     (24.6, 29.6, 0.68)]
+            for (y0, y1, cf) in zonas:
+                a, b = sgn * y0, sgn * y1
+                self.seg(cove(a, cf), a, cove(b, cf), b, 0, 1.0, 2)
+                for yy in (a, b):
+                    self.seg(cove(yy, cf), yy, self._te(yy), yy, 0, 1.0, 3)
+            for (y0, y1) in ((2.5, 7.5), (11.7, 15.7), (15.7, 19.7),
+                             (19.7, 23.7), (23.7, 27.7), (27.7, 31.4)):
+                a, b = sgn * y0, sgn * y1
+                self.seg(self._le(a) + 0.65, a, self._le(b) + 0.65, b,
+                         0, 0.85, 2)
+                for yy in (y0, y1):
+                    y = sgn * yy
+                    self.seg(self._le(y), y, self._le(y) + 0.65, y, 0, 0.85, 2)
+        print("   [asa] cutlines 777 desenhadas (R)")
+
+    def matricula(self, tris, bb, y0, y1, folga_te=0.20):
+        """Matricula sob a asa DIREITA: baseline paralela a linha do cove
+        (te - folga), leitura raiz->ponta, topo dos glifos para o BA.
+        O canal B pertence SO a matricula: zera-lo antes torna a op
+        idempotente e re-posicionavel."""
+        if not hasattr(self, "ys"):
+            self.bordos()
+        self.arr[..., 2] = 0.0
+        ax, bx, ay, by = bb
+        s = (y1 - y0) / max(bx - ax, 1e-9)
+        cap = (by - ay) * s
+        # baseline: reta entre os dois pontos do cove
+        cove0 = self._te(y0) - folga_te
+        cove1 = self._te(y1) - folga_te
+        t = np.array([y1 - y0, cove1 - cove0]); t = t / np.hypot(*t)
+        nrm = np.array([-t[1], t[0]])       # aponta para -x (BA)
+        if nrm[1] > 0:
+            nrm = -nrm
+        P0 = np.array([y0, cove0])
+        polys = []
+        for tri in tris:
+            p = []
+            for X, Yv in tri:
+                q = P0 + t * (X - ax) * s + nrm * (Yv - ay) * s
+                p.append((q[0], q[1]))      # (y, x)
+            polys.append(p)
+        # rasterizar em (y, x) com SS2
+        SS2 = 2
+        ys_ = [p[0] for tri in polys for p in tri]
+        xs_ = [p[1] for tri in polys for p in tri]
+        u0 = int((min(ys_) - self.Y0) / self.DY * self.H) - 2
+        u1 = int((max(ys_) - self.Y0) / self.DY * self.H) + 2
+        v0 = int((min(xs_) - self.X0) / self.DX * self.W) - 2
+        v1 = int((max(xs_) - self.X0) / self.DX * self.W) + 2
+        nr, nc = u1 - u0 + 1, v1 - v0 + 1
+        gy = self.Y0 + (u0 + (np.arange(nr * SS2) + 0.5) / SS2 - 0.5) * \
+            (self.DY / self.H)
+        gx = self.X0 + (v0 + (np.arange(nc * SS2) + 0.5) / SS2 - 0.5) * \
+            (self.DX / self.W)
+        GY = gy[:, None].repeat(nc * SS2, 1)
+        GX = gx[None, :].repeat(nr * SS2, 0)
+        cov = _raster([[(p[1], p[0]) for p in tri] for tri in polys], GX, GY)
+        cov = cov.reshape(nr, SS2, nc, SS2).mean((1, 3)).astype(np.float32)
+        m = cov > 0
+        self.arr[u0:u1 + 1, v0:v1 + 1, 2] = np.maximum(
+            self.arr[u0:u1 + 1, v0:v1 + 1, 2], cov)
+        print(f"   [asa] matricula sob a asa D: y {y0:.2f}..{y1:.2f}  "
+              f"cap {cap:.3f} m  {int(m.sum())} texels (canal B)")
+        return cap
+
+    # --- shader ----------------------------------------------------------
+    def shader(self):
+        """Garante o ramo AL_* em CinzaAsa (padrao do 777) + o ramo B da
+        matricula (AL2_*, so intradorso). Idempotente: acha nos por nome."""
+        D = bpy.data
+        mats = [m for m in D.materials
+                if m.name.startswith("CinzaAsa") and m.use_nodes and any(
+                    ms.material == m for o in self.obs for ms in o.material_slots)]
+        for mat in mats:
+            nt = mat.node_tree
+            nodes, links = nt.nodes, nt.links
+            bsdf = next(n for n in nodes if n.type == 'BSDF_PRINCIPLED')
+            out = next(n for n in nodes if n.type == 'OUTPUT_MATERIAL')
+            if not any(l.to_node == out for l in links):
+                links.new(bsdf.outputs["BSDF"], out.inputs["Surface"])
+
+            novos = set()
+
+            def no(nome, tipo, **kw):
+                n = nodes.get(nome)
+                if n is None:
+                    n = nodes.new(tipo)
+                    n.name = nome
+                    novos.add(nome)
+                    for k, v in kw.items():
+                        setattr(n, k, v)
+                return n
+
+            uv = no("AL_uv", "ShaderNodeUVMap")
+            uv.uv_map = "UVAsa"
+            tx = no("AL_tex", "ShaderNodeTexImage")
+            tx.image = self.img
+            tx.image.colorspace_settings.name = "Non-Color"
+            tx.extension = 'EXTEND'
+            sep = no("AL_sep", "ShaderNodeSeparateColor")
+            geo = no("AL_geo", "ShaderNodeNewGeometry")
+            sepn = no("AL_sepn", "ShaderNodeSeparateXYZ")
+            mr = no("AL_mr", "ShaderNodeMapRange")
+            mul = no("AL_mul", "ShaderNodeMath", operation='MULTIPLY')
+            add = no("AL_add", "ShaderNodeMath", operation='ADD')
+            mix = no("AL_mix", "ShaderNodeMix", data_type='RGBA')
+            if "AL_mr" in novos:
+                mr.inputs["From Min"].default_value = 0.1
+                mr.inputs["From Max"].default_value = 0.4
+            if "AL_mix" in novos:
+                base = tuple(bsdf.inputs["Base Color"].default_value)
+                _sock(mix, "A_Color").default_value = base
+            # forca de linha da FROTA: nos Boeing embarcados o AL_mix leva
+            # B = 0.42 x A (lido no proprio 767/777). So escrever quando o no
+            # e novo ou carrega outra forca (a rodada chegou a criar 0.70x);
+            # o B embarcado dos Boeing (0.329,0.333,0.36) fica intocado.
+            aa = tuple(_sock(mix, "A_Color").default_value)
+            bb_ = tuple(_sock(mix, "B_Color").default_value)
+            if "AL_mix" in novos or abs(bb_[0] - aa[0] * 0.42) > 0.05:
+                _sock(mix, "B_Color").default_value = (aa[0] * 0.42,
+                                                       aa[1] * 0.42,
+                                                       aa[2] * 0.42, 1.0)
+            links.new(uv.outputs["UV"], tx.inputs["Vector"])
+            links.new(tx.outputs["Color"], sep.inputs["Color"])
+            links.new(geo.outputs["Normal"], sepn.inputs["Vector"])
+            links.new(sepn.outputs["Z"], mr.inputs["Value"])
+            links.new(sep.outputs["Green"], mul.inputs[0])
+            links.new(mr.outputs["Result"], mul.inputs[1])
+            links.new(sep.outputs["Red"], add.inputs[0])
+            links.new(mul.outputs["Value"], add.inputs[1])
+            links.new(add.outputs["Value"], _sock(mix, "Factor_Float"))
+            # ramo B: matricula, so faces com normal para baixo
+            lt = no("AL2_baixo", "ShaderNodeMath", operation='LESS_THAN')
+            lt.inputs[1].default_value = -0.2
+            m2 = no("AL2_mul", "ShaderNodeMath", operation='MULTIPLY')
+            mix2 = no("AL2_mix", "ShaderNodeMix", data_type='RGBA')
+            if "AL2_mix" in novos:
+                lin = [(c / 255.0 / 12.92) if c / 255.0 <= 0.04045 else
+                       (((c / 255.0 + 0.055) / 1.055) ** 2.4)
+                       for c in COR_REG_ASA]
+                _sock(mix2, "B_Color").default_value = (lin[0], lin[1],
+                                                       lin[2], 1.0)
+            links.new(sepn.outputs["Z"], lt.inputs[0])
+            links.new(sep.outputs["Blue"], m2.inputs[0])
+            links.new(lt.outputs["Value"], m2.inputs[1])
+            links.new(_sock(mix, "Result_Color", saida=True), _sock(mix2, "A_Color"))
+            links.new(m2.outputs["Value"], _sock(mix2, "Factor_Float"))
+            links.new(_sock(mix2, "Result_Color", saida=True),
+                      bsdf.inputs["Base Color"])
+            print(f"   [asa] shader {mat.name}: ramo AL/AL2 garantido")
+
+    def salvar(self):
+        self.img.pixels.foreach_set(self.arr.ravel())
+        self.img.update()
+        self.img.pack()
+        print("   [asa] AsaLinhas salva e empacotada")
+
+
+# ------------------------------------------------------------------ deriva
+class Deriva:
+    """Linha do leme nas texturas FinSashE/D, pela UV da propria deriva."""
+
+    def __init__(self):
+        D = bpy.data
+        self.ob = D.objects["Deriva"]
+        me = self.ob.data
+        uvl = me.uv_layers.active.data
+        M = self.ob.matrix_world
+        X, Z, U, V = [], [], [], []
+        for poly in me.polygons:
+            for li in poly.loop_indices:
+                co = M @ me.vertices[me.loops[li].vertex_index].co
+                u, v = uvl[li].uv
+                X.append(co.x); Z.append(co.z); U.append(u); V.append(v)
+        A = np.stack([X, Z, np.ones(len(X))], 1)
+        self.cu, ru, *_ = np.linalg.lstsq(A, np.array(U), rcond=None)[:2]
+        self.cv, rv, *_ = np.linalg.lstsq(A, np.array(V), rcond=None)[:2]
+        P = np.array([tuple(M @ v.co) for v in me.vertices])
+        zb = np.arange(P[:, 2].min(), P[:, 2].max(), 0.25)
+        zs, le, te = [], [], []
+        for a, b in zip(zb[:-1], zb[1:]):
+            m = (P[:, 2] >= a) & (P[:, 2] < b)
+            if m.sum() < 2:
+                continue
+            zs.append(0.5 * (a + b)); le.append(P[m, 0].min())
+            te.append(P[m, 0].max())
+        self.zs = np.array(zs); self.le = np.array(le); self.te = np.array(te)
+
+    def leme(self, frac, z0f=0.04, z1f=0.97, alpha=ALPHA_LEME, esp_px=2):
+        """Linha da charneira do leme: x = te - frac*(te-le), da raiz a ponta.
+        frac lida na foto do proprio tipo (citada na tabela EMPENAGEM)."""
+        D = bpy.data
+        zr = self.zs.min() + z0f * (self.zs.max() - self.zs.min())
+        zt = self.zs.min() + z1f * (self.zs.max() - self.zs.min())
+        zz = np.linspace(zr, zt, 200)
+        xle = np.interp(zz, self.zs, self.le)
+        xte = np.interp(zz, self.zs, self.te)
+        xh = xte - frac * (xte - xle)
+        for nome in ("FinSashE", "FinSashD"):
+            img = D.images.get(nome)
+            if img is None:
+                continue
+            W, H = img.size
+            buf = np.empty(W * H * 4, np.float32)
+            img.pixels.foreach_get(buf)
+            arr = buf.reshape(H, W, 4)
+            n = 0
+            for x, z in zip(xh, zz):
+                u = self.cu[0] * x + self.cu[1] * z + self.cu[2]
+                v = self.cv[0] * x + self.cv[1] * z + self.cv[2]
+                px, py = int(u * W), int(v * H)
+                h = esp_px // 2
+                if 0 <= px < W and 0 <= py < H:
+                    sl = arr[max(0, py - h):py + h + 1,
+                             max(0, px - h):px + h + 1, :3]
+                    sl *= (1.0 - alpha)
+                    n += sl.shape[0] * sl.shape[1]
+            img.pixels.foreach_set(arr.ravel())
+            img.update()
+            img.pack()
+            print(f"   [deriva] leme em {nome}: frac {frac:.2f}, "
+                  f"~{n} texels escurecidos x{1-alpha:.2f}")
+
+
+# fracoes da charneira do leme, lidas na foto citada de cada familia
+EMPENAGEM = {
+    "a319": dict(leme=0.32, foto="airbus A320neo/refs/ref_PR-XBP_teresina.jpg"),
+    "a320ceo": dict(leme=0.32, foto="ref_PR-XBP_teresina.jpg"),
+    "a320neo": dict(leme=0.32, foto="ref_PR-XBP_teresina.jpg"),
+    "a321ceo": dict(leme=0.32, foto="ref_PR-XBP_teresina.jpg (familia)"),
+    "a321neo": dict(leme=0.32, foto="ref_PR-XBP_teresina.jpg (familia)"),
+    "b763er": dict(leme=0.35, foto="ref_CC-CXE_appr4.jpg (familia 767)"),
+    "b763f": dict(leme=0.35, foto="ref_CC-CXE_appr4.jpg (familia 767)"),
+    "b763bcf": dict(leme=0.35, foto="ref_CC-CXE_appr4.jpg"),
+    "b77w": dict(leme=0.30, foto="refs/20251011_LATAM_PT-MUC_EGLL.jpg"),
+    "b788": dict(leme=0.33, foto="ref_bgg_mad23.jpg (familia 787)"),
+    "b789": dict(leme=0.33, foto="ref_bgg_mad23.jpg"),
+}
+
+
+def fazer_empenagem(tag):
+    cfg = EMPENAGEM[tag]
+    dv = Deriva()
+    dv.leme(cfg["leme"])
+
+
+# tabela da asa: objetos, se as cutlines da familia A320 precisam ser
+# desenhadas (os Boeing ja embarcam as suas), e a caixa da matricula.
+# caixas: lidas nas fotos citadas na LEI acima; a familia A320 nao tem quadro
+# de intradorso no repositorio — a caixa dela e a LEI DE FROTA aplicada a
+# propria asa (banda do aileron, declarado; QA-BACKLOG registra a pendencia).
+ASA = {
+    "a319":    dict(objetos=["Asas"], linhas=True, reg="PT-TMT",
+                    eta=(0.58, 0.905)),
+    "a320ceo": dict(objetos=["Asas"], linhas=True, reg="CC-BFO",
+                    eta=(0.58, 0.905)),
+    "a320neo": dict(objetos=["Asas"], linhas=True, reg="PT-TMN",
+                    eta=(0.58, 0.905)),
+    "a321ceo": dict(objetos=["Asas"], linhas=True, reg="PT-MXP",
+                    eta=(0.58, 0.905)),
+    "a321neo": dict(objetos=["Asas"], linhas=True, reg="PS-LBA",
+                    eta=(0.58, 0.905)),
+    "b763er":  dict(objetos=["Asas"], linhas=False, reg="CC-CWY",
+                    y=(16.5, 21.4)),
+    "b763f":   dict(objetos=["Asas"], linhas=False, reg="N536LA",
+                    y=(16.5, 21.4)),
+    "b763bcf": dict(objetos=["Asas"], linhas=False, reg="CC-CXE",
+                    y=(16.5, 21.4)),
+    # 777: a arte embarcada de AsaLinhas NUNCA renderizou (AsaD/E sem camada
+    # UV) e o frame dela e irrecuperavel (fit degenerado, sem gap de pylon);
+    # esta rodada REPINTA as linhas num dominio declarado, medidas na foto do
+    # intradorso da PROPRIA PT-MUG (ref_PT-MUG_2022_FRA.jpg) ancoradas nas
+    # canoas do modelo (y 9.0/14.5/19.5). Spoilers DEFERIDOS (sem foto do
+    # extradorso; QA-BACKLOG).
+    "b77w":    dict(objetos=["AsaE", "AsaD"], linhas="b77w", reg="PT-MUG",
+                    y=(13.2, 19.4), limpar=True),
+    "b788":    dict(objetos=["Asas"], linhas=False, reg="CC-BBF",
+                    eta=(0.66, 0.90)),
+    "b789":    dict(objetos=["Asas"], linhas=False, reg="CC-BGK",
+                    eta=(0.66, 0.90)),
+}
+
+
+def _texto_tris_arial(txt):
+    """Glifos em Arial Bold — a fonte das matriculas dos A321/A320ceo."""
+    D = bpy.data
+    cu = D.curves.new("_txt_arial", 'FONT')
+    cu.body = txt
+    f = D.fonts.get("Arial Bold")
+    if f:
+        cu.font = f
+    cu.size = 1.0
+    ob = D.objects.new("_txt_arial", cu)
+    bpy.context.scene.collection.objects.link(ob)
+    dg = bpy.context.evaluated_depsgraph_get()
+    me = bpy.data.meshes.new_from_object(ob.evaluated_get(dg))
+    bm = bmesh.new(); bm.from_mesh(me)
+    bmesh.ops.triangulate(bm, faces=bm.faces[:])
+    tris = [[(v.co.x, v.co.y) for v in f2.verts] for f2 in bm.faces]
+    bm.free()
+    bpy.data.meshes.remove(me)
+    bpy.data.objects.remove(ob)
+    bpy.data.curves.remove(cu)
+    a = np.asarray(tris)
+    return tris, (a[..., 0].min(), a[..., 0].max(),
+                  a[..., 1].min(), a[..., 1].max())
+
+
+def _tris_ilhas(nome, plano=("x", "z")):
+    """Ilhas do mesh de matricula, ordenadas por x, como listas de tris 2D."""
+    import collections
+    ob = bpy.data.objects[nome]
+    me = ob.data
+    me.calc_loop_triangles()
+    adj = collections.defaultdict(set)
+    for e in me.edges:
+        a, b = e.vertices
+        adj[a].add(b); adj[b].add(a)
+    seen, islands = set(), []
+    for v0 in range(len(me.vertices)):
+        if v0 in seen:
+            continue
+        st, comp = [v0], set()
+        while st:
+            v = st.pop()
+            if v in comp:
+                continue
+            comp.add(v)
+            st.extend(adj[v] - comp)
+        seen |= comp
+        islands.append(comp)
+    idx = {"x": 0, "y": 1, "z": 2}
+    i, j = idx[plano[0]], idx[plano[1]]
+
+    def pt(vi):
+        c = me.vertices[vi].co
+        return (c[i], c[j])
+
+    def bx(comp):
+        ps = [pt(v) for v in comp]
+        return (min(p[0] for p in ps), max(p[0] for p in ps),
+                min(p[1] for p in ps), max(p[1] for p in ps))
+
+    islands.sort(key=lambda c: bx(c)[0])
+    vert_isl = {v: k for k, comp in enumerate(islands) for v in comp}
+    tris_by = {k: [] for k in range(len(islands))}
+    for t in me.loop_triangles:
+        tris_by[vert_isl[t.vertices[0]]].append([pt(v) for v in t.vertices])
+    return tris_by, [bx(c) for c in islands]
+
+
+def _tris_reg(tag, texto):
+    """A arte da matricula, a MESMA do casco de cada familia (REBUILD):
+    mesh proprio quando existe, recombinacao quando o mesh guarda outra
+    matricula, Arial Bold nos A321/A320ceo, fonte padrao nos Boeing legados."""
+    if tag == "a320neo":
+        return tris_xy("Reg_E", ("x", "z"))
+    if tag == "b789":
+        return tris_xy("Reg787_E", ("x", "y"))
+    if tag == "a319":
+        # P,T,-,T,M,T recombinado de Reg_E (que guarda PT-TMN)
+        tris_by, bb = _tris_ilhas("Reg_E", ("x", "z"))
+        seq = [0, 1, 2, 3, 4, 1]
+        tris2 = []
+        for pos, k in enumerate(seq):
+            slot = bb[pos] if pos < len(bb) else bb[-1]
+            dx = 0.5 * (slot[0] + slot[1]) - 0.5 * (bb[k][0] + bb[k][1])
+            tris2 += [[(px + dx, pz) for px, pz in t] for t in tris_by[k]]
+        return tris2, bb_de(tris2)
+    if tag == "b788":
+        # C,C,-,B,B + F construido (build_788_livery secao 6, como no casco)
+        tris_by, bb = _tris_ilhas("Reg787_E", ("x", "y"))
+        capH = max(b[3] for b in bb)
+        hyph = min(range(len(bb)), key=lambda k: (bb[k][3] - bb[k][2]))
+        tbar = bb[hyph][3] - bb[hyph][2]
+        seq = [0, 1, 2, 3, 3]
+        tris2 = []
+        for pos, k in enumerate(seq):
+            slot = bb[pos]
+            dxg = 0.5 * (slot[0] + slot[1]) - 0.5 * (bb[k][0] + bb[k][1])
+            tris2 += [[(px + dxg, py) for px, py in t] for t in tris_by[k]]
+        s5 = bb[5]
+        wF = (s5[1] - s5[0]) * 0.92
+        fx0 = s5[0]
+        sw = tbar * 1.10
+
+        def rect(x0, x1, y0, y1):
+            return [[(x0, y0), (x1, y0), (x1, y1)],
+                    [(x0, y0), (x1, y1), (x0, y1)]]
+
+        tris2 += rect(fx0, fx0 + sw, 0.0, capH)
+        tris2 += rect(fx0, fx0 + wF, capH - tbar, capH)
+        zm = 0.54 * capH
+        tris2 += rect(fx0, fx0 + 0.82 * wF, zm - 0.5 * tbar, zm + 0.5 * tbar)
+        return tris2, bb_de(tris2)
+    if tag in ("a320ceo", "a321ceo", "a321neo"):
+        return _texto_tris_arial(texto)
+    return texto_tris(texto)          # boeing legados: fonte padrao do casco
+
+
+def fazer_asa(tag):
+    cfg = ASA[tag]
+    asa = Asa(cfg["objetos"])
+    asa.bordos()
+    if cfg.get("limpar"):
+        asa.arr[..., :3] = 0.0
+        print("   [asa] AsaLinhas zerada (arte antiga sem UV, frame perdido)")
+    if cfg["linhas"] == "b77w":
+        asa.linhas_777()
+    elif cfg["linhas"]:
+        asa.linhas_familia_a320()
+    tris, bb = _tris_reg(tag, cfg["reg"])
+    if "y" in cfg:
+        y0, y1 = cfg["y"]
+    else:
+        e0, e1 = cfg["eta"]
+        y0 = asa.y_raiz + e0 * (asa.y_ponta - asa.y_raiz)
+        y1 = asa.y_raiz + e1 * (asa.y_ponta - asa.y_raiz)
+    asa.matricula(tris, bb, y0, y1)
+    asa.shader()
+    asa.salvar()
+
+
+# ------------------------------------------------------- titulo do A319
+def fazer_titulo_a319(cs):
+    """Fecha a entrada 'AIRBUS A3' do QA-BACKLOG: o titulo inteiro re-
+    rasterizado de ARTE REAL — as ilhas do proprio MarkAirbusNeo_E (swirl?/
+    AIRBUS/A/3 + os SLOTS oficiais de '2' e '0' para o espacamento), o '1'
+    importado de airbus_a321neo_logo.svg (mesma fonte de titulo), e o '9'
+    reconstruido do bojo do proprio '0' + haste (unico glifo sem fonte SVG no
+    repositorio — declarado; a proporcao conferida no crop da PT-TMT,
+    ref_sdu_00). Caixa: a do builder (x 23.45..25.20, z 1.04..~1.21), que a
+    sdu_01 confirma quase encostada na fronteira nova."""
+    D = bpy.data
+    mk = D.objects["MarkAirbusNeo_E"]
+    me = mk.data
+    me.calc_loop_triangles()
+    # ilhas locais (x, y)
+    import collections
+    adj = collections.defaultdict(set)
+    for e in me.edges:
+        a, b = e.vertices
+        adj[a].add(b); adj[b].add(a)
+    seen, islands = set(), []
+    for v0 in range(len(me.vertices)):
+        if v0 in seen:
+            continue
+        st, comp = [v0], set()
+        while st:
+            v = st.pop()
+            if v in comp:
+                continue
+            comp.add(v)
+            st.extend(adj[v] - comp)
+        seen |= comp
+        islands.append(comp)
+
+    def box(comp):
+        xs = [me.vertices[i].co.x for i in comp]
+        ys = [me.vertices[i].co.y for i in comp]
+        return min(xs), max(xs), min(ys), max(ys)
+
+    islands.sort(key=lambda c: box(c)[0])
+    vert_isl = {i: k for k, comp in enumerate(islands) for i in comp}
+    tris_by = {k: [] for k in range(len(islands))}
+    for t in me.loop_triangles:
+        tris_by[vert_isl[t.vertices[0]]].append(
+            [(me.vertices[i].co.x, me.vertices[i].co.y) for i in t.vertices])
+    bbs = [box(c) for c in islands]
+    n = len(islands)
+    caps = [b[3] - b[2] for b in bbs]
+    # classificar por PALAVRAS: o maior vao em x separa 'AIRBUS' de 'A320neo'
+    # (deterministico; o detector anterior de swirl confundiu o 'A' com um
+    # swirl e deslocou todos os glifos — o 'neo' virou '9')
+    gaps = [(bbs[k + 1][0] - bbs[k][1], k) for k in range(n - 1)]
+    corte = max(gaps)[1]
+    w1 = list(range(0, corte + 1))
+    w2 = list(range(corte + 1, n))
+    swirl = w1[0] if len(w1) == 7 else None
+    letras1 = w1[1:] if swirl is not None else w1
+    if len(letras1) != 6 or len(w2) < 5:
+        raise SystemExit(f"titulo a319: particao inesperada {len(w1)}+{len(w2)}")
+    seq = letras1 + w2[:2]                 # A I R B U S + A 3
+    isl_2, isl_0 = w2[2], w2[3]            # slots do '2' e do '0'
+    cap = max(caps[k] for k in letras1)
+    print(f"   [titulo] {n} ilhas ({len(w1)}+{len(w2)}), "
+          f"swirl={'sim' if swirl is not None else 'nao'}, cap {cap:.3f}")
+    tris2 = []
+    for k in ([swirl] if swirl is not None else []) + seq:
+        tris2 += tris_by[k]
+    # '1' real do SVG do a321neo, no SLOT do '2'
+    me321 = D.meshes.get("a321neo_mark")
+    if me321 is None:
+        import os as _os
+        svg = _os.path.abspath(_os.path.join(
+            _os.path.dirname(_os.path.abspath(__file__)),
+            "airbus_a321neo_logo.svg"))
+        before = set(D.objects)
+        bpy.ops.import_curve.svg(filepath=svg)
+        imported = [o for o in D.objects if o not in before]
+        bmn = bmesh.new()
+        dg = bpy.context.evaluated_depsgraph_get()
+        for o in imported:
+            mev = o.evaluated_get(dg).to_mesh()
+            vmap = {}
+            for p in mev.polygons:
+                nv = []
+                for vi in p.vertices:
+                    if vi not in vmap:
+                        vmap[vi] = bmn.verts.new(o.matrix_world @
+                                                 mev.vertices[vi].co)
+                    nv.append(vmap[vi])
+                try:
+                    bmn.faces.new(nv)
+                except ValueError:
+                    pass
+            o.evaluated_get(dg).to_mesh_clear()
+        for o in imported:
+            D.objects.remove(o, do_unlink=True)
+        bmesh.ops.triangulate(bmn, faces=bmn.faces[:])
+        me321 = D.meshes.new("a321neo_mark")
+        bmn.to_mesh(me321)
+        bmn.free()
+    me321.calc_loop_triangles()
+    # ILHAS por conectividade (os glifos italicos se sobrepoem em x, entao
+    # cluster por intervalo mistura '1' com 'n'/'e'): A 3 2 1 n e o
+    adj2 = collections.defaultdict(set)
+    for e in me321.edges:
+        a2, b2 = e.vertices
+        adj2[a2].add(b2); adj2[b2].add(a2)
+    seen2, isl2 = set(), []
+    for v0 in range(len(me321.vertices)):
+        if v0 in seen2:
+            continue
+        st, comp = [v0], set()
+        while st:
+            v = st.pop()
+            if v in comp:
+                continue
+            comp.add(v)
+            st.extend(adj2[v] - comp)
+        seen2 |= comp
+        isl2.append(comp)
+    isl2.sort(key=lambda c: min(me321.vertices[i].co.x for i in c))
+    if len(isl2) < 5:
+        raise SystemExit(f"a321neo_mark: {len(isl2)} ilhas (esperava >=5)")
+    # o '1' e o mais ESTREITO dos quatro primeiros glifos (A,3,2,1);
+    # com 'neo' ligado o mesh da 5 ilhas, com glifos soltos da 7
+
+    def _w(comp):
+        xs2 = [me321.vertices[i].co.x for i in comp]
+        return max(xs2) - min(xs2)
+
+    k1 = min(range(4), key=lambda k: _w(isl2[k]))
+    vi2il = {v: k for k, comp in enumerate(isl2) for v in comp}
+    tris_1 = [[(me321.vertices[i].co.x, me321.vertices[i].co.y)
+               for i in t.vertices]
+              for t in me321.loop_triangles
+              if vi2il[t.vertices[0]] == k1]
+    pts1 = [p for t in tris_1 for p in t]
+    x1a = min(p[0] for p in pts1); x1b = max(p[0] for p in pts1)
+    y1a = min(p[1] for p in pts1); y1b = max(p[1] for p in pts1)
+    # os digitos do tipo sao MENORES que o cap do AIRBUS na arte oficial
+    # (o 'A320' da marca mede 0.64 do cap); escalar pelo '3' real
+    capd = bbs[seq[-1]][3] - bbs[seq[-1]][2]
+    s1 = capd / (y1b - y1a)
+    slot2 = bbs[isl_2]
+    cx_slot2 = 0.5 * (slot2[0] + slot2[1])
+    base_y = bbs[seq[-1]][2]                # baseline do '3'
+    w1 = (x1b - x1a) * s1
+    for t in tris_1:
+        tris2.append([((px - x1a) * s1 + cx_slot2 - 0.5 * w1,
+                       (py - y1a) * s1 + base_y) for px, py in t])
+    # '9': bojo do '0' (0.72 do cap, alinhado ao topo) + haste a direita
+    slot0 = bbs[isl_0]
+    cx_slot0 = 0.5 * (slot0[0] + slot0[1])
+    t0 = tris_by[isl_0]
+    x0a, x0b, y0a, y0b = slot0
+    esc = 0.72
+    stroke = 0.19 * capd
+    bojo = []
+    for t in t0:
+        bojo.append([(cx_slot0 + (px - cx_slot0) * esc,
+                      (base_y + capd) - ((y0b - py) * esc)) for px, py in t])
+    tris2 += bojo
+    bj_x1 = cx_slot0 + (x0b - cx_slot0) * esc
+    bj_ymid = (base_y + capd) - 0.5 * (y0b - y0a) * esc
+    tris2.append([(bj_x1 - stroke, base_y), (bj_x1, base_y), (bj_x1, bj_ymid)])
+    tris2.append([(bj_x1 - stroke, base_y), (bj_x1, bj_ymid),
+                  (bj_x1 - stroke, bj_ymid)])
+    # caixa final e rasterizacao (modo z, baseline constante)
+    a = np.asarray([p for t in tris2 for p in t])
+    bb = (a[:, 0].min(), a[:, 0].max(), a[:, 1].min(), a[:, 1].max())
+    # caixa do spec (x 23.45-25.20, z 1.04-1.21): encaixe uniforme como o
+    # builder fazia — a altura manda, a arte comeca em TX0
+    razao = (bb[1] - bb[0]) / (bb[3] - bb[2])
+    ZB, ZT = 1.040, 1.210
+    TX0 = 23.45
+    TX1 = min(TX0 + (ZT - ZB) * razao, 25.20)
+    cs.apagar(23.30, 25.00, 50.0, 67.0, nome="titulo antigo (AIRBUS A3)",
+              alvos=[INDIGO, TITULO], base="branco")
+    cs.apagar(23.30, 25.00, -67.0, -50.0, nome="titulo antigo stbd",
+              alvos=[INDIGO, TITULO], base="branco")
+    xm = 0.5 * (TX0 + TX1)
+    th_t = _th_de_z(cs, xm, ZT)
+    th_b = _th_de_z(cs, xm, ZB)
+    s_topo = float(cs.arc(np.array([xm]), np.array([th_t]))[0])
+    altura = float(cs.arc(np.array([xm]), np.array([th_b]))[0]) - s_topo
+    for lado, esp in ((-1, False), (1, True)):
+        cs.pintar(tris2, bb, TX0, TX1, s_topo, altura, TITULO, lado, esp,
+                  modo="z", z_topo=ZT,
+                  nome=f"titulo AIRBUS A319 {'port' if lado < 0 else 'stbd'}")
+    print(f"   [titulo] caixa x {TX0}..{TX1}  z {ZB:.3f}..{ZT:.3f} "
+          f"(razao da arte {razao:.2f})")
+
+
+def _th_de_z(cs, x, z):
+    """theta (rad, >0) em que a secao local cruza z."""
+    i = int(cs._i(np.array([x]))[0])
+    e = cs.est[i]
+    m = e[1] >= 0
+    tt = e[1][m]; zz = e[3][m]
+    o = np.argsort(zz)
+    return float(np.interp(z, zz[o], tt[o]))
+
+
 LEGADO = {
     "b763er": dict(spec="boeing 767-300ER/spec_763.json", luv=55.5,
                    ponte="b763", fn=_marcas_b763er),
@@ -2221,26 +3194,33 @@ LEGADO = {
 def main():
     argv = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
     tag = argv[0]
-    if tag == "b788":
+    if tag == "b788" or tag in LEGADO:
+        tarefas = argv[1:]
+        rodar_legado = (not tarefas) or ("marcas" in tarefas)
         for o in bpy.data.objects:
             o.hide_viewport = False
         bpy.context.view_layer.update()
-        cb = CascoB788()
-        print(f"[b788] legado 787-8  L={cb.L_UV}  tex {cb.W}x{cb.H}")
-        _marcas_b788(cb)
-        cb.salvar()
-        bpy.ops.wm.save_mainfile()
-        print("[b788] blend saved")
-        return
-    if tag in LEGADO:
-        cfg = LEGADO[tag]
-        for o in bpy.data.objects:
-            o.hide_viewport = False
-        bpy.context.view_layer.update()
-        cl = CascoLegado(cfg["spec"], cfg["luv"], cfg["ponte"])
-        print(f"[{tag}] legado  L={cl.LUV}  tex {cl.W}x{cl.H}")
-        cfg["fn"](cl)
-        cl.salvar()
+        if rodar_legado:
+            if tag == "b788":
+                cb = CascoB788()
+                print(f"[b788] legado 787-8  L={cb.L_UV}  tex {cb.W}x{cb.H}")
+                _marcas_b788(cb)
+                cb.salvar()
+            else:
+                cfg = LEGADO[tag]
+                cl = CascoLegado(cfg["spec"], cfg["luv"], cfg["ponte"])
+                print(f"[{tag}] legado  L={cl.LUV}  tex {cl.W}x{cl.H}")
+                cfg["fn"](cl)
+                cl.salvar()
+        if "impressao" in tarefas:
+            cs = Casco()
+            print(f"[{tag}] impressao  L={cs.L:.3f}  tex {cs.W}x{cs.H}")
+            fazer_impressao(cs, tag)
+            cs.salvar()
+        if "asa" in tarefas:
+            fazer_asa(tag)
+        if "empenagem" in tarefas:
+            fazer_empenagem(tag)
         bpy.ops.wm.save_mainfile()
         print(f"[{tag}] blend saved")
         return
@@ -2252,6 +3232,10 @@ def main():
         fazer_lockup(cs, cfg)
     if "marcas" in tarefas:
         fazer_marcas(cs, tag)
+    if "impressao" in tarefas:
+        fazer_impressao(cs, tag)
+    if "titulo" in tarefas and tag == "a319":
+        fazer_titulo_a319(cs)
     cs.salvar()
     if "marcas" in tarefas and tag in LEGADO_A320:
         # as marcas legadas SS2 (ventre, matricula, titulo) leem as imagens ja
@@ -2274,6 +3258,10 @@ def main():
             if im.packed_file:
                 im.pack()
         print("   [salvar] LiveryTex + LiveryFac atualizadas (A321)")
+    if "asa" in tarefas:
+        fazer_asa(tag)
+    if "empenagem" in tarefas:
+        fazer_empenagem(tag)
     bpy.ops.wm.save_mainfile()
     print(f"[{tag}] blend saved")
 

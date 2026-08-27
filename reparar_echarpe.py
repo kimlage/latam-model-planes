@@ -295,13 +295,15 @@ FROTA = {
     # --- audited with --seco and found clean; kept here so the next round can
     #     re-measure them with one command instead of re-deriving the rules
     "a319":    dict(regra=_r_a319, zona=(20.0, 34.2),
-                    poupar=[(23.40, 24.55, 54.5, 64.5)],
+                    poupar=[(23.40, 25.00, 52.5, 66.0)],
                     nota="rule re-measured with the flank parallax corrected: "
                          "the 08-22 line sat 0.76 m too far forward (and ahead "
                          "of the fin LE); door 4 was never wrong. The poupar "
-                         "box hugs the surviving 'AIRBUS A3' ink (x 23.47.."
-                         "24.47), which is all on white under the new rule, so "
-                         "the box spares no stale indigo."),
+                         "box was WIDENED 2026-08-27 for the rebuilt title: "
+                         "'AIRBUS A319' now spans x 23.45..24.88 in NAVY "
+                         "#1C2E63 (refazer_marcas `titulo`), off the "
+                         "white->indigo segment, so the colour test also "
+                         "protects it — the box is belt and braces."),
     "a320ceo": dict(regra=_r_a320ceo, zona=(26.0, 38.0), auditoria=True,
                     nota="clean; 5583 texels of hard cut"),
     "a320neo": dict(regra=_r_a320neo, zona=(26.0, 38.0), auditoria=True,

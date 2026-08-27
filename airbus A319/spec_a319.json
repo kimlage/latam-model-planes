@@ -120,7 +120,7 @@
   "echarpe_rear": "x <= 30.72 + 0.220*z — a PROPRIA linha do BF da deriva (empenagem.fin_TE), a convencao da frota. O 30.30 + 0.10z de 2026-08-22 era o mesmo artefato de paralaxe (corrigido, a tinta acaba em 31.2..31.5 nesse trecho, +-0.3 m sob a carenagem da raiz).",
   "porta4": "a folha CRUZA a fronteira: topo a 58%/57% da folha em indigo (sdu_00 corrigida / PR-MBU), parte baixa-dianteira branca; contorno branco 0.058 m pintado por cima. A POSICAO da porta e a do ACAP (25.81 ao centro): paralaxe corrigida, foto menos modelo = -0.10 +- 0.19 m — a 'contradicao' de 2026-08-22 (porta em 24.60) era a paralaxe de flanco sem correcao.",
   "matricula": "PT-TMT BRANCA dentro do indigo. MOVIDA 2026-08-22: os glifos foram reamostrados de x 26.456..28.443 / |theta| 80.3..104.9 (razao 3.1) para x 26.41..28.21 / |theta| 56.5..67.7 (razao 5.2, a da foto), por 'airbus A319/fix_matricula_a319.py'. A caixa e ancorada na porta 4 (centro + 0.60 .. + 2.40 m), como a foto a da. 2026-08-26: a porta do modelo NAO esta atras da real (era paralaxe; ver porta4), entao a ancora porta+0.60..+2.40 esta sa; leitura corrigida da sdu_00 poe a matricula consistente com a caixa atual dentro de +-0.4 m.",
-  "titulo": "'AIRBUS A319' indigo sobre branco, logo acima da fronteira, x 23.45-25.20, z 1.04-1.21; glifos swirl+AIRBUS+A+3 do SVG oficial airbus_a320neo_logo.svg; '1' e '9' reconstruidos ('1' = stem do I; '9' = anel + haste) (DESVIO documentado: nao existe SVG oficial 'A319' no Commons)",
+  "titulo": "'AIRBUS A319' NAVY #1C2E63 sobre branco, x 23.45-24.88, z 1.040-1.210 (encaixe pela altura; caixa do spec mantida). ARTE REAL desde 2026-08-27 (refazer_marcas `titulo`): ilhas AIRBUS+A+3 do MarkAirbusNeo_E (SVG oficial a320neo), '1' REAL do airbus_a321neo_logo.svg (mesma fonte de titulo), digitos no espacamento dos SLOTS oficiais de '2' e '0'; '9' = bojo do proprio '0' (0.72 cap, topo alinhado) + haste 0.19 cap — o unico glifo sem fonte SVG no repositorio, conferido no crop da PT-TMT (refs/ref_sdu_00.jpg). O bloco legado (aneis NSEG) foi aposentado; fecha a entrada 'AIRBUS A3' do QA-BACKLOG.",
   "hstab": "extradorso INDIGO como no PT-TMN atual (foto PT-TMT confirma topo escuro), intradorso branco",
   "fence": "outboard indigo com banda coral diagonal; inboard branco/cinza (foto ref_sdu_01)",
   "lockup": "LATAM + simbolo coral: MESMA posicao do A320 (fuselagem dianteira identica): E x5.7-11.9, D idem espelhado, barriga x5.9",
@@ -407,6 +407,41 @@
    "ang": 55,
    "comp_braco": 0.42,
    "comp_lamina": 0.5
+  }
+ },
+ "impressao_2026-08-27": {
+  "lei": "Lei da sutileza MEDIDA: 3 faixas limpas da fuselagem em boeing 777-300ER/refs/20251011_LATAM_PT-MUC_EGLL.jpg dao juntas lendo a -0.8..-3.8% de luminancia (tipico -1..-2.5%). Alphas do pintor: junta 0.032 (787: 0.022), radome 0.055, costura/APU 0.045, leme multiplicativo 0.91. Pintor unico: refazer_marcas.py (IMPRESSAO/ASA/EMPENAGEM), tarefas impressao/asa/empenagem.",
+  "juntas_x": [
+   1.55,
+   2.65,
+   4.4,
+   5.96,
+   6.96,
+   8.0,
+   10.0,
+   12.0,
+   14.0,
+   16.0,
+   18.0,
+   20.0,
+   22.27,
+   25.27,
+   28.27,
+   31.27,
+   33.0
+  ],
+  "radome_x": 1.55,
+  "apu_anel_x": null,
+  "costura_carenagem": "polilinha lida da PROPRIA malha BellyFairing (min|theta| por faixa de 0.5 m), alpha 0.045",
+  "asa": {
+   "linhas": "cutlines da familia lidas do plano ACAP p.45 600dpi em FRACOES de envergadura (livres de calibracao; validadas pelos pods 0.211/0.417/0.652 -> |y| 5.3/8.6/12.35 vs 4.95/8.48/12.21 do QA): flap A/B 0.265, flap/aileron 0.569, aileron ext 0.946; slats raiz 0.142, vao do pylon 0.304-0.324, cortes 0.436/0.588/0.740, fim 0.892; spoilers 5 paineis (1 interno + 4 entre kink e aileron)",
+   "infra": "UVAsa planar criado nesta rodada + AsaLinhas 2048 nova + ramo AL/AL2 no CinzaAsa (forca de linha 0.42x = a dos Boeing)",
+   "matricula": "caixa DERIVADA da lei de frota (banda do aileron, y 10.21..14.85, sob a asa D) — NAO ha quadro de intradorso de A320 LATAM no repositorio; pendencia no QA-BACKLOG; glifos = recombinacao P,T,-,T,M,T do Reg_E (a mesma do casco)"
+  },
+  "leme": {
+   "fracao_da_corda": 0.32,
+   "foto": "airbus A320neo/refs/ref_PR-XBP_teresina.jpg (familia)",
+   "aplicacao": "FinSashE/D escurecidas x0.91 na charneira"
   }
  }
 }
