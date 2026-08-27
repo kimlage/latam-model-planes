@@ -584,6 +584,15 @@ class Ground:
 G = None
 
 
+def dem_slope(x, y, h=20.0):
+    """|grad| of the DSM by central differences - the surround round's test
+    for 'this ground is a flank, not a floor'. The DSM is roofs-and-canopy,
+    so urban cells read bumpy; every use below pairs this with the street
+    mask so only UNBUILT steep ground goes to the serra treatment."""
+    return math.hypot(G.dem(x + h, y) - G.dem(x - h, y),
+                      G.dem(x, y + h) - G.dem(x, y - h)) / (2.0 * h)
+
+
 def gz(x, y, dz=0.0):
     return G.graded(x, y) + dz
 
@@ -1697,7 +1706,11 @@ def build_ground(d, P, c_ground):
     150 m skirt that tapers onto the city sheet. The first build laid this
     over the boundary's BBOX and the plan check showed a metropolis buried
     under 25 km2 of infield grass - the empty-ring failure, caught by the
-    check that exists to catch it."""
+    check that exists to catch it. The SKIRT is clipped to FLAT ground since
+    the surround round: where the fence runs at the foot of a hill (the NE
+    knoll behind the 901 ramp) the skirt used to climb the flank in ragged
+    25 m grass steps - THE 'tint sawtooth' of phase 2's checks, which was
+    never landuse tint at all. The serra scrub owns that flank now."""
     ring = dedupe_ring(d["aerodrome_boundary_xy_m"][0])
     xs = [p[0] for p in ring]; ys = [p[1] for p in ring]
     x0, x1 = min(xs) - 200.0, max(xs) + 200.0
@@ -1715,7 +1728,8 @@ def build_ground(d, P, c_ground):
         for i in range(nx):
             x = x0 + i * step
             dd = ring_dist(x, y)
-            krow.append(dd > -160.0)
+            krow.append(dd >= 0.0 or
+                        (dd > -160.0 and dem_slope(x, y) < 0.12))
             if dd >= 0.0:
                 z = G.graded(x, y)
             else:
@@ -2505,10 +2519,13 @@ def build_city(d, P, c_city, mask):
                 continue                  # beyond this the terrain shading is it
             key = mk
             z = G.dem(x, y)
-            if mk in ("city_green", "city_bare") and z > 30.0 \
-                    and not mask.urban(x, y):
+            if mk in ("city_green", "city_bare") and not mask.urban(x, y) \
+                    and (z > 30.0 or dem_slope(x, y) > 0.15):
                 nskip_serra += 1
-                continue                  # the serra owns the high flank
+                continue                  # the serra owns the high flank AND
+                #                           every steep unbuilt knoll - the
+                #                           30 m tint steps read as a sawtooth
+                #                           exactly there (phase 2's checks)
             if mk == "city_res" and y > 1500.0 and z > 25.0:
                 key = "city_fav"          # the hillside fabric
             _quad(bms[key], x, y, 30.0, lambda a, b: G.dem(a, b) + 0.5)
@@ -2588,6 +2605,12 @@ def build_city(d, P, c_city, mask):
             h = (3.0 * lv + 1.5) if lv else (16.0 + rnd.random() * 14.0)
             obox(bm_mid, cx, cy, zb, zb + h, L, W, hdg)
             nmid += 1
+        elif L > 32.0:
+            # a 'house' footprint 32+ m long is a school, a church hall, a
+            # clinic - institutional block, not a giant tile roof
+            h = (3.4 * lv) if lv else (5.0 + rnd.random() * 3.0)
+            obox(bm_shed, cx, cy, zb, zb + h, L, W, hdg)
+            nshed += 1
         else:
             hill = cy > 1500.0 and G.dem(cx, cy) > 25.0
             h = 3.4 * lv if lv else None
@@ -3024,14 +3047,21 @@ def build_serra_forest(P, c_veg, mask):
         for i in range(NC):
             cx = -9300.0 + (i + 0.5) * STEP
             z = G.dem(cx, cy)
-            if z < 32.0:
-                continue
             if mask.urban(cx, cy):
                 continue
+            if z >= 30.0:
+                dens = 0.42 + 0.56 * _smoothstep((z - 30.0) / 16.0)
+            else:
+                # the steep unbuilt knolls under 32 m - the ground whose
+                # tint build_city just ceded - carry wooded scrub
+                sl = dem_slope(cx, cy)
+                if sl < 0.13 or z < 8.0:
+                    continue
+                dens = 0.30 + 0.45 * _smoothstep((sl - 0.13) / 0.15)
             if px0 < cx < px1 and py0 < cy < py1 \
                     and ring_dist(cx, cy) > -60.0:
                 continue
-            if rnd.random() > 0.40 + 0.58 * _smoothstep((z - 32.0) / 22.0):
+            if rnd.random() > dens:
                 continue
             if max(abs(cx - 2000.0), abs(cy)) > 7200.0 and (i + j) % 2:
                 continue                  # thin the far flank; haze owns it
