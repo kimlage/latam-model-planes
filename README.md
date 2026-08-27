@@ -111,7 +111,7 @@ same way Santiago is. Three clips, and none of them is Santiago with the labels
 changed — this field is short, it is not level, and its base sits 35 m below its
 runway.
 
-![A320neo departing RWY 02 at São Carlos, the camera flying formation off its port quarter as the LATAM maintenance base rises out of the ground behind it](scenario_sdsc/a320_sdsc_v3.gif)
+![A320neo departing RWY 02 at São Carlos, the camera flying formation off its port quarter as the LATAM maintenance base rises out of the ground behind it](scenario_sdsc/a320_sdsc_v4.gif)
 
 *A320neo lifting off **RWY 02** — 240 frames, 9.6 s. TORA here is 1 672 m and
 anything leaving is a ferry flight, so it goes early: the wheels leave at
@@ -149,9 +149,12 @@ the anchor is not a shape but a level: a ruler-straight edge held at v 0.81 to
 0.84 for all 240 frames.
 ([`scenario_sdsc/base_flyover.py`](scenario_sdsc/base_flyover.py))*
 
-**All three are `_v3`, and what changed is on the ramp.** The nine airliners on
+**The version trail tells the base's story.** `_v2` built the surround, `_v3`
+put the real fleet on the ramp, and the departure's `_v4` re-shot the rotation
+on the geometry-truth round's landing gear — the A320 rotates to its
+photograph-checked tailstrike attitude now. The nine airliners on
 the MRO stands and the widebody on the mid-field apron were low-poly proxies;
-they are now ten of the eleven real masters — the whole A320 family in three
+they are ten of the eleven real masters — the whole A320 family in three
 lengths, a 767-300ER, a LATAM Cargo 767-300F on jacks, and the 787-9 on
 hangar 9's stand. One module,
 [`scenario_sdsc/fleet_placement.py`](scenario_sdsc/fleet_placement.py), places
