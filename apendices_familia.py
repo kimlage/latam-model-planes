@@ -99,6 +99,22 @@ if velhos:
 bpy.context.view_layer.update()
 DG = bpy.context.evaluated_depsgraph_get()
 
+# ---------------------------------------------------------- colecao de destino
+# As cenas (SBGR/SCL/SDSC) LINKAM as colecoes nomeadas do master (01..05) —
+# objeto solto na raiz da cena NAO viaja pelo link. Medido na primeira rodada:
+# frames 1-60 da decolagem re-renderizados byte-quase-identicos porque os
+# Apx_ moravam na raiz. Destino: a colecao onde as antenas legadas ja moram.
+_ref_det = next((D.objects[n] for n in
+                 ("AntenaVHF1", "AntenaVHF_Dorso1", "AntenaGPS", "AntenaSAT")
+                 if n in D.objects), None)
+if _ref_det is not None and _ref_det.users_collection:
+    COL_DESTINO = _ref_det.users_collection[0]
+elif "04_Detalhes" in D.collections:
+    COL_DESTINO = D.collections["04_Detalhes"]
+else:
+    COL_DESTINO = bpy.context.scene.collection
+log("colecao de destino dos Apx_: %s" % COL_DESTINO.name)
+
 CASCO_OK = ("Fuselagem", "BellyFairing", "Asas", "AsaE", "AsaD",
             "EstabHorizontal", "EstabE", "EstabD", "Deriva", "DerivaDorsal")
 
@@ -146,7 +162,7 @@ def _obj(nome, verts, faces, mat, liso=False):
         for p in me.polygons:
             p.use_smooth = True
     ob = D.objects.new(nome, me)
-    bpy.context.scene.collection.objects.link(ob)
+    COL_DESTINO.objects.link(ob)
     return ob
 
 
