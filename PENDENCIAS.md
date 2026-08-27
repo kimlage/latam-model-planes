@@ -46,9 +46,29 @@ eles tocam.
    byte-quase-idênticos) que objeto na raiz não viaja pelo link. Prova em
    `scenario_sbgr/showcase_apendices_777{,_strip,_diff}.png`: beacon
    dorsal e luzes lendo na cena real depois da correção.
-3. **Rodada de impressão de superfície (frota)** — linhas de painel e
-   cutlines de comandos, matrícula sob a asa, e a arte SVG dos títulos
-   (fecha o "AIRBUS A3" do A319). PRÓXIMA.
+3. ~~Rodada de impressão de superfície (frota)~~ — **fechada 2026-08-27**:
+   o pintor único ganhou as tarefas `impressao`/`asa`/`empenagem`/`titulo`.
+   (a) Lei da sutileza MEDIDA antes de pintar: juntas reais lêem a
+   -0.8..-3.8% de luminância (3 faixas da PT-MUC em EGLL); a tinta compõe a
+   alpha 0.032 (787: 0.022) e o gate devolve -0.8..-1.2% — painéis, não
+   wireframe. Juntas circunferenciais nas tabelas citadas por tipo (as do
+   787-9 MEDIDAS na foto da CC-BGG, 4 emendas de barril; as do -8 deslocadas
+   pelos plugs), radome, anel do APU, costura da carenagem lida da PRÓPRIA
+   malha BellyFairing. Os PanelBump mortos dos dois A320 (packed=False)
+   regenerados. (b) Matrícula sob a asa DIREITA em TODAS as onze — lei
+   fotografada em 4 quadros de 3 tipos (PT-MUG/CC-BGG/N536LA/CC-CXE):
+   raiz->ponta, topo para o BA, avante do cove; canal B novo em AsaLinhas,
+   só intradorso, arte de cada casco. Família A320 ganhou UVAsa+AsaLinhas+
+   ramo de shader novos (cutlines do plano ACAP p.45 em frações de
+   envergadura); o 777 tinha AsaLinhas que NUNCA renderizou (asas sem UV,
+   frame irrecuperável) — repintada da foto da própria PT-MUG. (c) Leme
+   escurecido x0.91 nas FinSash da frota. (d) O título do A319 diz
+   **AIRBUS A319** com arte real (fecha o "AIRBUS A3" do QA; '9' construído
+   do '0' oficial, declarado). Deferidos com registro no QA-BACKLOG:
+   spoilers do 777 (sem foto do extradorso), cutlines de elevator (estabs
+   sem canal de textura), caixa da matrícula de asa da família A320 (sem
+   quadro de intradorso no repo). Clipes NÃO re-renderizados: as cenas
+   linkam os masters e apanham a impressão no próximo render de cena.
 4. **Detalhe de cena** — jetbridges articuladas, GSE fino, variantes de
    luz (anoitecer GRU). DEPOIS.
 

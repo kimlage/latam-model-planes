@@ -57,6 +57,31 @@ mais**: `build_a321_fase2b_espelho.py`, `fix_reg_ghosts.py`,
 (a matrícula do A319 agora é pintada da recombinação P,T,-,T,M,T do próprio
 `Reg_E`, na caixa final que o fix mediu).
 
+## A impressão de superfície (2026-08-27)
+
+Depois da sequência de marcas de cada aeronave, a rodada de impressão roda
+**UMA vez**:
+
+    refazer_marcas.py -- <tag> impressao asa empenagem      # 11 tags
+    refazer_marcas.py -- a319 titulo                        # só o A319
+
+- `impressao` (juntas/radome/APU/costura) e `empenagem` (leme) **NÃO são
+  idempotentes**: a tinta compõe multiplicativamente sobre a cor efetiva —
+  rodar duas vezes dobra o escurecimento. Depois de um rebuild de livery
+  (que restaura a base chapada) elas rodam UMA vez, nunca em manutenção
+  sobre textura já impressa.
+- `asa` É idempotente (canal B zerado antes da matrícula; linhas compõem
+  por máximo) e re-posicionável.
+- `titulo` do A319 É idempotente (o erase alveja INDIGO e NAVY).
+- O A319 rebuild vira: `build_a319_livery.py` → `portas_familia -- construir`
+  → `refazer_marcas.py -- a319 lockup marcas titulo` → `reparar_echarpe.py
+  -- a319 --forcar` → `refazer_marcas.py -- a319 impressao asa empenagem`
+  (o bloco legado do título em `_marcas_a319` foi aposentado).
+- Tabelas e fontes de medida: `IMPRESSAO`/`ASA`/`EMPENAGEM` em
+  `refazer_marcas.py` + bloco `impressao_2026-08-27` no spec de cada
+  aeronave. Os PanelBump dos dois A320 são regenerados por `impressao`
+  (`pb_regen`).
+
 ## A aceitação medida (dump-and-diff, cor EFETIVA, em cópias — nada embarcado)
 
 Todo diff abaixo é `mix(#E6E7EA, LiveryTex, LiveryFac)` texel a texel contra a

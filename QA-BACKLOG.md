@@ -271,22 +271,60 @@ eye level on a light nose.
 
 ---
 
-## A319: the type title reads "AIRBUS A3"
+## CLOSED 2026-08-27: the A319 title reads "AIRBUS A319" again
 
-Found by the `(x, θ)` marks audit, which measured the right box on the PT-TMT
-photo (`refs/ref_sdu_00.jpg`: x 22.40–24.35, whole title on the white, rear end
-~0.12 m ahead of the boundary) and then **declined to move the ink**.
-
-The reason is worth stating: the glyphs "1", "9" and the Airbus swirl were
-destroyed when the wedge was painted over them, and **the source art no longer
-exists in the blend** — there is no A319 title mesh. Moving the surviving ink
-would only float a truncated title at the right station. The fix needs
-`airbus_a320neo_logo.svg` re-imported and the digits rebuilt, which is the
-deviation `spec_a319.json → livery_pt_tmt.titulo` already documents.
+The surface-print round rebuilt the whole title from real art through the
+single painter (`refazer_marcas.py -- a319 titulo`): AIRBUS+A+3 from the
+`MarkAirbusNeo_E` islands (the official a320neo SVG), the **'1' is the real
+glyph from `airbus_a321neo_logo.svg`** (same title font), and the digits sit
+in the official '2'/'0' SLOTS so the letterspacing is the mark's own. The
+'9' is the one glyph with no SVG source anywhere in the repo: built from the
+official '0''s own bowl (0.72 cap, top-aligned) + a 0.19-cap stem, checked
+against the PT-TMT crop (`refs/ref_sdu_00.jpg`) — declared in
+`spec_a319.json → livery_pt_tmt.titulo`. Navy #1C2E63 (off the white→indigo
+segment, so `reparar_echarpe`'s colour guard also protects it; the `poupar`
+box was widened to x 23.40–25.00 anyway). The legacy ring-'9' block in
+`_marcas_a319` is retired; rebuilds run the `titulo` task. Method note: the
+digit islands are 0.64 of the AIRBUS cap in the official art and the first
+'1'-import merged italic glyphs when clustered by x-interval — cluster by
+mesh connectivity and scale digits by the '3''s own cap.
 
 ---
 
 
+
+## Surface-print round 2026-08-27: what was deferred, and why
+
+The round that put panel joints, the belly-fairing seam, wing cutlines, the
+under-wing registration and the rudder line on the fleet (PENDENCIAS item 3)
+left four things named:
+
+- **A320-family under-wing registration box is fleet-law, not photo.** No
+  frame in the repo shows a LATAM A320-family wing underside. The five
+  Airbus boxes (y 10.21–14.85, aileron band) apply the law measured on
+  PT-MUG/CC-BGG/N536LA/CC-CXE — wing, orientation and cove anchor are
+  photographic; the SPAN PLACEMENT is derived. One from-below frame of any
+  fleet A320 closes it (spec `impressao_2026-08-27.asa.matricula`).
+- **777 spoiler lines deferred.** The 777's shipped AsaLinhas NEVER rendered
+  — AsaD/E carry no UV layer, so the shader sampled texel (0,0) — and its
+  authoring frame is unrecoverable (no script; symmetric-mid fit is
+  degenerate, no pylon gap in the art). The round repainted the wing print
+  from the PT-MUG underside photo (TE zones + slats, canoe-anchored, ±1 m)
+  in a declared domain, but the photo shows no extradorso: spoiler panels
+  need a wing-top photo of a LATAM 777.
+- **Elevator cutlines deferred fleet-wide.** The stabilizers carry flat
+  materials (LATAM_Branco or CinzaAsa without UV); giving them a texture
+  channel is material surgery on 11 masters for a line that reads only at
+  CamCauda. Do it if a gate ever misses it.
+- **787-8 joints and under-wing box are derived, not measured**: the -9's
+  photo-measured barrel joins shifted by the derivation plugs, and the -9's
+  reg band on the identical wing. A CC-BBF/BBB frame would close both.
+
+Also named: `impressao`/`empenagem` are **not idempotent** (tint composites
+— running twice doubles the darkening); `asa` is (channel B is wiped and
+lines compose by max). REBUILD.md carries the run-once rule.
+
+---
 
 ## A320 family: the flap-track fairings are not at the ACAP stations
 
@@ -543,13 +581,9 @@ no indigo.
 
 ### em aberto
 
-1. **O titulo do A319 ainda precisa de arte** (entrada propria acima: "AIRBUS
-   A3"). Novo dado de 08-26: com a cunha recuada a tinta sobrevivente ficou
-   INTEIRA no branco. As leituras de posicao divergem (21.4..23.2 na sdu_00
-   corrigida x 23.45..25.20 do modelo), mas a sdu_01 mostra o titulo quase
-   encostando na fronteira — o que bate com a caixa do modelo sob a fronteira
-   NOVA. Reconstruir os glifos primeiro; so mover a caixa se uma foto com
-   escala local confiavel mandar.
+1. ~~O titulo do A319 ainda precisa de arte~~ — **fechado 2026-08-27**
+   (entrada propria acima): glifos reconstruidos de arte real na caixa do
+   modelo, que a sdu_01 corrobora; a caixa nao foi movida.
 2. **O `Reg_E` do A319 guarda PT-TMN, nao PT-TMT.** Pintar a matricula por
    `refazer_marcas.py` escreve a matricula do master. Os glifos certos existem
    so como tinta; `fix_matricula_a319.py` os move como tinta.
