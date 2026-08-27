@@ -72,11 +72,11 @@ mm/pixel do gate — nenhum ângulo do gate resolve).
 | 777-300ER | 914 | 480 quantização ≤0.02 + 424 flips = canto do `poupar` + o pente de texels vizinhos de janela que o reparo não podia tocar (o rebuild pinta-os pela regra). `reparar` escreve **zero** depois do builder. |
 | A320neo | 7.5k | ~6k é o ruído do `portas_familia` (apagar+difusão+repintar de anéis NÃO é byte-estável: re-rodar portas sozinho sobre o embarcado diverge 5.9k texels — pré-existente, não desta rodada); resto = fronteiras AA e marcas re-blendadas. `reparar --seco`: 4.3k (o mesmo número da auditoria embarcada). |
 | A320ceo | 10.3k | mesmas classes (ruído de anéis + marcas movidas para refazer re-rasterizadas + cunha auditada 5.4k vs 5.6k embarcado). |
-| A319 | ver nota | classes acima + duas feridas documentadas: o título re-pintado COMPLETO (a arte do builder restaura o "19"+swirl que a cunha velha destruiu — QA-BACKLOG "AIRBUS A3") e a matrícula re-rasterizada da malha na caixa final (o embarcado é resample de tinta). |
+| A319 | 11.0k | atribuído zona a zona: matrícula 4.5k (MESMAS linhas e colunas de glifo; só o peso do traço — o embarcado é resample duplo de tinta, o rebuild é raster de primeira geração), anéis 4.1k (classe portas), título 0.5k (a arte do builder restaura o "19"+swirl que a cunha velha destruiu — QA-BACKLOG "AIRBUS A3"), lockup 0.3k, resto 1.1k (fronteiras AA). |
 | A321neo | 2.2k | 532 flips = bordas de glifo da matrícula (re-raster na posição do spec x 37.15 vs tinta embarcada movida por sessão não versionada); título byte-exato; `reparar`: **nada a reparar**. |
 | A321ceo | 1.4k | 466 flips idem; título byte-exato; anel D4 excluído dos erases (é o AA do portas). |
 | 787-8 | 4.6k | 1.0k flips = matrícula re-rasterizada da arte na caixa final (o embarcado é resample duplo); ventre re-blendado; lockup deriva AA. |
-| 787-9 | (medido nesta rodada) | refazer+reparar re-rodados sobre o embarcado; ver commit. |
+| 787-9 | 6.7k | re-rodar refazer+reparar sobre o embarcado: **3** texels de contraste cheio; o resto é deriva de re-blend ≤0.5 (lockup, espelho de janelas). `reparar` escreve 5. |
 
 ## As três lições de método desta rodada
 

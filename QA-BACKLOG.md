@@ -49,44 +49,54 @@ Three method lessons, kept because they will bite again:
 
 ---
 
-## The wedge rasterizer is shared now; the eleven builders are not
+## CLOSED 2026-08-27: the single painter — the eleven builders paint flat, refazer_marcas paints marks
 
-`latam_livery_kit.secoes_do_casco` / `cobertura_echarpe` / `reparar_echarpe`
-were added by the tail round and `reparar_echarpe.py` drives them, but **the
-per-aircraft builders were not rewritten to call them**. Each still carries its
-own copy of the (x, z) -> (x, theta) bridge, so re-running any builder puts its
-own defect back. Three specific ones:
+The round happened (`fd1fbcf` + `e4d53b2`, plumbing only, zero renders, no
+master texture touched). What it closed:
 
-- `boeing 767-300ER/b5_livery.py`, `767-300F/b5f_livery.py` and
-  `767-300BCF/b5b_livery.py` still define `zc_rz()` with the splice at
-  **x = 41.0** — the constant mid-section below, `spec_763.cauda_estacoes`
-  above, `dzc = +0.117 m` and `drz = -0.117 m` across one station. Only the
-  -300ER's wedge crosses that station (the freighters' starts at x 41.55), so
-  only the -300ER showed the 3.0-degree step; the splice is in all three.
-- `airbus A321neo/build_a321_fase2_livery.py` and
-  `A321ceo/build_a321ceo_fase2_livery.py` still re-solve the wedge as a
-  DIFFERENCE of two rules gated on `flat_w` / `flat_i`, and still erase with
-  `fac[m] = 0`. The two boxes that punched white into the indigo are
-  `box(36.9, 38.45, 0.95, 1.50)` ("old reg, remapped") and
-  `box(33.70, 37.05, 1.10, 1.55)` ("old type titles").
-- `boeing 787-8/build_788_livery.py` still guards its white-in-wedge refill with
-  `np.abs(np.sin(THg)) > 0.10`, which skips `|theta| <= 5.74` deg.
+- **The three named offenders are gone from the builders.** The 767 family's
+  spliced `zc_rz()` no longer feeds the wedge (the rule comes from
+  `reparar_echarpe.FROTA` over `kit.secoes_do_casco`; the spliced table stays
+  only for doors/windows/windshield, which were AUTHORED in it); the A321s'
+  difference-mask re-solve and the `fac[m]=0` erasers over the wedge are
+  replaced by absolute rasterization + stated-base erases; the 787-8's
+  `abs(sin θ) > 0.10` guard is replaced by the colour test.
+- **`refazer_marcas.py` is the only mark painter**, with three legacy engines
+  (767/777 uint8, A320-family SS2, A321 raster_side, 787-8 coverage) carrying
+  each family's constants and bridges verbatim, cited. Seven mark scripts are
+  absorbed and marked historical (fase2b espelho, fix_titulo, fix_reg_ghosts,
+  fix_matricula_a319, build_788_livery2).
+- **The acceptance was measured offline** (dump-and-diff of the effective
+  colour on scratch copies, per aircraft): the 767-300ER reproduces the
+  shipped texture byte-identically except the 25-texel splice signature, and
+  re-running its pipeline is byte-idempotent; the full per-aircraft table,
+  the rebuild sequences, and the tolerance classes live in **`REBUILD.md`**.
 
-Rewriting them is not a texture round: their wedge paint comes before every
-mark, so re-running one re-does the registration, the titles, the lockup and
-the door rings, and those went through `refazer_marcas.py` afterwards. The
-honest sequence is to make `refazer_marcas.py` the only thing that paints marks
-and let the builders paint nothing but flat livery — a round of its own.
+What the round measured and left OPEN, on purpose:
 
-Also left, deliberately: **seven of the eleven wedge boundaries are still a
-hard binary cut**, painted by `mask -> colour` with no anti-aliasing. Measured
-by `reparar_echarpe.py --seco`, the boundary texels that would change if they
-were anti-aliased are A319 4627, A320ceo 5583, A320neo 4535, 767-300F 2340,
-767-300BCF 2310, 777-300ER 3109, 787-9 3851. It is cosmetic at this scale — one
-texel is 9-18 mm on the hull against 32 mm per rendered pixel at the gate's
-`CamCauda` — and repainting them means re-rendering seven aircraft for a
-change no angle in the gate can resolve. The 777 was already supersampled by
-its own builder; it is where the shared function came from.
+- **`portas_familia`'s ring repaint is not byte-stable**: its erase reads the
+  background back by DIFFUSION from the neighbourhood, so re-running it on
+  the shipped A320neo alone moves ~5.9k texels at ring edges (sub-visible,
+  1-texel AA fringes). Pre-existing, cosmetic, and now named: door rings are
+  verified by class, not byte by byte. A byte-stable ring painter would need
+  the base stated instead of diffused — same lesson as the wedge.
+- **Seven of the eleven wedge boundaries are still a hard binary cut**
+  (deliberate, unchanged): A319 4627, A320ceo 5583, A320neo 4535, 767-300F
+  2340, 767-300BCF 2310, 777-300ER 3109, 787-9 3851 texels by `--seco`.
+  The migrated builders paint the SAME binary cut on purpose (ss=1), so a
+  re-run does not sneak the deferred anti-aliasing in; flipping to ss=3 is a
+  one-argument change when a texture round wants it, with re-renders.
+- **Marks whose shipped ink is a degraded copy** now rebuild crisper, not
+  byte-equal: the A319 registration (shipped = double resample; rebuild =
+  first-generation raster in the SAME glyph rows/columns) and the 787-8
+  registration (same). The A319 title rebuild restores the "19"+swirl the
+  old wedge destroyed (its own QA entry stays open for the SVG re-import).
+  None of this is shipped — it materializes only when a rebuild actually
+  runs, and that run ends at the visual gate as always.
+- **Two operational traps recorded in REBUILD.md**: Blender returns rc=0
+  even when the script dies with a traceback (every headless pipeline must
+  grep the log), and scratch copies of a master need the folder's aux files
+  (rings json, specs) linked beside them or scripts fail silently.
 
 ---
 

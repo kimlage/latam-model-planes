@@ -80,9 +80,16 @@ As duas metades resolvidas com UMA aeronave repintada, não cinco:
    clipes). Uma re-renderização captura cauda + cunha + casco de uma vez —
    não re-renderizar antes, para não pagar duas vezes.
 4. **GRU fases 2–3** — construção do cenário e clipes.
-5. **Consolidação da pintura**: fazer de `refazer_marcas.py` o único pintor de
-   marcas. Hoje os 11 builders carregam rasterizadores próprios e re-rodar
-   qualquer um re-insere o defeito que a rodada das cunhas tirou (QA-BACKLOG).
+5. ~~Consolidação da pintura~~ — **fechado 2026-08-27**: `refazer_marcas.py` é
+   o único pintor de marcas (três motores legados, constantes citadas); os 11
+   builders pintam só livery plana com a cunha da regra única; os três
+   ofensores nomeados (emenda x=41, máscara-diferença dos A321, portão
+   `abs(sin θ)>0.10` do 787-8) morreram. Aceitação por dump-and-diff em
+   cópias: 767-300ER byte-idêntico fora a assinatura da emenda (25 texels) e
+   idempotente; tabela completa e a sequência única por aeronave em
+   `REBUILD.md`. Zero renders, nenhuma textura embarcada mudou. Fica nomeado
+   (QA-BACKLOG): o repintar de anéis do `portas_familia` não é byte-estável
+   (difusão), e as bordas duras das sete cunhas seguem deferidas de propósito.
 6. ~~787-8/-9: assentamento da cunha~~ — **fechado 2026-08-27**: quatro fotos,
    veredito pela porta 4, cunhas repintadas NA REGRA (a tinta é que derivava).
 7. **Cargueiros: cunha sem veredito — mas as fotos existem agora.** A asa não
