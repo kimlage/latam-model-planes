@@ -350,6 +350,43 @@ written after the practice, and nobody went back to reconcile the two.
 
 ---
 
+## SBGR surround round — what it closed, and what it leaves thin
+
+The 2026-08-26 surround round answered "o entorno está todo muito vazio"
+(street-mask fabric, real footprints, the serra canopy, the warehouse belt —
+`scenario_sbgr/README.md` §9.4/§10.2). Two findings worth keeping:
+
+- **The "tint sawtooth" on the NE knoll was never landuse tint.** The probe
+  found NO landuse polygons under the stepped camo; it was `build_ground`'s
+  160 m pad skirt climbing the flank in ragged 25 m infield-grass quads.
+  CLOSED: the skirt now clips to flat ground (`dem_slope < 0.12`) and the
+  knoll carries scrub crowns. When a defect looks like a texture problem,
+  check which MESH owns the pixels first.
+- **Streets are the urbanization truth in Brazilian OSM, landuse is not**
+  (Bonsucesso: ~50 km of mapped streets under <1 km² of mapped landuse).
+  `surround_osm.py` documents the re-query; the mask is reusable for any
+  future Brazilian base.
+
+Left thin, none of it gate-blocking:
+
+- **The far NE hills (5–9 km) in the tour's close beat** still read hazy
+  olive-tan with sparse crowns — partly honest 17:30 haze, partly the crown
+  lattice thinning past 7.2 km. If the owner points there, densify the
+  far-flank crowns before touching the haze.
+- **The eye-level knoll flank is bare earth** at ranges only
+  `ground_city_fence_ne` visits (10 m AGL); the clips obey the >100 m rule
+  so no shipped frame shows it. A ground-level clip near the NE fence would
+  need a real scrub treatment there.
+- **Beyond the 9 km tint reach the height split shades high far city as
+  forest** (the Paulista ridge sits ~+50 m over the datum). Under haze it
+  reads as dark mass either way; wrong in principle, invisible in every
+  current framing.
+- **Fabric tint is uniformly residential** where only the street mask says
+  urban — the commercial corridors along the Dutra render as house fabric.
+  Landuse nuance there needs data OSM does not carry.
+
+---
+
 ## Housekeeping: three docstrings name the retired manifest path
 
 `refs_manifest.json` moved to `<aircraft>/refs/manifest.json` in `37cf7b8`, but

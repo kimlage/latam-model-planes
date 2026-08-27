@@ -166,6 +166,71 @@ of `02_Motores` with the port side deleted, and the open fan cowls had to be
 
 ---
 
+### Guarulhos — the hub, and the 777's home
+
+**SBGR / Aeroporto Internacional de São Paulo/Guarulhos — Gov. André Franco
+Montoro**: LATAM's hub, and the third base — the field the 777-300ER fleet
+calls home, because the hangar where those aircraft are maintained stands at
+its NE corner and the ADC chart prints HANGAR LATAM on the footprint. Built in
+[`scenario_sbgr/`](scenario_sbgr/) and nothing here repeats the other two
+bases: **two parallel runways** 373 m apart with the fleet holding between
+them, a field that is level to six feet, a horizon that is a **ring** (+0.12°
+to +3.23°, never negative, all of it real terrain), the **Cabuçu/Cantareira
+wall** carrying closed-canopy Atlantic forest across every north-facing frame
+— and a **metropolis of 1.3 million people wrapped around the fence**, which
+after the surround round renders as what it is: 120 402 landuse-and-street
+tint cells, 22 000 structures of which 7 743 are real OSM footprints, the
+Cumbica warehouse belt, 1 303 km of minor streets, and 23 222 canopy crowns
+on the serra ([`scenario_sbgr/README.md`](scenario_sbgr/README.md) §9.4).
+
+![Boeing 777-300ER departing RWY 10L at Guarulhos, chased from its starboard quarter as the nose lifts abeam the LATAM hangar with the forested Cantareira wall behind](scenario_sbgr/b77w_sbgr_v2.gif)
+
+*The **777-300ER** off **RWY 10L** — 240 frames, 9.6 s, one orbit flown in
+the aircraft's own frame from the aft-starboard quarter, no dolly, no
+hand-over. The geometry in time is the shot: rotation begins **abeam the
+LATAM hangar** at 2 571 m, so the nose lifts exactly as the aeroplane's own
+maintenance base crosses the frame behind it, and the tilt is pinned to the
+Cantareira crest at +2.39° the way Santiago pins the Andes — ridge above,
+fabric below, both grazing-lit by the 17:30 sun dead astern of a 073°
+departure.
+([`scenario_sbgr/takeoff_camera.py`](scenario_sbgr/takeoff_camera.py))*
+
+![A LATAM 777-300ER backing out of its maintenance hangar tail-first, the fin crossing the door line into low sunlight with the tug holding its nose](scenario_sbgr/b77w_rollout_v1.gif)
+
+*The roll-out — 400 frames, 16 s, and the inversion of São Carlos's hangar
+clip: there a 787 was towed **in** nose-first; here the 777 comes **out the
+way an MRO actually releases one — tail first**, backing into the daylight.
+The first thing to cross the door line is the FIN: the sash slides out of a
+dark bay into raking light through the **76 m opening** of the 100 m door
+(leaves stacked 12 m each end; 5.6 m per wingtip on a 64.8 m span, fin top
+18.5 m under the 20.5 m lintel). Same tractrix mathematics as the São Carlos
+tow — the entry is solved forward and played in reverse, so the tug never
+changes ends and the aeroplane is square to the door by construction.
+([`scenario_sbgr/hangar_rollout.py`](scenario_sbgr/hangar_rollout.py))*
+
+![Aerial tour of Guarulhos: terminal crescent and tower, both runways, the cargo ramp, and the LATAM corner against the east city](scenario_sbgr/sbgr_base_v2.gif)
+
+*The aerial tour — 240 frames, 9.6 s, one straight line at literally constant
+rate (the camera knots are ON the line; the first solve let PCHIP modulate
+the speed to 478 m/s) with a travelling aim: the terminal crescent and tower,
+both runways crossing the frame, the mid-field, and the close on the LATAM
+corner — the hangar, its 777, the 901 widebody row — with Bonsucesso and the
+forested serra behind. **The ring is never empty**: every beat holds city
+fabric or forest past the fence, which is the point of the surround round
+below. ([`scenario_sbgr/base_tour.py`](scenario_sbgr/base_tour.py))*
+
+*The departure and tour are `_v2`, the roll-out `_v1`, and the difference
+between v1 and v2 is the **surround**: the first renders showed bare tan
+hills and an empty ring — the owner's verdict was "o entorno está todo muito
+vazio" — so the round brought back the ~8 550 minor streets and ~2 756
+footprints phase 1 had deliberately cut
+([`scenario_sbgr/surround_osm.py`](scenario_sbgr/surround_osm.py)), grew the
+city from 4 200 boxes to 22 000 structures, forested the serra, and
+re-rendered all three. The v1 GIFs stay in git history, per the per-round
+rule.*
+
+---
+
 The A319 is a spec-level derivation of the A320neo master: same nose and
 cross-section, the two constant-section plugs removed (1.60 m forward of the
 wing, 2.13 m aft), tail translated 3.73 m forward, empennage repositioned per

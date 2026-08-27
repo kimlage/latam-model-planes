@@ -401,25 +401,54 @@ field (the first build clipped to the boundary BBOX and buried the metropolis
 under 25 km² of infield grass — caught by the plan check, which exists for
 exactly that):
 
-1. **Landuse tint** — 47 803 cells, 30 m, snapped to the near terrain tier's
+1. **Landuse tint** — 47 669 cells, 30 m, snapped to the near terrain tier's
    own lattice and sampled from the same DEM, so tint and terrain are
    parallel by construction and cannot interleave (the SDSC cane-sheet lesson
    applied before the fact). Residential polygons on the north hills render
    as the tighter, redder hillside fabric the photographs show climbing the
-   Cabuçu flank.
-2. **Procedural massing** — 4 200 boxes (houses 4–9 m, sheds, ~120
-   mid-rises) hashed inside the mapped residential/commercial/industrial
-   polygons within 4.2 km. The polygons are data; the boxes are not. They
-   stand on the DSM, which already contains roofs — a storey of
-   double-counting, declared, invisible under haze at 1.5+ km.
-3. **The mapped lines** — 255 km of roads, the CPTM Line 13 viaduct on piers
-   (13.5 km), the Rio Baquirivu-Guaçu and 77 km of watercourses, ~800
-   gallery/forest trees on the north belt.
+   Cabuçu flank. **Plus, since the surround round, 72 733 street-mask fabric
+   cells**: `surround_osm.py` re-queried the ~8 550 minor streets and ~2 756
+   footprints phase 1 deliberately cut (wider bbox, documented in the file —
+   the owner's verdict on the first tour was *"o entorno está todo muito
+   vazio"*), and every 30 m cell within ~50–100 m of a mapped street that no
+   landuse polygon covers gets the residential tint. Brazilian OSM maps
+   streets far more completely than landuse — Bonsucesso and Água Chata
+   across the Baquirivu valley exist in the render because their streets are
+   mapped, even though their landuse mostly is not.
+2. **Massing** — 22 000 structures, three sources in order of honesty:
+   7 743 **real footprints** (min-area boxes, height from `building:levels`
+   where tagged); procedural boxes inside the mapped polygons within 4.2 km
+   — and the big industrial polygons south of the field build as the
+   **Cumbica logistics belt**, 45–110 m warehouses, not houses (835 of
+   them); fabric houses on urban street-mask cells nothing else covered,
+   nearest-first to 6.5 km. All of it stands on the DSM, which already
+   contains roofs — a storey of double-counting, declared, invisible under
+   haze at 1.5+ km.
+3. **The mapped lines** — 255 km of major roads **plus 1 303 km of the minor
+   streets themselves**, the CPTM Line 13 viaduct on piers (13.5 km), the
+   Rio Baquirivu-Guaçu and 77 km of watercourses, and 2 344 trees: gallery
+   rows on the watercourses, verge rows along the avenidas, park crowns on
+   the green landuse.
+4. **The serra** — 23 222 closed-canopy crowns (14 verts each, ONE material)
+   on every high (+30 m, closing by +46) or steep (slope > 0.13) unbuilt
+   cell, north first so the Cantareira wall that backs every clip can never
+   lose out to the cap. The terrain material underneath was re-cut in the
+   same round: forest from +18 m (full by +52 — the old 25→90 band rendered
+   the whole visible flank as half-mixed bare tan), near-black-green matching
+   the crowns, 45 m canopy noise instead of the 420 m city hash. The **"tint
+   sawtooth"** phase 2's checks recorded stepping down the NE knoll turned
+   out to be `build_ground`'s pad skirt climbing the flank in 25 m grass
+   steps — the skirt now clips to flat ground and the knoll carries scrub
+   crowns instead.
 
 Beyond the tint reach the terrain's own material carries the fabric: a
-block-hash city grey below z +35 m blending to mata-atlântica green by
-+110 m, so the Cabuçu and Cantareira read as the forested wall of the
-photographs, and the far tier's Atlantic corner reads as sea.
+block-hash city grey on the flats going closed-canopy green on height, so
+the Cabuçu and Cantareira read as the forested wall of the photographs, and
+the far tier's Atlantic corner reads as sea. Render cost of the whole
+surround, measured on tour frame 120 (960×540, 96 samples, Metal): 13.6 →
+16.4 s/frame, **+2.8 s (+21 %) for ~0.9 M added faces and two new
+materials** — the material count, not the triangles, is what renders pay
+for, and the round added only `SBGR_SerraCanopy` and `SBGR_WarehouseShed`.
 
 ### 9.5 Population — the ramp is not empty
 
@@ -459,8 +488,8 @@ by the white-card method: 2.3 : 1 direct:diffuse. Haze V = 19 km, H = 1200 m
 
 | piece | faces |
 |---|---|
-| field (everything in `sbgr_field.blend`) | **177 117** |
-| of which: city tint + massing | ~78 000 |
+| field (everything in `sbgr_field.blend`) | **1 071 825** (177 117 before the surround round) |
+| of which: city tint + massing + serra crowns | ~970 000 |
 | terrain, three tiers | 3 697 248 |
 | fleet | 11 unique master geometries, instanced 16× |
 
@@ -485,3 +514,50 @@ abeam-the-hangar-at-rotation and the south-side composition the 2023 LATAM
 Cargo photograph proves), `horizon` (N/E/S/W against the phase-1 ring table),
 `tour`, `fleet`. Every check populates the ramp first, exactly as the clip
 files will. `python3 refs_fetch.py --verificar` exits 0.
+
+## 10. The three clips — phase 3, and the surround round
+
+### 10.1 The clips, and how to re-render each
+
+All three render at 960×540, Cycles/Metal, 96 samples, AgX Medium High
+Contrast, motion blur OFF (its second BVH build is what blew the 9.7 GB
+Metal ceiling — `takeoff_camera.py` documents it), through the chunked
+resumable driver (frames land inside the repo, git-ignored, and survive a
+reboot — one did):
+
+    bash scenario_sbgr/render_drive.sh <scene.blend> <frames_dir> <end>
+    python3 scenario_sbgr/encode_gif.py --dir <frames_dir> --out <gif> \
+        --width <W> --colors <C>
+
+| clip | scene | frames | GIF knobs | rebuild the scene with |
+|---|---|---|---|---|
+| departure, 777 off 10L | `sbgr_takeoff_v1.blend` | 240 → `frames_tk/` | 800 px / 112 colours | `blender -b sbgr_takeoff.blend -P takeoff_camera.py -- --out sbgr_takeoff_v1.blend` |
+| hangar roll-out, tail first | `sbgr_rollout.blend` | 400 → `frames_roll/` | 680 px / 84 colours | `blender -b --factory-startup -P hangar_rollout.py -- --out sbgr_rollout.blend` |
+| aerial tour | `sbgr_base_tour.blend` | 240 → `frames_tour/` | 640 px / 64 colours | `blender -b --factory-startup -P base_tour.py -- --out sbgr_base_tour.blend` |
+
+Every GIF is verified with PIL frame-by-frame (40 ms on every frame, count
+against the directory, ≤ 15 MB) — `encode_gif.py` does it and exits nonzero
+otherwise; never trust the byte scan. The takeoff and tour scenes LINK the
+field and terrain, so a scenery rebuild reaches them at render time with no
+scene rebuild; **the roll-out APPENDS the LATAM base locally** (it re-cuts
+the 76 m door opening into the wall) **and must be re-run through
+`hangar_rollout.py` after any scenery change**, or it renders the old base.
+
+### 10.2 The surround round (2026-08-26, after the first three GIFs)
+
+The owner's verdict on the first tour was *"o entorno está todo muito
+vazio"* — and the render evidence agreed: bare tan hills where the
+Cantareira's closed canopy should be, nothing across the Baquirivu valley,
+a sparse ring even where fabric existed, ~800 trees for a subtropical
+metropolis edge. The round that answered it is §9.4 as it now reads:
+the `surround_osm.py` re-query (streets are the urbanization truth where
+landuse is thin), 120 402 tint cells, 22 000 structures with 7 743 real
+footprints, the Cumbica warehouse belt, 1 303 km of minor streets, 23 222
+serra crowns over a terrain material re-cut to closed-canopy dark, and the
+"tint sawtooth" diagnosed to `build_ground`'s pad skirt climbing the NE
+knoll — never tint at all. Cost discipline held from the fleet round's
+measurement (render cost scales with DISTINCT MATERIALS, not triangles):
+two new materials, +2.8 s/frame (+21 %) on the tour beat. The before/after
+pairs live in `checks/before_surround/` against the current `checks/`
+frames; the clips were re-rendered as v2 GIFs afterwards, keeping v1 in git
+history per the per-round GIF rule.
