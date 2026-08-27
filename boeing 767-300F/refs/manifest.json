@@ -180,6 +180,21 @@
    "registration": "UPS N354UP (control, not LATAM)",
    "view": "port side, on stand",
    "notes": "Control for the CLOSED door: on a UPS 767-300F the main deck cargo door outline is readable under contrast enhancement, immediately aft of the L1 door."
+  },
+  {
+   "file": "refs/ref_N536LA_ldg26.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/N536LA_AIRCRAFT_Boeing_767-316F(ER)_-1b.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:N536LA_AIRCRAFT_Boeing_767-316F(ER)_-1b.jpg",
+   "author": "Sg1959 (Wikimedia Commons user, own work)",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "date": "2026-06-20 (data da pagina do Commons)",
+   "resolution": "5765x3243",
+   "sha1": "b893054610b420c6057f0886f0d7428c174a2b00",
+   "registration": "N536LA (a matricula-alvo desta pasta)",
+   "view": "BOMBORDO (nariz a esquerda), aproximacao com trem baixo",
+   "group": "cunha_traseira_2026-08-27",
+   "notes": "O quadro que o item 7 das pendencias pedia: aproximacao com a ASA ERGUIDA e LIMPA da cunha — fronteiras dianteira e INFERIOR inteiras, do topo a quilha, com o BF da deriva e as duas pontas do estabilizador no quadro (v mensuravel). Nas fotos de taxi (N568LA, CC-CXE fra03) a asa cruza exatamente essa zona. RESSALVA DE BUSCA 2026-08-27: nao existe quadro de ESTIBORDO em voo de nenhum 767 cargueiro LATAM em licenca livre no Commons (varridas Category:Boeing 767-300F of LATAM Cargo Chile e derivadas + busca 'LATAM Cargo 767': todo pouso/decolagem publicado e de bombordo); o criterio de dois flancos vira dois-quadros-com-v, como no 767-300ER de 08-26."
   }
  ],
  "project": "LATAM Cargo Boeing 767-300F reference photos",

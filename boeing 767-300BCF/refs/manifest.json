@@ -147,6 +147,22 @@
    "registration": "CC-CXD",
    "view": "not downloaded - cited for its title only",
    "notes": "Cited, not measured. Its Commons title says BDSF (IAI Bedek) where CC-CXE, CC-CXK, CC-BDC, N538LA and N540LA say BCF. That is uploader-entered metadata, not a primary source, but it is the first evidence found on the BCF-vs-BDSF split that the 767-300F build listed as an open question."
+  },
+  {
+   "file": "refs/ref_N566LA_gua25.jpg",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Boeing_767-316(ER)(BCF)_-_N566LA_-_LATAM_Cargo_Flight_L71801_(Miami)_-_Landing_Guatemala_City_La_Aurora_GUA_MGGT.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Boeing_767-316(ER)(BCF)_-_N566LA_-_LATAM_Cargo_Flight_L71801_(Miami)_-_Landing_Guatemala_City_La_Aurora_GUA_MGGT.jpg",
+   "author": "Rene Hernandez2 (Flickr 201377104@N06)",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "source_url": "https://www.flickr.com/photos/201377104@N06/54910475319/",
+   "date": "2025-11-08 13:05:38 (EXIF DateTimeOriginal)",
+   "resolution": "4034x2521",
+   "sha1": "90782715b1df83c6ff6a3f874d169739e3e85a52",
+   "registration": "N566LA (BCF, LATAM Cargo Colombia — mesma arte de frota que CC-CXE; matricula declarada, nao a modelada)",
+   "view": "BOMBORDO (nariz a esquerda), pouso em GUA, camera bem abaixo da trajetoria",
+   "group": "cunha_traseira_2026-08-27",
+   "notes": "Segundo quadro independente para a cunha do BCF (par da ref_CC-CXE_appr2, que ja estava nesta pasta e tem a asa LIMPA da cunha): aeroporto, camera e azimute muito diferentes, v mensuravel no estabilizador. Barriga inteira iluminada — serve a fronteira INFERIOR. RESSALVA DE BUSCA 2026-08-27: nenhum quadro de ESTIBORDO em voo de cargueiro LATAM em licenca livre no Commons; o criterio de dois flancos vira dois-quadros-com-v, como no 767-300ER de 08-26."
   }
  ],
  "aircraft": {
