@@ -262,11 +262,23 @@ bm.free()
 hull.data.update()
 
 # ------------------------- resolver o encolhimento CC: ponto fixo por vertice
-# apice antigo (preservado) e eixo do domo
-h_apex = bvh_antiga.ray_cast(Vector((centro.x - 4.0, 0.0, centro.z)), Vector((1, 0, 0)), 10.0)
-APEX = h_apex[0] if h_apex[0] is not None else Vector((0.0, 0.0, centro.z))
+# apice antigo (preservado): o ponto MAIS A FRENTE da superficie avaliada — um
+# raio pelo eixo do anel erra o apice de um nariz com droop (no 777 errava 2 cm
+# e o domo nascia fora da ponta: "botao" no radome, visto no gate)
+def _apice_antigo():
+    best = None
+    for iz in range(-40, 41):
+        for iy in range(-40, 41):
+            d = Vector((-1.0, iy * 0.01, iz * 0.01)).normalized()
+            h = bvh_antiga.ray_cast(C, d, 8.0)[0]
+            if h is not None and (best is None or h.x < best.x):
+                best = h.copy()
+    return best if best is not None else Vector((0.0, 0.0, centro.z))
+
+
+APEX = _apice_antigo()
 AXIS = (APEX - centro).normalized()
-log("apice antigo: x %.4f z %.4f" % (APEX.x, APEX.z))
+log("apice antigo (min-x avaliado): x %.4f z %.4f" % (APEX.x, APEX.z))
 
 # fronteira por theta (para rho e para o domo) — do snapshot pre-cirurgia
 anel_pos = sorted(anel_snap, key=lambda t: t[0])
@@ -292,6 +304,11 @@ def fronteira(th):
 # resolve; foto de perto nao ha). O ajuste casa o perfil no anel de confianca,
 # entao nao ha "botao": a curva e uma so, C1, do apice ao flanco.
 R_APEX = float(argv[1]) if len(argv) > 1 else 0.05
+# desvio maximo do alvo em relacao a casca antiga (m). No 777 a ogiva sem
+# limite saiu ~2 cm alem da casca no apice e rendia um BOTAO no radome
+# (medido no gate 2026-08-27); limitar o desvio arredonda o cone sem criar
+# silhueta nova. 0 = sem limite.
+DESVIO_MAX = float(argv[2]) if len(argv) > 2 else 0.0
 EIXO_TRAS = (centro - APEX).normalized()      # aponta do apice para dentro
 
 
@@ -347,6 +364,9 @@ if A_FIT < a_min:
 
 def alvo_no_raio(P_old):
     """substitui o raio radial pelo perfil ogiva, com fade para a casca antiga."""
+    if R_APEX <= 0:
+        return P_old          # tampa PURA: so a topologia muda (777: a ogiva
+                              # nao veste o nariz rombudo — fit degenerado)
     rel = P_old - APEX
     d = rel.dot(EIXO_TRAS)
     rad = rel - d * EIXO_TRAS
@@ -367,7 +387,12 @@ def alvo_no_raio(P_old):
         t = (0.90 - rho) / 0.35
         w = t * t * (3 - 2 * t)
     r_alvo = rad.length * (1 - w) + r_fit * w
-    return APEX + d * EIXO_TRAS + rad.normalized() * r_alvo
+    T = APEX + d * EIXO_TRAS + rad.normalized() * r_alvo
+    if DESVIO_MAX > 0:
+        e = T - P_old
+        if e.length > DESVIO_MAX:
+            T = P_old + e.normalized() * DESVIO_MAX
+    return T
 
 
 n_novos = len(novos)
@@ -390,6 +415,23 @@ for rodada in range(14):
         erro = alvo_no_raio(h_old) - h_new       # onde a superficie deveria estar
         pior = max(pior, erro.length)
         v.co = inv @ (w + erro * 0.8)
+    # relaxamento Laplaciano dos internos (decai ao longo das rodadas): sem
+    # ele a solucao de 49 pontos ondula, e num radome rombudo (777) a ondinha
+    # de ~1 cm no centro vira um BOTAO no clear coat
+    lam = max(0.0, 0.45 * (1.0 - rodada / 9.0))
+    if lam > 0:
+        idset = set(idxs)
+        novos_pos = {}
+        for ix in idxs:
+            v = bm.verts[ix]
+            viz = [e.other_vert(v) for e in v.link_edges]
+            if not viz:
+                continue
+            m = sum(((mw @ o.co) for o in viz), Vector()) / len(viz)
+            w = mw @ v.co
+            novos_pos[ix] = w + (m - w) * lam
+        for ix, p in novos_pos.items():
+            bm.verts[ix].co = inv @ p
     bm.to_mesh(hull.data); bm.free(); hull.data.update()
     log("ponto-fixo rodada %d: pior residuo %.4f m" % (rodada, pior))
     if pior <= 0.002:

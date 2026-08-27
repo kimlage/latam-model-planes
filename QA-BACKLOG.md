@@ -147,7 +147,7 @@ type-specific art `f162f73` established and were left alone.
 ## FIXED 2026-08-27: the valence-32 nose pole — and what the cap taught
 
 `nariz_quad_cap.py` replaced the 32-fan with an 8x8 Coons-grid quad cap on
-all ELEVEN hulls (corners at 45 deg off the symmetry plane — the first
+TEN of the eleven hulls (corners at 45 deg off the symmetry plane — the first
 attempt put a valence-3 corner on the keel and the crease showed up exactly
 there). The Catmull-Clark shrink is solved by per-vertex fixed point, and
 the lesson that cost two render rounds: **the old limit surface near the
@@ -169,6 +169,13 @@ left open:
   fit constrains the exponents — re-deriving them is its own round.
 - **The tail tip has the same valence-32 pole**, spanning ~3 cm of cone;
   it resolves in no current render and was left.
+- **The 777 kept its pole.** Its radome is blunt enough that the 8x8 cap
+  reads as a BUTTON at the cap/band seam (measured in the gate; three
+  solver variants tried — ogive target, deviation clamp, Laplacian-relaxed
+  pure fit — all ±1 cm coherent bulge). The old starburst-and-eye artifact
+  therefore still stands on the 777 head-on; killing it needs a denser cap
+  with a transition ring, a dedicated round. `construir -1` runs the pure
+  cap if someone wants to trade starburst for button meanwhile.
 
 ---
 
