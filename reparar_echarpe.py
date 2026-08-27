@@ -145,13 +145,23 @@ def _r_a321(X, Z, T):
 
 
 def _r_788(X, Z, T):
-    # boeing 787-8/build_788_livery.py, wedge_mask(); the +0.48 is the drift of
-    # the resampled -9 paint from this rule, measured by minimising the
-    # disagreement over the flat paint of the tail zone (3.8% residual).
-    d = 0.48
-    return ((X >= 42.68 + 0.992 * Z + d) &
-            (T <= 117.0 - 5.2 * (X - 42.61 - d)) &
-            (X <= 51.05 + 0.3858 * Z + 0.15))
+    # boeing 787-8/build_788_livery.py, wedge_mask(). SETTLED 2026-08-27: the
+    # rule was the measurement, the paint was the drift. Two frames of this
+    # very type (CC-BBF climbing at MIA, CC-BBB taxiing at MIA — opposite
+    # flanks) read H-free against the door-4 ring: the real boundary crosses
+    # the ring's aft edge at 0.80 / 0.96 of its height, i.e. c = x - 0.992z =
+    # 42.94 / 42.61, mean 42.78 +- 0.12 — where the paint carried 43.17 and
+    # this rule says 42.68. The clincher is cross-type: the 787-9's two frames
+    # give c = 48.90 / 48.84, and 48.87 - 42.78 = 6.09 is EXACTLY the fin
+    # shift between the types — the fleet art is rigid on the fin, as it
+    # should be. The old +0.48 offset (fitted texture-vs-rule) is therefore
+    # the -9's painting error pushed through the column resample, not a
+    # measurement of any aeroplane; it is removed and the wedge is repainted
+    # ON the rule (the measured +0.10 residual is inside the ring-scale
+    # uncertainty of the method and is recorded in spec_788.json).
+    return ((X >= 42.68 + 0.992 * Z) &
+            (T <= 117.0 - 5.2 * (X - 42.61)) &
+            (X <= 51.05 + 0.3858 * Z))
 
 
 def _r_a319(X, Z, T):
@@ -251,16 +261,22 @@ def _r_77w(X, Z, T):
 
 
 def _r_789(X, Z, T):
-    # 787-9 frame, quoted in latam_livery_kit's own header. The -9's builder is
-    # not in the repository and its PAINT sits +0.56 m (forward edge) / +0.65 m
-    # (aft edge) from those numbers — fitted by minimising the disagreement over
-    # the flat paint of the tail zone, residual 1.20%. With the offsets in, the
-    # -9's wedge is clean: the drift is a siting question for a photo round, not
-    # a defect. The -8 carries the same drift at +0.48 / +0.15, which is what a
-    # piecewise column resample of this texture would do.
-    return ((X >= 48.77 + 0.992 * Z + 0.56) &
-            (T <= 117.0 - 5.2 * (X - 48.70 - 0.56)) &
-            (X <= 57.14 + 0.3858 * Z + 0.65))
+    # 787-9 frame, quoted in latam_livery_kit's own header. SETTLED 2026-08-27:
+    # this rule IS the aeroplane. Two free-licence frames (CC-BGF landing at
+    # PEK, estibordo; CC-BGG on approach at MAD, bombordo — opposite flanks,
+    # 6000px class) read H-free against the door-4 ring: the real boundary
+    # crosses the ring's aft edge at 0.87 / 0.90 of its height, c = 48.90 /
+    # 48.84 vs 48.77 here — rule + 0.10 +- 0.12, inside the method's ring-scale
+    # uncertainty. The paint sat at c = 49.31 (the old +0.56 offset), 4 sigma
+    # aft of the photographs: the -9's PAINTER drifted, the record did not.
+    # The registration agrees: CC-BGF wears its reg ~0.27 m aft of the real
+    # boundary, which is what the model's Reg787 box gives against THIS rule
+    # (against the drifted paint the reg's first glyph fell on white).
+    # Offsets removed; wedge repainted on the rule. See spec_b789.json ->
+    # cauda_livery and QA-BACKLOG for the full trail.
+    return ((X >= 48.77 + 0.992 * Z) &
+            (T <= 117.0 - 5.2 * (X - 48.70)) &
+            (X <= 57.14 + 0.3858 * Z))
 
 
 FROTA = {
@@ -272,7 +288,8 @@ FROTA = {
     "a321neo": dict(regra=_r_a321, zona=(33.0, 45.0),
                     nota="white rectangle, dotted edge, aft splinter"),
     "b788":    dict(regra=_r_788, zona=(40.0, 57.5),
-                    nota="crown block left by |sin theta| > 0.10"),
+                    nota="wedge re-sited ON the rule 2026-08-27 (photo round: "
+                         "paint was +0.48 aft, inherited from the -9 resample)"),
     # --- audited with --seco and found clean; kept here so the next round can
     #     re-measure them with one command instead of re-deriving the rules
     "a319":    dict(regra=_r_a319, zona=(20.0, 34.2),
@@ -294,8 +311,9 @@ FROTA = {
     "b77w":    dict(regra=_r_77w, zona=(50.0, 74.5),
                     poupar=[(55.20, 59.00, 62.0, 81.0)],
                     nota="forward boundary re-measured: 0.86 m too far aft"),
-    "b789":    dict(regra=_r_789, zona=(44.0, 63.5), auditoria=True,
-                    nota="clean once its own offset is applied"),
+    "b789":    dict(regra=_r_789, zona=(44.0, 63.5),
+                    nota="wedge re-sited ON the rule 2026-08-27 (photo round: "
+                         "paint was +0.56/+0.65 aft; the rule was the truth)"),
 }
 
 

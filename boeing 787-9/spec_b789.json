@@ -667,6 +667,24 @@
    "modelo_completo": "indigo <=> x >= 48.77+0.992*z  E  theta <= 117.0-5.2*(x-48.70)  E  x <= 57.14+0.3858*z",
    "A320": "theta_max(x)=101.4-7.58*(x-29.11) ; x >= 27.39+0.8393*z ; x <= 34.52+0.0538*z (BF da deriva)",
    "SUBSTITUI_2": "As tentativas por reta unica (corte horizontal, 16 graus, reta do estabilizador) todas produziam cunha pequena demais. A fronteira nao e uma reta em (x,z): e uma reta em (x,theta)."
+  },
+  "cunha_assentada_2026-08-27": {
+   "fonte": "CC-BGF pouso em PEK (N509FZ, CC BY-SA 4.0, 6215px, estibordo) e CC-BGG aproximacao MAD (mike hoffmann, dominio publico, 6000px, bombordo) — refs/manifest.json, grupo cunha_traseira_2026-08-27. Duas leituras LOCAIS, sem homografia: reta da fronteira ajustada em >110 linhas de varredura x anel pintado da porta 4 (altura do anel 2.06 m como escala local).",
+   "resultado": {
+    "cruzamento_na_aresta_traseira_do_anel": [
+     0.872,
+     0.9
+    ],
+    "c_fronteira_dianteira": "x - 0.992z = 48.90 (BGF) / 48.84 (BGG); tinta ANTIGA 49.31, regra do kit 48.77",
+    "veredito": "A REGRA ERA A MEDIDA. A tinta estava +0.54 m atras dela (4 sigma); a fronteira real fica em regra +0.10 +-0.12 (dentro da incerteza da escala do anel). Cunha REPINTADA na regra por reparar_echarpe.py em 2026-08-27; offsets +0.56/+0.65 removidos."
+   },
+   "consistencia_entre_tipos": "c(-9) 48.87 - c(-8) 42.78 = 6.09 m = exatamente o deslocamento da deriva entre -9 e -8: a arte e rigida na deriva, como arte de frota deve ser. Quatro quadros independentes, dois tipos, flancos opostos.",
+   "matricula": "na CC-BGF a matricula veste ~0.27 m atras da fronteira real — o que a caixa Reg787 do modelo da contra a regra; contra a tinta antiga o primeiro glifo caia no branco.",
+   "fronteira_inferior": "so o quadro da BGG le a barriga (+5.0 +-3.3 graus da regra, n=18 — dentro da tolerancia); o da BGF e ao anoitecer e nao responde. Confianca baixa segue declarada.",
+   "avisos_de_metodo": [
+    "a homografia ancorada no casco carrega ~0.35 m de vies de flanco (lente na borda do quadro; a porta confere +23 px) — por isso o veredito e da leitura LOCAL, nao do residuo do conferir",
+    "as linhas BA/BF da deriva do BLEND (BA x=47.116+1.1275z, BF x=57.165+0.4356z) diferem das da CORRECAO_2026-08-17 do spec (0.992/0.3858) E a foto nao bate exatamente com nenhuma das duas — a deriva construida esta ~0.2-0.3 m estreita contra a foto; fica registrado, nao corrigido nesta rodada"
+   ]
   }
  },
  "marcas_xtheta_2026-08-20": {

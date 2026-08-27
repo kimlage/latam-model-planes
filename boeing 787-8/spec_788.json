@@ -332,7 +332,19 @@
    "estado": "a posicao x~10-13 esta CONFIRMADA contra o spec antigo do -9 que dizia x 17-22; a largura exata continua sem foto vertical",
    "sem_wordmark": true
   },
-  "asas": "cinza Boeing flight-gray extradorso e intradorso; ponta raked sem cor de marca; estabilizador branco"
+  "asas": "cinza Boeing flight-gray extradorso e intradorso; ponta raked sem cor de marca; estabilizador branco",
+  "cunha_assentada_2026-08-27": {
+   "fonte": "CC-BBF subida em MIA (estibordo) e CC-BBB taxi em MIA (bombordo) — as fotos de trabalho historicas desta pasta; leitura LOCAL sem homografia (reta da fronteira x anel da porta 4).",
+   "resultado": {
+    "cruzamento_na_aresta_traseira_do_anel": [
+     0.8,
+     0.96
+    ],
+    "c_fronteira_dianteira": "x - 0.992z = 42.94 (BBF) / 42.61 (BBB); tinta ANTIGA 43.17, regra 42.68",
+    "veredito": "tinta re-assentada NA REGRA em 2026-08-27 (offset +0.48 removido): o +0.48 era a deriva de pintura do -9 empurrada pelo resample de colunas, nao medida de aeronave. c real = 42.78 +-0.12 = regra +0.10, e casa com o -9 pelo deslocamento exato da deriva (6.09 m)."
+   },
+   "aviso": "a homografia de 08-22 deste aviao (quadro CC-BBB) estava QUEBRADA: o quadro corta o nariz e a silhueta inteira foi encaixada nele — escala 81.6 px/m contra 97 reais. O 'OK -0.12' da rodada de 08-22 era artefato dela."
+  }
  },
  "correcoes_2026-08-20": {
   "matricula_grande_demais": "A etapa 2 reconstruiu CC-BBF a partir dos alveolos de CC-BGK do -9, com cap 0.50 m: ficou 1.63x comprida demais (2.63 m contra 1.63), 1.67x alta demais e 0.4 m baixa demais. Medida duas vezes, em duas fotos e nos dois bordos, cada uma ancorada num regua local (passo das janelas / porta 4) e nao no vao nariz-cauda. Corrigida reamostrando a TINTA JA PINTADA com media de area para a caixa menor — as formas das letras (inclusive o F construido) sobrevivem intactas, sem nenhuma fonte nova.",
