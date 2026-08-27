@@ -5,9 +5,22 @@ isoladas** — cada rodada ataca o item mais alto que estiver destravado, e os
 itens micro só entram anexados a uma rodada maior que já re-renderize o que
 eles tocam.
 
-## Em andamento
+## Em andamento — programa de aprofundamento (ordem do dono, 2026-08-27:
+## "continuar atacando os próximos aviões e detalhes, o mais realista possível")
 
-(vazio — os itens restantes aguardam evidência externa; ver "Próximas")
+1. **Rodada da verdade geométrica (frota)** — os defeitos MEDIDOS de casco e
+   trem, empacotando os itens micro que a regra mandava anexar a uma rodada
+   maior: ângulo de tailstrike da família A320 (7,75° modelado vs ~11,7°
+   real — visível em toda rotação), polo de valência 32 no nariz, pinch do
+   cockpit do 767, UV da coroa dos 787, altura do 787-8. EM ANDAMENTO.
+2. **Rodada de apêndices e luzes (frota)** — antenas VHF, pitots, AoA,
+   descarregadores estáticos, beacon/strobe/nav/landing lights emissivas;
+   transforma clipes e gates de uma vez. PRÓXIMA.
+3. **Rodada de impressão de superfície (frota)** — linhas de painel e
+   cutlines de comandos, matrícula sob a asa, e a arte SVG dos títulos
+   (fecha o "AIRBUS A3" do A319). DEPOIS.
+4. **Detalhe de cena** — jetbridges articuladas, GSE fino, variantes de
+   luz (anoitecer GRU). DEPOIS.
 
 ## Fechado em 2026-08-27 — a caça às fotos das cunhas
 
