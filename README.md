@@ -82,7 +82,7 @@ the terminals, the LATAM base and the cordillera open around it. The move is
 measured rather than eyeballed — see [§8 of the scenery
 manual](scenario/README.md).*
 
-![Aerial survey of SCL: terminals, tower and the LATAM base](scenario/scl_base_v8.gif)
+![Aerial survey of SCL: terminals, tower and the LATAM base](scenario/scl_base_v9.gif)
 
 *The second clip: a northbound aerial survey of the whole airport — it
 opens on the T1/T2 terminal core with its piers and parked fleet, crosses
@@ -111,7 +111,7 @@ same way Santiago is. Three clips, and none of them is Santiago with the labels
 changed — this field is short, it is not level, and its base sits 35 m below its
 runway.
 
-![A320neo departing RWY 02 at São Carlos, the camera flying formation off its port quarter as the LATAM maintenance base rises out of the ground behind it](scenario_sdsc/a320_sdsc_v4.gif)
+![A320neo departing RWY 02 at São Carlos, the camera flying formation off its port quarter as the LATAM maintenance base rises out of the ground behind it](scenario_sdsc/a320_sdsc_v5.gif)
 
 *A320neo lifting off **RWY 02** — 240 frames, 9.6 s. TORA here is 1 672 m and
 anything leaving is a ferry flight, so it goes early: the wheels leave at
@@ -123,7 +123,7 @@ breaks the crest at frame 78, nine frames after rotation, and by the close the
 apron, the nose-in line and hangar 9 are all open behind the climbing jet.
 ([`scenario_sdsc/takeoff_camera.py`](scenario_sdsc/takeoff_camera.py))*
 
-![A Boeing 787-9 towed nose-first into hangar 9, the tug and towbar ahead of it and the aircraft passing out of the sunlight into the lit interior](scenario_sdsc/b789_hangar9_v3.gif)
+![A Boeing 787-9 towed nose-first into hangar 9, the tug and towbar ahead of it and the aircraft passing out of the sunlight into the lit interior](scenario_sdsc/b789_hangar9_v4.gif)
 
 *A **787-9** towed into **hangar 9** — 400 frames, 16.0 s, and the clip nothing
 in this repository had done before. The aeroplane is not a choice: the hangar was
@@ -137,7 +137,7 @@ frame the wingtips sit in the opening with 8.94 m to spare each side. It is
 400 frames because a 787 does not enter a hangar in ten seconds.
 ([`scenario_sdsc/hangar_tow.py`](scenario_sdsc/hangar_tow.py))*
 
-![Aerial tour of the São Carlos base: the Aeroclube, the runway, the mid-field cluster and the LATAM MRO with hangar 9](scenario_sdsc/sdsc_base_v4.gif)
+![Aerial tour of the São Carlos base: the Aeroclube, the runway, the mid-field cluster and the LATAM MRO with hangar 9](scenario_sdsc/sdsc_base_v5.gif)
 
 *The aerial tour — 240 frames, 9.6 s, one straight line at constant rate with a
 travelling aim, the São Carlos answer to the Santiago survey above. It opens over
@@ -198,7 +198,7 @@ fabric below, both grazing-lit by the 17:30 sun dead astern of a 073°
 departure.
 ([`scenario_sbgr/takeoff_camera.py`](scenario_sbgr/takeoff_camera.py))*
 
-![A LATAM 777-300ER backing out of its maintenance hangar tail-first, the fin crossing the door line into low sunlight with the tug holding its nose](scenario_sbgr/b77w_rollout_v2.gif)
+![A LATAM 777-300ER backing out of its maintenance hangar tail-first, the fin crossing the door line into low sunlight with the tug holding its nose](scenario_sbgr/b77w_rollout_v3.gif)
 
 *The roll-out — 400 frames, 16 s, and the inversion of São Carlos's hangar
 clip: there a 787 was towed **in** nose-first; here the 777 comes **out the
@@ -211,7 +211,7 @@ tow — the entry is solved forward and played in reverse, so the tug never
 changes ends and the aeroplane is square to the door by construction.
 ([`scenario_sbgr/hangar_rollout.py`](scenario_sbgr/hangar_rollout.py))*
 
-![Aerial tour of Guarulhos: terminal crescent and tower, both runways, the cargo ramp, and the LATAM corner against the east city](scenario_sbgr/sbgr_base_v2.gif)
+![Aerial tour of Guarulhos: terminal crescent and tower, both runways, the cargo ramp, and the LATAM corner against the east city](scenario_sbgr/sbgr_base_v3.gif)
 
 *The aerial tour — 240 frames, 9.6 s, one straight line at literally constant
 rate (the camera knots are ON the line; the first solve let PCHIP modulate
