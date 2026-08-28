@@ -192,7 +192,8 @@ def verificar(a):
 
 # ----------------------------------------------------------------- manifesto
 
-def escrever_manifesto(assets, achatados, assados=None, leve=None):
+def escrever_manifesto(assets, achatados, assados=None, leve=None,
+                       leve_fora=()):
     """Grava o manifesto. `leve` nao mexe em `assets`: o tier leve e uma SEGUNDA
     linha de arquivos para os mesmos slugs, entao mora na sua propria secao."""
     assados = dict(assados or {})
@@ -206,6 +207,9 @@ def escrever_manifesto(assets, achatados, assados=None, leve=None):
             achatados = {**m.get("materiais_achatados", {}), **achatados}
             assados = {**m.get("materiais_assados", {}), **assados}
             leve = {**m.get("tier_leve", {}), **(leve or {})}
+            # um slug que perdeu a variante nesta rodada sai da tabela, senao a
+            # fusao com o manifesto antigo ressuscitaria um arquivo apagado
+            leve = {k: v for k, v in leve.items() if k not in set(leve_fora)}
         except Exception:                        # noqa: BLE001
             antigo = {}
     leve = leve or {}
@@ -351,13 +355,34 @@ def main():
     if a.tier == "completo":
         caminho = escrever_manifesto(bons, achatados, assados)
     else:
-        caminho = escrever_manifesto([], {}, {}, leve={
-            x["slug"]: {"arquivo": x["arquivo"], "bytes": x["bytes"],
-                        "atlas": x["bake"]["atlas"],
-                        "m_por_texel": x["bake"]["m_por_texel"],
-                        "megapixels": (x.get("verificacao") or {}).get("megapixels"),
-                        "bytes_imagens": (x.get("verificacao") or {}).get("bytes_imagens")}
-            for x in bons if x.get("bake")})
+        # UM ARQUIVO QUASE IGUAL NAO E UM NIVEL DE DETALHE. Quando o atlas ja
+        # era pequeno no tier completo, o arredondamento para potencia de dois
+        # devolve o MESMO lado no leve, e a variante economiza dezenas de bytes.
+        # Essas sao apagadas: baixar duas vezes o mesmo asset e pior do que nao
+        # ter tier leve nenhum.
+        cheio = {}
+        cam = os.path.join(SAIDA, "manifest.json")
+        if os.path.exists(cam):
+            with open(cam) as f:
+                cheio = {y["slug"]: y["bytes"] for y in json.load(f).get("assets", [])}
+        leve, magros = {}, []
+        for x in bons:
+            if not x.get("bake"):
+                continue
+            base = cheio.get(x["slug"])
+            if base and x["bytes"] >= 0.9 * base:
+                os.remove(os.path.join(SAIDA, x["arquivo"]))
+                magros.append(x["slug"])
+                continue
+            leve[x["slug"]] = {
+                "arquivo": x["arquivo"], "bytes": x["bytes"],
+                "atlas": x["bake"]["atlas"],
+                "m_por_texel": x["bake"]["m_por_texel"],
+                "megapixels": (x.get("verificacao") or {}).get("megapixels"),
+                "bytes_imagens": (x.get("verificacao") or {}).get("bytes_imagens")}
+        if magros:
+            print("sem tier leve (economia < 10%%): %s" % ", ".join(magros))
+        caminho = escrever_manifesto([], {}, {}, leve=leve, leve_fora=magros)
     print("\n%s" % ("=" * 116))
     for x in todos:
         print(_linha(x))

@@ -138,17 +138,6 @@
    "megapixels": 0.26,
    "bytes_imagens": 11380
   },
-  "scl_base_latam": {
-   "arquivo": "scl_base_latam.leve.glb",
-   "bytes": 59568,
-   "atlas": [
-    256,
-    256
-   ],
-   "m_por_texel": 0.172,
-   "megapixels": 0.07,
-   "bytes_imagens": 2142
-  },
   "scl_placa_campo": {
    "arquivo": "scl_placa_campo.leve.glb",
    "bytes": 143572,

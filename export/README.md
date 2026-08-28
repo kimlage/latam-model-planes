@@ -369,7 +369,7 @@ python3 export_cenarios.py              # 46 assets from three fields, ~90 s
 python3 export_cenarios.py --listar     # the catalogue, without opening Blender
 python3 export_cenarios.py --campo sbgr # just Guarulhos
 python3 export_cenarios.py --verificar  # read every .glb back and check it
-python3 export_cenarios.py --tier leve  # half-size atlases, textured assets only
+python3 export_cenarios.py --tier leve  # half-size atlases, where they pay
 ```
 
 46 composable pieces cut out of `scenario/scl_field.blend`,
@@ -485,14 +485,19 @@ whole catalogue, and 4.19 MP for a single field plate.
 A **low-texture tier** is available for the cases where that is too much:
 
 ```bash
-python3 export_cenarios.py --tier leve    # <slug>.leve.glb, only the 15 textured assets
+python3 export_cenarios.py --tier leve    # <slug>.leve.glb, for the textured assets
 ```
 
 `leve` halves every atlas side — a quarter of the pixels — and writes
 `<slug>.leve.glb` beside the full one, recorded in the manifest under
-`tier_leve`. Substituting all 15 brings the catalogue to **0.94 MB and 5.0 MP**.
-Assets with no texture get no `leve` variant, because a second identical file is
-not a level of detail.
+`tier_leve`. Substituting them brings the catalogue to **0.94 MB and 5.0 MP**.
+
+**14 of the 15 textured assets get a variant, not 15.** Assets with no texture
+get none, because a second identical file is not a level of detail — and the
+same rule is enforced by measurement, not by assumption: `scl_base_latam`'s
+atlas was already small enough that halving the budget rounded back to the same
+256², so its variant came out 12 bytes lighter and is deleted rather than
+shipped. The exporter prints which slugs it dropped and why.
 
 **What is still thin**, measured rather than guessed:
 
