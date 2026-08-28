@@ -103,6 +103,11 @@
   </div>
   <div id="carga" hidden><div class="barra-carga"><i></i></div><span></span></div>
   <div id="status"></div>
+  <!-- The timeline dock. It lives in the document (estado.linha), which is what
+       makes it undoable, savable, embeddable and exportable without a second
+       code path — see js/tempo.js. -->
+  <button id="tempo-alternar" title="Show / hide the timeline (T)">▾ timeline</button>
+  <section id="tempo"></section>
 </main>
 
 <!-- ---------------------------------------------------------------- right -->
@@ -148,6 +153,22 @@
         <button id="btn-pose-b">Store pose B</button>
       </div>
       <div id="poses-info" class="nota">A and B are the endpoints of the “camera path” GIF.</div>
+    </div>
+  </section>
+
+  <section class="bloco" data-aberto="0">
+    <h3>Colour grade</h3>
+    <div class="corpo">
+      <label class="uma"><span>contrast</span><input type="range" id="g-contraste" min="0.5" max="1.8" step="0.01" value="1"><output id="g-contraste-out">1.00</output></label>
+      <label class="uma"><span>saturation</span><input type="range" id="g-saturacao" min="0" max="2" step="0.01" value="1"><output id="g-saturacao-out">1.00</output></label>
+      <label class="uma"><span>lift blacks</span><input type="range" id="g-elevar" min="0" max="0.3" step="0.005" value="0"><output id="g-elevar-out">0.00</output></label>
+      <label class="uma"><span>warm / cool</span><input type="range" id="g-temperatura" min="-0.2" max="0.2" step="0.005" value="0"><output id="g-temperatura-out">0.00</output></label>
+      <label class="uma"><span>vignette</span><input type="range" id="g-vinheta" min="0" max="1" step="0.02" value="0"><output id="g-vinheta-out">0.00</output></label>
+      <div class="linha-botoes"><button id="g-reset">Reset to identity</button></div>
+      <p class="nota">Applied after tone mapping, in display space. While it is
+        the identity the renderer draws straight to the canvas, with no extra
+        pass. <b>There is no motion blur</b> and there will not be a fake one —
+        see js/mundo.js §colour correction for why.</p>
     </div>
   </section>
 

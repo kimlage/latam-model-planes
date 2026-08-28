@@ -34,19 +34,30 @@ export class Editor {
       // the objects where they already are and the drag would do nothing), and
       // detach after. One history entry per drag, written at the end.
       if (e.value) this.iniciarArrasto();
-      else { this.finalizarArrasto(); this.registrar(`${tc.mode} ${this.selecao.length} object(s)`); }
+      else {
+        this.finalizarArrasto();
+        /* Auto-key BEFORE the history entry, so one drag is one undo step that
+           contains both the new transform and the key it wrote. Keying after
+           would leave an undo that puts the object back and leaves the key. */
+        this.aoAutoChave(this.selecao);
+        this.registrar(`${tc.mode} ${this.selecao.length} object(s)`);
+      }
     });
     tc.addEventListener('objectChange', () => {
       this.escreverDeVolta();
       this.aoMudarTransformacao();
     });
-    mundo.cena.add(tc.getHelper());
+    const ajudante = tc.getHelper();
+    ajudante.userData.auxiliar = true;      // hidden during exports — see mundo.js
+    mundo.cena.add(ajudante);
     this.gizmo = tc;
 
     /* callbacks the UI plugs into */
     this.aoMudarSelecao = () => {};
     this.aoMudarTransformacao = () => {};
     this.aoMudarDoc = () => {};
+    this.aoAutoChave = () => {};        // main.js replaces both — see §auto-key
+    this.aoAutoChaveCanal = () => {};
 
     this.ligarPonteiro();
     this.ligarTeclado();
@@ -82,6 +93,14 @@ export class Editor {
   }
 
   limparSelecao () { this.selecao = []; this.atualizarGizmo(); this.aoMudarSelecao(); }
+
+  /** Keep the selection box on an object the timeline is moving. Cheap, and
+   *  without it the blue box sits where the object was at frame 0. */
+  atualizarCaixa () {
+    if (!this.selecao.length) return;
+    const cx = this.mundo.caixaDe(this.selecao);
+    if (cx) { this.mundo.caixaSel.box.copy(cx); this.mundo.caixaSel.visible = true; }
+  }
 
   atualizarGizmo () {
     const m = this.mundo;
@@ -276,7 +295,7 @@ export class Editor {
     this.mundo.aplicarTransformacoes(this.estado);
     this.atualizarGizmo();
     this.aoMudarTransformacao();
-    if (registrar) this.registrar('snap to ground');
+    if (registrar) { this.aoAutoChave(this.selecao); this.registrar('snap to ground'); }
   }
 
   travar (id, v) {
@@ -295,6 +314,10 @@ export class Editor {
     this.mundo.aplicarTransformacoes(this.estado);
     this.atualizarGizmo();
     this.aoMudarSelecao();
+    /* Visibility is a keyable channel, and the eye button is the only place a
+       user ever changes it — so this is where a visibility key comes from. Held
+       (step) interpolation, because half-visible is not a thing. */
+    this.aoAutoChaveCanal(id, 'objeto.visivel', d.visivel);
     this.registrar(v ? 'hide' : 'show');
   }
 }

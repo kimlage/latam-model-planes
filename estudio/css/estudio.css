@@ -113,8 +113,12 @@ label.check{display:flex;gap:6px;align-items:center;margin:6px 0;color:var(--fra
 label.check input{width:auto;accent-color:var(--acento)}
 
 /* -------------------------------------------------------------- viewport */
-#palco{grid-area:palco;position:relative;min-width:0;min-height:0}
-#viewport{position:absolute;inset:0}
+/* --t is the dock's height. The viewport is inset by it rather than laid out
+   beside it, so collapsing the dock costs one custom-property write and the
+   ResizeObserver in mundo.js does the rest. */
+#palco{grid-area:palco;position:relative;min-width:0;min-height:0;--t:204px}
+#palco.sem-tempo{--t:0px}
+#viewport{position:absolute;inset:0 0 var(--t) 0}
 #viewport canvas{display:block;width:100%;height:100%}
 #hud-cameras,#hud-gizmo{position:absolute;display:flex;gap:4px;z-index:2;
   background:rgba(16,18,24,.82);border:1px solid var(--borda);border-radius:7px;
@@ -123,7 +127,7 @@ label.check input{width:auto;accent-color:var(--acento)}
 #hud-gizmo{top:10px;right:10px}
 #hud-cameras button,#hud-gizmo button{padding:3px 7px;font-size:11px}
 .hud-sep{flex:0 0 1px;background:var(--borda);margin:2px 2px}
-#status{position:absolute;left:10px;bottom:10px;z-index:2;color:var(--fraco);
+#status{position:absolute;left:10px;bottom:calc(var(--t) + 10px);z-index:2;color:var(--fraco);
   font-size:11px;background:rgba(16,18,24,.75);border:1px solid var(--borda);
   border-radius:6px;padding:4px 8px;white-space:pre-line;pointer-events:none;
   font-variant-numeric:tabular-nums}
@@ -133,6 +137,76 @@ label.check input{width:auto;accent-color:var(--acento)}
 #carga span{color:var(--fraco);font-size:11px}
 .barra-carga{height:4px;background:#0a0c12;border-radius:2px;overflow:hidden;margin-bottom:8px}
 .barra-carga i{display:block;height:100%;width:0;background:var(--acento);transition:width .12s}
+
+/* ------------------------------------------------------------- timeline */
+#tempo{position:absolute;left:0;right:0;bottom:0;height:var(--t);z-index:3;
+  background:var(--painel);border-top:1px solid var(--borda);
+  display:flex;flex-direction:column;overflow:hidden}
+#palco.sem-tempo #tempo{display:none}
+#tempo-alternar{position:absolute;right:10px;bottom:calc(var(--t) + 8px);z-index:4;
+  font-size:11px;padding:2px 8px;opacity:.85}
+.tempo-barra{display:flex;align-items:center;gap:6px;padding:6px 10px;flex-wrap:wrap;
+  border-bottom:1px solid var(--borda);background:var(--painel2)}
+.tempo-barra button{padding:3px 8px;font-size:11px}
+.tempo-barra .tocar{min-width:32px;font-size:12px}
+.tempo-barra select{width:auto;padding:3px 5px;font-size:11px}
+.mini-campo{display:flex;align-items:center;gap:4px;color:var(--fraco);font-size:11px}
+.mini-campo .num{width:58px;padding:3px 5px;font-variant-numeric:tabular-nums}
+.tempo-barra .tmp{font-variant-numeric:tabular-nums;color:var(--texto);font-size:11px;
+  min-width:150px}
+.tempo-barra .leitura{color:#8fd4a8;font-size:11px;font-variant-numeric:tabular-nums;
+  margin-left:auto;text-align:right}
+.editor-chave{display:flex;align-items:center;gap:6px;width:100%;padding-top:6px;
+  border-top:1px dashed var(--borda);color:var(--fraco);font-size:11px}
+.editor-chave select{flex:1;max-width:340px}
+
+.tempo-pistas{flex:1;overflow-y:auto;padding:0 10px 8px}
+.tempo-regua{position:sticky;top:0;z-index:2;height:20px;margin:0 26px 0 202px;
+  background:var(--painel);border-bottom:1px solid var(--borda);cursor:ew-resize}
+.tempo-regua .tick{position:absolute;top:3px;font-size:9.5px;color:var(--fraco);
+  transform:translateX(1px);pointer-events:none;border-left:1px solid var(--borda);
+  padding-left:3px;height:14px}
+.tempo-cabeca{position:absolute;top:0;bottom:-2000px;width:0;
+  border-left:1px solid var(--coral);pointer-events:none;z-index:3}
+.tempo-cabeca::before{content:"";position:absolute;top:0;left:-4px;
+  border-left:4px solid transparent;border-right:4px solid transparent;
+  border-top:6px solid var(--coral)}
+.tempo-cabeca-linha{position:absolute;top:0;bottom:0;width:0;
+  border-left:1px solid rgba(255,92,92,.45);pointer-events:none}
+
+.trilha{display:grid;grid-template-columns:150px 20px 20px 1fr 22px;gap:4px;
+  align-items:center;margin-top:3px}
+.trilha .rot{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  font-size:11px;color:var(--texto)}
+.trilha .unid{color:var(--fraco);font-size:10px;text-align:right}
+.trilha .mini{background:none;border:none;padding:0;opacity:.5;font-size:11px}
+.trilha .mini:hover{opacity:1;background:none}
+.trilha.voo{grid-template-columns:150px 20px 20px 1fr}
+.trilha.voo .rot{color:#8fd4a8}
+.pista{position:relative;height:18px;background:#0e1119;border:1px solid var(--borda);
+  border-radius:4px}
+.pista.voo{background:#101a15;border-color:#264a34}
+.chave{position:absolute;top:50%;width:9px;height:9px;margin:-5px 0 0 -5px;
+  background:var(--acento);border:1px solid #0a0c12;transform:rotate(45deg);
+  cursor:ew-resize;border-radius:1px}
+.chave:hover{background:#c3d0ff}
+.chave.sel{background:#fff;box-shadow:0 0 0 2px rgba(143,166,255,.6)}
+/* Easing is a fact about the key, so it is legible ON the key: a hold is a
+   square, a linear key is hollow, a smooth key is amber (it stops dead at both
+   ends and you should be able to see that without opening anything). */
+.chave[data-e="segurar"]{transform:none;border-radius:0;background:#d8b263}
+.chave[data-e="linear"]{background:#0e1119;border-color:var(--acento)}
+.chave[data-e="suave"]{background:#c9a24a}
+.faixa-voo{position:absolute;top:1px;bottom:1px;background:#1d3d2a;border:1px solid #3f7a55;
+  border-radius:3px;color:#9fe0b8;font-size:10px;font-style:normal;padding:1px 5px;
+  overflow:hidden;white-space:nowrap;line-height:14px}
+.tempo-trilhas .nota.vazio{padding:10px 4px;max-width:620px}
+
+@media (max-width:1180px){
+  .tempo-regua{margin:0 22px 0 158px}
+  .trilha{grid-template-columns:110px 18px 18px 1fr 18px}
+  .trilha.voo{grid-template-columns:110px 18px 18px 1fr}
+}
 
 /* ---------------------------------------------------------------- modal */
 #modal{position:fixed;inset:0;background:rgba(4,6,10,.72);z-index:9;

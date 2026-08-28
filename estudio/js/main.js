@@ -13,14 +13,16 @@ import { PROPS, RIGS } from './props.js';
 import { Mundo } from './mundo.js';
 import { Editor } from './editor.js';
 import { CENAS_BASE, ROTULOS_BASE, cenaBase } from './cenas.js';
-import { h, dlgExportar, dlgLicenca, fecharModal } from './dialogos.js';
+import { h, dlgExportar, dlgLicenca, dlgMovimento, dlgVoo, fecharModal } from './dialogos.js';
 import { formatarBytes } from './exportar.js';
+import { linhaPadrao, avaliar, temAnimacao, podar, porChave, acharTrilha, encaixar } from './tempo.js';
+import { Dock } from './tempoui.js';
 
 const $ = id => document.getElementById(id);
 
 let estado = estadoPadrao();
 const historico = new Historico();
-let mundo, editor;
+let mundo, editor, dock;
 let falhas = [];
 
 /* ------------------------------------------------------------------ boot */
@@ -33,8 +35,11 @@ async function iniciar () {
   editor.aoMudarTransformacao = () => sincronizarTransform();
   editor.aoMudarDoc = () => atualizarBotoesHistorico();
   editor.aoAtalho = atalho;
+  editor.aoAutoChave = autoChave;
+  editor.aoAutoChaveCanal = autoChaveCanal;
   historico.aoMudar = atualizarBotoesHistorico;
 
+  ligarTempo();
   ligarInspetor();
   ligarBarra();
   ligarHud();
@@ -62,18 +67,161 @@ async function iniciar () {
   sincronizarInspetor();
   historico.iniciar(estado);
 
+  let relogio = performance.now();
   mundo.iniciarLoop(() => {
-    mundo.controles.update();
+    const agora = performance.now();
+    const dt = Math.min(0.25, (agora - relogio) / 1000);
+    relogio = agora;
+    if (dock.avancar(dt)) sincronizarTransform();
+    const ov = aplicarTempo();
+    /* OrbitControls.update() recomputes the camera from its own spherical
+       state and would overwrite whatever the camera track just set — the same
+       collision the GIF exporter avoids by pausing the loop. While the
+       timeline owns the camera, the controls do not get a turn. */
+    if (!(ov && ov.camera)) mundo.controles.update();
     mundo.render();
     contarQuadro();
   });
 
   /* Debug handle. Deliberate: it is how this page was driven and verified from
      the console, and it is the only way to script the studio from outside. */
-  window.__estudio = { mundo, editor, estado, historico, carregarDocumento, adicionar, atalho };
+  window.__estudio = { mundo, editor, estado, historico, dock, carregarDocumento,
+                       adicionar, atalho, aplicarTempo, registrar: (r) => historico.registrar(r, estado) };
 
   // Open on something worth looking at rather than an empty grid.
   await carregarDocumento(cenaBase('heroi'));
+}
+
+/* ------------------------------------------------------------- timeline --
+ *
+ * The dock edits `estado.linha`; this file owns everything that has to happen
+ * around an edit — one history entry per action, a re-evaluation after it, and
+ * the rule that SCRUBBING IS NOT AN EDIT. */
+
+function ligarTempo () {
+  dock = new Dock($('tempo'), {
+    estado, mundo, editor,
+    aoMudar: rot => { historico.registrar(rot, estado); },
+    aoTempo: () => { aplicarTempo(); sincronizarTransform(); },
+    aoParar: () => mundo.controles.update(),      // resync the orbit state
+    aoChavear: () => chavearSelecao(),
+    aoPreset: () => dlgMovimento(ctxDialogo()),
+    aoVooPainel: v => dlgVoo(ctxDialogo(), v),
+  });
+
+  const alt = $('tempo-alternar');
+  alt.addEventListener('click', () => alternarDock());
+  addEventListener('keydown', e => {
+    const a = e.target;
+    if (a && (a.tagName === 'INPUT' || a.tagName === 'SELECT' || a.tagName === 'TEXTAREA')) return;
+    if (e.metaKey || e.ctrlKey) return;
+    if (e.key === ' ') { e.preventDefault(); dock.alternarTocar(); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); dock.parar(); dock.passo(e.shiftKey ? 10 : 1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); dock.parar(); dock.passo(e.shiftKey ? -10 : -1); }
+    else if (e.key === 'Home') { dock.parar(); dock.irPara(0); }
+    else if (e.key === 'End') { dock.parar(); dock.irPara(estado.linha.duracao); }
+    else if (e.key.toLowerCase() === 'k') { chavearSelecao(); }
+    else if (e.key.toLowerCase() === 't') { alternarDock(); }
+    else if (e.key === 'Delete' || e.key === 'Backspace') {
+      /* A selected KEY wins over a selected object: you just clicked the key. */
+      if (dock.chaveSel && dock.apagarSelecionada()) e.preventDefault();
+    }
+  });
+}
+
+function alternarDock () {
+  const p = $('palco');
+  p.classList.toggle('sem-tempo');
+  $('tempo-alternar').textContent = p.classList.contains('sem-tempo') ? '▴ timeline' : '▾ timeline';
+}
+
+const ctxDialogo = () => ({ mundo, estado, editor, dock, carregarDocumento,
+  registrar: rot => historico.registrar(rot, estado),
+  redesenhar: () => { dock.desenhar(); aplicarTempo(); desenharOutliner(); } });
+
+/** Evaluate the timeline onto the world. Returns the overlay, or null when the
+ *  scene has no animation — in which case nothing here costs anything. */
+function aplicarTempo () {
+  if (!dock) return null;
+  /* Not while a gizmo is being dragged: the overlay would put the object back
+     where the keys say it is on every frame and the drag would do nothing at
+     all, which is a bug that looks exactly like a broken mouse. */
+  if (editor && editor.gizmo && editor.gizmo.dragging) return null;
+  if (!temAnimacao(estado.linha)) { dock.mostrarVoo(null); return null; }
+  const ov = avaliar(estado, dock.t, id => mundo.contextoVoo(id, estado));
+  mundo.aplicarTransformacoes(estado);
+  mundo.aplicarLinha(estado, ov);
+  let info = null;
+  for (const [, v] of ov.objetos) if (v.voo) info = v.voo;
+  dock.mostrarVoo(info);
+  editor.atualizarCaixa && editor.atualizarCaixa();
+  return ov;
+}
+
+/* Which channels a drag on an object touches. */
+const CANAIS_OBJ = [['objeto.pos', 'pos'], ['objeto.rot', 'rot'], ['objeto.esc', 'esc']];
+
+/**
+ * Auto-key, and the one rule that is not the DCC default:
+ *
+ *   auto-key ON  — a move writes keys on position, rotation and scale, starting
+ *                  the tracks if they do not exist.
+ *   auto-key OFF — a move on a channel that is ALREADY animated still writes a
+ *                  key, because otherwise the next frame re-evaluates the track
+ *                  and the drag is silently thrown away. A channel with no keys
+ *                  is left alone and just edits the rest pose.
+ *
+ * Blender discards that drag. This studio does not, because there is no
+ * F-curve editor here to explain what happened to it.
+ */
+function autoChave (ids) {
+  const l = estado.linha;
+  if (!l) return;
+  let escreveu = 0;
+  for (const id of ids || []) {
+    const d = estado.objetos.find(o => o.id === id);
+    if (!d) continue;
+    for (const [canal, campo] of CANAIS_OBJ) {
+      const jaTem = !!acharTrilha(l, canal, id);
+      if (!l.autochave && !jaTem) continue;
+      porChave(l, canal, id, dock.t, d[campo].slice());
+      escreveu++;
+    }
+  }
+  if (escreveu) { dock.desenhar(); aplicarTempo(); }
+  return escreveu;
+}
+
+/** One channel, same rule: start a track only with auto-key on, but keep an
+ *  already-animated channel honest. */
+function autoChaveCanal (id, canal, valor) {
+  const l = estado.linha;
+  if (!l) return 0;
+  if (!l.autochave && !acharTrilha(l, canal, id)) return 0;
+  porChave(l, canal, id, dock.t, valor, 'segurar');
+  dock.desenhar();
+  aplicarTempo();
+  return 1;
+}
+
+/** The explicit key button: position, rotation and scale of the selection. */
+function chavearSelecao () {
+  const sel = editor.selecionados;
+  if (!sel.length) { avisar('Select something first — “key” writes the selection’s transform.'); return; }
+  for (const d of sel) for (const [canal, campo] of CANAIS_OBJ) {
+    porChave(estado.linha, canal, d.id, dock.t, d[campo].slice());
+  }
+  historico.registrar(`key ${sel.length} object(s)`, estado);
+  dock.desenhar();
+  aplicarTempo();
+}
+
+let avisoT = null;
+function avisar (txt) {
+  const s = $('status');
+  s.dataset.aviso = txt;
+  clearTimeout(avisoT);
+  avisoT = setTimeout(() => { delete s.dataset.aviso; }, 4000);
 }
 
 /* -------------------------------------------------------------- sidebar */
@@ -244,13 +392,20 @@ async function carregarDocumento (doc) {
       sol: { ...base.ambiente.sol, ...(doc.ambiente?.sol || {}) },
       chao: { ...base.ambiente.chao, ...(doc.ambiente?.chao || {}) },
       neblina: { ...base.ambiente.neblina, ...(doc.ambiente?.neblina || {}) } },
-    render: { ...base.render, ...(doc.render || {}) },
+    render: { ...base.render, ...(doc.render || {}),
+      correcao: { ...base.render.correcao, ...((doc.render || {}).correcao || {}) } },
     poses: { ...base.poses, ...(doc.poses || {}) },
+    /* A scene saved before the timeline existed has no `linha` and opens with
+       an empty one — which is why the schema did not have to move. */
+    linha: { ...linhaPadrao(), ...(doc.linha || {}) },
     objetos: (doc.objetos || []).map(o => ({ ...novoObjeto(o.tipo, o.slug, o.nome), ...o })),
   };
   substituirEstado(novo);
+  podar(estado);
   editor.selecao = [];
   editor.atualizarGizmo();
+  dock.parar();
+  dock.t = 0;
 
   mostrarCarga('loading assets…', 0);
   mundo.aplicarRender(estado.render);
@@ -291,9 +446,15 @@ async function carregarDocumento (doc) {
     mundo.vista(doc.vista || 'tres-quartos', caixa);
   }
   $('nome-cena').value = estado.nome;
+  mundo.invalidarTerreno();
   sincronizarInspetor();
   desenharOutliner();
   sincronizarTransform();
+  dock.desenhar();
+  /* A scene that carries a timeline opens ON its first frame, not on the rest
+     pose: otherwise a take-off scene opens with the aeroplane at the origin and
+     the camera somewhere else entirely, and looks broken until you press play. */
+  aplicarTempo();
   historico.iniciar(estado);
 }
 
@@ -340,6 +501,7 @@ async function adicionar (tipo, slug, nome, ponto) {
     mundo.aplicarTransformacoes(estado);
   }
   mundo.aplicarAmbiente(estado.ambiente);      // shadow frustum follows the scene
+  mundo.invalidarTerreno();                    // a flight's ground profile is stale
   editor.selecionar([d.id]);
   desenharOutliner();
   historico.registrar(`add ${nome}`, estado);
@@ -367,10 +529,17 @@ async function apagar () {
   const n = sel.length;
   estado.objetos = estado.objetos.filter(o => !sel.includes(o.id));
   editor.selecao = [];
+  /* Tracks and flights that pointed at those objects go with them. Leaving
+     orphans behind would put rows in the dock for aeroplanes that are not
+     there, and `avaliar` would keep asking mundo for their instances. */
+  podar(estado);
   await mundo.sincronizar(estado);
+  mundo.invalidarTerreno();
   editor.atualizarGizmo();
   desenharOutliner();
   sincronizarTransform();
+  dock.desenhar();
+  aplicarTempo();
   historico.registrar(`delete ${n}`, estado);
 }
 
@@ -391,10 +560,17 @@ async function aplicarSnapshot (s) {
   mundo.aplicarRender(estado.render);
   await mundo.sincronizar(estado);
   mundo.aplicarAmbiente(estado.ambiente);
+  mundo.invalidarTerreno();
   editor.atualizarGizmo();
   sincronizarInspetor();
   desenharOutliner();
   sincronizarTransform();
+  /* The timeline is part of the snapshot, so undo undoes a key exactly the way
+     it undoes a move — one serialiser, one restorer, still no third path. */
+  dock.t = Math.min(dock.t, estado.linha.duracao);
+  dock.chaveSel = null;
+  dock.desenhar();
+  aplicarTempo();
   $('nome-cena').value = estado.nome;
 }
 
@@ -490,6 +666,7 @@ function ligarTransform () {
     // One entry per committed edit: typing digits fires many `input` events
     // and exactly one `change` when the field is left or Enter is pressed.
     e.addEventListener('change', () => {
+      autoChave(editor.selecao);
       historico.registrar('edit transform', estado);
       sincronizarTransform();
     });
@@ -571,6 +748,19 @@ function ligarInspetor () {
   ren('aa', v => (estado.render.aa = v));
   ren('pr', v => (estado.render.pixelRatioMax = v), 'pr-out');
 
+  /* grade — see js/mundo.js §grade */
+  ren('g-contraste', v => (estado.render.correcao.contraste = v), 'g-contraste-out');
+  ren('g-saturacao', v => (estado.render.correcao.saturacao = v), 'g-saturacao-out');
+  ren('g-elevar', v => (estado.render.correcao.elevar = v), 'g-elevar-out');
+  ren('g-temperatura', v => (estado.render.correcao.temperatura = v), 'g-temperatura-out');
+  ren('g-vinheta', v => (estado.render.correcao.vinheta = v), 'g-vinheta-out');
+  $('g-reset').addEventListener('click', () => {
+    estado.render.correcao = { contraste: 1, saturacao: 1, elevar: 0, temperatura: 0, vinheta: 0 };
+    mundo.aplicarRender(estado.render);
+    sincronizarInspetor();
+    historico.registrar('reset colour grade', estado);
+  });
+
   /* One undo step per committed setting. A slider drag fires a stream of
      `input` events and a single `change` when the thumb is released, so the
      whole drag collapses into one entry — which is what a user expects. */
@@ -606,6 +796,13 @@ function sincronizarInspetor () {
   p('exposicao', r.exposicao); $('exposicao-out').textContent = (+r.exposicao).toFixed(2);
   p('sombras', r.sombras); p('sombra-px', r.sombraPx); p('aa', r.aa);
   p('pr', r.pixelRatioMax); $('pr-out').textContent = (+r.pixelRatioMax).toFixed(1);
+  const g = r.correcao || {};
+  for (const [id, k] of [['g-contraste', 'contraste'], ['g-saturacao', 'saturacao'],
+                         ['g-elevar', 'elevar'], ['g-temperatura', 'temperatura'],
+                         ['g-vinheta', 'vinheta']]) {
+    p(id, g[k] ?? (k === 'contraste' || k === 'saturacao' ? 1 : 0));
+    $(`${id}-out`).textContent = (+$(id).value).toFixed(2);
+  }
   p('fov', estado.camera.fov); $('fov-out').textContent = estado.camera.fov;
   p('orto', estado.camera.orto);
   guardarPoseTexto();
@@ -711,10 +908,13 @@ function contarQuadro () {
   const fps = quadros * 1000 / (agora - t0);
   quadros = 0; t0 = agora;
   const s = mundo.estatisticas();
-  $('status').textContent =
+  const el = $('status');
+  el.textContent =
     `${fps.toFixed(0)} fps · ${estado.objetos.length} objects · `
     + `${s.triangulos.toLocaleString()} tris · ${s.chamadas} draw calls · `
     + `${formatarBytes(bytesCarregados())} of GLB loaded`
+    + (temAnimacao(estado.linha) ? ` · timeline ${estado.linha.duracao}s @ ${estado.linha.fps} fps` : '')
+    + (el.dataset.aviso ? `\n${el.dataset.aviso}` : '')
     + (falhas.length ? `\n${falhas.length} asset(s) failed — see the console` : '');
 }
 

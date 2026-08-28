@@ -9,9 +9,11 @@
 import {
   FPS_LEGAIS, estimarGif, formatarBytes, exportarGif, exportarPng,
   construirEmbed, documentoParaJson, baixar, nomeArquivo,
-  licencasDaCena, textoAtribuicao,
+  licencasDaCena, textoAtribuicao, exportarSequencia,
 } from './exportar.js';
 import { acharAsset } from './frota.js';
+import { RECEITAS_VOO, RECEITAS_MOV, aplicarVoo, escreverMovimento, perfilPara } from './presets.js';
+import { temAnimacao, quadros as quadrosDaLinha, amostrarVoo, tabelaDe, invalidarVoo } from './tempo.js';
 
 /* Tiny DOM helper: h('div.classe', {attr}, ...filhos) */
 export function h (spec, props = {}, ...filhos) {
@@ -153,6 +155,217 @@ export function dlgLicenca (ctx) {
   abrirModal('Licence and attribution', corpo);
 }
 
+/* --------------------------------------------------------------- motion ---
+ * Everything that WRITES a timeline lives behind this one button, and that is
+ * the point: a preset here is not a mode the exporter runs, it is a handful of
+ * keys you can then drag. */
+
+export function dlgMovimento (ctx) {
+  /* NOT named `sel`: that is the <select> helper at the top of this file, and
+     shadowing it here turns every dropdown below into a TypeError. */
+  const selId = ctx.editor.selecao[0] || null;
+  const d = selId ? ctx.estado.objetos.find(o => o.id === selId) : null;
+  const inst = selId ? ctx.mundo.objetos.get(selId) : null;
+  const ehAero = d && d.tipo === 'aeronave';
+  const comp = inst ? inst.userData.tamanho.x : 0;
+  const trem = inst ? inst.userData.trem : null;
+
+  /* --- flight --- */
+  const receita = sel('voo-tipo', Object.entries(RECEITAS_VOO).map(([v, r]) => ({ v, r: r.rot })), 'decolagem');
+  const dur = h('input', { type: 'number', min: 2, max: 60, step: 0.5, value: ctx.estado.linha.duracao });
+  const altP = h('input', { type: 'number', min: 15, max: 900, step: 5, value: 90 });
+  const velP = h('input', { type: 'number', min: 40, max: 250, step: 5, value: 100 });
+  const giroP = h('input', { type: 'number', min: 0, max: 60, step: 5, value: 20 });
+  const camOn = h('input', { type: 'checkbox', checked: true });
+  const linhaAlt = campo('pass altitude (m)', altP);
+  const linhaVel = campo('pass speed (m/s)', velP);
+  const linhaGiro = campo('turn through the pass (°)', giroP);
+  const msgVoo = h('div.nota');
+  const perfil = ehAero ? perfilPara(comp) : null;
+
+  const atualizarVoo = () => {
+    const p = receita.value === 'passagem';
+    linhaAlt.style.display = linhaVel.style.display = linhaGiro.style.display = p ? '' : 'none';
+  };
+  receita.addEventListener('change', atualizarVoo);
+
+  const btnVoo = h('button.primaria', {
+    onclick: () => {
+      try {
+        const r = aplicarVoo(ctx.estado, ctx.mundo, selId, receita.value, {
+          duracao: +dur.value, camera: camOn.checked,
+          altitude: +altP.value, velocidade: +velP.value, giro: +giroP.value,
+        });
+        ctx.registrar(`flight: ${receita.value}`);
+        ctx.dock.t = 0;
+        ctx.redesenhar();
+        msgVoo.innerHTML = `<b>done.</b> ${r.resumo}`
+          + (r.camera ? ' · camera keyed to follow it' : '');
+      } catch (e) { msgVoo.innerHTML = `<span style="color:#ff8f8f">${e.message}</span>`; console.error(e); }
+    },
+  }, 'Build the flight');
+  btnVoo.disabled = !ehAero;
+
+  /* --- the four canned motions --- */
+  const modo = sel('mov-modo', Object.entries(RECEITAS_MOV).map(([v, r]) => ({ v, r })), 'turntable-cena');
+  const sentido = sel('mov-sentido', [{ v: 'horario', r: 'clockwise' }, { v: 'anti', r: 'anticlockwise' }], 'horario');
+  const pingpong = h('input', { type: 'checkbox', checked: true });
+  const distancia = h('input', { type: 'number', step: 5, value: 60 });
+  const subida = h('input', { type: 'number', step: 1, value: 0 });
+  const direcao = sel('mov-dir', [
+    { v: 'nariz', r: 'along the nose (local −X)' }, { v: 'x', r: 'world +X' }, { v: 'z', r: 'world +Z' },
+  ], 'nariz');
+  const linhaSentido = campo('direction', sentido);
+  const linhaPP = h('label.check', {}, pingpong, ' ping-pong (A→B→A, so the loop does not cut)');
+  const linhaDist = campo('travel (m)', distancia);
+  const linhaSobe = campo('climb (m)', subida);
+  const linhaDir = campo('direction', direcao);
+  const msgMov = h('div.nota');
+  const atualizarMov = () => {
+    const m = modo.value;
+    linhaSentido.style.display = m.startsWith('turntable') ? '' : 'none';
+    linhaPP.style.display = m === 'caminho-camera' ? '' : 'none';
+    linhaDist.style.display = linhaSobe.style.display = linhaDir.style.display = m === 'objeto-movel' ? '' : 'none';
+  };
+  modo.addEventListener('change', atualizarMov);
+
+  const btnMov = h('button', {
+    onclick: () => {
+      try {
+        const r = escreverMovimento(ctx.estado, ctx.mundo, modo.value, {
+          sentido: sentido.value, pingpong: pingpong.checked,
+          distancia: +distancia.value, subida: +subida.value, direcao: direcao.value,
+        }, selId);
+        ctx.registrar(`motion: ${modo.value}`);
+        ctx.dock.t = 0;
+        ctx.redesenhar();
+        msgMov.innerHTML = `<b>written.</b> ${r} — every key is now draggable.`;
+      } catch (e) { msgMov.innerHTML = `<span style="color:#ff8f8f">${e.message}</span>`; console.error(e); }
+    },
+  }, 'Write the keys');
+
+  atualizarVoo(); atualizarMov();
+
+  const corpo = h('div', {},
+    h('h4', {}, 'Flight'),
+    ehAero
+      ? h('p.nota', { html:
+          `<b>${d.nome}</b> — ${comp.toFixed(1)} m, which puts it on the `
+          + `<b>${perfil === undefined ? '?' : (perfil.rot.split(' —')[0])}</b> profile. `
+          + (trem ? `Main gear measured at x = ${trem.x.toFixed(2)} m, ${trem.nos} meshes: `
+                  + 'the aeroplane rotates about the wheels, not about its own origin.'
+                  : 'No gear meshes found in this GLB — it will rotate about its origin.') })
+      : h('div.aviso', { html: 'Select an <b>aircraft</b> in the viewport or the outliner. '
+          + 'A flight derives heading, pitch and bank from a path, which only means '
+          + 'anything for something with wings.' }),
+    campo('recipe', receita), campo('clip length (s)', dur),
+    linhaAlt, linhaVel, linhaGiro,
+    h('label.check', {}, camOn, ' also key the camera to follow it'),
+    h('p.nota', { html:
+      'The route starts where the aeroplane stands, along the heading it is '
+      + 'already facing. Attitude is <b>derived</b>: bank from tan φ = v·ψ̇/g, '
+      + 'pitch from the flight path angle plus an angle of attack that scales as '
+      + '1/v², both rate-limited. See <code>js/tempo.js</code> §flight for where '
+      + 'every number was measured.' }),
+    msgVoo,
+    h('div.rodape', {}, h('span.estimativa', {}, 'writes one flight + a gear key'), btnVoo),
+
+    h('h4', {}, 'The four motions the GIF dialog used to own'),
+    h('p.nota', {}, 'They are not gone — they are now timeline writers. Pick one, '
+      + 'get keys, drag them.'),
+    campo('motion', modo), linhaSentido, linhaPP, linhaDir, linhaDist, linhaSobe,
+    msgMov,
+    h('div.rodape', {}, h('span.estimativa', {},
+      `clip is ${ctx.estado.linha.duracao} s at ${ctx.estado.linha.fps} fps`), btnMov));
+
+  abrirModal('Motion — write the timeline', corpo);
+}
+
+/* --- flight parameters --------------------------------------------------- */
+
+export function dlgVoo (ctx, voo) {
+  const d = ctx.estado.objetos.find(o => o.id === voo.ref);
+  const cx = ctx.mundo.contextoVoo(voo.ref, ctx.estado);
+  amostrarVoo(voo, 0, cx);                       // makes sure the table exists
+  const tab = tabelaDe(voo);
+
+  const num = (rot, k, min, max, passo, nota) => {
+    const i = h('input', { type: 'number', min, max, step: passo, value: voo[k] });
+    i.addEventListener('change', () => {
+      voo[k] = +i.value;
+      invalidarVoo(voo);                         // force the table to rebuild
+      ctx.registrar(`flight ${k}`);
+      ctx.redesenhar();
+      medir();
+    });
+    return h('div', {}, campo(rot, i), nota ? h('p.nota', {}, nota) : null);
+  };
+
+  const saida = h('div.nota');
+  function medir () {
+    amostrarVoo(voo, 0, ctx.mundo.contextoVoo(voo.ref, ctx.estado));
+    const t = tabelaDe(voo);
+    if (!t) { saida.textContent = 'route not built'; return; }
+    const vsMax = Math.max(...t.VS), bMax = Math.max(...t.BANCO.map(Math.abs));
+    const pMax = Math.max(...t.PITCH);
+    /* Everything below is READ BACK from the built table. Nothing here is the
+       number that was asked for; it is the number that came out. */
+    saida.innerHTML =
+      `<table>
+        <tr><th>path</th><td>${t.comprimento.toFixed(0)} m in ${t.dur.toFixed(2)} s,
+            ${voo.rota.length} waypoints</td></tr>
+        <tr><th>speed</th><td>${Math.min(...t.V).toFixed(1)} → ${Math.max(...t.V).toFixed(1)} m/s</td></tr>
+        <tr><th>wheels off</th><td>${t.tLift !== null
+            ? `${t.tLift.toFixed(2)} s, ${t.S[t.SOLO.indexOf(false)].toFixed(0)} m into the roll`
+            : 'never — this flight does not leave the ground'}</td></tr>
+        <tr><th>peak climb</th><td>${vsMax.toFixed(2)} m/s
+            ${vsMax > 0.05 ? `(${(100 * vsMax / Math.max(...t.V)).toFixed(1)} % gradient)` : ''}</td></tr>
+        <tr><th>peak pitch</th><td>${pMax.toFixed(1)}°</td></tr>
+        <tr><th>peak bank</th><td>${bMax.toFixed(1)}°</td></tr>
+        <tr><th>main gear</th><td>${cx && cx.temTrem
+            ? `x = ${cx.xg.toFixed(3)} m, y = ${cx.yg.toFixed(3)} m — measured off the GLB`
+            : 'not found; rotating about the object origin'}</td></tr>
+      </table>`;
+  }
+  medir();
+
+  const btnRefazer = h('button', {
+    onclick: () => {
+      try {
+        const r = aplicarVoo(ctx.estado, ctx.mundo, voo.ref,
+          voo.rotulo === 'landing' ? 'pouso' : voo.rotulo === 'flypast' ? 'passagem' : 'decolagem',
+          { duracao: ctx.estado.linha.duracao, camera: false });
+        ctx.registrar('rebuild flight');
+        ctx.redesenhar();
+        saida.innerHTML = `<b>rebuilt.</b> ${r.resumo}`;
+      } catch (e) { saida.innerHTML = `<span style="color:#ff8f8f">${e.message}</span>`; }
+    },
+  }, 'Rebuild from where the aircraft stands now');
+
+  abrirModal(`Flight — ${d ? d.nome : '?'} · ${voo.rotulo}`, h('div', {},
+    h('p.nota', { html:
+      'The <b>path</b> is the data. Heading, pitch and bank are consequences of '
+      + 'it — change a number here and the whole attitude re-derives. '
+      + 'Everything in the table is measured off the rebuilt curve, not copied '
+      + 'from the field above it.' }),
+    num('pitch rate (°/s)', 'taxaRot', 0.5, 12, 0.1,
+      'The rate limiter that does the rotation, the flare and the de-rotation. '
+      + '3.1 °/s is the loaded 777; 3.5 is the ferry A320. Raise it and the '
+      + 'aeroplane reads light.'),
+    num('take-off attitude (°)', 'pitchDec', 4, 20, 0.5),
+    num('α at reference speed (°)', 'alfaRef', 0, 15, 0.1,
+      'The angle of attack the model scales as 1/v². Pitch is the flight path '
+      + 'angle plus this.'),
+    num('reference speed (m/s)', 'vRef', 30, 260, 1),
+    num('roll rate (°/s)', 'taxaBanco', 1, 30, 0.5),
+    num('bank limit (°)', 'bancoMax', 0, 45, 1),
+    num('rotation distance (m)', 'rotacao', 0, 900, 10,
+      'How far before lift-off the nose starts coming up. The recipe sets it to '
+      + 'pitch ÷ rate × speed, so the attitude is reached exactly AT lift-off.'),
+    h('h4', {}, 'Measured'), saida,
+    h('div.rodape', {}, h('span.estimativa', {}, tab ? `${tab.N} samples` : ''), btnRefazer)));
+}
+
 /* --------------------------------------------------------------- export --- */
 
 export function dlgExportar (ctx, abaInicial = 'GIF') {
@@ -160,6 +373,7 @@ export function dlgExportar (ctx, abaInicial = 'GIF') {
   const painel = h('div');
   const construtores = {
     GIF: () => abaGif(ctx),
+    'PNG seq': () => abaSequencia(ctx),
     Embed: () => abaEmbed(ctx),
     PNG: () => abaPng(ctx),
     JSON: () => abaJson(ctx),
@@ -181,12 +395,14 @@ function abaGif (ctx) {
   const selecionado = ctx.editor.selecao[0] || null;
   const nomeSel = selecionado ? (ctx.estado.objetos.find(o => o.id === selecionado)?.nome || '?') : null;
 
+  const temLinha = temAnimacao(ctx.estado.linha);
   const modo = sel('gif-modo', [
+    { v: 'linha', r: `timeline — the clip you built${temLinha ? '' : ' (nothing on it yet)'}` },
     { v: 'turntable-cena', r: 'turntable — camera orbits the scene' },
     { v: 'turntable-objeto', r: `turntable — spin the selected object${nomeSel ? ` (${nomeSel})` : ' (none selected)'}` },
     { v: 'caminho-camera', r: 'camera path — pose A → pose B' },
     { v: 'objeto-movel', r: 'fixed camera — the selected object moves' },
-  ], 'turntable-cena');
+  ], temLinha ? 'linha' : 'turntable-cena');
 
   const sentido = sel('gif-sentido', [{ v: 'horario', r: 'clockwise' }, { v: 'anti', r: 'anticlockwise' }], 'horario');
   const quadros = h('input', { type: 'number', id: 'gif-n', min: 2, max: 400, step: 1, value: 60 });
@@ -208,6 +424,11 @@ function abaGif (ctx) {
   const matte = h('input', { type: 'color', id: 'gif-matte', value: ctx.estado.ambiente.fundoCor });
 
   const est = h('div.estimativa');
+  const custo = h('div.aviso');
+  const notaLinha = h('p.nota', { html:
+    'The GIF is the timeline, frame for frame: same count, same rate, same '
+    + 'interpolation, so what you scrubbed is what you get. Duration and frame '
+    + 'rate are edited in the dock, not here.' });
   const aviso = h('div.aviso', { html:
     'A GIF frame delay is an integer number of <b>centiseconds</b>. Only rates that '
     + 'divide 100 evenly are offered: 24 fps would alternate 4 and 5 cs and visibly '
@@ -232,15 +453,41 @@ function abaGif (ctx) {
 
   function atualizar () {
     const m = modo.value;
-    linhaSentido.style.display = m.startsWith('turntable') ? '' : 'none';
-    linhaPP.style.display = m === 'caminho-camera' ? '' : 'none';
-    linhaDist.style.display = linhaSobe.style.display = linhaDir.style.display = m === 'objeto-movel' ? '' : 'none';
+    const naLinha = m === 'linha';
+    /* On the timeline the frame count and the rate are NOT the exporter's to
+       choose: they are the clip's, and a GIF that renders a different number of
+       frames than the playhead showed is a GIF you cannot direct. */
+    if (naLinha) {
+      quadros.value = quadrosDaLinha(ctx.estado.linha);
+      fps.value = ctx.estado.linha.fps;
+    }
+    quadros.disabled = naLinha;
+    fps.disabled = naLinha;
+    linhaSentido.style.display = (!naLinha && m.startsWith('turntable')) ? '' : 'none';
+    linhaPP.style.display = (!naLinha && m === 'caminho-camera') ? '' : 'none';
+    linhaDist.style.display = linhaSobe.style.display = linhaDir.style.display =
+      (!naLinha && m === 'objeto-movel') ? '' : 'none';
+    notaLinha.style.display = naLinha ? '' : 'none';
     linhaMatte.style.display = ctx.estado.ambiente.fundo === 'transparente' ? '' : 'none';
     const [w, hh] = dims();
     const n = +quadros.value, f = +fps.value;
     const cs = (FPS_LEGAIS.find(x => x.fps === f) || FPS_LEGAIS[0]).cs;
     const bytes = estimarGif({ quadros: n, larg: w, alt: hh, cores: +cores.value });
     est.textContent = `${w}×${hh} · ${n} frames · ${cs} cs each · ${(n / f).toFixed(1)} s · ≈ ${formatarBytes(bytes)}`;
+    /* The encoder is synchronous. Say so, with a number, BEFORE the click that
+       freezes the page. The constant is MEASURED, not guessed: the shipped
+       example — 159 frames of 640×360 at 2× supersample — rendered, quantised
+       and encoded in 1.9 s, which is 19 million output pixels a second on this
+       machine, GPU render included. A first attempt at this line used a made-up
+       constant and overstated the wait by seventeen times, which is its own
+       kind of dishonesty. */
+    const seg = (n * w * hh * (ss.checked ? 1.7 : 1)) / 19e6;
+    custo.innerHTML = `Encoding is <b>synchronous on the main thread</b> — there is no
+      worker. This export will make the page unresponsive for roughly
+      <b>${seg < 1 ? 'under a second' : `${seg.toFixed(0)} s`}</b> on a machine like the one
+      that measurement came from, yielding only every second frame; a slower GPU
+      will be several times worse. Nothing is lost if you wait; nothing works if
+      you do not.`;
   }
   [modo, quadros, fps, larg, proporcao, cores].forEach(e => e.addEventListener('change', atualizar));
   quadros.addEventListener('input', atualizar);
@@ -290,7 +537,87 @@ function abaGif (ctx) {
     linhaMatte,
     h('label.check', {}, loop, ' loop forever'),
     h('label.check', {}, ss, ' 2× supersample (slower, much cleaner edges)'),
-    aviso, caixaProg,
+    notaLinha, aviso, custo, caixaProg,
+    h('div.rodape', {}, est, btn));
+}
+
+/* --- PNG sequence -------------------------------------------------------- */
+
+function abaSequencia (ctx) {
+  const l = ctx.estado.linha;
+  const larg = sel('seq-w', [640, 800, 960, 1280, 1600, 1920].map(v => ({ v, r: `${v} px wide` })), 1280);
+  const proporcao = sel('seq-ar', [
+    { v: '16:9', r: '16 : 9' }, { v: '4:3', r: '4 : 3' }, { v: '1:1', r: 'square' }, { v: 'vp', r: 'match the viewport' },
+  ], '16:9');
+  const ss = sel('seq-ss', [{ v: 1, r: 'none' }, { v: 2, r: '2×' }, { v: 3, r: '3× (heavy)' }],
+    ctx.estado.render.aa || 2);
+  const est = h('div.estimativa');
+  const prog = h('div.barra-carga', {}, h('i'));
+  const progTxt = h('div.nota', {}, '');
+  const caixaProg = h('div', { style: 'display:none' }, prog, progTxt);
+
+  function dims () {
+    const w = +larg.value;
+    let hh;
+    if (proporcao.value === '16:9') hh = Math.round(w * 9 / 16);
+    else if (proporcao.value === '4:3') hh = Math.round(w * 3 / 4);
+    else if (proporcao.value === '1:1') hh = w;
+    else hh = Math.round(w * ctx.mundo.altura / ctx.mundo.largura);
+    return [w, hh - (hh % 2)];
+  }
+  const atualizar = () => {
+    const [w, hh] = dims();
+    const n = quadrosDaLinha(l);
+    /* Roughly 0.6 bytes per pixel for a PNG of a 3D render at this palette
+       depth — measured on this studio's own stills, and stated as a range
+       because a sky gradient and tiled concrete are not the same problem. */
+    est.textContent = `${n} frames · ${w}×${hh} · ≈ ${formatarBytes(n * w * hh * 0.6)} zipped `
+      + `(0.3–1.0 bytes/pixel depending on the scene)`;
+  };
+  [larg, proporcao, ss].forEach(e => e.addEventListener('change', atualizar));
+  atualizar();
+
+  const btn = h('button.primaria', {
+    onclick: async () => {
+      const [w, hh] = dims();
+      btn.disabled = true; caixaProg.style.display = '';
+      try {
+        const t0 = performance.now();
+        const r = await exportarSequencia(ctx.mundo, ctx.estado,
+          { larg: w, alt: hh, ss: +ss.value, prefixo: 'quadro' },
+          (feito, total, fase) => {
+            prog.firstChild.style.width = `${Math.round(100 * feito / total)}%`;
+            progTxt.textContent = `${fase} — ${feito}/${total}`;
+          });
+        baixar(r.blob, nomeArquivo(ctx.estado.nome, 'zip'));
+        progTxt.innerHTML = `<b>done.</b> ${r.quadros} PNGs, ${formatarBytes(r.bytes)} `
+          + `(${(r.bytes / (r.quadros * w * hh)).toFixed(2)} bytes/pixel/frame), `
+          + `${((performance.now() - t0) / 1000).toFixed(1)} s. Downloaded.`;
+      } catch (e) {
+        progTxt.innerHTML = `<span style="color:#ff8f8f">${e.message}</span>`;
+        console.error(e);
+      } finally { btn.disabled = false; }
+    },
+  }, 'Render PNG sequence');
+  btn.disabled = !temAnimacao(l);
+
+  return h('div', {},
+    temAnimacao(l)
+      ? h('p.nota', {}, `${quadrosDaLinha(l)} frames over ${l.duracao} s at ${l.fps} fps — `
+        + 'the timeline exactly, one PNG per frame, in one ZIP.')
+      : h('div.aviso', { html: 'This scene has no timeline. Open <b>Motion…</b> in the dock '
+        + 'and write one — a flight, or one of the four old motions.' }),
+    campo('width', larg), campo('aspect', proporcao), campo('supersample', ss),
+    h('div.aviso', { html:
+      'A PNG sequence is the way out to a real video codec, which a browser '
+      + 'does not have. Feed it to ffmpeg:<br>'
+      + `<code>ffmpeg -framerate ${l.fps} -i quadro_%04d.png -c:v libx264 -pix_fmt yuv420p out.mp4</code>`
+      + '<br>The ZIP is <b>stored, not compressed</b> — PNG is already deflated, so '
+      + 'compressing it again buys nothing and costs a compressor.' }),
+    h('p.nota', {}, 'A transparent background keeps its alpha, frame by frame — '
+      + 'combined with the shadow-catcher ground that is an aeroplane and its '
+      + 'shadow over nothing, which is what a composite wants.'),
+    caixaProg,
     h('div.rodape', {}, est, btn));
 }
 
@@ -308,9 +635,22 @@ function abaEmbed (ctx) {
   const velocidade = h('input', { type: 'number', id: 'emb-vg', step: 0.1, value: 0.4 });
   const zoom = h('input', { type: 'checkbox', id: 'emb-z', checked: true });
   const pan = h('input', { type: 'checkbox', id: 'emb-p', checked: true });
+  const tocar = h('input', { type: 'checkbox', id: 'emb-t', checked: true });
+  const transporte = h('input', { type: 'checkbox', id: 'emb-tr', checked: true });
 
   const linhaU1 = campo('estudio/ base', baseEstudio);
   const linhaU2 = campo('GLB base', baseGlb);
+  /* The embed plays the timeline with the studio's own evaluator, so these two
+     boxes are the only decisions left: does it start playing, and does the
+     viewer get a scrubber. */
+  const linhaTempo = temAnimacao(ctx.estado.linha)
+    ? h('div', {},
+        h('label.check', {}, tocar, ' start the timeline playing'),
+        h('label.check', {}, transporte, ' show a play / scrub bar'),
+        h('p.nota', {}, `This scene carries ${quadrosDaLinha(ctx.estado.linha)} frames over `
+          + `${ctx.estado.linha.duracao} s. While the camera track is running the orbit `
+          + 'controls stand down; pause it and the viewer gets the scene back.'))
+    : h('p.nota', {}, 'No timeline in this scene — the embed will be the still, orbitable scene.');
   const precisa = h('div', { style: 'margin-top:10px' });
   const saida = h('pre', { style: 'display:none;max-height:180px' });
 
@@ -319,6 +659,7 @@ function abaEmbed (ctx) {
       modo: modo.value, baseEstudio: baseEstudio.value, baseGlb: baseGlb.value,
       autoGirar: autoGirar.checked, velocidadeGiro: +velocidade.value,
       zoom: zoom.checked, pan: pan.checked,
+      tocar: tocar.checked, transporte: transporte.checked,
     };
   }
 
@@ -397,6 +738,7 @@ function abaEmbed (ctx) {
     campo('rotate speed', velocidade),
     h('label.check', {}, zoom, ' allow zoom'),
     h('label.check', {}, pan, ' allow pan'),
+    linhaTempo,
     precisa, saida,
     h('div.rodape', {}, h('span.estimativa', {}, 'iframe-able, self-hosted, no CDN'), btnVer, btnSnippet, btnBaixar));
 }

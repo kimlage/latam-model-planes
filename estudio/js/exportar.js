@@ -20,6 +20,7 @@
 import * as THREE from 'three';
 import { GIFEncoder, quantize, applyPalette } from 'gifenc';
 import { acharAsset, LICENCAS, licencasDe } from './frota.js';
+import { avaliar, temAnimacao, quadros } from './tempo.js';
 
 /* fps values whose frame delay is a whole number of centiseconds. */
 export const FPS_LEGAIS = [
@@ -79,6 +80,15 @@ export class Capturador {
       pr: m.renderer.getPixelRatio(),
       aspect: m.camP.aspect,
     };
+    /* Editing furniture out of the frame. The gizmo and the selection box live
+       in the same scene the exporter renders, so a GIF taken with something
+       selected carried three coloured arrows across the aeroplane. */
+    this.escondidos = [];
+    m.cena.traverse(o => {
+      if (o.userData && o.userData.auxiliar && o.visible) {
+        this.escondidos.push(o); o.visible = false;
+      }
+    });
     this.larg = larg; this.alt = alt; this.ss = ss;
     this.lona.width = larg; this.lona.height = alt;
     m.renderer.setPixelRatio(1);
@@ -107,6 +117,8 @@ export class Capturador {
 
   terminar () {
     const m = this.mundo, s = this.salvo;
+    for (const o of this.escondidos || []) o.visible = true;
+    this.escondidos = [];
     if (!s) return;
     m.renderer.setPixelRatio(s.pr);
     m.renderer.setSize(s.w, s.h, false);
@@ -146,6 +158,36 @@ export function construirMovimento (mundo, estado, cfg, selId) {
 
   let passo;
   switch (cfg.modo) {
+    /* THE motion, now. The four below it are kept only so an old scene JSON or
+       a habit still works; the dialog steers everything at this one, because
+       this is the only one that can animate two things at once and the only one
+       whose result you can edit afterwards. */
+    case 'linha': {
+      const l = estado.linha;
+      if (!temAnimacao(l)) throw new Error('this scene has no timeline — open Motion… and write one');
+      const ctxVoo = id => mundo.contextoVoo(id, estado);
+      passo = t => {
+        /* t is normalised over the WHOLE clip, and the frame count the exporter
+           uses is the timeline's own, so frame i is exactly the frame the
+           playhead shows at i/fps. A GIF that disagrees with the preview is a
+           GIF nobody can direct. */
+        const ov = avaliar(estado, t * l.duracao, ctxVoo);
+        mundo.aplicarTransformacoes(estado);
+        mundo.aplicarLinha(estado, ov);
+      };
+      /* Every object may have moved, so the restore is the document itself —
+         the same projection the studio uses everywhere else. */
+      const restaurarBase = restaurar;
+      return {
+        passo,
+        restaurar: () => {
+          restaurarBase();
+          mundo.aplicarTransformacoes(estado);
+          mundo.aplicarAmbiente(estado.ambiente);
+          mundo.aplicarRender(estado.render);
+        },
+      };
+    }
     case 'turntable-cena': {
       // Orbit the current target at the current radius and height.
       const rel = pos0.clone().sub(alvo0);
@@ -274,6 +316,101 @@ export async function exportarPng (mundo, cfg) {
   }
 }
 
+/* ------------------------------------------------------- PNG sequence --- */
+
+/* A store-only ZIP, written by hand in about forty lines.
+ *
+ * The alternative was 200 separate downloads, which every browser blocks after
+ * the first few, or vendoring a zip library for one job. PNG is already
+ * DEFLATEd, so "store" costs nothing but the 30-byte header per entry — a
+ * compressed ZIP of PNGs is the same size and needs a compressor.
+ *
+ * A PNG sequence is what you hand a real encoder. ffmpeg:
+ *   ffmpeg -framerate 25 -i quadro_%04d.png -c:v libx264 -pix_fmt yuv420p out.mp4
+ * which is also the honest answer to "can the studio make an MP4": it cannot,
+ * a browser has no H.264 encoder worth the name, and this is the way out. */
+
+const TABELA_CRC = (() => {
+  const t = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) {
+    let c = n;
+    for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+    t[n] = c >>> 0;
+  }
+  return t;
+})();
+
+function crc32 (buf) {
+  let c = 0xFFFFFFFF;
+  for (let i = 0; i < buf.length; i++) c = TABELA_CRC[(c ^ buf[i]) & 0xFF] ^ (c >>> 8);
+  return (c ^ 0xFFFFFFFF) >>> 0;
+}
+
+export function zipArmazenado (entradas) {
+  const cod = new TextEncoder();
+  const partes = [], central = [];
+  let deslo = 0;
+  for (const { nome, dados } of entradas) {
+    const n = cod.encode(nome);
+    const crc = crc32(dados);
+    const loc = new DataView(new ArrayBuffer(30));
+    loc.setUint32(0, 0x04034b50, true); loc.setUint16(4, 20, true);
+    loc.setUint16(6, 0, true); loc.setUint16(8, 0, true);          // store
+    loc.setUint16(10, 0, true); loc.setUint16(12, 0x2821, true);   // a fixed DOS time
+    loc.setUint32(14, crc, true);
+    loc.setUint32(18, dados.length, true); loc.setUint32(22, dados.length, true);
+    loc.setUint16(26, n.length, true); loc.setUint16(28, 0, true);
+    partes.push(new Uint8Array(loc.buffer), n, dados);
+
+    const cen = new DataView(new ArrayBuffer(46));
+    cen.setUint32(0, 0x02014b50, true); cen.setUint16(4, 20, true); cen.setUint16(6, 20, true);
+    cen.setUint16(10, 0, true); cen.setUint16(12, 0, true); cen.setUint16(14, 0x2821, true);
+    cen.setUint32(16, crc, true);
+    cen.setUint32(20, dados.length, true); cen.setUint32(24, dados.length, true);
+    cen.setUint16(28, n.length, true);
+    cen.setUint32(42, deslo, true);
+    central.push(new Uint8Array(cen.buffer), n);
+    deslo += 30 + n.length + dados.length;
+  }
+  const tamCentral = central.reduce((s, p) => s + p.length, 0);
+  const fim = new DataView(new ArrayBuffer(22));
+  fim.setUint32(0, 0x06054b50, true);
+  fim.setUint16(8, entradas.length, true); fim.setUint16(10, entradas.length, true);
+  fim.setUint32(12, tamCentral, true); fim.setUint32(16, deslo, true);
+  return new Blob([...partes, ...central, new Uint8Array(fim.buffer)], { type: 'application/zip' });
+}
+
+/** Render every frame of the timeline as a PNG and pack them into one ZIP. */
+export async function exportarSequencia (mundo, estado, cfg, aoProgresso = () => {}) {
+  const l = estado.linha;
+  const N = cfg.quadros || quadros(l);
+  const mov = construirMovimento(mundo, estado, { modo: 'linha' }, null);
+  const cap = new Capturador(mundo);
+  const matte = estado.ambiente.fundo === 'transparente' ? (cfg.matte || null) : null;
+  const entradas = [];
+  let bytes = 0;
+  cap.iniciar(cfg.larg, cfg.alt, cfg.ss || 1);
+  try {
+    for (let i = 0; i < N; i++) {
+      mov.passo(i / N);
+      cap.quadro(matte);
+      const blob = await cap.blobPNG();
+      const dados = new Uint8Array(await blob.arrayBuffer());
+      bytes += dados.length;
+      entradas.push({ nome: `${cfg.prefixo || 'quadro'}_${String(i).padStart(4, '0')}.png`, dados });
+      aoProgresso(i + 1, N, 'rendering');
+      await new Promise(r => setTimeout(r));
+    }
+    aoProgresso(N, N, 'zipping');
+    const zip = zipArmazenado(entradas);
+    return { blob: zip, bytes: zip.size, brutos: bytes, quadros: N };
+  } finally {
+    cap.terminar();
+    mov.restaurar();
+    mundo.render();
+  }
+}
+
 /* --------------------------------------------------------------- JSON --- */
 
 /* ------------------------------------------------------------- licence ---
@@ -375,9 +512,13 @@ export function construirEmbed (estado, mundo, cfg) {
 
      Needs, relative to THIS file:
        ${baseEstudio}vendor/three/…      three.js r169 + Draco decoder
-       ${baseEstudio}js/embed.js         the ~120-line runtime (imports mundo.js, props.js, frota.js)
+       ${baseEstudio}js/embed.js         the runtime (imports mundo.js, tempo.js, props.js, frota.js)
        ${baseGlb}<slug>_web.glb   the aircraft, listed in doc.assets below
-
+${temAnimacao(estado.linha)
+  ? `     This scene carries a TIMELINE: ${quadros(estado.linha)} frames over `
+    + `${estado.linha.duracao} s at ${estado.linha.fps} fps. The page plays it with the same\n`
+    + '     evaluator the studio uses, so the embed and the GIF cannot disagree about a curve.\n'
+  : ''}
      LICENCES THIS SCENE CARRIES — computed from the assets actually in it,
      and they travel with the file because that is what they require:
 ${lics.map(l => `       ${l.atribuicao}\n         ${l.url}${l.share_alike ? '   [SHARE-ALIKE]' : ''}`).join('\n')}
@@ -406,7 +547,7 @@ ${lics.map(l => `       ${l.atribuicao}\n         ${l.url}${l.share_alike ? '   
 <div id="cena"></div>
 <div id="cred">${lics.map(l =>
     `<a href="${l.url}" target="_blank" rel="noopener">${escapar(l.atribuicao)}</a>`).join(' &middot; ')}
-  &middot; drag to orbit, scroll to zoom</div>
+  &middot; drag to orbit, scroll to zoom${temAnimacao(estado.linha) ? ' &middot; space to play' : ''}</div>
 <script type="importmap">
 { "imports": {
   "three": "${baseEstudio}vendor/three/three.module.js",
@@ -420,7 +561,9 @@ montar(document.getElementById('cena'), doc, {
   autoGirar: ${cfg.autoGirar ? 'true' : 'false'},
   velocidadeGiro: ${(cfg.velocidadeGiro ?? 0.4).toFixed(2)},
   zoom: ${cfg.zoom !== false},
-  pan: ${cfg.pan !== false}
+  pan: ${cfg.pan !== false},
+  tocar: ${cfg.tocar !== false},
+  transporte: ${cfg.transporte !== false}
 }).catch(e => {
   document.getElementById('cena').innerHTML =
     '<p style="padding:20px;color:#ff8f8f;font-family:monospace">' + e.message + '</p>';
