@@ -44,10 +44,16 @@ resposta nao e "decimar ate parecer aceitavel": o casco e Catmull-Clark sobre
 uma gaiola esparsa, entao o nivel de subdivisao E o botao de LOD, e ele preserva
 UV, materiais e a silhueta melhor do que qualquer decimador.
 
-  alta  subsurf como o autor deixou, textura nativa, PNG, sem Draco
-        para desktop, DCC e uso offline
-  web   subsurf limitado a 1, textura ate 2048 px, JPEG, Draco
-        para three.js - os numeros medidos estao no README da pasta
+  alta   subsurf como o autor deixou, textura nativa, PNG, sem Draco
+         para desktop, DCC e uso offline
+  heroi  subsurf limitado a 2, textura ate 2048 px, Draco
+         para o assunto de um clipe: a curvatura de volta ao quarto do custo
+  web    subsurf limitado a 1, textura ate 2048 px, Draco
+         para three.js - os numeros medidos estao no README da pasta
+
+Os tres sao o MESMO codigo com tres linhas de tabela diferentes. `subsurf` e um
+TETO, nao um valor: por isso "nivel intermediario" nao precisou de decimador
+nenhum - so de um teto entre o do autor e 1.
 
 ------------------------------------------------------------------------------
 O QUE SAI DA CENA ANTES DE EXPORTAR
@@ -139,6 +145,35 @@ LODS = {
                                  # MB) sem acrescentar nada visivel
         "formatos": ("glb", "fbx", "obj"),
         "descricao": "fiel - desktop, DCC, uso offline",
+    },
+    # O TERCEIRO NIVEL, e ele existe por um motivo MEDIDO, nao por simetria.
+    # O `web` forca subsurf 1 em tudo. No 777 isso derruba 326.241 triangulos
+    # para 47.805, e o que se perde nao esta espalhado: esta onde a gaiola e
+    # mais curva. O labio da nacele, a face do fan e o cone de escape viram um
+    # tubo liso - foi o MOTOR que o dono apontou no primeiro clipe. Num catalogo
+    # de dezesseis aeronaves 47 mil triangulos e a escolha certa; num CLIPE, em
+    # que uma ou duas aeronaves sao o assunto, nao e.
+    #
+    # `alta` nao e a resposta: 9,1 MB e 43 MP de textura sem Draco, contra 1,9
+    # MB para a cena inteira do campo de GRU. O que falta e o meio-termo, e ele
+    # cai sozinho do fato de `subsurf` ser um TETO e nao um valor: o casco esta
+    # em nivel 3, entao o teto 2 da a curvatura de volta ao quarto do custo.
+    # Textura, bake e Draco continuam os do `web` - o que estava faltando era
+    # geometria, e os dois niveis ja declaram os mesmos 20 materiais.
+    "heroi": {
+        "subsurf": 2,
+        "textura_max": 2048,
+        "bake_max": 2048,
+        "draco": True,
+        "imagem": "AUTO",
+        "qualidade": 88,
+        # mapa, e nao a media do `web`: com a geometria de volta, a fuselagem
+        # passa a ter reflexo suficiente para que a variacao de rugosidade
+        # apareca. A 1024 ela custa dezenas de kB.
+        "rugosidade": "mapa",
+        "rugosidade_max": 1024,
+        "formatos": ("glb",),
+        "descricao": "heroi - o assunto do clipe: geometria real, textura de web",
     },
     "web": {
         "subsurf": 1,
