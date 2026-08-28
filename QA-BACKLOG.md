@@ -491,6 +491,29 @@ written after the practice, and nobody went back to reconcile the two.
 
 ---
 
+## CLOSED (SBGR clips): the 777 shipped sunk to its belly, and the rule that came out of it
+
+Two published GRU GIFs — the departure `_v2` and the roll-out `_v1` — shipped
+with the 777 sunk to its belly on the ramp. The placement cited "wheels at
+z 0" from the exported GLB, but `export_frota.py` seats every aircraft on the
+floor by its own rule, so that datum describes the export and not the master.
+**The owner caught it in the published GIFs**; none of the pipeline's numeric
+checks had ever been pointed at where the wheels were.
+
+CLOSED: the gear datum is now measured in the master itself — the 777's
+`03_Trem` hangs to **z = −5.670** (`scenario_sbgr/place_777.py`,
+`hangar_rollout.py` both carry the number and the reason) — and the two clips
+were re-shot as `_v3` and `_v2`, since refreshed again over the detailed fleet.
+
+**The review rule this leaves: three frames of every GIF, by eye, before it
+ships.** It is the clip-level sibling of the render-and-look gate, and it is the
+same lesson as the header of this file read backwards — a numeric check can only
+fail on the quantity it was aimed at. Its companions are in `PENDENCIAS.md`:
+prove ONE frame before rendering a batch, and treat a GIF outside the historical
+size band as a symptom, not luck.
+
+---
+
 ## SBGR surround round — what it closed, and what it leaves thin
 
 The 2026-08-26 surround round answered "o entorno está todo muito vazio"
