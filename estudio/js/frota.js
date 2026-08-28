@@ -254,7 +254,45 @@ export async function instanciar (slug, aoProgresso) {
   pivo.add(copia);
   pivo.userData.tamanho = t.clone();
   pivo.userData.raio = Math.hypot(t.x, t.z) / 2;
+  medirTrem(pivo);
   return pivo;
+}
+
+/* --------------------------------------------------------- landing gear ---
+ * Every aircraft GLB in this repository names its gear meshes: the nose leg is
+ * `TremNariz_*` and the main gear is `TremP_*` (777/767/787) or
+ * `TremPrincipal_*` (the A320 family). That is a fact about the exported files,
+ * checked across all eleven — 15 gear nodes on an A319, 32 on a 787 — and it
+ * buys the timeline two things it cannot get any other way:
+ *
+ *   the MAIN-GEAR CONTACT POINT, which is what an aeroplane rotates about on
+ *      the runway. Rotate about the instance's own origin instead and the nose
+ *      goes up while the wheels sink through the pavement.
+ *   a GEAR-UP KEY, which is simply hiding those nodes.
+ *
+ * Measured here, where the pivot is still at the identity, so what comes out is
+ * already in the pivot's own frame. Nothing is hard-coded per type; an aircraft
+ * whose gear is named something else gets `trem = null` and the timeline falls
+ * back to the object origin, which is stated in the flight panel rather than
+ * silently wrong. */
+function medirTrem (pivo) {
+  const principais = [], todos = [];
+  pivo.traverse(o => {
+    if (!o.isMesh || !o.name) return;
+    if (!o.name.startsWith('Trem')) return;
+    todos.push(o);
+    if (o.name.startsWith('TremP')) principais.push(o);      // TremP_ and TremPrincipal_
+  });
+  pivo.userData.nosTrem = todos;
+  if (!principais.length) { pivo.userData.trem = null; return; }
+  pivo.updateMatrixWorld(true);
+  const b = new THREE.Box3();
+  for (const m of principais) b.expandByObject(m);
+  const c = b.getCenter(new THREE.Vector3());
+  /* x is the contact's station along the fuselage, y its lowest point — which
+     should be ≈ 0 because the exporter puts the wheels on y = 0, but it is
+     measured rather than assumed, because "should be" is how a datum drifts. */
+  pivo.userData.trem = { x: +c.x.toFixed(4), y: +b.min.y.toFixed(4), nos: principais.length };
 }
 
 /** Bytes already fetched, for the status line. */

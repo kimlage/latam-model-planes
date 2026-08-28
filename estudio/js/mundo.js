@@ -72,6 +72,12 @@ export class Mundo {
     /* selection box */
     this.caixaSel = new THREE.Box3Helper(new THREE.Box3(), 0x8fa6ff);
     this.caixaSel.visible = false;
+    /* Editing furniture. Anything flagged this way is hidden for the duration
+       of an export — see exportar.js §Capturador. The gizmo and the selection
+       box were rendering INTO the GIF whenever anything was selected, which
+       nobody had noticed because nobody had exported with a selection and then
+       looked at the frames. */
+    this.caixaSel.userData.auxiliar = true;
     this.caixaSel.material.depthTest = false;
     this.caixaSel.renderOrder = 999;
     this.cena.add(this.caixaSel);
@@ -142,29 +148,120 @@ export class Mundo {
       this.sol.shadow.map = null;                   // force a rebuild at the new size
     }
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, r.pixelRatioMax));
+    /* NOT `this.grade`: in this codebase `grade` is Portuguese for GRID, and
+       `this.grade` is the GridHelper `aplicarGrade` disposes. Naming the colour
+       grade that made `aplicarAmbiente` try to dispose the geometry of a plain
+       object, and the whole page failed to boot. `correcao` — colour
+       correction — is the word that does not already mean something here. */
+    this.correcao = r.correcao || null;
+  }
+
+  /* ----------------------------------------------------- colour correction ---
+   * A clip wants three things a still does not: shadow quality, exposure and a
+   * grade. The first two already existed. This is the third, and it is
+   * deliberately small — contrast, saturation, a black lift, a warm/cool push
+   * and a vignette, applied AFTER tone mapping, in display space, which is what
+   * "a simple grade" means and all it should mean.
+   *
+   * What is NOT here, and will not be: motion blur. Doing it properly in
+   * three.js means either accumulating sub-frames (N× the render cost, and it
+   * fights the GIF's global palette) or a velocity buffer and a custom
+   * material on every mesh (which would mean cloning the shared materials the
+   * whole studio is built on). A cheap fake — blending the previous frame —
+   * smears the static scenery as well as the aeroplane and reads as a dirty
+   * screen. So there is none, and the panel says so rather than shipping a
+   * checkbox that lies.
+   *
+   * While the grade is the identity nothing happens: no render target, no
+   * second pass, the same single draw to the canvas the studio always did. */
+  static correcaoAtiva (g) {
+    return !!g && (Math.abs(g.contraste - 1) > 1e-3 || Math.abs(g.saturacao - 1) > 1e-3
+      || Math.abs(g.elevar) > 1e-3 || Math.abs(g.temperatura) > 1e-3 || Math.abs(g.vinheta) > 1e-3);
+  }
+
+  prepararCorrecao () {
+    if (this.quadCor) return;
+    /* MEASURED, not assumed: three.js r169 forces the output colour space to
+       LINEAR whenever it renders into a render target that is not an XR one —
+       `WebGLRenderer.render`, the `_currentRenderTarget === null ? ... :
+       LinearSRGBColorSpace` line. Setting `colorSpace: SRGBColorSpace` on the
+       target does NOT change that; the flag is simply ignored. The first
+       version of this pass believed the documentation, graded linear values as
+       if they were display values, and every frame came back looking like a
+       power curve had been applied to it — because one had. So the target holds
+       LINEAR light and the shader does the encode itself, where you can see it.
+       HalfFloat rather than 8-bit: the values are tone-mapped but still linear,
+       and 8 bits of LINEAR is visible banding in the shadows — which this
+       repository has already paid for once (commit 917c174, the grey hangar). */
+    this.rtCor = new THREE.WebGLRenderTarget(1, 1, {
+      type: THREE.HalfFloatType,
+      colorSpace: THREE.LinearSRGBColorSpace,
+      samples: 4,                       // the canvas has MSAA; the target must too
+      depthBuffer: true, stencilBuffer: false,
+    });
+    const mat = new THREE.ShaderMaterial({
+      uniforms: {
+        tDif: { value: this.rtCor.texture },
+        contraste: { value: 1 }, saturacao: { value: 1 },
+        elevar: { value: 0 }, temperatura: { value: 0 }, vinheta: { value: 0 },
+      },
+      /* No three.js colour-space include: this shader does its own encode, once,
+         and grades AFTER it — a grade is a thing you do to the picture, not to
+         the light. */
+      vertexShader: `varying vec2 vUv;
+        void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`,
+      fragmentShader: `
+        uniform sampler2D tDif;
+        uniform float contraste, saturacao, elevar, temperatura, vinheta;
+        varying vec2 vUv;
+        vec3 paraSRGB(vec3 c){
+          return mix(c * 12.92,
+                     1.055 * pow(max(c, vec3(0.0)), vec3(0.41666)) - 0.055,
+                     step(vec3(0.0031308), c));
+        }
+        void main(){
+          vec4 c = texture2D(tDif, vUv);
+          vec3 x = paraSRGB(c.rgb);
+          x += elevar * (1.0 - x);                               // lift the blacks
+          x += vec3(temperatura, temperatura * 0.18, -temperatura) * 0.5;
+          x = (x - 0.5) * contraste + 0.5;                       // pivot at mid grey
+          float l = dot(x, vec3(0.2126, 0.7152, 0.0722));
+          x = mix(vec3(l), x, saturacao);
+          vec2 d = vUv - 0.5;
+          x *= clamp(1.0 - vinheta * dot(d, d) * 2.4, 0.0, 1.0);
+          gl_FragColor = vec4(clamp(x, 0.0, 1.0), c.a);
+        }`,
+      depthTest: false, depthWrite: false, blending: THREE.NoBlending,
+    });
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(
+      new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]), 3));
+    g.setAttribute('uv', new THREE.BufferAttribute(new Float32Array([0, 0, 2, 0, 0, 2]), 2));
+    this.quadCor = new THREE.Mesh(g, mat);
+    this.quadCor.frustumCulled = false;
+    this.cenaCor = new THREE.Scene();
+    this.cenaCor.add(this.quadCor);
+    this.camCor = new THREE.Camera();
   }
 
   aplicarAmbiente (a) {
-    /* sun — aimed at the small objects, not at the whole scene */
-    const dir = direcaoSol(a.sol.elev, a.sol.azim);
-    const { centro, raio } = this.focoSombra();
-    this.sol.position.copy(centro).addScaledVector(dir, raio * 2.4 + 400);
-    this.sol.target.position.copy(centro);
-    this.sol.target.updateMatrixWorld();
-    this.sol.intensity = a.sol.intensidade;
-    this.sol.color.set(a.sol.cor);
-    const s = this.sol.shadow.camera;
-    s.left = -raio * 1.3; s.right = raio * 1.3;
-    s.top = raio * 1.3; s.bottom = -raio * 1.3;
-    s.near = 1; s.far = raio * 6 + 900;
-    s.updateProjectionMatrix();
+    /* sun — aimed at the small objects, not at the whole scene. One function
+       does it, so the sun a timeline moves and the sun a slider moves cannot
+       end up aiming their shadows differently. */
+    this.aplicarSol(a.sol);
     this._raioCena = this.raioCena();
     this.preencher.intensity = 0.18 * a.envIntensidade;
 
     /* environment + background. The sky texture is rebuilt only when the sun
        actually moved: PMREM of a 512×256 equirect is ~4 ms, but it is 4 ms on
-       every drag frame if you are careless. */
-    const chave = `${a.envPreset}|${a.sol.elev}|${a.sol.azim}|${a.sol.cor}`;
+       every drag frame if you are careless.
+       The key is QUANTISED to half a degree, which matters now that a sun track
+       can move the sun by a fiftieth of a degree per frame: without it a
+       time-of-day clip repaints the sky and re-runs PMREM 200 times for a
+       change no one can see. Half a degree of sun is well under one JPEG-noise
+       worth of sky. */
+    const q = n => Math.round(n * 2) / 2;
+    const chave = `${a.envPreset}|${q(a.sol.elev)}|${q(a.sol.azim)}|${a.sol.cor}`;
     if (chave !== this._envKey) {
       this._envKey = chave;
       this.envAtual?.dispose();
@@ -278,9 +375,130 @@ export class Mundo {
       o.rotation.set(...d.rot.map(THREE.MathUtils.degToRad));
       o.scale.fromArray(d.esc);
       o.visible = d.visivel;
+      /* The rest pose has the gear DOWN. Without this reset a gear-up key would
+         leave the wheels hidden for the rest of the session the moment the
+         playhead moved past it — a state the document never records and no undo
+         would ever put back. */
+      this.tremVisivel(o, true);
       o.updateMatrixWorld(true);
     }
   }
+
+  /* ------------------------------------------------------------ timeline ---
+   * The timeline is a projection too. `avaliar()` (tempo.js) turns the document
+   * into an OVERLAY at a time t, and this writes the overlay onto the world.
+   * The document rows are untouched: they are the rest pose, used for every
+   * channel the timeline does not drive, which is what makes scrubbing free of
+   * history entries. */
+
+  /** Apply a timeline overlay. Call AFTER aplicarTransformacoes(). */
+  aplicarLinha (estado, ov) {
+    if (!ov) return;
+    for (const [id, v] of ov.objetos) {
+      const o = this.objetos.get(id);
+      if (!o) continue;
+      if (v.pos) o.position.fromArray(v.pos);
+      if (v.quat) o.quaternion.fromArray(v.quat);
+      else if (v.rot) o.rotation.set(...v.rot.map(THREE.MathUtils.degToRad));
+      if (v.esc) o.scale.fromArray(v.esc);
+      if (v.visivel !== undefined) o.visible = !!v.visivel;
+      if (v.trem !== undefined) this.tremVisivel(o, !!v.trem);
+      o.updateMatrixWorld(true);
+    }
+    if (ov.camera) {
+      if (ov.camera.pos) this.camP.position.fromArray(ov.camera.pos);
+      if (ov.camera.alvo) {
+        this.controles.target.fromArray(ov.camera.alvo);
+        this.camP.lookAt(this.controles.target);
+      }
+      if (ov.camera.fov) { this.camP.fov = ov.camera.fov; this.camP.updateProjectionMatrix(); }
+      this.atualizarOrto();
+    }
+    if (ov.sol) {
+      const s = { ...estado.ambiente.sol, ...ov.sol };
+      this.aplicarSol(s);
+      /* Shadows must follow the sun through time or a sunset clip keeps the
+         shadows it had at noon — which looks exactly like a bug and is exactly
+         what forgetting this line produces. `aplicarSol` moves the light AND
+         re-aims the shadow frustum, so the two can never drift apart. */
+      const chave = `${estado.ambiente.envPreset}|${Math.round(s.elev * 2) / 2}|`
+                  + `${Math.round(s.azim * 2) / 2}|${s.cor}`;
+      if (chave !== this._envKey) {
+        this.aplicarAmbiente({ ...estado.ambiente, sol: s });
+      }
+    }
+    if (ov.render && ov.render.exposicao !== undefined) {
+      this.renderer.toneMappingExposure = ov.render.exposicao;
+    }
+  }
+
+  /** The light alone — no sky rebuild, no ground rebuild. Cheap enough to run
+   *  every frame of a 200-frame time-of-day clip. */
+  aplicarSol (sol) {
+    const dir = direcaoSol(sol.elev, sol.azim);
+    const { centro, raio } = this.focoSombra();
+    this.sol.position.copy(centro).addScaledVector(dir, raio * 2.4 + 400);
+    this.sol.target.position.copy(centro);
+    this.sol.target.updateMatrixWorld();
+    this.sol.intensity = sol.intensidade;
+    this.sol.color.set(sol.cor);
+    const s = this.sol.shadow.camera;
+    s.left = -raio * 1.3; s.right = raio * 1.3;
+    s.top = raio * 1.3; s.bottom = -raio * 1.3;
+    s.near = 1; s.far = raio * 6 + 900;
+    s.updateProjectionMatrix();
+  }
+
+  /** Show or hide an instance's landing gear (see frota.js §landing gear).
+   *  Guarded on the last value it wrote, so the reset in aplicarTransformacoes
+   *  costs one comparison per aircraft per frame rather than 32 writes. */
+  tremVisivel (obj, v) {
+    const nos = obj.userData.nosTrem;
+    if (!nos || !nos.length) return;
+    if (obj.userData.tremEstado === v) return;
+    obj.userData.tremEstado = v;
+    for (const n of nos) n.visible = v;
+  }
+
+  /** What a flight needs to know about one aircraft instance: where its main
+   *  gear touches, and how high the ground is under any (x, z). */
+  contextoVoo (id, estado) {
+    const o = this.objetos.get(id);
+    if (!o) return null;
+    const t = o.userData.trem;
+    return {
+      xg: t ? t.x : 0,
+      yg: t ? t.y : 0,
+      temTrem: !!t,
+      marca: this._marcaTerreno || 0,
+      sondar: this.sondaTerreno(id, estado),
+    };
+  }
+
+  /** A downward raycast onto everything except the aircraft itself.
+   *
+   *  Same rule as the editor's "snap to ground", and for the same reason: y = 0
+   *  is the floor only when there IS a floor. A GRU field plate is datumed on
+   *  the runway threshold and runs BELOW zero over most of the aerodrome, so
+   *  clamping there would fly the aeroplane 0.39 m above its own runway. */
+  sondaTerreno (excluirId, estado) {
+    const outros = [...this.objetos.entries()]
+      .filter(([k, v]) => k !== excluirId && v.visible).map(([, v]) => v);
+    const ray = new THREE.Raycaster();
+    const abaixo = new THREE.Vector3(0, -1, 0);
+    const temChao = !!(estado && estado.ambiente.chao.ligado);
+    return (x, z) => {
+      if (!outros.length) return 0;
+      ray.set(new THREE.Vector3(x, 4000, z), abaixo);
+      const h = ray.intersectObjects(outros, true);
+      if (!h.length) return 0;
+      return temChao ? Math.max(0, h[0].point.y) : h[0].point.y;
+    };
+  }
+
+  /** Bump when the scene changes under a flight, so cached flight tables that
+   *  baked a ground profile are rebuilt rather than quietly stale. */
+  invalidarTerreno () { this._marcaTerreno = (this._marcaTerreno || 0) + 1; }
 
   /** Copy one object's live transform back into the document row. */
   lerTransformacao (d) {
@@ -436,7 +654,22 @@ export class Mundo {
   render () {
     this.ajustarProfundidade();
     if (this.cam === this.camO) this.atualizarOrto();
+    if (!Mundo.correcaoAtiva(this.correcao)) { this.renderer.render(this.cena, this.cam); return; }
+    this.prepararCorrecao();
+    const t = this.renderer.getDrawingBufferSize(new THREE.Vector2());
+    if (this.rtCor.width !== t.x || this.rtCor.height !== t.y) {
+      this.rtCor.setSize(Math.max(1, t.x), Math.max(1, t.y));
+    }
+    const u = this.quadCor.material.uniforms;
+    u.contraste.value = this.correcao.contraste;
+    u.saturacao.value = this.correcao.saturacao;
+    u.elevar.value = this.correcao.elevar;
+    u.temperatura.value = this.correcao.temperatura;
+    u.vinheta.value = this.correcao.vinheta;
+    this.renderer.setRenderTarget(this.rtCor);
     this.renderer.render(this.cena, this.cam);
+    this.renderer.setRenderTarget(null);
+    this.renderer.render(this.cenaCor, this.camCor);
   }
 
   estatisticas () {
