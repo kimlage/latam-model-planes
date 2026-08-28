@@ -334,20 +334,75 @@ licences in [`../NOTICE.md`](../NOTICE.md), and nothing here grants more:
   Characteristics*). No third-party mesh was used. Those documents are free to
   download but not free to redistribute, and they are not in this repository.
 
-### `scenario/` is deliberately excluded
+### The airports ship too, in their own folder, under their own licence
 
-The SCL airport under [`../scenario/`](../scenario/) is **not exported, in any
-format, at any LOD** — the exporter drops linked-library objects and any ground
-plane before writing.
+For a while this section said the scenery was excluded because ODbL's
+share-alike "conflicts" with CC BY 4.0. That was over-cautious and it is now
+corrected. ODbL does not forbid redistribution; it requires **attribution** and
+**share-alike on the derived database**. [`../NOTICE.md`](../NOTICE.md)
+§"The airport mesh is an OSM derivative" says exactly that, and the repository
+has always published renders of the fields anyway.
 
-The reason is a different and stricter obligation. `scenario/scl_field.blend` is
-generated directly from OpenStreetMap data, which makes the mesh a **derived
-database under ODbL 1.0 — share-alike**. Redistributing it, or a render of it,
-or an aircraft file that links it, would drag that share-alike requirement onto
-the exported asset and put it in conflict with the CC BY 4.0 the models carry.
-The aircraft alone have no such entanglement. The `Pista` ground plane that the
-visual gate uses is dropped for the same reason it exists — it is the gate's
-floor, not part of the aeroplane.
+So there are **two tiers with two licences**, kept in separate folders:
 
-If you want the scenery, build it from the repository with
-`scenario/build_scenery.py` and keep the ODbL notice with whatever you make.
+| | built by | licence | attribution |
+|---|---|---|---|
+| [`web/`](web/), [`alta/`](alta/) | `export_frota.py` | CC BY 4.0 | LATAM fleet 3D replicas — Kim Lage |
+| [`cenarios/`](cenarios/) | `export_cenarios.py` | **ODbL 1.0, share-alike** | Airport geometry © OpenStreetMap contributors |
+
+An **aircraft** `.glb` still contains nothing but the aeroplane: the exporter
+drops linked-library objects and the `Pista` ground plane before writing, which
+is why that file carries one licence and no share-alike. Mixing the two inside
+one file is what would be careless; shipping them as separate assets, each
+carrying its own `licenca` in the manifest and its own `asset.copyright` inside
+the `.glb`, is not.
+
+**Copernicus terrain is still excluded**, and that one is a size decision as
+much as a licensing one: the SBGR height field alone is 3.7 M faces. Build it
+with `scenario*/build_terrain.py` if you need it, and carry the two Copernicus
+notices from NOTICE.md with whatever you make.
+
+## `cenarios/` — the airport tier
+
+```bash
+python3 export_cenarios.py              # 46 assets from three fields, ~10 s
+python3 export_cenarios.py --listar     # the catalogue, without opening Blender
+python3 export_cenarios.py --campo sbgr # just Guarulhos
+python3 export_cenarios.py --verificar  # read every .glb back and check it
+```
+
+46 composable pieces cut out of `scenario/scl_field.blend`,
+`scenario_sdsc/sdsc_field.blend` and `scenario_sbgr/sbgr_field.blend`:
+**53,797 faces and 0.47 MB of Draco GLB for the whole catalogue**, the heaviest
+single asset being the Guarulhos field plate at 27,648 faces and 89 kB for
+6.1 × 4.8 km of aerodrome.
+
+The builders merge everything into a few large meshes per material —
+`SBGR_Jetbridges` is *every* jetbridge at Guarulhos in one mesh spread over
+1.7 km — so there is no "jetbridge object" to export. An asset is a **region of
+the field**, cut one of two ways, chosen per piece:
+
+- **islands** — whole connected components whose centre falls in the region.
+  Right for buildings, vehicles and masts: nobody wants half a truck.
+- **plane bisection** — right for pavement, paint and ground, which are carpets;
+  cutting a quad in half is the wanted result, and filtering by centre would be
+  all-or-nothing on a 3.7 km polygon.
+
+Same conventions as the fleet: +Y up, metres, origin at the X/Z bounding-box
+centre, base on y = 0, Draco, and every file read back and verified. Two
+deliberate exceptions, both recorded in the manifest and both checked:
+
+- **field plates** are datumed on the **runway threshold**, not on their lowest
+  point, so an aircraft at y = 0 stands on the runway and the rest of the field
+  goes below zero where the ground does;
+- three surface sections carry `centrar_em`, which puts the origin on the named
+  mesh instead of on the bounding box — a runway section is centred on the
+  *runway*, because a PAPI on one side alone pulls the box 21 m off the
+  centreline.
+
+**What is lost:** the scenery materials are procedural node trees that glTF
+cannot carry, so each is flattened to a representative colour read from the
+material's own `diffuse_color` — which the builders set deliberately. All 93
+materials resolved that way; none needed a fallback. The substitution is
+recorded material by material in `cenarios/manifest.json` under
+`materiais_achatados`.

@@ -160,6 +160,24 @@ widths, declared distances, marking geometry) comes from **AIP-Chile / DGAC** an
 is quoted as fact; no chart is redistributed. Full breakdown in
 [`scenario/README.md`](scenario/README.md) §6.
 
+**This is a permission, not a prohibition, and the repository now uses it.**
+[`export/cenarios/`](export/cenarios/) redistributes 46 composable pieces of the
+three aerodromes — built by [`export_cenarios.py`](export_cenarios.py) from
+`scl_field.blend`, `sdsc_field.blend` and `sbgr_field.blend` — under exactly the
+two obligations above. The attribution travels with them three ways: a `licenca`
+field on every row of `export/cenarios/manifest.json`, the string written into
+each `.glb` as `asset.copyright`, and the Licence panel of
+[`estudio/`](estudio/), which lists the licences the open scene actually uses
+rather than making one claim about the whole page. An earlier round of that
+studio refused to export any of it on the belief that ODbL and CC BY 4.0
+"conflict"; they do not. What would be careless is putting both into **one
+file** — so an aircraft `.glb` still contains nothing but the aeroplane, and the
+airport pieces are separate assets with a separate licence.
+
+**Copernicus terrain is not redistributed.** No exported asset references the
+height fields; anything you build from them carries the two Copernicus notices
+above.
+
 ## What the models contain
 
 The `.blend` files carry the livery textures packed in, including the marks
