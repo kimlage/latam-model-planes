@@ -654,7 +654,7 @@ export class Mundo {
   render () {
     this.ajustarProfundidade();
     if (this.cam === this.camO) this.atualizarOrto();
-    if (!Mundo.correcaoAtiva(this.correcao)) { this.renderer.render(this.cena, this.cam); return; }
+    if (!Mundo.correcaoAtiva(this.correcao)) { this._infoCena = null; this.renderer.render(this.cena, this.cam); return; }
     this.prepararCorrecao();
     const t = this.renderer.getDrawingBufferSize(new THREE.Vector2());
     if (this.rtCor.width !== t.x || this.rtCor.height !== t.y) {
@@ -669,11 +669,20 @@ export class Mundo {
     this.renderer.setRenderTarget(this.rtCor);
     this.renderer.render(this.cena, this.cam);
     this.renderer.setRenderTarget(null);
+    /* `renderer.info` resets on every render call, so after the quad pass it
+       reports one triangle and one draw call — which is exactly what the status
+       line under the viewport started saying the moment the grade was switched
+       on. Keep the scene pass's numbers; they are the ones anybody wants. */
+    const i = this.renderer.info.render;
+    this._infoCena = { calls: i.calls, triangles: i.triangles };
     this.renderer.render(this.cenaCor, this.camCor);
   }
 
   estatisticas () {
     const i = this.renderer.info;
-    return { chamadas: i.render.calls, triangulos: i.render.triangles, geometrias: i.memory.geometries, texturas: i.memory.textures };
+    const c = Mundo.correcaoAtiva(this.correcao) && this._infoCena
+      ? this._infoCena : i.render;
+    return { chamadas: c.calls, triangulos: c.triangles,
+             geometrias: i.memory.geometries, texturas: i.memory.textures };
   }
 }
