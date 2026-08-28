@@ -72,7 +72,7 @@ white to the belly, the rear wedge is smaller, the lockup runs LATAM over
 CARGO, the winglets are indigo outboard and coral inboard, and the belly
 carries the symbol alone. Only the fin sash passes through unchanged.
 
-![A320neo departing RWY 17R at Santiago, seen head-on as the camera flies formation and cranes up around its starboard bow](airbus%20A320neo/a320_scl_v13.gif)
+![A320neo departing RWY 17R at Santiago, seen head-on as the camera flies formation and cranes up around its starboard bow](airbus%20A320neo/a320_scl_v14.gif)
 
 *A320neo departing 17R at Santiago — 240 frames, 9.6 s. The camera flies
 formation in the aircraft's own coordinate frame from the first frame to the
@@ -186,7 +186,7 @@ tint cells, 22 000 structures of which 7 743 are real OSM footprints, the
 Cumbica warehouse belt, 1 303 km of minor streets, and 23 222 canopy crowns
 on the serra ([`scenario_sbgr/README.md`](scenario_sbgr/README.md) §9.4).
 
-![Boeing 777-300ER departing RWY 10L at Guarulhos, chased from its starboard quarter as the nose lifts abeam the LATAM hangar with the forested Cantareira wall behind](scenario_sbgr/b77w_sbgr_v3.gif)
+![Boeing 777-300ER departing RWY 10L at Guarulhos, chased from its starboard quarter as the nose lifts abeam the LATAM hangar with the forested Cantareira wall behind](scenario_sbgr/b77w_sbgr_v4.gif)
 
 *The **777-300ER** off **RWY 10L** — 240 frames, 9.6 s, one orbit flown in
 the aircraft's own frame from the aft-starboard quarter, no dolly, no

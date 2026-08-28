@@ -1193,7 +1193,7 @@ re-parented to an empty on the strut axis so they can actually turn.
 | tug across the door plane | frame 85 (21%) |
 | nose across the door plane | frame 115 (29%) |
 | wingtips at frame 400 | x 719.9 and 780.1 in an opening x 711…789 — **8.94 m each side** |
-| fin | 16.48 m in a 20.5 m door, **4.02 m under the lintel** |
+| fin | 17.02 m in a 20.5 m door, **3.48 m under the lintel** (re-measured 2026-08-27 on the geometry-truth legs: `WHEEL_Z` −4.88 → −5.42, the fin now rides at the published height) |
 
 **Why this clip is 400 frames when the others are 240.** A 787 does not enter a
 hangar in 9.6 seconds. At a real tow speed the aeroplane covers 42 m in 16 s,
@@ -1321,7 +1321,8 @@ is nothing near enough to streak at the bottom edge.
 ### Still open after phase 3
 
 - **The fin has never been through the door.** Clip 2 stops with the wingspan in
-  the opening; the 4.02 m of lintel clearance is arithmetic, not a frame.
+  the opening; the 3.48 m of lintel clearance (on the 2026-08-27 legs) is
+  arithmetic, not a frame.
 - **The shared `sdsc_field.blend` still has a painted-on door.** Only
   `sdsc_hangar_tow.blend` has a real opening. If another clip ever needs to look
   into hangar 9, the opening should move into `build_scenery.py` — it is about

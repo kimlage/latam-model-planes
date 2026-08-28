@@ -9,6 +9,34 @@ survives, suspect the instrument before the model**.
 
 ---
 
+## Scene-detail + clips-refresh round 2026-08-27: found in passing, deferred with reasons
+
+1. **TECA massing tubes reach the freighters.** `checks/fleet_cargo.png`
+   shows the pre-existing massing jetbridges on the cargo-terminal face
+   reaching toward the two LATAM Cargo 767s — a pax bridge on a freighter
+   is wrong in reality. The C-stands were deliberately left OUT of the
+   articulated tier this round (the tour/departure cameras never resolve
+   the cargo frontage); the honest fix is to exclude the TECA face from
+   the massing pass entirely and let the freighters work the ramp with
+   GSE only.
+2. **R910/HGR AABB overlap warning.** Every `fleet_placement.populate`
+   prints `!! R910 and HGR overlap by 37.8 x 5.3 m`. The envelopes are
+   world AABBs of ROTATED aircraft, so they overstate; the hangar check
+   still (`checks/fleet_hangar_777.png`) shows no visible contact between
+   the 767's wing and the hangar 777. Needs a verdict with oriented
+   envelopes (or a stand shift) rather than a silenced warning.
+3. **GRU dusk showcase deferred.** PENDENCIAS item 4 floated "variantes
+   de luz (anoitecer GRU)". The shared field's light was chosen at 17:30
+   for flow-honesty and must not change; a dusk set needs its own sun rig
+   in a derived scene. Deferred — this round's budget went to the eight-
+   clip refresh.
+4. **Apron light pools skipped, with reason.** At the shipped 17:30 sun
+   (16.5° up) emissive pools under the mast heads would not read, and
+   `refs/` holds no night frame of the mast layout to paint them from.
+   Unphotographed scene detail is skipped per the round's own rule.
+
+---
+
 ## SETTLED 2026-08-27: the 787 wedges — the record was right, the painter drifted
 
 The old entry asked whether the rule or the paint was the measurement, and

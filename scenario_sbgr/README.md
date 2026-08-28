@@ -392,7 +392,7 @@ localizer arrays, edge lights, 76 holding boards, 2 windsocks.
 | Terminal 3 | 20 m, same band as T2 | opened 2014 — absent from the DSM. Built as T2's sibling |
 | Terminal 2 / 1 / TECA | 20 / 14 / 11 m | DSM floors +14.1 / +10.8 / +8..10 plus roof plant |
 | floodlight masts | 30 m, two designs (ring-head + lattice-rack) | the two designs are photographed side by side (2026 frame); 30 m is the international-apron band, no published figure |
-| jetbridges | 109, rotunda + sloped tunnel, one per gate within 90 m of a terminal | pier-and-jetbridge MASSING per the LOD rule — the nearest camera is 650 m out |
+| jetbridges | **two tiers since the scene-detail round (2026-08-27)**: 9 ARTICULATED bridges docked at the parked fleet's door-1 stations on the T2/T3 frontage — rotunda drum, sloped tunnel, elbow, fatter telescoping barrel, cab on a support portal with a wheel bogie — plus 6 parked articulated ones at free frontage gates (barrel drawn back, cab swung 35°), and 77 massing tubes at every other gate | the frontage is what the tour and the 10L departure actually see. The cab is aimed with real per-type door geometry (`DOCK_TYPES`, declared inference) **plus a measured +2.0 m nose correction**: `fleet_placement` centres the world AABB, not the fuselage — probed +1.9/+2.1 m on G403/G402 — and the cab face is held 0.4 m off the skin to absorb the residual. Gates the cameras never approach keep the massing per the LOD rule |
 
 ### 9.4 The city ring — the answer to phase 1's cut
 
