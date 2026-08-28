@@ -202,6 +202,14 @@ def escrever_manifesto(rels):
     # nao e, porque zip guarda mtime, e por isso ele nao vai para o git.
     antigo = {k: {kk: vv for kk, vv in v.items() if kk != "segundos"}
               for k, v in antigo.items()}
+    # LICENCA POR ASSET. A frota inteira e CC BY 4.0, mas o campo tem de existir
+    # LINHA A LINHA: o estudio agora tambem carrega cenario derivado de OSM sob
+    # ODbL (export/cenarios/manifest.json), e um painel de licenca que mostra o
+    # que a cena aberta realmente usa precisa perguntar a cada asset, nao ao
+    # cabecalho do arquivo. Ver export/cenarios_portateis.py, tabela LICENCAS.
+    for v in antigo.values():
+        v.setdefault("licenca", "cc-by-4.0")
+        v.setdefault("categoria", "aeronave")
     ordem = list(FROTA)
     itens = sorted(antigo.values(),
                    key=lambda r: (ordem.index(r["slug"]) if r["slug"] in ordem else 99,

@@ -1,0 +1,4937 @@
+{
+ "schema": "latam-cenarios/1",
+ "gerado_por": "export_cenarios.py",
+ "aviso": "Geometria de aerodromo derivada de OpenStreetMap. Cada asset carrega seu proprio campo `licenca`; a tabela `licencas` diz o que cada id exige. ODbL e share-alike: uma cena que use qualquer asset odbl-1.0 carrega essa obrigacao junto.",
+ "licencas": {
+  "odbl-1.0": {
+   "nome": "ODbL 1.0 (Open Database License)",
+   "url": "https://opendatacommons.org/licenses/odbl/1-0/",
+   "atribuicao": "Airport geometry (c) OpenStreetMap contributors, ODbL 1.0",
+   "share_alike": true,
+   "nota": "A malha do aerodromo e gerada a partir de OpenStreetMap (footprints, eixos de taxiway, poligonos de patio, posicoes de stand e ponte). Uma malha feita a partir de um banco ODbL e um banco derivado: redistribuir exige a atribuicao acima E share-alike sobre a geodata derivada. O levantamento de pista (cabeceiras, larguras, distancias declaradas, geometria de pintura) vem de AIP/DECEA/DGAC e e citado como fato."
+  },
+  "cc-by-4.0": {
+   "nome": "CC BY 4.0",
+   "url": "https://creativecommons.org/licenses/by/4.0/",
+   "atribuicao": "LATAM fleet 3D replicas - Kim Lage - CC BY 4.0",
+   "share_alike": false,
+   "nota": "Geometria original deste repositorio, construida a partir dos documentos dimensionais publicados pelos fabricantes."
+  },
+  "copernicus": {
+   "nome": "Copernicus WorldDEM-30 (Free & Open)",
+   "url": "https://spacedata.copernicus.eu/",
+   "atribuicao": "produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved",
+   "share_alike": false,
+   "nota": "As organizacoes responsaveis pelo programa Copernicus por lei ou delegacao nao incorrem em qualquer responsabilidade por qualquer uso do Copernicus WorldDEM-30. NENHUM asset desta exportacao usa terreno Copernicus - a tabela esta aqui porque o estudio a exibe se algum dia usar."
+  }
+ },
+ "marcas": "LATAM, Airbus e Boeing sao marcas de seus titulares. Projeto independente, nao comercial, sem afiliacao ou endosso.",
+ "categorias": {
+  "estrutura": "airport structures",
+  "superficie": "ground & surfaces",
+  "veiculo": "vehicles & GSE",
+  "adereco": "props"
+ },
+ "campos": {
+  "scl": {
+   "rotulo": "SCEL - Santiago / Arturo Merino Benitez",
+   "blend": "scenario/scl_field.blend",
+   "datum_z": 0.0
+  },
+  "sdsc": {
+   "rotulo": "SDSC - Sao Carlos / base de manutencao LATAM",
+   "blend": "scenario_sdsc/sdsc_field.blend",
+   "datum_z": -2.33
+  },
+  "sbgr": {
+   "rotulo": "SBGR - Guarulhos / Sao Paulo",
+   "blend": "scenario_sbgr/sbgr_field.blend",
+   "datum_z": -4.76
+  }
+ },
+ "teto_faces": 60000,
+ "materiais_achatados": {
+  "SBGR_AABand": {
+   "cor": [
+    0.07,
+    0.072,
+    0.078
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.6,
+   "emissivo": false
+  },
+  "SBGR_ApronBus": {
+   "cor": [
+    0.42,
+    0.424,
+    0.43
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.45,
+   "emissivo": false
+  },
+  "SBGR_ApronConcrete": {
+   "cor": [
+    0.2,
+    0.196,
+    0.184
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.86,
+   "emissivo": false
+  },
+  "SBGR_BareConcrete": {
+   "cor": [
+    0.175,
+    0.17,
+    0.158
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.88,
+   "emissivo": false
+  },
+  "SBGR_CargoDolly": {
+   "cor": [
+    0.11,
+    0.112,
+    0.118
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.65,
+   "emissivo": false
+  },
+  "SBGR_Cladding": {
+   "cor": [
+    0.25,
+    0.252,
+    0.248
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.62,
+   "emissivo": false
+  },
+  "SBGR_CladdingPale": {
+   "cor": [
+    0.3,
+    0.3,
+    0.295
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.62,
+   "emissivo": false
+  },
+  "SBGR_EdgeLightFitting": {
+   "cor": [
+    0.42,
+    0.4,
+    0.33
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.45,
+   "emissivo": false
+  },
+  "SBGR_GSEDark": {
+   "cor": [
+    0.045,
+    0.046,
+    0.05
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.6,
+   "emissivo": false
+  },
+  "SBGR_GSEWhite": {
+   "cor": [
+    0.48,
+    0.482,
+    0.478
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.55,
+   "emissivo": false
+  },
+  "SBGR_GSEYellow": {
+   "cor": [
+    0.41,
+    0.25,
+    0.02
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.58,
+   "emissivo": false
+  },
+  "SBGR_Glass": {
+   "cor": [
+    0.028,
+    0.042,
+    0.048
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.16,
+   "emissivo": false
+  },
+  "SBGR_HangarFloor": {
+   "cor": [
+    0.3,
+    0.298,
+    0.29
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.35,
+   "emissivo": false
+  },
+  "SBGR_HangarInterior": {
+   "cor": [
+    0.022,
+    0.02,
+    0.019
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.9,
+   "emissivo": false
+  },
+  "SBGR_Infield": {
+   "cor": [
+    0.062,
+    0.098,
+    0.026
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.95,
+   "emissivo": false
+  },
+  "SBGR_Jetbridge": {
+   "cor": [
+    0.36,
+    0.362,
+    0.368
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.55,
+   "emissivo": false
+  },
+  "SBGR_JetbridgeDark": {
+   "cor": [
+    0.06,
+    0.062,
+    0.066
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.6,
+   "emissivo": false
+  },
+  "SBGR_LATAM_Band": {
+   "cor": [
+    0.0085,
+    0.0035,
+    0.074
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.55,
+   "emissivo": false
+  },
+  "SBGR_LATAM_Coral": {
+   "cor": [
+    0.847,
+    0.008,
+    0.082
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.45,
+   "emissivo": false
+  },
+  "SBGR_LATAM_White": {
+   "cor": [
+    0.7,
+    0.702,
+    0.715
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.42,
+   "emissivo": false
+  },
+  "SBGR_MarkingPink": {
+   "cor": [
+    0.48,
+    0.13,
+    0.16
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.7,
+   "emissivo": false
+  },
+  "SBGR_MarkingWhite": {
+   "cor": [
+    0.52,
+    0.518,
+    0.498
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.7,
+   "emissivo": false
+  },
+  "SBGR_MarkingYellow": {
+   "cor": [
+    0.42,
+    0.268,
+    0.022
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.7,
+   "emissivo": false
+  },
+  "SBGR_Mast": {
+   "cor": [
+    0.47,
+    0.472,
+    0.478
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.52,
+   "emissivo": false
+  },
+  "SBGR_Radome": {
+   "cor": [
+    0.64,
+    0.642,
+    0.65
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.42,
+   "emissivo": false
+  },
+  "SBGR_RoofGrey": {
+   "cor": [
+    0.16,
+    0.163,
+    0.161
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.66,
+   "emissivo": false
+  },
+  "SBGR_RoofPale": {
+   "cor": [
+    0.21,
+    0.211,
+    0.205
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.6,
+   "emissivo": false
+  },
+  "SBGR_Runway_10L28R": {
+   "cor": [
+    0.075,
+    0.074,
+    0.07
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.4,
+   "emissivo": false
+  },
+  "SBGR_Runway_10R28L": {
+   "cor": [
+    0.075,
+    0.074,
+    0.07
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.4,
+   "emissivo": false
+  },
+  "SBGR_Shoulder": {
+   "cor": [
+    0.1,
+    0.096,
+    0.085
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.9,
+   "emissivo": false
+  },
+  "SBGR_SpaceFrameSteel": {
+   "cor": [
+    0.24,
+    0.246,
+    0.252
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.55,
+   "emissivo": false
+  },
+  "SBGR_TaxiwayAsphalt": {
+   "cor": [
+    0.085,
+    0.084,
+    0.078
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.85,
+   "emissivo": false
+  },
+  "SBGR_TerminalGlass": {
+   "cor": [
+    0.022,
+    0.032,
+    0.04
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.18,
+   "emissivo": false
+  },
+  "SBGR_ULD": {
+   "cor": [
+    0.36,
+    0.362,
+    0.37
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.5,
+   "emissivo": false
+  },
+  "SBGR_WallRender": {
+   "cor": [
+    0.39,
+    0.386,
+    0.372
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.8,
+   "emissivo": false
+  },
+  "SCL_AsphaltShoulder": {
+   "cor": [
+    0.095,
+    0.093,
+    0.085
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.88,
+   "emissivo": false
+  },
+  "SCL_Concrete": {
+   "cor": [
+    0.225,
+    0.22,
+    0.205
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.84,
+   "emissivo": false
+  },
+  "SCL_Glass": {
+   "cor": [
+    0.03,
+    0.045,
+    0.05
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.16,
+   "emissivo": false
+  },
+  "SCL_LATAM_Coral": {
+   "cor": [
+    0.847,
+    0.008,
+    0.082
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.45,
+   "emissivo": false
+  },
+  "SCL_LATAM_DoorPanels": {
+   "cor": [
+    0.19,
+    0.192,
+    0.195
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.62,
+   "emissivo": false
+  },
+  "SCL_LATAM_LitWindows": {
+   "cor": [
+    0.33,
+    0.31,
+    0.26
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.3,
+   "emissivo": true
+  },
+  "SCL_LATAM_SignBand": {
+   "cor": [
+    0.021,
+    0.02,
+    0.048
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.45,
+   "emissivo": false
+  },
+  "SCL_LATAM_White": {
+   "cor": [
+    0.7,
+    0.705,
+    0.72
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.4,
+   "emissivo": false
+  },
+  "SCL_MarkingWhite": {
+   "cor": [
+    0.52,
+    0.52,
+    0.5
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.7,
+   "emissivo": false
+  },
+  "SCL_MarkingYellow": {
+   "cor": [
+    0.4,
+    0.26,
+    0.02
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.7,
+   "emissivo": false
+  },
+  "SCL_MastWhite": {
+   "cor": [
+    0.52,
+    0.525,
+    0.53
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.5,
+   "emissivo": false
+  },
+  "SCL_RoofBrick": {
+   "cor": [
+    0.098,
+    0.03,
+    0.038
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.75,
+   "emissivo": false
+  },
+  "SCL_RoofLight": {
+   "cor": [
+    0.33,
+    0.335,
+    0.33
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.72,
+   "emissivo": false
+  },
+  "SCL_RoofRibbedWhite": {
+   "cor": [
+    0.29,
+    0.294,
+    0.288
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.58,
+   "emissivo": false
+  },
+  "SCL_RoofSteelDark": {
+   "cor": [
+    0.118,
+    0.122,
+    0.126
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.72,
+   "emissivo": false
+  },
+  "SCL_Runway_17L35R": {
+   "cor": [
+    0.075,
+    0.078,
+    0.075
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.4,
+   "emissivo": false
+  },
+  "SCL_Runway_17R35L": {
+   "cor": [
+    0.075,
+    0.078,
+    0.075
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.4,
+   "emissivo": false
+  },
+  "SCL_Soil": {
+   "cor": [
+    0.232,
+    0.18,
+    0.1
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.95,
+   "emissivo": false
+  },
+  "SCL_SteelLight": {
+   "cor": [
+    0.33,
+    0.34,
+    0.35
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.42,
+   "emissivo": false
+  },
+  "SCL_T2Brise": {
+   "cor": [
+    0.36,
+    0.115,
+    0.03
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.62,
+   "emissivo": false
+  },
+  "SCL_T2PanelGreen": {
+   "cor": [
+    0.185,
+    0.29,
+    0.15
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.72,
+   "emissivo": false
+  },
+  "SCL_T2Roof": {
+   "cor": [
+    0.275,
+    0.28,
+    0.285
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.5,
+   "emissivo": false
+  },
+  "SCL_TaxiwayAsphalt": {
+   "cor": [
+    0.092,
+    0.094,
+    0.09
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.84,
+   "emissivo": false
+  },
+  "SCL_TowerConcrete": {
+   "cor": [
+    0.185,
+    0.182,
+    0.176
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.8,
+   "emissivo": false
+  },
+  "SCL_WallGrey": {
+   "cor": [
+    0.17,
+    0.172,
+    0.175
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.82,
+   "emissivo": false
+  },
+  "SCL_WallLight": {
+   "cor": [
+    0.3,
+    0.298,
+    0.288
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.8,
+   "emissivo": false
+  },
+  "SDSC_AircraftGrey": {
+   "cor": [
+    0.175,
+    0.185,
+    0.195
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.35,
+   "emissivo": false
+  },
+  "SDSC_Chequer": {
+   "cor": [
+    0.64,
+    0.18,
+    0.03
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.7,
+   "emissivo": false
+  },
+  "SDSC_Cladding": {
+   "cor": [
+    0.255,
+    0.258,
+    0.252
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.62,
+   "emissivo": false
+  },
+  "SDSC_Concrete": {
+   "cor": [
+    0.215,
+    0.208,
+    0.192
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.86,
+   "emissivo": false
+  },
+  "SDSC_Container": {
+   "cor": [
+    0.3,
+    0.3,
+    0.292
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.72,
+   "emissivo": false
+  },
+  "SDSC_ContainerRust": {
+   "cor": [
+    0.15,
+    0.062,
+    0.04
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.86,
+   "emissivo": false
+  },
+  "SDSC_CropPasture": {
+   "cor": [
+    0.128,
+    0.13,
+    0.058
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.92,
+   "emissivo": false
+  },
+  "SDSC_DockYellow": {
+   "cor": [
+    0.32,
+    0.196,
+    0.02
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.64,
+   "emissivo": false
+  },
+  "SDSC_FasciaBand": {
+   "cor": [
+    0.0085,
+    0.0035,
+    0.074
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.55,
+   "emissivo": false
+  },
+  "SDSC_GSEDark": {
+   "cor": [
+    0.045,
+    0.046,
+    0.05
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.6,
+   "emissivo": false
+  },
+  "SDSC_GSEWhite": {
+   "cor": [
+    0.48,
+    0.482,
+    0.478
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.55,
+   "emissivo": false
+  },
+  "SDSC_GSEYellow": {
+   "cor": [
+    0.41,
+    0.25,
+    0.02
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.58,
+   "emissivo": false
+  },
+  "SDSC_Glass": {
+   "cor": [
+    0.028,
+    0.042,
+    0.048
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.16,
+   "emissivo": false
+  },
+  "SDSC_HangarFloor": {
+   "cor": [
+    0.3,
+    0.298,
+    0.29
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.35,
+   "emissivo": false
+  },
+  "SDSC_HangarInterior": {
+   "cor": [
+    0.022,
+    0.02,
+    0.019
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.9,
+   "emissivo": false
+  },
+  "SDSC_Infield": {
+   "cor": [
+    0.245,
+    0.108,
+    0.052
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.95,
+   "emissivo": false
+  },
+  "SDSC_LATAM_Coral": {
+   "cor": [
+    0.847,
+    0.008,
+    0.082
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.45,
+   "emissivo": false
+  },
+  "SDSC_LATAM_White": {
+   "cor": [
+    0.7,
+    0.702,
+    0.715
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.42,
+   "emissivo": false
+  },
+  "SDSC_MarkingWhite": {
+   "cor": [
+    0.5,
+    0.498,
+    0.478
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.7,
+   "emissivo": false
+  },
+  "SDSC_MarkingYellow": {
+   "cor": [
+    0.4,
+    0.255,
+    0.02
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.7,
+   "emissivo": false
+  },
+  "SDSC_Mast": {
+   "cor": [
+    0.48,
+    0.482,
+    0.488
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.52,
+   "emissivo": false
+  },
+  "SDSC_MeshFence": {
+   "cor": [
+    0.02,
+    0.021,
+    0.022
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.6,
+   "emissivo": false
+  },
+  "SDSC_OxideRed": {
+   "cor": [
+    0.115,
+    0.024,
+    0.02
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.72,
+   "emissivo": false
+  },
+  "SDSC_RoofGrey": {
+   "cor": [
+    0.165,
+    0.168,
+    0.166
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.66,
+   "emissivo": false
+  },
+  "SDSC_RoofPale": {
+   "cor": [
+    0.215,
+    0.216,
+    0.21
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.6,
+   "emissivo": false
+  },
+  "SDSC_Runway_0220": {
+   "cor": [
+    0.078,
+    0.076,
+    0.07
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.4,
+   "emissivo": false
+  },
+  "SDSC_Shoulder": {
+   "cor": [
+    0.105,
+    0.086,
+    0.062
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.9,
+   "emissivo": false
+  },
+  "SDSC_SpaceFrameRed": {
+   "cor": [
+    0.42,
+    0.045,
+    0.028
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.6,
+   "emissivo": false
+  },
+  "SDSC_Steel": {
+   "cor": [
+    0.32,
+    0.33,
+    0.34
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.42,
+   "emissivo": false
+  },
+  "SDSC_TaxiwayAsphalt": {
+   "cor": [
+    0.09,
+    0.088,
+    0.08
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.85,
+   "emissivo": false
+  },
+  "SDSC_ToolCartRed": {
+   "cor": [
+    0.3,
+    0.028,
+    0.024
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.6,
+   "emissivo": false
+  },
+  "SDSC_WallRender": {
+   "cor": [
+    0.4,
+    0.396,
+    0.38
+   ],
+   "fonte": "diffuse_color",
+   "rugosidade": 0.8,
+   "emissivo": false
+  }
+ },
+ "assets": [
+  {
+   "slug": "sbgr_hangar_latam",
+   "rotulo": "LATAM hangar (GRU)",
+   "categoria": "estrutura",
+   "campo": "sbgr",
+   "licenca": "odbl-1.0",
+   "arquivo": "sbgr_hangar_latam.glb",
+   "bytes": 51244,
+   "faces": 1067,
+   "faces_origem": 1067,
+   "decimado": null,
+   "triangulos": 10310,
+   "vertices": 7285,
+   "materiais": 9,
+   "caixa": {
+    "min": [
+     -78.604,
+     0.0,
+     -67.604
+    ],
+    "max": [
+     78.604,
+     31.5,
+     67.604
+    ],
+    "tamanho": [
+     157.209,
+     31.5,
+     135.207
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sbgr/sbgr_field.blend",
+    "pecas": [
+     "SBGR_LATAM_Hangar",
+     "SBGR_LATAM_HangarTruss",
+     "SBGR_LATAM_HangarDoors",
+     "SBGR_LATAM_HangarBand",
+     "SBGR_LATAM_HangarFloor",
+     "SBGR_LATAM_HangarOpenBay",
+     "SBGR_LATAM_Hangar_Wordmark",
+     "SBGR_LATAM_Hangar_Brandmark"
+    ],
+    "superficies": [],
+    "regiao": null,
+    "origem_no_campo_m": [
+     2289.35,
+     1366.33
+    ],
+    "datum": "min"
+   },
+   "nota": "O hangar da base LATAM em Guarulhos, com a fachada, a porta, a faixa e a marca. Footprint do OSM; altura estimada.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 10310,
+    "vertices": 12161,
+    "materiais": 8,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -78.6045,
+      0.0,
+      -67.6036
+     ],
+     "max": [
+      78.6042,
+      31.5,
+      67.6038
+     ],
+     "tamanho": [
+      157.2087,
+      31.5,
+      135.2074
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sbgr_hangar_mro",
+   "rotulo": "MRO hangar, second bay (GRU)",
+   "categoria": "estrutura",
+   "campo": "sbgr",
+   "licenca": "odbl-1.0",
+   "arquivo": "sbgr_hangar_mro.glb",
+   "bytes": 2508,
+   "faces": 23,
+   "faces_origem": 23,
+   "decimado": null,
+   "triangulos": 37,
+   "vertices": 32,
+   "materiais": 3,
+   "caixa": {
+    "min": [
+     -98.705,
+     0.0,
+     -84.171
+    ],
+    "max": [
+     98.705,
+     29.0,
+     84.171
+    ],
+    "tamanho": [
+     197.409,
+     29.0,
+     168.342
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sbgr/sbgr_field.blend",
+    "pecas": [
+     "SBGR_AA_Hangar",
+     "SBGR_AA_HangarDoors"
+    ],
+    "superficies": [],
+    "regiao": null,
+    "origem_no_campo_m": [
+     2032.01,
+     1257.93
+    ],
+    "datum": "min"
+   },
+   "nota": "O segundo hangar da area de manutencao, com a porta.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 37,
+    "vertices": 63,
+    "materiais": 2,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -98.7047,
+      0.0,
+      -84.1711
+     ],
+     "max": [
+      98.7047,
+      29.0,
+      84.171
+     ],
+     "tamanho": [
+      197.4094,
+      29.0,
+      168.3422
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sbgr_torre",
+   "rotulo": "Control tower (GRU)",
+   "categoria": "estrutura",
+   "campo": "sbgr",
+   "licenca": "odbl-1.0",
+   "arquivo": "sbgr_torre.glb",
+   "bytes": 4668,
+   "faces": 97,
+   "faces_origem": 97,
+   "decimado": null,
+   "triangulos": 194,
+   "vertices": 124,
+   "materiais": 4,
+   "caixa": {
+    "min": [
+     -5.95,
+     0.0,
+     -5.95
+    ],
+    "max": [
+     5.95,
+     61.7,
+     5.95
+    ],
+    "tamanho": [
+     11.9,
+     61.7,
+     11.9
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sbgr/sbgr_field.blend",
+    "pecas": [
+     "SBGR_TWR_Shaft",
+     "SBGR_TWR_Cab",
+     "SBGR_TWR_Galleries",
+     "SBGR_TWR_Radome"
+    ],
+    "superficies": [],
+    "regiao": null,
+    "origem_no_campo_m": [
+     301.0,
+     1322.0
+    ],
+    "datum": "min"
+   },
+   "nota": "Torre de controle: fuste, galerias, cabine e radome.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 194,
+    "vertices": 172,
+    "materiais": 4,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -5.95,
+      0.0,
+      -5.95
+     ],
+     "max": [
+      5.95,
+      61.7,
+      5.95
+     ],
+     "tamanho": [
+      11.9,
+      61.7,
+      11.8999
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sbgr_terminal_t3",
+   "rotulo": "Terminal 3 pier (GRU)",
+   "categoria": "estrutura",
+   "campo": "sbgr",
+   "licenca": "odbl-1.0",
+   "arquivo": "sbgr_terminal_t3.glb",
+   "bytes": 7136,
+   "faces": 306,
+   "faces_origem": 306,
+   "decimado": null,
+   "triangulos": 499,
+   "vertices": 542,
+   "materiais": 3,
+   "caixa": {
+    "min": [
+     -311.94,
+     0.0,
+     -223.98
+    ],
+    "max": [
+     311.94,
+     21.5,
+     223.98
+    ],
+    "tamanho": [
+     623.88,
+     21.5,
+     447.96
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sbgr/sbgr_field.blend",
+    "pecas": [
+     "SBGR_TerminalBodies",
+     "SBGR_TerminalGlassBand"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "retangulo",
+     "x0": -230,
+     "x1": 410,
+     "y0": 545,
+     "y1": 1010
+    },
+    "origem_no_campo_m": [
+     87.6,
+     777.24
+    ],
+    "datum": "min"
+   },
+   "nota": "O pier inteiro do Terminal 3: 624 m de frente. E um fundo de cena, nao uma peca de montar - use-o atras dos stands.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 499,
+    "vertices": 891,
+    "materiais": 3,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -311.94,
+      0.0,
+      -223.98
+     ],
+     "max": [
+      311.94,
+      21.5,
+      223.98
+     ],
+     "tamanho": [
+      623.88,
+      21.5,
+      447.96
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sbgr_terminal_bloco",
+   "rotulo": "Terminal block (GRU)",
+   "categoria": "estrutura",
+   "campo": "sbgr",
+   "licenca": "odbl-1.0",
+   "arquivo": "sbgr_terminal_bloco.glb",
+   "bytes": 3708,
+   "faces": 40,
+   "faces_origem": 40,
+   "decimado": null,
+   "triangulos": 68,
+   "vertices": 84,
+   "materiais": 3,
+   "caixa": {
+    "min": [
+     -52.191,
+     0.0,
+     -143.315
+    ],
+    "max": [
+     52.191,
+     15.5,
+     143.315
+    ],
+    "tamanho": [
+     104.383,
+     15.5,
+     286.63
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sbgr/sbgr_field.blend",
+    "pecas": [
+     "SBGR_TerminalBodies",
+     "SBGR_TerminalGlassBand"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "retangulo",
+     "x0": -760,
+     "x1": -630,
+     "y0": 350,
+     "y1": 640
+    },
+    "origem_no_campo_m": [
+     -694.42,
+     497.16
+    ],
+    "datum": "min"
+   },
+   "nota": "Um bloco de terminal de ~104 x 276 m, do tamanho certo para compor uma cena de stand sem engolir a aeronave.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 68,
+    "vertices": 126,
+    "materiais": 3,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -52.1915,
+      0.0,
+      -143.3148
+     ],
+     "max": [
+      52.1914,
+      15.5,
+      143.3148
+     ],
+     "tamanho": [
+      104.3829,
+      15.5,
+      286.6296
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sbgr_ponte_embarque",
+   "rotulo": "Jetbridge (GRU)",
+   "categoria": "estrutura",
+   "campo": "sbgr",
+   "licenca": "odbl-1.0",
+   "arquivo": "sbgr_ponte_embarque.glb",
+   "bytes": 3236,
+   "faces": 51,
+   "faces_origem": 51,
+   "decimado": null,
+   "triangulos": 102,
+   "vertices": 88,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -8.763,
+     0.0,
+     -4.482
+    ],
+    "max": [
+     8.763,
+     7.2,
+     4.482
+    ],
+    "tamanho": [
+     17.526,
+     7.2,
+     8.963
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sbgr/sbgr_field.blend",
+    "pecas": [
+     "SBGR_Jetbridges",
+     "SBGR_JetbridgeDark"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": -10.0,
+     "y": 625.0,
+     "r": 30.0
+    },
+    "origem_no_campo_m": [
+     -9.82,
+     625.23
+    ],
+    "datum": "min"
+   },
+   "nota": "Uma ponte de embarque articulada: rotunda, tunel, cabine e as colunas. Posicao vem do stand mapeado no OSM.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 102,
+    "vertices": 204,
+    "materiais": 2,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -8.7632,
+      0.0,
+      -4.4816
+     ],
+     "max": [
+      8.7632,
+      7.2,
+      4.4816
+     ],
+     "tamanho": [
+      17.5264,
+      7.2,
+      8.9633
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sbgr_galpao_carga",
+   "rotulo": "Cargo shed (GRU)",
+   "categoria": "estrutura",
+   "campo": "sbgr",
+   "licenca": "odbl-1.0",
+   "arquivo": "sbgr_galpao_carga.glb",
+   "bytes": 1664,
+   "faces": 18,
+   "faces_origem": 18,
+   "decimado": null,
+   "triangulos": 28,
+   "vertices": 20,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -81.37,
+     0.0,
+     -59.01
+    ],
+    "max": [
+     81.37,
+     12.5,
+     59.01
+    ],
+    "tamanho": [
+     162.74,
+     12.5,
+     118.02
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sbgr/sbgr_field.blend",
+    "pecas": [
+     "SBGR_CargoSheds"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": 2213.8,
+     "y": 1440.1,
+     "r": 120.0
+    },
+    "origem_no_campo_m": [
+     2213.83,
+     1440.05
+    ],
+    "datum": "min"
+   },
+   "nota": "Galpao de carga junto a base LATAM.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 28,
+    "vertices": 50,
+    "materiais": 1,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -81.3701,
+      0.0,
+      -59.01
+     ],
+     "max": [
+      81.3699,
+      12.5,
+      59.01
+     ],
+     "tamanho": [
+      162.74,
+      12.5,
+      118.02
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sbgr_pista_secao",
+   "rotulo": "Runway 10R threshold, 500 m (GRU)",
+   "categoria": "superficie",
+   "campo": "sbgr",
+   "licenca": "odbl-1.0",
+   "arquivo": "sbgr_pista_secao.glb",
+   "bytes": 6944,
+   "faces": 174,
+   "faces_origem": 174,
+   "decimado": null,
+   "triangulos": 348,
+   "vertices": 480,
+   "materiais": 5,
+   "caixa": {
+    "min": [
+     -244.994,
+     0.0,
+     -51.506
+    ],
+    "max": [
+     244.994,
+     1.126,
+     51.506
+    ],
+    "tamanho": [
+     489.988,
+     1.126,
+     103.012
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sbgr/sbgr_field.blend",
+    "pecas": [
+     "SBGR_RunwayEdgeLights",
+     "SBGR_PAPI"
+    ],
+    "superficies": [
+     "SBGR_RwyS_Pavement",
+     "SBGR_RunwayShoulders",
+     "SBGR_RunwayMarkings"
+    ],
+    "regiao": {
+     "tipo": "obb",
+     "x": -289.9,
+     "y": -462.3,
+     "L": 500.0,
+     "W": 150.0,
+     "hdg": 16.354
+    },
+    "origem_no_campo_m": [
+     -284.89,
+     -440.82
+    ],
+    "datum": "min"
+   },
+   "nota": "Cabeceira da 10R com as marcas de soleira, o numero e as luzes de borda. Pintura conforme AIP-Brasil / DECEA.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 348,
+    "vertices": 696,
+    "materiais": 5,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -244.9942,
+      0.0,
+      -51.5059
+     ],
+     "max": [
+      244.9942,
+      1.1256,
+      51.5059
+     ],
+     "tamanho": [
+      489.9884,
+      1.1256,
+      103.0118
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sbgr_taxi_secao",
+   "rotulo": "Taxiway section with centreline (GRU)",
+   "categoria": "superficie",
+   "campo": "sbgr",
+   "licenca": "odbl-1.0",
+   "arquivo": "sbgr_taxi_secao.glb",
+   "bytes": 3140,
+   "faces": 79,
+   "faces_origem": 79,
+   "decimado": null,
+   "triangulos": 158,
+   "vertices": 190,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -160.0,
+     0.0,
+     -45.0
+    ],
+    "max": [
+     160.0,
+     2.376,
+     45.0
+    ],
+    "tamanho": [
+     320.0,
+     2.376,
+     90.0
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sbgr/sbgr_field.blend",
+    "pecas": [],
+    "superficies": [
+     "SBGR_TaxiwayPavement",
+     "SBGR_TaxiwayCentrelines"
+    ],
+    "regiao": {
+     "tipo": "obb",
+     "x": 231.5,
+     "y": -507.0,
+     "L": 320.0,
+     "W": 90.0,
+     "hdg": 16.354
+    },
+    "origem_no_campo_m": [
+     231.5,
+     -507.0
+    ],
+    "datum": "min"
+   },
+   "nota": "Trecho de taxiway paralela com o eixo pintado.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 158,
+    "vertices": 206,
+    "materiais": 2,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -160.0,
+      0.0,
+      -45.0
+     ],
+     "max": [
+      160.0,
+      2.3757,
+      45.0
+     ],
+     "tamanho": [
+      320.0,
+      2.3757,
+      90.0
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sbgr_patio",
+   "rotulo": "Apron slab (GRU)",
+   "categoria": "superficie",
+   "campo": "sbgr",
+   "licenca": "odbl-1.0",
+   "arquivo": "sbgr_patio.glb",
+   "bytes": 2592,
+   "faces": 36,
+   "faces_origem": 36,
+   "decimado": null,
+   "triangulos": 62,
+   "vertices": 80,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -150.0,
+     0.0,
+     -100.0
+    ],
+    "max": [
+     150.0,
+     0.02,
+     100.0
+    ],
+    "tamanho": [
+     300.0,
+     0.02,
+     200.0
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sbgr/sbgr_field.blend",
+    "pecas": [],
+    "superficies": [
+     "SBGR_ApronConcrete",
+     "SBGR_ApronLaneEdges"
+    ],
+    "regiao": {
+     "tipo": "obb",
+     "x": -10.0,
+     "y": 625.0,
+     "L": 300.0,
+     "W": 200.0,
+     "hdg": 16.354
+    },
+    "origem_no_campo_m": [
+     -10.0,
+     625.0
+    ],
+    "datum": "min"
+   },
+   "nota": "Laje de patio com as linhas de faixa, recortada dos poligonos de patio mapeados.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 62,
+    "vertices": 82,
+    "materiais": 2,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -150.0,
+      0.0,
+      -100.0
+     ],
+     "max": [
+      150.0,
+      0.02,
+      100.0
+     ],
+     "tamanho": [
+      300.0,
+      0.02,
+      200.0
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sbgr_placa_campo",
+   "rotulo": "Field plate - GRU (runways, taxiways, aprons, infield)",
+   "categoria": "superficie",
+   "campo": "sbgr",
+   "licenca": "odbl-1.0",
+   "arquivo": "sbgr_placa_campo.glb",
+   "bytes": 91164,
+   "faces": 27648,
+   "faces_origem": 27648,
+   "decimado": null,
+   "triangulos": 55056,
+   "vertices": 35274,
+   "materiais": 9,
+   "caixa": {
+    "min": [
+     -3062.5,
+     -17.617,
+     -2387.5
+    ],
+    "max": [
+     3062.5,
+     66.358,
+     2387.5
+    ],
+    "tamanho": [
+     6125.0,
+     83.975,
+     4775.0
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sbgr/sbgr_field.blend",
+    "pecas": [],
+    "superficies": [
+     "SBGR_RwyN_Pavement",
+     "SBGR_RwyS_Pavement",
+     "SBGR_RunwayShoulders",
+     "SBGR_RunwayMarkings",
+     "SBGR_TaxiwayPavement",
+     "SBGR_TaxiwayCentrelines",
+     "SBGR_ApronConcrete",
+     "SBGR_ApronLaneEdges",
+     "SBGR_AerodromeGround"
+    ],
+    "regiao": null,
+    "origem_no_campo_m": [
+     1713.47,
+     -403.26
+    ],
+    "datum": "campo"
+   },
+   "nota": "As duas pistas, as taxiways, os patios e o campo verde em volta, 6,1 x 4,8 km. y = 0 e a cabeceira da 10L: uma aeronave em y = 0 pousa na pista. Sem terreno Copernicus, sem cidade, sem mata.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida",
+     "datum na cabeceira: base em y=-17.6 m, de proposito"
+    ],
+    "triangulos": 55056,
+    "vertices": 37538,
+    "materiais": 9,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -3062.5,
+      -17.6168,
+      -2387.5
+     ],
+     "max": [
+      3062.5,
+      66.358,
+      2387.5
+     ],
+     "tamanho": [
+      6125.0,
+      83.9747,
+      4775.0
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sbgr_mastro",
+   "rotulo": "Apron floodlight mast, 30 m (GRU)",
+   "categoria": "adereco",
+   "campo": "sbgr",
+   "licenca": "odbl-1.0",
+   "arquivo": "sbgr_mastro.glb",
+   "bytes": 1828,
+   "faces": 35,
+   "faces_origem": 35,
+   "decimado": null,
+   "triangulos": 70,
+   "vertices": 56,
+   "materiais": 1,
+   "caixa": {
+    "min": [
+     -1.95,
+     0.0,
+     -2.039
+    ],
+    "max": [
+     1.95,
+     30.0,
+     2.039
+    ],
+    "tamanho": [
+     3.9,
+     30.0,
+     4.077
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sbgr/sbgr_field.blend",
+    "pecas": [
+     "SBGR_MastsRing"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": 14.5,
+     "y": -691.4,
+     "r": 4.0
+    },
+    "origem_no_campo_m": [
+     14.54,
+     -691.35
+    ],
+    "datum": "min"
+   },
+   "nota": "Mastro de iluminacao de patio. Altura estimada de foto.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 70,
+    "vertices": 140,
+    "materiais": 1,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -1.95,
+      0.0,
+      -2.0387
+     ],
+     "max": [
+      1.95,
+      30.0,
+      2.0388
+     ],
+     "tamanho": [
+      3.9,
+      30.0,
+      4.0775
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sbgr_mastro_trelica",
+   "rotulo": "Lattice floodlight mast, 28 m (GRU)",
+   "categoria": "adereco",
+   "campo": "sbgr",
+   "licenca": "odbl-1.0",
+   "arquivo": "sbgr_mastro_trelica.glb",
+   "bytes": 1636,
+   "faces": 25,
+   "faces_origem": 25,
+   "decimado": null,
+   "triangulos": 50,
+   "vertices": 40,
+   "materiais": 1,
+   "caixa": {
+    "min": [
+     -2.6,
+     0.0,
+     -1.0
+    ],
+    "max": [
+     2.6,
+     30.0,
+     1.0
+    ],
+    "tamanho": [
+     5.2,
+     30.0,
+     2.0
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sbgr/sbgr_field.blend",
+    "pecas": [
+     "SBGR_MastsLattice"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": 1.1,
+     "y": -545.5,
+     "r": 6.0
+    },
+    "origem_no_campo_m": [
+     1.11,
+     -545.53
+    ],
+    "datum": "min"
+   },
+   "nota": "Mastro em trelica de quatro pernas.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 50,
+    "vertices": 100,
+    "materiais": 1,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -2.6,
+      0.0,
+      -1.0
+     ],
+     "max": [
+      2.6,
+      30.0,
+      1.0
+     ],
+     "tamanho": [
+      5.2,
+      30.0,
+      2.0
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sbgr_gse_escada",
+   "rotulo": "Boarding stairs (GRU)",
+   "categoria": "veiculo",
+   "campo": "sbgr",
+   "licenca": "odbl-1.0",
+   "arquivo": "sbgr_gse_escada.glb",
+   "bytes": 2372,
+   "faces": 10,
+   "faces_origem": 10,
+   "decimado": null,
+   "triangulos": 20,
+   "vertices": 16,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -2.652,
+     0.0,
+     -1.567
+    ],
+    "max": [
+     2.652,
+     3.4,
+     1.567
+    ],
+    "tamanho": [
+     5.304,
+     3.4,
+     3.135
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sbgr/sbgr_field.blend",
+    "pecas": [
+     "SBGR_GSE_White",
+     "SBGR_GSE_Dark"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": 2208.5,
+     "y": 1108.0,
+     "r": 3.2
+    },
+    "origem_no_campo_m": [
+     2208.53,
+     1108.0
+    ],
+    "datum": "min"
+   },
+   "nota": "Escada de embarque da fila remota. Posicao e inferencia; que uma posicao remota TENHA escada nao e.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 20,
+    "vertices": 40,
+    "materiais": 2,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -2.6521,
+      0.0,
+      -1.5674
+     ],
+     "max": [
+      2.6523,
+      3.4,
+      1.5674
+     ],
+     "tamanho": [
+      5.3044,
+      3.4,
+      3.1348
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sbgr_gse_onibus",
+   "rotulo": "Apron bus (GRU)",
+   "categoria": "veiculo",
+   "campo": "sbgr",
+   "licenca": "odbl-1.0",
+   "arquivo": "sbgr_gse_onibus.glb",
+   "bytes": 2376,
+   "faces": 10,
+   "faces_origem": 10,
+   "decimado": null,
+   "triangulos": 20,
+   "vertices": 16,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -6.043,
+     0.0,
+     -3.349
+    ],
+    "max": [
+     6.043,
+     3.0,
+     3.349
+    ],
+    "tamanho": [
+     12.087,
+     3.0,
+     6.697
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sbgr/sbgr_field.blend",
+    "pecas": [
+     "SBGR_GSE_Bus",
+     "SBGR_GSE_Dark"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": 2220.4,
+     "y": 1096.1,
+     "r": 6.5
+    },
+    "origem_no_campo_m": [
+     2220.43,
+     1096.08
+    ],
+    "datum": "min"
+   },
+   "nota": "Onibus de patio, 12 m.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 20,
+    "vertices": 40,
+    "materiais": 2,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -6.0432,
+      0.0,
+      -3.3485
+     ],
+     "max": [
+      6.0435,
+      3.0,
+      3.3486
+     ],
+     "tamanho": [
+      12.0867,
+      3.0,
+      6.6971
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sbgr_gse_catering",
+   "rotulo": "Catering truck (GRU)",
+   "categoria": "veiculo",
+   "campo": "sbgr",
+   "licenca": "odbl-1.0",
+   "arquivo": "sbgr_gse_catering.glb",
+   "bytes": 2400,
+   "faces": 10,
+   "faces_origem": 10,
+   "decimado": null,
+   "triangulos": 20,
+   "vertices": 16,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -2.185,
+     0.0,
+     -3.71
+    ],
+    "max": [
+     2.185,
+     3.6,
+     3.71
+    ],
+    "tamanho": [
+     4.369,
+     3.6,
+     7.421
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sbgr/sbgr_field.blend",
+    "pecas": [
+     "SBGR_GSE_White",
+     "SBGR_GSE_Dark"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": -2.8,
+     "y": 612.7,
+     "r": 4.5
+    },
+    "origem_no_campo_m": [
+     -2.82,
+     612.66
+    ],
+    "datum": "min"
+   },
+   "nota": "Caminhao de comissaria, com a caixa elevatoria.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 20,
+    "vertices": 40,
+    "materiais": 2,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -2.1847,
+      0.0,
+      -3.7103
+     ],
+     "max": [
+      2.1847,
+      3.6,
+      3.7103
+     ],
+     "tamanho": [
+      4.3694,
+      3.6,
+      7.4207
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sbgr_gse_loader",
+   "rotulo": "Cargo loader (GRU)",
+   "categoria": "veiculo",
+   "campo": "sbgr",
+   "licenca": "odbl-1.0",
+   "arquivo": "sbgr_gse_loader.glb",
+   "bytes": 2388,
+   "faces": 10,
+   "faces_origem": 10,
+   "decimado": null,
+   "triangulos": 20,
+   "vertices": 16,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -2.521,
+     0.0,
+     -3.809
+    ],
+    "max": [
+     2.521,
+     3.0,
+     3.809
+    ],
+    "tamanho": [
+     5.041,
+     3.0,
+     7.618
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sbgr/sbgr_field.blend",
+    "pecas": [
+     "SBGR_GSE_Yellow",
+     "SBGR_GSE_Dark"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": -634.3,
+     "y": 531.4,
+     "r": 4.6
+    },
+    "origem_no_campo_m": [
+     -634.29,
+     531.42
+    ],
+    "datum": "min"
+   },
+   "nota": "Loader de carga da frente de carga.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 20,
+    "vertices": 40,
+    "materiais": 2,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -2.5206,
+      0.0,
+      -3.8089
+     ],
+     "max": [
+      2.5206,
+      3.0,
+      3.8088
+     ],
+     "tamanho": [
+      5.0411,
+      3.0,
+      7.6177
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sbgr_gse_dolly",
+   "rotulo": "Dolly train with ULDs (GRU)",
+   "categoria": "veiculo",
+   "campo": "sbgr",
+   "licenca": "odbl-1.0",
+   "arquivo": "sbgr_gse_dolly.glb",
+   "bytes": 2876,
+   "faces": 35,
+   "faces_origem": 35,
+   "decimado": null,
+   "triangulos": 70,
+   "vertices": 56,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -4.368,
+     0.0,
+     -8.911
+    ],
+    "max": [
+     4.368,
+     2.0,
+     8.911
+    ],
+    "tamanho": [
+     8.736,
+     2.0,
+     17.822
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sbgr/sbgr_field.blend",
+    "pecas": [
+     "SBGR_GSE_Dolly",
+     "SBGR_GSE_Uld"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "retangulo",
+     "x0": -616.0,
+     "x1": -598.0,
+     "y0": 498.0,
+     "y1": 524.0
+    },
+    "origem_no_campo_m": [
+     -609.02,
+     511.0
+    ],
+    "datum": "min"
+   },
+   "nota": "Comboio de dollies com contentores ULD em cima.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 70,
+    "vertices": 140,
+    "materiais": 2,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -4.3682,
+      0.0,
+      -8.9112
+     ],
+     "max": [
+      4.3682,
+      2.0,
+      8.9112
+     ],
+     "tamanho": [
+      8.7365,
+      2.0,
+      17.8224
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sbgr_gse_bowser",
+   "rotulo": "Fuel bowser (GRU)",
+   "categoria": "veiculo",
+   "campo": "sbgr",
+   "licenca": "odbl-1.0",
+   "arquivo": "sbgr_gse_bowser.glb",
+   "bytes": 2368,
+   "faces": 10,
+   "faces_origem": 10,
+   "decimado": null,
+   "triangulos": 20,
+   "vertices": 16,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -4.683,
+     0.0,
+     -2.559
+    ],
+    "max": [
+     4.683,
+     2.9,
+     2.559
+    ],
+    "tamanho": [
+     9.367,
+     2.9,
+     5.118
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sbgr/sbgr_field.blend",
+    "pecas": [
+     "SBGR_GSE_White",
+     "SBGR_GSE_Dark"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": 2100.0,
+     "y": 1395.0,
+     "r": 5.2
+    },
+    "origem_no_campo_m": [
+     2100.0,
+     1395.0
+    ],
+    "datum": "min"
+   },
+   "nota": "Caminhao-tanque da fila do parque de combustivel.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 20,
+    "vertices": 40,
+    "materiais": 2,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -4.6833,
+      0.0,
+      -2.5588
+     ],
+     "max": [
+      4.6833,
+      2.9,
+      2.5588
+     ],
+     "tamanho": [
+      9.3667,
+      2.9,
+      5.1177
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sdsc_hangar9",
+   "rotulo": "Hangar 9 (Sao Carlos MRO)",
+   "categoria": "estrutura",
+   "campo": "sdsc",
+   "licenca": "odbl-1.0",
+   "arquivo": "sdsc_hangar9.glb",
+   "bytes": 41504,
+   "faces": 1113,
+   "faces_origem": 1113,
+   "decimado": null,
+   "triangulos": 10408,
+   "vertices": 7361,
+   "materiais": 8,
+   "caixa": {
+    "min": [
+     -66.658,
+     0.0,
+     -49.768
+    ],
+    "max": [
+     66.658,
+     27.5,
+     49.768
+    ],
+    "tamanho": [
+     133.315,
+     27.5,
+     99.537
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sdsc/sdsc_field.blend",
+    "pecas": [
+     "SDSC_Hangar9",
+     "SDSC_Hangar9_SpaceFrame",
+     "SDSC_Hangar9_Door",
+     "SDSC_Hangar9_Band",
+     "SDSC_Hangar9_Floor",
+     "SDSC_Hangar9_Wordmark",
+     "SDSC_Hangar9_Brandmark"
+    ],
+    "superficies": [],
+    "regiao": null,
+    "origem_no_campo_m": [
+     750.0,
+     1637.5
+    ],
+    "datum": "min"
+   },
+   "nota": "Hangar 9 do centro de manutencao LATAM em Sao Carlos - o hangar de widebody, 133 x 100 x 28 m, com a marca na fachada.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 10408,
+    "vertices": 11672,
+    "materiais": 8,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -66.6577,
+      0.0,
+      -49.7684
+     ],
+     "max": [
+      66.6577,
+      27.5,
+      49.7684
+     ],
+     "tamanho": [
+      133.3154,
+      27.5,
+      99.5369
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sdsc_mro_hangar",
+   "rotulo": "MRO hangar bay (Sao Carlos)",
+   "categoria": "estrutura",
+   "campo": "sdsc",
+   "licenca": "odbl-1.0",
+   "arquivo": "sdsc_mro_hangar.glb",
+   "bytes": 5372,
+   "faces": 79,
+   "faces_origem": 79,
+   "decimado": null,
+   "triangulos": 156,
+   "vertices": 130,
+   "materiais": 5,
+   "caixa": {
+    "min": [
+     -31.071,
+     0.0,
+     -50.927
+    ],
+    "max": [
+     31.071,
+     21.5,
+     50.927
+    ],
+    "tamanho": [
+     62.141,
+     21.5,
+     101.853
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sdsc/sdsc_field.blend",
+    "pecas": [
+     "SDSC_MRO_Hangars",
+     "SDSC_MRO_HangarBay",
+     "SDSC_MRO_HangarDoors",
+     "SDSC_MRO_SpaceFrame",
+     "SDSC_MRO_HangarFloor"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": 960.0,
+     "y": 1809.0,
+     "r": 80.0
+    },
+    "origem_no_campo_m": [
+     960.5,
+     1809.0
+    ],
+    "datum": "min"
+   },
+   "nota": "Uma baia de hangar da linha MRO, com a porta, a trelica e o piso. A faixa de fachada com a marca e um asset a parte - ela atravessa 450 m de frente e nao pertence a esta baia.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 156,
+    "vertices": 312,
+    "materiais": 5,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -31.0706,
+      0.0,
+      -50.9266
+     ],
+     "max": [
+      31.0706,
+      21.5,
+      50.9266
+     ],
+     "tamanho": [
+      62.1411,
+      21.5,
+      101.8533
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sdsc_mro_fachada",
+   "rotulo": "MRO frontage band + LATAM wordmark (Sao Carlos)",
+   "categoria": "estrutura",
+   "campo": "sdsc",
+   "licenca": "odbl-1.0",
+   "arquivo": "sdsc_mro_fachada.glb",
+   "bytes": 32388,
+   "faces": 1026,
+   "faces_origem": 1026,
+   "decimado": null,
+   "triangulos": 10236,
+   "vertices": 7223,
+   "materiais": 3,
+   "caixa": {
+    "min": [
+     -48.0,
+     0.0,
+     -225.0
+    ],
+    "max": [
+     48.0,
+     7.6,
+     225.0
+    ],
+    "tamanho": [
+     96.0,
+     7.6,
+     450.0
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sdsc/sdsc_field.blend",
+    "pecas": [
+     "SDSC_MRO_FasciaBand",
+     "SDSC_MRO_Wordmark",
+     "SDSC_MRO_Brandmark"
+    ],
+    "superficies": [],
+    "regiao": null,
+    "origem_no_campo_m": [
+     978.5,
+     1805.0
+    ],
+    "datum": "min"
+   },
+   "nota": "A faixa de fachada do centro de manutencao, 450 m, com o letreiro LATAM. Encoste-a numa fila de baias de hangar.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 10236,
+    "vertices": 10113,
+    "materiais": 3,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -48.0,
+      0.0,
+      -225.0
+     ],
+     "max": [
+      48.0,
+      7.6,
+      225.0
+     ],
+     "tamanho": [
+      96.0,
+      7.6,
+      450.0
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sdsc_mro_oficinas",
+   "rotulo": "MRO workshop spine (Sao Carlos)",
+   "categoria": "estrutura",
+   "campo": "sdsc",
+   "licenca": "odbl-1.0",
+   "arquivo": "sdsc_mro_oficinas.glb",
+   "bytes": 2612,
+   "faces": 26,
+   "faces_origem": 26,
+   "decimado": null,
+   "triangulos": 40,
+   "vertices": 28,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -71.365,
+     0.0,
+     -234.935
+    ],
+    "max": [
+     71.365,
+     14.4,
+     234.935
+    ],
+    "tamanho": [
+     142.73,
+     14.4,
+     469.87
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sdsc/sdsc_field.blend",
+    "pecas": [
+     "SDSC_MRO_Workshops"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": 1009.1,
+     "y": 1803.8,
+     "r": 40.0
+    },
+    "origem_no_campo_m": [
+     1009.07,
+     1803.83
+    ],
+    "datum": "min"
+   },
+   "nota": "A espinha de oficinas atras da linha de hangares, 470 m.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 40,
+    "vertices": 70,
+    "materiais": 2,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -71.3649,
+      0.0,
+      -234.9351
+     ],
+     "max": [
+      71.365,
+      14.4,
+      234.9349
+     ],
+     "tamanho": [
+      142.7299,
+      14.4,
+      469.87
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sdsc_museu",
+   "rotulo": "TAM museum hangar (Sao Carlos)",
+   "categoria": "estrutura",
+   "campo": "sdsc",
+   "licenca": "odbl-1.0",
+   "arquivo": "sdsc_museu.glb",
+   "bytes": 2716,
+   "faces": 92,
+   "faces_origem": 92,
+   "decimado": null,
+   "triangulos": 149,
+   "vertices": 114,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -46.76,
+     0.0,
+     -161.26
+    ],
+    "max": [
+     46.76,
+     12.5,
+     161.26
+    ],
+    "tamanho": [
+     93.52,
+     12.5,
+     322.52
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sdsc/sdsc_field.blend",
+    "pecas": [
+     "SDSC_Museu_TAM"
+    ],
+    "superficies": [],
+    "regiao": null,
+    "origem_no_campo_m": [
+     1320.74,
+     1725.71
+    ],
+    "datum": "min"
+   },
+   "nota": "O hangar do Museu TAM, vizinho do centro de manutencao.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 149,
+    "vertices": 281,
+    "materiais": 1,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -46.76,
+      0.0,
+      -161.26
+     ],
+     "max": [
+      46.76,
+      12.5,
+      161.26
+     ],
+     "tamanho": [
+      93.52,
+      12.5,
+      322.52
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sdsc_torre_xadrez",
+   "rotulo": "Chequered tower (Sao Carlos)",
+   "categoria": "estrutura",
+   "campo": "sdsc",
+   "licenca": "odbl-1.0",
+   "arquivo": "sdsc_torre_xadrez.glb",
+   "bytes": 3368,
+   "faces": 30,
+   "faces_origem": 30,
+   "decimado": null,
+   "triangulos": 60,
+   "vertices": 48,
+   "materiais": 3,
+   "caixa": {
+    "min": [
+     -4.8,
+     0.0,
+     -4.8
+    ],
+    "max": [
+     4.8,
+     29.0,
+     4.8
+    ],
+    "tamanho": [
+     9.6,
+     29.0,
+     9.6
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sdsc/sdsc_field.blend",
+    "pecas": [
+     "SDSC_Chequer_Shaft",
+     "SDSC_Chequer_Cab",
+     "SDSC_Chequer_Roof"
+    ],
+    "superficies": [],
+    "regiao": null,
+    "origem_no_campo_m": [
+     300.0,
+     1255.0
+    ],
+    "datum": "min"
+   },
+   "nota": "A torre quadriculada do meio de campo.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 60,
+    "vertices": 120,
+    "materiais": 3,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -4.8,
+      0.0,
+      -4.8
+     ],
+     "max": [
+      4.8,
+      29.0,
+      4.8
+     ],
+     "tamanho": [
+      9.6,
+      29.0,
+      9.6001
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sdsc_hangar_midfield",
+   "rotulo": "Midfield hangar (Sao Carlos)",
+   "categoria": "estrutura",
+   "campo": "sdsc",
+   "licenca": "odbl-1.0",
+   "arquivo": "sdsc_hangar_midfield.glb",
+   "bytes": 4816,
+   "faces": 117,
+   "faces_origem": 117,
+   "decimado": null,
+   "triangulos": 174,
+   "vertices": 124,
+   "materiais": 4,
+   "caixa": {
+    "min": [
+     -18.6,
+     0.0,
+     -34.975
+    ],
+    "max": [
+     18.6,
+     12.7,
+     34.975
+    ],
+    "tamanho": [
+     37.2,
+     12.7,
+     69.95
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sdsc/sdsc_field.blend",
+    "pecas": [
+     "SDSC_Midfield_Hangar",
+     "SDSC_Midfield_Door",
+     "SDSC_Midfield_EndPanels"
+    ],
+    "superficies": [],
+    "regiao": null,
+    "origem_no_campo_m": [
+     335.0,
+     1157.38
+    ],
+    "datum": "min"
+   },
+   "nota": "Hangar de meio de campo com porta e empenas.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 174,
+    "vertices": 182,
+    "materiais": 4,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -18.6,
+      0.0,
+      -34.975
+     ],
+     "max": [
+      18.6,
+      12.7,
+      34.975
+     ],
+     "tamanho": [
+      37.2,
+      12.7,
+      69.95
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sdsc_portao_mro",
+   "rotulo": "MRO gate and guard house",
+   "categoria": "estrutura",
+   "campo": "sdsc",
+   "licenca": "odbl-1.0",
+   "arquivo": "sdsc_portao_mro.glb",
+   "bytes": 3884,
+   "faces": 55,
+   "faces_origem": 55,
+   "decimado": null,
+   "triangulos": 110,
+   "vertices": 88,
+   "materiais": 3,
+   "caixa": {
+    "min": [
+     -14.25,
+     0.0,
+     -8.0
+    ],
+    "max": [
+     14.25,
+     4.7,
+     8.0
+    ],
+    "tamanho": [
+     28.5,
+     4.7,
+     16.0
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sdsc/sdsc_field.blend",
+    "pecas": [
+     "SDSC_MRO_Gate",
+     "SDSC_MRO_GuardHouse",
+     "SDSC_MRO_Boom"
+    ],
+    "superficies": [],
+    "regiao": null,
+    "origem_no_campo_m": [
+     921.75,
+     1539.0
+    ],
+    "datum": "min"
+   },
+   "nota": "Portaria do centro de manutencao: guarita, portao e cancela.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 110,
+    "vertices": 220,
+    "materiais": 3,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -14.25,
+      0.0,
+      -8.0
+     ],
+     "max": [
+      14.25,
+      4.7,
+      8.0
+     ],
+     "tamanho": [
+      28.5,
+      4.7,
+      16.0
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sdsc_cerca",
+   "rotulo": "Perimeter fence, 60 m run",
+   "categoria": "adereco",
+   "campo": "sdsc",
+   "licenca": "odbl-1.0",
+   "arquivo": "sdsc_cerca.glb",
+   "bytes": 3148,
+   "faces": 173,
+   "faces_origem": 173,
+   "decimado": null,
+   "triangulos": 346,
+   "vertices": 428,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -30.125,
+     0.0,
+     -1.58
+    ],
+    "max": [
+     30.125,
+     3.0,
+     1.58
+    ],
+    "tamanho": [
+     60.25,
+     3.0,
+     3.16
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sdsc/sdsc_field.blend",
+    "pecas": [
+     "SDSC_MRO_PerimeterWall",
+     "SDSC_MRO_PerimeterMesh",
+     "SDSC_MRO_PerimeterPosts"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "retangulo",
+     "x0": 619.0,
+     "x1": 681.0,
+     "y0": 1543.0,
+     "y1": 1547.0
+    },
+    "origem_no_campo_m": [
+     649.97,
+     1546.42
+    ],
+    "datum": "min"
+   },
+   "nota": "Trecho reto de cerca de perimetro - mureta, tela e postes a cada 3 m. Duplique-o em fila para fechar um perimetro.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 346,
+    "vertices": 692,
+    "materiais": 2,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -30.125,
+      0.0,
+      -1.5801
+     ],
+     "max": [
+      30.125,
+      3.0,
+      1.58
+     ],
+     "tamanho": [
+      60.25,
+      3.0,
+      3.16
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sdsc_doca_manutencao",
+   "rotulo": "Maintenance dock + tool carts",
+   "categoria": "adereco",
+   "campo": "sdsc",
+   "licenca": "odbl-1.0",
+   "arquivo": "sdsc_doca_manutencao.glb",
+   "bytes": 4252,
+   "faces": 170,
+   "faces_origem": 170,
+   "decimado": null,
+   "triangulos": 340,
+   "vertices": 272,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -9.862,
+     0.0,
+     -8.081
+    ],
+    "max": [
+     9.862,
+     4.539,
+     8.081
+    ],
+    "tamanho": [
+     19.724,
+     4.539,
+     16.163
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sdsc/sdsc_field.blend",
+    "pecas": [
+     "SDSC_MRO_Docks",
+     "SDSC_MRO_ToolCarts"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": 874.3,
+     "y": 1887.0,
+     "r": 13.0
+    },
+    "origem_no_campo_m": [
+     878.41,
+     1887.03
+    ],
+    "datum": "min"
+   },
+   "nota": "Doca de manutencao com plataformas, escadas e carrinhos de ferramenta.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 340,
+    "vertices": 680,
+    "materiais": 2,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -9.8622,
+      0.0,
+      -8.0813
+     ],
+     "max": [
+      9.8622,
+      4.539,
+      8.0813
+     ],
+     "tamanho": [
+      19.7245,
+      4.539,
+      16.1626
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sdsc_suporte_motor",
+   "rotulo": "Engine stands with engines",
+   "categoria": "adereco",
+   "campo": "sdsc",
+   "licenca": "odbl-1.0",
+   "arquivo": "sdsc_suporte_motor.glb",
+   "bytes": 4964,
+   "faces": 159,
+   "faces_origem": 159,
+   "decimado": null,
+   "triangulos": 318,
+   "vertices": 248,
+   "materiais": 3,
+   "caixa": {
+    "min": [
+     -6.243,
+     0.0,
+     -8.22
+    ],
+    "max": [
+     6.243,
+     4.539,
+     8.22
+    ],
+    "tamanho": [
+     12.485,
+     4.539,
+     16.44
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sdsc/sdsc_field.blend",
+    "pecas": [
+     "SDSC_MRO_Docks",
+     "SDSC_MRO_LooseEngines",
+     "SDSC_MRO_ToolCarts"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": 990.0,
+     "y": 1958.0,
+     "r": 13.0
+    },
+    "origem_no_campo_m": [
+     989.99,
+     1958.02
+    ],
+    "datum": "min"
+   },
+   "nota": "Ber\u00e7os de motor com motores fora da asa, na frente da oficina.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 318,
+    "vertices": 572,
+    "materiais": 3,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -6.2426,
+      0.0,
+      -8.22
+     ],
+     "max": [
+      6.2426,
+      4.539,
+      8.2198
+     ],
+     "tamanho": [
+      12.4852,
+      4.539,
+      16.4398
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sdsc_conteineres",
+   "rotulo": "ISO container row",
+   "categoria": "adereco",
+   "campo": "sdsc",
+   "licenca": "odbl-1.0",
+   "arquivo": "sdsc_conteineres.glb",
+   "bytes": 3196,
+   "faces": 55,
+   "faces_origem": 55,
+   "decimado": null,
+   "triangulos": 110,
+   "vertices": 88,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -25.337,
+     0.0,
+     -3.045
+    ],
+    "max": [
+     25.337,
+     5.2,
+     3.045
+    ],
+    "tamanho": [
+     50.674,
+     5.2,
+     6.091
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sdsc/sdsc_field.blend",
+    "pecas": [
+     "SDSC_Containers",
+     "SDSC_ContainersRust"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "retangulo",
+     "x0": 930.0,
+     "x1": 985.0,
+     "y0": 1860.0,
+     "y1": 1876.0
+    },
+    "origem_no_campo_m": [
+     956.57,
+     1868.27
+    ],
+    "datum": "min"
+   },
+   "nota": "Fila de contentores ISO encostada na linha de hangares. Fotografado: refs/mro_centro_tecnologico_2009.jpg.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 110,
+    "vertices": 220,
+    "materiais": 2,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -25.3369,
+      0.0,
+      -3.0453
+     ],
+     "max": [
+      25.3369,
+      5.2,
+      3.0454
+     ],
+     "tamanho": [
+      50.6737,
+      5.2,
+      6.0907
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sdsc_mastro",
+   "rotulo": "Floodlight mast, 16 m (Sao Carlos)",
+   "categoria": "adereco",
+   "campo": "sdsc",
+   "licenca": "odbl-1.0",
+   "arquivo": "sdsc_mastro.glb",
+   "bytes": 1588,
+   "faces": 10,
+   "faces_origem": 10,
+   "decimado": null,
+   "triangulos": 20,
+   "vertices": 16,
+   "materiais": 1,
+   "caixa": {
+    "min": [
+     -2.2,
+     0.0,
+     -0.7
+    ],
+    "max": [
+     2.2,
+     17.4,
+     0.7
+    ],
+    "tamanho": [
+     4.4,
+     17.4,
+     1.4
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sdsc/sdsc_field.blend",
+    "pecas": [
+     "SDSC_FloodlightMasts"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": 1030.9,
+     "y": 2051.0,
+     "r": 4.0
+    },
+    "origem_no_campo_m": [
+     1030.92,
+     2050.96
+    ],
+    "datum": "min"
+   },
+   "nota": "Mastro de iluminacao do patio de manutencao.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 20,
+    "vertices": 40,
+    "materiais": 1,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -2.2,
+      0.0,
+      -0.7
+     ],
+     "max": [
+      2.2001,
+      17.4,
+      0.7
+     ],
+     "tamanho": [
+      4.4,
+      17.4,
+      1.3999
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sdsc_gse_reboque",
+   "rotulo": "Tug with towbar",
+   "categoria": "veiculo",
+   "campo": "sdsc",
+   "licenca": "odbl-1.0",
+   "arquivo": "sdsc_gse_reboque.glb",
+   "bytes": 3172,
+   "faces": 15,
+   "faces_origem": 15,
+   "decimado": null,
+   "triangulos": 30,
+   "vertices": 24,
+   "materiais": 3,
+   "caixa": {
+    "min": [
+     -1.224,
+     0.0,
+     -5.0
+    ],
+    "max": [
+     1.224,
+     1.7,
+     5.0
+    ],
+    "tamanho": [
+     2.448,
+     1.7,
+     10.0
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sdsc/sdsc_field.blend",
+    "pecas": [
+     "SDSC_GSE_White",
+     "SDSC_GSE_Yellow",
+     "SDSC_GSE_Chassis"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": 950.0,
+     "y": 1875.0,
+     "r": 6.0
+    },
+    "origem_no_campo_m": [
+     950.0,
+     1877.6
+    ],
+    "datum": "min"
+   },
+   "nota": "Trator de reboque com a barra. Um trator SEM barra parado no trem de nariz e o detalhe que denuncia quem nunca pisou num patio - por isso a barra vem junto.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 30,
+    "vertices": 60,
+    "materiais": 3,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -1.224,
+      0.0,
+      -5.0
+     ],
+     "max": [
+      1.224,
+      1.7,
+      5.0
+     ],
+     "tamanho": [
+      2.448,
+      1.7,
+      10.0
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sdsc_gse_gpu",
+   "rotulo": "Ground power unit",
+   "categoria": "veiculo",
+   "campo": "sdsc",
+   "licenca": "odbl-1.0",
+   "arquivo": "sdsc_gse_gpu.glb",
+   "bytes": 2356,
+   "faces": 10,
+   "faces_origem": 10,
+   "decimado": null,
+   "triangulos": 20,
+   "vertices": 16,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -0.816,
+     0.0,
+     -1.6
+    ],
+    "max": [
+     0.816,
+     1.8,
+     1.6
+    ],
+    "tamanho": [
+     1.632,
+     1.8,
+     3.2
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sdsc/sdsc_field.blend",
+    "pecas": [
+     "SDSC_GSE_Yellow",
+     "SDSC_GSE_Chassis"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": 957.4,
+     "y": 1875.0,
+     "r": 2.6
+    },
+    "origem_no_campo_m": [
+     957.4,
+     1875.0
+    ],
+    "datum": "min"
+   },
+   "nota": "GPU do parque de equipamentos.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 20,
+    "vertices": 40,
+    "materiais": 2,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -0.816,
+      0.0,
+      -1.6
+     ],
+     "max": [
+      0.816,
+      1.8,
+      1.6
+     ],
+     "tamanho": [
+      1.632,
+      1.8,
+      3.2
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sdsc_gse_airstart",
+   "rotulo": "Air start unit",
+   "categoria": "veiculo",
+   "campo": "sdsc",
+   "licenca": "odbl-1.0",
+   "arquivo": "sdsc_gse_airstart.glb",
+   "bytes": 2352,
+   "faces": 10,
+   "faces_origem": 10,
+   "decimado": null,
+   "triangulos": 20,
+   "vertices": 16,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -0.918,
+     0.0,
+     -1.8
+    ],
+    "max": [
+     0.918,
+     1.9,
+     1.8
+    ],
+    "tamanho": [
+     1.836,
+     1.9,
+     3.6
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sdsc/sdsc_field.blend",
+    "pecas": [
+     "SDSC_GSE_Yellow",
+     "SDSC_GSE_Chassis"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": 964.8,
+     "y": 1875.0,
+     "r": 2.8
+    },
+    "origem_no_campo_m": [
+     964.8,
+     1875.0
+    ],
+    "datum": "min"
+   },
+   "nota": "Unidade de partida pneumatica.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 20,
+    "vertices": 40,
+    "materiais": 2,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -0.918,
+      0.0,
+      -1.8
+     ],
+     "max": [
+      0.918,
+      1.9,
+      1.8
+     ],
+     "tamanho": [
+      1.836,
+      1.9,
+      3.6001
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sdsc_gse_beltloader",
+   "rotulo": "Belt loader",
+   "categoria": "veiculo",
+   "campo": "sdsc",
+   "licenca": "odbl-1.0",
+   "arquivo": "sdsc_gse_beltloader.glb",
+   "bytes": 2372,
+   "faces": 10,
+   "faces_origem": 10,
+   "decimado": null,
+   "triangulos": 20,
+   "vertices": 16,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -1.122,
+     0.0,
+     -3.2
+    ],
+    "max": [
+     1.122,
+     1.6,
+     3.2
+    ],
+    "tamanho": [
+     2.244,
+     1.6,
+     6.4
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sdsc/sdsc_field.blend",
+    "pecas": [
+     "SDSC_GSE_White",
+     "SDSC_GSE_Chassis"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": 972.2,
+     "y": 1875.0,
+     "r": 3.6
+    },
+    "origem_no_campo_m": [
+     972.2,
+     1875.0
+    ],
+    "datum": "min"
+   },
+   "nota": "Esteira de bagagem.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 20,
+    "vertices": 40,
+    "materiais": 2,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -1.122,
+      0.0,
+      -3.2
+     ],
+     "max": [
+      1.122,
+      1.6,
+      3.2
+     ],
+     "tamanho": [
+      2.244,
+      1.6,
+      6.3999
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sdsc_gse_van",
+   "rotulo": "Service van",
+   "categoria": "veiculo",
+   "campo": "sdsc",
+   "licenca": "odbl-1.0",
+   "arquivo": "sdsc_gse_van.glb",
+   "bytes": 2336,
+   "faces": 10,
+   "faces_origem": 10,
+   "decimado": null,
+   "triangulos": 20,
+   "vertices": 16,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -1.02,
+     0.0,
+     -2.6
+    ],
+    "max": [
+     1.02,
+     2.1,
+     2.6
+    ],
+    "tamanho": [
+     2.04,
+     2.1,
+     5.2
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sdsc/sdsc_field.blend",
+    "pecas": [
+     "SDSC_GSE_White",
+     "SDSC_GSE_Chassis"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": 979.6,
+     "y": 1875.0,
+     "r": 3.0
+    },
+    "origem_no_campo_m": [
+     979.6,
+     1875.0
+    ],
+    "datum": "min"
+   },
+   "nota": "Van de servico.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 20,
+    "vertices": 40,
+    "materiais": 2,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -1.02,
+      0.0,
+      -2.6
+     ],
+     "max": [
+      1.02,
+      2.1,
+      2.6
+     ],
+     "tamanho": [
+      2.04,
+      2.1,
+      5.2
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sdsc_gse_bowser",
+   "rotulo": "Fuel bowser",
+   "categoria": "veiculo",
+   "campo": "sdsc",
+   "licenca": "odbl-1.0",
+   "arquivo": "sdsc_gse_bowser.glb",
+   "bytes": 2340,
+   "faces": 10,
+   "faces_origem": 10,
+   "decimado": null,
+   "triangulos": 20,
+   "vertices": 16,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -1.326,
+     0.0,
+     -4.5
+    ],
+    "max": [
+     1.326,
+     2.9,
+     4.5
+    ],
+    "tamanho": [
+     2.652,
+     2.9,
+     9.0
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sdsc/sdsc_field.blend",
+    "pecas": [
+     "SDSC_GSE_White",
+     "SDSC_GSE_Chassis"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": 994.4,
+     "y": 1875.0,
+     "r": 5.0
+    },
+    "origem_no_campo_m": [
+     994.4,
+     1875.0
+    ],
+    "datum": "min"
+   },
+   "nota": "Caminhao-tanque, 9 m.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 20,
+    "vertices": 40,
+    "materiais": 2,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -1.326,
+      0.0,
+      -4.5
+     ],
+     "max": [
+      1.326,
+      2.9,
+      4.5
+     ],
+     "tamanho": [
+      2.652,
+      2.9,
+      9.0
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sdsc_gse_cherrypicker",
+   "rotulo": "Cherry picker",
+   "categoria": "veiculo",
+   "campo": "sdsc",
+   "licenca": "odbl-1.0",
+   "arquivo": "sdsc_gse_cherrypicker.glb",
+   "bytes": 2364,
+   "faces": 10,
+   "faces_origem": 10,
+   "decimado": null,
+   "triangulos": 20,
+   "vertices": 16,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -1.173,
+     0.0,
+     -2.8
+    ],
+    "max": [
+     1.173,
+     2.4,
+     2.8
+    ],
+    "tamanho": [
+     2.346,
+     2.4,
+     5.6
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sdsc/sdsc_field.blend",
+    "pecas": [
+     "SDSC_GSE_Yellow",
+     "SDSC_GSE_Chassis"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": 1001.8,
+     "y": 1875.0,
+     "r": 3.4
+    },
+    "origem_no_campo_m": [
+     1001.8,
+     1875.0
+    ],
+    "datum": "min"
+   },
+   "nota": "Plataforma elevatoria.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 20,
+    "vertices": 40,
+    "materiais": 2,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -1.173,
+      0.0,
+      -2.8
+     ],
+     "max": [
+      1.173,
+      2.4,
+      2.8
+     ],
+     "tamanho": [
+      2.346,
+      2.4,
+      5.6001
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "sdsc_placa_campo",
+   "rotulo": "Field plate - Sao Carlos (runway, taxiways, apron, infield)",
+   "categoria": "superficie",
+   "campo": "sdsc",
+   "licenca": "odbl-1.0",
+   "arquivo": "sdsc_placa_campo.glb",
+   "bytes": 41492,
+   "faces": 12881,
+   "faces_origem": 12881,
+   "decimado": null,
+   "triangulos": 25680,
+   "vertices": 15753,
+   "materiais": 8,
+   "caixa": {
+    "min": [
+     -1250.0,
+     -103.808,
+     -1475.0
+    ],
+    "max": [
+     1250.0,
+     11.669,
+     1475.0
+    ],
+    "tamanho": [
+     2500.0,
+     115.477,
+     2950.0
+    ]
+   },
+   "fonte": {
+    "blend": "scenario_sdsc/sdsc_field.blend",
+    "pecas": [],
+    "superficies": [
+     "SDSC_RunwayPavement",
+     "SDSC_RunwayShoulders",
+     "SDSC_RunwayMarkings",
+     "SDSC_TaxiwayPavement",
+     "SDSC_TaxiwayCentrelines",
+     "SDSC_ApronConcrete",
+     "SDSC_MownGrass",
+     "SDSC_AerodromeGround"
+    ],
+    "regiao": null,
+    "origem_no_campo_m": [
+     570.18,
+     979.62
+    ],
+    "datum": "campo"
+   },
+   "nota": "A pista 02/20, as taxiways, o patio e o campo, 2,5 x 3,0 km. y = 0 e a cabeceira 02; o terreno de Sao Carlos desce 35 m dali ate o patio do MRO, e isso esta na malha.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida",
+     "datum na cabeceira: base em y=-103.8 m, de proposito"
+    ],
+    "triangulos": 25680,
+    "vertices": 15873,
+    "materiais": 8,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -1250.0,
+      -103.8081,
+      -1475.0
+     ],
+     "max": [
+      1250.0,
+      11.6687,
+      1475.0
+     ],
+     "tamanho": [
+      2500.0,
+      115.4769,
+      2950.0
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "scl_torre",
+   "rotulo": "Control tower + DGAC block (SCL)",
+   "categoria": "estrutura",
+   "campo": "scl",
+   "licenca": "odbl-1.0",
+   "arquivo": "scl_torre.glb",
+   "bytes": 5708,
+   "faces": 189,
+   "faces_origem": 189,
+   "decimado": null,
+   "triangulos": 322,
+   "vertices": 272,
+   "materiais": 4,
+   "caixa": {
+    "min": [
+     -30.0,
+     0.0,
+     -24.898
+    ],
+    "max": [
+     30.0,
+     65.8,
+     24.898
+    ],
+    "tamanho": [
+     60.0,
+     65.8,
+     49.795
+    ]
+   },
+   "fonte": {
+    "blend": "scenario/scl_field.blend",
+    "pecas": [
+     "SCL_Tower_Shaft",
+     "SCL_Tower_Cab",
+     "SCL_Tower_Decks",
+     "SCL_Tower_Equipment",
+     "SCL_DGAC_Building"
+    ],
+    "superficies": [],
+    "regiao": null,
+    "origem_no_campo_m": [
+     -676.0,
+     -1785.1
+    ],
+    "datum": "min"
+   },
+   "nota": "A torre de Santiago, 48 m de fuste, com o bloco da DGAC embaixo.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 322,
+    "vertices": 636,
+    "materiais": 4,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -30.0,
+      0.0,
+      -24.8977
+     ],
+     "max": [
+      30.0,
+      65.8,
+      24.8977
+     ],
+     "tamanho": [
+      60.0,
+      65.8,
+      49.7954
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "scl_base_latam",
+   "rotulo": "LATAM base frontage (SCL)",
+   "categoria": "estrutura",
+   "campo": "scl",
+   "licenca": "odbl-1.0",
+   "arquivo": "scl_base_latam.glb",
+   "bytes": 36688,
+   "faces": 1091,
+   "faces_origem": 1091,
+   "decimado": null,
+   "triangulos": 10338,
+   "vertices": 7305,
+   "materiais": 7,
+   "caixa": {
+    "min": [
+     -70.615,
+     0.0,
+     -93.657
+    ],
+    "max": [
+     70.615,
+     23.0,
+     93.657
+    ],
+    "tamanho": [
+     141.23,
+     23.0,
+     187.314
+    ]
+   },
+   "fonte": {
+    "blend": "scenario/scl_field.blend",
+    "pecas": [
+     "SCL_LATAM_Buildings",
+     "SCL_LATAM_HangarDoors",
+     "SCL_LATAM_WindowBand",
+     "SCL_LATAM_SignBand",
+     "SCL_LATAM_Wordmark",
+     "SCL_LATAM_Brandmark"
+    ],
+    "superficies": [],
+    "regiao": null,
+    "origem_no_campo_m": [
+     -651.48,
+     -1302.89
+    ],
+    "datum": "min"
+   },
+   "nota": "A frente da base LATAM em Santiago, com a faixa de letreiro e a marca.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 10338,
+    "vertices": 10312,
+    "materiais": 7,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -70.615,
+      0.0,
+      -93.6571
+     ],
+     "max": [
+      70.615,
+      23.0,
+      93.6571
+     ],
+     "tamanho": [
+      141.23,
+      23.0,
+      187.3142
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "scl_terminal_t2",
+   "rotulo": "Terminal 2 (SCL)",
+   "categoria": "estrutura",
+   "campo": "scl",
+   "licenca": "odbl-1.0",
+   "arquivo": "scl_terminal_t2.glb",
+   "bytes": 16336,
+   "faces": 1157,
+   "faces_origem": 1157,
+   "decimado": null,
+   "triangulos": 2167,
+   "vertices": 2534,
+   "materiais": 6,
+   "caixa": {
+    "min": [
+     -201.57,
+     0.0,
+     -159.64
+    ],
+    "max": [
+     201.57,
+     34.989,
+     159.64
+    ],
+    "tamanho": [
+     403.14,
+     34.989,
+     319.28
+    ]
+   },
+   "fonte": {
+    "blend": "scenario/scl_field.blend",
+    "pecas": [
+     "SCL_Terminal_Volumes",
+     "SCL_Terminal_Roofs",
+     "SCL_Terminal_Glazing",
+     "SCL_T2_Brise",
+     "SCL_T2_GreenPanels"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "retangulo",
+     "x0": -830,
+     "x1": -440,
+     "y0": -2975,
+     "y1": -2640
+    },
+    "origem_no_campo_m": [
+     -637.14,
+     -2807.13
+    ],
+    "datum": "min"
+   },
+   "nota": "O Terminal 2 com a cobertura ondulada, o brise e os paineis verdes - 367 x 317 m.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 2167,
+    "vertices": 2979,
+    "materiais": 5,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -201.5702,
+      0.0,
+      -159.6399
+     ],
+     "max": [
+      201.5702,
+      34.9892,
+      159.6399
+     ],
+     "tamanho": [
+      403.1404,
+      34.9892,
+      319.2798
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "scl_hangar",
+   "rotulo": "Hangar block (SCL)",
+   "categoria": "estrutura",
+   "campo": "scl",
+   "licenca": "odbl-1.0",
+   "arquivo": "scl_hangar.glb",
+   "bytes": 2988,
+   "faces": 58,
+   "faces_origem": 58,
+   "decimado": null,
+   "triangulos": 89,
+   "vertices": 64,
+   "materiais": 2,
+   "caixa": {
+    "min": [
+     -49.103,
+     0.0,
+     -47.961
+    ],
+    "max": [
+     49.103,
+     21.0,
+     47.961
+    ],
+    "tamanho": [
+     98.205,
+     21.0,
+     95.922
+    ]
+   },
+   "fonte": {
+    "blend": "scenario/scl_field.blend",
+    "pecas": [
+     "SCL_Hangar_SkyAirline"
+    ],
+    "superficies": [],
+    "regiao": null,
+    "origem_no_campo_m": [
+     -822.31,
+     -1659.35
+    ],
+    "datum": "min"
+   },
+   "nota": "Um hangar de terceiros no lado sul, 98 x 96 x 21 m.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 89,
+    "vertices": 157,
+    "materiais": 2,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -49.1025,
+      0.0,
+      -47.9609
+     ],
+     "max": [
+      49.1025,
+      21.0,
+      47.9609
+     ],
+     "tamanho": [
+      98.2051,
+      21.0,
+      95.9219
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "scl_mastro",
+   "rotulo": "Apron floodlight mast, 30 m (SCL)",
+   "categoria": "adereco",
+   "campo": "scl",
+   "licenca": "odbl-1.0",
+   "arquivo": "scl_mastro.glb",
+   "bytes": 1552,
+   "faces": 12,
+   "faces_origem": 12,
+   "decimado": null,
+   "triangulos": 20,
+   "vertices": 16,
+   "materiais": 1,
+   "caixa": {
+    "min": [
+     -2.4,
+     0.0,
+     -1.2
+    ],
+    "max": [
+     2.4,
+     32.6,
+     1.2
+    ],
+    "tamanho": [
+     4.8,
+     32.6,
+     2.4
+    ]
+   },
+   "fonte": {
+    "blend": "scenario/scl_field.blend",
+    "pecas": [
+     "SCL_LightMasts"
+    ],
+    "superficies": [],
+    "regiao": {
+     "tipo": "circulo",
+     "x": -759.7,
+     "y": -324.7,
+     "r": 4.0
+    },
+    "origem_no_campo_m": [
+     -759.71,
+     -324.68
+    ],
+    "datum": "min"
+   },
+   "nota": "Mastro de patio de Santiago.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida"
+    ],
+    "triangulos": 20,
+    "vertices": 40,
+    "materiais": 1,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -2.4,
+      0.0,
+      -1.2
+     ],
+     "max": [
+      2.4,
+      32.6,
+      1.2
+     ],
+     "tamanho": [
+      4.8,
+      32.6,
+      2.4
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  },
+  {
+   "slug": "scl_placa_campo",
+   "rotulo": "Field plate - Santiago (runways, taxiways, apron, infield)",
+   "categoria": "superficie",
+   "campo": "scl",
+   "licenca": "odbl-1.0",
+   "arquivo": "scl_placa_campo.glb",
+   "bytes": 35596,
+   "faces": 5545,
+   "faces_origem": 5545,
+   "decimado": null,
+   "triangulos": 10403,
+   "vertices": 12073,
+   "materiais": 8,
+   "caixa": {
+    "min": [
+     -1085.07,
+     0.0,
+     -2527.745
+    ],
+    "max": [
+     1085.07,
+     0.12,
+     2527.745
+    ],
+    "tamanho": [
+     2170.14,
+     0.12,
+     5055.49
+    ]
+   },
+   "fonte": {
+    "blend": "scenario/scl_field.blend",
+    "pecas": [],
+    "superficies": [
+     "SCL_RunwayPavement_17L",
+     "SCL_RunwayPavement_17R",
+     "SCL_RunwayShoulders",
+     "SCL_RunwayMarkings",
+     "SCL_TaxiwayPavement",
+     "SCL_TaxiwayCentrelines",
+     "SCL_ApronConcrete",
+     "SCL_AerodromeGround"
+    ],
+    "regiao": {
+     "tipo": "retangulo",
+     "x0": -1760,
+     "x1": 440,
+     "y0": -4010,
+     "y1": 1090
+    },
+    "origem_no_campo_m": [
+     -662.26,
+     -1461.45
+    ],
+    "datum": "campo"
+   },
+   "nota": "As duas pistas paralelas 17L/35R e 17R/35L, as taxiways, o patio e o campo, 2,2 x 5,1 km. y = 0 e a cabeceira 17L.",
+   "ausentes": [],
+   "verificacao": {
+    "ok": true,
+    "erros": [],
+    "avisos": [
+     "nenhuma imagem embutida",
+     "datum na cabeceira: base em y=0.0 m, de proposito"
+    ],
+    "triangulos": 10403,
+    "vertices": 12107,
+    "materiais": 8,
+    "imagens": 0,
+    "caixa": {
+     "min": [
+      -1085.0699,
+      0.0,
+      -2527.7451
+     ],
+     "max": [
+      1085.0701,
+      0.12,
+      2527.7451
+     ],
+     "tamanho": [
+      2170.14,
+      0.12,
+      5055.4902
+     ]
+    },
+    "draco": true,
+    "nos": 1,
+    "extensoes": [
+     "KHR_draco_mesh_compression"
+    ]
+   }
+  }
+ ]
+}
