@@ -42,5 +42,8 @@ export async function montar (el, doc, opc = {}) {
   c.maxDistance = 12000;
 
   m.iniciarLoop(() => { c.update(); m.render(); });
+  /* Same reason index.html exposes window.__estudio: this is how an embed gets
+     driven and checked from the console when it does not look right. */
+  window.__embed = m;
   return m;
 }

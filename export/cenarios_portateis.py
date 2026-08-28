@@ -56,21 +56,22 @@ LICENCAS = {
         "url": "https://opendatacommons.org/licenses/odbl/1-0/",
         "atribuicao": "Airport geometry (c) OpenStreetMap contributors, ODbL 1.0",
         "share_alike": True,
-        "nota": ("A malha do aerodromo e gerada a partir de OpenStreetMap "
-                 "(footprints, eixos de taxiway, poligonos de patio, posicoes "
-                 "de stand e ponte). Uma malha feita a partir de um banco ODbL "
-                 "e um banco derivado: redistribuir exige a atribuicao acima E "
-                 "share-alike sobre a geodata derivada. O levantamento de pista "
-                 "(cabeceiras, larguras, distancias declaradas, geometria de "
-                 "pintura) vem de AIP/DECEA/DGAC e e citado como fato."),
+        "nota": ("The aerodrome mesh is generated from OpenStreetMap "
+                 "(building footprints, taxiway centrelines, apron polygons, "
+                 "stand and jetbridge positions). A mesh built from an ODbL "
+                 "database is a derived database: redistributing it requires "
+                 "the attribution above AND share-alike on the derived "
+                 "geodata. The runway survey itself - thresholds, widths, "
+                 "declared distances, marking geometry - comes from "
+                 "AIP/DECEA/DGAC and is quoted as fact."),
     },
     "cc-by-4.0": {
         "nome": "CC BY 4.0",
         "url": "https://creativecommons.org/licenses/by/4.0/",
         "atribuicao": "LATAM fleet 3D replicas - Kim Lage - CC BY 4.0",
         "share_alike": False,
-        "nota": ("Geometria original deste repositorio, construida a partir dos "
-                 "documentos dimensionais publicados pelos fabricantes."),
+        "nota": ("Original geometry from this repository, built from the "
+                 "dimensional documents published by the manufacturers."),
     },
     "copernicus": {
         "nome": "Copernicus WorldDEM-30 (Free & Open)",
@@ -80,16 +81,17 @@ LICENCAS = {
                        "2014-2018 provided under COPERNICUS by the European "
                        "Union and ESA; all rights reserved"),
         "share_alike": False,
-        "nota": ("As organizacoes responsaveis pelo programa Copernicus por lei "
-                 "ou delegacao nao incorrem em qualquer responsabilidade por "
-                 "qualquer uso do Copernicus WorldDEM-30. NENHUM asset desta "
-                 "exportacao usa terreno Copernicus - a tabela esta aqui porque "
-                 "o estudio a exibe se algum dia usar."),
+        "nota": ("The organisations in charge of the Copernicus programme by "
+                 "law or by delegation do not incur any liability for any use "
+                 "of the Copernicus WorldDEM-30. NO asset in this export uses "
+                 "Copernicus terrain - the row is here so the studio can show "
+                 "it the day one does."),
     },
 }
 
-MARCAS = ("LATAM, Airbus e Boeing sao marcas de seus titulares. Projeto "
-          "independente, nao comercial, sem afiliacao ou endosso.")
+MARCAS = ("LATAM, Airbus and Boeing are trademarks of their owners. An "
+          "independent, non-commercial project with no affiliation or "
+          "endorsement.")
 
 # ---------------------------------------------------------------------------
 # Os campos e o datum de cada um.
@@ -109,7 +111,7 @@ CAMPOS = {
     },
     "sdsc": {
         "blend": "scenario_sdsc/sdsc_field.blend",
-        "rotulo": "SDSC - Sao Carlos / base de manutencao LATAM",
+        "rotulo": "SDSC - Sao Carlos / LATAM maintenance base",
         "datum_z": -2.33,        # SDSC_02_Threshold
         "prefixo": "SDSC_",
     },
@@ -162,46 +164,47 @@ CATALOGO = {
                "SBGR_LATAM_HangarDoors", "SBGR_LATAM_HangarBand",
                "SBGR_LATAM_HangarFloor", "SBGR_LATAM_HangarOpenBay",
                "SBGR_LATAM_Hangar_Wordmark", "SBGR_LATAM_Hangar_Brandmark"],
-        nota="O hangar da base LATAM em Guarulhos, com a fachada, a porta, a "
-             "faixa e a marca. Footprint do OSM; altura estimada."),
+        nota="The LATAM base hangar at Guarulhos, with the frontage, the "
+             "door, the band and the mark. Footprint from OSM; height "
+             "estimated."),
 
     "sbgr_hangar_mro": dict(
         campo="sbgr", categoria="estrutura", rotulo="MRO hangar, second bay (GRU)",
         pecas=["SBGR_AA_Hangar", "SBGR_AA_HangarDoors"],
-        nota="O segundo hangar da area de manutencao, com a porta."),
+        nota="The second hangar of the maintenance area, with its door."),
 
     "sbgr_torre": dict(
         campo="sbgr", categoria="estrutura", rotulo="Control tower (GRU)",
         pecas=["SBGR_TWR_Shaft", "SBGR_TWR_Cab", "SBGR_TWR_Galleries",
                "SBGR_TWR_Radome"],
-        nota="Torre de controle: fuste, galerias, cabine e radome."),
+        nota="Control tower: shaft, galleries, cab and radome."),
 
     "sbgr_terminal_t3": dict(
         campo="sbgr", categoria="estrutura", rotulo="Terminal 3 pier (GRU)",
         pecas=["SBGR_TerminalBodies", "SBGR_TerminalGlassBand"],
         regiao=rect(-230, 410, 545, 1010),
-        nota="O pier inteiro do Terminal 3: 624 m de frente. E um fundo de "
-             "cena, nao uma peca de montar - use-o atras dos stands."),
+        nota="The whole Terminal 3 pier: 624 m of frontage. A backdrop, not a "
+             "building block - put it behind the stands."),
 
     "sbgr_terminal_bloco": dict(
         campo="sbgr", categoria="estrutura", rotulo="Terminal block (GRU)",
         pecas=["SBGR_TerminalBodies", "SBGR_TerminalGlassBand"],
         regiao=rect(-760, -630, 350, 640),
-        nota="Um bloco de terminal de ~104 x 276 m, do tamanho certo para "
-             "compor uma cena de stand sem engolir a aeronave."),
+        nota="A terminal block, 104 x 276 m: the right size to compose a "
+             "stand scene without swallowing the aeroplane."),
 
     "sbgr_ponte_embarque": dict(
         campo="sbgr", categoria="estrutura", rotulo="Jetbridge (GRU)",
         pecas=["SBGR_Jetbridges", "SBGR_JetbridgeDark"],
         regiao=circ(-10.0, 625.0, 30.0),
-        nota="Uma ponte de embarque articulada: rotunda, tunel, cabine e as "
-             "colunas. Posicao vem do stand mapeado no OSM."),
+        nota="One articulated jetbridge: rotunda, tunnel, cab and columns. "
+             "Its position comes from the stand mapped in OSM."),
 
     "sbgr_galpao_carga": dict(
         campo="sbgr", categoria="estrutura", rotulo="Cargo shed (GRU)",
         pecas=["SBGR_CargoSheds"],
         regiao=circ(2213.8, 1440.1, 120.0),
-        nota="Galpao de carga junto a base LATAM."),
+        nota="A cargo shed beside the LATAM base."),
 
     "sbgr_pista_secao": dict(
         campo="sbgr", categoria="superficie",
@@ -211,8 +214,8 @@ CATALOGO = {
         pecas=["SBGR_RunwayEdgeLights", "SBGR_PAPI"],
         regiao=obb(-289.9, -462.3, 500.0, 150.0, 16.354),
         centrar_em=["SBGR_RwyS_Pavement"],
-        nota="Cabeceira da 10R com as marcas de soleira, o numero e as luzes "
-             "de borda. Pintura conforme AIP-Brasil / DECEA."),
+        nota="The 10R threshold with its threshold bars, the runway number "
+             "and the edge lights. Marking geometry per AIP-Brasil / DECEA."),
 
     "sbgr_taxi_secao": dict(
         campo="sbgr", categoria="superficie",
@@ -220,15 +223,15 @@ CATALOGO = {
         superficies=["SBGR_TaxiwayPavement", "SBGR_TaxiwayCentrelines"],
         regiao=obb(231.5, -507.0, 320.0, 90.0, 16.354),
         centrar_em=["SBGR_TaxiwayPavement"],
-        nota="Trecho de taxiway paralela com o eixo pintado."),
+        nota="A stretch of parallel taxiway with its painted centreline."),
 
     "sbgr_patio": dict(
         campo="sbgr", categoria="superficie", rotulo="Apron slab (GRU)",
         superficies=["SBGR_ApronConcrete", "SBGR_ApronLaneEdges"],
         regiao=obb(-10.0, 625.0, 300.0, 200.0, 16.354),
         centrar_em=["SBGR_ApronConcrete"],
-        nota="Laje de patio com as linhas de faixa, recortada dos poligonos "
-             "de patio mapeados."),
+        nota="An apron slab with the lane edge course, cut from the mapped "
+             "apron polygons."),
 
     "sbgr_placa_campo": dict(
         campo="sbgr", categoria="superficie",
@@ -239,58 +242,59 @@ CATALOGO = {
                      "SBGR_ApronConcrete", "SBGR_ApronLaneEdges",
                      "SBGR_AerodromeGround"],
         datum="campo",
-        nota="As duas pistas, as taxiways, os patios e o campo verde em volta, "
-             "6,1 x 4,8 km. y = 0 e a cabeceira da 10L: uma aeronave em y = 0 "
-             "pousa na pista. Sem terreno Copernicus, sem cidade, sem mata."),
+        nota="Both runways, the taxiways, the aprons and the green field "
+             "around them: 6.1 x 4.8 km. y = 0 is the 10L threshold, so an "
+             "aeroplane at y = 0 stands on the runway. No Copernicus terrain, "
+             "no city, no forest."),
 
     "sbgr_mastro": dict(
         campo="sbgr", categoria="adereco",
         rotulo="Apron floodlight mast, 30 m (GRU)",
         pecas=["SBGR_MastsRing"], regiao=circ(14.5, -691.4, 4.0),
-        nota="Mastro de iluminacao de patio. Altura estimada de foto."),
+        nota="Apron floodlight mast. Height estimated from photographs."),
 
     "sbgr_mastro_trelica": dict(
         campo="sbgr", categoria="adereco",
         rotulo="Lattice floodlight mast, 28 m (GRU)",
         pecas=["SBGR_MastsLattice"], regiao=circ(1.1, -545.5, 6.0),
-        nota="Mastro em trelica de quatro pernas."),
+        nota="A four-legged lattice floodlight mast."),
 
     "sbgr_gse_escada": dict(
         campo="sbgr", categoria="veiculo", rotulo="Boarding stairs (GRU)",
         pecas=["SBGR_GSE_White", "SBGR_GSE_Dark"],
         regiao=circ(2208.5, 1108.0, 3.2),
-        nota="Escada de embarque da fila remota. Posicao e inferencia; que uma "
-             "posicao remota TENHA escada nao e."),
+        nota="Boarding stairs from the remote row. Where it stands is "
+             "inference; that a remote stand HAS stairs is not."),
 
     "sbgr_gse_onibus": dict(
         campo="sbgr", categoria="veiculo", rotulo="Apron bus (GRU)",
         pecas=["SBGR_GSE_Bus", "SBGR_GSE_Dark"],
         regiao=circ(2220.4, 1096.1, 6.5),
-        nota="Onibus de patio, 12 m."),
+        nota="Apron bus, 12 m."),
 
     "sbgr_gse_catering": dict(
         campo="sbgr", categoria="veiculo", rotulo="Catering truck (GRU)",
         pecas=["SBGR_GSE_White", "SBGR_GSE_Dark"],
         regiao=circ(-2.8, 612.7, 4.5),
-        nota="Caminhao de comissaria, com a caixa elevatoria."),
+        nota="Catering truck, with its lifting box."),
 
     "sbgr_gse_loader": dict(
         campo="sbgr", categoria="veiculo", rotulo="Cargo loader (GRU)",
         pecas=["SBGR_GSE_Yellow", "SBGR_GSE_Dark"],
         regiao=circ(-634.3, 531.4, 4.6),
-        nota="Loader de carga da frente de carga."),
+        nota="Cargo loader from the freight frontage."),
 
     "sbgr_gse_dolly": dict(
         campo="sbgr", categoria="veiculo", rotulo="Dolly train with ULDs (GRU)",
         pecas=["SBGR_GSE_Dolly", "SBGR_GSE_Uld"],
         regiao=rect(-616.0, -598.0, 498.0, 524.0),
-        nota="Comboio de dollies com contentores ULD em cima."),
+        nota="A dolly train with ULD containers on top."),
 
     "sbgr_gse_bowser": dict(
         campo="sbgr", categoria="veiculo", rotulo="Fuel bowser (GRU)",
         pecas=["SBGR_GSE_White", "SBGR_GSE_Dark"],
         regiao=circ(2100.0, 1395.0, 5.2),
-        nota="Caminhao-tanque da fila do parque de combustivel."),
+        nota="Fuel bowser from the row at the fuel farm."),
 
     # ------------------------------------------------------------ SDSC ----
     "sdsc_hangar9": dict(
@@ -298,122 +302,123 @@ CATALOGO = {
         pecas=["SDSC_Hangar9", "SDSC_Hangar9_SpaceFrame", "SDSC_Hangar9_Door",
                "SDSC_Hangar9_Band", "SDSC_Hangar9_Floor",
                "SDSC_Hangar9_Wordmark", "SDSC_Hangar9_Brandmark"],
-        nota="Hangar 9 do centro de manutencao LATAM em Sao Carlos - o hangar "
-             "de widebody, 133 x 100 x 28 m, com a marca na fachada."),
+        nota="Hangar 9 of the LATAM maintenance centre at Sao Carlos - the "
+             "widebody hangar, 133 x 100 x 28 m, with the mark on its "
+             "frontage."),
 
     "sdsc_mro_hangar": dict(
         campo="sdsc", categoria="estrutura", rotulo="MRO hangar bay (Sao Carlos)",
         pecas=["SDSC_MRO_Hangars", "SDSC_MRO_HangarBay", "SDSC_MRO_HangarDoors",
                "SDSC_MRO_SpaceFrame", "SDSC_MRO_HangarFloor"],
         regiao=circ(960.0, 1809.0, 80.0),
-        nota="Uma baia de hangar da linha MRO, com a porta, a trelica e o "
-             "piso. A faixa de fachada com a marca e um asset a parte - ela "
-             "atravessa 450 m de frente e nao pertence a esta baia."),
+        nota="One hangar bay of the MRO line, with the door, the space frame "
+             "and the floor. The frontage band carrying the mark is a "
+             "separate asset: it runs 450 m and does not belong to this bay."),
 
     "sdsc_mro_fachada": dict(
         campo="sdsc", categoria="estrutura",
         rotulo="MRO frontage band + LATAM wordmark (Sao Carlos)",
         pecas=["SDSC_MRO_FasciaBand", "SDSC_MRO_Wordmark",
                "SDSC_MRO_Brandmark"],
-        nota="A faixa de fachada do centro de manutencao, 450 m, com o "
-             "letreiro LATAM. Encoste-a numa fila de baias de hangar."),
+        nota="The maintenance centre's frontage band, 450 m, with the LATAM "
+             "sign. Stand it against a row of hangar bays."),
 
     "sdsc_mro_oficinas": dict(
         campo="sdsc", categoria="estrutura", rotulo="MRO workshop spine (Sao Carlos)",
         pecas=["SDSC_MRO_Workshops"], regiao=circ(1009.1, 1803.8, 40.0),
-        nota="A espinha de oficinas atras da linha de hangares, 470 m."),
+        nota="The workshop spine behind the hangar line, 470 m."),
 
     "sdsc_museu": dict(
         campo="sdsc", categoria="estrutura", rotulo="TAM museum hangar (Sao Carlos)",
         pecas=["SDSC_Museu_TAM"],
-        nota="O hangar do Museu TAM, vizinho do centro de manutencao."),
+        nota="The TAM Museum hangar, next door to the maintenance centre."),
 
     "sdsc_torre_xadrez": dict(
         campo="sdsc", categoria="estrutura", rotulo="Chequered tower (Sao Carlos)",
         pecas=["SDSC_Chequer_Shaft", "SDSC_Chequer_Cab", "SDSC_Chequer_Roof"],
-        nota="A torre quadriculada do meio de campo."),
+        nota="The chequered midfield tower."),
 
     "sdsc_hangar_midfield": dict(
         campo="sdsc", categoria="estrutura", rotulo="Midfield hangar (Sao Carlos)",
         pecas=["SDSC_Midfield_Hangar", "SDSC_Midfield_Door",
                "SDSC_Midfield_EndPanels"],
-        nota="Hangar de meio de campo com porta e empenas."),
+        nota="A midfield hangar with its door and end panels."),
 
     "sdsc_portao_mro": dict(
         campo="sdsc", categoria="estrutura", rotulo="MRO gate and guard house",
         pecas=["SDSC_MRO_Gate", "SDSC_MRO_GuardHouse", "SDSC_MRO_Boom"],
-        nota="Portaria do centro de manutencao: guarita, portao e cancela."),
+        nota="The maintenance centre gatehouse: guard house, gate and boom."),
 
     "sdsc_cerca": dict(
         campo="sdsc", categoria="adereco", rotulo="Perimeter fence, 60 m run",
         pecas=["SDSC_MRO_PerimeterWall", "SDSC_MRO_PerimeterMesh",
                "SDSC_MRO_PerimeterPosts"],
         regiao=rect(619.0, 681.0, 1543.0, 1547.0),
-        nota="Trecho reto de cerca de perimetro - mureta, tela e postes a cada "
-             "3 m. Duplique-o em fila para fechar um perimetro."),
+        nota="A straight run of perimeter fence - low wall, mesh and posts "
+             "every 3 m. Duplicate it in a line to close a perimeter."),
 
     "sdsc_doca_manutencao": dict(
         campo="sdsc", categoria="adereco", rotulo="Maintenance dock + tool carts",
         pecas=["SDSC_MRO_Docks", "SDSC_MRO_ToolCarts"],
         regiao=circ(874.3, 1887.0, 13.0),
-        nota="Doca de manutencao com plataformas, escadas e carrinhos de "
-             "ferramenta."),
+        nota="A maintenance dock with platforms, stairs and tool carts."),
 
     "sdsc_suporte_motor": dict(
         campo="sdsc", categoria="adereco", rotulo="Engine stands with engines",
         pecas=["SDSC_MRO_Docks", "SDSC_MRO_LooseEngines", "SDSC_MRO_ToolCarts"],
         regiao=circ(990.0, 1958.0, 13.0),
-        nota="Berços de motor com motores fora da asa, na frente da oficina."),
+        nota="Engine stands with engines off the wing, in front of the "
+             "workshop."),
 
     "sdsc_conteineres": dict(
         campo="sdsc", categoria="adereco", rotulo="ISO container row",
         pecas=["SDSC_Containers", "SDSC_ContainersRust"],
         regiao=rect(930.0, 985.0, 1860.0, 1876.0),
-        nota="Fila de contentores ISO encostada na linha de hangares. "
-             "Fotografado: refs/mro_centro_tecnologico_2009.jpg."),
+        nota="A row of ISO containers against the hangar line. Photographed: "
+             "refs/mro_centro_tecnologico_2009.jpg."),
 
     "sdsc_mastro": dict(
         campo="sdsc", categoria="adereco", rotulo="Floodlight mast, 16 m (Sao Carlos)",
         pecas=["SDSC_FloodlightMasts"], regiao=circ(1030.9, 2051.0, 4.0),
-        nota="Mastro de iluminacao do patio de manutencao."),
+        nota="Floodlight mast on the maintenance apron."),
 
     "sdsc_gse_reboque": dict(
         campo="sdsc", categoria="veiculo", rotulo="Tug with towbar",
         pecas=["SDSC_GSE_White", "SDSC_GSE_Yellow", "SDSC_GSE_Chassis"],
         regiao=circ(950.0, 1875.0, 6.0),
-        nota="Trator de reboque com a barra. Um trator SEM barra parado no "
-             "trem de nariz e o detalhe que denuncia quem nunca pisou num "
-             "patio - por isso a barra vem junto."),
+        nota="A tug with its towbar. A tug WITHOUT one, parked at a nose "
+             "gear, is the detail that gives away somebody who has never "
+             "stood on a ramp - so the bar comes with it."),
 
     "sdsc_gse_gpu": dict(
         campo="sdsc", categoria="veiculo", rotulo="Ground power unit",
         pecas=["SDSC_GSE_Yellow", "SDSC_GSE_Chassis"],
-        regiao=circ(957.4, 1875.0, 2.6), nota="GPU do parque de equipamentos."),
+        regiao=circ(957.4, 1875.0, 2.6), nota="Ground power unit from the equipment park."),
 
     "sdsc_gse_airstart": dict(
         campo="sdsc", categoria="veiculo", rotulo="Air start unit",
         pecas=["SDSC_GSE_Yellow", "SDSC_GSE_Chassis"],
-        regiao=circ(964.8, 1875.0, 2.8), nota="Unidade de partida pneumatica."),
+        regiao=circ(964.8, 1875.0, 2.8), nota="Air start unit."),
 
     "sdsc_gse_beltloader": dict(
         campo="sdsc", categoria="veiculo", rotulo="Belt loader",
         pecas=["SDSC_GSE_White", "SDSC_GSE_Chassis"],
-        regiao=circ(972.2, 1875.0, 3.6), nota="Esteira de bagagem."),
+        regiao=circ(972.2, 1875.0, 3.6), nota="Belt loader."),
 
     "sdsc_gse_van": dict(
         campo="sdsc", categoria="veiculo", rotulo="Service van",
         pecas=["SDSC_GSE_White", "SDSC_GSE_Chassis"],
-        regiao=circ(979.6, 1875.0, 3.0), nota="Van de servico."),
+        regiao=circ(979.6, 1875.0, 3.0), nota="Service van."),
 
     "sdsc_gse_bowser": dict(
         campo="sdsc", categoria="veiculo", rotulo="Fuel bowser",
         pecas=["SDSC_GSE_White", "SDSC_GSE_Chassis"],
-        regiao=circ(994.4, 1875.0, 5.0), nota="Caminhao-tanque, 9 m."),
+        regiao=circ(994.4, 1875.0, 5.0), nota="Fuel bowser, 9 m."),
 
     "sdsc_gse_cherrypicker": dict(
         campo="sdsc", categoria="veiculo", rotulo="Cherry picker",
         pecas=["SDSC_GSE_Yellow", "SDSC_GSE_Chassis"],
-        regiao=circ(1001.8, 1875.0, 3.4), nota="Plataforma elevatoria."),
+        regiao=circ(1001.8, 1875.0, 3.4), nota="Cherry picker."),
 
     "sdsc_placa_campo": dict(
         campo="sdsc", categoria="superficie",
@@ -423,43 +428,44 @@ CATALOGO = {
                      "SDSC_TaxiwayCentrelines", "SDSC_ApronConcrete",
                      "SDSC_MownGrass", "SDSC_AerodromeGround"],
         datum="campo",
-        nota="A pista 02/20, as taxiways, o patio e o campo, 2,5 x 3,0 km. "
-             "y = 0 e a cabeceira 02; o terreno de Sao Carlos desce 35 m dali "
-             "ate o patio do MRO, e isso esta na malha."),
+        nota="Runway 02/20, the taxiways, the apron and the field: 2.5 x 3.0 "
+             "km. y = 0 is the 02 threshold; the ground at Sao Carlos falls "
+             "35 m from there to the MRO apron, and that fall is in the mesh."),
 
     # ------------------------------------------------------------- SCL ----
     "scl_torre": dict(
         campo="scl", categoria="estrutura", rotulo="Control tower + DGAC block (SCL)",
         pecas=["SCL_Tower_Shaft", "SCL_Tower_Cab", "SCL_Tower_Decks",
                "SCL_Tower_Equipment", "SCL_DGAC_Building"],
-        nota="A torre de Santiago, 48 m de fuste, com o bloco da DGAC embaixo."),
+        nota="The Santiago tower, a 48 m shaft, with the DGAC block beneath "
+             "it."),
 
     "scl_base_latam": dict(
         campo="scl", categoria="estrutura", rotulo="LATAM base frontage (SCL)",
         pecas=["SCL_LATAM_Buildings", "SCL_LATAM_HangarDoors",
                "SCL_LATAM_WindowBand", "SCL_LATAM_SignBand",
                "SCL_LATAM_Wordmark", "SCL_LATAM_Brandmark"],
-        nota="A frente da base LATAM em Santiago, com a faixa de letreiro e a "
-             "marca."),
+        nota="The frontage of the LATAM base at Santiago, with the sign band "
+             "and the mark."),
 
     "scl_terminal_t2": dict(
         campo="scl", categoria="estrutura", rotulo="Terminal 2 (SCL)",
         pecas=["SCL_Terminal_Volumes", "SCL_Terminal_Roofs",
                "SCL_Terminal_Glazing", "SCL_T2_Brise", "SCL_T2_GreenPanels"],
         regiao=rect(-830, -440, -2975, -2640),
-        nota="O Terminal 2 com a cobertura ondulada, o brise e os paineis "
-             "verdes - 367 x 317 m."),
+        nota="Terminal 2 with its undulating roof, the brise-soleil and the "
+             "green panels - 367 x 317 m."),
 
     "scl_hangar": dict(
         campo="scl", categoria="estrutura", rotulo="Hangar block (SCL)",
         pecas=["SCL_Hangar_SkyAirline"],
-        nota="Um hangar de terceiros no lado sul, 98 x 96 x 21 m."),
+        nota="A third-party hangar on the south side, 98 x 96 x 21 m."),
 
     "scl_mastro": dict(
         campo="scl", categoria="adereco",
         rotulo="Apron floodlight mast, 30 m (SCL)",
         pecas=["SCL_LightMasts"], regiao=circ(-759.7, -324.7, 4.0),
-        nota="Mastro de patio de Santiago."),
+        nota="Apron floodlight mast at Santiago."),
 
     "scl_placa_campo": dict(
         campo="scl", categoria="superficie",
@@ -469,8 +475,8 @@ CATALOGO = {
                      "SCL_TaxiwayPavement", "SCL_TaxiwayCentrelines",
                      "SCL_ApronConcrete", "SCL_AerodromeGround"],
         regiao=rect(-1760, 440, -4010, 1090), datum="campo",
-        nota="As duas pistas paralelas 17L/35R e 17R/35L, as taxiways, o patio "
-             "e o campo, 2,2 x 5,1 km. y = 0 e a cabeceira 17L."),
+        nota="The two parallel runways 17L/35R and 17R/35L, the taxiways, the "
+             "apron and the field: 2.2 x 5.1 km. y = 0 is the 17L threshold."),
 }
 
 # Teto de faces por asset. Acima disto entra um Decimate e o relatorio diz

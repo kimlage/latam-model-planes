@@ -195,11 +195,11 @@ def escrever_manifesto(assets, achatados):
         json.dump({
             "schema": "latam-cenarios/1",
             "gerado_por": "export_cenarios.py",
-            "aviso": ("Geometria de aerodromo derivada de OpenStreetMap. Cada "
-                      "asset carrega seu proprio campo `licenca`; a tabela "
-                      "`licencas` diz o que cada id exige. ODbL e share-alike: "
-                      "uma cena que use qualquer asset odbl-1.0 carrega essa "
-                      "obrigacao junto."),
+            "aviso": ("Aerodrome geometry derived from OpenStreetMap. Every "
+                      "asset carries its own `licenca` field; the `licencas` "
+                      "table says what each id requires. ODbL is share-alike: "
+                      "a scene using any odbl-1.0 asset carries that "
+                      "obligation with it."),
             "licencas": LICENCAS,
             "marcas": MARCAS,
             "categorias": CATEGORIAS,

@@ -390,6 +390,13 @@ ${lics.map(l => `       ${l.atribuicao}\n         ${l.url}${l.share_alike ? '   
   html,body{margin:0;height:100%;overflow:hidden;background:${estado.ambiente.fundoCor};
     font:12px/1.4 -apple-system,"Segoe UI",Roboto,sans-serif;color:#e6e7ea}
   #cena{position:fixed;inset:0}
+  /* The renderer calls setSize(w, h, false) — updateStyle OFF — so the canvas
+     carries its PHYSICAL size in its width/height attributes and nothing sets
+     its CSS size. The studio's own stylesheet has this rule; the embed did not,
+     so on any HiDPI display the canvas laid out at 2x the window, the page
+     showed the top-left quarter of the frame, and the aeroplane sat off the
+     bottom of the picture. Caught by driving a generated embed and looking. */
+  #cena canvas{display:block;width:100%;height:100%}
   #cred{position:fixed;left:10px;bottom:8px;right:10px;color:#9aa0ae;font-size:11px;
     background:rgba(13,15,20,.6);padding:3px 7px;border-radius:5px;pointer-events:auto;
     line-height:1.5}

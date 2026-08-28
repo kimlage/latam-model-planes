@@ -6,27 +6,37 @@
        ./js/embed.js         the ~120-line runtime (imports mundo.js, props.js, frota.js)
        ../export/web/<slug>_web.glb   the aircraft, listed in doc.assets below
 
-     Aircraft models: CC BY 4.0 — LATAM fleet 3D replicas, Kim Lage.
-     Ground, sky and props are original geometry authored in estudio/js/props.js.
-     No airport scenery is used: the OSM-derived airport meshes are ODbL and are
-     never redistributed with these models. -->
+     LICENCES THIS SCENE CARRIES — computed from the assets actually in it,
+     and they travel with the file because that is what they require:
+       Airport geometry (c) OpenStreetMap contributors, ODbL 1.0
+         https://opendatacommons.org/licenses/odbl/1-0/   [SHARE-ALIKE]
+       LATAM fleet 3D replicas - Kim Lage - CC BY 4.0
+         https://creativecommons.org/licenses/by/4.0/
+-->
 <html lang="en"><head>
 <meta charset="utf-8">
-<title>Runway hero — 777-300ER</title>
+<title>Stand at GRU — A320neo at the gate</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
   html,body{margin:0;height:100%;overflow:hidden;background:#0d0f14;
     font:12px/1.4 -apple-system,"Segoe UI",Roboto,sans-serif;color:#e6e7ea}
   #cena{position:fixed;inset:0}
-  #cred{position:fixed;left:10px;bottom:8px;color:#9aa0ae;font-size:11px;
-    background:rgba(13,15,20,.6);padding:3px 7px;border-radius:5px;pointer-events:auto}
-  #cred a{color:#8fa6ff}
+  /* The renderer calls setSize(w, h, false) — updateStyle OFF — so the canvas
+     carries its PHYSICAL size in its width/height attributes and nothing sets
+     its CSS size. The studio's own stylesheet has this rule; the embed did not,
+     so on any HiDPI display the canvas laid out at 2x the window, the page
+     showed the top-left quarter of the frame, and the aeroplane sat off the
+     bottom of the picture. Caught by driving a generated embed and looking. */
+  #cena canvas{display:block;width:100%;height:100%}
+  #cred{position:fixed;left:10px;bottom:8px;right:10px;color:#9aa0ae;font-size:11px;
+    background:rgba(13,15,20,.6);padding:3px 7px;border-radius:5px;pointer-events:auto;
+    line-height:1.5}
+  #cred a{color:#8fa6ff;text-decoration:none}
 </style>
 </head><body>
 <div id="cena"></div>
-<div id="cred">LATAM fleet 3D replicas — Kim Lage —
-  <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>
-  · drag to orbit, scroll to zoom</div>
+<div id="cred"><a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noopener">Airport geometry (c) OpenStreetMap contributors, ODbL 1.0</a> &middot; <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">LATAM fleet 3D replicas - Kim Lage - CC BY 4.0</a>
+  &middot; drag to orbit, scroll to zoom</div>
 <script type="importmap">
 { "imports": {
   "three": "./vendor/three/three.module.js",
@@ -37,13 +47,13 @@
 import { montar } from './js/embed.js';
 const doc = {
  "schema": "latam-estudio/1",
- "nome": "Runway hero — 777-300ER",
+ "nome": "Stand at GRU — A320neo at the gate",
  "ambiente": {
   "sol": {
-   "elev": 58,
-   "azim": 150,
+   "elev": 27,
+   "azim": 118,
    "intensidade": 3.2,
-   "cor": "#fff6ea"
+   "cor": "#fff0d8"
   },
   "envPreset": "ceu",
   "envIntensidade": 1,
@@ -55,28 +65,28 @@ const doc = {
   },
   "chao": {
    "ligado": true,
-   "tipo": "pista",
-   "tamanho": 900
+   "tipo": "apron",
+   "tamanho": 1200
   },
   "grade": false
  },
  "render": {
   "tone": "aces",
-  "exposicao": 0.95,
+  "exposicao": 1,
   "sombras": true,
   "sombraPx": 2048,
-  "aa": 1,
+  "aa": 2,
   "pixelRatioMax": 2
  },
  "camera": {
   "pos": [
-   -119.073,
-   66.87,
-   138.278
+   55,
+   24,
+   55
   ],
   "alvo": [
-   0,
-   9.254,
+   -16,
+   6,
    0
   ],
   "fov": 35,
@@ -88,12 +98,35 @@ const doc = {
  },
  "objetos": [
   {
-   "id": "a1lce",
-   "tipo": "aeronave",
-   "slug": "B77W",
-   "nome": "Boeing 777-300ER",
+   "id": "p3ace",
+   "tipo": "cenario",
+   "slug": "sbgr_patio",
+   "nome": "apron slab — GRU",
    "pos": [
     0,
+    0.06,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0
+   ],
+   "esc": [
+    1,
+    1,
+    1
+   ],
+   "visivel": true,
+   "travado": false
+  },
+  {
+   "id": "p4ace",
+   "tipo": "cenario",
+   "slug": "sbgr_terminal_bloco",
+   "nome": "terminal block — GRU",
+   "pos": [
+    -100,
     0,
     0
    ],
@@ -109,21 +142,341 @@ const doc = {
    ],
    "visivel": true,
    "travado": false
+  },
+  {
+   "id": "p5ace",
+   "tipo": "cenario",
+   "slug": "sbgr_ponte_embarque",
+   "nome": "jetbridge — GRU",
+   "pos": [
+    -23,
+    0,
+    4.2
+   ],
+   "rot": [
+    0,
+    12,
+    0
+   ],
+   "esc": [
+    1,
+    1,
+    1
+   ],
+   "visivel": true,
+   "travado": false
+  },
+  {
+   "id": "a6ace",
+   "tipo": "aeronave",
+   "slug": "A320neo",
+   "nome": "A320neo",
+   "pos": [
+    0,
+    0.06,
+    0
+   ],
+   "rot": [
+    0,
+    0,
+    0
+   ],
+   "esc": [
+    1,
+    1,
+    1
+   ],
+   "visivel": true,
+   "travado": false
+  },
+  {
+   "id": "p7ace",
+   "tipo": "cenario",
+   "slug": "sbgr_gse_catering",
+   "nome": "catering",
+   "pos": [
+    2,
+    0,
+    -21
+   ],
+   "rot": [
+    0,
+    0,
+    0
+   ],
+   "esc": [
+    1,
+    1,
+    1
+   ],
+   "visivel": true,
+   "travado": false
+  },
+  {
+   "id": "p8ace",
+   "tipo": "cenario",
+   "slug": "sbgr_gse_loader",
+   "nome": "cargo loader",
+   "pos": [
+    -7,
+    0,
+    -19
+   ],
+   "rot": [
+    0,
+    0,
+    0
+   ],
+   "esc": [
+    1,
+    1,
+    1
+   ],
+   "visivel": true,
+   "travado": false
+  },
+  {
+   "id": "p9ace",
+   "tipo": "cenario",
+   "slug": "sdsc_gse_reboque",
+   "nome": "tug + towbar",
+   "pos": [
+    -27,
+    0,
+    1
+   ],
+   "rot": [
+    0,
+    90,
+    0
+   ],
+   "esc": [
+    1,
+    1,
+    1
+   ],
+   "visivel": true,
+   "travado": false
+  },
+  {
+   "id": "paace",
+   "tipo": "cenario",
+   "slug": "sbgr_gse_bowser",
+   "nome": "bowser",
+   "pos": [
+    12,
+    0,
+    25
+   ],
+   "rot": [
+    0,
+    20,
+    0
+   ],
+   "esc": [
+    1,
+    1,
+    1
+   ],
+   "visivel": true,
+   "travado": false
+  },
+  {
+   "id": "pbace",
+   "tipo": "cenario",
+   "slug": "sbgr_gse_onibus",
+   "nome": "apron bus",
+   "pos": [
+    26,
+    0,
+    -30
+   ],
+   "rot": [
+    0,
+    12,
+    0
+   ],
+   "esc": [
+    1,
+    1,
+    1
+   ],
+   "visivel": true,
+   "travado": false
+  },
+  {
+   "id": "pcace",
+   "tipo": "cenario",
+   "slug": "sbgr_mastro",
+   "nome": "floodlight mast",
+   "pos": [
+    74,
+    0,
+    84
+   ],
+   "rot": [
+    0,
+    0,
+    0
+   ],
+   "esc": [
+    1,
+    1,
+    1
+   ],
+   "visivel": true,
+   "travado": false
+  },
+  {
+   "id": "pdace",
+   "tipo": "cenario",
+   "slug": "sbgr_mastro",
+   "nome": "floodlight mast",
+   "pos": [
+    -34,
+    0,
+    -96
+   ],
+   "rot": [
+    0,
+    0,
+    0
+   ],
+   "esc": [
+    1,
+    1,
+    1
+   ],
+   "visivel": true,
+   "travado": false
   }
  ],
- "gerado": "2026-08-28T13:31:54.709Z",
- "licenca": "Aircraft models CC BY 4.0 — LATAM fleet 3D replicas, Kim Lage. Ground, sky and props authored in estudio/js/props.js. No airport scenery.",
+ "gerado": "2026-08-28T17:11:09.014Z",
+ "licencas": [
+  {
+   "id": "odbl-1.0",
+   "nome": "ODbL 1.0 (Open Database License)",
+   "url": "https://opendatacommons.org/licenses/odbl/1-0/",
+   "atribuicao": "Airport geometry (c) OpenStreetMap contributors, ODbL 1.0",
+   "share_alike": true,
+   "nota": "The aerodrome mesh is generated from OpenStreetMap (building footprints, taxiway centrelines, apron polygons, stand and jetbridge positions). A mesh built from an ODbL database is a derived database: redistributing it requires the attribution above AND share-alike on the derived geodata. The runway survey itself - thresholds, widths, declared distances, marking geometry - comes from AIP/DECEA/DGAC and is quoted as fact."
+  },
+  {
+   "id": "cc-by-4.0",
+   "nome": "CC BY 4.0",
+   "url": "https://creativecommons.org/licenses/by/4.0/",
+   "atribuicao": "LATAM fleet 3D replicas - Kim Lage - CC BY 4.0",
+   "share_alike": false,
+   "nota": "Original geometry from this repository, built from the dimensional documents published by the manufacturers."
+  }
+ ],
+ "licenca": "Airport geometry (c) OpenStreetMap contributors, ODbL 1.0\nLATAM fleet 3D replicas - Kim Lage - CC BY 4.0",
  "assets": {
-  "B77W": {
-   "arquivo": "../export/web/B77W_web.glb",
-   "nome": "Boeing 777-300ER",
-   "matricula": "PT-MUG"
+  "sbgr_patio": {
+   "arquivo": "../export/cenarios/sbgr_patio.glb",
+   "nome": "Apron slab (GRU)",
+   "matricula": "SBGR",
+   "tipo": "cenario",
+   "categoria": "superficie",
+   "licenca": "odbl-1.0",
+   "bytes": 2696,
+   "triangulos": 62
+  },
+  "sbgr_terminal_bloco": {
+   "arquivo": "../export/cenarios/sbgr_terminal_bloco.glb",
+   "nome": "Terminal block (GRU)",
+   "matricula": "SBGR",
+   "tipo": "cenario",
+   "categoria": "estrutura",
+   "licenca": "odbl-1.0",
+   "bytes": 3724,
+   "triangulos": 68
+  },
+  "sbgr_ponte_embarque": {
+   "arquivo": "../export/cenarios/sbgr_ponte_embarque.glb",
+   "nome": "Jetbridge (GRU)",
+   "matricula": "SBGR",
+   "tipo": "cenario",
+   "categoria": "estrutura",
+   "licenca": "odbl-1.0",
+   "bytes": 3252,
+   "triangulos": 102
+  },
+  "A320neo": {
+   "arquivo": "../export/web/A320neo_web.glb",
+   "nome": "Airbus A320neo",
+   "matricula": "PT-TMN",
+   "tipo": "aeronave",
+   "categoria": "aeronave",
+   "licenca": "cc-by-4.0",
+   "bytes": 1231616,
+   "triangulos": 62456
+  },
+  "sbgr_gse_catering": {
+   "arquivo": "../export/cenarios/sbgr_gse_catering.glb",
+   "nome": "Catering truck (GRU)",
+   "matricula": "SBGR",
+   "tipo": "cenario",
+   "categoria": "veiculo",
+   "licenca": "odbl-1.0",
+   "bytes": 2416,
+   "triangulos": 20
+  },
+  "sbgr_gse_loader": {
+   "arquivo": "../export/cenarios/sbgr_gse_loader.glb",
+   "nome": "Cargo loader (GRU)",
+   "matricula": "SBGR",
+   "tipo": "cenario",
+   "categoria": "veiculo",
+   "licenca": "odbl-1.0",
+   "bytes": 2404,
+   "triangulos": 20
+  },
+  "sdsc_gse_reboque": {
+   "arquivo": "../export/cenarios/sdsc_gse_reboque.glb",
+   "nome": "Tug with towbar",
+   "matricula": "SDSC",
+   "tipo": "cenario",
+   "categoria": "veiculo",
+   "licenca": "odbl-1.0",
+   "bytes": 3188,
+   "triangulos": 30
+  },
+  "sbgr_gse_bowser": {
+   "arquivo": "../export/cenarios/sbgr_gse_bowser.glb",
+   "nome": "Fuel bowser (GRU)",
+   "matricula": "SBGR",
+   "tipo": "cenario",
+   "categoria": "veiculo",
+   "licenca": "odbl-1.0",
+   "bytes": 2384,
+   "triangulos": 20
+  },
+  "sbgr_gse_onibus": {
+   "arquivo": "../export/cenarios/sbgr_gse_onibus.glb",
+   "nome": "Apron bus (GRU)",
+   "matricula": "SBGR",
+   "tipo": "cenario",
+   "categoria": "veiculo",
+   "licenca": "odbl-1.0",
+   "bytes": 2392,
+   "triangulos": 20
+  },
+  "sbgr_mastro": {
+   "arquivo": "../export/cenarios/sbgr_mastro.glb",
+   "nome": "Apron floodlight mast, 30 m (GRU)",
+   "matricula": "SBGR",
+   "tipo": "cenario",
+   "categoria": "adereco",
+   "licenca": "odbl-1.0",
+   "bytes": 1844,
+   "triangulos": 70
   }
  }
 };
 montar(document.getElementById('cena'), doc, {
-  autoGirar: true,
-  velocidadeGiro: 0.45,
+  autoGirar: false,
+  velocidadeGiro: 0.40,
   zoom: true,
   pan: true
 }).catch(e => {

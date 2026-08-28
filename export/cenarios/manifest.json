@@ -1,31 +1,31 @@
 {
  "schema": "latam-cenarios/1",
  "gerado_por": "export_cenarios.py",
- "aviso": "Geometria de aerodromo derivada de OpenStreetMap. Cada asset carrega seu proprio campo `licenca`; a tabela `licencas` diz o que cada id exige. ODbL e share-alike: uma cena que use qualquer asset odbl-1.0 carrega essa obrigacao junto.",
+ "aviso": "Aerodrome geometry derived from OpenStreetMap. Every asset carries its own `licenca` field; the `licencas` table says what each id requires. ODbL is share-alike: a scene using any odbl-1.0 asset carries that obligation with it.",
  "licencas": {
   "odbl-1.0": {
    "nome": "ODbL 1.0 (Open Database License)",
    "url": "https://opendatacommons.org/licenses/odbl/1-0/",
    "atribuicao": "Airport geometry (c) OpenStreetMap contributors, ODbL 1.0",
    "share_alike": true,
-   "nota": "A malha do aerodromo e gerada a partir de OpenStreetMap (footprints, eixos de taxiway, poligonos de patio, posicoes de stand e ponte). Uma malha feita a partir de um banco ODbL e um banco derivado: redistribuir exige a atribuicao acima E share-alike sobre a geodata derivada. O levantamento de pista (cabeceiras, larguras, distancias declaradas, geometria de pintura) vem de AIP/DECEA/DGAC e e citado como fato."
+   "nota": "The aerodrome mesh is generated from OpenStreetMap (building footprints, taxiway centrelines, apron polygons, stand and jetbridge positions). A mesh built from an ODbL database is a derived database: redistributing it requires the attribution above AND share-alike on the derived geodata. The runway survey itself - thresholds, widths, declared distances, marking geometry - comes from AIP/DECEA/DGAC and is quoted as fact."
   },
   "cc-by-4.0": {
    "nome": "CC BY 4.0",
    "url": "https://creativecommons.org/licenses/by/4.0/",
    "atribuicao": "LATAM fleet 3D replicas - Kim Lage - CC BY 4.0",
    "share_alike": false,
-   "nota": "Geometria original deste repositorio, construida a partir dos documentos dimensionais publicados pelos fabricantes."
+   "nota": "Original geometry from this repository, built from the dimensional documents published by the manufacturers."
   },
   "copernicus": {
    "nome": "Copernicus WorldDEM-30 (Free & Open)",
    "url": "https://spacedata.copernicus.eu/",
    "atribuicao": "produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved",
    "share_alike": false,
-   "nota": "As organizacoes responsaveis pelo programa Copernicus por lei ou delegacao nao incorrem em qualquer responsabilidade por qualquer uso do Copernicus WorldDEM-30. NENHUM asset desta exportacao usa terreno Copernicus - a tabela esta aqui porque o estudio a exibe se algum dia usar."
+   "nota": "The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability for any use of the Copernicus WorldDEM-30. NO asset in this export uses Copernicus terrain - the row is here so the studio can show it the day one does."
   }
  },
- "marcas": "LATAM, Airbus e Boeing sao marcas de seus titulares. Projeto independente, nao comercial, sem afiliacao ou endosso.",
+ "marcas": "LATAM, Airbus and Boeing are trademarks of their owners. An independent, non-commercial project with no affiliation or endorsement.",
  "categorias": {
   "estrutura": "airport structures",
   "superficie": "ground & surfaces",
@@ -39,7 +39,7 @@
    "datum_z": 0.0
   },
   "sdsc": {
-   "rotulo": "SDSC - Sao Carlos / base de manutencao LATAM",
+   "rotulo": "SDSC - Sao Carlos / LATAM maintenance base",
    "blend": "scenario_sdsc/sdsc_field.blend",
    "datum_z": -2.33
   },
@@ -990,7 +990,7 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_hangar_latam.glb",
-   "bytes": 51244,
+   "bytes": 51260,
    "faces": 1067,
    "faces_origem": 1067,
    "decimado": null,
@@ -1032,9 +1032,10 @@
      2289.35,
      1366.33
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "O hangar da base LATAM em Guarulhos, com a fachada, a porta, a faixa e a marca. Footprint do OSM; altura estimada.",
+   "nota": "The LATAM base hangar at Guarulhos, with the frontage, the door, the band and the mark. Footprint from OSM; height estimated.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -1077,7 +1078,7 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_hangar_mro.glb",
-   "bytes": 2508,
+   "bytes": 2524,
    "faces": 23,
    "faces_origem": 23,
    "decimado": null,
@@ -1113,9 +1114,10 @@
      2032.01,
      1257.93
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "O segundo hangar da area de manutencao, com a porta.",
+   "nota": "The second hangar of the maintenance area, with its door.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -1158,7 +1160,7 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_torre.glb",
-   "bytes": 4668,
+   "bytes": 4684,
    "faces": 97,
    "faces_origem": 97,
    "decimado": null,
@@ -1196,9 +1198,10 @@
      301.0,
      1322.0
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Torre de controle: fuste, galerias, cabine e radome.",
+   "nota": "Control tower: shaft, galleries, cab and radome.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -1241,7 +1244,7 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_terminal_t3.glb",
-   "bytes": 7136,
+   "bytes": 7152,
    "faces": 306,
    "faces_origem": 306,
    "decimado": null,
@@ -1283,9 +1286,10 @@
      87.6,
      777.24
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "O pier inteiro do Terminal 3: 624 m de frente. E um fundo de cena, nao uma peca de montar - use-o atras dos stands.",
+   "nota": "The whole Terminal 3 pier: 624 m of frontage. A backdrop, not a building block - put it behind the stands.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -1328,7 +1332,7 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_terminal_bloco.glb",
-   "bytes": 3708,
+   "bytes": 3724,
    "faces": 40,
    "faces_origem": 40,
    "decimado": null,
@@ -1370,9 +1374,10 @@
      -694.42,
      497.16
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Um bloco de terminal de ~104 x 276 m, do tamanho certo para compor uma cena de stand sem engolir a aeronave.",
+   "nota": "A terminal block, 104 x 276 m: the right size to compose a stand scene without swallowing the aeroplane.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -1415,7 +1420,7 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_ponte_embarque.glb",
-   "bytes": 3236,
+   "bytes": 3252,
    "faces": 51,
    "faces_origem": 51,
    "decimado": null,
@@ -1456,9 +1461,10 @@
      -9.82,
      625.23
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Uma ponte de embarque articulada: rotunda, tunel, cabine e as colunas. Posicao vem do stand mapeado no OSM.",
+   "nota": "One articulated jetbridge: rotunda, tunnel, cab and columns. Its position comes from the stand mapped in OSM.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -1501,7 +1507,7 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_galpao_carga.glb",
-   "bytes": 1664,
+   "bytes": 1680,
    "faces": 18,
    "faces_origem": 18,
    "decimado": null,
@@ -1541,9 +1547,10 @@
      2213.83,
      1440.05
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Galpao de carga junto a base LATAM.",
+   "nota": "A cargo shed beside the LATAM base.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -1586,7 +1593,7 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_pista_secao.glb",
-   "bytes": 6944,
+   "bytes": 6960,
    "faces": 174,
    "faces_origem": 174,
    "decimado": null,
@@ -1638,7 +1645,7 @@
      "SBGR_RwyS_Pavement"
     ]
    },
-   "nota": "Cabeceira da 10R com as marcas de soleira, o numero e as luzes de borda. Pintura conforme AIP-Brasil / DECEA.",
+   "nota": "The 10R threshold with its threshold bars, the runway number and the edge lights. Marking geometry per AIP-Brasil / DECEA.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -1682,7 +1689,7 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_taxi_secao.glb",
-   "bytes": 3260,
+   "bytes": 3276,
    "faces": 79,
    "faces_origem": 79,
    "decimado": null,
@@ -1730,7 +1737,7 @@
      "SBGR_TaxiwayPavement"
     ]
    },
-   "nota": "Trecho de taxiway paralela com o eixo pintado.",
+   "nota": "A stretch of parallel taxiway with its painted centreline.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -1775,7 +1782,7 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_patio.glb",
-   "bytes": 2680,
+   "bytes": 2696,
    "faces": 36,
    "faces_origem": 36,
    "decimado": null,
@@ -1823,7 +1830,7 @@
      "SBGR_ApronConcrete"
     ]
    },
-   "nota": "Laje de patio com as linhas de faixa, recortada dos poligonos de patio mapeados.",
+   "nota": "An apron slab with the lane edge course, cut from the mapped apron polygons.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -1868,7 +1875,7 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_placa_campo.glb",
-   "bytes": 91164,
+   "bytes": 91180,
    "faces": 27648,
    "faces_origem": 27648,
    "decimado": null,
@@ -1911,9 +1918,10 @@
      1713.47,
      -403.26
     ],
-    "datum": "campo"
+    "datum": "campo",
+    "centrar_em": []
    },
-   "nota": "As duas pistas, as taxiways, os patios e o campo verde em volta, 6,1 x 4,8 km. y = 0 e a cabeceira da 10L: uma aeronave em y = 0 pousa na pista. Sem terreno Copernicus, sem cidade, sem mata.",
+   "nota": "Both runways, the taxiways, the aprons and the green field around them: 6.1 x 4.8 km. y = 0 is the 10L threshold, so an aeroplane at y = 0 stands on the runway. No Copernicus terrain, no city, no forest.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -1957,7 +1965,7 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_mastro.glb",
-   "bytes": 1828,
+   "bytes": 1844,
    "faces": 35,
    "faces_origem": 35,
    "decimado": null,
@@ -1997,9 +2005,10 @@
      14.54,
      -691.35
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Mastro de iluminacao de patio. Altura estimada de foto.",
+   "nota": "Apron floodlight mast. Height estimated from photographs.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -2042,7 +2051,7 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_mastro_trelica.glb",
-   "bytes": 1636,
+   "bytes": 1652,
    "faces": 25,
    "faces_origem": 25,
    "decimado": null,
@@ -2082,9 +2091,10 @@
      1.11,
      -545.53
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Mastro em trelica de quatro pernas.",
+   "nota": "A four-legged lattice floodlight mast.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -2127,7 +2137,7 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_gse_escada.glb",
-   "bytes": 2372,
+   "bytes": 2388,
    "faces": 10,
    "faces_origem": 10,
    "decimado": null,
@@ -2168,9 +2178,10 @@
      2208.53,
      1108.0
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Escada de embarque da fila remota. Posicao e inferencia; que uma posicao remota TENHA escada nao e.",
+   "nota": "Boarding stairs from the remote row. Where it stands is inference; that a remote stand HAS stairs is not.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -2213,7 +2224,7 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_gse_onibus.glb",
-   "bytes": 2376,
+   "bytes": 2392,
    "faces": 10,
    "faces_origem": 10,
    "decimado": null,
@@ -2254,9 +2265,10 @@
      2220.43,
      1096.08
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Onibus de patio, 12 m.",
+   "nota": "Apron bus, 12 m.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -2299,7 +2311,7 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_gse_catering.glb",
-   "bytes": 2400,
+   "bytes": 2416,
    "faces": 10,
    "faces_origem": 10,
    "decimado": null,
@@ -2340,9 +2352,10 @@
      -2.82,
      612.66
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Caminhao de comissaria, com a caixa elevatoria.",
+   "nota": "Catering truck, with its lifting box.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -2385,7 +2398,7 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_gse_loader.glb",
-   "bytes": 2388,
+   "bytes": 2404,
    "faces": 10,
    "faces_origem": 10,
    "decimado": null,
@@ -2426,9 +2439,10 @@
      -634.29,
      531.42
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Loader de carga da frente de carga.",
+   "nota": "Cargo loader from the freight frontage.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -2471,7 +2485,7 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_gse_dolly.glb",
-   "bytes": 2876,
+   "bytes": 2892,
    "faces": 35,
    "faces_origem": 35,
    "decimado": null,
@@ -2513,9 +2527,10 @@
      -609.02,
      511.0
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Comboio de dollies com contentores ULD em cima.",
+   "nota": "A dolly train with ULD containers on top.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -2558,7 +2573,7 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_gse_bowser.glb",
-   "bytes": 2368,
+   "bytes": 2384,
    "faces": 10,
    "faces_origem": 10,
    "decimado": null,
@@ -2599,9 +2614,10 @@
      2100.0,
      1395.0
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Caminhao-tanque da fila do parque de combustivel.",
+   "nota": "Fuel bowser from the row at the fuel farm.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -2644,7 +2660,7 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_hangar9.glb",
-   "bytes": 41504,
+   "bytes": 41520,
    "faces": 1113,
    "faces_origem": 1113,
    "decimado": null,
@@ -2685,9 +2701,10 @@
      750.0,
      1637.5
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Hangar 9 do centro de manutencao LATAM em Sao Carlos - o hangar de widebody, 133 x 100 x 28 m, com a marca na fachada.",
+   "nota": "Hangar 9 of the LATAM maintenance centre at Sao Carlos - the widebody hangar, 133 x 100 x 28 m, with the mark on its frontage.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -2730,7 +2747,7 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_mro_hangar.glb",
-   "bytes": 5372,
+   "bytes": 5388,
    "faces": 79,
    "faces_origem": 79,
    "decimado": null,
@@ -2774,9 +2791,10 @@
      960.5,
      1809.0
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Uma baia de hangar da linha MRO, com a porta, a trelica e o piso. A faixa de fachada com a marca e um asset a parte - ela atravessa 450 m de frente e nao pertence a esta baia.",
+   "nota": "One hangar bay of the MRO line, with the door, the space frame and the floor. The frontage band carrying the mark is a separate asset: it runs 450 m and does not belong to this bay.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -2819,7 +2837,7 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_mro_fachada.glb",
-   "bytes": 32388,
+   "bytes": 32404,
    "faces": 1026,
    "faces_origem": 1026,
    "decimado": null,
@@ -2856,9 +2874,10 @@
      978.5,
      1805.0
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "A faixa de fachada do centro de manutencao, 450 m, com o letreiro LATAM. Encoste-a numa fila de baias de hangar.",
+   "nota": "The maintenance centre's frontage band, 450 m, with the LATAM sign. Stand it against a row of hangar bays.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -2901,7 +2920,7 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_mro_oficinas.glb",
-   "bytes": 2612,
+   "bytes": 2628,
    "faces": 26,
    "faces_origem": 26,
    "decimado": null,
@@ -2941,9 +2960,10 @@
      1009.07,
      1803.83
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "A espinha de oficinas atras da linha de hangares, 470 m.",
+   "nota": "The workshop spine behind the hangar line, 470 m.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -2986,7 +3006,7 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_museu.glb",
-   "bytes": 2716,
+   "bytes": 2732,
    "faces": 92,
    "faces_origem": 92,
    "decimado": null,
@@ -3021,9 +3041,10 @@
      1320.74,
      1725.71
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "O hangar do Museu TAM, vizinho do centro de manutencao.",
+   "nota": "The TAM Museum hangar, next door to the maintenance centre.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -3066,7 +3087,7 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_torre_xadrez.glb",
-   "bytes": 3368,
+   "bytes": 3384,
    "faces": 30,
    "faces_origem": 30,
    "decimado": null,
@@ -3103,9 +3124,10 @@
      300.0,
      1255.0
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "A torre quadriculada do meio de campo.",
+   "nota": "The chequered midfield tower.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -3148,7 +3170,7 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_hangar_midfield.glb",
-   "bytes": 4816,
+   "bytes": 4832,
    "faces": 117,
    "faces_origem": 117,
    "decimado": null,
@@ -3185,9 +3207,10 @@
      335.0,
      1157.38
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Hangar de meio de campo com porta e empenas.",
+   "nota": "A midfield hangar with its door and end panels.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -3230,7 +3253,7 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_portao_mro.glb",
-   "bytes": 3884,
+   "bytes": 3900,
    "faces": 55,
    "faces_origem": 55,
    "decimado": null,
@@ -3267,9 +3290,10 @@
      921.75,
      1539.0
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Portaria do centro de manutencao: guarita, portao e cancela.",
+   "nota": "The maintenance centre gatehouse: guard house, gate and boom.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -3312,7 +3336,7 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_cerca.glb",
-   "bytes": 3148,
+   "bytes": 3164,
    "faces": 173,
    "faces_origem": 173,
    "decimado": null,
@@ -3355,9 +3379,10 @@
      649.97,
      1546.42
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Trecho reto de cerca de perimetro - mureta, tela e postes a cada 3 m. Duplique-o em fila para fechar um perimetro.",
+   "nota": "A straight run of perimeter fence - low wall, mesh and posts every 3 m. Duplicate it in a line to close a perimeter.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -3400,7 +3425,7 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_doca_manutencao.glb",
-   "bytes": 4252,
+   "bytes": 4268,
    "faces": 170,
    "faces_origem": 170,
    "decimado": null,
@@ -3441,9 +3466,10 @@
      878.41,
      1887.03
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Doca de manutencao com plataformas, escadas e carrinhos de ferramenta.",
+   "nota": "A maintenance dock with platforms, stairs and tool carts.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -3486,7 +3512,7 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_suporte_motor.glb",
-   "bytes": 4964,
+   "bytes": 4980,
    "faces": 159,
    "faces_origem": 159,
    "decimado": null,
@@ -3528,9 +3554,10 @@
      989.99,
      1958.02
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Ber\u00e7os de motor com motores fora da asa, na frente da oficina.",
+   "nota": "Engine stands with engines off the wing, in front of the workshop.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -3573,7 +3600,7 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_conteineres.glb",
-   "bytes": 3196,
+   "bytes": 3212,
    "faces": 55,
    "faces_origem": 55,
    "decimado": null,
@@ -3615,9 +3642,10 @@
      956.57,
      1868.27
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Fila de contentores ISO encostada na linha de hangares. Fotografado: refs/mro_centro_tecnologico_2009.jpg.",
+   "nota": "A row of ISO containers against the hangar line. Photographed: refs/mro_centro_tecnologico_2009.jpg.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -3660,7 +3688,7 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_mastro.glb",
-   "bytes": 1588,
+   "bytes": 1604,
    "faces": 10,
    "faces_origem": 10,
    "decimado": null,
@@ -3700,9 +3728,10 @@
      1030.92,
      2050.96
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Mastro de iluminacao do patio de manutencao.",
+   "nota": "Floodlight mast on the maintenance apron.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -3745,7 +3774,7 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_gse_reboque.glb",
-   "bytes": 3172,
+   "bytes": 3188,
    "faces": 15,
    "faces_origem": 15,
    "decimado": null,
@@ -3787,9 +3816,10 @@
      950.0,
      1877.6
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Trator de reboque com a barra. Um trator SEM barra parado no trem de nariz e o detalhe que denuncia quem nunca pisou num patio - por isso a barra vem junto.",
+   "nota": "A tug with its towbar. A tug WITHOUT one, parked at a nose gear, is the detail that gives away somebody who has never stood on a ramp - so the bar comes with it.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -3832,7 +3862,7 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_gse_gpu.glb",
-   "bytes": 2356,
+   "bytes": 2372,
    "faces": 10,
    "faces_origem": 10,
    "decimado": null,
@@ -3873,9 +3903,10 @@
      957.4,
      1875.0
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "GPU do parque de equipamentos.",
+   "nota": "Ground power unit from the equipment park.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -3918,7 +3949,7 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_gse_airstart.glb",
-   "bytes": 2352,
+   "bytes": 2368,
    "faces": 10,
    "faces_origem": 10,
    "decimado": null,
@@ -3959,9 +3990,10 @@
      964.8,
      1875.0
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Unidade de partida pneumatica.",
+   "nota": "Air start unit.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -4004,7 +4036,7 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_gse_beltloader.glb",
-   "bytes": 2372,
+   "bytes": 2388,
    "faces": 10,
    "faces_origem": 10,
    "decimado": null,
@@ -4045,9 +4077,10 @@
      972.2,
      1875.0
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Esteira de bagagem.",
+   "nota": "Belt loader.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -4090,7 +4123,7 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_gse_van.glb",
-   "bytes": 2336,
+   "bytes": 2352,
    "faces": 10,
    "faces_origem": 10,
    "decimado": null,
@@ -4131,9 +4164,10 @@
      979.6,
      1875.0
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Van de servico.",
+   "nota": "Service van.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -4176,7 +4210,7 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_gse_bowser.glb",
-   "bytes": 2340,
+   "bytes": 2356,
    "faces": 10,
    "faces_origem": 10,
    "decimado": null,
@@ -4217,9 +4251,10 @@
      994.4,
      1875.0
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Caminhao-tanque, 9 m.",
+   "nota": "Fuel bowser, 9 m.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -4262,7 +4297,7 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_gse_cherrypicker.glb",
-   "bytes": 2364,
+   "bytes": 2380,
    "faces": 10,
    "faces_origem": 10,
    "decimado": null,
@@ -4303,9 +4338,10 @@
      1001.8,
      1875.0
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Plataforma elevatoria.",
+   "nota": "Cherry picker.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -4348,7 +4384,7 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_placa_campo.glb",
-   "bytes": 41492,
+   "bytes": 41508,
    "faces": 12881,
    "faces_origem": 12881,
    "decimado": null,
@@ -4390,9 +4426,10 @@
      570.18,
      979.62
     ],
-    "datum": "campo"
+    "datum": "campo",
+    "centrar_em": []
    },
-   "nota": "A pista 02/20, as taxiways, o patio e o campo, 2,5 x 3,0 km. y = 0 e a cabeceira 02; o terreno de Sao Carlos desce 35 m dali ate o patio do MRO, e isso esta na malha.",
+   "nota": "Runway 02/20, the taxiways, the apron and the field: 2.5 x 3.0 km. y = 0 is the 02 threshold; the ground at Sao Carlos falls 35 m from there to the MRO apron, and that fall is in the mesh.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -4436,7 +4473,7 @@
    "campo": "scl",
    "licenca": "odbl-1.0",
    "arquivo": "scl_torre.glb",
-   "bytes": 5708,
+   "bytes": 5724,
    "faces": 189,
    "faces_origem": 189,
    "decimado": null,
@@ -4475,9 +4512,10 @@
      -676.0,
      -1785.1
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "A torre de Santiago, 48 m de fuste, com o bloco da DGAC embaixo.",
+   "nota": "The Santiago tower, a 48 m shaft, with the DGAC block beneath it.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -4520,7 +4558,7 @@
    "campo": "scl",
    "licenca": "odbl-1.0",
    "arquivo": "scl_base_latam.glb",
-   "bytes": 36688,
+   "bytes": 36704,
    "faces": 1091,
    "faces_origem": 1091,
    "decimado": null,
@@ -4560,9 +4598,10 @@
      -651.48,
      -1302.89
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "A frente da base LATAM em Santiago, com a faixa de letreiro e a marca.",
+   "nota": "The frontage of the LATAM base at Santiago, with the sign band and the mark.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -4605,7 +4644,7 @@
    "campo": "scl",
    "licenca": "odbl-1.0",
    "arquivo": "scl_terminal_t2.glb",
-   "bytes": 16336,
+   "bytes": 16352,
    "faces": 1157,
    "faces_origem": 1157,
    "decimado": null,
@@ -4650,9 +4689,10 @@
      -637.14,
      -2807.13
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "O Terminal 2 com a cobertura ondulada, o brise e os paineis verdes - 367 x 317 m.",
+   "nota": "Terminal 2 with its undulating roof, the brise-soleil and the green panels - 367 x 317 m.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -4695,7 +4735,7 @@
    "campo": "scl",
    "licenca": "odbl-1.0",
    "arquivo": "scl_hangar.glb",
-   "bytes": 2988,
+   "bytes": 3004,
    "faces": 58,
    "faces_origem": 58,
    "decimado": null,
@@ -4730,9 +4770,10 @@
      -822.31,
      -1659.35
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Um hangar de terceiros no lado sul, 98 x 96 x 21 m.",
+   "nota": "A third-party hangar on the south side, 98 x 96 x 21 m.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -4775,7 +4816,7 @@
    "campo": "scl",
    "licenca": "odbl-1.0",
    "arquivo": "scl_mastro.glb",
-   "bytes": 1552,
+   "bytes": 1568,
    "faces": 12,
    "faces_origem": 12,
    "decimado": null,
@@ -4815,9 +4856,10 @@
      -759.71,
      -324.68
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": []
    },
-   "nota": "Mastro de patio de Santiago.",
+   "nota": "Apron floodlight mast at Santiago.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
@@ -4860,7 +4902,7 @@
    "campo": "scl",
    "licenca": "odbl-1.0",
    "arquivo": "scl_placa_campo.glb",
-   "bytes": 35596,
+   "bytes": 35612,
    "faces": 5545,
    "faces_origem": 5545,
    "decimado": null,
@@ -4908,9 +4950,10 @@
      -662.26,
      -1461.45
     ],
-    "datum": "campo"
+    "datum": "campo",
+    "centrar_em": []
    },
-   "nota": "As duas pistas paralelas 17L/35R e 17R/35L, as taxiways, o patio e o campo, 2,2 x 5,1 km. y = 0 e a cabeceira 17L.",
+   "nota": "The two parallel runways 17L/35R and 17R/35L, the taxiways, the apron and the field: 2.2 x 5.1 km. y = 0 is the 17L threshold.",
    "ausentes": [],
    "verificacao": {
     "ok": true,
