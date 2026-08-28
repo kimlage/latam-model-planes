@@ -598,14 +598,14 @@ The `.blend` is the master, but it only opens in Blender.
 command at the root:
 
 ```bash
-python3 export_frota.py                 # whole fleet, both LODs  (~4 min)
+python3 export_frota.py                 # whole fleet, both LODs  (~9 min)
 python3 export_frota.py B77W --lod web  # one aircraft, light level
 python3 export_frota.py --verificar     # read every .glb back and check it
 ```
 
 **glTF 2.0 binary (`.glb`) is the primary target**, in two levels — a faithful
 one (~325 k triangles, native textures) and a genuinely light one for three.js
-(~47–67 k triangles, ≤ 2048 px textures, Draco: **around 0.5 MB per aircraft**).
+(~48–68 k triangles, ≤ 2048 px textures, Draco: **0.6–1.3 MB per aircraft**).
 USDZ, FBX and OBJ+MTL come out alongside for AR Quick Look, Unity/Unreal and
 everything else. [`export/viewer.html`](export/viewer.html) is a one-file
 three.js viewer for the fleet — serve `export/` over HTTP and open it.
