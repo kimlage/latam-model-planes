@@ -12,6 +12,14 @@
  * that share geometry and materials.
  */
 
+import { linhaPadrao } from './tempo.js';
+
+/* The schema stays at /1 and the timeline rides in as an ADDITIVE block. That
+ * is not laziness: a reader that predates the timeline — an embed generated
+ * last week, `export/viewer.html`, a hand-written JSON — opens a document with
+ * a `linha` in it and shows the scene at rest, which is the correct degradation
+ * and the reason not to bump. A version bump would have made those files
+ * refuse to open a scene they can very nearly render. */
 export const SCHEMA = 'latam-estudio/1';
 
 let contador = 0;
@@ -40,11 +48,17 @@ export function estadoPadrao () {
       aa: 2,                     // export supersample factor (1–3); the viewport
                                  // uses the context's own MSAA, which is fixed
       pixelRatioMax: 2,
+      /* A display-referred grade, applied after tone mapping. Identity by
+         default, and while it IS the identity the renderer draws straight to
+         the canvas exactly as it did before the grade existed — no render
+         target, no extra pass, nothing to go wrong in the common case. */
+      correcao: { contraste: 1, saturacao: 1, elevar: 0, temperatura: 0, vinheta: 0 },
     },
     camera: {
       pos: [-70, 26, 62], alvo: [0, 4, 0], fov: 35, orto: false,
     },
     poses: { A: null, B: null },  // the two endpoints of the "camera path" GIF
+    linha: linhaPadrao(),         // the timeline — see tempo.js
     objetos: [],                  // see novoObjeto()
   };
 }
