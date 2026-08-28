@@ -345,13 +345,13 @@ python3 scenario/takeoff_camera.py
 The move (v4): **one orbit flown in the aircraft's own coordinates from frame
 1 to frame 240** — distance, relative bearing, elevation above it — with no
 dolly phase and no hand-over; the seam between coordinate frames was where
-the earlier cuts' stiffness lived. The camera starts 400 m off the nose at
+the earlier cuts' stiffness lived. The camera starts 130 m off the nose at
 ~13 m, lets the jet close head-on through the roll, then cranes up around
 the starboard bow, closing 284 → 200 m while the lens opens 55 → 28 mm, plus
 a metre of slow positional sway (formation flight is not a rail). Full
 reasoning, and the measurements that forced each choice, are in the module
 docstring. The second clip, a constant-rate drone orbit of the LATAM base,
-is `base_flyover.py` → `scl_base_v1.gif`.
+is `base_flyover.py` → `scl_base_v9.gif`.
 
 ### Judging the move with numbers, not adjectives
 
@@ -406,7 +406,7 @@ ffmpeg -y -framerate 25 -start_number 1 -i /tmp/frames_scl/%04d.png \
   -vf "scale=800:-1:flags=lanczos,split[a][b];\
 [a]palettegen=max_colors=88:stats_mode=diff[p];\
 [b][p]paletteuse=dither=none:diff_mode=rectangle" \
-  -loop 0 "airbus A320neo/a320_scl_v10.gif"
+  -loop 0 "airbus A320neo/a320_scl_v14.gif"
 ```
 
 **A 180° shutter (0.50) is affordable only because the pan slowed down.** The
@@ -435,7 +435,7 @@ LZW data and once reported a phantom 311 s delay that did not exist:
 ```bash
 python3 - <<'PY'
 from PIL import Image, ImageSequence
-im = Image.open("airbus A320neo/a320_scl_v10.gif")
+im = Image.open("airbus A320neo/a320_scl_v14.gif")
 durs = {fr.info.get("duration") for fr in ImageSequence.Iterator(im)}
 print("durations (ms):", durs)     # must be a single value, {40}
 PY

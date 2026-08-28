@@ -60,7 +60,7 @@ box in metres — length, height, span.
 | Boeing 777-300ER | PT-MUG | 46,908 | 0.4 | 9.4 | 325,344 | 8.6 | 2.5 | 7.1 | 28.3 | 73.93 | 18.51 | 64.74 |
 | Boeing 787-8 | CC-BBF | 59,256 | 0.6 | 13.6 | 346,008 | 8.6 | 3.3 | 7.3 | 29.4 | 56.74 | 16.48 | 60.11 |
 | Boeing 787-9 | CC-BGK | 61,768 | 0.6 | 13.6 | 356,200 | 8.9 | 3.4 | 7.4 | 30.2 | 62.83 | 16.48 | 60.11 |
-| Boeing 767-300F | — | *master pending* | | | | | | | | | | |
+| Boeing 767-300F | — | *exported 2026-08-26* | | | | | | | | | | |
 
 **Whole fleet: 5.0 MB of `web` GLB** (committed), 28.6 MB of USDZ and 400.8 MB
 of `alta` (both regenerated on demand). An export takes 6–10 s per aircraft per
