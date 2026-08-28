@@ -335,30 +335,38 @@ handful of control curves, extends the aircraft action past its shipped frame
 
 ```bash
 blender -b "airbus A320neo/A320neo_scl.blend" -P scenario/takeoff_camera.py \
-    -- --out "airbus A320neo/A320neo_scl_v2.blend"
+    -- --out "airbus A320neo/A320neo_scl_v5.blend"
 
 # the same module runs without Blender, to tune the geometry in a second
 # instead of a minute (needs an ac_curve.json export of the aircraft action)
 python3 scenario/takeoff_camera.py
 ```
 
-The move (v4): **one orbit flown in the aircraft's own coordinates from frame
+The move (v5): **one orbit flown in the aircraft's own coordinates from frame
 1 to frame 240** — distance, relative bearing, elevation above it — with no
 dolly phase and no hand-over; the seam between coordinate frames was where
-the earlier cuts' stiffness lived. The camera starts 130 m off the nose at
-~13 m, lets the jet close head-on through the roll, then cranes up around
-the starboard bow, closing 284 → 200 m while the lens opens 55 → 28 mm, plus
-a metre of slow positional sway (formation flight is not a rail). Full
-reasoning, and the measurements that forced each choice, are in the module
-docstring. The second clip, a constant-rate drone orbit of the LATAM base,
-is `base_flyover.py` → `scl_base_v9.gif`.
+the earlier cuts' stiffness lived. It **opens close**: 130 m off the nose at
+7.8 m, the jet filling 42% of the frame width at 50 mm, titles, nose and
+gear legible. The details come first, and the reveal is then bought by
+**opening** the distance rather than closing it — 130 → 250 m while the lens
+opens 50 → 28 mm, the crane swinging 20° → 46° around the starboard bow and
+climbing 3.2° → 21.5° above the aircraft, plus a metre of slow positional
+sway (formation flight is not a rail). The price is ground rush: flying
+formation at 47–85 m/s eight metres over the scrub band, which the table
+below accounts for. Full reasoning, and the measurements that
+forced each choice, are in the module docstring. The second clip is not an
+orbit but a northbound aerial **survey** of the whole east side,
+`base_flyover.py` → `scl_base_v9.gif`: a constant-rate straight line 2.0 km
+long west of both runways, climbing 280 → 330 m at a fixed 38 mm, its aim
+opening on the T1/T2 terminal core, crossing the control tower mid-clip and
+settling on the LATAM base with the assembled PT-TMN at its stand.
 
 ### Judging the move with numbers, not adjectives
 
 `camera_metrics.py` measures whether a move is comfortable to watch:
 
 ```bash
-blender -b "airbus A320neo/A320neo_scl_v2.blend" -P scenario/camera_metrics.py
+blender -b "airbus A320neo/A320neo_scl_v5.blend" -P scenario/camera_metrics.py
 ```
 
 **Degrees per second is the wrong unit.** What the eye reads is how much of the
@@ -373,20 +381,32 @@ the tree line at 12 m is a different defect from a fast pan, and needs a
 different fix), the projected pixel width of the light masts, and the
 aircraft's smallest margin to the frame edge.
 
-| | first SCL cut | this one |
+| | first SCL cut (v1) | this one (v5) |
 |---|---|---|
-| screen flow, central band, median | **1.66 w/s** | **0.10 w/s** |
-| frames above 1.0 w/s | 114 of 139 | 0 of 239 |
-| worst single probe in frame | 41.1 w/s | 0.90 w/s |
-| nearest scenery in frame | 12 m — a tree | 53 m — grass |
-| worst foreground parallax | 582 °/s | 38 °/s |
-| aircraft margin to frame edge | 5.34% | 12.26% |
+| screen flow, central band, median | **1.66 w/s** | **0.092 w/s** |
+| frames above 1.0 w/s, central band | 114 of 139 | 0 of 239 |
+| worst single probe in frame | 41.1 w/s | 1.45 w/s |
+| nearest scenery in frame | 12 m — an 18 m poplar | the scrub band, ~8 m below the lens |
+| worst foreground parallax | 582 °/s | 96 °/s |
+| aircraft margin to frame edge | 5.34% | 24.0% (offline solve) |
+
+The v1 column and the method are the original in-scene `camera_metrics.py` run;
+v5's flow, worst probe and parallax were re-measured when that camera shipped;
+the margin is what the offline solver prints today.
+
+**The one number above the threshold is a frame-edge tuft, and that is on
+purpose.** Starting at 130 m means flying eight metres over the scrub, so the
+worst single probe — always at the frame edge, never in the central band —
+reads 1.45 w/s and 96 °/s of parallax. That is structurally unlike v1, where
+the 41 w/s probe was an 18 m poplar crossing the whole frame in two or three
+frames: a 25 px tuft under a 180° shutter smears into speed texture. The
+central band, where the big steady jet is, stays at 0.092 median / 0.124 max.
 
 ### Rendering
 
 ```bash
 # 240 frames, 960x540, Cycles 96 samples on Metal, 180 deg shutter (0.50)
-blender -b "airbus A320neo/A320neo_scl_v4.blend" -P - <<'PY'
+blender -b "airbus A320neo/A320neo_scl_v5.blend" -P - <<'PY'
 import bpy, os
 prefs = bpy.context.preferences.addons["cycles"].preferences
 prefs.compute_device_type = "METAL"; prefs.get_devices()
@@ -400,11 +420,13 @@ PY
 
 # GIF: 800 px wide, 25 fps. max_colors is re-measured per round against the
 # ~15 MB budget: texture-heavy rounds (soil mottle, scrub tufts, camera sway)
-# cost colours - the ladder so far ran 144 -> 96 -> 88 -> 80. The base
-# flyover, whose orbit moves every pixel every frame, ships at 720 px / 72.
+# cost colours - the ladder ran 144 -> 96 -> 88 -> 80, and v14, re-rendered
+# over the detailed fleet, came back up to 96 for 14.67 MB. The base flyover,
+# whose survey line moves every pixel every frame, ships at 660 px / 64
+# for 14.58 MB.
 ffmpeg -y -framerate 25 -start_number 1 -i /tmp/frames_scl/%04d.png \
   -vf "scale=800:-1:flags=lanczos,split[a][b];\
-[a]palettegen=max_colors=88:stats_mode=diff[p];\
+[a]palettegen=max_colors=96:stats_mode=diff[p];\
 [b][p]paletteuse=dither=none:diff_mode=rectangle" \
   -loop 0 "airbus A320neo/a320_scl_v14.gif"
 ```
@@ -418,13 +440,21 @@ sub-pixel) and it is not the GIF dither — measured, the dither choice moves th
 flicker score by under 1%. Here the background crosses at most 0.27
 frame-widths/s, the masts step 8.6 px, and the shutter covers half of it.
 
-**144 colours and `dither=none` are a size decision, measured.** 240 frames at
-800 px is 23.4 MB with `sierra2_4a`/256 and 16.4 MB with a subtle
-`bayer_scale=5`/160; `none`/144 lands at 14.68 MB, inside the 15 MB budget,
+**The colour budget and `dither=none` are a size decision, measured.** From the
+round that set the rule: 240 frames at 800 px is 23.4 MB with `sierra2_4a`/256
+and 16.4 MB with a subtle `bayer_scale=5`/160; `none`/144 lands at 14.68 MB,
+inside the 15 MB budget,
 with no ordered-dither pattern that could crawl. It costs a little banding in
 the sky gradient, which is the honest trade. It costs nothing in flicker: the
 finished GIF measures 35.47 flickering px per 10 k against 35.76 for the source
 PNGs — quantisation removes a hair of variation rather than adding any.
+
+**The rule is conditional on motion, though.** Both clips in this section are
+full of it and keep `dither=none`. A clip that is mostly smooth gradient and
+barely moves is the opposite case: a small global palette lands there in
+visible steps, and the fix is ordered `bayer_scale=5`, which is deterministic
+per pixel position and so cannot shimmer between frames the way error
+diffusion does.
 
 **Use 25 fps, not 24.** A GIF delay is an integer number of centiseconds. 25 fps is
 exactly 4 cs for every frame; 24 fps is 4.1666… cs, and every encoder resolves that by
