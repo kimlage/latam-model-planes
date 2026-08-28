@@ -16,32 +16,38 @@ python3 export_frota.py --verificar --reimportar   # …and re-open every format
 Everything here is generated. Nothing in an aircraft folder is written, and no
 `.blend` is ever saved — the export can run while another session edits a master.
 
-## State of these files — a re-run is required after the QA fixes
+## State of these files — current with the masters
 
 **The pipeline is the deliverable; these binaries are not.** They were generated
-on 2026-08-21 from the masters as they stood that morning, while
-[`QA-BACKLOG.md`](../QA-BACKLOG.md) still listed open defects on most of the
-fleet — the A320-family windshields, the 787 radome joint, the A321 wordmark's
-broken "M", the A320ceo ghost door. **Every one of those defects is baked into
-the exports here.** When a fix lands, re-run the aircraft:
+on **2026-08-27** (`217d33f`) from the masters as they stand today. That run came
+after the QA round that closed the A320-family windshields, the 787 radome joint,
+the A321 wordmark's broken "M" and the A320ceo ghost door, and after the same
+day's appendages-and-lights round — so the probes, antennas, static wicks,
+wipers, drain masts and the emissive navigation, beacon, strobe and logo lights
+are all in these files. **All eleven aircraft exported and verified clean, both
+LODs.** When a fix lands on a master, re-run that aircraft:
 
 ```bash
 python3 export_frota.py A321neo          # one aircraft, both LODs
 python3 export_frota.py                  # or the whole fleet
 ```
 
-Nine of the ten aircraft in the table exported and verified clean. The tenth,
-the **Boeing 767-300F**, has no master yet — it is being built in
-`boeing 767-300F/`, its row is already in `FROTA`, and it will export on the
-next run without anyone editing anything.
+`--verificar` re-opens every file the manifest lists, `alta/` included. That
+folder is not committed, so on a fresh clone regenerate it first — otherwise the
+read-back stops at the first missing file rather than checking the `web` tier
+that IS committed.
 
-One measurement worth passing back to the model side rather than the export
-side: the exported bounding boxes agree with each aircraft's own
-`spec_*.json` to within a few centimetres on all four Boeings, and are **2.4–2.8
-m wide on all five Airbus** — 38.23 m of span read out of the A320/A321 files
-against 35.80 m declared in their specs, 36.92 m on the A319 against 34.10 m.
-That is a property of the masters, not of the export (Blender measures the same
-figure directly), and it is not in the QA backlog.
+The appendages ride into the GLB as their own nodes, one per `Apx_*` object —
+**22 on each of the five Airbus, 31 on the three 767s and both 787s, 33 on the
+777**. The three emissive materials (`LuzBranca`, `LuzVermelha`, `LuzVerde`) are
+written **natively rather than baked**, as `emissiveFactor` under
+`KHR_materials_emissive_strength` = 6.0.
+
+The bounding boxes now agree with each aircraft's own `spec_*.json`. The span
+gap this section used to record — 38.23 m read out of the A320/A321 files
+against 35.80 m declared, and 36.92 m on the A319 against 34.10 m — closed on
+the master side with the geometry-truth round; the table below reads 35.80 and
+34.10.
 
 ## Measured, per aircraft
 
@@ -52,20 +58,28 @@ box in metres — length, height, span.
 
 | Aircraft | Reg. | `web` tris | `web` .glb | `web` MP | `alta` tris | `alta` .glb | .usdz | .fbx | .obj+tex | X | Y | Z |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Airbus A319 (ceo) | PT-TMT | 57,250 | 0.5 | 9.4 | 308,386 | 8.3 | 3.0 | 6.5 | 26.4 | 33.98 | 11.71 | 36.92 |
-| Airbus A320ceo | CC-BFO | 62,954 | 0.5 | 9.4 | 328,490 | 8.8 | 3.3 | 6.8 | 28.1 | 37.71 | 11.71 | 38.23 |
-| Airbus A320neo | PT-TMN | 61,474 | 0.6 | 9.4 | 327,010 | 8.8 | 3.2 | 6.9 | 28.0 | 37.71 | 11.71 | 38.23 |
-| Airbus A321-231 (ceo) | PT-MXP | 65,746 | 0.6 | 9.4 | 342,802 | 9.2 | 3.4 | 7.1 | 29.2 | 44.65 | 11.71 | 38.23 |
-| Airbus A321neo (ACF) | PS-LBA | 66,734 | 0.6 | 9.4 | 343,790 | 9.3 | 3.5 | 7.1 | 29.3 | 44.65 | 11.71 | 38.23 |
-| Boeing 767-300ER | CC-CWY | 60,428 | 0.6 | 13.6 | 326,960 | 8.9 | 3.2 | 7.4 | 28.8 | 54.75 | 15.75 | 50.89 |
-| Boeing 777-300ER | PT-MUG | 46,908 | 0.4 | 9.4 | 325,344 | 8.6 | 2.5 | 7.1 | 28.3 | 73.93 | 18.51 | 64.74 |
-| Boeing 787-8 | CC-BBF | 59,256 | 0.6 | 13.6 | 346,008 | 8.6 | 3.3 | 7.3 | 29.4 | 56.74 | 16.48 | 60.11 |
-| Boeing 787-9 | CC-BGK | 61,768 | 0.6 | 13.6 | 356,200 | 8.9 | 3.4 | 7.4 | 30.2 | 62.83 | 16.48 | 60.11 |
-| Boeing 767-300F | — | *exported 2026-08-26* | | | | | | | | | | |
+| Airbus A319 (ceo) | PT-TMT | 58,232 | 1.2 | 34.6 | 314,168 | 10.4 | 3.7 | 8.5 | 31.6 | 34.05 | 11.99 | 34.10 |
+| Airbus A320ceo | CC-BFO | 63,936 | 1.2 | 34.6 | 334,272 | 10.9 | 4.0 | 9.0 | 33.5 | 37.78 | 11.99 | 35.80 |
+| Airbus A320neo | PT-TMN | 62,456 | 1.2 | 34.6 | 332,792 | 11.0 | 3.9 | 9.1 | 33.6 | 37.78 | 11.99 | 35.80 |
+| Airbus A321-231 (ceo) | PT-MXP | 66,728 | 1.2 | 34.6 | 348,584 | 11.4 | 4.1 | 9.3 | 34.7 | 44.72 | 12.02 | 35.80 |
+| Airbus A321neo (ACF) | PS-LBA | 67,716 | 1.3 | 34.6 | 349,572 | 11.5 | 4.2 | 9.3 | 34.9 | 44.72 | 12.02 | 35.80 |
+| Boeing 767-300ER | CC-CWY | 61,673 | 0.6 | 13.6 | 333,005 | 9.1 | 3.3 | 7.7 | 30.5 | 54.96 | 15.75 | 50.89 |
+| Boeing 777-300ER | PT-MUG | 47,805 | 0.6 | 17.8 | 326,241 | 9.1 | 2.7 | 7.6 | 30.5 | 74.03 | 18.51 | 64.74 |
+| Boeing 787-8 Dreamliner | CC-BBF | 60,423 | 0.7 | 13.6 | 351,975 | 9.5 | 3.3 | 8.1 | 32.0 | 56.74 | 16.92 | 60.11 |
+| Boeing 787-9 Dreamliner | CC-BGK | 62,935 | 0.7 | 13.6 | 362,167 | 9.7 | 3.5 | 8.2 | 32.7 | 62.83 | 17.02 | 60.11 |
+| Boeing 767-300F | N536LA | 51,061 | 0.6 | 13.6 | 322,393 | 8.8 | 2.9 | 7.4 | 29.5 | 54.96 | 15.75 | 50.89 |
+| Boeing 767-300BCF | CC-CXE | 51,061 | 0.6 | 13.6 | 322,393 | 8.8 | 2.9 | 7.5 | 29.6 | 54.96 | 15.75 | 50.89 |
 
-**Whole fleet: 5.0 MB of `web` GLB** (committed), 28.6 MB of USDZ and 400.8 MB
-of `alta` (both regenerated on demand). An export takes 6–10 s per aircraft per
-LOD, 26–40 s for the 767 whose bake is the largest.
+**Whole fleet: 9.8 MB of `web` GLB** (committed), 38.5 MB of USDZ and 554.7 MB
+of `alta` (both regenerated on demand). A full run is **about 9 minutes** for
+the eleven aircraft in both LODs — 32–67 s per aircraft for the pair. The five
+Airbus are the slow half: their `alta` bake is 76.5 MP against 34.6–43.0 on the
+Boeings, and it is the bake, not the geometry, that sets the clock.
+
+The two freighters are the same mesh: the 767-300F and 767-300BCF agree to the
+triangle, carry the same object names and the same material names, and differ
+only in the baked paint — N536LA against CC-CXE. That is why their rows repeat
+and their `.glb` sizes still differ slightly.
 
 ## See it now
 
@@ -210,7 +224,7 @@ declared: every number there was read back out of the finished file.
 Exporting a master straight to glTF **silently loses the paint**. Measured on
 the 777: 30 materials → 17, 8 textures → 3, and the fuselage came out flat grey.
 
-The cause is structural. `FuselagemPaint` — the paint on all nine aircraft — is
+The cause is structural. `FuselagemPaint` — the paint on all eleven aircraft — is
 not a Principled BSDF: it is three of them mixed by channels of an 8192×2048
 nose mask, with the base colour coming from a `Mix` of `LiveryFac` over
 `LiveryTex`. glTF can represent exactly one Principled per material. The
@@ -220,9 +234,10 @@ So the pipeline finds those materials by a **structural test** — the Output's
 Surface must come straight from a Principled, and that Principled's scalar
 inputs may only come from an Image Texture or a Normal Map — and Cycles-bakes
 each failing material into a texture glTF *can* carry. On the current fleet the
-test catches exactly two materials (`FuselagemPaint` on all nine, `CinzaAsa` on
-the four Boeings) and it will catch whatever the 767-300F brings without anyone
-editing a list of names.
+test catches exactly two materials, both now on all eleven aircraft —
+`FuselagemPaint` once per aircraft and `CinzaAsa` across 78 wing objects in all
+— and it caught them on the two freighters, the last masters to be built,
+without anyone editing a list of names.
 
 Proof that the bake is faithful: the same scene rendered before and after
 remediation, three canonical angles, 1280×720/64 samples —
@@ -334,7 +349,7 @@ nothing in the export log said so. Reading the file was the only way to know.
 ## What is in git, and what is not
 
 **Committed:** this README, the three scripts, `viewer.html`, `manifest.json`,
-**`web/*.glb`** — about 0.5 MB per aircraft, so a fresh clone can serve the
+**`web/*.glb`** — 0.6–1.3 MB per aircraft (9.8 MB for the fleet), so a fresh clone can serve the
 folder and see the fleet immediately — and **`heroi/*.glb`** for the aircraft
 that have been asked to carry a clip. `heroi` is committed rather than
 regenerated because it is small (0.93 MB for the 777) and because a scene JSON
@@ -346,7 +361,7 @@ python3 export_frota.py B77W A320neo --lod heroi
 ```
 
 **Not committed** (see the repository [`.gitignore`](../.gitignore)): `alta/`
-in full and the `.usdz` files. Together they are roughly 400 MB of derived
+in full and the `.usdz` files. Together they are roughly 590 MB of derived
 binaries that one command regenerates:
 
 ```bash

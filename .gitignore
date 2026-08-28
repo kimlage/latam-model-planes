@@ -127,12 +127,13 @@ scenario/checks/
 
 # ---------------------------------------------------------------------------
 # Portable exports (export/). Regenerate the whole lot with
-#   python3 export_frota.py            # ~2 min for the fleet, both LODs
-# What IS committed: export/web/*.glb — the light three.js deliverable, about
-# 0.5 MB each, so a fresh clone can open export/viewer.html and see the fleet.
-# What is NOT: everything below, because it is bulky and regenerable.
-#   alta/  ~44 MB per aircraft (GLB + FBX + OBJ + loose textures) = ~400 MB
-#   *.usdz  ~3 MB each; AR Quick Look, one command away
+#   python3 export_frota.py            # fleet, every configured tier
+# What IS committed: export/web/*.glb — the light three.js deliverable, 0.6-1.3
+# MB each (9.8 MB in all) — plus requested export/heroi/*.glb clip subjects, so
+# a fresh clone can open the viewer and authored clips. What is NOT: everything
+# below, because it is bulky and regenerable.
+#   alta/  ~50 MB per aircraft (GLB + FBX + OBJ + loose textures) = ~555 MB
+#   *.usdz  ~2.7-4.2 MB each; AR Quick Look, one command away
 # Same rule as scenario/scl_terrain.blend: derived, large, one command to rebuild.
 # ---------------------------------------------------------------------------
 export/alta/

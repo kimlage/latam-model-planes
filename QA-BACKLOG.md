@@ -441,9 +441,23 @@ written after the practice, and nobody went back to reconcile the two.
   retracted — the nose-gear taxi/TO lamp is what the photos show lit); the
   A320 pitot standby (3rd probe) is not modelled (sub-resolution at every
   gate); all light emission is CONSTANT — a strobe/beacon flash cycle is a
-  clip-level decision at 25 fps, noted in PENDENCIAS item 2. The
+  clip-level decision at 25 fps, noted in PENDENCIAS item 2. ~~The
   `export/` GLB fleet is now one round behind the masters (appendages not
-  re-exported).
+  re-exported).~~ — **CLOSED 2026-08-28: it was already false when written.**
+  The re-export landed the same evening in `217d33f`, after both appendages
+  commits (`61def5c` 14:29, `021cc33` 15:34), and no master has been touched
+  since — every commit after it is scene and clip work. Audited file by file
+  across all eleven rather than taken from the commit message: every `Apx_*`
+  object that survives `preparar()` in the master is a node in the committed
+  `.glb`, and the total object counts agree too — 22 appendages on each of the
+  five Airbus, 31 on the three 767s and both 787s, 33 on the 777. The three
+  emissive materials reach the GLB **natively, never baked** — so the
+  `Emission Color` that `ESCALARES` does not carry was never at risk — as
+  `emissiveFactor` under `KHR_materials_emissive_strength` = 6.0, the strength
+  `apendices_familia.py` declares. `export/manifest.json` is from that same run
+  and its recorded byte sizes match the eleven committed files exactly. Re-run
+  to a scratch folder on today's masters reproduced the same triangle counts,
+  boxes and file sizes, so nothing in `export/` needed rewriting.
 - ~~**Tailstrike angles** run short across the A320 family~~ — **FIXED
   2026-08-27**: it was BOTH suspects at once, plus a third — gear 0.28 short
   (keel clearance 1.605 vs 1.885 ACAP), belly fairing 0.20 too deep (-2.443
