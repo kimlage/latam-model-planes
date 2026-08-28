@@ -71,6 +71,46 @@ eles tocam.
    linkam os masters e apanham a impressão no próximo render de cena.
 4. **Detalhe de cena** — jetbridges articuladas, GSE fino, variantes de
    luz (anoitecer GRU). DEPOIS.
+5. **Cenários no estúdio: o que ficou fino (2026-08-28).**
+   - Materiais dos assets de aeroporto são **cor chapada** — glTF não carrega as
+     redes de nós procedurais e este exportador não faz bake. Um bake para
+     textura pequena (pavimento e infield primeiro) é a próxima melhoria real.
+   - Peças recortadas por bissecção ficam **ocas e de face única**: um bloco de
+     terminal visto do lado do corte deixa ver através. Tampar o corte custaria
+     pouco e não foi feito.
+   - **Só três seções de superfície** (uma cabeceira, um trecho de taxiway, uma
+     laje de pátio) e todas de GRU. SCL e SDSC têm placa de campo mas nenhuma
+     seção solta.
+   - A **posição relativa entre peças do mesmo stand** existe no manifesto
+     (`origem_no_campo_m`) mas só a cena `campo-gru` a usa; as outras três são
+     compostas a olho.
+   - Nada de **colisão nem encaixe em face**: a ponte de embarque é acostada no
+     olho, e "assentar" é só vertical.
+
+## Fechado em 2026-08-28 — os aeroportos viraram assets do estúdio
+
+`export_cenarios.py` + `export/cenarios_portateis.py` recortam **46 peças
+componíveis** dos três campos (`scl_field`, `sdsc_field`, `sbgr_field`):
+53 797 faces e 0,47 MB de GLB Draco no catálogo inteiro, a maior sendo a placa
+de campo de GRU — 27 648 faces, 89 kB, 6,1 × 4,8 km. Reprodutível byte a byte
+(21 de 21 idênticos numa segunda rodada) e verificado na volta como a frota.
+
+O destravamento foi **de leitura, não de engenharia**: NOTICE.md sempre disse
+que a malha PODE ser redistribuída sob ODbL desde que a atribuição viaje junto
+e o share-alike seja honrado. A rodada anterior do estúdio leu "conflito" onde
+está escrito "obrigação". A solução é **licença por asset** — campo `licenca`
+em cada linha dos dois manifestos, a atribuição dentro do `asset.copyright` de
+cada `.glb`, e um painel de licença que lê a cena aberta.
+
+O estúdio ganhou cinco seções vindas dos manifestos, quatro cenas iniciais
+sobre as bases reais (stand GRU, hangar 9, cabeceira 10R, campo inteiro), e
+quatro correções de escala achadas OLHANDO a página: faixa de profundidade
+presa à distância de órbita, superfícies que recebem sombra sem projetá-la,
+frustum de sombra mirado nos objetos pequenos, e "assentar no chão" virando
+raycast para baixo. Um bug antigo caiu junto: o embed renderizava em 2× em
+qualquer tela HiDPI porque nada dava tamanho CSS ao canvas.
+
+**Terreno Copernicus continua fora** — 3,7 M faces só em SBGR.
 
 ## Fechado em 2026-08-27 — a caça às fotos das cunhas
 
