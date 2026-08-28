@@ -1,0 +1,236 @@
+<!doctype html>
+<!--
+  LATAM fleet — Scene Studio.
+
+  Compose scenes from the exported aircraft GLBs and export them as an animated
+  GIF, a navigable 3D embed, a PNG still or a scene JSON.
+
+  Serve the REPOSITORY ROOT over HTTP (the page reads ../export/):
+
+      python3 -m http.server 8000
+      open http://localhost:8000/estudio/
+
+  A file:// page cannot fetch the .glb next to it — that is a browser rule, not
+  a fault in this page. See README.md.
+
+  Aircraft models: CC BY 4.0 — LATAM fleet 3D replicas, Kim Lage.
+  No airport scenery is loaded or shipped here: every ground, sky and prop in
+  this studio is original geometry authored in js/props.js. See README.md §Licence.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>LATAM fleet — Scene Studio</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%233d3aae'/%3E%3Cpath d='M2 9h12M8 3v10' stroke='%23fff' stroke-width='1.4'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/estudio.css">
+<script type="importmap">
+{ "imports": {
+    "three": "./vendor/three/three.module.js",
+    "three/addons/": "./vendor/three/addons/",
+    "gifenc": "./vendor/gifenc/gifenc.esm.js"
+} }
+</script>
+</head>
+<body>
+
+<!-- ------------------------------------------------------------------ top -->
+<header id="barra">
+  <span class="marca">LATAM fleet <b>Scene&nbsp;Studio</b></span>
+  <input id="nome-cena" value="untitled scene" title="scene name" spellcheck="false">
+  <span class="sep"></span>
+  <button id="btn-undo" title="Undo (Ctrl+Z)" disabled>↶</button>
+  <button id="btn-redo" title="Redo (Ctrl+Shift+Z)" disabled>↷</button>
+  <span class="sep"></span>
+  <button id="btn-salvar" title="Save this scene to the browser's scene library">Save scene</button>
+  <button id="btn-exportar" class="primaria" title="Export GIF / embed / PNG / JSON">Export…</button>
+  <button id="btn-sobre" title="About, licence and attribution">Licence</button>
+</header>
+
+<!-- ----------------------------------------------------------------- left -->
+<aside id="lateral">
+  <div class="abas" id="abas-lateral">
+    <button class="aba ativa" data-alvo="pnl-assets">Assets</button>
+    <button class="aba" data-alvo="pnl-scenes">Scenes</button>
+  </div>
+
+  <div class="painel ativo" id="pnl-assets">
+    <input id="busca" placeholder="filter assets…" spellcheck="false">
+    <h3>Aircraft <small id="cnt-frota"></small></h3>
+    <div id="lista-frota" class="lista-cards">loading manifest…</div>
+    <h3>Environment</h3>
+    <div id="lista-props" class="lista-cards"></div>
+    <h3>Light rigs</h3>
+    <div id="lista-rigs" class="lista-cards"></div>
+  </div>
+
+  <div class="painel" id="pnl-scenes">
+    <h3>Starter scenes</h3>
+    <div id="lista-cenas-base" class="lista-linhas"></div>
+    <h3>My scenes <small>(this browser)</small></h3>
+    <div id="lista-cenas-user" class="lista-linhas"></div>
+    <div class="linha-botoes">
+      <button id="btn-cena-nova">New empty</button>
+      <button id="btn-cena-importar">Import JSON…</button>
+    </div>
+    <p class="nota">Scenes live in this browser's localStorage. Export the JSON
+      to move one between machines.</p>
+  </div>
+</aside>
+
+<!-- -------------------------------------------------------------- viewport -->
+<main id="palco">
+  <div id="viewport"></div>
+  <div id="hud-cameras">
+    <button data-vista="frente">front</button>
+    <button data-vista="lado">side</button>
+    <button data-vista="topo">top</button>
+    <button data-vista="tres-quartos">3/4</button>
+    <button data-vista="heroi">hero</button>
+    <span class="hud-sep"></span>
+    <button data-acao="enquadrar-sel" title="Frame selected (F)">frame sel</button>
+    <button data-acao="enquadrar-tudo" title="Frame all (A)">frame all</button>
+  </div>
+  <div id="hud-gizmo">
+    <button data-modo="translate" class="ativo" title="Move (W)">move</button>
+    <button data-modo="rotate" title="Rotate (E)">rotate</button>
+    <button data-modo="scale" title="Scale (R)">scale</button>
+    <span class="hud-sep"></span>
+    <button data-espaco="world" class="ativo" title="Toggle local/world space (Q)">world</button>
+  </div>
+  <div id="carga" hidden><div class="barra-carga"><i></i></div><span></span></div>
+  <div id="status"></div>
+</main>
+
+<!-- ---------------------------------------------------------------- right -->
+<aside id="inspetor">
+  <section class="bloco" data-aberto="1">
+    <h3>Outliner <small id="cnt-obj"></small></h3>
+    <div class="corpo">
+      <div id="outliner" class="lista-linhas"></div>
+      <div class="linha-botoes">
+        <button id="btn-dup" title="Duplicate (Ctrl+D)">Duplicate</button>
+        <button id="btn-del" title="Delete (Del)">Delete</button>
+        <button id="btn-chao" title="Drop selection onto the ground">Snap to ground</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloco" data-aberto="1">
+    <h3>Transform</h3>
+    <div class="corpo" id="corpo-transform">
+      <p class="nota" id="sem-selecao">Nothing selected. Click an object in the
+        viewport, or a row in the outliner.</p>
+      <div id="campos-transform" hidden>
+        <label class="tri"><span>position</span>
+          <input type="number" id="tx" step="0.1"><input type="number" id="ty" step="0.1"><input type="number" id="tz" step="0.1"></label>
+        <label class="tri"><span>rotation °</span>
+          <input type="number" id="rx" step="1"><input type="number" id="ry" step="1"><input type="number" id="rz" step="1"></label>
+        <label class="tri"><span>scale</span>
+          <input type="number" id="sx" step="0.01"><input type="number" id="sy" step="0.01"><input type="number" id="sz" step="0.01"></label>
+        <label class="uma"><span>snap move (m)</span><input type="number" id="snap-mov" step="0.5" value="0"></label>
+        <label class="uma"><span>snap rotate (°)</span><input type="number" id="snap-rot" step="5" value="0"></label>
+        <div id="medidas-sel" class="nota"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloco" data-aberto="1">
+    <h3>Camera</h3>
+    <div class="corpo">
+      <label class="uma"><span>FOV °</span><input type="range" id="fov" min="12" max="80" step="1" value="35"><output id="fov-out">35</output></label>
+      <label class="check"><input type="checkbox" id="orto"> orthographic</label>
+      <div class="linha-botoes">
+        <button id="btn-pose-a">Store pose A</button>
+        <button id="btn-pose-b">Store pose B</button>
+      </div>
+      <div id="poses-info" class="nota">A and B are the endpoints of the “camera path” GIF.</div>
+    </div>
+  </section>
+
+  <section class="bloco" data-aberto="1">
+    <h3>Sun &amp; sky</h3>
+    <div class="corpo">
+      <label class="uma"><span>elevation °</span><input type="range" id="sol-elev" min="-5" max="89" step="1" value="34"><output id="sol-elev-out">34</output></label>
+      <label class="uma"><span>azimuth °</span><input type="range" id="sol-azim" min="0" max="360" step="1" value="135"><output id="sol-azim-out">135</output></label>
+      <label class="uma"><span>intensity</span><input type="range" id="sol-int" min="0" max="8" step="0.1" value="3"><output id="sol-int-out">3.0</output></label>
+      <label class="uma"><span>colour</span><input type="color" id="sol-cor" value="#fff2df"></label>
+      <label class="uma"><span>environment</span>
+        <select id="env-preset">
+          <option value="ceu">sky (built from the sun)</option>
+          <option value="sala">studio (RoomEnvironment)</option>
+          <option value="nenhum">none</option>
+        </select></label>
+      <label class="uma"><span>env. intensity</span><input type="range" id="env-int" min="0" max="3" step="0.05" value="1"><output id="env-int-out">1.00</output></label>
+      <label class="uma"><span>background</span>
+        <select id="fundo">
+          <option value="ceu">sky gradient</option>
+          <option value="cor">solid colour</option>
+          <option value="transparente">transparent</option>
+        </select></label>
+      <label class="uma"><span>bg colour</span><input type="color" id="fundo-cor" value="#0d0f14"></label>
+      <label class="check"><input type="checkbox" id="neblina"> fog</label>
+      <label class="uma"><span>fog density</span><input type="range" id="neblina-d" min="0" max="30" step="0.5" value="4"><output id="neblina-d-out">4</output></label>
+    </div>
+  </section>
+
+  <section class="bloco" data-aberto="1">
+    <h3>Ground &amp; grid</h3>
+    <div class="corpo">
+      <label class="check"><input type="checkbox" id="chao-on" checked> ground plane</label>
+      <label class="uma"><span>material</span>
+        <select id="chao-tipo">
+          <option value="apron">apron — asphalt</option>
+          <option value="concreto">apron — concrete slabs</option>
+          <option value="pista">runway (centreline + edges)</option>
+          <option value="grama">grass</option>
+          <option value="estudio">studio sweep (plain)</option>
+          <option value="sombra">shadow catcher only</option>
+        </select></label>
+      <label class="uma"><span>size (m)</span><input type="range" id="chao-tam" min="100" max="2000" step="50" value="600"><output id="chao-tam-out">600</output></label>
+      <label class="check"><input type="checkbox" id="grade-on" checked> grid</label>
+    </div>
+  </section>
+
+  <section class="bloco" data-aberto="1">
+    <h3>Render</h3>
+    <div class="corpo">
+      <label class="uma"><span>tone mapping</span>
+        <select id="tone">
+          <option value="aces">ACES Filmic</option>
+          <option value="agx">AgX</option>
+          <option value="neutral">Khronos Neutral</option>
+          <option value="reinhard">Reinhard</option>
+          <option value="linear">Linear (none)</option>
+        </select></label>
+      <label class="uma"><span>exposure</span><input type="range" id="exposicao" min="0.1" max="3" step="0.05" value="1"><output id="exposicao-out">1.00</output></label>
+      <label class="check"><input type="checkbox" id="sombras" checked> shadows</label>
+      <label class="uma"><span>shadow map</span>
+        <select id="sombra-px">
+          <option value="512">512 — fast</option>
+          <option value="1024">1024</option>
+          <option value="2048" selected>2048</option>
+          <option value="4096">4096 — sharp</option>
+        </select></label>
+      <label class="uma"><span>antialias</span>
+        <select id="aa">
+          <option value="0">off</option>
+          <option value="1" selected>MSAA (context)</option>
+          <option value="2">MSAA + 2× supersample on export</option>
+        </select></label>
+      <label class="uma"><span>pixel ratio cap</span><input type="range" id="pr" min="1" max="3" step="0.5" value="2"><output id="pr-out">2.0</output></label>
+    </div>
+  </section>
+</aside>
+
+<!-- --------------------------------------------------------------- modals -->
+<div id="modal" hidden>
+  <div class="janela">
+    <header><span id="modal-titulo"></span><button id="modal-fechar">✕</button></header>
+    <div id="modal-corpo"></div>
+  </div>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

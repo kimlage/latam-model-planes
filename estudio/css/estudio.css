@@ -1,0 +1,148 @@
+/* LATAM fleet — Scene Studio.
+   Dark, dense, three columns. The palette is viewer.html's, extended. */
+
+:root{
+  color-scheme: dark;
+  --fundo:#0d0f14; --painel:#12151d; --painel2:#171b25; --borda:#262a36;
+  --texto:#e6e7ea; --fraco:#9aa0ae; --acento:#8fa6ff; --coral:#ff5c5c;
+  --indigo:#3d3aae; --ok:#5bd48a;
+  --h:44px;                 /* top bar height */
+  --l:260px;                /* left column   */
+  --r:300px;                /* right column  */
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--fundo);color:var(--texto);
+  font:12px/1.45 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+body{display:grid;grid-template-columns:var(--l) 1fr var(--r);grid-template-rows:var(--h) 1fr;
+  grid-template-areas:"barra barra barra" "lateral palco inspetor"}
+
+button,select,input{font:inherit;color:var(--texto)}
+button{background:var(--painel2);border:1px solid var(--borda);border-radius:5px;
+  padding:4px 9px;cursor:pointer}
+button:hover:not(:disabled){background:#212635;border-color:#39405280}
+button:disabled{opacity:.35;cursor:default}
+button.primaria{background:var(--indigo);border-color:#4a47c8}
+button.primaria:hover{background:#4a47c8}
+button.ativo,button.ativa{background:#2b3350;border-color:#4a5486;color:#fff}
+select,input[type=text],input[type=number],input:not([type]){background:#0e1119;border:1px solid var(--borda);
+  border-radius:5px;padding:4px 6px;width:100%}
+input[type=range]{width:100%;accent-color:var(--acento)}
+input[type=color]{background:none;border:1px solid var(--borda);border-radius:5px;
+  height:24px;padding:1px;width:100%}
+h3{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--fraco);
+  margin:14px 0 6px;font-weight:600}
+h3 small{text-transform:none;letter-spacing:0;font-weight:400;opacity:.7}
+.nota{color:var(--fraco);font-size:11px;margin:6px 0 0}
+a{color:var(--acento)}
+
+/* ------------------------------------------------------------------ bar */
+#barra{grid-area:barra;display:flex;align-items:center;gap:8px;padding:0 10px;
+  background:var(--painel);border-bottom:1px solid var(--borda)}
+.marca{font-size:12px;letter-spacing:.02em;color:var(--fraco);white-space:nowrap}
+.marca b{color:var(--texto);font-weight:600}
+#nome-cena{width:210px;margin-left:6px}
+.sep{flex:0 0 1px;height:22px;background:var(--borda)}
+#barra .sep:last-of-type{margin-left:auto}
+#btn-undo,#btn-redo{font-size:15px;line-height:1;padding:3px 8px}
+
+/* --------------------------------------------------------------- columns */
+#lateral,#inspetor{background:var(--painel);overflow-y:auto;padding:0 10px 40px}
+#lateral{grid-area:lateral;border-right:1px solid var(--borda)}
+#inspetor{grid-area:inspetor;border-left:1px solid var(--borda)}
+.abas{display:flex;gap:4px;position:sticky;top:0;background:var(--painel);
+  padding:8px 0 6px;z-index:3}
+.aba{flex:1}
+.painel{display:none}
+.painel.ativo{display:block}
+#busca{margin-bottom:2px}
+
+/* asset cards */
+.lista-cards{display:flex;flex-direction:column;gap:4px}
+.card{display:grid;grid-template-columns:56px 1fr;gap:8px;align-items:center;
+  background:var(--painel2);border:1px solid var(--borda);border-radius:6px;
+  padding:5px;cursor:grab;user-select:none}
+.card:hover{border-color:#414a6b;background:#1b2030}
+.card canvas,.card .thumb{width:56px;height:38px;border-radius:4px;background:#0a0c12;display:block}
+.card .n{font-weight:600;font-size:11.5px}
+.card .m{color:var(--fraco);font-size:10.5px}
+.card.oculto{display:none}
+
+/* rows (outliner, scenes) */
+.lista-linhas{display:flex;flex-direction:column;gap:2px}
+.linha{display:flex;align-items:center;gap:6px;padding:3px 6px;border-radius:4px;
+  background:var(--painel2);border:1px solid transparent;cursor:pointer}
+.linha:hover{background:#1b2030}
+.linha.sel{border-color:var(--acento);background:#1c2338}
+.linha .rot{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.linha .tag{font-size:9.5px;color:var(--fraco);border:1px solid var(--borda);
+  border-radius:3px;padding:0 3px}
+.linha .mini{background:none;border:none;padding:1px 3px;opacity:.55;font-size:12px}
+.linha .mini:hover{opacity:1;background:none}
+.linha-botoes{display:flex;gap:4px;margin-top:6px}
+.linha-botoes button{flex:1}
+
+/* inspector blocks */
+.bloco{border-bottom:1px solid var(--borda);padding-bottom:8px}
+.bloco h3{cursor:pointer;margin-bottom:4px}
+.bloco h3::before{content:"▾ ";opacity:.5}
+.bloco[data-aberto="0"] h3::before{content:"▸ "}
+.bloco[data-aberto="0"] .corpo{display:none}
+label.uma{display:grid;grid-template-columns:88px 1fr auto;gap:6px;align-items:center;margin:4px 0}
+label.uma>span{color:var(--fraco)}
+label.uma>output{color:var(--fraco);min-width:30px;text-align:right;font-variant-numeric:tabular-nums}
+label.tri{display:grid;grid-template-columns:88px repeat(3,1fr);gap:4px;align-items:center;margin:4px 0}
+label.tri>span{color:var(--fraco)}
+label.tri input{padding:3px 4px;font-variant-numeric:tabular-nums}
+label.check{display:flex;gap:6px;align-items:center;margin:6px 0;color:var(--fraco)}
+label.check input{width:auto;accent-color:var(--acento)}
+
+/* -------------------------------------------------------------- viewport */
+#palco{grid-area:palco;position:relative;min-width:0;min-height:0}
+#viewport{position:absolute;inset:0}
+#viewport canvas{display:block;width:100%;height:100%}
+#hud-cameras,#hud-gizmo{position:absolute;display:flex;gap:4px;z-index:2;
+  background:rgba(16,18,24,.82);border:1px solid var(--borda);border-radius:7px;
+  padding:5px;backdrop-filter:blur(6px)}
+#hud-cameras{top:10px;left:10px}
+#hud-gizmo{top:10px;right:10px}
+#hud-cameras button,#hud-gizmo button{padding:3px 7px;font-size:11px}
+.hud-sep{flex:0 0 1px;background:var(--borda);margin:2px 2px}
+#status{position:absolute;left:10px;bottom:10px;z-index:2;color:var(--fraco);
+  font-size:11px;background:rgba(16,18,24,.75);border:1px solid var(--borda);
+  border-radius:6px;padding:4px 8px;white-space:pre-line;pointer-events:none;
+  font-variant-numeric:tabular-nums}
+#carga{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4;
+  background:rgba(16,18,24,.92);border:1px solid var(--borda);border-radius:8px;
+  padding:14px 18px;min-width:240px;text-align:center}
+#carga span{color:var(--fraco);font-size:11px}
+.barra-carga{height:4px;background:#0a0c12;border-radius:2px;overflow:hidden;margin-bottom:8px}
+.barra-carga i{display:block;height:100%;width:0;background:var(--acento);transition:width .12s}
+
+/* ---------------------------------------------------------------- modal */
+#modal{position:fixed;inset:0;background:rgba(4,6,10,.72);z-index:9;
+  display:flex;align-items:center;justify-content:center;padding:24px}
+#modal[hidden]{display:none}
+.janela{background:var(--painel);border:1px solid var(--borda);border-radius:10px;
+  width:min(720px,96vw);max-height:90vh;display:flex;flex-direction:column;
+  box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.janela>header{display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;border-bottom:1px solid var(--borda);font-weight:600}
+.janela>header button{background:none;border:none;font-size:14px;opacity:.6}
+#modal-corpo{padding:14px;overflow-y:auto}
+#modal-corpo h4{margin:12px 0 6px;font-size:12px}
+#modal-corpo p{color:var(--fraco);margin:6px 0}
+#modal-corpo code,#modal-corpo pre{background:#0a0c12;border:1px solid var(--borda);
+  border-radius:4px;padding:1px 5px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:11px}
+#modal-corpo pre{padding:8px 10px;overflow-x:auto;white-space:pre-wrap;word-break:break-all}
+#modal-corpo table{border-collapse:collapse;width:100%;margin:6px 0}
+#modal-corpo td,#modal-corpo th{border-bottom:1px solid var(--borda);padding:3px 6px;
+  text-align:left;font-weight:400}
+#modal-corpo th{color:var(--fraco);font-size:11px}
+.abas-modal{display:flex;gap:4px;margin-bottom:12px}
+.abas-modal button{flex:1}
+.grade2{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px}
+.rodape{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;
+  border-top:1px solid var(--borda);padding-top:12px;align-items:center}
+.estimativa{margin-right:auto;color:var(--fraco);font-size:11px;font-variant-numeric:tabular-nums}
+.aviso{color:#ffcf7a;border-left:2px solid #ffcf7a;padding-left:8px;margin:8px 0;font-size:11px}
