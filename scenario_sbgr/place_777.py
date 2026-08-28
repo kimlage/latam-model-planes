@@ -74,10 +74,30 @@ PITCH_FINAL = 13.0
 CLIMB_RAMP = 70                 # frames over which vs ramps 0 -> VS_FINAL
 
 
+def _subida(t):
+    """Climb-rate fraction at t = (frames since lift-off) / CLIMB_RAMP.
+
+    NOT a smoothstep. A smoothstep has ZERO derivative at t = 0, so the
+    aeroplane leaves the ground with a vertical speed of 0.006 m/s and takes
+    most of a second to reach even 0.6 - on screen it STICKS to the runway
+    after the wheels are supposedly off, which is exactly the hitch the owner
+    saw. (`shot_common._slopes` documents this same trap for cameras; it was
+    left in the aeroplane's own motion.)
+
+    A real aeroplane does the opposite: at rotation the wing is already making
+    lift, so the climb rate rises FASTEST right at lift-off and then settles.
+    That is an exponential approach - maximum derivative at t = 0, asymptotic
+    after - with tau set so 95% of the final rate is reached by CLIMB_RAMP."""
+    if t <= 0.0:
+        return 0.0
+    return 1.0 - math.exp(-3.0 * t)          # 95% at t = 1
+
+
 def profile():
     """Per-frame (station s, wheel-agl z, pitch deg). Authoring, not physics
-    homework: constant accel to lift-off, smoothstep ramps after, every rate
-    chosen to read 'heavy' against the São Carlos ferry."""
+    homework: constant accel to lift-off, an exponential climb approach after
+    (see _subida), every rate chosen to read 'heavy' against the São Carlos
+    ferry."""
     out = []
     s, v = S0, V0
     pitch = 0.0
@@ -92,7 +112,7 @@ def profile():
             if f > ROTATE_F:
                 pitch = min(PITCH_TAKEOFF, pitch + ROTATE_RATE / FPS)
             if f > LIFTOFF_F:
-                t = S._smoothstep((f - LIFTOFF_F) / float(CLIMB_RAMP))
+                t = _subida((f - LIFTOFF_F) / float(CLIMB_RAMP))
                 vs = VS_FINAL * t
                 agl += vs / FPS
                 pitch = min(PITCH_FINAL,

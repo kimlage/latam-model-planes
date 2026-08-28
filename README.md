@@ -144,7 +144,7 @@ holding between them, a field level to six feet across five kilometres, a horizo
 that is a **ring** (+0.12° to +3.23°, never negative, all of it real terrain), and
 the city wrapped around the fence instead of empty ground.
 
-![A Boeing 777-300ER departing RWY 10L at Guarulhos, chased from its starboard quarter with the forested Cantareira wall behind](scenario_sbgr/b77w_sbgr_v4.gif)
+![A Boeing 777-300ER departing RWY 10L at Guarulhos, chased from its starboard quarter with the forested Cantareira wall behind](scenario_sbgr/b77w_sbgr_v5.gif)
 
 *The **777-300ER** off **RWY 10L**, one orbit flown in the aircraft's own frame
 from the aft-starboard quarter. Rotation begins abeam the LATAM hangar at 2 571 m,
