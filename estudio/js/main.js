@@ -187,11 +187,18 @@ async function carregarDocumento (doc) {
   mundo.aplicarAmbiente(estado.ambiente);      // the shadow camera needs the real scene radius
   esconderCarga();
 
+  mundo.camP.fov = estado.camera.fov || 35;
+  mundo.camP.updateProjectionMatrix();
   if (doc.camera && doc.camera.pos) {
     mundo.aplicarPose(doc.camera);
     if (doc.camera.orto) { estado.camera.orto = true; mundo.usarOrto(true); }
   } else {
-    mundo.vista(doc.vista || 'tres-quartos', mundo.caixaTudo());
+    /* A starter scene carries a direction, not a position: frame what is here.
+       Frame the AIRCRAFT, not everything — a 240 m backdrop card or a terminal
+       block would otherwise decide the shot and leave the jet a speck. The
+       "frame all" button still frames all of it. */
+    const aeronaves = estado.objetos.filter(o => o.tipo === 'aeronave').map(o => o.id);
+    mundo.vista(doc.vista || 'tres-quartos', mundo.caixaDe(aeronaves) || mundo.caixaTudo());
   }
   $('nome-cena').value = estado.nome;
   sincronizarInspetor();

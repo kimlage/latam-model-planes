@@ -37,10 +37,12 @@ export const FPS_LEGAIS = [
  *   "Single hero"      .051   .073   .092   .120   ← smooth sky, one aircraft
  *   "Line-up" (×5)     .103   .145   .175   .200   ← textured concrete, five
  *
- * The constants below sit between the two, nearer the busy end. The live
- * estimate is therefore good to roughly ±40 %; the dialog reports the real
- * size the moment the encode finishes, and that number is not a model. */
-const BPP = { 32: 0.08, 64: 0.11, 128: 0.14, 256: 0.17 };
+ * and 0.068 at 128 colours on the hero scene with 2× supersampling on, which is
+ * the default: cleaner edges compress better. The constants below sit between
+ * those cases, so the live estimate is good to roughly ±50 % — it exists to
+ * make resolution-versus-colours a visible trade, not to be precise. The dialog
+ * reports the REAL size the moment the encode finishes, and that is measured. */
+const BPP = { 32: 0.068, 64: 0.095, 128: 0.12, 256: 0.145 };
 
 export function estimarGif ({ quadros, larg, alt, cores }) {
   const bpp = BPP[cores] ?? 0.29;

@@ -33,7 +33,11 @@ function base (patch) {
   Object.assign(e.render, patch.render || {});
   e.nome = patch.nome;
   e.objetos = patch.objetos;
-  e.vista = patch.vista || 'tres-quartos';       // framed on open, not hard-coded
+  /* No camera position: a starter is FRAMED on open, from the measured bounding
+     box of whatever it contains. Hard-coding a camera would mean re-tuning five
+     scenes every time an aircraft's span changes. `vista` picks the direction. */
+  e.camera = { pos: null, alvo: null, fov: patch.fov || 35, orto: false };
+  e.vista = patch.vista || 'tres-quartos';
   return e;
 }
 
@@ -98,7 +102,9 @@ export const CENAS_BASE = {
       grade: false,
     },
     render: { exposicao: 1.0, tone: 'aces', sombraPx: 4096 },
-    objetos: [aero('B789', 'Boeing 787-9', 0, 0)],
+    // The backdrop card is what makes a sweep read as a sweep: without it the
+    // ground plane simply ends and the background shows through behind it.
+    objetos: [aero('B789', 'Boeing 787-9', 0, 0), prop('cartao', 'backdrop', 0, 0)],
   }),
 
   'noite': () => base({

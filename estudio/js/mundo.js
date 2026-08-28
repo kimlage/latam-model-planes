@@ -306,8 +306,11 @@ export class Mundo {
     return Math.max(40, b.getSize(new THREE.Vector3()).length() / 2);
   }
 
-  /** Distance at which `raio` fills the frame, honouring the tighter FOV. */
-  distanciaPara (raio, margem = 1.15) {
+  /** Distance at which `raio` fills the frame, honouring the tighter FOV.
+   *  The margin is below 1 on purpose: an aircraft seen from three-quarters
+   *  never fills its own bounding sphere, so fitting the sphere exactly leaves
+   *  the subject small. 0.85 is the same trick export/viewer.html uses. */
+  distanciaPara (raio, margem = 0.85) {
     const fovY = THREE.MathUtils.degToRad(this.camP.fov);
     const fovX = 2 * Math.atan(Math.tan(fovY / 2) * (this.camP.aspect || 1));
     return margem * raio / Math.sin(Math.min(fovY, fovX) / 2);

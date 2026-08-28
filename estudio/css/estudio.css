@@ -16,6 +16,11 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--fundo);color:var
 body{display:grid;grid-template-columns:var(--l) 1fr var(--r);grid-template-rows:var(--h) 1fr;
   grid-template-areas:"barra barra barra" "lateral palco inspetor"}
 
+/* Narrow panes (a split editor window, a small laptop): give the viewport back
+   the space the two columns were taking. */
+@media (max-width:1180px){ :root{ --l:212px; --r:252px } }
+@media (max-width:960px){  :root{ --l:180px; --r:224px; --h:40px } }
+
 button,select,input{font:inherit;color:var(--texto)}
 button{background:var(--painel2);border:1px solid var(--borda);border-radius:5px;
   padding:4px 9px;cursor:pointer}

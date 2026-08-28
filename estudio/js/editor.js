@@ -29,9 +29,12 @@ export class Editor {
     tc.setSize(0.85);
     tc.addEventListener('dragging-changed', e => {
       mundo.controles.enabled = !e.value;
-      // One history entry per drag, written when the drag ends and the document
-      // has already been updated — never per intermediate frame.
-      if (!e.value) { this.finalizarArrasto(); this.registrar(`${tc.mode} ${this.selecao.length} object(s)`); }
+      // The re-parenting has to bracket the drag: attach BEFORE the pivot moves
+      // (attach preserves world transforms, so attaching afterwards would pin
+      // the objects where they already are and the drag would do nothing), and
+      // detach after. One history entry per drag, written at the end.
+      if (e.value) this.iniciarArrasto();
+      else { this.finalizarArrasto(); this.registrar(`${tc.mode} ${this.selecao.length} object(s)`); }
     });
     tc.addEventListener('objectChange', () => {
       this.escreverDeVolta();
@@ -104,27 +107,29 @@ export class Editor {
     if (cx) { m.caixaSel.box.copy(cx); m.caixaSel.visible = true; }
   }
 
-  /* Re-parent the selection under the pivot for the duration of a drag. */
+  /** Drag start: put the selection under the pivot so it follows the gizmo. */
+  iniciarArrasto () {
+    if (this.selecao.length < 2 || this.gizmo.object !== this.pivo) return;
+    this.pivo.updateMatrixWorld(true);
+    for (const id of this.selecao) {
+      const o = this.obj3dDe(id);
+      if (o && o.parent !== this.pivo) this.pivo.attach(o);
+    }
+  }
+
+  /** Drag end: put them back under the scene root, then read the result. */
   finalizarArrasto () {
-    if (this.selecao.length > 1) {
-      for (const id of this.selecao) {
-        const o = this.obj3dDe(id);
-        if (o && o.parent === this.pivo) this.mundo.raizObjetos.attach(o);
-      }
+    for (const id of this.selecao) {
+      const o = this.obj3dDe(id);
+      if (o && o.parent === this.pivo) this.mundo.raizObjetos.attach(o);
     }
     this.escreverDeVolta();
     this.atualizarGizmo();
     this.aoMudarTransformacao();
   }
 
+  /** Read the live transforms back into the document. Never re-parents. */
   escreverDeVolta () {
-    if (this.selecao.length > 1 && this.gizmo.object === this.pivo) {
-      // First drag frame: pull the objects under the pivot so they follow it.
-      for (const id of this.selecao) {
-        const o = this.obj3dDe(id);
-        if (o && o.parent !== this.pivo) this.pivo.attach(o);
-      }
-    }
     for (const id of this.selecao) {
       const o = this.obj3dDe(id), d = this.docDe(id);
       if (!o || !d) continue;

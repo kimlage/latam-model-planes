@@ -24,13 +24,15 @@ const canvas = (w, h) => {
   return c;
 };
 
-/** Value noise splattered as soft dots — cheap, seamless enough at tiling size. */
+/** Value noise splattered as soft dots — cheap, seamless enough at tiling size.
+ *  Biased 4:1 towards dark: a 50/50 mix reads as gravel scattered on the apron
+ *  once the camera gets close, which it does in every hero shot. */
 function ruido (ctx, w, h, n, raio, alpha) {
   for (let i = 0; i < n; i++) {
     const x = Math.random() * w, y = Math.random() * h;
     const r = raio * (0.4 + Math.random());
     const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-    const v = Math.random() < 0.5 ? 0 : 255;
+    const v = Math.random() < 0.8 ? 0 : 210;
     g.addColorStop(0, `rgba(${v},${v},${v},${alpha})`);
     g.addColorStop(1, `rgba(${v},${v},${v},0)`);
     ctx.fillStyle = g;
@@ -336,12 +338,12 @@ export const PROPS = {
     construir () { return caixa(20, 12, 20, MAT.medio()); },
   },
   cartao: {
-    rotulo: 'Backdrop card', medidas: '240 × 90 m curved',
+    rotulo: 'Backdrop card', medidas: '210 × 86 m curved',
     construir () {
-      const g = new THREE.CylinderGeometry(120, 120, 90, 40, 1, true, Math.PI * 0.62, Math.PI * 0.76);
+      const g = new THREE.CylinderGeometry(105, 105, 86, 44, 1, true, Math.PI * 0.62, Math.PI * 0.76);
       const m = new THREE.Mesh(g, new THREE.MeshStandardMaterial({
         color: 0xe8ecf2, roughness: 0.95, side: THREE.BackSide }));
-      m.position.y = 45;
+      m.position.y = 43;
       return m;
     },
   },
