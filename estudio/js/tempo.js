@@ -569,11 +569,20 @@ export function apagarChave (l, trilhaId, t) {
   return tr.chaves.length !== n;
 }
 
-/** Drop every track and flight that points at an object that no longer exists. */
+/** Drop every track and flight that has nothing to drive: a track with no keys,
+ *  an object track whose object is gone or was never named, a flight whose
+ *  aircraft was deleted. Cheap, and it runs on every document load and every
+ *  delete, so a ghost row can never outlive what it pointed at. */
 export function podar (estado) {
   const l = estado.linha;
   if (!l) return;
   const vivos = new Set(estado.objetos.map(o => o.id));
-  l.trilhas = (l.trilhas || []).filter(t => !t.ref || vivos.has(t.ref));
+  l.trilhas = (l.trilhas || []).filter(t => {
+    if (!t.chaves || !t.chaves.length) return false;
+    const def = CANAIS[t.canal];
+    if (!def) return false;
+    if (def.alvo === 'objeto') return !!t.ref && vivos.has(t.ref);
+    return true;
+  });
   l.voos = (l.voos || []).filter(v => vivos.has(v.ref));
 }

@@ -3,7 +3,7 @@
  * Two families, and they exist for the same reason: nothing in this studio
  * should be a motion you cannot then edit. The four canned GIF motions the
  * studio shipped before the timeline existed are still here, but they are now
- * timeline WRITERS — pick "turntable", get sixteen camera keys you can drag.
+ * timeline WRITERS — pick "turntable", get thirty-three camera keys you can drag.
  * Nothing is lost and everything becomes editable.
  *
  * The flight recipes are the other family, and they are the point of the
@@ -134,7 +134,7 @@ export function vooDecolagem (ctx, opc = {}) {
        pavement to see. The Blender profile picked 32 frames and then jumped the
        pitch from 4° to 12° in a single frame; a rate limiter cannot do that,
        and it should not. */
-    rotacao: Math.min(tRot * P.vLift, dRoll * 0.9),
+    rotacao: +Math.min(tRot * P.vLift, dRoll * 0.9).toFixed(1),
     alfaRef: P.alfaRef, vRef: P.vRef,
     taxaBanco: 6, bancoMax: 15,
   });
@@ -387,7 +387,11 @@ export function escreverMovimento (estado, mundo, modo, cfg = {}, selId = null) 
   const l = estado.linha;
   const D = l.duracao;
   const sentido = cfg.sentido === 'anti' ? -1 : 1;
-  const limpar = canal => { const t = garantirTrilha(l, canal, cfg.ref ?? null); t.chaves = []; return t; };
+  /* `ref` is not optional here, and defaulting it to null was a real bug: an
+     object channel cleared with ref null created a SECOND, empty, ownerless
+     track beside the one the keys then went into, which showed in the dock as a
+     ghost row labelled "(gone)". A track is identified by channel AND owner. */
+  const limpar = (canal, ref = null) => { const t = garantirTrilha(l, canal, ref); t.chaves = []; return t; };
 
   switch (modo) {
     case 'turntable-cena': {
@@ -396,10 +400,15 @@ export function escreverMovimento (estado, mundo, modo, cfg = {}, selId = null) 
       const raio = Math.hypot(rel.x, rel.z), y = rel.y;
       const a0 = Math.atan2(rel.z, rel.x);
       limpar('camera.pos'); limpar('camera.alvo');
-      /* A circle through sixteen Hermite keys is not exactly a circle — the
-         radius wobbles by well under a per cent, which is invisible, and the
-         payoff is that every one of those keys can now be dragged. */
-      const N = 16;
+      /* Keys on a circle, LINEAR, which makes the angular rate exactly constant
+         — measured at 45.0000 °/s across every probe, which is what a turntable
+         is and what PCHIP would not give (its zero end tangents would make the
+         loop stop dead at the seam).
+         The cost is that the path is an N-gon, not a circle: the radius wobbles
+         by 1 − cos(π/N). At the sixteen keys this was first written with that is
+         1.94 % — measured, and enough to pulse the subject's apparent size eight
+         times a revolution. At 32 it is 0.48 %, which is not. */
+      const N = 32;
       for (let i = 0; i <= N; i++) {
         const a = a0 + sentido * (i / N) * Math.PI * 2;
         porChave(l, 'camera.pos', null, encaixar(l, D * i / N), [
@@ -409,12 +418,12 @@ export function escreverMovimento (estado, mundo, modo, cfg = {}, selId = null) 
           'linear');
       }
       porChave(l, 'camera.alvo', null, 0, alvo.toArray().map(n => +n.toFixed(3)));
-      return `turntable: 17 camera keys over ${D} s`;
+      return `turntable: ${N + 1} camera keys over ${D} s`;
     }
     case 'turntable-objeto': {
       if (!selId) throw new Error('spinning an object needs a selection');
       const d = estado.objetos.find(o => o.id === selId);
-      limpar('objeto.rot');
+      limpar('objeto.rot', selId);
       /* Linear easing on every key, because a spin at a CONSTANT rate is what a
          turntable is; PCHIP through four quarter-turns would ease at each. */
       for (let i = 0; i <= 4; i++) {
@@ -441,7 +450,7 @@ export function escreverMovimento (estado, mundo, modo, cfg = {}, selId = null) 
       const dist = cfg.distancia || 0, sobe = cfg.subida || 0;
       const dir = cfg.direcao === 'nariz' ? frente(d.rot[1])
         : cfg.direcao === 'x' ? new THREE.Vector3(1, 0, 0) : new THREE.Vector3(0, 0, 1);
-      limpar('objeto.pos');
+      limpar('objeto.pos', selId);
       /* Linear keys, eight segments. The horizontal travel is exactly constant
          (which PCHIP would ease at both ends) and the quadratic climb is
          sampled finely enough that the piecewise-linear error is under

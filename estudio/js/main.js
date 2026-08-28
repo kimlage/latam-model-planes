@@ -137,7 +137,7 @@ function alternarDock () {
 
 const ctxDialogo = () => ({ mundo, estado, editor, dock, carregarDocumento,
   registrar: rot => historico.registrar(rot, estado),
-  redesenhar: () => { dock.desenhar(); aplicarTempo(); desenharOutliner(); } });
+  redesenhar: () => { podar(estado); dock.desenhar(); aplicarTempo(); desenharOutliner(); } });
 
 /** Evaluate the timeline onto the world. Returns the overlay, or null when the
  *  scene has no animation — in which case nothing here costs anything. */

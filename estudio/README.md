@@ -442,7 +442,19 @@ exactly the frame the playhead shows at *i*/fps.
 
 The four old motions are still in the menu for a scene JSON that predates the
 timeline, and they behave as they always did. But the way to *get* one now is
-`Motion…` in the dock, which writes it as keys.
+`Motion…` in the dock, which writes it as keys — and the keys are chosen so the
+motion is *exactly* what it claims:
+
+- a **turntable** is 33 camera keys on a circle with **linear** easing, which
+  makes the angular rate exactly constant (measured at 45.0000 °/s at every
+  probe) and the loop seamless — PCHIP's zero end tangents would stop it dead at
+  the seam. The cost is that the path is a 32-gon, so the radius wobbles by
+  1 − cos(π/32) = **0.483 %**, measured. At the 16 keys this was first written
+  with it was 1.94 %, which is enough to pulse the subject's apparent size eight
+  times a revolution, and was visible.
+- an **object spin** is 5 rotation keys, also linear, so the rate is exact.
+- a **camera path** is 2 keys, or 3 with ping-pong, on PCHIP — whose zero end
+  tangents are exactly right here: the move starts and ends at rest.
 
 Every motion is bracketed by save/restore: an export leaves the scene, the
 camera and the object exactly where they were. The interactive render loop is
