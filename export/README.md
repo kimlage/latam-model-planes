@@ -15,56 +15,75 @@ python3 export_frota.py --verificar --reimportar   # …and re-open every format
 Everything here is generated. Nothing in an aircraft folder is written, and no
 `.blend` is ever saved — the export can run while another session edits a master.
 
-## State of these files — a re-run is required after the QA fixes
+## State of these files
 
-**The pipeline is the deliverable; these binaries are not.** They were generated
-on 2026-08-21 from the masters as they stood that morning, while
-[`QA-BACKLOG.md`](../QA-BACKLOG.md) still listed open defects on most of the
-fleet — the A320-family windshields, the 787 radome joint, the A321 wordmark's
-broken "M", the A320ceo ghost door. **Every one of those defects is baked into
-the exports here.** When a fix lands, re-run the aircraft:
+**The pipeline is the deliverable; these binaries are not.** They were
+regenerated on 2026-08-27 from the masters as they stand now — after the QA
+round that closed the A320-family windshields, the 787 radome joint, the A319
+wordmark and the 787-8 height, and in the same pass that put both LATAM Cargo
+767s into `export/` for the first time. All **eleven** aircraft are here, both
+LODs: 22 exports, 55 artefacts, and every one of the 22 came back `"ok": true`
+with an empty `erros` list in [`manifest.json`](manifest.json).
+
+[`QA-BACKLOG.md`](../QA-BACKLOG.md) is not empty — the A320 flap-track
+stations, the sharklet blade and the 787-8 crown UV are still open — so these
+files are as good as the masters were on 2026-08-27 and no better. When a fix
+lands, re-run the aircraft:
 
 ```bash
 python3 export_frota.py A321neo          # one aircraft, both LODs
 python3 export_frota.py                  # or the whole fleet
 ```
 
-Nine of the ten aircraft in the table exported and verified clean. The tenth,
-the **Boeing 767-300F**, has no master yet — it is being built in
-`boeing 767-300F/`, its row is already in `FROTA`, and it will export on the
-next run without anyone editing anything.
+The bounding boxes are now the measurement worth trusting rather than the one
+worth reporting upstream. Every span in the table below lands within 6 cm of
+the figure its `spec_*.json` publishes — the five Airbus exactly, at 34.10 and
+35.80 — and both 787 heights are exact. What survives is a uniform Airbus
+offset: **+0.21 m of length on all five, and +0.23 m of height on the A319 and
+A320s, +0.26 m on the A321s**, against ACAP's 33.84/37.57/44.51 and 11.76.
+That is a property of the masters, not of the export, and it is not in the QA
+backlog.
 
-One measurement worth passing back to the model side rather than the export
-side: the exported bounding boxes agree with each aircraft's own
-`spec_*.json` to within a few centimetres on all four Boeings, and are **2.4–2.8
-m wide on all five Airbus** — 38.23 m of span read out of the A320/A321 files
-against 35.80 m declared in their specs, 36.92 m on the A319 against 34.10 m.
-That is a property of the masters, not of the export (Blender measures the same
-figure directly), and it is not in the QA backlog.
+The only warnings the run emits are length readings, and they compare the glTF
+box against Blender's own measurement of the same aircraft: 2.6–12.6 cm apart,
+well inside the 0.6 m the axis check allows. The 777-300ER emits none.
 
 ## Measured, per aircraft
 
-Every number below was read back **out of the finished file**, not predicted.
-Sizes in MB; `tris` is the triangle count parsed from the index accessors;
-`MP` is the total megapixels of embedded texture; X/Y/Z are the glTF bounding
-box in metres — length, height, span.
+Every number below was read back **out of the finished file**, not predicted —
+all of it from each entry's `verificacao` block in
+[`manifest.json`](manifest.json). Sizes in MB; `tris` is the triangle count
+parsed from the index accessors; `mats` is the material count, identical at
+both LODs; `img / MP` is the number of embedded images and their total
+megapixels; X/Y/Z are the glTF bounding box in metres — length, height, span.
 
-| Aircraft | Reg. | `web` tris | `web` .glb | `web` MP | `alta` tris | `alta` .glb | .usdz | .fbx | .obj+tex | X | Y | Z |
-|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Airbus A319 (ceo) | PT-TMT | 57,250 | 0.5 | 9.4 | 308,386 | 8.3 | 3.0 | 6.5 | 26.4 | 33.98 | 11.71 | 36.92 |
-| Airbus A320ceo | CC-BFO | 62,954 | 0.5 | 9.4 | 328,490 | 8.8 | 3.3 | 6.8 | 28.1 | 37.71 | 11.71 | 38.23 |
-| Airbus A320neo | PT-TMN | 61,474 | 0.6 | 9.4 | 327,010 | 8.8 | 3.2 | 6.9 | 28.0 | 37.71 | 11.71 | 38.23 |
-| Airbus A321-231 (ceo) | PT-MXP | 65,746 | 0.6 | 9.4 | 342,802 | 9.2 | 3.4 | 7.1 | 29.2 | 44.65 | 11.71 | 38.23 |
-| Airbus A321neo (ACF) | PS-LBA | 66,734 | 0.6 | 9.4 | 343,790 | 9.3 | 3.5 | 7.1 | 29.3 | 44.65 | 11.71 | 38.23 |
-| Boeing 767-300ER | CC-CWY | 60,428 | 0.6 | 13.6 | 326,960 | 8.9 | 3.2 | 7.4 | 28.8 | 54.75 | 15.75 | 50.89 |
-| Boeing 777-300ER | PT-MUG | 46,908 | 0.4 | 9.4 | 325,344 | 8.6 | 2.5 | 7.1 | 28.3 | 73.93 | 18.51 | 64.74 |
-| Boeing 787-8 | CC-BBF | 59,256 | 0.6 | 13.6 | 346,008 | 8.6 | 3.3 | 7.3 | 29.4 | 56.74 | 16.48 | 60.11 |
-| Boeing 787-9 | CC-BGK | 61,768 | 0.6 | 13.6 | 356,200 | 8.9 | 3.4 | 7.4 | 30.2 | 62.83 | 16.48 | 60.11 |
-| Boeing 767-300F | — | *exported 2026-08-26* | | | | | | | | | | |
+| Aircraft | Reg. | mats | `web` tris | `web` .glb | `web` img / MP | `alta` tris | `alta` .glb | `alta` img / MP | .usdz | .fbx | .obj | X | Y | Z |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Airbus A319 (ceo) | PT-TMT | 28 | 58,232 | 1.19 | 9 / 34.6 | 314,168 | 10.4 | 16 / 76.55 | 3.7 | 8.5 | 29.3 | 34.05 | 11.99 | 34.10 |
+| Airbus A320ceo | CC-BFO | 29 | 63,936 | 1.21 | 9 / 34.6 | 334,272 | 10.9 | 16 / 76.55 | 4.0 | 9.0 | 31.3 | 37.78 | 11.99 | 35.80 |
+| Airbus A320neo | PT-TMN | 28 | 62,456 | 1.23 | 9 / 34.6 | 332,792 | 11.0 | 16 / 76.55 | 3.9 | 9.1 | 31.3 | 37.78 | 11.99 | 35.80 |
+| Airbus A321-231 (ceo) | PT-MXP | 29 | 66,728 | 1.23 | 9 / 34.6 | 348,584 | 11.4 | 16 / 76.55 | 4.1 | 9.2 | 32.4 | 44.72 | 12.02 | 35.80 |
+| Airbus A321neo (ACF) | PS-LBA | 29 | 67,716 | 1.25 | 9 / 34.6 | 349,572 | 11.5 | 16 / 76.55 | 4.2 | 9.3 | 32.6 | 44.72 | 12.02 | 35.80 |
+| Boeing 767-300ER | CC-CWY | 30 | 61,673 | 0.60 | 4 / 13.63 | 333,005 | 9.1 | 6 / 34.6 | 3.3 | 7.7 | 29.4 | 54.96 | 15.75 | 50.89 |
+| Boeing 777-300ER | PT-MUG | 20 | 47,805 | 0.64 | 5 / 17.83 | 326,241 | 9.1 | 8 / 42.99 | 2.7 | 7.6 | 29.4 | 74.03 | 18.51 | 64.74 |
+| Boeing 787-8 Dreamliner | CC-BBF | 16 | 60,423 | 0.66 | 4 / 13.63 | 351,975 | 9.5 | 6 / 34.6 | 3.3 | 8.1 | 30.6 | 56.74 | 16.92 | 60.11 |
+| Boeing 787-9 Dreamliner | CC-BGK | 16 | 62,935 | 0.66 | 4 / 13.63 | 362,167 | 9.7 | 6 / 34.6 | 3.5 | 8.2 | 31.4 | 62.83 | 17.02 | 60.11 |
+| Boeing 767-300F | N536LA | 30 | 51,061 | 0.57 | 4 / 13.63 | 322,393 | 8.8 | 6 / 34.6 | 2.9 | 7.4 | 28.5 | 54.96 | 15.75 | 50.89 |
+| Boeing 767-300BCF | CC-CXE | 30 | 51,061 | 0.58 | 4 / 13.63 | 322,393 | 8.8 | 6 / 34.6 | 2.9 | 7.5 | 28.6 | 54.96 | 15.75 | 50.89 |
 
-**Whole fleet: 5.0 MB of `web` GLB** (committed), 28.6 MB of USDZ and 400.8 MB
-of `alta` (both regenerated on demand). An export takes 6–10 s per aircraft per
-LOD, 26–40 s for the 767 whose bake is the largest.
+The two LATAM Cargo 767s are the same hull as the -300ER and read as such: an
+identical bounding box and, between themselves, identical triangle and image
+counts. They differ only in paint — 12 kB of embedded texture and 60 kB of
+`alta` GLB separate `N536LA` from `CC-CXE`.
+
+The `.obj` column is the `.obj` alone. Its `.mtl` sits beside it and its
+textures are loose files under `textures_<slug>/`, neither of which the
+manifest sizes.
+
+**Whole fleet: 9.8 MB of `web` GLB** (committed — eleven files averaging
+892 kB), 38.5 MB of USDZ and 536.5 MB of `alta` (both regenerated on demand).
+An export takes 6–10 s per aircraft per LOD, 26–40 s for the 767 whose bake is
+the largest.
 
 ## See it now
 
@@ -168,8 +187,8 @@ declared: every number there was read back out of the finished file.
 Exporting a master straight to glTF **silently loses the paint**. Measured on
 the 777: 30 materials → 17, 8 textures → 3, and the fuselage came out flat grey.
 
-The cause is structural. `FuselagemPaint` — the paint on all nine aircraft — is
-not a Principled BSDF: it is three of them mixed by channels of an 8192×2048
+The cause is structural. `FuselagemPaint` — the paint on all eleven aircraft —
+is not a Principled BSDF: it is three of them mixed by channels of an 8192×2048
 nose mask, with the base colour coming from a `Mix` of `LiveryFac` over
 `LiveryTex`. glTF can represent exactly one Principled per material. The
 exporter does not warn; it writes grey and moves on.
@@ -178,9 +197,9 @@ So the pipeline finds those materials by a **structural test** — the Output's
 Surface must come straight from a Principled, and that Principled's scalar
 inputs may only come from an Image Texture or a Normal Map — and Cycles-bakes
 each failing material into a texture glTF *can* carry. On the current fleet the
-test catches exactly two materials (`FuselagemPaint` on all nine, `CinzaAsa` on
-the four Boeings) and it will catch whatever the 767-300F brings without anyone
-editing a list of names.
+test catches exactly two materials — `FuselagemPaint` and `CinzaAsa`, both on
+all eleven aircraft — and it caught them unaided on the two LATAM Cargo 767s
+the first time those exported, without anyone editing a list of names.
 
 Proof that the bake is faithful: the same scene rendered before and after
 remediation, three canonical angles, 1280×720/64 samples —
