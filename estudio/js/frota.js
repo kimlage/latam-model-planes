@@ -17,6 +17,15 @@
  * the studio shows the licences the OPEN SCENE actually uses rather than a
  * blanket claim about the whole page.
  *
+ * TIERS. `export/manifest.json` carries one row per (aircraft, LOD), and this
+ * module keeps ALL of them on one catalogue entry, under `niveis`. `web` is the
+ * default and is what a sixteen-aircraft scene should use; `heroi` is the
+ * clip's subject — same 20 materials, same 2048 textures, 3.6× the triangles
+ * for +0.29 MB on the 777 — and `alta` is there because the manifest has it,
+ * with its weight shown rather than hidden. Which tier an INSTANCE uses is a
+ * property of the scene row (`nivel`), not of the catalogue, so one 777 can be
+ * the hero while five more stay cheap.
+ *
  * The GLBs are +Y up, metres, wheels on y = 0, nose at x ≈ 0 and tail at
  * x ≈ +L (see export/README.md §Axis). Every instance is therefore wrapped in
  * a pivot Group whose origin sits at the aircraft's X/Z bounding-box centre
@@ -69,6 +78,24 @@ export const CATEGORIAS = { aeronave: 'aircraft' };
 /** Which fields the scenery came from, for the licence panel and the cards. */
 export const CAMPOS = {};
 
+/* Tier order, coarse first. Anything the manifest invents outside this list is
+   ignored by the studio rather than offered as an unknown quantity. */
+export const ORDEM_NIVEIS = ['web', 'heroi', 'alta'];
+export const NIVEL_PADRAO = 'web';
+export const ROTULOS_NIVEL = {
+  web:   'normal — the catalogue tier',
+  heroi: 'hero — real geometry, web textures',
+  alta:  'full — the master, uncompressed',
+};
+/** The `lods` table out of the manifest: what each tier actually IS. */
+export let NIVEIS_LOD = {};
+
+/** The tier one scene row asks for, clamped to what the asset really has. */
+export function nivelDe (asset, nivel) {
+  if (!asset || !asset.niveis) return NIVEL_PADRAO;
+  return asset.niveis[nivel] ? nivel : NIVEL_PADRAO;
+}
+
 const draco = new DRACOLoader().setDecoderPath(BASE + 'vendor/three/draco/');
 const loader = new GLTFLoader().setDRACOLoader(draco);
 
@@ -81,21 +108,49 @@ export async function carregarManifesto () {
   if (!r.ok) throw new Error(`manifest.json ${r.status} at ${EXPORT} — serve the repository ROOT, not estudio/`);
   const m = await r.json();
 
-  const web = m.exportacoes.filter(e => e.lod === 'web' && e.saidas && e.saidas.glb);
-  for (const e of web) {
+  /* Every LOD that produced a .glb, grouped by aircraft. The DEFAULT tier is
+     the one the catalogue's top-level fields describe, and it is `web` — a
+     scene opened without any tier decision must weigh what it always weighed.
+     The others ride along in `niveis` and cost nothing until an object asks. */
+  const porSlug = new Map();
+  for (const e of m.exportacoes) {
+    if (!e.saidas || !e.saidas.glb) continue;
+    if (!ORDEM_NIVEIS.includes(e.lod)) continue;
+    if (!porSlug.has(e.slug)) porSlug.set(e.slug, {});
+    const v = e.verificacao || {};
+    porSlug.get(e.slug)[e.lod] = {
+      nivel: e.lod,
+      rel: e.saidas.glb.arquivo,                      // web/<slug>_web.glb
+      arquivo: EXPORT + e.saidas.glb.arquivo,
+      bytes: e.saidas.glb.bytes,
+      triangulos: v.triangulos ?? e.triangulos_blender ?? 0,
+      materiais: v.materiais ?? 0,
+      megapixels: v.megapixels ?? 0,
+      ok: v.ok !== false,
+      linha: e,
+    };
+  }
+  NIVEIS_LOD = m.lods || {};
+  for (const [slug, niveis] of porSlug) {
+    const padrao = niveis[NIVEL_PADRAO] || niveis[Object.keys(niveis)[0]];
+    if (!padrao) continue;
+    const e = padrao.linha;
     const v = e.verificacao || {};
     const cx = v.caixa || {};
+    for (const n of Object.values(niveis)) delete n.linha;
     catalogo.push({
-      slug: e.slug,
+      slug,
       tipo: 'aeronave',
       categoria: e.categoria || 'aeronave',
       licenca: e.licenca || 'cc-by-4.0',
       nome: e.nome,
       matricula: e.matricula || '—',
-      arquivo: EXPORT + e.saidas.glb.arquivo,          // export/web/<slug>_web.glb
-      bytes: e.saidas.glb.bytes,
-      triangulos: v.triangulos ?? e.triangulos_blender ?? 0,
-      materiais: v.materiais ?? 0,
+      arquivo: padrao.arquivo,                         // export/web/<slug>_web.glb
+      rel: padrao.rel,
+      bytes: padrao.bytes,
+      triangulos: padrao.triangulos,
+      materiais: padrao.materiais,
+      niveis,
       // glTF box: X length, Y height, Z span (the exporter *verifies* this).
       L: cx.tamanho ? cx.tamanho[0] : e.L_ref,
       H: cx.tamanho ? cx.tamanho[1] : 0,
@@ -141,6 +196,7 @@ export async function carregarCenarios () {
       nome: a.rotulo || a.slug,
       matricula: (m.campos?.[a.campo]?.rotulo || a.campo || '').split(' - ')[0],
       arquivo: EXPORT + 'cenarios/' + a.arquivo,
+      rel: 'cenarios/' + a.arquivo,
       bytes: a.bytes || 0,
       triangulos: a.triangulos || 0,
       faces: a.faces || 0,
@@ -191,19 +247,30 @@ export function registrarAssets (mapa = {}) {
       tipo: a.tipo || 'aeronave', categoria: a.categoria || 'aeronave',
       licenca: a.licenca || 'cc-by-4.0',
       arquivo: a.arquivo, bytes: a.bytes || 0, triangulos: a.triangulos || 0,
+      /* An embed carries only the tiers its own scene uses. Without this the
+         page would fall back to `arquivo` for a hero object and quietly ship
+         the 47k-triangle mesh the clip was built to get away from. */
+      niveis: a.niveis || { [NIVEL_PADRAO]: { nivel: NIVEL_PADRAO, arquivo: a.arquivo,
+                                              bytes: a.bytes || 0,
+                                              triangulos: a.triangulos || 0 } },
       materiais: 0, L: 0, H: 0, env: 0, ok: true,
     });
   }
 }
 
-/** Load a GLB once. Later calls share the same parsed scene. */
-export function carregarGLB (slug, aoProgresso) {
-  if (cache.has(slug)) return cache.get(slug);
+/** Load a GLB once. Later calls share the same parsed scene.
+ *  The cache key is slug@tier: the hero 777 and the normal 777 are two
+ *  different files and must not share a cache entry. */
+export function carregarGLB (slug, nivel, aoProgresso) {
   const asset = acharAsset(slug);
   if (!asset) return Promise.reject(new Error(`unknown asset slug "${slug}"`));
+  const n = nivelDe(asset, nivel || NIVEL_PADRAO);
+  const fonte = (asset.niveis && asset.niveis[n]) || asset;
+  const chave = `${slug}@${n}`;
+  if (cache.has(chave)) return cache.get(chave);
 
   const p = new Promise((ok, erro) => {
-    loader.load(asset.arquivo,
+    loader.load(fonte.arquivo,
       gltf => {
         const raiz = gltf.scene;
         /* A pavement asset RECEIVES shadows and does not cast them. It is a
@@ -223,12 +290,13 @@ export function carregarGLB (slug, aoProgresso) {
         raiz.userData.caixa = caixa;
         raiz.userData.centro = caixa.getCenter(new THREE.Vector3());
         raiz.userData.tamanho = caixa.getSize(new THREE.Vector3());
+        raiz.userData.nivel = n;
         ok(raiz);
       },
       ev => aoProgresso && ev.total && aoProgresso(ev.loaded / ev.total),
-      e => erro(new Error(`failed to load ${asset.arquivo}: ${e.message || e}`)));
+      e => erro(new Error(`failed to load ${fonte.arquivo}: ${e.message || e}`)));
   });
-  cache.set(slug, p);
+  cache.set(chave, p);
   return p;
 }
 
@@ -243,8 +311,8 @@ export function carregarGLB (slug, aoProgresso) {
  *  centreline. Re-centring those here silently undid the exporter's decision
  *  and put the 777 of the runway starter with its gear on the shoulder. So the
  *  shift applies to aircraft only. */
-export async function instanciar (slug, aoProgresso) {
-  const raiz = await carregarGLB(slug, aoProgresso);
+export async function instanciar (slug, nivel, aoProgresso) {
+  const raiz = await carregarGLB(slug, nivel, aoProgresso);
   const asset = acharAsset(slug);
   const copia = raiz.clone(true);             // shares geometry + materials
   const c = raiz.userData.centro, t = raiz.userData.tamanho;
@@ -252,6 +320,10 @@ export async function instanciar (slug, aoProgresso) {
 
   const pivo = new THREE.Group();
   pivo.add(copia);
+  /* The tier the instance actually carries — mundo.sincronizar compares it
+     against the document row and rebuilds when they disagree, which is what
+     makes the hero/normal switch a one-line change to the document. */
+  pivo.userData.nivel = raiz.userData.nivel;
   pivo.userData.tamanho = t.clone();
   pivo.userData.raio = Math.hypot(t.x, t.z) / 2;
   medirTrem(pivo);
@@ -276,29 +348,63 @@ export async function instanciar (slug, aoProgresso) {
  * back to the object origin, which is stated in the flight panel rather than
  * silently wrong. */
 function medirTrem (pivo) {
-  const principais = [], todos = [];
+  const principais = [], rodas = [], todos = [];
   pivo.traverse(o => {
     if (!o.isMesh || !o.name) return;
     if (!o.name.startsWith('Trem')) return;
     todos.push(o);
-    if (o.name.startsWith('TremP')) principais.push(o);      // TremP_ and TremPrincipal_
+    if (!o.name.startsWith('TremP')) return;                 // TremP_ and TremPrincipal_
+    principais.push(o);
+    if (o.name.includes('Roda')) rodas.push(o);              // the tyres, not the leg
   });
   pivo.userData.nosTrem = todos;
   if (!principais.length) { pivo.userData.trem = null; return; }
   pivo.updateMatrixWorld(true);
   const b = new THREE.Box3();
   for (const m of principais) b.expandByObject(m);
-  const c = b.getCenter(new THREE.Vector3());
-  /* x is the contact's station along the fuselage, y its lowest point — which
-     should be ≈ 0 because the exporter puts the wheels on y = 0, but it is
-     measured rather than assumed, because "should be" is how a datum drifts. */
-  pivo.userData.trem = { x: +c.x.toFixed(4), y: +b.min.y.toFixed(4), nos: principais.length };
+
+  /* WHICH STATION THE AEROPLANE ROTATES ABOUT, and the first answer was wrong
+     in a way only a wheels-versus-pavement check found.
+     It used to be the centre of the whole main-gear box. On a single-axle
+     Airbus that is very nearly the contact patch and it looked fine. On the
+     777's THREE-AXLE BOGIE it is the MIDDLE axle — and a rigid bogie pitched up
+     12° about its middle axle drives its aft axle 1.46 m · sin 12° = 0.30 m
+     into the runway. Measured on the GRU clip: the tyres were 0.44 m below the
+     pavement from 1.5 s to 5.0 s, through the whole rotation.
+     An aeroplane rotates about the AFT contact — the bogie tilts and the
+     forward axles come off the ground, which is what a 777 visibly does. So the
+     station is the aft-most WHEEL centre (max x; +x is aft in this frame), with
+     the old box centre kept only as the fallback for a gear whose meshes do not
+     name their tyres. */
+  let x = b.getCenter(new THREE.Vector3()).x;
+  let eixos = 0;
+  if (rodas.length) {
+    const cx = [];
+    for (const m of rodas) {
+      const rb = new THREE.Box3().setFromObject(m);
+      cx.push(rb.getCenter(new THREE.Vector3()).x);
+    }
+    x = Math.max(...cx);
+    // distinct axle stations, 5 cm apart: 3 on a 777, 1 on an A320
+    eixos = new Set(cx.map(v => Math.round(v * 20))).size;
+  }
+  /* y is the contact's lowest point — which should be ≈ 0 because the exporter
+     puts the wheels on y = 0, but it is measured rather than assumed, because
+     "should be" is how a datum drifts. */
+  pivo.userData.trem = { x: +x.toFixed(4), y: +b.min.y.toFixed(4),
+                         nos: principais.length, rodas: rodas.length, eixos };
 }
 
-/** Bytes already fetched, for the status line. */
+/** Bytes already fetched, for the status line. Keys are slug@tier, so a scene
+ *  holding one hero 777 and five normal ones counts both files once each. */
 export function bytesCarregados () {
   let n = 0;
-  for (const slug of cache.keys()) { const a = acharAsset(slug); if (a) n += a.bytes; }
+  for (const chave of cache.keys()) {
+    const [slug, nivel] = chave.split('@');
+    const a = acharAsset(slug);
+    if (!a) continue;
+    n += ((a.niveis && a.niveis[nivel]) || a).bytes || 0;
+  }
   return n;
 }
 
@@ -324,7 +430,7 @@ function obterMiniRenderer () {
 
 async function fazerMiniatura (slug) {
   if (miniCache[slug]) return miniCache[slug];
-  const raiz = await carregarGLB(slug);
+  const raiz = await carregarGLB(slug, NIVEL_PADRAO);
   const r = obterMiniRenderer();
   const cena = new THREE.Scene();
   const obj = raiz.clone(true);

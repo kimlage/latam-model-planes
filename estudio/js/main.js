@@ -8,7 +8,8 @@
 import * as THREE from 'three';
 import { estadoPadrao, novoObjeto, clonar, Historico, lerBiblioteca, salvarCena, apagarCena } from './estado.js';
 import { carregarManifesto, carregarCenarios, catalogo, miniatura, bytesCarregados,
-         acharAsset, LICENCAS, CATEGORIAS, ORDEM_CATEGORIAS, CAMPOS } from './frota.js';
+         acharAsset, LICENCAS, CATEGORIAS, ORDEM_CATEGORIAS, CAMPOS,
+         ORDEM_NIVEIS, NIVEL_PADRAO, ROTULOS_NIVEL } from './frota.js';
 import { PROPS, RIGS } from './props.js';
 import { Mundo } from './mundo.js';
 import { Editor } from './editor.js';
@@ -84,9 +85,39 @@ async function iniciar () {
   });
 
   /* Debug handle. Deliberate: it is how this page was driven and verified from
-     the console, and it is the only way to script the studio from outside. */
-  window.__estudio = { mundo, editor, estado, historico, dock, carregarDocumento,
-                       adicionar, atalho, aplicarTempo, registrar: (r) => historico.registrar(r, estado) };
+     the console, and it is the only way to script the studio from outside.
+     `estado` is a GETTER because carregarDocumento REPLACES the object — a
+     plain reference here went stale the moment a scene was opened, which made
+     every console measurement read the scene before last. */
+  window.__estudio = {
+    get estado () { return estado; },
+    mundo, editor, historico, get dock () { return dock; },
+    carregarDocumento, adicionar, atalho, aplicarTempo,
+    registrar: r => historico.registrar(r, estado),
+
+    /* MEASUREMENT, not control. Two questions about the hero tier cannot be
+       answered by hand at all: how long a GLB takes to arrive, and what the
+       renderer really costs per frame with a 6 km field plate on screen. Both
+       had to be measured in a browser rather than argued about, and the numbers
+       in export/README.md come from here.
+
+       `medirRender` counts real milliseconds around N draws with a gl.finish()
+       at each end, which is the honest way to time WebGL — and, unlike counting
+       requestAnimationFrame callbacks, it still works when the tab is in the
+       background, where the browser throttles rAF to about 1 Hz. */
+    medirRender: (n = 60) => {
+      const gl = mundo.renderer.getContext();
+      mundo.render(); gl.finish();
+      const t0 = performance.now();
+      for (let i = 0; i < n; i++) mundo.render();
+      gl.finish();
+      const ms = (performance.now() - t0) / n;
+      return { ms: +ms.toFixed(2), fps: +(1000 / ms).toFixed(1),
+               px: [mundo.largura, mundo.altura],
+               tri: mundo.renderer.info.render.triangles,
+               draws: mundo.renderer.info.render.calls };
+    },
+  };
 
   // Open on something worth looking at rather than an empty grid.
   await carregarDocumento(cenaBase('heroi'));
@@ -105,6 +136,7 @@ function ligarTempo () {
     aoTempo: () => { aplicarTempo(); sincronizarTransform(); },
     aoParar: () => mundo.controles.update(),      // resync the orbit state
     aoChavear: () => chavearSelecao(),
+    aoChavearCamera: () => chavearCamera(),
     aoPreset: () => dlgMovimento(ctxDialogo()),
     aoVooPainel: v => dlgVoo(ctxDialogo(), v),
   });
@@ -120,7 +152,7 @@ function ligarTempo () {
     else if (e.key === 'ArrowLeft') { e.preventDefault(); dock.parar(); dock.passo(e.shiftKey ? -10 : -1); }
     else if (e.key === 'Home') { dock.parar(); dock.irPara(0); }
     else if (e.key === 'End') { dock.parar(); dock.irPara(estado.linha.duracao); }
-    else if (e.key.toLowerCase() === 'k') { chavearSelecao(); }
+    else if (e.key.toLowerCase() === 'k') { e.shiftKey ? chavearCamera() : chavearSelecao(); }
     else if (e.key.toLowerCase() === 't') { alternarDock(); }
     else if (e.key === 'Delete' || e.key === 'Backspace') {
       /* A selected KEY wins over a selected object: you just clicked the key. */
@@ -155,6 +187,10 @@ function aplicarTempo () {
   for (const [, v] of ov.objetos) if (v.voo) info = v.voo;
   dock.mostrarVoo(info);
   editor.atualizarCaixa && editor.atualizarCaixa();
+  /* The overlay writes the camera directly, which does NOT fire OrbitControls'
+     change event — without this the numeric camera rows would freeze at the
+     last hand-driven pose while the clip flew past behind them. */
+  if (ov.camera) sincronizarCamera();
   return ov;
 }
 
@@ -190,6 +226,34 @@ function autoChave (ids) {
   }
   if (escreveu) { dock.desenhar(); aplicarTempo(); }
   return escreveu;
+}
+
+/** The camera, keyed from the viewport at the playhead.
+ *
+ *  Position and target always; FOV only if a `camera.fov` track already exists,
+ *  because writing one silently pins the FOV for the whole clip and the FOV
+ *  slider would then appear to do nothing.
+ *
+ *  This is the counterpart of `chavearSelecao` and it exists because a recipe's
+ *  framing is a STARTING POINT. `cameraParaVoo` puts the lens 1.75 aircraft
+ *  lengths abeam the lift-off point, which is a good guess and was the wrong
+ *  one for the GRU field clip — the shot wanted to be closer and lower, with
+ *  the hangar behind. Without this button the only way to change it was to
+ *  edit the JSON. */
+function chavearCamera () {
+  const l = estado.linha;
+  const t = dock.t;
+  porChave(l, 'camera.pos', null, encaixar(l, t),
+    mundo.camP.position.toArray().map(n => +n.toFixed(3)));
+  porChave(l, 'camera.alvo', null, encaixar(l, t),
+    mundo.controles.target.toArray().map(n => +n.toFixed(3)));
+  if (acharTrilha(l, 'camera.fov', null)) {
+    porChave(l, 'camera.fov', null, encaixar(l, t), +mundo.camP.fov.toFixed(2));
+  }
+  historico.registrar(`key camera @ ${t.toFixed(2)} s`, estado);
+  dock.desenhar();
+  aplicarTempo();
+  avisar(`camera keyed at ${t.toFixed(2)} s`);
 }
 
 /** One channel, same rule: start a track only with auto-key on, but keep an
@@ -633,6 +697,8 @@ function sincronizarTransform () {
   set('rx', d.rot[0]); set('ry', d.rot[1]); set('rz', d.rot[2]);
   set('sx', d.esc[0]); set('sy', d.esc[1]); set('sz', d.esc[2]);
 
+  sincronizarNivel(d);
+
   const o = mundo.objetos.get(d.id);
   if (o) {
     const b = new THREE.Box3().setFromObject(o), s = b.getSize(new THREE.Vector3());
@@ -648,7 +714,62 @@ function sincronizarTransform () {
   }
 }
 
+/* ------------------------------------------------------------- detail tier -
+ * The control is built from `asset.niveis`, which is built from the manifest.
+ * Nothing here knows the word "hero" except as a label: add a fourth tier to
+ * export_frota.py, re-export, and it appears in this dropdown with its own
+ * measured triangles and bytes. An asset with a single tier hides the row
+ * rather than offering a choice of one. */
+
+function sincronizarNivel (d) {
+  const linha = $('linha-nivel'), nota = $('nota-nivel'), s = $('nivel-obj');
+  const a = d.tipo === 'prop' ? null : acharAsset(d.slug);
+  const niveis = a && a.niveis ? ORDEM_NIVEIS.filter(n => a.niveis[n]) : [];
+  if (niveis.length < 2) {
+    linha.style.display = nota.style.display = 'none';
+    return;
+  }
+  linha.style.display = nota.style.display = '';
+  const atual = a.niveis[d.nivel] ? d.nivel : NIVEL_PADRAO;
+  s.textContent = '';
+  for (const n of niveis) {
+    const v = a.niveis[n];
+    s.append(h('option', { value: n, selected: n === atual ? 'selected' : undefined },
+      `${n} — ${v.triangulos.toLocaleString()} tris, ${formatarBytes(v.bytes)}`));
+  }
+  s.value = atual;
+  const v = a.niveis[atual], base = a.niveis[NIVEL_PADRAO];
+  nota.textContent = (ROTULOS_NIVEL[atual] || atual)
+    + (base && v !== base
+        ? `\n${(v.triangulos / Math.max(1, base.triangulos)).toFixed(1)}× the triangles of `
+          + `${NIVEL_PADRAO}, ${v.bytes > base.bytes ? '+' : '−'}`
+          + `${formatarBytes(Math.abs(v.bytes - base.bytes))}`
+        : '');
+}
+
+async function trocarNivel (nivel) {
+  const d = editor.selecionados[0];
+  if (!d) return;
+  const antes = d.nivel || NIVEL_PADRAO;
+  if (antes === nivel) return;
+  if (nivel === NIVEL_PADRAO) delete d.nivel; else d.nivel = nivel;
+  mostrarCarga(`loading ${d.nome} at ${nivel} detail…`, 0.4);
+  const t0 = performance.now();
+  await mundo.sincronizar(estado);
+  esconderCarga();
+  mundo.aplicarAmbiente(estado.ambiente);
+  /* A hero mesh is a different mesh: the main-gear measurement, the bounding
+     box and any flight table derived from them are all stale. */
+  mundo.invalidarTerreno();
+  editor.atualizarGizmo();
+  sincronizarTransform();
+  historico.registrar(`detail ${d.nome} → ${nivel}`, estado);
+  avisar(`${d.nome}: ${nivel} tier in ${Math.round(performance.now() - t0)} ms`);
+}
+
 function ligarTransform () {
+  $('nivel-obj').addEventListener('change', e => trocarNivel(e.target.value));
+
   const ids = ['tx', 'ty', 'tz', 'rx', 'ry', 'rz', 'sx', 'sy', 'sz'];
   for (const id of ids) {
     const e = $(id);
@@ -691,7 +812,34 @@ function ligarInspetor () {
   $('btn-del').addEventListener('click', apagar);
   $('btn-chao').addEventListener('click', () => editor.aoChao());
 
-  /* camera */
+  /* camera — the numeric fields, and the live read-back that keeps them
+     honest while the mouse is driving. */
+  const camIds = ['cx', 'cy', 'cz', 'ax', 'ay', 'az'];
+  for (const id of camIds) {
+    $(id).addEventListener('input', () => {
+      const v = camIds.map(k => parseFloat($(k).value));
+      if (v.some(n => !isFinite(n))) return;
+      mundo.camP.position.set(v[0], v[1], v[2]);
+      mundo.controles.target.set(v[3], v[4], v[5]);
+      mundo.camP.lookAt(mundo.controles.target);
+      /* NOT controles.update(), and this cost an hour. OrbitControls clamps the
+         polar angle at maxPolarAngle = 0.499π — "never under the tarmac" — and
+         that clamp is expressed relative to the TARGET, not to the ground. A
+         climbing aeroplane puts the target 24 m up, so a lens typed in at 16 m
+         is "below the target", and update() silently lifted it to 24.99 m: the
+         camera key came back nine metres higher than the number typed.
+         The timeline's own projection (mundo.aplicarLinha) sets the camera and
+         calls lookAt without ever going through the controls, so it has never
+         had this limit — which is why a keyed low camera plays back correctly
+         and only the numeric fields disagreed with it. The next mouse drag
+         re-derives the orbit state from the camera, and re-applies the clamp
+         then, which is the control's own business. */
+      mundo.atualizarOrto();
+    });
+  }
+  mundo.controles.addEventListener('change', sincronizarCamera);
+  sincronizarCamera();
+
   $('fov').addEventListener('input', e => {
     const v = +e.target.value;
     $('fov-out').textContent = v;
@@ -807,6 +955,18 @@ function sincronizarInspetor () {
   p('orto', estado.camera.orto);
   guardarPoseTexto();
 }
+/** Write the live camera into the two numeric rows. Skips whichever field the
+ *  user is typing in, the same rule the transform fields use. */
+function sincronizarCamera () {
+  const p = mundo.camP.position, a = mundo.controles.target;
+  const v = { cx: p.x, cy: p.y, cz: p.z, ax: a.x, ay: a.y, az: a.z };
+  for (const [id, n] of Object.entries(v)) {
+    const e = $(id);
+    if (!e || document.activeElement === e) continue;
+    e.value = +n.toFixed(2);
+  }
+}
+
 function guardarPoseTexto () {
   $('poses-info').innerHTML =
     `A ${estado.poses.A ? '<b>stored</b>' : '—'} · B ${estado.poses.B ? '<b>stored</b>' : '—'} — `

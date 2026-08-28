@@ -9,9 +9,9 @@
 import {
   FPS_LEGAIS, estimarGif, formatarBytes, exportarGif, exportarPng,
   construirEmbed, documentoParaJson, baixar, nomeArquivo,
-  licencasDaCena, textoAtribuicao, exportarSequencia,
+  licencasDaCena, textoAtribuicao, exportarSequencia, urlDoAsset,
 } from './exportar.js';
-import { acharAsset } from './frota.js';
+import { acharAsset, NIVEL_PADRAO, nivelDe } from './frota.js';
 import { RECEITAS_VOO, RECEITAS_MOV, aplicarVoo, escreverMovimento, perfilPara } from './presets.js';
 import { temAnimacao, quadros as quadrosDaLinha, amostrarVoo, tabelaDe, invalidarVoo } from './tempo.js';
 
@@ -630,7 +630,9 @@ function abaEmbed (ctx) {
     { v: 'url', r: 'absolute URLs — hosted somewhere else' },
   ], 'relativo');
   const baseEstudio = h('input', { type: 'text', id: 'emb-be', value: 'https://example.com/estudio/' });
-  const baseGlb = h('input', { type: 'text', id: 'emb-bg', value: 'https://example.com/export/web/' });
+  /* the export/ ROOT, not export/web/: the tier folder is part of each asset's
+     own path now, so one base covers web/, heroi/ and cenarios/ */
+  const baseGlb = h('input', { type: 'text', id: 'emb-bg', value: 'https://example.com/export/' });
   const autoGirar = h('input', { type: 'checkbox', id: 'emb-ag' });
   const velocidade = h('input', { type: 'number', id: 'emb-vg', step: 0.1, value: 0.4 });
   const zoom = h('input', { type: 'checkbox', id: 'emb-z', checked: true });
@@ -666,11 +668,23 @@ function abaEmbed (ctx) {
   function atualizar () {
     const url = modo.value === 'url';
     linhaU1.style.display = linhaU2.style.display = url ? '' : 'none';
-    const usados = [...new Set(ctx.estado.objetos.filter(o => o.tipo !== 'prop').map(o => o.slug))]
-      .map(s => acharAsset(s)).filter(Boolean);
+    /* One row per FILE, not per slug: a scene with a hero 777 and a parked one
+       downloads two GLBs, and the weight warning has to know that. */
     const be = url ? baseEstudio.value.replace(/\/?$/, '/') : (modo.value === 'irmao' ? 'estudio/' : './');
-    const bg = url ? baseGlb.value.replace(/\/?$/, '/') : (modo.value === 'irmao' ? './' : '../export/web/');
-    const bc = url ? baseGlb.value.replace(/\/?$/, '/') : (modo.value === 'irmao' ? './' : '../export/cenarios/');
+    const bg = url ? baseGlb.value.replace(/\/?$/, '/') : (modo.value === 'irmao' ? './' : '../export/');
+    const usados = [];
+    const vistos = new Set();
+    for (const o of ctx.estado.objetos) {
+      if (o.tipo === 'prop') continue;
+      const a = acharAsset(o.slug);
+      if (!a) continue;
+      const n = nivelDe(a, o.nivel || NIVEL_PADRAO);
+      if (vistos.has(`${o.slug}@${n}`)) continue;
+      vistos.add(`${o.slug}@${n}`);
+      const f = (a.niveis && a.niveis[n]) || a;
+      usados.push({ asset: a, nivel: n, url: urlDoAsset(f, bg),
+                    bytes: f.bytes || 0, triangulos: f.triangulos || 0 });
+    }
     const bytes = usados.reduce((n, a) => n + a.bytes, 0);
     const tris = usados.reduce((n, a) => n + a.triangulos, 0);
     const lics = licencasDaCena(ctx.estado);
@@ -683,9 +697,10 @@ function abaEmbed (ctx) {
          <tr><th>${be}vendor/three/</th><td>three.js r169 + Draco decoder (~2.1 MB, once)</td></tr>
          <tr><th>${be}js/</th><td>embed.js, mundo.js, props.js, frota.js, estado.js (~64 kB)</td></tr>
          ${usados.length
-           ? usados.map(a => `<tr><th>${a.tipo === 'cenario' ? bc : bg}${a.arquivo.split('/').pop()}</th>`
-               + `<td>${formatarBytes(a.bytes)} · ${a.triangulos.toLocaleString()} tris`
-               + `${a.tipo === 'cenario' ? ' · <span style="color:#d8b263">ODbL</span>' : ''}</td></tr>`).join('')
+           ? usados.map(u => `<tr><th>${u.url}</th>`
+               + `<td>${formatarBytes(u.bytes)} · ${u.triangulos.toLocaleString()} tris`
+               + `${u.nivel !== NIVEL_PADRAO ? ` · <span style="color:#8fd2a0">${u.nivel}</span>` : ''}`
+               + `${u.asset.tipo === 'cenario' ? ' · <span style="color:#d8b263">ODbL</span>' : ''}</td></tr>`).join('')
            : '<tr><th>—</th><td>nothing but authored props in this scene</td></tr>'}
        </table>
        <p>Payload: <b>${formatarBytes(bytes)}</b>, ${tris.toLocaleString()} triangles.

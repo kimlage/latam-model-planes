@@ -136,6 +136,13 @@
           <input type="number" id="rx" step="1"><input type="number" id="ry" step="1"><input type="number" id="rz" step="1"></label>
         <label class="tri"><span>scale</span>
           <input type="number" id="sx" step="0.01"><input type="number" id="sy" step="0.01"><input type="number" id="sz" step="0.01"></label>
+        <!-- The DETAIL TIER, per object. The catalogue tier (`web`) is the right
+             answer for a scene of sixteen aircraft; a clip has one or two that
+             matter, and they should carry the real mesh. The options come from
+             export/manifest.json, so a tier added to export_frota.py shows up
+             here without a line of HTML. -->
+        <label class="uma" id="linha-nivel"><span>detail</span><select id="nivel-obj"></select></label>
+        <div id="nota-nivel" class="nota"></div>
         <label class="uma"><span>snap move (m)</span><input type="number" id="snap-mov" step="0.5" value="0"></label>
         <label class="uma"><span>snap rotate (°)</span><input type="number" id="snap-rot" step="5" value="0"></label>
         <div id="medidas-sel" class="nota"></div>
@@ -147,6 +154,15 @@
     <h3>Camera</h3>
     <div class="corpo">
       <label class="uma"><span>FOV °</span><input type="range" id="fov" min="12" max="80" step="1" value="35"><output id="fov-out">35</output></label>
+      <!-- WHERE THE LENS IS, as numbers. Orbit and scroll are how you FIND a
+           shot; they are not how you repeat one, and they are not how you put a
+           camera 96 m off a runway centreline at 9 m. These two rows read the
+           live camera and write it, and “◆ cam” in the dock turns the result
+           into a key. -->
+      <label class="tri"><span>cam position</span>
+        <input type="number" id="cx" step="1"><input type="number" id="cy" step="1"><input type="number" id="cz" step="1"></label>
+      <label class="tri"><span>cam target</span>
+        <input type="number" id="ax" step="1"><input type="number" id="ay" step="1"><input type="number" id="az" step="1"></label>
       <label class="check"><input type="checkbox" id="orto"> orthographic</label>
       <div class="linha-botoes">
         <button id="btn-pose-a">Store pose A</button>

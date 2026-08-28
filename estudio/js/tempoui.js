@@ -23,7 +23,7 @@ export class Dock {
   /**
    * @param el   the dock element
    * @param ctx  { estado, mundo, editor, aoMudar(rot), aoTempo(), aoPreset(),
-   *               aoVooPainel(voo) }
+   *               aoChavear(), aoChavearCamera(), aoVooPainel(voo) }
    */
   constructor (el, ctx) {
     this.el = el;
@@ -73,6 +73,16 @@ export class Dock {
       onclick: () => { this.linha.autochave = !this.linha.autochave; this.ctx.aoMudar('auto-key'); this.desenhar(); },
     }, 'auto-key');
     this.btnChave = h('button', { title: 'Key the selection\'s position, rotation and scale here (K)', onclick: () => this.ctx.aoChavear() }, '◆ key');
+    /* KEYING THE CAMERA BY HAND, which the dock could not do until the GRU clip
+       needed it. `camera.pos` / `camera.alvo` / `camera.fov` were already
+       channels, the dock already drew their tracks, and the evaluator already
+       played them — but the only WRITER was presets.js. So a director could
+       accept the framing a recipe computed or nothing, and the studio's own
+       README claimed the keys were "yours to drag". They are now. */
+    this.btnChaveCam = h('button', {
+      title: 'Key the CAMERA here — position, target and FOV, from the viewport (Shift+K)',
+      onclick: () => this.ctx.aoChavearCamera(),
+    }, '◆ cam');
     this.btnPreset = h('button.primaria', { title: 'Flight and motion presets — they write keys you can then edit', onclick: () => this.ctx.aoPreset() }, 'Motion…');
     this.btnLimpar = h('button', { title: 'Remove every track and flight', onclick: () => this.limpar() }, 'clear');
 
@@ -85,7 +95,7 @@ export class Dock {
       h('label.mini-campo', {}, h('span', {}, 'length'), this.campoDur, h('i', {}, 's')),
       this.campoFps,
       h('span.hud-sep'),
-      this.btnAuto, this.btnChave, this.btnPreset, this.btnLimpar,
+      this.btnAuto, this.btnChave, this.btnChaveCam, this.btnPreset, this.btnLimpar,
       h('span.hud-sep'),
       this.marcaTempo, this.leitura);
 

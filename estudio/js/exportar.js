@@ -19,7 +19,7 @@
 
 import * as THREE from 'three';
 import { GIFEncoder, quantize, applyPalette } from 'gifenc';
-import { acharAsset, LICENCAS, licencasDe } from './frota.js';
+import { acharAsset, LICENCAS, licencasDe, NIVEL_PADRAO, nivelDe } from './frota.js';
 import { avaliar, temAnimacao, quadros } from './tempo.js';
 
 /* fps values whose frame delay is a whole number of centiseconds. */
@@ -50,6 +50,30 @@ const BPP = { 32: 0.062, 64: 0.092, 128: 0.111, 256: 0.132 };
 export function estimarGif ({ quadros, larg, alt, cores }) {
   const bpp = BPP[cores] ?? 0.29;
   return Math.round(quadros * larg * alt * bpp) + 800;
+}
+
+/* YIELDING TO THE BROWSER BETWEEN FRAMES, and it must not be setTimeout.
+ *
+ * A 159-frame GIF renders and encodes for a minute or two, and the loop has to
+ * hand the thread back or the page locks up and the progress line never paints.
+ * The obvious `await new Promise(r => setTimeout(r))` does that — until the tab
+ * is not the front tab. Chrome clamps background timers to one per second and
+ * then FREEZES them entirely after about five minutes of a hidden tab, so an
+ * export left running while its author looked at something else stopped dead
+ * partway and never resumed. Measured here: 16 frames of 159, then nothing,
+ * with the JavaScript thread perfectly alive.
+ *
+ * A MessageChannel message is a macrotask like a timer, gives the browser the
+ * same chance to paint and to run events, and is NOT subject to background
+ * throttling. Same yield, same responsiveness, and the export finishes whether
+ * or not anyone is watching it. */
+const _canal = typeof MessageChannel === 'function' ? new MessageChannel() : null;
+export function ceder () {
+  if (!_canal) return new Promise(r => setTimeout(r));
+  return new Promise(r => {
+    _canal.port1.onmessage = () => { _canal.port1.onmessage = null; r(); };
+    _canal.port2.postMessage(0);
+  });
 }
 
 export const formatarBytes = n =>
@@ -288,7 +312,7 @@ export async function exportarGif (mundo, estado, cfg, selId, aoProgresso = () =
         repeat: cfg.loop ? 0 : -1,          // 0 = forever, −1 = play once
         first: i === 0,
       });
-      if (i % 2 === 0) { aoProgresso(i, N, 'encoding'); await new Promise(r => setTimeout(r)); }
+      if (i % 2 === 0) { aoProgresso(i, N, 'encoding'); await ceder(); }
     }
     gif.finish();
     const bytes = gif.bytes();
@@ -399,7 +423,7 @@ export async function exportarSequencia (mundo, estado, cfg, aoProgresso = () =>
       bytes += dados.length;
       entradas.push({ nome: `${cfg.prefixo || 'quadro'}_${String(i).padStart(4, '0')}.png`, dados });
       aoProgresso(i + 1, N, 'rendering');
-      await new Promise(r => setTimeout(r));
+      await ceder();
     }
     aoProgresso(N, N, 'zipping');
     const zip = zipArmazenado(entradas);
@@ -466,21 +490,46 @@ export function documentoParaJson (estado, mundo, { comAssets = false, baseGlb =
   doc.licencas = licencasDaCena(estado);
   doc.licenca = textoAtribuicao(estado);
   if (comAssets) {
+    /* The asset table is keyed by slug and carries a `niveis` map, because two
+       rows may share a slug and NOT a detail tier: the clip's hero 777 and a
+       parked one are the same catalogue entry and two different files. `arquivo`
+       stays on the entry as the default tier so a reader that predates tiers
+       still resolves something sane. */
     doc.assets = {};
     for (const o of doc.objetos) {
-      if (o.tipo === 'prop' || doc.assets[o.slug]) continue;
+      if (o.tipo === 'prop') continue;
       const a = acharAsset(o.slug);
       if (!a) continue;
-      const base = a.tipo === 'cenario' ? (baseCen || baseGlb) : baseGlb;
-      doc.assets[o.slug] = {
-        arquivo: base + a.arquivo.split('/').pop(),
+      const n = nivelDe(a, o.nivel || NIVEL_PADRAO);
+      const fonte = (a.niveis && a.niveis[n]) || a;
+      const padrao = (a.niveis && a.niveis[NIVEL_PADRAO]) || a;
+      const e = doc.assets[o.slug] || (doc.assets[o.slug] = {
+        arquivo: urlDoAsset(padrao, baseGlb),
         nome: a.nome, matricula: a.matricula,
         tipo: a.tipo, categoria: a.categoria, licenca: a.licenca,
         bytes: a.bytes, triangulos: a.triangulos,
-      };
+        niveis: {},
+      });
+      e.niveis[n] = { nivel: n, arquivo: urlDoAsset(fonte, baseGlb),
+                      bytes: fonte.bytes || 0, triangulos: fonte.triangulos || 0 };
     }
   }
   return doc;
+}
+
+/* WHERE A GLB LIVES, for a generated embed.
+ *
+ * `rel` is the path under export/ — `web/B77W_web.glb`, `heroi/B77W_heroi.glb`,
+ * `cenarios/sbgr_placa_campo.glb`. Before detail tiers there was one folder per
+ * kind of asset and the embed could keep the basename and a per-kind base; with
+ * tiers the folder is part of the answer, so the base is now export/ ITSELF and
+ * the tier rides in the path. `baseGlb` ending in `./` is the flat "sibling"
+ * layout, where every GLB was copied next to the HTML and only the basename
+ * survives. */
+export function urlDoAsset (fonte, baseGlb) {
+  const rel = fonte.rel || fonte.arquivo || '';
+  const nome = rel.split('/').pop();
+  return baseGlb === './' ? './' + nome : baseGlb + (fonte.rel ? fonte.rel : nome);
 }
 
 /* -------------------------------------------------------------- embed --- */
@@ -495,14 +544,14 @@ export function construirEmbed (estado, mundo, cfg) {
   const baseEstudio = cfg.modo === 'url' ? cfg.baseEstudio.replace(/\/?$/, '/')
                     : cfg.modo === 'irmao' ? 'estudio/'
                     : './';
+  /* ONE base, and it is export/ — see urlDoAsset. The tier folder (web/ or
+     heroi/) and cenarios/ are part of each asset's own relative path, which is
+     what lets a scene mix a hero 777 with a normal one. */
   const baseGlb = cfg.modo === 'url' ? cfg.baseGlb.replace(/\/?$/, '/')
                 : cfg.modo === 'irmao' ? './'
-                : '../export/web/';
-  const baseCen = cfg.modo === 'url' ? (cfg.baseCen || cfg.baseGlb).replace(/\/?$/, '/')
-                : cfg.modo === 'irmao' ? './'
-                : '../export/cenarios/';
+                : '../export/';
 
-  const doc = documentoParaJson(estado, mundo, { comAssets: true, baseGlb, baseCen });
+  const doc = documentoParaJson(estado, mundo, { comAssets: true, baseGlb });
   const titulo = (estado.nome || 'LATAM fleet scene').replace(/[<&]/g, '');
   const lics = licencasDaCena(estado);
   const escapar = t => String(t).replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
@@ -513,7 +562,7 @@ export function construirEmbed (estado, mundo, cfg) {
      Needs, relative to THIS file:
        ${baseEstudio}vendor/three/…      three.js r169 + Draco decoder
        ${baseEstudio}js/embed.js         the runtime (imports mundo.js, tempo.js, props.js, frota.js)
-       ${baseGlb}<slug>_web.glb   the aircraft, listed in doc.assets below
+       ${baseGlb}<tier>/<slug>_<tier>.glb   the models, listed in doc.assets below
 ${temAnimacao(estado.linha)
   ? `     This scene carries a TIMELINE: ${quadros(estado.linha)} frames over `
     + `${estado.linha.duracao} s at ${estado.linha.fps} fps. The page plays it with the same\n`
@@ -527,6 +576,10 @@ ${lics.map(l => `       ${l.atribuicao}\n         ${l.url}${l.share_alike ? '   
 <meta charset="utf-8">
 <title>${titulo}</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- The studio's own mark, inline. Without it the page's ONLY failed request
+     is /favicon.ico 404 — harmless, and still the one red line in a network
+     panel someone opens to check that an embed is self-contained. -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%233d3aae'/%3E%3Cpath d='M2 9h12M8 3v10' stroke='%23fff' stroke-width='1.4'/%3E%3C/svg%3E">
 <style>
   html,body{margin:0;height:100%;overflow:hidden;background:${estado.ambiente.fundoCor};
     font:12px/1.4 -apple-system,"Segoe UI",Roboto,sans-serif;color:#e6e7ea}

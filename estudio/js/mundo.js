@@ -9,7 +9,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { instanciar } from './frota.js';
+import { instanciar, NIVEL_PADRAO } from './frota.js';
 import { instanciarProp, materialChao, faixaPista, texturaCeu, direcaoSol } from './props.js';
 
 const TONE = {
@@ -344,6 +344,20 @@ export class Mundo {
       this.raizObjetos.remove(obj);
       this.objetos.delete(id);
     }
+    /* A DETAIL TIER CHANGE IS A REBUILD, not a property write: `heroi` is a
+       different GLB with a different mesh, so the instance has to be dropped
+       and re-made. Comparing against the tier the instance actually carries
+       (frota.js sets `userData.nivel`) rather than against a remembered
+       document value means an undo, a scene load and a manual edit all take
+       the same path. */
+    for (const d of estado.objetos) {
+      const obj = this.objetos.get(d.id);
+      if (!obj || d.tipo === 'prop') continue;
+      const querNivel = d.nivel || NIVEL_PADRAO;
+      if ((obj.userData.nivel || NIVEL_PADRAO) === querNivel) continue;
+      this.raizObjetos.remove(obj);
+      this.objetos.delete(d.id);
+    }
     const faltando = estado.objetos.filter(o => !this.objetos.has(o.id));
     let feitos = 0;
     for (const d of faltando) {
@@ -353,7 +367,8 @@ export class Mundo {
            from export/manifest.json, 'cenario' from export/cenarios/. Both go
            through the same pivot wrapper, so a hangar and a 777 obey the same
            rule — origin at the X/Z bbox centre, base on y = 0. */
-        obj = d.tipo === 'prop' ? instanciarProp(d.slug) : await instanciar(d.slug);
+        obj = d.tipo === 'prop' ? instanciarProp(d.slug)
+                                : await instanciar(d.slug, d.nivel || NIVEL_PADRAO);
       } catch (e) {
         console.error('could not instantiate', d, e);
         continue;

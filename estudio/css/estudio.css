@@ -38,6 +38,9 @@ h3{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--frac
   margin:14px 0 6px;font-weight:600}
 h3 small{text-transform:none;letter-spacing:0;font-weight:400;opacity:.7}
 .nota{color:var(--fraco);font-size:11px;margin:6px 0 0}
+/* Two notes are written as several lines and were being collapsed into one:
+   the selection's measurements and the detail-tier comparison. */
+#medidas-sel,#nota-nivel{white-space:pre-line}
 a{color:var(--acento)}
 
 /* ------------------------------------------------------------------ bar */

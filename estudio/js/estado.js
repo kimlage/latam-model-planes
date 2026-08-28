@@ -63,7 +63,13 @@ export function estadoPadrao () {
   };
 }
 
-/** One instance in the scene. `slug` picks the asset; the rest is placement. */
+/** One instance in the scene. `slug` picks the asset; the rest is placement.
+ *
+ *  `nivel` — the DETAIL TIER — is deliberately absent by default rather than
+ *  written as 'web'. A scene document that never made a tier decision must
+ *  serialise exactly as it did before tiers existed, and an absent field reads
+ *  as frota.NIVEL_PADRAO everywhere. The field appears the moment the
+ *  inspector's `detail` control is used, and round-trips from there. */
 export function novoObjeto (tipo, slug, nome, extra = {}) {
   return {
     id: novoId(tipo === 'aeronave' ? 'a' : 'p'),
