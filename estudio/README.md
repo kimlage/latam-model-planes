@@ -1,9 +1,10 @@
 # `estudio/` — the scene studio
 
 A browser page that loads the exported fleet **and the three airports**, lets
-you **compose a scene** from them, and gets the result back out four ways: an
-**animated GIF**, a **navigable 3D embed** you can drop into another web page, a
-**scene JSON** that round-trips, and a **PNG still**.
+you **compose a scene** from them, **animate it on a timeline**, and gets the
+result back out five ways: an **animated GIF**, a **PNG sequence** for a real
+encoder, a **navigable 3D embed** that plays the clip, a **scene JSON** that
+round-trips, and a **PNG still**.
 
 57 GLB assets: 11 aircraft (CC BY 4.0) and 46 pieces of Guarulhos, São Carlos
 and Santiago (ODbL 1.0, share-alike), plus 9 authored massing props.
@@ -187,6 +188,8 @@ go stale the day a plate is re-cut.
 | **Object** | click-select in the viewport and in the outliner; shift-click to add to the selection; move / rotate / scale gizmos (W / E / R) with X / Y / Z axis constraints; local/world space (Q); numeric position, rotation and scale fields; translation and rotation snap increments; snap to ground (G); duplicate (Ctrl+D); delete (Del); per-object lock and hide; undo / redo (Ctrl+Z, Ctrl+Shift+Z). The selection read-out adds the asset's field, its licence and its note |
 | **Scene** | sun elevation / azimuth / intensity / colour; environment (generated sky, RoomEnvironment, none) and its intensity; background (sky, solid colour, transparent); exponential fog; ground on/off with six materials and a size; grid |
 | **Render** | tone mapping (ACES Filmic, AgX, Khronos Neutral, Reinhard, Linear); exposure; shadows on/off; shadow map 512–4096; export sampling 1–3×; pixel-ratio cap |
+| **Colour grade** | contrast, saturation, black lift, warm/cool, vignette — applied after tone mapping, in display space. **No motion blur**, and there will not be a fake one; see below |
+| **Timeline** | clip length and frame rate; a scrubbable playhead; play / pause / loop (space, ←/→, shift+←/→, Home/End); auto-key; an explicit **key** button (K); per-track mute and delete; per-key easing; draggable keys; `Motion…`, which writes flights and the four old GIF motions. Toggle the dock with **T** |
 
 The status line under the viewport reports fps, object count, triangles, draw
 calls and how many bytes of GLB have been fetched.
@@ -236,7 +239,181 @@ instances are `Object3D.clone()`s sharing geometry and materials.
 
 ---
 
-## The four exports
+## The timeline
+
+Before there was one, the studio could animate exactly one thing at a time,
+through four canned motions parameterised by a normalised *t*. That is a
+showroom loop, not a clip. The timeline replaces it, and the four motions are
+still there — as **presets that write keys you can then drag**.
+
+**The timeline lives in the scene document**, at `estado.linha`, and that single
+decision is what makes it undoable, savable, embeddable and exportable without a
+second code path. The schema stays `latam-estudio/1`: a reader that predates the
+timeline opens such a document and shows the scene at rest, which is the correct
+degradation and a better outcome than a version bump that would make it refuse.
+
+```jsonc
+"linha": {
+  "duracao": 7.95,          // seconds
+  "fps": 20,                // only rates whose GIF delay is a whole centisecond
+  "loop": true,
+  "autochave": false,       // auto-key
+  "trilhas": [              // keyframe tracks
+    { "id": "t1x2y", "canal": "camera.alvo", "ref": null, "mudo": false,
+      "chaves": [ { "t": 0, "v": [-232, 6.7, 0], "e": "pchip" },
+                  { "t": 1.35, "v": [-135.6, 6.7, 0], "e": "pchip" } ] }
+  ],
+  "voos": [ … ]             // flight behaviours — see below
+}
+```
+
+| channel | target | what it drives |
+|---|---|---|
+| `objeto.pos` `objeto.rot` `objeto.esc` | one scene object | position (m), rotation (degrees, XYZ), scale |
+| `objeto.visivel` `objeto.trem` | one scene object | visibility, and the landing gear — both **held**, never interpolated |
+| `camera.pos` `camera.alvo` `camera.fov` | the camera | where it is, what it looks at, the lens |
+| `sol.elev` `sol.azim` `sol.intensidade` | the sun | time of day, **including the shadows** |
+| `render.exposicao` | the renderer | a fade, or a stop of recovery over the clip |
+
+A key is `{ t, v, e }`: a time on the frame grid, a number or a triple, and an
+easing that governs the segment **leaving** it — Blender's convention, and the
+reason the last key's easing is inert.
+
+### Interpolation: monotone cubic, and this project already knew why
+
+The default is **PCHIP** — cubic Hermite with Fritsch–Carlson tangents. C¹,
+monotone, no overshoot, and a real derivative at every interior knot.
+
+The alternative was a smoothstep, and this repository has paid for that curve
+twice and written it down both times:
+
+- [`scenario_sbgr/shot_common.py::_slopes`](../scenario_sbgr/shot_common.py) —
+  a chain of smoothstepped camera segments has **zero derivative at every knot**,
+  which produced a 107 m/s² acceleration spike in the São Carlos module this one
+  was ported from.
+- [`scenario_sbgr/place_777.py::_subida`](../scenario_sbgr/place_777.py), fixed
+  in `96a2371` **the same day this timeline was built** — the same curve was
+  still in the aeroplane's own climb. At the lift-off frame the vertical speed
+  was 0.006 m/s and took nearly a second to reach 0.6: on screen the 777 clung
+  to the runway after its wheels were off.
+
+Per-key easing is offered — `linear` (constant rate, exact, and what a turntable
+wants), `suave` (smoothstep, which stops dead at *both* knots and is right for a
+single deliberate ease), `segurar` (hold) — but the default is the one that is
+correct, and the diamond on the track is shaped and coloured by its easing so
+you can see which is which without opening anything.
+
+**Two end conditions, and the difference matters.** Keyframe tracks use
+`m₀ = mₙ₋₁ = 0`, so a clip starts and ends at rest — what a camera move wants,
+and what `shot_common._slopes` itself ships. A **flight path** uses secant end
+conditions instead: with zero tangents an aeroplane would ease into and out of
+its own take-off roll, which is the runway-sticking bug wearing a different hat.
+
+### Flight — the attitude is derived, not keyed
+
+A flight is not a transform track. It is a **path** (waypoints carrying an
+altitude above the surface and a ground speed) plus a speed schedule, and
+everything about how the aeroplane is *pointing* falls out of it:
+
+| | |
+|---|---|
+| **heading** ψ | the horizontal tangent of the path. The nose is local −X, so ψ = atan2(dz, −dx) — checked against `cenas.js`, where GRU's 10L track (16.354° off +X) is written 196.354, which is exactly what this returns for that tangent |
+| **bank** φ | `tan φ = v·ψ̇ / g`, the coordinated-turn relation: the bank at which the lift vector's horizontal component supplies the centripetal acceleration the turn needs. Rate-limited (a transport rolls at 5–10 °/s) and capped. **The sign is worked out, not guessed**: d(forward)/dψ at ψ = 180° is (0,0,−1) while starboard there is (0,0,+1), so increasing ψ swings the nose to *port*, and a coordinated left turn puts the *port* wing down. Without the minus sign the aeroplane banked away from every turn it made |
+| **pitch** θ | `θ = γ + α`, where γ = atan(vs/v) is the flight-path angle read off the path and α is the angle of attack. α is not free: lift = ½ρv²S·C_L must equal the weight and C_L ≈ C_Lα·α, so **α ∝ 1/v²**. One number, `alfaRef` at `vRef`, and the model scales it |
+| **the rate limiter** | θ is then rate-limited at `taxaRot` °/s, and that one limiter does three jobs: the rotation on take-off (the target jumps to the take-off attitude at the rotation point and the nose walks up at 3.1 °/s, which is what makes a loaded 777 look loaded), the flare, and the de-rotation on landing |
+
+**The ground segment** needs no special case, because the path describes the
+**main-gear contact point** — on the pavement and in the air alike. Put that
+point where the path says it is, hang the body off it by the measured gear
+offset, and "rotate about the main gear" is what happens. The gear offset is
+measured off the GLB at instancing time: every aircraft here names its gear
+meshes (`TremNariz_*`, `TremP*`), 15 nodes on an A319 and 32 on a 787, and the
+777's main gear solves to x = 0.08 m from the instance's own origin. **Gear up
+is a key**, on the `objeto.trem` channel, held — because retraction is something
+a pilot does and you should be able to drag it.
+
+**Altitude is above the surface, blended.** At the pavement it *is* the pavement
+— GRU's 10R threshold section falls 18 cm across the take-off roll and the
+wheels follow it — and by 50 m up the datum is the surface height where the
+route began. Without that blend a flypast at 90 m AGL crossing a 26 m hangar
+climbs 26 m to keep its clearance, and the milder version of it showed up as
+±0.7 m/s of phantom climb where a path leaves the runway slab.
+
+**What is deliberately not modelled:** thrust, drag, weight, wind, ground
+effect, flap schedule. This is authoring, not a simulator. Every number below is
+a profile chosen to read right; the derivations above are what keep the profile
+self-consistent once you drag a waypoint.
+
+#### The two calibrations, and where they were measured
+
+| | heavy | light |
+|---|---|---|
+| source | [`scenario_sbgr/place_777.py`](../scenario_sbgr/place_777.py) — the GRU 777-300ER departure | [`scenario_sdsc/place_aircraft.py`](../scenario_sdsc/place_aircraft.py) — the São Carlos ferry A320 |
+| lift-off speed | 83 m/s | 58 m/s |
+| acceleration | 1.4 m/s² | 1.6 m/s² |
+| rotation rate | 3.1 °/s to 12.0° | 3.5 °/s to 13.0° |
+| climb gradient | **11 %** | **21 %** — twice the 777's, on a runway half the length |
+| approach | 71 m/s | 62 m/s |
+
+The chooser is the aircraft's **own measured length** (≥ 55 m is heavy), so a
+twelfth aeroplane exported tomorrow lands on the right side of the line with no
+table of type names anywhere.
+
+Two differences from the Blender profile, both deliberate:
+
+- the Blender clip rotates for 32 frames and then **jumps the pitch from 4° to
+  12° in one frame**. A rate limiter cannot do that, and it should not; the
+  recipe instead sets the rotation distance to `pitch ÷ rate × speed` so the
+  attitude is reached exactly *at* lift-off.
+- the climb is an exponential approach in *distance*, `alt(x) = G(x − Lₑ(1 −
+  e^{−x/Lₑ}))`, whose gradient has its **maximum derivative at lift-off**. The
+  waypoints through the first 120 m are deliberately dense, because the monotone
+  interpolator sets the tangent to zero at a knot where a flat segment meets a
+  climbing one — the same dead knot, reintroduced by the interpolation rather
+  than by the profile.
+
+#### The three recipes
+
+`Motion…` in the dock, with an aircraft selected. Each starts the route **where
+the aeroplane stands, along the heading it already faces** — nothing about GRU
+or about any runway is written into `presets.js`. Each optionally writes a
+camera track sampled *from the flight*, so the pan is exactly as fast as the
+aeroplane is at every instant.
+
+| recipe | what it builds | measured on the 777, 8 s |
+|---|---|---|
+| **take-off** | roll, rotation about the main gear, lift-off, exponential climb-out, a gear-up key six seconds after the wheels leave *if the clip lasts that long* | 644 m of path, wheels off at 5.14 s after a 409 m roll, pitch exactly 12.00° at lift-off rising to 12.7°, a 10.2 % gradient |
+| **landing** | 3° approach, flare, touchdown at the aeroplane's current position, decelerating rollout with the nose coming down | peak descent 3.85 m/s, **0.78 m/s at the wheels**, pitch 6.9° through the flare |
+| **flypast** | a low pass with a turn through it, so the derived bank is visible | 20.4° of bank into a port turn — the port wingtip 10.4 m below the starboard one, which is 30 m × sin 20.4° |
+
+The landing's flare took two attempts and the second one is the point of having
+a flight panel that *measures*. The first was an exponential in distance-to-go,
+which is beautifully flat at the wheels and therefore **steep at the top**,
+because all the height it had to lose was still there: the panel read −9.63 m/s
+peak descent on what is meant to be a 3° approach at 71 m/s, i.e. 3.72. The
+aeroplane dived into its own flare. What a flare *is*, is the descent rate
+bleeding off, so the path's slope now goes linearly from the glideslope to
+almost nothing and the height is its integral — continuous in both value and
+slope, with no dive anywhere.
+
+### Auto-key, and one rule that is not the DCC default
+
+| | |
+|---|---|
+| auto-key **on** | a move writes keys on position, rotation and scale, starting the tracks if they do not exist; the eye button in the outliner writes a visibility key |
+| auto-key **off** | a move on a channel that is **already animated** still writes a key |
+
+Blender discards that second drag. This studio does not, because the next frame
+would re-evaluate the track, the object would snap back, and there is no F-curve
+editor here to explain where the drag went.
+
+**Scrubbing writes nothing.** Moving the playhead is not an edit; a timeline
+that filled the undo stack with playhead positions would make undo useless
+exactly when it is needed. Keys, retimes, easings, flights and clip settings are
+each one history entry, and they ride in the same snapshot stack as everything
+else — undo undoes a key exactly the way it undoes a move.
+
+## The five exports
 
 ### 1. Animated GIF
 
@@ -257,14 +434,15 @@ a single frame and flickers across a loop. The second pass renders and encodes
 frame by frame and keeps no buffers, so a 90-frame 960 px export does not need
 200 MB of RAM.
 
-Four motions:
+**The motion is the timeline**, and it is the default the moment the scene has
+one. In that mode the frame count and the frame rate are the *clip's*, not the
+exporter's, and the fields go read-only: a GIF that renders a different number
+of frames than the playhead showed is a GIF nobody can direct. Frame *i* is
+exactly the frame the playhead shows at *i*/fps.
 
-- **turntable — camera orbits the scene**, at the current radius and height
-- **turntable — spin the selected object** about its own centre, camera fixed
-- **camera path — pose A → pose B**, smoothstepped, optionally ping-ponged so
-  the loop does not cut
-- **fixed camera — the selected object moves**, a distance along its own nose
-  (local −X) or a world axis, with an optional quadratic climb
+The four old motions are still in the menu for a scene JSON that predates the
+timeline, and they behave as they always did. But the way to *get* one now is
+`Motion…` in the dock, which writes it as keys.
 
 Every motion is bracketed by save/restore: an export leaves the scene, the
 camera and the object exactly where they were. The interactive render loop is
@@ -296,7 +474,52 @@ A representative export, verified with PIL rather than by eye:
 PIL: frames 60, unique durations {40 ms}, loop 0
 ```
 
-### 2. Navigable 3D embed
+And the shipped example clip, same treatment:
+
+```
+640×360, 159 frames, 2× supersample, 128 colours  →  2.60 MB in 2.2 s
+                                                      0.075 bytes/pixel/frame
+PIL: frames 159, unique durations {50 ms}, loop 0, 159 unique frames
+```
+
+**The encode is synchronous on the main thread and there is no worker.** The
+dialog now says so *with a number* before you click: measured at about 19
+million output pixels a second on the machine this was built on, GPU render
+included, so 159 frames of 640×360 at 2× is 2 s and a 400-frame 960 px export
+is nearer 15. A slower GPU will be several times worse. (The first version of
+that line used a made-up constant and overstated the wait by seventeen times,
+which is its own kind of dishonesty.) Moving the quantise-and-index pass to a
+worker is possible — the render must stay on the main thread — and is **not
+built**.
+
+**A vignette and an 8-bit GIF are enemies**, which is worth knowing before you
+reach for the grade. The palette is 128 or 256 colours and gifenc never dithers,
+so a smooth gradient bands; a *horizontal* sky gradient bands into horizontal
+stripes, which read as sky, while a vignette bands into **concentric arcs
+centred on the frame**, which read as a defect. The shipped example carries
+contrast, saturation, lift and a warm push, and no vignette at all, for exactly
+that reason. Going 128 → 256 colours cost 24 % of the file and fixed almost
+none of it.
+
+### 2. PNG sequence
+
+Every frame of the timeline as a PNG, at a chosen width and supersample, packed
+into **one ZIP** — because two hundred separate downloads is not a feature any
+browser will let you have. The ZIP is written by hand in about forty lines and
+is **stored, not compressed**: PNG is already deflated, so compressing it again
+buys nothing and costs a compressor. `unzip` opens it.
+
+This is the honest answer to "can the studio make an MP4". It cannot; a browser
+has no H.264 encoder worth the name. The dialog prints the command:
+
+```bash
+ffmpeg -framerate 20 -i quadro_%04d.png -c:v libx264 -pix_fmt yuv420p out.mp4
+```
+
+A transparent background keeps its alpha frame by frame, which combined with the
+shadow-catcher ground is an aeroplane and its shadow over nothing.
+
+### 3. Navigable 3D embed
 
 An `<iframe>`-able HTML file. It does **not** re-implement the renderer: it
 imports [`js/embed.js`](js/embed.js), which builds the *same* `Mundo` the studio
@@ -339,6 +562,18 @@ it a CSS size. `css/estudio.css` does; the generated embed did not, so the
 canvas laid out at twice the window and the page showed the top-left quarter of
 the frame. On a 1× display it looked correct, which is exactly why it survived.
 
+**The embed plays the timeline**, and that is nearly free: it imports the same
+`avaliar()` the studio uses and calls the same `mundo.aplicarLinha()`, so an
+embed cannot disagree with the GIF about a curve. It gets a transport bar —
+play/pause, back to start, a frame scrubber — and while the camera track is
+running the orbit controls stand down; pause the clip and the viewer gets the
+scene back from wherever the camera is. Two checkboxes decide whether it starts
+playing and whether the bar is shown.
+
+[`exemplo_embed_clipe.html`](exemplo_embed_clipe.html) in this folder is a real
+one, of the example clip below. Measured on it: the clock advances 2.00 s of
+clip in 2.00 s of wall time.
+
 **The limit, stated plainly:** this is *linked*, not *inlined*. One HTML file
 plus `estudio/vendor/` (2.1 MB, once, shared by every embed), `estudio/js/`
 (~60 kB) and one GLB per aircraft type (0.4–1.3 MB). Nothing comes from a CDN.
@@ -346,21 +581,73 @@ A true single-file embed would have to inline three.js, the Draco decoder *and*
 the GLBs as base64 — roughly 6 MB of HTML for a three-aircraft scene — and it is
 **not built**. If you need one, the honest route is to serve the folder.
 
-### 3. Scene JSON
+### 4. Scene JSON
 
 Schema `latam-estudio/1`. Objects and their transforms, the sun and sky, the
-render settings, the live camera, the two stored poses, and an `assets` table
-mapping each slug to its GLB path. Download, copy to clipboard, or import a file
-back. A save/load round trip was verified to return the same object count,
-ground type, environment preset and camera position to 0.1 m.
+render settings **including the colour grade**, the live camera, the two stored
+poses, **the whole timeline** — tracks, keys, easings and flights — and an
+`assets` table mapping each slug to its GLB path. Download, copy to clipboard,
+or import a file back.
 
-### 4. PNG still
+A save/load round trip was verified to return the same object count, ground
+type, environment preset and camera position to 0.1 m; with a flight in it, the
+evaluated position, **quaternion** and camera at five sample times come back to
+a maximum deviation of **0**.
+
+The flight's sampled table is a cache and lives in a `WeakMap`, not on the
+flight object. It was a field for one afternoon, which put three thousand
+samples of six arrays into the JSON (108 kB for a nine-point route), into
+`localStorage`, and — worst — into all sixty undo snapshots, because `clonar()`
+is a JSON round trip. A cache that survives serialisation is not a cache. The
+same document is 8 kB now.
+
+### 5. PNG still
 
 The viewport camera as it stands, at a chosen width and aspect, with 1–3×
 supersampling. A transparent background produces a PNG **with alpha** — combined
 with the *shadow catcher* ground you get an aircraft and its shadow on nothing,
 which is what a composite needs. Verified: 84,257 fully transparent pixels,
 1,870 fully opaque, 3,873 partial (the antialiased edges and the soft shadow).
+
+---
+
+## The worked example — `exemplo_clipe.gif`
+
+![a 777-300ER taking off from runway 10R at Guarulhos](exemplo_clipe.gif)
+
+**2.60 MB, 640 × 360, 159 frames at 20 fps (5 cs each), 7.95 s, loops.** Made
+entirely in the page, with the scene document that produced it committed beside
+it as [`exemplo_clipe.json`](exemplo_clipe.json) and the same clip as a playable
+embed in [`exemplo_embed_clipe.html`](exemplo_embed_clipe.html).
+
+It is the **Runway 10R at GRU** starter with three edits and two clicks:
+
+1. the 777 moved back to x = −232 so the whole take-off roll happens **on the
+   490 m of real 10R threshold section** — it lifts off at x = +176, with 69 m
+   of pavement to spare;
+2. the two lattice masts moved out of the camera's line;
+3. a light colour grade — contrast 1.06, saturation 1.10, a 0.02 black lift, a
+   touch of warmth, **no vignette**;
+4. `Motion… → take-off`, 8 s, *also key the camera to follow it*.
+
+That last step wrote everything else: the flight, a gear key, two camera-position
+keys and seven camera-target keys sampled from the flight itself.
+
+**What it shows, measured off the built curve rather than described:**
+
+| | |
+|---|---|
+| roll | 409 m of it, opening at 76 m/s and accelerating at 1.4 m/s² |
+| rotation | begins 88 m into the roll at 1.15 s, at **3.1 °/s**, about the **main gear** — measured at x = 0.08 m off the 777's own GLB, 22 gear meshes |
+| lift-off | **5.14 s**, at 83 m/s, with pitch at exactly **12.00°** — reached *at* the wheels leaving, not jumped to afterwards |
+| the first ten frames after it | vertical speed 0.78 → 4.29 m/s. The Blender clip's fix reached 0.40 → 3.31 in its first ten. **Nothing sticks to the runway** |
+| climb-out | to 8.63 m/s against 85 m/s — a **10.2 % gradient**, against the 11 % the profile was calibrated to — pitch settling at 12.7° |
+| the runway itself | the wheels follow the section's own relief, which falls 0.28 m → 0.10 m across the roll |
+| gear | down through the last frame, because retraction would start at 11.1 s and the clip has 7.95 — which is what the GRU Blender clip does too, for the same reason |
+| bank | 0.0°, and correctly so: it is a straight-line departure. The **flypast** recipe is where the bank model shows, at 20.4° with the port wingtip 10.4 m below the starboard one |
+
+Verified with PIL rather than by eye: 159 frames, one unique duration `{50 ms}`,
+loop 0, and **159 unique frames** — no repeats, no black frame.
 
 ---
 
@@ -379,15 +666,21 @@ estudio/
     mundo.js            the three.js world; the document's only projection
     editor.js           selection, gizmos, snapping, lock/hide
     cenas.js            the nine starter scenes, four of them on real bases
-    exportar.js         GIF, PNG, embed HTML, scene JSON
-    dialogos.js         the export and licence modals
-    embed.js            the runtime an exported embed loads
+    tempo.js            THE TIMELINE: the document, PCHIP, the flight model
+    tempoui.js          the dock — ruler, playhead, tracks, keys
+    presets.js          recipes that WRITE a timeline: three flights, four motions
+    exportar.js         GIF, PNG sequence, PNG still, embed HTML, scene JSON
+    dialogos.js         the export, motion, flight and licence modals
+    embed.js            the runtime an exported embed loads — it plays the clip
   vendor/               three.js r169 + Draco + gifenc, with their licences
-  exemplo_embed.html    a real generated embed, as the worked example
+  exemplo_embed.html         a real generated embed of the GRU stand scene
+  exemplo_clipe.gif          the worked example clip (below)
+  exemplo_clipe.json         the scene document that produced it
+  exemplo_embed_clipe.html   the same clip, as a playable embed
 ```
 
-`window.__estudio` exposes `{ mundo, editor, estado, historico,
-carregarDocumento, adicionar, atalho }`. That is deliberate: it is how the page
+`window.__estudio` exposes `{ mundo, editor, estado, historico, dock,
+carregarDocumento, adicionar, atalho, aplicarTempo, registrar }`. That is deliberate: it is how the page
 was driven and verified, and it is the only way to script it from outside.
 
 ---
@@ -409,10 +702,39 @@ was driven and verified, and it is the only way to script it from outside.
 - **Scenes live in this browser's `localStorage`.** Clearing site data clears
   them. Export the JSON to move a scene between machines.
 - **GIF is 8-bit and never dithers.** Skies band. That is the format, and the
-  colour-count control is how you trade against it.
+  colour-count control is how you trade against it. **Do not put a vignette on
+  a clip you are going to export as a GIF** — it turns the banding from
+  horizontal stripes, which read as sky, into concentric arcs, which read as a
+  defect.
 - **The GIF encode is synchronous on the main thread**, yielding every second
-  frame. A 400-frame 960 px export will make the page unresponsive for tens of
-  seconds. There is no worker.
+  frame. Measured at ~19 million output pixels a second here, so a 400-frame
+  960 px export is about fifteen unresponsive seconds, and several times that
+  on a slower GPU. The dialog states the estimate before you click. There is no
+  worker; moving the quantise-and-index pass into one is possible and is not
+  built.
+- **No motion blur, and there will not be a fake one.** Doing it properly in
+  three.js means accumulating sub-frames (N× the render cost, and it fights the
+  GIF's global palette) or a velocity buffer plus a custom material on every
+  mesh — which would mean cloning the shared materials the whole studio is built
+  on. The cheap fake, blending the previous frame, smears the static scenery
+  along with the aeroplane and reads as a dirty screen.
+- **The colour grade is display-referred and after tone mapping.** It is
+  contrast, saturation, lift, a warm/cool push and a vignette; it is not a LUT,
+  not per-channel curves, and not keyable except through exposure. While it is
+  the identity the renderer draws straight to the canvas with no extra pass —
+  verified pixel-for-pixel identical, max channel difference 0.
+- **One flight per aircraft.** Two would fight for the same position every frame
+  and the winner would be list order.
+- **A flight's ground profile is sampled 24 times along the route**, not
+  raycast per frame, and it is rebuilt when the scene changes under it. Move a
+  runway section without touching the flight and the profile is stale until
+  something invalidates it.
+- **Flight waypoints are not draggable in the viewport.** A route is built by a
+  recipe and edited through numbers in the flight panel, or rebuilt from where
+  the aeroplane now stands. There are no on-screen path handles.
+- **The timeline has no F-curve editor.** Easing is per key, chosen from four
+  named modes; there are no free tangent handles, and the key list is the only
+  view of a curve.
 - **"export sampling" only affects exports.** The interactive viewport's
   antialiasing is the WebGL context's own MSAA plus the pixel-ratio cap, and
   changing that would mean rebuilding the renderer and every compiled program.
