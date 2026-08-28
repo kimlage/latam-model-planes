@@ -88,16 +88,17 @@ CATEGORIAS = {
 
 # ------------------------------------------------------------------ exportar
 
-def exportar(campo, slugs, verboso=False):
+def exportar(campo, slugs, verboso=False, tier="completo"):
     d = CAMPOS[campo]
     blend = os.path.join(RAIZ, d["blend"])
     if not os.path.exists(blend):
         return {"campo": campo, "erro": "campo ausente: %s" % blend, "assets": []}
-    rel_json = os.path.join(PASTA, ".rel_cen_%s.json" % campo)
+    rel_json = os.path.join(PASTA, ".rel_cen_%s_%s.json" % (campo, tier))
     if os.path.exists(rel_json):
         os.remove(rel_json)
     cmd = [BLENDER, "-b", blend, "--factory-startup", "--python", _MOD, "--",
-           "--campo", campo, "--saida", SAIDA, "--relatorio", rel_json]
+           "--campo", campo, "--saida", SAIDA, "--relatorio", rel_json,
+           "--tier", tier]
     if slugs:
         cmd += ["--assets", ",".join(slugs)]
     t = time.time()
@@ -135,6 +136,22 @@ def verificar(a):
                      % (v["triangulos"], a["triangulos"]))
     if not v["draco"]:
         erros.append("sem Draco")
+
+    # TEXTURA TEM DE ESTAR DENTRO DO ARQUIVO. `verificar_glb.inspecionar` ja
+    # transforma um `uri` externo em erro; o que falta e o outro lado: um asset
+    # que o relatorio diz ter sido ASSADO e voltou sem nenhuma imagem perdeu a
+    # textura em silencio, e um .glb que carrega e um .glb que parece certo.
+    bake = a.get("bake")
+    if bake and v["n_imagens"] == 0:
+        erros.append("houve bake (%s) mas nenhuma imagem embutida"
+                     % ", ".join(bake.get("materiais", [])))
+    if not bake and v["n_imagens"]:
+        avisos.append("%d imagem(ns) sem bake declarado" % v["n_imagens"])
+    if bake:
+        mp_dito = bake.get("megapixels")
+        if mp_dito and abs(v["megapixels"] - mp_dito) > max(0.02, mp_dito * 0.02):
+            erros.append("%.2f MP no .glb x %.2f MP assados"
+                         % (v["megapixels"], mp_dito))
     cx = v["caixa"]
     if cx:
         for i, eixo in enumerate("XYZ"):
@@ -167,6 +184,7 @@ def verificar(a):
         "ok": not erros, "erros": erros, "avisos": avisos,
         "triangulos": v["triangulos"], "vertices": v["vertices"],
         "materiais": v["n_materiais"], "imagens": v["n_imagens"],
+        "megapixels": v["megapixels"], "bytes_imagens": v["bytes_imagens"],
         "caixa": cx, "draco": v["draco"], "nos": v["n_nos"],
         "extensoes": v["extensoes"],
     }
@@ -174,7 +192,10 @@ def verificar(a):
 
 # ----------------------------------------------------------------- manifesto
 
-def escrever_manifesto(assets, achatados):
+def escrever_manifesto(assets, achatados, assados=None, leve=None):
+    """Grava o manifesto. `leve` nao mexe em `assets`: o tier leve e uma SEGUNDA
+    linha de arquivos para os mesmos slugs, entao mora na sua propria secao."""
+    assados = dict(assados or {})
     caminho = os.path.join(SAIDA, "manifest.json")
     antigo = {}
     if os.path.exists(caminho):
@@ -183,8 +204,14 @@ def escrever_manifesto(assets, achatados):
                 m = json.load(f)
             antigo = {a["slug"]: a for a in m.get("assets", [])}
             achatados = {**m.get("materiais_achatados", {}), **achatados}
+            assados = {**m.get("materiais_assados", {}), **assados}
+            leve = {**m.get("tier_leve", {}), **(leve or {})}
         except Exception:                        # noqa: BLE001
             antigo = {}
+    leve = leve or {}
+    # um material que virou textura nao e mais uma perda: sai da lista de
+    # achatados, senao uma rodada parcial deixaria o mesmo nome nas duas tabelas
+    achatados = {k: v for k, v in achatados.items() if k not in assados}
     for a in assets:
         antigo[a["slug"]] = a
     ordem = list(CATALOGO)
@@ -206,6 +233,21 @@ def escrever_manifesto(assets, achatados):
             "campos": {k: {"rotulo": v["rotulo"], "blend": v["blend"],
                            "datum_z": v["datum_z"]} for k, v in CAMPOS.items()},
             "teto_faces": TETO_FACES,
+            "textura": {
+                "metodo": ("Cycles DIFFUSE bake para um atlas por asset, UV por "
+                           "smart_project, JPEG q%d embutido no .glb" % 82),
+                "orcamento_m_por_texel": {
+                    "superficie_perto": 0.30, "superficie_campo": 3.50,
+                    "estrutura": 0.12, "adereco": 0.05},
+                "nota": ("O bake acontece com a peca ainda nas coordenadas do "
+                         "campo: os materiais leem Geometry.Position (mundo) e "
+                         "TexCoord.Object, entao girar ou descer o datum antes "
+                         "de assar pintaria o padrao no lugar errado. O grupo "
+                         "de neblina e desviado - airlight e do render do "
+                         "aerodromo, nao do asset."),
+            },
+            "tier_leve": dict(sorted(leve.items())),
+            "materiais_assados": dict(sorted(assados.items())),
             "materiais_achatados": dict(sorted(achatados.items())),
             "assets": itens,
         }, f, indent=1)
@@ -219,10 +261,13 @@ def _linha(a):
         return "%-24s FALHOU  %s" % (a["slug"], a["erro"])
     v = a.get("verificacao") or {}
     t = a["caixa"]["tamanho"]
+    b = a.get("bake") or {}
+    tex = ("%5.2f MP %5.1f m/tx" % (v.get("megapixels", 0.0), b["m_por_texel"])
+           if b else "        - achatado")
     return ("%-24s %-11s %7d f %7d tri %2d mat  %7.1f x %6.1f x %7.1f m  "
-            "%8.1f kB  %s"
+            "%s  %8.1f kB  %s"
             % (a["slug"], a["categoria"], a["faces"], a["triangulos"],
-               a["materiais"], t[0], t[1], t[2], a["bytes"] / 1024,
+               a["materiais"], t[0], t[1], t[2], tex, a["bytes"] / 1024,
                "OK" if v.get("ok") else "VERIFICACAO FALHOU"))
 
 
@@ -244,6 +289,10 @@ def main():
     ap.add_argument("--verificar", action="store_true",
                     help="nao exporta: so le de volta o que ja esta em export/cenarios/")
     ap.add_argument("--listar", action="store_true", help="o catalogo, so isso")
+    ap.add_argument("--tier", default="completo", choices=("completo", "leve"),
+                    help="completo = orcamento cheio de textura; leve = metade "
+                         "do lado do atlas (um quarto dos pixels), so para os "
+                         "assets que tem textura, em <slug>.leve.glb")
     ap.add_argument("-v", "--verboso", action="store_true")
     a = ap.parse_args()
 
@@ -267,7 +316,8 @@ def main():
         for x in itens:
             verificar(x)
             print(_linha(x))
-        escrever_manifesto(itens, m.get("materiais_achatados", {}))
+        escrever_manifesto(itens, m.get("materiais_achatados", {}),
+                           m.get("materiais_assados", {}))
         return 1 if any(not (x.get("verificacao") or {}).get("ok") for x in itens) else 0
 
     if not os.path.exists(BLENDER):
@@ -275,13 +325,13 @@ def main():
     os.makedirs(SAIDA, exist_ok=True)
 
     campos = [a.campo] if a.campo else list(CAMPOS)
-    todos, achatados, ruins = [], {}, []
+    todos, achatados, assados, ruins = [], {}, {}, []
     for campo in campos:
         slugs = [s for s in a.assets if CATALOGO[s]["campo"] == campo] if a.assets else []
         if a.assets and not slugs:
             continue
         print("=== campo %s" % campo)
-        rel = exportar(campo, slugs, a.verboso)
+        rel = exportar(campo, slugs, a.verboso, a.tier)
         if rel.get("erro"):
             print("    FALHOU: %s" % rel["erro"])
             if rel.get("cauda"):
@@ -289,6 +339,7 @@ def main():
             ruins.append(campo)
             continue
         achatados.update(rel.get("materiais_achatados", {}))
+        assados.update(rel.get("materiais_assados", {}))
         for x in rel["assets"]:
             if not x.get("erro"):
                 verificar(x)
@@ -297,14 +348,29 @@ def main():
         print("    %.1f s" % rel.get("segundos", 0))
 
     bons = [x for x in todos if not x.get("erro")]
-    caminho = escrever_manifesto(bons, achatados)
+    if a.tier == "completo":
+        caminho = escrever_manifesto(bons, achatados, assados)
+    else:
+        caminho = escrever_manifesto([], {}, {}, leve={
+            x["slug"]: {"arquivo": x["arquivo"], "bytes": x["bytes"],
+                        "atlas": x["bake"]["atlas"],
+                        "m_por_texel": x["bake"]["m_por_texel"],
+                        "megapixels": (x.get("verificacao") or {}).get("megapixels"),
+                        "bytes_imagens": (x.get("verificacao") or {}).get("bytes_imagens")}
+            for x in bons if x.get("bake")})
     print("\n%s" % ("=" * 116))
     for x in todos:
         print(_linha(x))
     print("=" * 116)
     tot_b = sum(x["bytes"] for x in bons)
     tot_f = sum(x["faces"] for x in bons)
-    print("%d assets  %d faces  %.2f MB" % (len(bons), tot_f, tot_b / 1e6))
+    tot_i = sum((x.get("verificacao") or {}).get("bytes_imagens", 0) for x in bons)
+    tot_mp = sum((x.get("verificacao") or {}).get("megapixels", 0.0) for x in bons)
+    n_ass = sum(1 for x in bons if x.get("bake"))
+    print("[%s] %d assets  %d faces  %.2f MB  (textura: %d assets, %.1f MP, "
+          "%.2f MB = %.0f%% dos bytes)"
+          % (a.tier, len(bons), tot_f, tot_b / 1e6, n_ass, tot_mp, tot_i / 1e6,
+             100.0 * tot_i / tot_b if tot_b else 0))
     print("manifesto: %s" % os.path.relpath(caminho, RAIZ))
     mal = [x for x in bons if not (x.get("verificacao") or {}).get("ok")]
     falhos = [x for x in todos if x.get("erro")]

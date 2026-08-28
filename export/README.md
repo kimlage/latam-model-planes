@@ -365,17 +365,20 @@ notices from NOTICE.md with whatever you make.
 ## `cenarios/` — the airport tier
 
 ```bash
-python3 export_cenarios.py              # 46 assets from three fields, ~10 s
+python3 export_cenarios.py              # 46 assets from three fields, ~90 s
 python3 export_cenarios.py --listar     # the catalogue, without opening Blender
 python3 export_cenarios.py --campo sbgr # just Guarulhos
 python3 export_cenarios.py --verificar  # read every .glb back and check it
+python3 export_cenarios.py --tier leve  # half-size atlases, textured assets only
 ```
 
 46 composable pieces cut out of `scenario/scl_field.blend`,
 `scenario_sdsc/sdsc_field.blend` and `scenario_sbgr/sbgr_field.blend`:
-**53,797 faces and 0.47 MB of Draco GLB for the whole catalogue**, the heaviest
-single asset being the Guarulhos field plate at 27,648 faces and 89 kB for
-6.1 × 4.8 km of aerodrome.
+**53,797 faces and 1.64 MB of Draco GLB for the whole catalogue**, of which
+1.06 MB is baked texture on the 15 assets that carry any (see
+[The scenery materials are baked too](#the-scenery-materials-are-baked-too)
+below); the heaviest single asset is the Santiago field plate at 324 kB, and
+the Guarulhos one is 27,648 faces and 323 kB for 6.1 × 4.8 km of aerodrome.
 
 The builders merge everything into a few large meshes per material —
 `SBGR_Jetbridges` is *every* jetbridge at Guarulhos in one mesh spread over
@@ -389,7 +392,10 @@ the field**, cut one of two ways, chosen per piece:
   all-or-nothing on a 3.7 km polygon.
 
 Same conventions as the fleet: +Y up, metres, origin at the X/Z bounding-box
-centre, base on y = 0, Draco, and every file read back and verified. Two
+centre, base on y = 0, Draco, embedded textures, and every file read back and
+verified — including that the images really are **embedded** and not external
+URIs, that an asset the report says was baked came back with images at all, and
+that its megapixels match what the bake claims to have written. Two
 deliberate exceptions, both recorded in the manifest and both checked:
 
 - **field plates** are datumed on the **runway threshold**, not on their lowest
@@ -400,9 +406,110 @@ deliberate exceptions, both recorded in the manifest and both checked:
   *runway*, because a PAPI on one side alone pulls the box 21 m off the
   centreline.
 
-**What is lost:** the scenery materials are procedural node trees that glTF
-cannot carry, so each is flattened to a representative colour read from the
-material's own `diffuse_color` — which the builders set deliberately. All 93
-materials resolved that way; none needed a fallback. The substitution is
-recorded material by material in `cenarios/manifest.json` under
-`materiais_achatados`.
+### The scenery materials are baked too
+
+The scenery materials are procedural node trees that glTF cannot carry. They
+used to be flattened to one representative colour each — all 93 of them — and a
+runway plate with no rubber on it is not a runway. They are now **baked**, by
+the same technique the livery uses two sections above, with three differences
+that the scenery forces.
+
+**1. The bake happens before the piece moves.** These materials read
+`Geometry.Position`, which is a **world** coordinate, and the infield reads
+`TexCoord.Object`. `montar()` rotates the piece (for an `obb` region) and drops
+the datum. Baking after that would paint the pattern in the wrong place: the
+rubber would run diagonally across the runway instead of along it. So the bake
+runs immediately after the parts are joined and their matrices applied, while
+vertex = world = object coordinates are still the frame the pattern was drawn
+in. The proof is visible in the runway section: the rubber runs *along* the
+centreline, which only happens if the ordering is right.
+
+**2. The haze group is bypassed.** Every scenery material ends in a group that
+mixes airlight by camera distance — correct for a render of the aerodrome, wrong
+for an asset the studio will light itself. The bake relinks the Principled
+straight to the output, otherwise each asset would ship with the fog of one
+viewpoint painted into it permanently.
+
+**3. One atlas per asset, UV by `smart_project`.** The scenery has no UVs at
+all. A planar XY projection would be tighter on a carpet, but the **markings lie
+on top of the pavement** — same XY, same texels, one would overwrite the other.
+`smart_project` projects per coplanar island and packs without overlap, so
+different materials land in different islands of the same atlas and one image
+per asset is enough. Bake margin is 8 texels and the island margin is always
+larger, so dilation never crosses from one island into its neighbour.
+
+**Metres per texel** — the budget is set by the smallest feature each material
+draws, and the manifest records the *achieved* figure per asset, not the target:
+
+| class | target | achieved | why that number |
+|---|---|---|---|
+| `superficie_perto` | 0.30 m/texel | 0.24–0.32 | the lateral rubber streak is ~2.2 m wide; 0.30 gives it 7 texels |
+| `superficie_campo` | 3.50 m/texel | 2.5–3.3 | the finest infield feature is ~21 m; 3.5 gives it 6 texels |
+| `estrutura` | 0.12 m/texel | 0.09–0.46 | cladding ribs are pitched at 1 m; 0.12 gives 8 texels per rib |
+| `adereco` | 0.05 m/texel | — | nothing in the catalogue triggers it yet |
+
+Atlases are capped at **2048 for field plates and 1024 for everything else**.
+4096 was never used: on a 6.1 km plate it would buy 1.6 m/texel, which is still
+far too coarse to resolve a 2 m rubber streak, so it would cost four times the
+pixels to change nothing you can see.
+
+**What is baked and what is not.** The test is structural, not by name: a
+material is baked when its Principled has a *linked* Base Color or Roughness.
+**25 of the 93 materials** qualify, and the other **68 are constant colours** —
+all the GSE, glass, steel and roofing. Flattening those is exact, not a loss:
+there is nothing in them for a texture to carry. Both tables are in
+`cenarios/manifest.json`, under `materiais_assados` and `materiais_achatados`.
+
+**Roughness is a measured scalar, not a map.** Only the five runway materials
+vary it, and the whole range is 0.59–0.84 — asphalt slightly smoothed where
+rubber has been laid down, within ~15 m of the centreline. A map cost a second
+512² image (+25% on the asset), came out of the exporter packed into the green
+channel of a `metallicRoughness` texture whose colour-space conversion got the
+value wrong once already, and changes nothing visible in a viewer without a
+strong environment — the rubber is already in the *base colour*, which is the
+signal the eye uses. So each runway material carries a mean measured from a
+small bake instead: 0.812 for GRU's 10R/28L, 0.808 for São Carlos. Metallic is
+constant everywhere and stays a scalar.
+
+**Textures are JPEG q82, embedded.** The atlases are smooth noise with no alpha,
+which is the case where PNG is expensive and JPEG is cheap, and the packing
+leaves holes that are filled with the mean of what *was* baked — flat area that
+JPEG pays almost nothing for. Filling those holes matters: left black they make
+the asset darken as the mipmap blends hole with island.
+
+**The bill.** The catalogue was 0.47 MB flat; it is now **1.64 MB**, of which
+**1.06 MB (64%) is texture** across the 15 assets that have any. The heaviest
+asset is the Santiago field plate at 324 kB. Texture memory is 20.1 MP for the
+whole catalogue, and 4.19 MP for a single field plate.
+
+A **low-texture tier** is available for the cases where that is too much:
+
+```bash
+python3 export_cenarios.py --tier leve    # <slug>.leve.glb, only the 15 textured assets
+```
+
+`leve` halves every atlas side — a quarter of the pixels — and writes
+`<slug>.leve.glb` beside the full one, recorded in the manifest under
+`tier_leve`. Substituting all 15 brings the catalogue to **0.94 MB and 5.0 MP**.
+Assets with no texture get no `leve` variant, because a second identical file is
+not a level of detail.
+
+**What is still thin**, measured rather than guessed:
+
+- On a **field plate**, runway markings lose 27.5% of their luminance, against
+  the 14.9% that is genuine wear in the material (measured on the close-up
+  section, where texels are 13× finer). The cause is geometric: a 0.15 m marking
+  is well under one texel at 3.3 m/texel, so its UV island is a sliver and
+  filtering mixes it with the fill. Raising the bake margin to 8 recovered 3.5
+  of those points; the rest is inherent to the class. On a plate meant to be
+  seen 6 km wide, a marking is one screen pixel, so this was not worth more.
+- **Packing occupancy runs 0.09 to 0.92.** The bad end is long, thin, diagonal
+  pieces — `sdsc_mro_oficinas` (a 470 m workshop spine) and `sbgr_taxi_secao`.
+  They waste atlas *pixels*; they cost few *bytes*, because the fill is flat.
+  A `uv.pack_islands(rotate=True)` pass was tried and made it worse, not better
+  — it repacks the non-procedural faces too, whose UVs are degenerate.
+- `sdsc_mro_oficinas` lands at 0.46 m/texel against a 0.12 target: it is capped
+  at 1024 *and* packed badly, so its cladding ribs are not resolved.
+- The apron reads as **aged patchwork, not as discrete slabs with joints** —
+  because that is what `aged_pavement_material` draws. Slab joints would have to
+  be added in `scenario*/`, which this round did not touch.

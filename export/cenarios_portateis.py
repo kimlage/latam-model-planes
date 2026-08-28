@@ -586,6 +586,440 @@ def _achatar(m, relatorio):
 
 
 # ---------------------------------------------------------------------------
+# BAKE - os materiais procedurais viram textura
+#
+# Mesma tecnica que `frota_portatil.py` usa para a pintura: o que o glTF nao
+# sabe escrever, o Cycles assa. As diferencas em relacao a frota, todas
+# forcadas pelo que o cenario e:
+#
+#   1. QUANDO. Os materiais de cenario leem `Geometry.Position` - coordenada de
+#      MUNDO - e, no caso do infield, `TexCoord.Object`. `montar()` GIRA a peca
+#      (regiao obb) e desce o datum. Assar depois disso pintaria o padrao no
+#      lugar errado: a borracha da pista sairia atravessada e a grama deslizaria.
+#      Entao o bake acontece logo depois do `_juntar()`, com a peca ainda nas
+#      coordenadas do campo e a matriz ja aplicada (coordenada de vertice =
+#      coordenada de mundo = coordenada de objeto).
+#
+#   2. A NEBLINA SAI. Todo material de cenario termina num grupo de haze que
+#      mistura airlight por distancia de camera - correto para um render do
+#      aerodromo, errado para um asset que o estudio vai iluminar sozinho. O
+#      bake desvia o grupo e le o Principled direto, senao a pista sairia com a
+#      neblina de UM ponto de vista pintada nela para sempre.
+#
+#   3. UV. A frota ja tinha UV; o cenario nao tem nenhuma. As pecas sao tapetes
+#      e paredes, e `smart_project` resolve as duas: projeta por ilha coplanar,
+#      empacota sem sobreposicao e mantem densidade uniforme. Uma projecao
+#      planar XY seria mais eficiente no tapete, mas as MARCAS ficam POR CIMA do
+#      pavimento - mesmo XY, texels iguais, um escreveria sobre o outro.
+#
+#   4. UM ATLAS POR ASSET, nao um por (objeto, material). Materiais diferentes
+#      escrevem em ilhas diferentes do mesmo atlas, entao nao colidem, e uma
+#      imagem por asset e o que segura o orcamento de bytes.
+#
+# O QUE NAO E ASSADO: material cuja Base Color e Roughness sao constantes. Sao
+# 68 dos 93 - todo o GSE, vidros, aco, telhas. Nao ha nada neles para uma
+# textura carregar: achata-los e exato, nao e perda. A perda que sobra esta em
+# `materiais_achatados`; o que virou textura esta em `materiais_assados`.
+# ---------------------------------------------------------------------------
+
+# ORCAMENTO DE METROS POR TEXEL, por classe de asset, com o teto do atlas.
+#
+# Os numeros saem do tamanho da MENOR feicao que o material desenha:
+#   pavimento de perto  a estria lateral de borracha mede ~2,2 m (ruido de
+#                       escala 1,0 sobre l*0,45); 0,30 m/texel da 7 texels nela
+#   placa de campo      a feicao mais fina do infield mede ~21 m (ruido de
+#                       escala 48 sobre um mapping de 0,001); 3,5 m/texel da 6
+#                       texels nela. A borracha da pista NAO e resolvida nesta
+#                       classe, e isso e deliberado: numa placa de 6,1 km ela
+#                       tem menos de um pixel na tela de qualquer jeito.
+#   estrutura           a nervura do cladding tem passo de 1 m; 0,12 m/texel da
+#                       8 texels por nervura
+TEXEL = {
+    "superficie_perto": (0.30, 1024),
+    "superficie_campo": (3.50, 2048),
+    "estrutura": (0.12, 1024),
+    "adereco": (0.05, 512),
+}
+# acima desta pegada uma superficie e placa de campo, nao pedaco de perto
+PEGADA_CAMPO = 800.0
+
+# DOIS NIVEIS DE TEXTURA. `completo` e o orcamento acima. `leve` dobra os metros
+# por texel e corta o teto do atlas pela metade - um quarto dos pixels, e na
+# pratica cerca de um terco dos bytes. Existe porque o atlas e memoria de GPU
+# alem de bytes de rede: a placa de campo completa sozinha e 4,2 MP, e uma cena
+# que empilhe varias superficies num telefone prefere perder a estria fina da
+# borracha a perder o quadro. So os assets ASSADOS ganham variante leve - os
+# outros nao tem textura nenhuma, entao o arquivo normal ja e o leve.
+TIERS = {"completo": 1.0, "leve": 0.5}
+TIER = "completo"
+
+QUALIDADE_JPEG = 82
+# MARGEM DO BAKE, em texels. A margem dilata a cor da ilha para fora dela, e e o
+# que salva uma ilha FINA: a pintura de pista e uma fita de 0,15 m que, numa
+# placa de campo a 3,3 m/texel, nao chega a um texel de largura - sem margem
+# larga o filtro do GPU mistura a marca com o preenchimento medio do atlas e a
+# marca escurece (medido: -31% de luminancia contra os -15% que sao desgaste
+# real do material). A margem da ILHA no UV tem de ser MAIOR que esta, senao a
+# dilatacao de uma ilha invade a vizinha.
+MARGEM_BAKE = 8
+_DUMMY = None
+
+
+def _principled(m):
+    if not m or not m.use_nodes or not m.node_tree:
+        return None
+    for n in m.node_tree.nodes:
+        if n.type == "BSDF_PRINCIPLED":
+            return n
+    return None
+
+
+def _procedural(m):
+    """Ha padrao para uma textura carregar? Teste ESTRUTURAL, nao por nome."""
+    p = _principled(m)
+    if p is None:
+        return False
+    return p.inputs["Base Color"].is_linked or p.inputs["Roughness"].is_linked
+
+
+def _saida(m):
+    alvo = None
+    for n in m.node_tree.nodes:
+        if n.type == "OUTPUT_MATERIAL":
+            if n.is_active_output:
+                return n
+            alvo = alvo or n
+    return alvo
+
+
+def _desviar_haze(m):
+    """Liga o Principled direto na saida, tirando o grupo de neblina do caminho.
+
+    Sem isto o bake grava airlight - a neblina de um ponto de vista - dentro da
+    textura, e o asset chega ao estudio com o nevoeiro de Guarulhos pintado."""
+    out = _saida(m)
+    p = _principled(m)
+    if out is None or p is None:
+        return False
+    s = out.inputs["Surface"]
+    if s.is_linked and s.links[0].from_node is p:
+        return False
+    for l in list(m.node_tree.links):
+        if l.to_socket is s:
+            m.node_tree.links.remove(l)
+    m.node_tree.links.new(p.outputs["BSDF"], s)
+    return True
+
+
+def _dummy():
+    global _DUMMY
+    if _DUMMY is None:
+        _DUMMY = bpy.data.images.new("__bake_descarte", 4, 4, alpha=True)
+    return _DUMMY
+
+
+def _no_imagem(m, img):
+    """Poe (ou reaponta) o no de imagem ATIVO do material. O bake escreve nele."""
+    nd = None
+    for n in m.node_tree.nodes:
+        if n.type == "TEX_IMAGE" and n.name.startswith("__bake_alvo"):
+            nd = n
+            break
+    if nd is None:
+        nd = m.node_tree.nodes.new("ShaderNodeTexImage")
+        nd.name = "__bake_alvo"
+        nd.location = (-1500, 700)
+    nd.image = img
+    m.node_tree.nodes.active = nd
+    return nd
+
+
+def _tirar_nos_bake(mats):
+    for m in mats:
+        if not m or not m.use_nodes:
+            continue
+        for n in [x for x in m.node_tree.nodes
+                  if x.type == "TEX_IMAGE" and x.name.startswith("__bake_alvo")]:
+            m.node_tree.nodes.remove(n)
+
+
+def _pow2(n, teto, piso=64):
+    n = max(piso, min(teto, n))
+    e = max(6, min(int(round(math.log(n, 2))), int(round(math.log(teto, 2)))))
+    return int(2 ** e)
+
+
+def _densidade(me, idx_proc, uv_nome):
+    """Area 3D e area UV das faces procedurais. Devolve (uv_por_metro, area)."""
+    uvl = me.uv_layers[uv_nome].data
+    a3d = auv = 0.0
+    for p in me.polygons:
+        if p.material_index not in idx_proc:
+            continue
+        a3d += p.area
+        lp = [Vector((uvl[i].uv[0], uvl[i].uv[1], 0.0)) for i in p.loop_indices]
+        s = 0.0
+        for i in range(1, len(lp) - 1):
+            s += (lp[i] - lp[0]).cross(lp[i + 1] - lp[0]).length / 2
+        auv += s
+    if a3d <= 0 or auv <= 0:
+        return 0.0, 0.0
+    return math.sqrt(auv / a3d), a3d
+
+
+def _desdobrar(alvo, idx_proc, margem, uv_nome):
+    """smart_project sobre AS FACES PROCEDURAIS somente."""
+    me = alvo.data
+    if uv_nome in me.uv_layers:
+        me.uv_layers.remove(me.uv_layers[uv_nome])
+    me.uv_layers.new(name=uv_nome)
+    me.uv_layers.active = me.uv_layers[uv_nome]
+    me.uv_layers[uv_nome].active_render = True
+
+    bpy.ops.object.select_all(action="DESELECT")
+    alvo.select_set(True)
+    bpy.context.view_layer.objects.active = alvo
+    bpy.context.tool_settings.mesh_select_mode = (False, False, True)
+    bpy.ops.object.mode_set(mode="EDIT")
+    bm = bmesh.from_edit_mesh(me)
+    bm.faces.ensure_lookup_table()
+    for f in bm.faces:
+        f.select_set(f.material_index in idx_proc)
+    bmesh.update_edit_mesh(me)
+    bpy.ops.uv.smart_project(angle_limit=math.radians(66.0),
+                             island_margin=margem, correct_aspect=True,
+                             scale_to_bounds=False)
+    # MEDIDO: um `uv.pack_islands(rotate=True)` por cima DEGRADOU o
+    # empacotamento do smart_project em vez de melhora-lo (a secao de pista caiu
+    # de 43% para 1% de ocupacao), porque ele reempacota tambem as faces nao
+    # procedurais, cujas UV sao degeneradas na origem. Fica so o smart_project.
+    bpy.ops.object.mode_set(mode="OBJECT")
+
+
+def _preparar_cycles(scene, margem_px):
+    scene.render.engine = "CYCLES"
+    scene.cycles.samples = 1
+    scene.cycles.device = "CPU"
+    scene.cycles.use_denoising = False
+    scene.render.bake.use_selected_to_active = False
+    scene.render.bake.margin = margem_px
+    scene.render.bake.use_clear = True
+    scene.render.bake.use_pass_direct = False
+    scene.render.bake.use_pass_indirect = False
+    scene.render.bake.use_pass_color = True
+
+
+def _preencher_vazio(img):
+    """Texel nao coberto recebe a MEDIA do que foi assado.
+
+    O empacotamento deixa buracos entre ilhas. Deixa-los pretos faz a peca
+    ESCURECER quando o mipmap mistura buraco com ilha - o asset fica sujo de
+    longe. A media e neutra e desaparece no mip."""
+    import numpy as np
+    px = np.empty(len(img.pixels), dtype=np.float32)
+    img.pixels.foreach_get(px)
+    px = px.reshape(-1, 4)
+    cob = px[:, 3] > 0.5
+    n_cob = int(cob.sum())
+    if n_cob and n_cob < px.shape[0]:
+        px[~cob, :3] = px[cob, :3].mean(axis=0)
+    px[:, 3] = 1.0
+    img.pixels.foreach_set(px.reshape(-1))
+    img.update()
+    return n_cob / float(px.shape[0]) if px.shape[0] else 0.0
+
+
+def _probe_rugosidade(alvo, trabalho, alvo_i, lado=128):
+    """Rugosidade MEDIA de um material, medida num bake pequeno.
+
+    A cobertura NAO pode sair do alfa: o bake de ROUGHNESS devolve alfa 1 no
+    atlas inteiro, inclusive nos buracos do empacotamento, e uma media sobre
+    tudo le o preto dos buracos como rugosidade - foi assim que a pista saiu
+    com 0,033, ou seja espelho. Aqui a imagem e FLOAT e comeca com -1; com
+    `use_clear=False` o bake so escreve onde ha geometria, entao "texel > -0.5"
+    e a cobertura exata, sem depender de limiar nenhum."""
+    import numpy as np
+    img = bpy.data.images.new("__probe_rug", lado, lado, alpha=True,
+                              float_buffer=True)
+    img.colorspace_settings.name = "Non-Color"
+    img.pixels.foreach_set(np.full(lado * lado * 4, -1.0, dtype=np.float32))
+    for j, c in trabalho.items():
+        _no_imagem(c, img if j == alvo_i else _dummy())
+    sc = bpy.context.scene
+    margem_antes = sc.render.bake.margin
+    # MARGEM ZERO no probe: a margem extrapola a cor para fora da ilha e mistura
+    # com o -1 do fundo, e ai o "texel > -0.5" deixa passar meio sentinela - foi
+    # o que devolveu um minimo de -0,39 numa rugosidade que nao pode ser negativa
+    sc.render.bake.margin = 0
+    sc.render.bake.use_clear = False
+    bpy.ops.object.select_all(action="DESELECT")
+    alvo.select_set(True)
+    bpy.context.view_layer.objects.active = alvo
+    bpy.ops.object.bake(type="ROUGHNESS")
+    sc.render.bake.use_clear = True
+    sc.render.bake.margin = margem_antes
+    out = np.empty(lado * lado * 4, dtype=np.float32)
+    img.pixels.foreach_get(out)
+    out = out.reshape(-1, 4)
+    cob = out[:, 0] > -0.5
+    v = (float(out[cob, 0].mean()), float(out[cob, 0].min()),
+         float(out[cob, 0].max())) if cob.any() else None
+    bpy.data.images.remove(img)
+    return v
+
+
+def _material_assado(nome, base_img, princ, rug_escalar=None):
+    """Principled liso: Base Color do atlas, escalares herdados. glTF escreve."""
+    ma = bpy.data.materials.new(nome)
+    ma.use_nodes = True
+    nt = ma.node_tree
+    for n in list(nt.nodes):
+        nt.nodes.remove(n)
+    out = nt.nodes.new("ShaderNodeOutputMaterial")
+    out.location = (300, 0)
+    b = nt.nodes.new("ShaderNodeBsdfPrincipled")
+    b.location = (0, 0)
+    nt.links.new(b.outputs["BSDF"], out.inputs["Surface"])
+    nd = nt.nodes.new("ShaderNodeTexImage")
+    nd.image = base_img
+    nd.location = (-400, 200)
+    nt.links.new(nd.outputs["Color"], b.inputs["Base Color"])
+    if princ is not None:
+        for chave in ("Metallic", "Roughness", "IOR", "Alpha"):
+            sn, sv = b.inputs.get(chave), princ.inputs.get(chave)
+            if sn is not None and sv is not None and not sv.is_linked:
+                sn.default_value = sv.default_value
+    if rug_escalar is not None:
+        b.inputs["Roughness"].default_value = rug_escalar
+    return ma
+
+
+def _classe(spec, pegada):
+    cat = spec["categoria"]
+    if cat == "superficie":
+        return "superficie_campo" if pegada >= PEGADA_CAMPO else "superficie_perto"
+    if cat == "estrutura":
+        return "estrutura"
+    return "adereco"
+
+
+def assar_materiais(alvo, spec, slug, relatorio):
+    """Assa o que for procedural num atlas; achata o resto. Devolve o relatorio.
+
+    CHAMAR ANTES de girar ou descer o datum - ver o cabecalho da secao."""
+    me = alvo.data
+    originais = list(me.materials)
+    idx_proc = {i for i, m in enumerate(originais) if _procedural(m)}
+    # so contam os materiais que sobreviveram ao recorte
+    usados = {p.material_index for p in me.polygons}
+    idx_proc &= usados
+    if not idx_proc:
+        for i, m in enumerate(originais):
+            me.materials[i] = _achatar(m, relatorio)
+        return None
+
+    co = [Vector(v.co) for v in me.vertices]
+    pegada = max(max(v.x for v in co) - min(v.x for v in co),
+                 max(v.y for v in co) - min(v.y for v in co))
+    classe = _classe(spec, pegada)
+    alvo_mpt, teto = TEXEL[classe]
+    escala = TIERS[TIER]
+    alvo_mpt, teto = alvo_mpt / escala, max(64, int(teto * escala))
+
+    uv_nome = "assado"
+    _desdobrar(alvo, idx_proc, (MARGEM_BAKE + 3) / 1024.0, uv_nome)
+    uv_m, area = _densidade(me, idx_proc, uv_nome)
+    if uv_m <= 0:
+        for i, m in enumerate(originais):
+            me.materials[i] = _achatar(m, relatorio)
+        return None
+
+    lado = _pow2(int(round(1.0 / (alvo_mpt * uv_m))), teto)
+    # segunda passada: a margem da ilha agora pode ser dita em texels do atlas
+    # que vamos mesmo usar, para o margin do bake nao sangrar de uma ilha a outra
+    _desdobrar(alvo, idx_proc, (MARGEM_BAKE + 3) / float(lado), uv_nome)
+    uv_m, area = _densidade(me, idx_proc, uv_nome)
+    lado = _pow2(int(round(1.0 / (alvo_mpt * uv_m))), teto)
+    mpt = 1.0 / (lado * uv_m) if uv_m else 0.0
+
+    # RUGOSIDADE: ESCALAR MEDIDO, nao mapa. So os materiais de pista tem
+    # Roughness ligada, e a variacao inteira vale 0,59..0,84 - o asfalto fica um
+    # pouco menos aspero onde a borracha o alisou, dentro de uns 15 m do eixo.
+    # Um mapa custou 512x512 a mais (+25% dos bytes do asset), sai do exportador
+    # embutido no canal G de uma textura metallicRoughness cuja conversao de
+    # espaco de cor ja errou o valor uma vez, e num visualizador sem ambiente
+    # forte nao muda o que se ve - a borracha ja esta na COR base, que e o sinal
+    # que o olho usa. Entao mede-se a media e escreve-se um escalar por
+    # material. A frota faz a mesma escolha no LOD web.
+    liga_rug = [i for i in sorted(idx_proc)
+                if _principled(originais[i]).inputs["Roughness"].is_linked]
+
+    base_img = bpy.data.images.new("%s_BaseColor" % slug, lado, lado, alpha=True)
+    trabalho = {}
+    for i in sorted(idx_proc):
+        c = originais[i].copy()
+        c.name = "%s__%s__bake" % (originais[i].name, slug)
+        _desviar_haze(c)
+        me.materials[i] = c
+        trabalho[i] = c
+    planos = {}
+    for i, m in enumerate(me.materials):
+        if i in idx_proc:
+            continue
+        planos[i] = _achatar(originais[i], relatorio)
+        me.materials[i] = planos[i]
+
+    _preparar_cycles(bpy.context.scene, MARGEM_BAKE)
+    for i, c in trabalho.items():
+        _no_imagem(c, base_img)
+    for i, f in planos.items():
+        _no_imagem(f, _dummy())
+    bpy.ops.object.select_all(action="DESELECT")
+    alvo.select_set(True)
+    bpy.context.view_layer.objects.active = alvo
+    bpy.ops.object.bake(type="DIFFUSE")
+    cobertura = _preencher_vazio(base_img)
+
+    escalares, faixas = {}, {}
+    # um probe POR MATERIAL: assar todos de uma vez daria a media MISTURADA de
+    # pista e pintura, que nao e a rugosidade de nenhuma das duas
+    for i in liga_rug:
+        v = _probe_rugosidade(alvo, trabalho, i)
+        if v is not None:
+            escalares[i] = round(v[0], 4)
+            faixas[originais[i].name] = [round(v[1], 3), round(v[2], 3)]
+
+    for i in sorted(idx_proc):
+        orig = originais[i]
+        limpo = _material_assado("baked_" + orig.name, base_img,
+                                 _principled(trabalho[i]), escalares.get(i))
+        me.materials[i] = limpo
+        relatorio.setdefault("materiais_assados", {})[orig.name] = {
+            "atlas": slug,
+            "rugosidade": ("escalar medido %.3f" % escalares[i]
+                           if i in escalares else "herdada do Principled"),
+        }
+    _tirar_nos_bake(list(trabalho.values()) + list(planos.values()))
+    for c in trabalho.values():
+        bpy.data.materials.remove(c)
+
+    mp = lado * lado / 1e6
+    return {
+        "classe": classe, "tier": TIER, "atlas": [lado, lado],
+        "m_por_texel": round(mpt, 3), "alvo_m_por_texel": alvo_mpt,
+        "area_m2": round(area, 1), "ocupacao": round(cobertura, 3),
+        "megapixels": round(mp, 3),
+        "rugosidade": ("escalar medido: " + ", ".join(
+            "%s=%.3f" % (originais[i].name, v)
+            for i, v in sorted(escalares.items()))
+            if escalares else "herdada do Principled"),
+        "rugosidade_faixa": faixas,
+        "materiais": sorted(originais[i].name for i in idx_proc),
+        "achatados": sorted(originais[i].name for i in planos),
+    }
+
+
+# ---------------------------------------------------------------------------
 # recorte
 # ---------------------------------------------------------------------------
 
@@ -703,7 +1137,7 @@ def _cortar_planos(obj, regiao):
 # um asset
 # ---------------------------------------------------------------------------
 
-def montar(slug, spec, campo, pasta, relatorio):
+def montar(slug, spec, campo, pasta, relatorio, sufixo=""):
     dep = bpy.context.evaluated_depsgraph_get()
     regiao = spec.get("regiao")
 
@@ -756,6 +1190,13 @@ def montar(slug, spec, campo, pasta, relatorio):
     alvo = _juntar(partes)
     alvo.name = slug
 
+    # BAKE AQUI, e nao depois. Os materiais leem Geometry.Position (mundo) e
+    # TexCoord.Object; `_juntar` acabou de aplicar as matrizes, entao neste
+    # ponto coordenada de vertice = de mundo = de objeto, exatamente o frame em
+    # que o padrao foi desenhado. Girar ou descer o datum antes do bake pintaria
+    # a borracha atravessada na pista e faria a grama deslizar.
+    bake = assar_materiais(alvo, spec, slug, relatorio)
+
     # gira o pedaco para o eixo, quando a regiao e orientada
     if regiao and regiao["tipo"] == "obb":
         c = Vector((regiao["x"], regiao["y"], 0.0))
@@ -806,9 +1247,10 @@ def montar(slug, spec, campo, pasta, relatorio):
     bm.to_mesh(alvo.data)
     bm.free()
 
-    # materiais achatados
-    for i, m in enumerate(alvo.data.materials):
-        alvo.data.materials[i] = _achatar(m, relatorio)
+    # os materiais ja foram resolvidos por `assar_materiais` (assados os
+    # procedurais, achatados os constantes) antes de a peca sair do frame do
+    # campo. Aqui so sobra o caso do asset sem nenhum procedural, que aquela
+    # funcao ja achatou por inteiro.
 
     faces0 = len(alvo.data.polygons)
     razao = None
@@ -825,7 +1267,7 @@ def montar(slug, spec, campo, pasta, relatorio):
     mn = Vector((min(v.x for v in co), min(v.y for v in co), min(v.z for v in co)))
     mx = Vector((max(v.x for v in co), max(v.y for v in co), max(v.z for v in co)))
 
-    arquivo = os.path.join(pasta, "%s.glb" % slug)
+    arquivo = os.path.join(pasta, "%s%s.glb" % (slug, sufixo))
     bpy.ops.object.select_all(action="DESELECT")
     alvo.select_set(True)
     bpy.context.view_layer.objects.active = alvo
@@ -835,12 +1277,25 @@ def montar(slug, spec, campo, pasta, relatorio):
         filepath=arquivo, export_format="GLB", export_apply=True,
         export_yup=True, use_selection=True,
         export_materials="EXPORT", export_cameras=False, export_lights=False,
-        export_extras=False, export_copyright=direitos, **DRACO)
+        export_extras=False, export_copyright=direitos,
+        # JPEG, e nao PNG: o atlas assado e ruido suave sem alfa, o caso em que
+        # o PNG e caro e o JPEG e barato. E o empacotamento deixa buracos que o
+        # `_preencher_vazio` uniformizou - area lisa que o JPEG paga quase nada.
+        export_image_format="JPEG", export_jpeg_quality=QUALIDADE_JPEG,
+        **DRACO)
 
     bytes_ = os.path.getsize(arquivo)
     faces = len(alvo.data.polygons)
     n_mat = len(alvo.data.materials)
     bpy.data.objects.remove(alvo, do_unlink=True)
+
+    # libera o atlas depois de exportado: 2048^2 em float sao ~67 MB por
+    # imagem, e um campo assa varios assets na mesma sessao de Blender
+    for img in [i for i in bpy.data.images if i.name.startswith(slug + "_")]:
+        bpy.data.images.remove(img)
+    for m in [x for x in bpy.data.materials
+              if x.name.startswith("baked_") and x.users == 0]:
+        bpy.data.materials.remove(m)
 
     # glTF: X = Blender X, Y = Blender Z, Z = -Blender Y
     caixa = {
@@ -856,6 +1311,7 @@ def montar(slug, spec, campo, pasta, relatorio):
         "faces": faces, "faces_origem": faces0, "decimado": razao,
         "triangulos": tris, "vertices": len(co),
         "materiais": n_mat,
+        "bake": bake,
         "caixa": caixa,
         "fonte": {
             "blend": campo["blend"],
@@ -879,23 +1335,37 @@ def main():
     ap.add_argument("--saida", required=True)
     ap.add_argument("--relatorio", required=True)
     ap.add_argument("--assets", default="")
+    ap.add_argument("--tier", default="completo", choices=sorted(TIERS))
     a = ap.parse_args(argv_apos_dashdash())
+    global TIER
+    TIER = a.tier
+    sufixo = "" if a.tier == "completo" else "." + a.tier
 
     campo = CAMPOS[a.campo]
     os.makedirs(a.saida, exist_ok=True)
     alvos = [s for s in a.assets.split(",") if s] or \
         [s for s, d in CATALOGO.items() if d["campo"] == a.campo]
 
-    relatorio = {"campo": a.campo, "assets": [], "materiais_achatados": {}}
+    relatorio = {"campo": a.campo, "tier": a.tier, "assets": [],
+                 "materiais_achatados": {}}
     for slug in alvos:
         spec = CATALOGO[slug]
         _limpar_temporarios()
         try:
-            r = montar(slug, spec, campo, a.saida, relatorio)
+            r = montar(slug, spec, campo, a.saida, relatorio, sufixo)
         except Exception as exc:            # noqa: BLE001 - queremos o motivo
             import traceback
             r = {"slug": slug, "erro": str(exc),
                  "traceback": traceback.format_exc()[-1200:]}
+        # no tier leve so faz sentido reexportar o que TEM textura: um asset
+        # achatado sairia byte a byte igual ao normal, e um segundo arquivo
+        # identico nao e um nivel de detalhe, e um arquivo a mais para baixar
+        if a.tier != "completo" and not r.get("erro") and not r.get("bake"):
+            caminho = os.path.join(a.saida, r["arquivo"])
+            if os.path.exists(caminho):
+                os.remove(caminho)
+            print("[cenario] %-24s sem textura: nao ha tier leve" % slug)
+            continue
         relatorio["assets"].append(r)
         print("[cenario] %-24s %s" % (slug, r.get("erro") or
               "%d faces, %d bytes" % (r["faces"], r["bytes"])))

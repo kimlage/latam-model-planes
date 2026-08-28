@@ -50,6 +50,285 @@
   }
  },
  "teto_faces": 60000,
+ "textura": {
+  "metodo": "Cycles DIFFUSE bake para um atlas por asset, UV por smart_project, JPEG q82 embutido no .glb",
+  "orcamento_m_por_texel": {
+   "superficie_perto": 0.3,
+   "superficie_campo": 3.5,
+   "estrutura": 0.12,
+   "adereco": 0.05
+  },
+  "nota": "O bake acontece com a peca ainda nas coordenadas do campo: os materiais leem Geometry.Position (mundo) e TexCoord.Object, entao girar ou descer o datum antes de assar pintaria o padrao no lugar errado. O grupo de neblina e desviado - airlight e do render do aerodromo, nao do asset."
+ },
+ "tier_leve": {
+  "sbgr_galpao_carga": {
+   "arquivo": "sbgr_galpao_carga.leve.glb",
+   "bytes": 20800,
+   "atlas": [
+    512,
+    512
+   ],
+   "m_por_texel": 0.304,
+   "megapixels": 0.26,
+   "bytes_imagens": 18659
+  },
+  "sbgr_hangar_latam": {
+   "arquivo": "sbgr_hangar_latam.leve.glb",
+   "bytes": 88028,
+   "atlas": [
+    512,
+    512
+   ],
+   "m_por_texel": 0.455,
+   "megapixels": 0.26,
+   "bytes_imagens": 21004
+  },
+  "sbgr_hangar_mro": {
+   "arquivo": "sbgr_hangar_mro.leve.glb",
+   "bytes": 20804,
+   "atlas": [
+    512,
+    512
+   ],
+   "m_por_texel": 0.531,
+   "megapixels": 0.26,
+   "bytes_imagens": 17662
+  },
+  "sbgr_patio": {
+   "arquivo": "sbgr_patio.leve.glb",
+   "bytes": 13184,
+   "atlas": [
+    512,
+    512
+   ],
+   "m_por_texel": 0.477,
+   "megapixels": 0.26,
+   "bytes_imagens": 9825
+  },
+  "sbgr_pista_secao": {
+   "arquivo": "sbgr_pista_secao.leve.glb",
+   "bytes": 20972,
+   "atlas": [
+    512,
+    512
+   ],
+   "m_por_texel": 0.501,
+   "megapixels": 0.26,
+   "bytes_imagens": 12400
+  },
+  "sbgr_placa_campo": {
+   "arquivo": "sbgr_placa_campo.leve.glb",
+   "bytes": 194876,
+   "atlas": [
+    1024,
+    1024
+   ],
+   "m_por_texel": 6.858,
+   "megapixels": 1.05,
+   "bytes_imagens": 76156
+  },
+  "sbgr_taxi_secao": {
+   "arquivo": "sbgr_taxi_secao.leve.glb",
+   "bytes": 15564,
+   "atlas": [
+    512,
+    512
+   ],
+   "m_por_texel": 0.633,
+   "megapixels": 0.26,
+   "bytes_imagens": 11380
+  },
+  "scl_base_latam": {
+   "arquivo": "scl_base_latam.leve.glb",
+   "bytes": 59568,
+   "atlas": [
+    256,
+    256
+   ],
+   "m_por_texel": 0.172,
+   "megapixels": 0.07,
+   "bytes_imagens": 2142
+  },
+  "scl_placa_campo": {
+   "arquivo": "scl_placa_campo.leve.glb",
+   "bytes": 143572,
+   "atlas": [
+    1024,
+    1024
+   ],
+   "m_por_texel": 6.205,
+   "megapixels": 1.05,
+   "bytes_imagens": 90453
+  },
+  "sdsc_hangar9": {
+   "arquivo": "sdsc_hangar9.leve.glb",
+   "bytes": 78980,
+   "atlas": [
+    512,
+    512
+   ],
+   "m_por_texel": 0.377,
+   "megapixels": 0.26,
+   "bytes_imagens": 20266
+  },
+  "sdsc_hangar_midfield": {
+   "arquivo": "sdsc_hangar_midfield.leve.glb",
+   "bytes": 24128,
+   "atlas": [
+    512,
+    512
+   ],
+   "m_por_texel": 0.187,
+   "megapixels": 0.26,
+   "bytes_imagens": 17818
+  },
+  "sdsc_mro_hangar": {
+   "arquivo": "sdsc_mro_hangar.leve.glb",
+   "bytes": 26668,
+   "atlas": [
+    512,
+    512
+   ],
+   "m_por_texel": 0.238,
+   "megapixels": 0.26,
+   "bytes_imagens": 20268
+  },
+  "sdsc_mro_oficinas": {
+   "arquivo": "sdsc_mro_oficinas.leve.glb",
+   "bytes": 10524,
+   "atlas": [
+    512,
+    512
+   ],
+   "m_por_texel": 0.913,
+   "megapixels": 0.26,
+   "bytes_imagens": 7196
+  },
+  "sdsc_placa_campo": {
+   "arquivo": "sdsc_placa_campo.leve.glb",
+   "bytes": 72836,
+   "atlas": [
+    512,
+    512
+   ],
+   "m_por_texel": 6.004,
+   "megapixels": 0.26,
+   "bytes_imagens": 23339
+  },
+  "sdsc_torre_xadrez": {
+   "arquivo": "sdsc_torre_xadrez.leve.glb",
+   "bytes": 9188,
+   "atlas": [
+    128,
+    128
+   ],
+   "m_por_texel": 0.213,
+   "megapixels": 0.02,
+   "bytes_imagens": 5159
+  }
+ },
+ "materiais_assados": {
+  "SBGR_ApronConcrete": {
+   "atlas": "sbgr_placa_campo",
+   "rugosidade": "herdada do Principled"
+  },
+  "SBGR_Cladding": {
+   "atlas": "sbgr_galpao_carga",
+   "rugosidade": "herdada do Principled"
+  },
+  "SBGR_CladdingPale": {
+   "atlas": "sbgr_hangar_latam",
+   "rugosidade": "herdada do Principled"
+  },
+  "SBGR_Infield": {
+   "atlas": "sbgr_placa_campo",
+   "rugosidade": "herdada do Principled"
+  },
+  "SBGR_MarkingWhite": {
+   "atlas": "sbgr_placa_campo",
+   "rugosidade": "herdada do Principled"
+  },
+  "SBGR_MarkingYellow": {
+   "atlas": "sbgr_placa_campo",
+   "rugosidade": "herdada do Principled"
+  },
+  "SBGR_Runway_10L28R": {
+   "atlas": "sbgr_placa_campo",
+   "rugosidade": "escalar medido 0.820"
+  },
+  "SBGR_Runway_10R28L": {
+   "atlas": "sbgr_placa_campo",
+   "rugosidade": "escalar medido 0.816"
+  },
+  "SBGR_TaxiwayAsphalt": {
+   "atlas": "sbgr_placa_campo",
+   "rugosidade": "herdada do Principled"
+  },
+  "SCL_Concrete": {
+   "atlas": "scl_placa_campo",
+   "rugosidade": "herdada do Principled"
+  },
+  "SCL_LATAM_DoorPanels": {
+   "atlas": "scl_base_latam",
+   "rugosidade": "herdada do Principled"
+  },
+  "SCL_MarkingWhite": {
+   "atlas": "scl_placa_campo",
+   "rugosidade": "herdada do Principled"
+  },
+  "SCL_MarkingYellow": {
+   "atlas": "scl_placa_campo",
+   "rugosidade": "herdada do Principled"
+  },
+  "SCL_Runway_17L35R": {
+   "atlas": "scl_placa_campo",
+   "rugosidade": "escalar medido 0.818"
+  },
+  "SCL_Runway_17R35L": {
+   "atlas": "scl_placa_campo",
+   "rugosidade": "escalar medido 0.712"
+  },
+  "SCL_Soil": {
+   "atlas": "scl_placa_campo",
+   "rugosidade": "herdada do Principled"
+  },
+  "SCL_TaxiwayAsphalt": {
+   "atlas": "scl_placa_campo",
+   "rugosidade": "herdada do Principled"
+  },
+  "SDSC_Chequer": {
+   "atlas": "sdsc_torre_xadrez",
+   "rugosidade": "herdada do Principled"
+  },
+  "SDSC_Cladding": {
+   "atlas": "sdsc_hangar_midfield",
+   "rugosidade": "herdada do Principled"
+  },
+  "SDSC_Concrete": {
+   "atlas": "sdsc_placa_campo",
+   "rugosidade": "herdada do Principled"
+  },
+  "SDSC_Infield": {
+   "atlas": "sdsc_placa_campo",
+   "rugosidade": "herdada do Principled"
+  },
+  "SDSC_MarkingWhite": {
+   "atlas": "sdsc_placa_campo",
+   "rugosidade": "herdada do Principled"
+  },
+  "SDSC_MarkingYellow": {
+   "atlas": "sdsc_placa_campo",
+   "rugosidade": "herdada do Principled"
+  },
+  "SDSC_Runway_0220": {
+   "atlas": "sdsc_placa_campo",
+   "rugosidade": "escalar medido 0.808"
+  },
+  "SDSC_TaxiwayAsphalt": {
+   "atlas": "sdsc_placa_campo",
+   "rugosidade": "herdada do Principled"
+  }
+ },
  "materiais_achatados": {
   "SBGR_AABand": {
    "cor": [
@@ -71,16 +350,6 @@
    "rugosidade": 0.45,
    "emissivo": false
   },
-  "SBGR_ApronConcrete": {
-   "cor": [
-    0.2,
-    0.196,
-    0.184
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.86,
-   "emissivo": false
-  },
   "SBGR_BareConcrete": {
    "cor": [
     0.175,
@@ -99,26 +368,6 @@
    ],
    "fonte": "diffuse_color",
    "rugosidade": 0.65,
-   "emissivo": false
-  },
-  "SBGR_Cladding": {
-   "cor": [
-    0.25,
-    0.252,
-    0.248
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.62,
-   "emissivo": false
-  },
-  "SBGR_CladdingPale": {
-   "cor": [
-    0.3,
-    0.3,
-    0.295
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.62,
    "emissivo": false
   },
   "SBGR_EdgeLightFitting": {
@@ -191,16 +440,6 @@
    "rugosidade": 0.9,
    "emissivo": false
   },
-  "SBGR_Infield": {
-   "cor": [
-    0.062,
-    0.098,
-    0.026
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.95,
-   "emissivo": false
-  },
   "SBGR_Jetbridge": {
    "cor": [
     0.36,
@@ -261,26 +500,6 @@
    "rugosidade": 0.7,
    "emissivo": false
   },
-  "SBGR_MarkingWhite": {
-   "cor": [
-    0.52,
-    0.518,
-    0.498
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.7,
-   "emissivo": false
-  },
-  "SBGR_MarkingYellow": {
-   "cor": [
-    0.42,
-    0.268,
-    0.022
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.7,
-   "emissivo": false
-  },
   "SBGR_Mast": {
    "cor": [
     0.47,
@@ -321,26 +540,6 @@
    "rugosidade": 0.6,
    "emissivo": false
   },
-  "SBGR_Runway_10L28R": {
-   "cor": [
-    0.075,
-    0.074,
-    0.07
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.4,
-   "emissivo": false
-  },
-  "SBGR_Runway_10R28L": {
-   "cor": [
-    0.075,
-    0.074,
-    0.07
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.4,
-   "emissivo": false
-  },
   "SBGR_Shoulder": {
    "cor": [
     0.1,
@@ -359,16 +558,6 @@
    ],
    "fonte": "diffuse_color",
    "rugosidade": 0.55,
-   "emissivo": false
-  },
-  "SBGR_TaxiwayAsphalt": {
-   "cor": [
-    0.085,
-    0.084,
-    0.078
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.85,
    "emissivo": false
   },
   "SBGR_TerminalGlass": {
@@ -411,16 +600,6 @@
    "rugosidade": 0.88,
    "emissivo": false
   },
-  "SCL_Concrete": {
-   "cor": [
-    0.225,
-    0.22,
-    0.205
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.84,
-   "emissivo": false
-  },
   "SCL_Glass": {
    "cor": [
     0.03,
@@ -439,16 +618,6 @@
    ],
    "fonte": "diffuse_color",
    "rugosidade": 0.45,
-   "emissivo": false
-  },
-  "SCL_LATAM_DoorPanels": {
-   "cor": [
-    0.19,
-    0.192,
-    0.195
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.62,
    "emissivo": false
   },
   "SCL_LATAM_LitWindows": {
@@ -479,26 +648,6 @@
    ],
    "fonte": "diffuse_color",
    "rugosidade": 0.4,
-   "emissivo": false
-  },
-  "SCL_MarkingWhite": {
-   "cor": [
-    0.52,
-    0.52,
-    0.5
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.7,
-   "emissivo": false
-  },
-  "SCL_MarkingYellow": {
-   "cor": [
-    0.4,
-    0.26,
-    0.02
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.7,
    "emissivo": false
   },
   "SCL_MastWhite": {
@@ -551,36 +700,6 @@
    "rugosidade": 0.72,
    "emissivo": false
   },
-  "SCL_Runway_17L35R": {
-   "cor": [
-    0.075,
-    0.078,
-    0.075
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.4,
-   "emissivo": false
-  },
-  "SCL_Runway_17R35L": {
-   "cor": [
-    0.075,
-    0.078,
-    0.075
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.4,
-   "emissivo": false
-  },
-  "SCL_Soil": {
-   "cor": [
-    0.232,
-    0.18,
-    0.1
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.95,
-   "emissivo": false
-  },
   "SCL_SteelLight": {
    "cor": [
     0.33,
@@ -621,16 +740,6 @@
    "rugosidade": 0.5,
    "emissivo": false
   },
-  "SCL_TaxiwayAsphalt": {
-   "cor": [
-    0.092,
-    0.094,
-    0.09
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.84,
-   "emissivo": false
-  },
   "SCL_TowerConcrete": {
    "cor": [
     0.185,
@@ -669,36 +778,6 @@
    ],
    "fonte": "diffuse_color",
    "rugosidade": 0.35,
-   "emissivo": false
-  },
-  "SDSC_Chequer": {
-   "cor": [
-    0.64,
-    0.18,
-    0.03
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.7,
-   "emissivo": false
-  },
-  "SDSC_Cladding": {
-   "cor": [
-    0.255,
-    0.258,
-    0.252
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.62,
-   "emissivo": false
-  },
-  "SDSC_Concrete": {
-   "cor": [
-    0.215,
-    0.208,
-    0.192
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.86,
    "emissivo": false
   },
   "SDSC_Container": {
@@ -811,16 +890,6 @@
    "rugosidade": 0.9,
    "emissivo": false
   },
-  "SDSC_Infield": {
-   "cor": [
-    0.245,
-    0.108,
-    0.052
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.95,
-   "emissivo": false
-  },
   "SDSC_LATAM_Coral": {
    "cor": [
     0.847,
@@ -839,26 +908,6 @@
    ],
    "fonte": "diffuse_color",
    "rugosidade": 0.42,
-   "emissivo": false
-  },
-  "SDSC_MarkingWhite": {
-   "cor": [
-    0.5,
-    0.498,
-    0.478
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.7,
-   "emissivo": false
-  },
-  "SDSC_MarkingYellow": {
-   "cor": [
-    0.4,
-    0.255,
-    0.02
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.7,
    "emissivo": false
   },
   "SDSC_Mast": {
@@ -911,16 +960,6 @@
    "rugosidade": 0.6,
    "emissivo": false
   },
-  "SDSC_Runway_0220": {
-   "cor": [
-    0.078,
-    0.076,
-    0.07
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.4,
-   "emissivo": false
-  },
   "SDSC_Shoulder": {
    "cor": [
     0.105,
@@ -949,16 +988,6 @@
    ],
    "fonte": "diffuse_color",
    "rugosidade": 0.42,
-   "emissivo": false
-  },
-  "SDSC_TaxiwayAsphalt": {
-   "cor": [
-    0.09,
-    0.088,
-    0.08
-   ],
-   "fonte": "diffuse_color",
-   "rugosidade": 0.85,
    "emissivo": false
   },
   "SDSC_ToolCartRed": {
@@ -990,13 +1019,41 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_hangar_latam.glb",
-   "bytes": 51260,
+   "bytes": 137008,
    "faces": 1067,
    "faces_origem": 1067,
    "decimado": null,
    "triangulos": 10310,
    "vertices": 7285,
    "materiais": 9,
+   "bake": {
+    "classe": "estrutura",
+    "tier": "completo",
+    "atlas": [
+     1024,
+     1024
+    ],
+    "m_por_texel": 0.225,
+    "alvo_m_por_texel": 0.12,
+    "area_m2": 36575.0,
+    "ocupacao": 0.726,
+    "megapixels": 1.049,
+    "rugosidade": "herdada do Principled",
+    "rugosidade_faixa": {},
+    "materiais": [
+     "SBGR_Cladding",
+     "SBGR_CladdingPale"
+    ],
+    "achatados": [
+     "SBGR_HangarFloor",
+     "SBGR_HangarInterior",
+     "SBGR_LATAM_Band",
+     "SBGR_LATAM_Coral",
+     "SBGR_LATAM_White",
+     "SBGR_RoofPale",
+     "SBGR_SpaceFrameSteel"
+    ]
+   },
    "caixa": {
     "min": [
      -78.604,
@@ -1040,13 +1097,13 @@
    "verificacao": {
     "ok": true,
     "erros": [],
-    "avisos": [
-     "nenhuma imagem embutida"
-    ],
+    "avisos": [],
     "triangulos": 10310,
-    "vertices": 12161,
+    "vertices": 12430,
     "materiais": 8,
-    "imagens": 0,
+    "imagens": 1,
+    "megapixels": 1.05,
+    "bytes_imagens": 69980,
     "caixa": {
      "min": [
       -78.6045,
@@ -1078,13 +1135,35 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_hangar_mro.glb",
-   "bytes": 2524,
+   "bytes": 76256,
    "faces": 23,
    "faces_origem": 23,
    "decimado": null,
    "triangulos": 37,
    "vertices": 32,
    "materiais": 3,
+   "bake": {
+    "classe": "estrutura",
+    "tier": "completo",
+    "atlas": [
+     1024,
+     1024
+    ],
+    "m_por_texel": 0.263,
+    "alvo_m_por_texel": 0.12,
+    "area_m2": 47045.2,
+    "ocupacao": 0.678,
+    "megapixels": 1.049,
+    "rugosidade": "herdada do Principled",
+    "rugosidade_faixa": {},
+    "materiais": [
+     "SBGR_Cladding"
+    ],
+    "achatados": [
+     "SBGR_AABand",
+     "SBGR_RoofGrey"
+    ]
+   },
    "caixa": {
     "min": [
      -98.705,
@@ -1122,13 +1201,13 @@
    "verificacao": {
     "ok": true,
     "erros": [],
-    "avisos": [
-     "nenhuma imagem embutida"
-    ],
+    "avisos": [],
     "triangulos": 37,
     "vertices": 63,
     "materiais": 2,
-    "imagens": 0,
+    "imagens": 1,
+    "megapixels": 1.05,
+    "bytes_imagens": 73114,
     "caixa": {
      "min": [
       -98.7047,
@@ -1167,6 +1246,7 @@
    "triangulos": 194,
    "vertices": 124,
    "materiais": 4,
+   "bake": null,
    "caixa": {
     "min": [
      -5.95,
@@ -1213,6 +1293,8 @@
     "vertices": 172,
     "materiais": 4,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -5.95,
@@ -1251,6 +1333,7 @@
    "triangulos": 499,
    "vertices": 542,
    "materiais": 3,
+   "bake": null,
    "caixa": {
     "min": [
      -311.94,
@@ -1301,6 +1384,8 @@
     "vertices": 891,
     "materiais": 3,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -311.94,
@@ -1339,6 +1424,7 @@
    "triangulos": 68,
    "vertices": 84,
    "materiais": 3,
+   "bake": null,
    "caixa": {
     "min": [
      -52.191,
@@ -1389,6 +1475,8 @@
     "vertices": 126,
     "materiais": 3,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -52.1915,
@@ -1427,6 +1515,7 @@
    "triangulos": 102,
    "vertices": 88,
    "materiais": 2,
+   "bake": null,
    "caixa": {
     "min": [
      -8.763,
@@ -1476,6 +1565,8 @@
     "vertices": 204,
     "materiais": 2,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -8.7632,
@@ -1507,13 +1598,34 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_galpao_carga.glb",
-   "bytes": 1680,
+   "bytes": 55696,
    "faces": 18,
    "faces_origem": 18,
    "decimado": null,
    "triangulos": 28,
    "vertices": 20,
    "materiais": 2,
+   "bake": {
+    "classe": "estrutura",
+    "tier": "completo",
+    "atlas": [
+     1024,
+     1024
+    ],
+    "m_por_texel": 0.15,
+    "alvo_m_por_texel": 0.12,
+    "area_m2": 15124.6,
+    "ocupacao": 0.681,
+    "megapixels": 1.049,
+    "rugosidade": "herdada do Principled",
+    "rugosidade_faixa": {},
+    "materiais": [
+     "SBGR_Cladding"
+    ],
+    "achatados": [
+     "SBGR_RoofPale"
+    ]
+   },
    "caixa": {
     "min": [
      -81.37,
@@ -1555,13 +1667,13 @@
    "verificacao": {
     "ok": true,
     "erros": [],
-    "avisos": [
-     "nenhuma imagem embutida"
-    ],
+    "avisos": [],
     "triangulos": 28,
     "vertices": 50,
     "materiais": 1,
-    "imagens": 0,
+    "imagens": 1,
+    "megapixels": 1.05,
+    "bytes_imagens": 53550,
     "caixa": {
      "min": [
       -81.3701,
@@ -1593,13 +1705,42 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_pista_secao.glb",
-   "bytes": 6960,
+   "bytes": 41100,
    "faces": 174,
    "faces_origem": 174,
    "decimado": null,
    "triangulos": 348,
    "vertices": 480,
    "materiais": 5,
+   "bake": {
+    "classe": "superficie_perto",
+    "tier": "completo",
+    "atlas": [
+     1024,
+     1024
+    ],
+    "m_por_texel": 0.247,
+    "alvo_m_por_texel": 0.3,
+    "area_m2": 24599.1,
+    "ocupacao": 0.463,
+    "megapixels": 1.049,
+    "rugosidade": "escalar medido: SBGR_Runway_10R28L=0.812",
+    "rugosidade_faixa": {
+     "SBGR_Runway_10R28L": [
+      0.59,
+      0.84
+     ]
+    },
+    "materiais": [
+     "SBGR_MarkingWhite",
+     "SBGR_Runway_10R28L"
+    ],
+    "achatados": [
+     "SBGR_EdgeLightFitting",
+     "SBGR_Mast",
+     "SBGR_Shoulder"
+    ]
+   },
    "caixa": {
     "min": [
      -244.994,
@@ -1651,13 +1792,14 @@
     "ok": true,
     "erros": [],
     "avisos": [
-     "nenhuma imagem embutida",
      "pivo deslocado -21.50 m em Z, de proposito (centrar_em SBGR_RwyS_Pavement)"
     ],
     "triangulos": 348,
     "vertices": 696,
     "materiais": 5,
-    "imagens": 0,
+    "imagens": 1,
+    "megapixels": 1.05,
+    "bytes_imagens": 32531,
     "caixa": {
      "min": [
       -244.9942,
@@ -1689,13 +1831,33 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_taxi_secao.glb",
-   "bytes": 3276,
+   "bytes": 35860,
    "faces": 79,
    "faces_origem": 79,
    "decimado": null,
    "triangulos": 158,
    "vertices": 190,
    "materiais": 2,
+   "bake": {
+    "classe": "superficie_perto",
+    "tier": "completo",
+    "atlas": [
+     1024,
+     1024
+    ],
+    "m_por_texel": 0.316,
+    "alvo_m_por_texel": 0.3,
+    "area_m2": 12125.4,
+    "ocupacao": 0.154,
+    "megapixels": 1.049,
+    "rugosidade": "herdada do Principled",
+    "rugosidade_faixa": {},
+    "materiais": [
+     "SBGR_MarkingYellow",
+     "SBGR_TaxiwayAsphalt"
+    ],
+    "achatados": []
+   },
    "caixa": {
     "min": [
      -152.176,
@@ -1743,14 +1905,15 @@
     "ok": true,
     "erros": [],
     "avisos": [
-     "nenhuma imagem embutida",
      "pivo deslocado 7.82 m em X, de proposito (centrar_em SBGR_TaxiwayPavement)",
      "pivo deslocado -10.86 m em Z, de proposito (centrar_em SBGR_TaxiwayPavement)"
     ],
     "triangulos": 158,
     "vertices": 206,
     "materiais": 2,
-    "imagens": 0,
+    "imagens": 1,
+    "megapixels": 1.05,
+    "bytes_imagens": 31675,
     "caixa": {
      "min": [
       -152.1757,
@@ -1782,13 +1945,34 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_patio.glb",
-   "bytes": 2696,
+   "bytes": 31984,
    "faces": 36,
    "faces_origem": 36,
    "decimado": null,
    "triangulos": 62,
    "vertices": 80,
    "materiais": 2,
+   "bake": {
+    "classe": "superficie_perto",
+    "tier": "completo",
+    "atlas": [
+     1024,
+     1024
+    ],
+    "m_por_texel": 0.236,
+    "alvo_m_por_texel": 0.3,
+    "area_m2": 35617.4,
+    "ocupacao": 0.636,
+    "megapixels": 1.049,
+    "rugosidade": "herdada do Principled",
+    "rugosidade_faixa": {},
+    "materiais": [
+     "SBGR_ApronConcrete"
+    ],
+    "achatados": [
+     "SBGR_MarkingPink"
+    ]
+   },
    "caixa": {
     "min": [
      -161.208,
@@ -1836,14 +2020,15 @@
     "ok": true,
     "erros": [],
     "avisos": [
-     "nenhuma imagem embutida",
      "pivo deslocado -11.21 m em X, de proposito (centrar_em SBGR_ApronConcrete)",
      "pivo deslocado -13.07 m em Z, de proposito (centrar_em SBGR_ApronConcrete)"
     ],
     "triangulos": 62,
-    "vertices": 82,
+    "vertices": 102,
     "materiais": 2,
-    "imagens": 0,
+    "imagens": 1,
+    "megapixels": 1.05,
+    "bytes_imagens": 28625,
     "caixa": {
      "min": [
       -161.2078,
@@ -1875,13 +2060,50 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_placa_campo.glb",
-   "bytes": 91180,
+   "bytes": 330596,
    "faces": 27648,
    "faces_origem": 27648,
    "decimado": null,
    "triangulos": 55056,
    "vertices": 35274,
    "materiais": 9,
+   "bake": {
+    "classe": "superficie_campo",
+    "tier": "completo",
+    "atlas": [
+     2048,
+     2048
+    ],
+    "m_por_texel": 3.279,
+    "alvo_m_por_texel": 3.5,
+    "area_m2": 15999345.1,
+    "ocupacao": 0.441,
+    "megapixels": 4.194,
+    "rugosidade": "escalar medido: SBGR_Runway_10L28R=0.820, SBGR_Runway_10R28L=0.816",
+    "rugosidade_faixa": {
+     "SBGR_Runway_10L28R": [
+      0.596,
+      0.84
+     ],
+     "SBGR_Runway_10R28L": [
+      0.642,
+      0.84
+     ]
+    },
+    "materiais": [
+     "SBGR_ApronConcrete",
+     "SBGR_Infield",
+     "SBGR_MarkingWhite",
+     "SBGR_MarkingYellow",
+     "SBGR_Runway_10L28R",
+     "SBGR_Runway_10R28L",
+     "SBGR_TaxiwayAsphalt"
+    ],
+    "achatados": [
+     "SBGR_MarkingPink",
+     "SBGR_Shoulder"
+    ]
+   },
    "caixa": {
     "min": [
      -3062.5,
@@ -1927,13 +2149,14 @@
     "ok": true,
     "erros": [],
     "avisos": [
-     "nenhuma imagem embutida",
      "datum na cabeceira: base em y=-17.6 m, de proposito"
     ],
     "triangulos": 55056,
-    "vertices": 37538,
+    "vertices": 37950,
     "materiais": 9,
-    "imagens": 0,
+    "imagens": 1,
+    "megapixels": 4.19,
+    "bytes_imagens": 211380,
     "caixa": {
      "min": [
       -3062.5,
@@ -1972,6 +2195,7 @@
    "triangulos": 70,
    "vertices": 56,
    "materiais": 1,
+   "bake": null,
    "caixa": {
     "min": [
      -1.95,
@@ -2020,6 +2244,8 @@
     "vertices": 140,
     "materiais": 1,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -1.95,
@@ -2058,6 +2284,7 @@
    "triangulos": 50,
    "vertices": 40,
    "materiais": 1,
+   "bake": null,
    "caixa": {
     "min": [
      -2.6,
@@ -2106,6 +2333,8 @@
     "vertices": 100,
     "materiais": 1,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -2.6,
@@ -2144,6 +2373,7 @@
    "triangulos": 20,
    "vertices": 16,
    "materiais": 2,
+   "bake": null,
    "caixa": {
     "min": [
      -2.652,
@@ -2193,6 +2423,8 @@
     "vertices": 40,
     "materiais": 2,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -2.6521,
@@ -2231,6 +2463,7 @@
    "triangulos": 20,
    "vertices": 16,
    "materiais": 2,
+   "bake": null,
    "caixa": {
     "min": [
      -6.043,
@@ -2280,6 +2513,8 @@
     "vertices": 40,
     "materiais": 2,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -6.0432,
@@ -2318,6 +2553,7 @@
    "triangulos": 20,
    "vertices": 16,
    "materiais": 2,
+   "bake": null,
    "caixa": {
     "min": [
      -2.185,
@@ -2367,6 +2603,8 @@
     "vertices": 40,
     "materiais": 2,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -2.1847,
@@ -2405,6 +2643,7 @@
    "triangulos": 20,
    "vertices": 16,
    "materiais": 2,
+   "bake": null,
    "caixa": {
     "min": [
      -2.521,
@@ -2454,6 +2693,8 @@
     "vertices": 40,
     "materiais": 2,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -2.5206,
@@ -2492,6 +2733,7 @@
    "triangulos": 70,
    "vertices": 56,
    "materiais": 2,
+   "bake": null,
    "caixa": {
     "min": [
      -4.368,
@@ -2542,6 +2784,8 @@
     "vertices": 140,
     "materiais": 2,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -4.3682,
@@ -2580,6 +2824,7 @@
    "triangulos": 20,
    "vertices": 16,
    "materiais": 2,
+   "bake": null,
    "caixa": {
     "min": [
      -4.683,
@@ -2629,6 +2874,8 @@
     "vertices": 40,
     "materiais": 2,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -4.6833,
@@ -2660,13 +2907,40 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_hangar9.glb",
-   "bytes": 41520,
+   "bytes": 123396,
    "faces": 1113,
    "faces_origem": 1113,
    "decimado": null,
    "triangulos": 10408,
    "vertices": 7361,
    "materiais": 8,
+   "bake": {
+    "classe": "estrutura",
+    "tier": "completo",
+    "atlas": [
+     1024,
+     1024
+    ],
+    "m_por_texel": 0.187,
+    "alvo_m_por_texel": 0.12,
+    "area_m2": 23420.6,
+    "ocupacao": 0.659,
+    "megapixels": 1.049,
+    "rugosidade": "herdada do Principled",
+    "rugosidade_faixa": {},
+    "materiais": [
+     "SDSC_Cladding"
+    ],
+    "achatados": [
+     "SDSC_FasciaBand",
+     "SDSC_HangarFloor",
+     "SDSC_HangarInterior",
+     "SDSC_LATAM_Coral",
+     "SDSC_LATAM_White",
+     "SDSC_RoofPale",
+     "SDSC_SpaceFrameRed"
+    ]
+   },
    "caixa": {
     "min": [
      -66.658,
@@ -2709,13 +2983,13 @@
    "verificacao": {
     "ok": true,
     "erros": [],
-    "avisos": [
-     "nenhuma imagem embutida"
-    ],
+    "avisos": [],
     "triangulos": 10408,
-    "vertices": 11672,
+    "vertices": 12634,
     "materiais": 8,
-    "imagens": 0,
+    "imagens": 1,
+    "megapixels": 1.05,
+    "bytes_imagens": 64683,
     "caixa": {
      "min": [
       -66.6577,
@@ -2747,13 +3021,37 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_mro_hangar.glb",
-   "bytes": 5388,
+   "bytes": 68816,
    "faces": 79,
    "faces_origem": 79,
    "decimado": null,
    "triangulos": 156,
    "vertices": 130,
    "materiais": 5,
+   "bake": {
+    "classe": "estrutura",
+    "tier": "completo",
+    "atlas": [
+     1024,
+     1024
+    ],
+    "m_por_texel": 0.117,
+    "alvo_m_por_texel": 0.12,
+    "area_m2": 12174.5,
+    "ocupacao": 0.873,
+    "megapixels": 1.049,
+    "rugosidade": "herdada do Principled",
+    "rugosidade_faixa": {},
+    "materiais": [
+     "SDSC_Cladding"
+    ],
+    "achatados": [
+     "SDSC_HangarFloor",
+     "SDSC_HangarInterior",
+     "SDSC_RoofPale",
+     "SDSC_SpaceFrameRed"
+    ]
+   },
    "caixa": {
     "min": [
      -31.071,
@@ -2799,13 +3097,13 @@
    "verificacao": {
     "ok": true,
     "erros": [],
-    "avisos": [
-     "nenhuma imagem embutida"
-    ],
+    "avisos": [],
     "triangulos": 156,
-    "vertices": 312,
+    "vertices": 314,
     "materiais": 5,
-    "imagens": 0,
+    "imagens": 1,
+    "megapixels": 1.05,
+    "bytes_imagens": 62416,
     "caixa": {
      "min": [
       -31.0706,
@@ -2844,6 +3142,7 @@
    "triangulos": 10236,
    "vertices": 7223,
    "materiais": 3,
+   "bake": null,
    "caixa": {
     "min": [
      -48.0,
@@ -2889,6 +3188,8 @@
     "vertices": 10113,
     "materiais": 3,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -48.0,
@@ -2920,13 +3221,34 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_mro_oficinas.glb",
-   "bytes": 2628,
+   "bytes": 27516,
    "faces": 26,
    "faces_origem": 26,
    "decimado": null,
    "triangulos": 40,
    "vertices": 28,
    "materiais": 2,
+   "bake": {
+    "classe": "estrutura",
+    "tier": "completo",
+    "atlas": [
+     1024,
+     1024
+    ],
+    "m_por_texel": 0.456,
+    "alvo_m_por_texel": 0.12,
+    "area_m2": 17460.5,
+    "ocupacao": 0.09,
+    "megapixels": 1.049,
+    "rugosidade": "herdada do Principled",
+    "rugosidade_faixa": {},
+    "materiais": [
+     "SDSC_Cladding"
+    ],
+    "achatados": [
+     "SDSC_RoofGrey"
+    ]
+   },
    "caixa": {
     "min": [
      -71.365,
@@ -2968,13 +3290,13 @@
    "verificacao": {
     "ok": true,
     "erros": [],
-    "avisos": [
-     "nenhuma imagem embutida"
-    ],
+    "avisos": [],
     "triangulos": 40,
-    "vertices": 70,
+    "vertices": 92,
     "materiais": 2,
-    "imagens": 0,
+    "imagens": 1,
+    "megapixels": 1.05,
+    "bytes_imagens": 24181,
     "caixa": {
      "min": [
       -71.3649,
@@ -3013,6 +3335,7 @@
    "triangulos": 149,
    "vertices": 114,
    "materiais": 2,
+   "bake": null,
    "caixa": {
     "min": [
      -46.76,
@@ -3056,6 +3379,8 @@
     "vertices": 281,
     "materiais": 1,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -46.76,
@@ -3087,13 +3412,35 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_torre_xadrez.glb",
-   "bytes": 3384,
+   "bytes": 16496,
    "faces": 30,
    "faces_origem": 30,
    "decimado": null,
    "triangulos": 60,
    "vertices": 48,
    "materiais": 3,
+   "bake": {
+    "classe": "estrutura",
+    "tier": "completo",
+    "atlas": [
+     256,
+     256
+    ],
+    "m_por_texel": 0.1,
+    "alvo_m_por_texel": 0.12,
+    "area_m2": 468.0,
+    "ocupacao": 0.795,
+    "megapixels": 0.066,
+    "rugosidade": "herdada do Principled",
+    "rugosidade_faixa": {},
+    "materiais": [
+     "SDSC_Chequer"
+    ],
+    "achatados": [
+     "SDSC_Glass",
+     "SDSC_Steel"
+    ]
+   },
    "caixa": {
     "min": [
      -4.8,
@@ -3132,13 +3479,13 @@
    "verificacao": {
     "ok": true,
     "erros": [],
-    "avisos": [
-     "nenhuma imagem embutida"
-    ],
+    "avisos": [],
     "triangulos": 60,
     "vertices": 120,
     "materiais": 3,
-    "imagens": 0,
+    "imagens": 1,
+    "megapixels": 0.07,
+    "bytes_imagens": 12461,
     "caixa": {
      "min": [
       -4.8,
@@ -3170,13 +3517,36 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_hangar_midfield.glb",
-   "bytes": 4832,
+   "bytes": 55556,
    "faces": 117,
    "faces_origem": 117,
    "decimado": null,
    "triangulos": 174,
    "vertices": 124,
    "materiais": 4,
+   "bake": {
+    "classe": "estrutura",
+    "tier": "completo",
+    "atlas": [
+     1024,
+     1024
+    ],
+    "m_por_texel": 0.089,
+    "alvo_m_por_texel": 0.12,
+    "area_m2": 5604.9,
+    "ocupacao": 0.73,
+    "megapixels": 1.049,
+    "rugosidade": "herdada do Principled",
+    "rugosidade_faixa": {},
+    "materiais": [
+     "SDSC_Cladding"
+    ],
+    "achatados": [
+     "SDSC_HangarInterior",
+     "SDSC_OxideRed",
+     "SDSC_RoofPale"
+    ]
+   },
    "caixa": {
     "min": [
      -18.6,
@@ -3215,13 +3585,13 @@
    "verificacao": {
     "ok": true,
     "erros": [],
-    "avisos": [
-     "nenhuma imagem embutida"
-    ],
+    "avisos": [],
     "triangulos": 174,
-    "vertices": 182,
+    "vertices": 244,
     "materiais": 4,
-    "imagens": 0,
+    "imagens": 1,
+    "megapixels": 1.05,
+    "bytes_imagens": 49249,
     "caixa": {
      "min": [
       -18.6,
@@ -3260,6 +3630,7 @@
    "triangulos": 110,
    "vertices": 88,
    "materiais": 3,
+   "bake": null,
    "caixa": {
     "min": [
      -14.25,
@@ -3305,6 +3676,8 @@
     "vertices": 220,
     "materiais": 3,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -14.25,
@@ -3343,6 +3716,7 @@
    "triangulos": 346,
    "vertices": 428,
    "materiais": 2,
+   "bake": null,
    "caixa": {
     "min": [
      -30.125,
@@ -3394,6 +3768,8 @@
     "vertices": 692,
     "materiais": 2,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -30.125,
@@ -3432,6 +3808,7 @@
    "triangulos": 340,
    "vertices": 272,
    "materiais": 2,
+   "bake": null,
    "caixa": {
     "min": [
      -9.862,
@@ -3481,6 +3858,8 @@
     "vertices": 680,
     "materiais": 2,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -9.8622,
@@ -3519,6 +3898,7 @@
    "triangulos": 318,
    "vertices": 248,
    "materiais": 3,
+   "bake": null,
    "caixa": {
     "min": [
      -6.243,
@@ -3569,6 +3949,8 @@
     "vertices": 572,
     "materiais": 3,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -6.2426,
@@ -3607,6 +3989,7 @@
    "triangulos": 110,
    "vertices": 88,
    "materiais": 2,
+   "bake": null,
    "caixa": {
     "min": [
      -25.337,
@@ -3657,6 +4040,8 @@
     "vertices": 220,
     "materiais": 2,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -25.3369,
@@ -3695,6 +4080,7 @@
    "triangulos": 20,
    "vertices": 16,
    "materiais": 1,
+   "bake": null,
    "caixa": {
     "min": [
      -2.2,
@@ -3743,6 +4129,8 @@
     "vertices": 40,
     "materiais": 1,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -2.2,
@@ -3781,6 +4169,7 @@
    "triangulos": 30,
    "vertices": 24,
    "materiais": 3,
+   "bake": null,
    "caixa": {
     "min": [
      -1.224,
@@ -3831,6 +4220,8 @@
     "vertices": 60,
     "materiais": 3,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -1.224,
@@ -3869,6 +4260,7 @@
    "triangulos": 20,
    "vertices": 16,
    "materiais": 2,
+   "bake": null,
    "caixa": {
     "min": [
      -0.816,
@@ -3918,6 +4310,8 @@
     "vertices": 40,
     "materiais": 2,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -0.816,
@@ -3956,6 +4350,7 @@
    "triangulos": 20,
    "vertices": 16,
    "materiais": 2,
+   "bake": null,
    "caixa": {
     "min": [
      -0.918,
@@ -4005,6 +4400,8 @@
     "vertices": 40,
     "materiais": 2,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -0.918,
@@ -4043,6 +4440,7 @@
    "triangulos": 20,
    "vertices": 16,
    "materiais": 2,
+   "bake": null,
    "caixa": {
     "min": [
      -1.122,
@@ -4092,6 +4490,8 @@
     "vertices": 40,
     "materiais": 2,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -1.122,
@@ -4130,6 +4530,7 @@
    "triangulos": 20,
    "vertices": 16,
    "materiais": 2,
+   "bake": null,
    "caixa": {
     "min": [
      -1.02,
@@ -4179,6 +4580,8 @@
     "vertices": 40,
     "materiais": 2,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -1.02,
@@ -4217,6 +4620,7 @@
    "triangulos": 20,
    "vertices": 16,
    "materiais": 2,
+   "bake": null,
    "caixa": {
     "min": [
      -1.326,
@@ -4266,6 +4670,8 @@
     "vertices": 40,
     "materiais": 2,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -1.326,
@@ -4304,6 +4710,7 @@
    "triangulos": 20,
    "vertices": 16,
    "materiais": 2,
+   "bake": null,
    "caixa": {
     "min": [
      -1.173,
@@ -4353,6 +4760,8 @@
     "vertices": 40,
     "materiais": 2,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -1.173,
@@ -4384,13 +4793,45 @@
    "campo": "sdsc",
    "licenca": "odbl-1.0",
    "arquivo": "sdsc_placa_campo.glb",
-   "bytes": 41508,
+   "bytes": 113224,
    "faces": 12881,
    "faces_origem": 12881,
    "decimado": null,
    "triangulos": 25680,
    "vertices": 15753,
    "materiais": 8,
+   "bake": {
+    "classe": "superficie_campo",
+    "tier": "completo",
+    "atlas": [
+     1024,
+     1024
+    ],
+    "m_por_texel": 2.904,
+    "alvo_m_por_texel": 3.5,
+    "area_m2": 7602140.5,
+    "ocupacao": 0.92,
+    "megapixels": 1.049,
+    "rugosidade": "escalar medido: SDSC_Runway_0220=0.808",
+    "rugosidade_faixa": {
+     "SDSC_Runway_0220": [
+      0.59,
+      0.84
+     ]
+    },
+    "materiais": [
+     "SDSC_Concrete",
+     "SDSC_Infield",
+     "SDSC_MarkingWhite",
+     "SDSC_MarkingYellow",
+     "SDSC_Runway_0220",
+     "SDSC_TaxiwayAsphalt"
+    ],
+    "achatados": [
+     "SDSC_CropPasture",
+     "SDSC_Shoulder"
+    ]
+   },
    "caixa": {
     "min": [
      -1250.0,
@@ -4435,13 +4876,14 @@
     "ok": true,
     "erros": [],
     "avisos": [
-     "nenhuma imagem embutida",
      "datum na cabeceira: base em y=-103.8 m, de proposito"
     ],
     "triangulos": 25680,
     "vertices": 15873,
     "materiais": 8,
-    "imagens": 0,
+    "imagens": 1,
+    "megapixels": 1.05,
+    "bytes_imagens": 63701,
     "caixa": {
      "min": [
       -1250.0,
@@ -4480,6 +4922,7 @@
    "triangulos": 322,
    "vertices": 272,
    "materiais": 4,
+   "bake": null,
    "caixa": {
     "min": [
      -30.0,
@@ -4527,6 +4970,8 @@
     "vertices": 636,
     "materiais": 4,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -30.0,
@@ -4558,13 +5003,39 @@
    "campo": "scl",
    "licenca": "odbl-1.0",
    "arquivo": "scl_base_latam.glb",
-   "bytes": 36704,
+   "bytes": 59580,
    "faces": 1091,
    "faces_origem": 1091,
    "decimado": null,
    "triangulos": 10338,
    "vertices": 7305,
    "materiais": 7,
+   "bake": {
+    "classe": "estrutura",
+    "tier": "completo",
+    "atlas": [
+     256,
+     256
+    ],
+    "m_por_texel": 0.17,
+    "alvo_m_por_texel": 0.12,
+    "area_m2": 1528.8,
+    "ocupacao": 0.861,
+    "megapixels": 0.066,
+    "rugosidade": "herdada do Principled",
+    "rugosidade_faixa": {},
+    "materiais": [
+     "SCL_LATAM_DoorPanels"
+    ],
+    "achatados": [
+     "SCL_LATAM_Coral",
+     "SCL_LATAM_LitWindows",
+     "SCL_LATAM_SignBand",
+     "SCL_LATAM_White",
+     "SCL_RoofLight",
+     "SCL_RoofRibbedWhite"
+    ]
+   },
    "caixa": {
     "min": [
      -70.615,
@@ -4606,13 +5077,13 @@
    "verificacao": {
     "ok": true,
     "erros": [],
-    "avisos": [
-     "nenhuma imagem embutida"
-    ],
+    "avisos": [],
     "triangulos": 10338,
-    "vertices": 10312,
+    "vertices": 12520,
     "materiais": 7,
-    "imagens": 0,
+    "imagens": 1,
+    "megapixels": 0.07,
+    "bytes_imagens": 2153,
     "caixa": {
      "min": [
       -70.615,
@@ -4651,6 +5122,7 @@
    "triangulos": 2167,
    "vertices": 2534,
    "materiais": 6,
+   "bake": null,
    "caixa": {
     "min": [
      -201.57,
@@ -4704,6 +5176,8 @@
     "vertices": 2979,
     "materiais": 5,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -201.5702,
@@ -4742,6 +5216,7 @@
    "triangulos": 89,
    "vertices": 64,
    "materiais": 2,
+   "bake": null,
    "caixa": {
     "min": [
      -49.103,
@@ -4785,6 +5260,8 @@
     "vertices": 157,
     "materiais": 2,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -49.1025,
@@ -4823,6 +5300,7 @@
    "triangulos": 20,
    "vertices": 16,
    "materiais": 1,
+   "bake": null,
    "caixa": {
     "min": [
      -2.4,
@@ -4871,6 +5349,8 @@
     "vertices": 40,
     "materiais": 1,
     "imagens": 0,
+    "megapixels": 0.0,
+    "bytes_imagens": 0,
     "caixa": {
      "min": [
       -2.4,
@@ -4902,13 +5382,49 @@
    "campo": "scl",
    "licenca": "odbl-1.0",
    "arquivo": "scl_placa_campo.glb",
-   "bytes": 35612,
+   "bytes": 332204,
    "faces": 5545,
    "faces_origem": 5545,
    "decimado": null,
    "triangulos": 10403,
    "vertices": 12073,
    "materiais": 8,
+   "bake": {
+    "classe": "superficie_campo",
+    "tier": "completo",
+    "atlas": [
+     2048,
+     2048
+    ],
+    "m_por_texel": 2.534,
+    "alvo_m_por_texel": 3.5,
+    "area_m2": 11783239.0,
+    "ocupacao": 0.552,
+    "megapixels": 4.194,
+    "rugosidade": "escalar medido: SCL_Runway_17L35R=0.818, SCL_Runway_17R35L=0.712",
+    "rugosidade_faixa": {
+     "SCL_Runway_17L35R": [
+      0.816,
+      0.82
+     ],
+     "SCL_Runway_17R35L": [
+      0.57,
+      0.797
+     ]
+    },
+    "materiais": [
+     "SCL_Concrete",
+     "SCL_MarkingWhite",
+     "SCL_MarkingYellow",
+     "SCL_Runway_17L35R",
+     "SCL_Runway_17R35L",
+     "SCL_Soil",
+     "SCL_TaxiwayAsphalt"
+    ],
+    "achatados": [
+     "SCL_AsphaltShoulder"
+    ]
+   },
    "caixa": {
     "min": [
      -1085.07,
@@ -4959,13 +5475,14 @@
     "ok": true,
     "erros": [],
     "avisos": [
-     "nenhuma imagem embutida",
      "datum na cabeceira: base em y=0.0 m, de proposito"
     ],
     "triangulos": 10403,
     "vertices": 12107,
     "materiais": 8,
-    "imagens": 0,
+    "imagens": 1,
+    "megapixels": 4.19,
+    "bytes_imagens": 278516,
     "caixa": {
      "min": [
       -1085.0699,
