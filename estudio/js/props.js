@@ -1,14 +1,20 @@
-/* props.js — everything in a scene that is NOT an aircraft.
+/* props.js — the AUTHORED environment: grounds, sky, and generic massing.
  *
- * LICENCE, and the reason this file exists at all:
- * the airport scenery in scenario/, scenario_sdsc/ and scenario_sbgr/ is
- * generated from OpenStreetMap and is therefore an ODbL derived database.
- * ODbL is share-alike; the models are CC BY 4.0. Those terms conflict, so the
- * scenery is NEVER exported and NEVER reaches this studio. Every ground, sky,
- * marking and block below is original geometry authored here, from primitives
- * and canvas painting, with no survey data of any real airport in it. Runway
- * markings follow the generic published pattern (centreline 30 m on / 20 m off,
- * edge stripes); they are not a survey of any specific runway.
+ * LICENCE, and what changed. Everything in this file is original geometry
+ * authored here, from primitives and canvas painting, with no survey data of
+ * any real airport in it: the runway markings follow the generic published
+ * pattern (centreline 30 m on / 20 m off, edge stripes), they are not a survey
+ * of any specific runway. That makes every prop below CC BY 4.0 along with the
+ * fleet, and it is why the grounds and the sky live here rather than being
+ * exported from a field.
+ *
+ * The airports themselves ARE now in the studio, and they do NOT come through
+ * this file — they come through export/cenarios/, as measured GLBs licensed
+ * per asset under ODbL 1.0 with the OpenStreetMap attribution attached (see
+ * NOTICE.md, "The airport mesh is an OSM derivative"). The two sets sit side by
+ * side in the same sidebar sections and the cards say which is which: a `SBGR`
+ * hangar is a survey and carries share-alike, the `hangar` block below is a box
+ * and does not.
  *
  * Conventions shared with the aircraft: +Y up, metres, every prop's origin at
  * its X/Z centre with y = 0 at its base, so "snap to ground" is pos.y = 0.
@@ -240,10 +246,13 @@ const caixa = (w, h, d, mat, x = 0, y = 0, z = 0) => {
   return m;
 };
 
-/** slug -> { rotulo, medidas, construir() }. Sidebar and loader both read this. */
+/** slug -> { rotulo, medidas, categoria, construir() }. Sidebar and loader both
+ *  read this. `categoria` is the vocabulary the scenery manifest uses, so the
+ *  authored props file into the same sidebar sections as the surveyed ones and
+ *  one filter box searches across both. */
 export const PROPS = {
   hangar: {
-    rotulo: 'Hangar block', medidas: '72 × 46 × 21 m',
+    rotulo: 'Hangar block', medidas: '72 × 46 × 21 m', categoria: 'estrutura',
     construir () {
       const g = new THREE.Group();
       g.add(caixa(72, 14, 46, MAT.claro()));
@@ -260,7 +269,7 @@ export const PROPS = {
     },
   },
   terminal: {
-    rotulo: 'Terminal block', medidas: '160 × 28 × 14 m',
+    rotulo: 'Terminal block', medidas: '160 × 28 × 14 m', categoria: 'estrutura',
     construir () {
       const g = new THREE.Group();
       g.add(caixa(160, 13, 28, MAT.claro()));
@@ -271,7 +280,7 @@ export const PROPS = {
     },
   },
   laje: {
-    rotulo: 'Apron slab', medidas: '80 × 80 m',
+    rotulo: 'Apron slab', medidas: '80 × 80 m', categoria: 'superficie',
     construir () {
       const { material } = materialChao('concreto');
       const m = new THREE.Mesh(new THREE.BoxGeometry(80, 0.25, 80), material);
@@ -281,7 +290,7 @@ export const PROPS = {
     },
   },
   mastro: {
-    rotulo: 'Light mast', medidas: '24 m',
+    rotulo: 'Light mast', medidas: '24 m', categoria: 'adereco',
     construir () {
       const g = new THREE.Group();
       const p = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.45, 22, 10), MAT.metal());
@@ -293,7 +302,7 @@ export const PROPS = {
     },
   },
   ponte: {
-    rotulo: 'Boarding bridge', medidas: '28 m, generic',
+    rotulo: 'Boarding bridge', medidas: '28 m, generic', categoria: 'estrutura',
     construir () {
       const g = new THREE.Group();
       const rot = new THREE.Mesh(new THREE.CylinderGeometry(3.2, 3.2, 6.5, 16), MAT.medio());
@@ -308,7 +317,7 @@ export const PROPS = {
     },
   },
   escada: {
-    rotulo: 'Boarding stairs', medidas: '9 × 3 × 5 m',
+    rotulo: 'Boarding stairs', medidas: '9 × 3 × 5 m', categoria: 'veiculo',
     construir () {
       const g = new THREE.Group();
       g.add(caixa(6.5, 0.6, 2.6, MAT.medio(), 0, 0.5, 0));
@@ -324,7 +333,7 @@ export const PROPS = {
     },
   },
   cone: {
-    rotulo: 'Traffic cone', medidas: '0.75 m',
+    rotulo: 'Traffic cone', medidas: '0.75 m', categoria: 'adereco',
     construir () {
       const g = new THREE.Group();
       const c = new THREE.Mesh(new THREE.ConeGeometry(0.28, 0.7, 12), MAT.laranja());
@@ -334,11 +343,11 @@ export const PROPS = {
     },
   },
   bloco: {
-    rotulo: 'Massing block', medidas: '20 × 12 × 20 m — scale it',
+    rotulo: 'Massing block', medidas: '20 × 12 × 20 m — scale it', categoria: 'adereco',
     construir () { return caixa(20, 12, 20, MAT.medio()); },
   },
   cartao: {
-    rotulo: 'Backdrop card', medidas: '210 × 86 m curved',
+    rotulo: 'Backdrop card', medidas: '210 × 86 m curved', categoria: 'adereco',
     construir () {
       const g = new THREE.CylinderGeometry(105, 105, 86, 44, 1, true, Math.PI * 0.62, Math.PI * 0.76);
       const m = new THREE.Mesh(g, new THREE.MeshStandardMaterial({

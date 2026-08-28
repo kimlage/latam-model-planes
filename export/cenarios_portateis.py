@@ -131,6 +131,10 @@ CAMPOS = {
 #   superficies malhas recortadas por CORTE (bisseccao)
 #   regiao      None = tudo; senao {"tipo": "circulo"|"retangulo"|"obb", ...}
 #   datum       "min" (base da peca em y=0) | "campo" (cabeceira em y=0)
+#   centrar_em  lista de malhas cuja caixa define a ORIGEM XY. Sem isto a
+#               origem e o centro da caixa de TUDO, e um PAPI de um lado so da
+#               pista puxa esse centro 20 m para fora do eixo - foi o que
+#               deixou o 777 do cenario inicial com o trem na borda.
 #   nota        o que a peca e, e o que nela e inferencia
 # ---------------------------------------------------------------------------
 
@@ -206,6 +210,7 @@ CATALOGO = {
                      "SBGR_RunwayMarkings"],
         pecas=["SBGR_RunwayEdgeLights", "SBGR_PAPI"],
         regiao=obb(-289.9, -462.3, 500.0, 150.0, 16.354),
+        centrar_em=["SBGR_RwyS_Pavement"],
         nota="Cabeceira da 10R com as marcas de soleira, o numero e as luzes "
              "de borda. Pintura conforme AIP-Brasil / DECEA."),
 
@@ -214,12 +219,14 @@ CATALOGO = {
         rotulo="Taxiway section with centreline (GRU)",
         superficies=["SBGR_TaxiwayPavement", "SBGR_TaxiwayCentrelines"],
         regiao=obb(231.5, -507.0, 320.0, 90.0, 16.354),
+        centrar_em=["SBGR_TaxiwayPavement"],
         nota="Trecho de taxiway paralela com o eixo pintado."),
 
     "sbgr_patio": dict(
         campo="sbgr", categoria="superficie", rotulo="Apron slab (GRU)",
         superficies=["SBGR_ApronConcrete", "SBGR_ApronLaneEdges"],
         regiao=obb(-10.0, 625.0, 300.0, 200.0, 16.354),
+        centrar_em=["SBGR_ApronConcrete"],
         nota="Laje de patio com as linhas de faixa, recortada dos poligonos "
              "de patio mapeados."),
 
@@ -696,6 +703,23 @@ def montar(slug, spec, campo, pasta, relatorio):
 
     partes = []
     ausentes = []
+    centrar = set(spec.get("centrar_em") or [])
+    caixa_centro = None
+
+    def _somar(nome, o):
+        """Acumula a caixa das malhas eleitas para definir a origem XY."""
+        nonlocal caixa_centro
+        if nome not in centrar:
+            return
+        co = [o.matrix_world @ v.co for v in o.data.vertices]
+        if not co:
+            return
+        b = [min(v.x for v in co), min(v.y for v in co),
+             max(v.x for v in co), max(v.y for v in co)]
+        caixa_centro = b if caixa_centro is None else [
+            min(caixa_centro[0], b[0]), min(caixa_centro[1], b[1]),
+            max(caixa_centro[2], b[2]), max(caixa_centro[3], b[3])]
+
     for nome in spec.get("pecas", []):
         o = _malha_de(nome, dep)
         if o is None:
@@ -703,6 +727,7 @@ def montar(slug, spec, campo, pasta, relatorio):
             continue
         _cortar_ilhas(o, regiao)
         if len(o.data.polygons):
+            _somar(nome, o)
             partes.append(o)
         else:
             bpy.data.objects.remove(o, do_unlink=True)
@@ -713,6 +738,7 @@ def montar(slug, spec, campo, pasta, relatorio):
             continue
         _cortar_planos(o, regiao)
         if len(o.data.polygons):
+            _somar(nome, o)
             partes.append(o)
         else:
             bpy.data.objects.remove(o, do_unlink=True)
@@ -726,29 +752,47 @@ def montar(slug, spec, campo, pasta, relatorio):
 
     # gira o pedaco para o eixo, quando a regiao e orientada
     if regiao and regiao["tipo"] == "obb":
-        bm = bmesh.new()
-        bm.from_mesh(alvo.data)
         c = Vector((regiao["x"], regiao["y"], 0.0))
         a = math.radians(-regiao["hdg"])
         ca, sa = math.cos(a), math.sin(a)
+
+        def _girar(x, y):
+            dx, dy = x - c.x, y - c.y
+            return c.x + dx * ca - dy * sa, c.y + dx * sa + dy * ca
+
+        bm = bmesh.new()
+        bm.from_mesh(alvo.data)
         for v in bm.verts:
-            dx, dy = v.co.x - c.x, v.co.y - c.y
-            v.co.x = c.x + dx * ca - dy * sa
-            v.co.y = c.y + dx * sa + dy * ca
+            v.co.x, v.co.y = _girar(v.co.x, v.co.y)
         bm.to_mesh(alvo.data)
         bm.free()
+        if caixa_centro:
+            xs, ys = [], []
+            for px, py in ((caixa_centro[0], caixa_centro[1]),
+                           (caixa_centro[2], caixa_centro[1]),
+                           (caixa_centro[0], caixa_centro[3]),
+                           (caixa_centro[2], caixa_centro[3])):
+                gx, gy = _girar(px, py)
+                xs.append(gx); ys.append(gy)
+            caixa_centro = [min(xs), min(ys), max(xs), max(ys)]
 
     # medidas ANTES do datum, no frame do campo
     co = [Vector(v.co) for v in alvo.data.vertices]
     mn = Vector((min(v.x for v in co), min(v.y for v in co), min(v.z for v in co)))
     mx = Vector((max(v.x for v in co), max(v.y for v in co), max(v.z for v in co)))
-    origem_campo = [round((mn.x + mx.x) / 2, 2), round((mn.y + mx.y) / 2, 2)]
+    origem_bbox = [round((mn.x + mx.x) / 2, 2), round((mn.y + mx.y) / 2, 2)]
 
     # DATUM: origem no centro XY da caixa; z = 0 na base da peca (ou na
     # cabeceira, para as placas de campo). Depois do export_yup do glTF isto
     # vira "pivo no centro X/Z, base em y = 0" - a mesma convencao da frota.
     z0 = campo["datum_z"] if spec.get("datum") == "campo" else mn.z
-    desloc = Vector((-(mn.x + mx.x) / 2, -(mn.y + mx.y) / 2, -z0))
+    if caixa_centro:
+        cx = (caixa_centro[0] + caixa_centro[2]) / 2
+        cy = (caixa_centro[1] + caixa_centro[3]) / 2
+    else:
+        cx, cy = (mn.x + mx.x) / 2, (mn.y + mx.y) / 2
+    origem_campo = origem_bbox if not caixa_centro else [round(cx, 2), round(cy, 2)]
+    desloc = Vector((-cx, -cy, -z0))
     bm = bmesh.new()
     bm.from_mesh(alvo.data)
     for v in bm.verts:
@@ -814,6 +858,7 @@ def montar(slug, spec, campo, pasta, relatorio):
             "regiao": regiao,
             "origem_no_campo_m": origem_campo,
             "datum": spec.get("datum", "min"),
+            "centrar_em": spec.get("centrar_em") or [],
         },
         "nota": spec.get("nota", ""),
         "ausentes": ausentes,

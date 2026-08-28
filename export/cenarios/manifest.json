@@ -1597,12 +1597,12 @@
     "min": [
      -244.994,
      0.0,
-     -51.506
+     -73.01
     ],
     "max": [
      244.994,
      1.126,
-     51.506
+     30.001
     ],
     "tamanho": [
      489.988,
@@ -1631,9 +1631,12 @@
     },
     "origem_no_campo_m": [
      -284.89,
-     -440.82
+     -462.32
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": [
+     "SBGR_RwyS_Pavement"
+    ]
    },
    "nota": "Cabeceira da 10R com as marcas de soleira, o numero e as luzes de borda. Pintura conforme AIP-Brasil / DECEA.",
    "ausentes": [],
@@ -1641,7 +1644,8 @@
     "ok": true,
     "erros": [],
     "avisos": [
-     "nenhuma imagem embutida"
+     "nenhuma imagem embutida",
+     "pivo deslocado -21.50 m em Z, de proposito (centrar_em SBGR_RwyS_Pavement)"
     ],
     "triangulos": 348,
     "vertices": 696,
@@ -1651,12 +1655,12 @@
      "min": [
       -244.9942,
       0.0,
-      -51.5059
+      -73.0103
      ],
      "max": [
       244.9942,
       1.1256,
-      51.5059
+      30.0015
      ],
      "tamanho": [
       489.9884,
@@ -1678,7 +1682,7 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_taxi_secao.glb",
-   "bytes": 3140,
+   "bytes": 3260,
    "faces": 79,
    "faces_origem": 79,
    "decimado": null,
@@ -1687,14 +1691,14 @@
    "materiais": 2,
    "caixa": {
     "min": [
-     -160.0,
+     -152.176,
      0.0,
-     -45.0
+     -55.864
     ],
     "max": [
-     160.0,
+     167.824,
      2.376,
-     45.0
+     34.136
     ],
     "tamanho": [
      320.0,
@@ -1718,10 +1722,13 @@
      "hdg": 16.354
     },
     "origem_no_campo_m": [
-     231.5,
-     -507.0
+     223.68,
+     -517.86
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": [
+     "SBGR_TaxiwayPavement"
+    ]
    },
    "nota": "Trecho de taxiway paralela com o eixo pintado.",
    "ausentes": [],
@@ -1729,7 +1736,9 @@
     "ok": true,
     "erros": [],
     "avisos": [
-     "nenhuma imagem embutida"
+     "nenhuma imagem embutida",
+     "pivo deslocado 7.82 m em X, de proposito (centrar_em SBGR_TaxiwayPavement)",
+     "pivo deslocado -10.86 m em Z, de proposito (centrar_em SBGR_TaxiwayPavement)"
     ],
     "triangulos": 158,
     "vertices": 206,
@@ -1737,14 +1746,14 @@
     "imagens": 0,
     "caixa": {
      "min": [
-      -160.0,
+      -152.1757,
       0.0,
-      -45.0
+      -55.8643
      ],
      "max": [
-      160.0,
+      167.8243,
       2.3757,
-      45.0
+      34.1357
      ],
      "tamanho": [
       320.0,
@@ -1766,7 +1775,7 @@
    "campo": "sbgr",
    "licenca": "odbl-1.0",
    "arquivo": "sbgr_patio.glb",
-   "bytes": 2592,
+   "bytes": 2680,
    "faces": 36,
    "faces_origem": 36,
    "decimado": null,
@@ -1775,14 +1784,14 @@
    "materiais": 2,
    "caixa": {
     "min": [
-     -150.0,
+     -161.208,
      0.0,
-     -100.0
+     -113.069
     ],
     "max": [
-     150.0,
+     138.792,
      0.02,
-     100.0
+     86.931
     ],
     "tamanho": [
      300.0,
@@ -1806,10 +1815,13 @@
      "hdg": 16.354
     },
     "origem_no_campo_m": [
-     -10.0,
-     625.0
+     1.21,
+     611.93
     ],
-    "datum": "min"
+    "datum": "min",
+    "centrar_em": [
+     "SBGR_ApronConcrete"
+    ]
    },
    "nota": "Laje de patio com as linhas de faixa, recortada dos poligonos de patio mapeados.",
    "ausentes": [],
@@ -1817,7 +1829,9 @@
     "ok": true,
     "erros": [],
     "avisos": [
-     "nenhuma imagem embutida"
+     "nenhuma imagem embutida",
+     "pivo deslocado -11.21 m em X, de proposito (centrar_em SBGR_ApronConcrete)",
+     "pivo deslocado -13.07 m em Z, de proposito (centrar_em SBGR_ApronConcrete)"
     ],
     "triangulos": 62,
     "vertices": 82,
@@ -1825,14 +1839,14 @@
     "imagens": 0,
     "caixa": {
      "min": [
-      -150.0,
+      -161.2078,
       0.0,
-      -100.0
+      -113.0688
      ],
      "max": [
-      150.0,
+      138.7922,
       0.02,
-      100.0
+      86.9312
      ],
      "tamanho": [
       300.0,

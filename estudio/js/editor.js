@@ -230,20 +230,53 @@ export class Editor {
 
   /* --------------------------------------------------------- operations */
 
-  /** Drop the selection so its lowest point rests on y = 0. */
-  aoChao () {
+  /** Drop the selection onto whatever is under it — the tarmac if nothing is.
+   *
+   *  This used to be `pos.y = 0`, which was right while every scene was
+   *  aircraft on a flat plane. It stopped being right the moment a runway
+   *  section arrived: that pavement carries its own relief (the GRU 10R
+   *  threshold section rises 24 cm across its 490 m), so a 777 snapped to
+   *  y = 0 stands a quarter of a metre INSIDE the runway. So the snap
+   *  raycasts down onto the other objects and lands on the highest surface it
+   *  finds under the footprint, with y = 0 as the floor.
+   *
+   *  The five samples are the centre and a small cross at ±15 % of the
+   *  footprint, not the corners: sampling the corners would let a wingtip
+   *  overhanging a container lift the whole aeroplane onto it. */
+  aoChao (registrar = true) {
     if (!this.selecao.length) return;
+    const ray = new THREE.Raycaster();
+    const abaixo = new THREE.Vector3(0, -1, 0);
     for (const id of this.selecao) {
       const o = this.obj3dDe(id), d = this.docDe(id);
       if (!o || !d) continue;
       o.updateMatrixWorld(true);
       const b = new THREE.Box3().setFromObject(o);
-      d.pos[1] = +(d.pos[1] - b.min.y).toFixed(4);
+      const c = b.getCenter(new THREE.Vector3());
+      const t = b.getSize(new THREE.Vector3());
+      const outros = [...this.mundo.objetos.entries()]
+        .filter(([k, v]) => k !== id && v.visible).map(([, v]) => v);
+      let piso = null;
+      if (outros.length) {
+        for (const [fx, fz] of [[0, 0], [0.15, 0], [-0.15, 0], [0, 0.15], [0, -0.15]]) {
+          ray.set(new THREE.Vector3(c.x + fx * t.x, b.max.y + 1000, c.z + fz * t.z), abaixo);
+          const h = ray.intersectObjects(outros, true);
+          if (h.length) piso = piso === null ? h[0].point.y : Math.max(piso, h[0].point.y);
+        }
+      }
+      /* y = 0 is the floor only when there IS a floor. A field plate is
+         datumed on the runway threshold, so its own surface runs BELOW zero
+         over most of the aerodrome — clamping to zero there left the 777
+         hovering 0.39 m over runway 10L. With the studio's ground plane
+         switched on, zero is a real surface again and the clamp is right. */
+      if (piso === null) piso = 0;
+      else if (this.estado.ambiente.chao.ligado) piso = Math.max(piso, 0);
+      d.pos[1] = +(d.pos[1] - b.min.y + piso).toFixed(4);
     }
     this.mundo.aplicarTransformacoes(this.estado);
     this.atualizarGizmo();
     this.aoMudarTransformacao();
-    this.registrar('snap to ground');
+    if (registrar) this.registrar('snap to ground');
   }
 
   travar (id, v) {

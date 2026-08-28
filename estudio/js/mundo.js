@@ -86,6 +86,7 @@ export class Mundo {
     this.texCeu = null;
     this.envAtual = null;
     this._envKey = '';
+    this._raioCena = 200;
 
     this.aoRedimensionar = () => {};
     const ro = new ResizeObserver(() => this.redimensionar());
@@ -114,6 +115,8 @@ export class Mundo {
     const asp = this.largura / this.altura;
     this.camO.top = alt / 2; this.camO.bottom = -alt / 2;
     this.camO.left = -alt * asp / 2; this.camO.right = alt * asp / 2;
+    const r = Math.max(2000, (this._raioCena || 200) * 4);
+    this.camO.near = -r; this.camO.far = r * 4;
     this.camO.position.copy(this.camP.position);
     this.camO.quaternion.copy(this.camP.quaternion);
     this.camO.updateProjectionMatrix();
@@ -142,18 +145,20 @@ export class Mundo {
   }
 
   aplicarAmbiente (a) {
-    /* sun */
+    /* sun — aimed at the small objects, not at the whole scene */
     const dir = direcaoSol(a.sol.elev, a.sol.azim);
-    const raio = Math.max(120, this.raioCena());
-    this.sol.position.copy(dir).multiplyScalar(raio * 2.4);
-    this.sol.target.position.set(0, 0, 0);
+    const { centro, raio } = this.focoSombra();
+    this.sol.position.copy(centro).addScaledVector(dir, raio * 2.4 + 400);
+    this.sol.target.position.copy(centro);
+    this.sol.target.updateMatrixWorld();
     this.sol.intensity = a.sol.intensidade;
     this.sol.color.set(a.sol.cor);
     const s = this.sol.shadow.camera;
-    s.left = -raio * 1.25; s.right = raio * 1.25;
-    s.top = raio * 1.25; s.bottom = -raio * 1.25;
-    s.near = 1; s.far = raio * 6;
+    s.left = -raio * 1.3; s.right = raio * 1.3;
+    s.top = raio * 1.3; s.bottom = -raio * 1.3;
+    s.near = 1; s.far = raio * 6 + 900;
     s.updateProjectionMatrix();
+    this._raioCena = this.raioCena();
     this.preencher.intensity = 0.18 * a.envIntensidade;
 
     /* environment + background. The sky texture is rebuilt only when the sun
@@ -247,7 +252,11 @@ export class Mundo {
     for (const d of faltando) {
       let obj;
       try {
-        obj = d.tipo === 'aeronave' ? await instanciar(d.slug) : instanciarProp(d.slug);
+        /* Anything that is not an authored prop comes from a GLB: 'aeronave'
+           from export/manifest.json, 'cenario' from export/cenarios/. Both go
+           through the same pivot wrapper, so a hangar and a 777 obey the same
+           rule — origin at the X/Z bbox centre, base on y = 0. */
+        obj = d.tipo === 'prop' ? instanciarProp(d.slug) : await instanciar(d.slug);
       } catch (e) {
         console.error('could not instantiate', d, e);
         continue;
@@ -301,9 +310,42 @@ export class Mundo {
     return b || new THREE.Box3(new THREE.Vector3(-30, 0, -30), new THREE.Vector3(30, 12, 30));
   }
 
+  /* A field plate is 6.1 km across. An aircraft is 60 m. Every quantity that
+     used to be derived from "the scene radius" — the sun's distance, the shadow
+     frustum, the spacing of a newly dropped object — becomes nonsense the
+     moment one of those plates is in the scene: a 9.7 km shadow map at 2048 px
+     is 4.8 m per texel, which is no shadow at all.
+     So there are two radii. This one ignores anything whose footprint is wider
+     than GRANDE, and it is the one the lighting uses. */
+  static GRANDE = 300;
+
+  caixaPequenos () {
+    const b = new THREE.Box3();
+    let algum = false;
+    const t = new THREE.Vector3();
+    for (const o of this.objetos.values()) {
+      if (!o.visible) continue;
+      const c = new THREE.Box3().setFromObject(o);
+      c.getSize(t);
+      if (Math.max(t.x, t.z) > Mundo.GRANDE) continue;
+      b.union(c); algum = true;
+    }
+    return algum ? b : null;
+  }
+
   raioCena () {
     const b = this.caixaTudo();
     return Math.max(40, b.getSize(new THREE.Vector3()).length() / 2);
+  }
+
+  /** Where the shadow map should spend its texels, and how wide. */
+  focoSombra () {
+    const b = this.caixaPequenos() || this.caixaTudo();
+    const centro = b.getCenter(new THREE.Vector3());
+    centro.y = 0;
+    const raio = THREE.MathUtils.clamp(
+      b.getSize(new THREE.Vector3()).length() / 2, 60, 800);
+    return { centro, raio };
   }
 
   /** Distance at which `raio` fills the frame, honouring the tighter FOV.
@@ -323,9 +365,7 @@ export class Mundo {
     const v = (dir || new THREE.Vector3(-0.62, 0.30, 0.72)).clone().normalize();
     this.camP.position.copy(centro).addScaledVector(v, d);
     this.controles.target.copy(centro);
-    this.camP.near = Math.max(0.1, d / 200);
-    this.camP.far = Math.max(2000, d * 30);
-    this.camP.updateProjectionMatrix();
+    this.ajustarProfundidade();
     this.controles.update();
     this.atualizarOrto();
   }
@@ -366,7 +406,35 @@ export class Mundo {
   pausar () { this.renderer.setAnimationLoop(null); }
   retomar () { if (this._loop) this.renderer.setAnimationLoop(this._loop); }
 
+  /** near/far from where the camera actually IS.
+   *
+   *  Pinning them at "frame this box" was fine while every scene was aircraft.
+   *  With a 6 km field plate, framing it gave near = 55 m and the next aircraft
+   *  you flew up to vanished into the near plane. Deriving them from the orbit
+   *  distance instead keeps the ratio near 5000:1 at every zoom level, which a
+   *  24-bit depth buffer handles without fighting — and it survives the
+   *  orthographic toggle, which a logarithmic depth buffer would not (ortho has
+   *  w = 1, so the log-depth chunk flattens). */
+  ajustarProfundidade () {
+    const d = this.camP.position.distanceTo(this.controles.target);
+    /* The RATIO is what a 24-bit depth buffer cares about, and it has to stay
+       near 3000:1 at every zoom: a 3 cm gap between an apron slab and the
+       ground plane z-fights visibly at 20000:1, which the first version of this
+       function produced at 60 m out. near tracks the orbit distance (1%, so
+       nothing you can be looking at is ever clipped) and far stays as tight as
+       the scene allows. */
+    const perto = THREE.MathUtils.clamp(d * 0.01, 0.2, 8);
+    const longe = Math.max(1500, d * 3 + (this._raioCena || 200) * 3);
+    if (Math.abs(perto - this.camP.near) > this.camP.near * 0.02 ||
+        Math.abs(longe - this.camP.far) > this.camP.far * 0.02) {
+      this.camP.near = perto;
+      this.camP.far = longe;
+      this.camP.updateProjectionMatrix();
+    }
+  }
+
   render () {
+    this.ajustarProfundidade();
     if (this.cam === this.camO) this.atualizarOrto();
     this.renderer.render(this.cena, this.cam);
   }

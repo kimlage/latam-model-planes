@@ -7,7 +7,8 @@
 
 import * as THREE from 'three';
 import { estadoPadrao, novoObjeto, clonar, Historico, lerBiblioteca, salvarCena, apagarCena } from './estado.js';
-import { carregarManifesto, catalogo, miniatura, bytesCarregados, acharAsset } from './frota.js';
+import { carregarManifesto, carregarCenarios, catalogo, miniatura, bytesCarregados,
+         acharAsset, LICENCAS, CATEGORIAS, ORDEM_CATEGORIAS, CAMPOS } from './frota.js';
 import { PROPS, RIGS } from './props.js';
 import { Mundo } from './mundo.js';
 import { Editor } from './editor.js';
@@ -39,16 +40,21 @@ async function iniciar () {
   ligarHud();
   ligarArrastar();
 
+  let nAero = 0, nCen = 0;
   try {
-    const info = await carregarManifesto();
-    $('cnt-frota').textContent = `${info.n} exported`;
+    nAero = (await carregarManifesto()).n;
   } catch (e) {
-    $('lista-frota').innerHTML =
+    $('lista-assets').innerHTML =
       `<p class="nota" style="color:#ff8f8f">${e.message}<br><br>Run
        <code>python3 -m http.server 8000</code> in the repository root and open
        <code>/estudio/</code>.</p>`;
     console.error(e);
   }
+  /* The airport tier is optional on purpose: a checkout without
+     export/cenarios/ still runs, it just has no airports. It never throws. */
+  nCen = (await carregarCenarios()).n;
+  $('cnt-frota').textContent =
+    `${nAero} aircraft · ${nCen} airport assets · ${Object.keys(PROPS).length} authored props`;
   construirBiblioteca();
 
   mundo.aplicarRender(estado.render);
@@ -72,37 +78,92 @@ async function iniciar () {
 
 /* -------------------------------------------------------------- sidebar */
 
-function construirBiblioteca () {
-  const lf = $('lista-frota');
-  lf.textContent = '';
-  for (const a of catalogo) {
-    const img = h('img.thumb', { alt: '' });
-    miniatura(a.slug).then(u => { if (u) img.src = u; }).catch(() => {});
-    const card = h('div.card', {
-      draggable: 'true', title: `${a.nome} · ${a.matricula}\n${a.L.toFixed(2)} m long · ${a.env.toFixed(2)} m span\n${a.triangulos.toLocaleString()} triangles · ${formatarBytes(a.bytes)}`,
-      onclick: () => adicionar('aeronave', a.slug, a.nome),
-      ondragstart: e => e.dataTransfer.setData('text/plain', `aeronave:${a.slug}:${a.nome}`),
-    },
-      img,
-      h('div', {},
-        h('div.n', {}, a.nome),
-        h('div.m', {}, `${a.matricula} · ${a.L.toFixed(1)} m · ${(a.triangulos / 1000).toFixed(0)}k tris`)));
-    card.dataset.busca = `${a.nome} ${a.matricula} ${a.slug}`.toLowerCase();
-    lf.append(card);
-  }
+/* The sidebar is built from the manifests, in this order:
+ *
+ *   catalogo   every GLB — the 11 aircraft (export/manifest.json) and the 46
+ *              airport pieces (export/cenarios/manifest.json), each carrying
+ *              its own `categoria` and `licenca`
+ *   PROPS      the authored boxes and slabs in js/props.js, tagged with the
+ *              same category vocabulary so both sets land in the same sections
+ *
+ * Nothing about the sections is written here except their order. A category the
+ * scenery manifest invents tomorrow appears at the end of the list rather than
+ * silently dropping its assets on the floor. */
 
-  const lp = $('lista-props');
-  lp.textContent = '';
-  for (const [slug, def] of Object.entries(PROPS)) {
-    const card = h('div.card', {
-      draggable: 'true', title: def.rotulo,
-      onclick: () => adicionar('prop', slug, def.rotulo),
-      ondragstart: e => e.dataTransfer.setData('text/plain', `prop:${slug}:${def.rotulo}`),
-    },
-      h('div.thumb', { style: 'display:grid;place-items:center;color:#5c6478;font-size:18px' }, '▦'),
-      h('div', {}, h('div.n', {}, def.rotulo), h('div.m', {}, def.medidas)));
-    card.dataset.busca = `${def.rotulo} ${slug}`.toLowerCase();
-    lp.append(card);
+function rotuloCategoria (c) {
+  return CATEGORIAS[c] || c;
+}
+
+/** A share-alike badge, or nothing. It is the licence fact a composer needs to
+ *  see BEFORE placing a piece, not after exporting. */
+function selo (licId) {
+  const l = LICENCAS[licId];
+  if (!l || !l.share_alike) return null;
+  return h('span.lic', { title: `${l.nome} — ${l.atribuicao}` }, 'ODbL');
+}
+
+function cartaoAsset (a) {
+  const img = h('img.thumb', { alt: '' });
+  miniatura(a.slug).then(u => { if (u) img.src = u; }).catch(() => {});
+  const grande = Math.max(a.L, a.env) >= 300;
+  const dim = a.L ? `${a.L.toFixed(a.L < 100 ? 1 : 0)} × ${a.env.toFixed(a.env < 100 ? 1 : 0)} m` : '';
+  const sub = a.tipo === 'aeronave'
+    ? `${a.matricula} · ${a.L.toFixed(1)} m · ${(a.triangulos / 1000).toFixed(0)}k tris`
+    : `${dim} · ${(a.triangulos / 1000).toFixed(a.triangulos < 1000 ? 2 : 0)}k tris`;
+  const card = h('div.card', {
+    draggable: 'true',
+    title: [`${a.nome}${a.matricula && a.tipo === 'aeronave' ? ' · ' + a.matricula : ''}`,
+            `${a.L.toFixed(2)} × ${a.H.toFixed(2)} × ${a.env.toFixed(2)} m (L × H × span)`,
+            `${a.triangulos.toLocaleString()} triangles · ${formatarBytes(a.bytes)}`,
+            a.campo ? `field ${a.campo.toUpperCase()} — ${(CAMPOS[a.campo] || {}).rotulo || ''}` : '',
+            a.datum === 'campo' ? 'datum: runway threshold at y = 0 — the plate goes below zero on purpose' : '',
+            LICENCAS[a.licenca] ? LICENCAS[a.licenca].atribuicao : '',
+            a.nota || ''].filter(Boolean).join('\n'),
+    onclick: () => adicionar(a.tipo, a.slug, a.nome),
+    ondragstart: e => e.dataTransfer.setData('text/plain', `${a.tipo}:${a.slug}:${a.nome}`),
+  },
+    img,
+    h('div', {},
+      h('div.n', {}, a.nome),
+      h('div.m', {}, sub, grande ? h('b.grande', { title: 'wider than 300 m — it is a backdrop, not a building block' }, ' ▮ large') : null),
+      selo(a.licenca)));
+  card.dataset.busca = [a.nome, a.slug, a.matricula, a.campo, a.categoria,
+                        rotuloCategoria(a.categoria), a.licenca, a.nota]
+    .filter(Boolean).join(' ').toLowerCase();
+  return card;
+}
+
+function cartaoProp (slug, def) {
+  const card = h('div.card', {
+    draggable: 'true',
+    title: `${def.rotulo} — ${def.medidas}\nAuthored in estudio/js/props.js. `
+         + `CC BY 4.0, no survey data.`,
+    onclick: () => adicionar('prop', slug, def.rotulo),
+    ondragstart: e => e.dataTransfer.setData('text/plain', `prop:${slug}:${def.rotulo}`),
+  },
+    h('div.thumb', { style: 'display:grid;place-items:center;color:#5c6478;font-size:18px' }, '▦'),
+    h('div', {}, h('div.n', {}, def.rotulo), h('div.m', {}, def.medidas)));
+  card.dataset.busca = `${def.rotulo} ${slug} ${def.categoria} `
+    + `${rotuloCategoria(def.categoria)} authored prop generic`.toLowerCase();
+  return card;
+}
+
+function construirBiblioteca () {
+  const grupos = new Map();
+  const por = (c, n) => { if (!grupos.has(c)) grupos.set(c, []); grupos.get(c).push(n); };
+
+  for (const a of catalogo) por(a.categoria || 'aeronave', cartaoAsset(a));
+  for (const [slug, def] of Object.entries(PROPS)) por(def.categoria || 'adereco', cartaoProp(slug, def));
+
+  const ordem = [...ORDEM_CATEGORIAS.filter(c => grupos.has(c)),
+                 ...[...grupos.keys()].filter(c => !ORDEM_CATEGORIAS.includes(c))];
+
+  const raiz = $('lista-assets');
+  raiz.textContent = '';
+  for (const c of ordem) {
+    const cards = grupos.get(c);
+    const lista = h('div.lista-cards', { 'data-cat': c }, cards);
+    raiz.append(h('h3', { 'data-cat': c }, rotuloCategoria(c), h('small', {}, ` ${cards.length}`)), lista);
   }
 
   const lr = $('lista-rigs');
@@ -111,14 +172,25 @@ function construirBiblioteca () {
     const card = h('div.card', { title: r.desc, onclick: () => aplicarRig(chave) },
       h('div.thumb', { style: 'display:grid;place-items:center;color:#c9a24a;font-size:18px' }, '☀'),
       h('div', {}, h('div.n', {}, r.rotulo), h('div.m', {}, r.desc)));
-    card.dataset.busca = `${r.rotulo} ${r.desc}`.toLowerCase();
+    card.dataset.busca = `${r.rotulo} ${r.desc} light rig`;
     lr.append(card);
   }
 
+  /* One filter box over every section. A heading whose whole section is hidden
+     hides too, otherwise the sidebar fills with empty titles. */
   $('busca').addEventListener('input', e => {
     const q = e.target.value.trim().toLowerCase();
-    document.querySelectorAll('.card').forEach(c =>
-      c.classList.toggle('oculto', !!q && !(c.dataset.busca || '').includes(q)));
+    document.querySelectorAll('.card').forEach(cd =>
+      cd.classList.toggle('oculto', !!q && !(cd.dataset.busca || '').includes(q)));
+    document.querySelectorAll('#lista-assets .lista-cards').forEach(l => {
+      const vivos = [...l.children].filter(cd => !cd.classList.contains('oculto')).length;
+      l.classList.toggle('oculto', vivos === 0);
+      const t = l.previousElementSibling;
+      if (t && t.tagName === 'H3') {
+        t.classList.toggle('oculto', vivos === 0);
+        t.querySelector('small').textContent = ` ${vivos}`;
+      }
+    });
   });
 
   desenharCenas();
@@ -187,6 +259,20 @@ async function carregarDocumento (doc) {
   mundo.aplicarAmbiente(estado.ambiente);      // the shadow camera needs the real scene radius
   esconderCarga();
 
+  /* `assentar` — seat the aircraft on whatever is under them, once, on open.
+     A field plate is a real surface with real relief: GRU's 10L runway sits
+     0.39 m below the threshold datum where the starter puts the 777, so a
+     hard-coded y would be a number that goes stale the day the plate is
+     re-exported. Ask the studio instead; it is the same code the G key runs. */
+  if (doc.assentar) {
+    const guarda = editor.selecao;
+    editor.selecao = estado.objetos
+      .filter(o => o.tipo === 'aeronave' && !o.travado && o.visivel).map(o => o.id);
+    editor.aoChao(false);
+    editor.selecao = guarda;
+    editor.atualizarGizmo();      // aoChao attached the gizmo to the temporary selection
+  }
+
   mundo.camP.fov = estado.camera.fov || 35;
   mundo.camP.updateProjectionMatrix();
   if (doc.camera && doc.camera.pos) {
@@ -194,11 +280,15 @@ async function carregarDocumento (doc) {
     if (doc.camera.orto) { estado.camera.orto = true; mundo.usarOrto(true); }
   } else {
     /* A starter scene carries a direction, not a position: frame what is here.
-       Frame the AIRCRAFT, not everything — a 240 m backdrop card or a terminal
-       block would otherwise decide the shot and leave the jet a speck. The
-       "frame all" button still frames all of it. */
+       Frame the AIRCRAFT by default — a 240 m backdrop card, a 624 m terminal
+       pier or a 6 km field plate would otherwise decide the shot and leave the
+       jet a speck. A scene whose subject IS the field says `quadro: 'tudo'`.
+       The "frame all" button still frames all of it either way. */
     const aeronaves = estado.objetos.filter(o => o.tipo === 'aeronave').map(o => o.id);
-    mundo.vista(doc.vista || 'tres-quartos', mundo.caixaDe(aeronaves) || mundo.caixaTudo());
+    const caixa = doc.quadro === 'tudo'
+      ? mundo.caixaTudo()
+      : (mundo.caixaDe(aeronaves) || mundo.caixaTudo());
+    mundo.vista(doc.vista || 'tres-quartos', caixa);
   }
   $('nome-cena').value = estado.nome;
   sincronizarInspetor();
@@ -209,6 +299,8 @@ async function carregarDocumento (doc) {
 
 /* ------------------------------------------------------------ operations */
 
+const GRANDE = 150;      // half-width, metres: above this a piece is scenery
+
 /** A spot on the ground that does not sit inside anything already placed. */
 function posicaoLivre (raioNovo, perto) {
   const alvo = perto || mundo.controles.target;
@@ -216,8 +308,13 @@ function posicaoLivre (raioNovo, perto) {
   const ocupados = [...mundo.objetos.values()].map(o => {
     const b = new THREE.Box3().setFromObject(o);
     const c = b.getCenter(new THREE.Vector3()), s = b.getSize(new THREE.Vector3());
-    return { c, r: Math.hypot(s.x, s.z) / 2 };
-  });
+    return { c, r: Math.hypot(s.x, s.z) / 2, grande: Math.max(s.x, s.z) > GRANDE };
+  }).filter(o => !o.grande);
+  /* A field plate has a 3 km radius. Nudging it "clear of what is already
+     there" would put it 5 km away, and nudging an aircraft clear of a plate is
+     just as wrong — you drop a jet ONTO a runway, not beside it. So anything
+     wider than GRANDE neither moves nor pushes. */
+  if (raioNovo > GRANDE) return base;
   const passo = Math.max(20, raioNovo * 1.2);
   for (let k = 0; k < 24; k++) {
     const dz = ((k + 1) >> 1) * passo * (k % 2 ? -1 : 1);
@@ -331,7 +428,7 @@ function desenharOutliner () {
         if (e.shiftKey || e.metaKey || e.ctrlKey) editor.alternar(d.id); else editor.selecionar([d.id]);
       },
     },
-      h('span.tag', {}, d.tipo === 'aeronave' ? 'AC' : 'PR'),
+      h('span.tag', {}, d.tipo === 'aeronave' ? 'AC' : d.tipo === 'prop' ? 'PR' : 'CE'),
       h('span.rot', { title: d.slug }, d.nome),
       h('button.mini', { title: d.visivel ? 'hide' : 'show', onclick: () => editor.ocultar(d.id, d.visivel) }, d.visivel ? '👁' : '⃠'),
       h('button.mini', { title: d.travado ? 'unlock' : 'lock', onclick: () => editor.travar(d.id, !d.travado) }, d.travado ? '🔒' : '🔓'));
@@ -363,11 +460,15 @@ function sincronizarTransform () {
   const o = mundo.objetos.get(d.id);
   if (o) {
     const b = new THREE.Box3().setFromObject(o), s = b.getSize(new THREE.Vector3());
-    const a = d.tipo === 'aeronave' ? acharAsset(d.slug) : null;
+    const a = d.tipo === 'prop' ? null : acharAsset(d.slug);
+    const lic = a && LICENCAS[a.licenca];
     $('medidas-sel').textContent =
       `${s.x.toFixed(2)} × ${s.y.toFixed(2)} × ${s.z.toFixed(2)} m (world bbox)`
-      + (a ? `\n${a.matricula} · ${a.triangulos.toLocaleString()} tris · ${a.materiais} materials` : '')
-      + `\nlowest point y = ${b.min.y.toFixed(3)} m`;
+      + (a ? `\n${a.tipo === 'aeronave' ? a.matricula : (a.campo || '').toUpperCase()} · `
+           + `${a.triangulos.toLocaleString()} tris · ${a.materiais} materials` : '')
+      + `\nlowest point y = ${b.min.y.toFixed(3)} m`
+      + (lic ? `\n${lic.nome}${lic.share_alike ? ' — share-alike' : ''}` : '')
+      + (a && a.nota ? `\n${a.nota}` : '');
   }
 }
 
@@ -543,7 +644,8 @@ function ligarBarra () {
   });
   $('btn-exportar').addEventListener('click', () =>
     dlgExportar({ mundo, estado, editor, carregarDocumento }));
-  $('btn-sobre').addEventListener('click', dlgLicenca);
+  /* The licence panel is built FROM the open scene, so it needs the scene. */
+  $('btn-sobre').addEventListener('click', () => dlgLicenca({ estado }));
   $('modal-fechar').addEventListener('click', fecharModal);
 
   document.querySelectorAll('#abas-lateral .aba').forEach(b =>

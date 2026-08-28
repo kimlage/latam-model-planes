@@ -14,8 +14,11 @@
   a fault in this page. See README.md.
 
   Aircraft models: CC BY 4.0 — LATAM fleet 3D replicas, Kim Lage.
-  No airport scenery is loaded or shipped here: every ground, sky and prop in
-  this studio is original geometry authored in js/props.js. See README.md §Licence.
+  Two asset tiers, two licences, and the studio tells you which one a scene is
+  using: the aircraft are CC BY 4.0, and the airport pieces under
+  export/cenarios/ are an OpenStreetMap derivative under ODbL 1.0 with
+  share-alike. Both may ship; the attribution travels with them. See README.md
+  §Licence and NOTICE.md.
 -->
 <html lang="en">
 <head>
@@ -56,10 +59,10 @@
 
   <div class="painel ativo" id="pnl-assets">
     <input id="busca" placeholder="filter assets…" spellcheck="false">
-    <h3>Aircraft <small id="cnt-frota"></small></h3>
-    <div id="lista-frota" class="lista-cards">loading manifest…</div>
-    <h3>Environment</h3>
-    <div id="lista-props" class="lista-cards"></div>
+    <div id="cnt-frota" class="nota">loading manifests…</div>
+    <!-- Sections are built from the two manifests, not written here: a new
+         category in export/cenarios/manifest.json appears on its own. -->
+    <div id="lista-assets">loading manifest…</div>
     <h3>Light rigs</h3>
     <div id="lista-rigs" class="lista-cards"></div>
   </div>

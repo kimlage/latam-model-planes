@@ -71,6 +71,17 @@ a{color:var(--acento)}
 .card .n{font-weight:600;font-size:11.5px}
 .card .m{color:var(--fraco);font-size:10.5px}
 .card.oculto{display:none}
+/* Share-alike is a fact you need BEFORE placing a piece, so it rides on the
+   card, not in a dialog. Only share-alike licences get a badge — CC BY is the
+   house default and a badge on every aircraft would be noise. */
+.card .lic{display:inline-block;font-size:9px;letter-spacing:.05em;color:#d8b263;
+  border:1px solid #5b4d2b;background:#241f14;border-radius:3px;padding:0 3px;margin-top:2px}
+.card .m b.grande{color:#d8b263;font-weight:600}
+/* An empty section hides its own heading, or filtering fills the column with
+   titles over nothing. */
+h3.oculto,.lista-cards.oculto{display:none}
+#cnt-frota{margin:6px 0 2px}
+#lista-assets h3{margin-top:12px}
 
 /* rows (outliner, scenes) */
 .lista-linhas{display:flex;flex-direction:column;gap:2px}

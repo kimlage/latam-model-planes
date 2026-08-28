@@ -9,8 +9,9 @@
 import {
   FPS_LEGAIS, estimarGif, formatarBytes, exportarGif, exportarPng,
   construirEmbed, documentoParaJson, baixar, nomeArquivo,
+  licencasDaCena, textoAtribuicao,
 } from './exportar.js';
-import { catalogo } from './frota.js';
+import { acharAsset } from './frota.js';
 
 /* Tiny DOM helper: h('div.classe', {attr}, ...filhos) */
 export function h (spec, props = {}, ...filhos) {
@@ -55,33 +56,82 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharModal(
 
 /* -------------------------------------------------------------- licence --- */
 
-export function dlgLicenca () {
-  const corpo = h('div', { html: `
-    <h4>What you may do with what this page produces</h4>
-    <p>The eleven aircraft are original geometry built in this repository from the
-       manufacturers' published dimensional documents. They are licensed
-       <b>CC BY 4.0</b>. Anything you export here — GIF, PNG, embed — carries that
-       licence, and the attribution it requires is:</p>
-    <pre>LATAM fleet 3D replicas — Kim Lage — CC BY 4.0
-https://creativecommons.org/licenses/by/4.0/</pre>
+/* The Licence panel answers "what does THIS scene oblige me to do", so it is
+ * built from the assets that are actually in the open scene. A blanket claim
+ * about the page would be wrong in both directions: wrong when the scene is
+ * pure fleet (it would over-claim), and wrong when a GRU hangar is in it (it
+ * would hide the share-alike). */
 
-    <h4>Why there is no airport in this studio</h4>
-    <p>The repository <i>does</i> hold three airport scenes — <code>scenario/</code>
-       (SCL), <code>scenario_sdsc/</code> and <code>scenario_sbgr/</code>. They are
-       generated from <b>OpenStreetMap</b> and are therefore ODbL derived databases.
-       ODbL is <b>share-alike</b>; CC BY 4.0 is not. Redistributing an aircraft scene
-       that carried that geometry would drag the share-alike obligation onto it, so
-       the airport meshes are <b>never exported and are not loadable here</b>.</p>
-    <p>Every ground, sky, marking and block you can place instead is original
-       geometry authored in <code>estudio/js/props.js</code> — canvas-painted
-       asphalt, concrete, grass, a generic runway pattern, and box-and-cylinder
-       massing. None of it is a survey of any real airport.</p>
+const escapar = t => String(t).replace(/[<>&]/g, c =>
+  ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
+
+export function dlgLicenca (ctx) {
+  const estado = ctx && ctx.estado;
+  const lics = estado ? licencasDaCena(estado) : [];
+  const compartilha = lics.some(l => l.share_alike);
+
+  const usados = estado
+    ? [...new Set(estado.objetos.map(o => o.slug))]
+        .map(s => acharAsset(s)).filter(Boolean)
+    : [];
+  const campos = [...new Set(usados.map(a => a.campo).filter(Boolean))];
+
+  const linhasCena = lics.map(l => `
+    <tr><th style="white-space:nowrap">${escapar(l.nome)}${l.share_alike
+        ? ' <span style="color:#d8b263">share-alike</span>' : ''}</th>
+        <td><code>${escapar(l.atribuicao)}</code><br>
+            <a href="${l.url}" target="_blank" rel="noopener">${l.url}</a>
+            ${l.nota ? `<br><span style="opacity:.8">${escapar(l.nota)}</span>` : ''}</td></tr>`).join('');
+
+  const corpo = h('div', { html: `
+    <h4>This scene</h4>
+    <p>${estado ? `<b>${escapar(estado.nome || 'untitled')}</b> — ${estado.objetos.length}
+       object(s)${campos.length ? `, using geometry from ${campos.map(c => c.toUpperCase()).join(', ')}` : ''}.`
+       : 'Open a scene to see what it carries.'}</p>
+    <table>${linhasCena || '<tr><td>nothing placed yet</td></tr>'}</table>
+    <p>Everything this scene exports — GIF, PNG, embed, JSON — carries
+       <b>every</b> line above. The exported embed writes them into the page and
+       the scene JSON records them in a <code>licencas</code> field.</p>
+    ${compartilha ? `<div class="aviso"><b>Share-alike is in play.</b> This scene
+       contains airport geometry derived from OpenStreetMap. ODbL 1.0 lets you
+       redistribute it — that is why it is here — but a <i>derived database</i>
+       you publish from it must be offered under ODbL as well, and the
+       attribution has to travel with the file. Renders and animations are
+       Produced Works: attribute them, and you are done.</div>` : ''}
+
+    <h4>The two tiers, and why both may ship</h4>
+    <p>The <b>eleven aircraft</b> are original geometry built in this repository
+       from the manufacturers' published dimensional documents. <b>CC BY 4.0.</b></p>
+    <p>The <b>airport pieces</b> under <code>export/cenarios/</code> are cut out of
+       <code>scenario/</code> (SCL), <code>scenario_sdsc/</code> and
+       <code>scenario_sbgr/</code>, which are generated from
+       <b>OpenStreetMap</b>. A mesh built from an ODbL database is a derived
+       database, so it is <b>ODbL 1.0, share-alike</b> — and ODbL <i>permits</i>
+       that redistribution as long as the attribution travels and share-alike is
+       honoured. That is what the per-asset <code>licenca</code> field, the
+       <code>copyright</code> written into every <code>.glb</code>, and this
+       panel are for. See <code>NOTICE.md</code> §"The airport mesh is an OSM
+       derivative".</p>
+    <p>The <b>grounds, the sky and the massing blocks</b> are authored in
+       <code>estudio/js/props.js</code> from primitives and canvas painting, with
+       no survey data in them. They ride with the fleet under CC BY 4.0.</p>
+    <p><b>Copernicus terrain is not exported at all.</b> The height fields under
+       <code>scenario*/</code> are 3.7 M faces at SBGR alone and would carry two
+       further notices; no asset in this studio references them.</p>
+
+    <h4>What is lost on the way out</h4>
+    <p>The airport materials are procedural node trees — noise, range maps, a
+       haze group — that glTF cannot carry. The exporter flattens each one to a
+       representative colour taken from the material's own
+       <code>diffuse_color</code>, and records that substitution material by
+       material in <code>export/cenarios/manifest.json</code> under
+       <code>materiais_achatados</code>. The pavement is the right grey; it is
+       not the pavement you see in a Cycles render of the field.</p>
 
     <h4>Trademarks</h4>
     <p><b>LATAM</b>, <b>Airbus</b> and <b>Boeing</b> are trademarks of their owners.
        This is an independent, non-commercial project with no affiliation or
-       endorsement. CC BY 4.0 covers this project's own authorship — the mesh, the
-       scripts, the measurements — and grants no rights over the marks.</p>
+       endorsement. Neither licence above grants any right over the marks.</p>
 
     <h4>Third-party code, vendored under <code>estudio/vendor/</code></h4>
     <table>
@@ -91,6 +141,15 @@ https://creativecommons.org/licenses/by/4.0/</pre>
     </table>
     <p>Nothing is loaded from a CDN: the studio runs with no internet.</p>
   ` });
+
+  const btn = h('button', {
+    onclick: () => {
+      navigator.clipboard?.writeText(estado ? textoAtribuicao(estado) : '');
+      btn.textContent = 'copied';
+    },
+  }, 'Copy this scene\'s attribution');
+  corpo.append(h('div.rodape', {},
+    h('span.estimativa', {}, `${lics.length} licence(s) in play`), btn));
   abrirModal('Licence and attribution', corpo);
 }
 
@@ -266,22 +325,38 @@ function abaEmbed (ctx) {
   function atualizar () {
     const url = modo.value === 'url';
     linhaU1.style.display = linhaU2.style.display = url ? '' : 'none';
-    const slugs = [...new Set(ctx.estado.objetos.filter(o => o.tipo === 'aeronave').map(o => o.slug))];
+    const usados = [...new Set(ctx.estado.objetos.filter(o => o.tipo !== 'prop').map(o => o.slug))]
+      .map(s => acharAsset(s)).filter(Boolean);
     const be = url ? baseEstudio.value.replace(/\/?$/, '/') : (modo.value === 'irmao' ? 'estudio/' : './');
     const bg = url ? baseGlb.value.replace(/\/?$/, '/') : (modo.value === 'irmao' ? './' : '../export/web/');
-    const bytes = slugs.reduce((n, s) => n + (catalogo.find(c => c.slug === s)?.bytes || 0), 0);
+    const bc = url ? baseGlb.value.replace(/\/?$/, '/') : (modo.value === 'irmao' ? './' : '../export/cenarios/');
+    const bytes = usados.reduce((n, a) => n + a.bytes, 0);
+    const tris = usados.reduce((n, a) => n + a.triangulos, 0);
+    const lics = licencasDaCena(ctx.estado);
+    /* Honesty about weight, before the download and not after: 15 MB of GLB on
+       a phone is a page that hangs, and the dialog has to say so. */
+    const pesado = bytes > 12e6 || tris > 900e3;
     precisa.innerHTML =
       `<h4>What the embed needs alongside it</h4>
        <table>
          <tr><th>${be}vendor/three/</th><td>three.js r169 + Draco decoder (~2.1 MB, once)</td></tr>
-         <tr><th>${be}js/</th><td>embed.js, mundo.js, props.js, frota.js, estado.js (~60 kB)</td></tr>
-         ${slugs.length
-           ? slugs.map(s => `<tr><th>${bg}${s}_web.glb</th><td>${formatarBytes(catalogo.find(c => c.slug === s)?.bytes || 0)}</td></tr>`).join('')
-           : '<tr><th>—</th><td>no aircraft in this scene</td></tr>'}
+         <tr><th>${be}js/</th><td>embed.js, mundo.js, props.js, frota.js, estado.js (~64 kB)</td></tr>
+         ${usados.length
+           ? usados.map(a => `<tr><th>${a.tipo === 'cenario' ? bc : bg}${a.arquivo.split('/').pop()}</th>`
+               + `<td>${formatarBytes(a.bytes)} · ${a.triangulos.toLocaleString()} tris`
+               + `${a.tipo === 'cenario' ? ' · <span style="color:#d8b263">ODbL</span>' : ''}</td></tr>`).join('')
+           : '<tr><th>—</th><td>nothing but authored props in this scene</td></tr>'}
        </table>
-       <p>Aircraft payload: <b>${formatarBytes(bytes)}</b>. The embed does <b>not</b>
-          need <code>manifest.json</code> — the GLB paths are baked into the scene
-          JSON inside the HTML. Nothing is fetched from a CDN.</p>`;
+       <p>Payload: <b>${formatarBytes(bytes)}</b>, ${tris.toLocaleString()} triangles.
+          The embed does <b>not</b> need either manifest — the GLB paths are baked
+          into the scene JSON inside the HTML. Nothing is fetched from a CDN.</p>
+       ${pesado ? `<div class="aviso"><b>This is a heavy embed.</b>
+          ${formatarBytes(bytes)} of GLB and ${tris.toLocaleString()} triangles will
+          take several seconds to appear on a laptop and may not finish on a
+          phone. Drop the biggest pieces, or serve the folder and link to it
+          rather than putting it in an iframe on a busy page.</div>` : ''}
+       <p class="nota">Licences written into the page:
+          ${lics.map(l => l.nome).join(' · ')}.</p>`;
   }
   [modo, baseEstudio, baseGlb].forEach(e => e.addEventListener('input', atualizar));
   modo.addEventListener('change', atualizar);
@@ -392,7 +467,8 @@ function abaJson (ctx) {
 
   const btn = h('button.primaria', {
     onclick: () => {
-      const doc = documentoParaJson(ctx.estado, ctx.mundo, { comAssets: true, baseGlb: '../export/web/' });
+      const doc = documentoParaJson(ctx.estado, ctx.mundo,
+        { comAssets: true, baseGlb: '../export/web/', baseCen: '../export/cenarios/' });
       baixar(new Blob([JSON.stringify(doc, null, 2)], { type: 'application/json' }),
         nomeArquivo(ctx.estado.nome, 'json'));
     },
@@ -400,7 +476,8 @@ function abaJson (ctx) {
 
   const btnCopiar = h('button', {
     onclick: () => {
-      const doc = documentoParaJson(ctx.estado, ctx.mundo, { comAssets: true, baseGlb: '../export/web/' });
+      const doc = documentoParaJson(ctx.estado, ctx.mundo,
+        { comAssets: true, baseGlb: '../export/web/', baseCen: '../export/cenarios/' });
       navigator.clipboard?.writeText(JSON.stringify(doc, null, 2));
       msg.textContent = 'copied to the clipboard.';
     },
@@ -409,7 +486,8 @@ function abaJson (ctx) {
   return h('div', {},
     h('p.nota', {}, 'Schema latam-estudio/1. Carries the objects, their transforms, '
       + 'the sun and sky, the render settings, the camera and the two stored poses, '
-      + 'plus an asset table mapping each slug to its GLB path.'),
+      + 'an asset table mapping each slug to its GLB path and its licence, and a '
+      + '`licencas` block listing what this particular scene obliges you to.'),
     h('h4', {}, 'Import'), arquivo, msg,
     h('div.rodape', {}, h('span.estimativa', {}, `${ctx.estado.objetos.length} objects`), btnCopiar, btn));
 }

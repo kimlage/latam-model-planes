@@ -145,10 +145,20 @@ def verificar(a):
         if a["fonte"]["datum"] == "min":
             if abs(cx["min"][1]) > 0.02:
                 erros.append("base em y=%.3f m, esperado 0" % cx["min"][1])
-            # pivo no centro X/Z
+            # Pivo no centro X/Z - a menos que o asset tenha pedido outro
+            # centro. Uma secao de pista e centrada NA PISTA, nao na caixa de
+            # tudo: um PAPI de um lado so puxa a caixa 20 m para fora do eixo,
+            # e uma aeronave em z = 0 fica com o trem na borda do pavimento.
+            centrado = bool(a["fonte"].get("centrar_em"))
             for i, eixo in ((0, "X"), (2, "Z")):
                 c = (cx["min"][i] + cx["max"][i]) / 2
-                if abs(c) > 0.02:
+                if abs(c) <= 0.02:
+                    continue
+                if centrado:
+                    avisos.append("pivo deslocado %.2f m em %s, de proposito "
+                                  "(centrar_em %s)"
+                                  % (c, eixo, ", ".join(a["fonte"]["centrar_em"])))
+                else:
                     erros.append("pivo fora do centro %s: %.3f m" % (eixo, c))
         else:
             avisos.append("datum na cabeceira: base em y=%.1f m, de proposito"

@@ -1,9 +1,21 @@
-/* frota.js — the aircraft library.
+/* frota.js — the GLB asset library: the fleet AND the airports.
  *
- * Reads ../export/manifest.json (the file export_frota.py writes) and turns the
- * `web` LOD rows into catalogue entries. Nothing here is hard-coded per
- * aircraft: add a twelfth jet to the fleet, re-run the exporter, and it shows
- * up in the sidebar with its own measured numbers.
+ * Reads two manifests and merges them into ONE catalogue:
+ *
+ *   ../export/manifest.json           export_frota.py  — the 11 aircraft
+ *   ../export/cenarios/manifest.json  export_cenarios.py — the airport pieces
+ *
+ * Nothing here is hard-coded per asset. Add a twelfth jet or a fortieth hangar,
+ * re-run the exporter, and it shows up in the sidebar under its own category
+ * with its own measured numbers and its own licence.
+ *
+ * LICENCE IS A PER-ASSET FIELD, and that is the whole point. The aircraft are
+ * CC BY 4.0; the airport geometry is an OpenStreetMap derivative and is ODbL
+ * 1.0 with share-alike. Both may ship — see NOTICE.md, "The airport mesh is an
+ * OSM derivative" — provided the attribution travels with them. So each row
+ * carries `licenca`, the licence table comes out of the scenery manifest, and
+ * the studio shows the licences the OPEN SCENE actually uses rather than a
+ * blanket claim about the whole page.
  *
  * The GLBs are +Y up, metres, wheels on y = 0, nose at x ≈ 0 and tail at
  * x ≈ +L (see export/README.md §Axis). Every instance is therefore wrapped in
@@ -30,6 +42,33 @@ export const EXPORT = new URL('../../export/', import.meta.url).href; // …/exp
 const ORDEM = ['A319', 'A320ceo', 'A320neo', 'A321ceo', 'A321neo',
                'B763', 'B77W', 'B788', 'B789', 'B763F', 'B763BCF'];
 
+/* The sidebar's section order. The LABELS come from the manifests; only the
+   order lives here, because "aircraft first" is an editorial choice and not a
+   fact about the data. A category the manifests invent tomorrow falls in at the
+   end rather than disappearing. */
+export const ORDEM_CATEGORIAS = ['aeronave', 'estrutura', 'superficie',
+                                 'veiculo', 'adereco'];
+
+/** id -> { nome, url, atribuicao, share_alike, nota }. Filled from the scenery
+ *  manifest; seeded with CC BY so an install without export/cenarios/ still
+ *  attributes the fleet correctly. */
+export const LICENCAS = {
+  'cc-by-4.0': {
+    nome: 'CC BY 4.0',
+    url: 'https://creativecommons.org/licenses/by/4.0/',
+    atribuicao: 'LATAM fleet 3D replicas — Kim Lage — CC BY 4.0',
+    share_alike: false,
+    nota: 'Original geometry built in this repository from the manufacturers\' '
+        + 'published dimensional documents.',
+  },
+};
+
+/** id -> human label, from the manifests. */
+export const CATEGORIAS = { aeronave: 'aircraft' };
+
+/** Which fields the scenery came from, for the licence panel and the cards. */
+export const CAMPOS = {};
+
 const draco = new DRACOLoader().setDecoderPath(BASE + 'vendor/three/draco/');
 const loader = new GLTFLoader().setDRACOLoader(draco);
 
@@ -48,6 +87,9 @@ export async function carregarManifesto () {
     const cx = v.caixa || {};
     catalogo.push({
       slug: e.slug,
+      tipo: 'aeronave',
+      categoria: e.categoria || 'aeronave',
+      licenca: e.licenca || 'cc-by-4.0',
       nome: e.nome,
       matricula: e.matricula || '—',
       arquivo: EXPORT + e.saidas.glb.arquivo,          // export/web/<slug>_web.glb
@@ -69,6 +111,73 @@ export async function carregarManifesto () {
   return { licenca: m.licenca, gerado_por: m.gerado_por, n: catalogo.length };
 }
 
+/** The airport tier. Optional: a repository without export/cenarios/ still
+ *  runs, it just has no airports. Returns how many assets it added. */
+export async function carregarCenarios () {
+  let m;
+  try {
+    const r = await fetch(EXPORT + 'cenarios/manifest.json', { cache: 'no-cache' });
+    if (!r.ok) throw new Error(`cenarios/manifest.json ${r.status}`);
+    m = await r.json();
+  } catch (e) {
+    console.warn('no airport tier —', e.message,
+                 '— run  python3 export_cenarios.py  to build it');
+    return { n: 0, erro: e.message };
+  }
+  Object.assign(LICENCAS, m.licencas || {});
+  Object.assign(CATEGORIAS, m.categorias || {});
+  Object.assign(CAMPOS, m.campos || {});
+
+  let n = 0;
+  for (const a of m.assets || []) {
+    if (acharAsset(a.slug)) continue;
+    const t = (a.caixa && a.caixa.tamanho) || [0, 0, 0];
+    catalogo.push({
+      slug: a.slug,
+      tipo: 'cenario',
+      categoria: a.categoria || 'adereco',
+      licenca: a.licenca || 'odbl-1.0',
+      campo: a.campo,
+      nome: a.rotulo || a.slug,
+      matricula: (m.campos?.[a.campo]?.rotulo || a.campo || '').split(' - ')[0],
+      arquivo: EXPORT + 'cenarios/' + a.arquivo,
+      bytes: a.bytes || 0,
+      triangulos: a.triangulos || 0,
+      faces: a.faces || 0,
+      materiais: a.materiais || 0,
+      L: t[0], H: t[1], env: t[2],
+      nota: a.nota || '',
+      datum: a.fonte?.datum || 'min',
+      ok: (a.verificacao || {}).ok !== false,
+    });
+    n++;
+  }
+  ordenarCatalogo();
+  return { n, marcas: m.marcas, aviso: m.aviso };
+}
+
+/** Licence ids used by a list of scene rows, in catalogue order. */
+export function licencasDe (objetos = []) {
+  const ids = new Set();
+  for (const o of objetos) {
+    if (o.tipo === 'prop') { ids.add('estudio'); continue; }
+    const a = acharAsset(o.slug);
+    if (a) ids.add(a.licenca);
+  }
+  return [...ids];
+}
+
+function ordenarCatalogo () {
+  catalogo.sort((a, b) => {
+    const ca = ORDEM_CATEGORIAS.indexOf(a.categoria);
+    const cb = ORDEM_CATEGORIAS.indexOf(b.categoria);
+    if (ca !== cb) return (ca < 0 ? 99 : ca) - (cb < 0 ? 99 : cb);
+    const ia = ORDEM.indexOf(a.slug), ib = ORDEM.indexOf(b.slug);
+    if (ia >= 0 || ib >= 0) return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+    return a.slug.localeCompare(b.slug);
+  });
+}
+
 export const acharAsset = slug => catalogo.find(c => c.slug === slug);
 
 /** Seed the catalogue without a manifest — what an exported embed does, from
@@ -79,6 +188,8 @@ export function registrarAssets (mapa = {}) {
     if (acharAsset(slug)) continue;
     catalogo.push({
       slug, nome: a.nome || slug, matricula: a.matricula || '—',
+      tipo: a.tipo || 'aeronave', categoria: a.categoria || 'aeronave',
+      licenca: a.licenca || 'cc-by-4.0',
       arquivo: a.arquivo, bytes: a.bytes || 0, triangulos: a.triangulos || 0,
       materiais: 0, L: 0, H: 0, env: 0, ok: true,
     });
@@ -89,15 +200,22 @@ export function registrarAssets (mapa = {}) {
 export function carregarGLB (slug, aoProgresso) {
   if (cache.has(slug)) return cache.get(slug);
   const asset = acharAsset(slug);
-  if (!asset) return Promise.reject(new Error(`unknown aircraft slug "${slug}"`));
+  if (!asset) return Promise.reject(new Error(`unknown asset slug "${slug}"`));
 
   const p = new Promise((ok, erro) => {
     loader.load(asset.arquivo,
       gltf => {
         const raiz = gltf.scene;
+        /* A pavement asset RECEIVES shadows and does not cast them. It is a
+           carpet: a zero-thickness plane 6 cm above the studio's own ground,
+           casting into a shadow map whose texel is 26 cm on the ground at a
+           27° sun, shadows ITSELF in stripes. That striping was visible across
+           the whole apron of the first stand scene, and no bias tweak fixes it
+           — the surface simply should not be an occluder. */
+        const projeta = asset.categoria !== 'superficie';
         raiz.traverse(o => {
           if (!o.isMesh) return;
-          o.castShadow = true;
+          o.castShadow = projeta;
           o.receiveShadow = true;
         });
         // Measure once, here, on the geometry as loaded.
@@ -114,12 +232,23 @@ export function carregarGLB (slug, aoProgresso) {
   return p;
 }
 
-/** An instance ready to drop in the scene: pivot Group, wheels at y = 0. */
+/** An instance ready to drop in the scene: pivot Group, wheels at y = 0.
+ *
+ *  An AIRCRAFT GLB has its nose at x = 0 and its tail at x = +L, so the studio
+ *  measures the loaded box and shifts the copy to put the origin at the X/Z
+ *  centre. A SCENERY GLB arrives already centred by export_cenarios.py, which
+ *  also VERIFIES it — and in three cases centred deliberately somewhere other
+ *  than the bounding-box middle: a runway section is centred on the runway,
+ *  not on the box, because a PAPI on one side alone pulls that box 21 m off the
+ *  centreline. Re-centring those here silently undid the exporter's decision
+ *  and put the 777 of the runway starter with its gear on the shoulder. So the
+ *  shift applies to aircraft only. */
 export async function instanciar (slug, aoProgresso) {
   const raiz = await carregarGLB(slug, aoProgresso);
+  const asset = acharAsset(slug);
   const copia = raiz.clone(true);             // shares geometry + materials
   const c = raiz.userData.centro, t = raiz.userData.tamanho;
-  copia.position.set(-c.x, 0, -c.z);          // pivot at the X/Z centre, ground datum kept
+  if (!asset || asset.tipo !== 'cenario') copia.position.set(-c.x, 0, -c.z);
 
   const pivo = new THREE.Group();
   pivo.add(copia);
