@@ -16,16 +16,22 @@ python3 export_frota.py --verificar --reimportar   # …and re-open every format
 Everything here is generated. Nothing in an aircraft folder is written, and no
 `.blend` is ever saved — the export can run while another session edits a master.
 
-## State of these files — current with the masters
+## State of these files
 
-**The pipeline is the deliverable; these binaries are not.** They were generated
-on **2026-08-27** (`217d33f`) from the masters as they stand today. That run came
-after the QA round that closed the A320-family windshields, the 787 radome joint,
-the A321 wordmark's broken "M" and the A320ceo ghost door, and after the same
-day's appendages-and-lights round — so the probes, antennas, static wicks,
-wipers, drain masts and the emissive navigation, beacon, strobe and logo lights
-are all in these files. **All eleven aircraft exported and verified clean, both
-LODs.** When a fix lands on a master, re-run that aircraft:
+**The pipeline is the deliverable; these binaries are not.** They were
+regenerated on 2026-08-27 from the masters as they stand now — after the QA
+round that closed the A320-family windshields, the 787 radome joint, the A319
+wordmark and the 787-8 height, and in the same pass that put both LATAM Cargo
+767s into `export/` for the first time. All **eleven** aircraft are here in the
+full-fleet `web` and `alta` tiers: 22 exports, 55 artefacts, and every one of the
+22 came back `"ok": true` with an empty `erros` list in
+[`manifest.json`](manifest.json). The newer `heroi` tier is generated only for
+aircraft selected as clip subjects.
+
+[`QA-BACKLOG.md`](../QA-BACKLOG.md) is not empty — the A320 flap-track
+stations, the sharklet blade and the 787-8 crown UV are still open — so these
+files are as good as the masters were on 2026-08-27 and no better. When a fix
+lands, re-run the aircraft:
 
 ```bash
 python3 export_frota.py A321neo          # one aircraft, both LODs
@@ -49,37 +55,55 @@ against 35.80 m declared, and 36.92 m on the A319 against 34.10 m — closed on
 the master side with the geometry-truth round; the table below reads 35.80 and
 34.10.
 
+The bounding boxes are now the measurement worth trusting rather than the one
+worth reporting upstream. Every span in the table below lands within 6 cm of
+the figure its `spec_*.json` publishes — the five Airbus exactly, at 34.10 and
+35.80 — and both 787 heights are exact. What survives is a uniform Airbus
+offset: **+0.21 m of length on all five, and +0.23 m of height on the A319 and
+A320s, +0.26 m on the A321s**, against ACAP's 33.84/37.57/44.51 and 11.76.
+That is a property of the masters, not of the export, and it is not in the QA
+backlog.
+
+The only warnings the run emits are length readings, and they compare the glTF
+box against Blender's own measurement of the same aircraft: 2.6–12.6 cm apart,
+well inside the 0.6 m the axis check allows. The 777-300ER emits none.
+
 ## Measured, per aircraft
 
-Every number below was read back **out of the finished file**, not predicted.
-Sizes in MB; `tris` is the triangle count parsed from the index accessors;
-`MP` is the total megapixels of embedded texture; X/Y/Z are the glTF bounding
-box in metres — length, height, span.
+Every number below was read back **out of the finished file**, not predicted —
+all of it from each entry's `verificacao` block in
+[`manifest.json`](manifest.json). Sizes in MB; `tris` is the triangle count
+parsed from the index accessors; `mats` is the material count, identical at
+both LODs; `img / MP` is the number of embedded images and their total
+megapixels; X/Y/Z are the glTF bounding box in metres — length, height, span.
 
-| Aircraft | Reg. | `web` tris | `web` .glb | `web` MP | `alta` tris | `alta` .glb | .usdz | .fbx | .obj+tex | X | Y | Z |
-|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Airbus A319 (ceo) | PT-TMT | 58,232 | 1.2 | 34.6 | 314,168 | 10.4 | 3.7 | 8.5 | 31.6 | 34.05 | 11.99 | 34.10 |
-| Airbus A320ceo | CC-BFO | 63,936 | 1.2 | 34.6 | 334,272 | 10.9 | 4.0 | 9.0 | 33.5 | 37.78 | 11.99 | 35.80 |
-| Airbus A320neo | PT-TMN | 62,456 | 1.2 | 34.6 | 332,792 | 11.0 | 3.9 | 9.1 | 33.6 | 37.78 | 11.99 | 35.80 |
-| Airbus A321-231 (ceo) | PT-MXP | 66,728 | 1.2 | 34.6 | 348,584 | 11.4 | 4.1 | 9.3 | 34.7 | 44.72 | 12.02 | 35.80 |
-| Airbus A321neo (ACF) | PS-LBA | 67,716 | 1.3 | 34.6 | 349,572 | 11.5 | 4.2 | 9.3 | 34.9 | 44.72 | 12.02 | 35.80 |
-| Boeing 767-300ER | CC-CWY | 61,673 | 0.6 | 13.6 | 333,005 | 9.1 | 3.3 | 7.7 | 30.5 | 54.96 | 15.75 | 50.89 |
-| Boeing 777-300ER | PT-MUG | 47,805 | 0.6 | 17.8 | 326,241 | 9.1 | 2.7 | 7.6 | 30.5 | 74.03 | 18.51 | 64.74 |
-| Boeing 787-8 Dreamliner | CC-BBF | 60,423 | 0.7 | 13.6 | 351,975 | 9.5 | 3.3 | 8.1 | 32.0 | 56.74 | 16.92 | 60.11 |
-| Boeing 787-9 Dreamliner | CC-BGK | 62,935 | 0.7 | 13.6 | 362,167 | 9.7 | 3.5 | 8.2 | 32.7 | 62.83 | 17.02 | 60.11 |
-| Boeing 767-300F | N536LA | 51,061 | 0.6 | 13.6 | 322,393 | 8.8 | 2.9 | 7.4 | 29.5 | 54.96 | 15.75 | 50.89 |
-| Boeing 767-300BCF | CC-CXE | 51,061 | 0.6 | 13.6 | 322,393 | 8.8 | 2.9 | 7.5 | 29.6 | 54.96 | 15.75 | 50.89 |
+| Aircraft | Reg. | mats | `web` tris | `web` .glb | `web` img / MP | `alta` tris | `alta` .glb | `alta` img / MP | .usdz | .fbx | .obj | X | Y | Z |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Airbus A319 (ceo) | PT-TMT | 28 | 58,232 | 1.19 | 9 / 34.6 | 314,168 | 10.4 | 16 / 76.55 | 3.7 | 8.5 | 29.3 | 34.05 | 11.99 | 34.10 |
+| Airbus A320ceo | CC-BFO | 29 | 63,936 | 1.21 | 9 / 34.6 | 334,272 | 10.9 | 16 / 76.55 | 4.0 | 9.0 | 31.3 | 37.78 | 11.99 | 35.80 |
+| Airbus A320neo | PT-TMN | 28 | 62,456 | 1.23 | 9 / 34.6 | 332,792 | 11.0 | 16 / 76.55 | 3.9 | 9.1 | 31.3 | 37.78 | 11.99 | 35.80 |
+| Airbus A321-231 (ceo) | PT-MXP | 29 | 66,728 | 1.23 | 9 / 34.6 | 348,584 | 11.4 | 16 / 76.55 | 4.1 | 9.2 | 32.4 | 44.72 | 12.02 | 35.80 |
+| Airbus A321neo (ACF) | PS-LBA | 29 | 67,716 | 1.25 | 9 / 34.6 | 349,572 | 11.5 | 16 / 76.55 | 4.2 | 9.3 | 32.6 | 44.72 | 12.02 | 35.80 |
+| Boeing 767-300ER | CC-CWY | 30 | 61,673 | 0.60 | 4 / 13.63 | 333,005 | 9.1 | 6 / 34.6 | 3.3 | 7.7 | 29.4 | 54.96 | 15.75 | 50.89 |
+| Boeing 777-300ER | PT-MUG | 20 | 47,805 | 0.64 | 5 / 17.83 | 326,241 | 9.1 | 8 / 42.99 | 2.7 | 7.6 | 29.4 | 74.03 | 18.51 | 64.74 |
+| Boeing 787-8 Dreamliner | CC-BBF | 16 | 60,423 | 0.66 | 4 / 13.63 | 351,975 | 9.5 | 6 / 34.6 | 3.3 | 8.1 | 30.6 | 56.74 | 16.92 | 60.11 |
+| Boeing 787-9 Dreamliner | CC-BGK | 16 | 62,935 | 0.66 | 4 / 13.63 | 362,167 | 9.7 | 6 / 34.6 | 3.5 | 8.2 | 31.4 | 62.83 | 17.02 | 60.11 |
+| Boeing 767-300F | N536LA | 30 | 51,061 | 0.57 | 4 / 13.63 | 322,393 | 8.8 | 6 / 34.6 | 2.9 | 7.4 | 28.5 | 54.96 | 15.75 | 50.89 |
+| Boeing 767-300BCF | CC-CXE | 30 | 51,061 | 0.58 | 4 / 13.63 | 322,393 | 8.8 | 6 / 34.6 | 2.9 | 7.5 | 28.6 | 54.96 | 15.75 | 50.89 |
 
-**Whole fleet: 9.8 MB of `web` GLB** (committed), 38.5 MB of USDZ and 554.7 MB
-of `alta` (both regenerated on demand). A full run is **about 9 minutes** for
-the eleven aircraft in both LODs — 32–67 s per aircraft for the pair. The five
-Airbus are the slow half: their `alta` bake is 76.5 MP against 34.6–43.0 on the
-Boeings, and it is the bake, not the geometry, that sets the clock.
+The two LATAM Cargo 767s are the same hull as the -300ER and read as such: an
+identical bounding box and, between themselves, identical triangle and image
+counts. They differ only in paint — 12 kB of embedded texture and 60 kB of
+`alta` GLB separate `N536LA` from `CC-CXE`.
 
-The two freighters are the same mesh: the 767-300F and 767-300BCF agree to the
-triangle, carry the same object names and the same material names, and differ
-only in the baked paint — N536LA against CC-CXE. That is why their rows repeat
-and their `.glb` sizes still differ slightly.
+The `.obj` column is the `.obj` alone. Its `.mtl` sits beside it and its
+textures are loose files under `textures_<slug>/`, neither of which the
+manifest sizes.
+
+**Whole fleet: 9.8 MB of `web` GLB** (committed — eleven files averaging
+892 kB), 38.5 MB of USDZ and 536.5 MB of `alta` (both regenerated on demand).
+An export takes 6–10 s per aircraft per LOD, 26–40 s for the 767 whose bake is
+the largest.
 
 ## See it now
 
