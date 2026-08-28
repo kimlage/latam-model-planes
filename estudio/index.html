@@ -212,11 +212,14 @@
           <option value="2048" selected>2048</option>
           <option value="4096">4096 — sharp</option>
         </select></label>
-      <label class="uma"><span>antialias</span>
+      <!-- The viewport's antialiasing is the WebGL context's own MSAA plus the
+           pixel-ratio cap below; it cannot be changed without rebuilding the
+           renderer. This control is the export supersample, and says so. -->
+      <label class="uma"><span>export sampling</span>
         <select id="aa">
-          <option value="0">off</option>
-          <option value="1" selected>MSAA (context)</option>
-          <option value="2">MSAA + 2× supersample on export</option>
+          <option value="1">1× — fastest</option>
+          <option value="2" selected>2× supersample</option>
+          <option value="3">3× supersample</option>
         </select></label>
       <label class="uma"><span>pixel ratio cap</span><input type="range" id="pr" min="1" max="3" step="0.5" value="2"><output id="pr-out">2.0</output></label>
     </div>

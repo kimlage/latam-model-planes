@@ -138,7 +138,8 @@ function abaGif (ctx) {
   ], '16:9');
   const cores = sel('gif-cores', [32, 64, 128, 256].map(v => ({ v, r: `${v} colours` })), 128);
   const loop = h('input', { type: 'checkbox', id: 'gif-loop', checked: true });
-  const ss = h('input', { type: 'checkbox', id: 'gif-ss', checked: true });
+  // Default follows Render → export sampling, so the setting is not a decoration.
+  const ss = h('input', { type: 'checkbox', id: 'gif-ss', checked: (ctx.estado.render.aa || 2) > 1 });
   const pingpong = h('input', { type: 'checkbox', id: 'gif-pp', checked: true });
   const distancia = h('input', { type: 'number', id: 'gif-dist', step: 5, value: 60 });
   const subida = h('input', { type: 'number', id: 'gif-sobe', step: 1, value: 0 });
@@ -197,7 +198,8 @@ function abaGif (ctx) {
       const cfg = {
         modo: modo.value, quadros: +quadros.value, fps: +fps.value,
         larg: w, alt: hh, cores: +cores.value, loop: loop.checked,
-        ss: ss.checked ? 2 : 1, sentido: sentido.value, pingpong: pingpong.checked,
+        ss: ss.checked ? Math.max(2, ctx.estado.render.aa || 2) : 1,
+        sentido: sentido.value, pingpong: pingpong.checked,
         distancia: +distancia.value, subida: +subida.value, direcao: direcao.value,
         matte: matte.value,
       };
@@ -331,7 +333,8 @@ function abaPng (ctx) {
   const proporcao = sel('png-ar', [
     { v: '16:9', r: '16 : 9' }, { v: '4:3', r: '4 : 3' }, { v: '1:1', r: 'square' }, { v: 'vp', r: 'match the viewport' },
   ], '16:9');
-  const ss = sel('png-ss', [{ v: 1, r: 'none' }, { v: 2, r: '2×' }, { v: 3, r: '3× (heavy)' }], 2);
+  const ss = sel('png-ss', [{ v: 1, r: 'none' }, { v: 2, r: '2×' }, { v: 3, r: '3× (heavy)' }],
+    ctx.estado.render.aa || 2);
   const est = h('div.estimativa');
   const msg = h('div.nota');
 

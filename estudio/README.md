@@ -121,7 +121,7 @@ the shot.
 | **Camera** | orbit / pan / dolly (OrbitControls, damped, no going under the tarmac); presets front / side / top / 3-quarter / hero; frame selected (F) and frame all (A); FOV slider; orthographic toggle that keeps the same apparent height; store pose A / pose B |
 | **Object** | click-select in the viewport and in the outliner; shift-click to add to the selection; move / rotate / scale gizmos (W / E / R) with X / Y / Z axis constraints; local/world space (Q); numeric position, rotation and scale fields; translation and rotation snap increments; snap to ground (G); duplicate (Ctrl+D); delete (Del); per-object lock and hide; undo / redo (Ctrl+Z, Ctrl+Shift+Z) |
 | **Scene** | sun elevation / azimuth / intensity / colour; environment (generated sky, RoomEnvironment, none) and its intensity; background (sky, solid colour, transparent); exponential fog; ground on/off with six materials and a size; grid |
-| **Render** | tone mapping (ACES Filmic, AgX, Khronos Neutral, Reinhard, Linear); exposure; shadows on/off; shadow map 512–4096; antialias; pixel-ratio cap |
+| **Render** | tone mapping (ACES Filmic, AgX, Khronos Neutral, Reinhard, Linear); exposure; shadows on/off; shadow map 512–4096; export sampling 1–3×; pixel-ratio cap |
 
 The status line under the viewport reports fps, object count, triangles, draw
 calls and how many bytes of GLB have been fetched.
@@ -178,19 +178,22 @@ paused for the duration, because `OrbitControls.update()` would otherwise
 overwrite the camera the motion function just set — the classic "my GIF is 60
 copies of one frame" bug.
 
-**Sizes, measured.** Two 640×360 12-frame turntables, no supersampling, bytes
-per pixel per frame:
+**Sizes, measured.** Two 640×360 12-frame turntables at 2× supersampling (the
+default), bytes per pixel per frame:
 
 | colours | 32 | 64 | 128 | 256 |
 |---|---:|---:|---:|---:|
-| *Single hero* (smooth sky, one aircraft) | 0.051 | 0.073 | 0.092 | 0.120 |
-| *Line-up of the family* (textured concrete, five) | 0.103 | 0.145 | 0.175 | 0.200 |
+| *Single hero* (smooth sky, one aircraft) | 0.035 | 0.050 | 0.063 | 0.082 |
+| *Line-up of the family* (textured concrete, five) | 0.111 | 0.169 | 0.196 | 0.212 |
 
-With the default 2× supersampling the hero scene drops to **0.068** at 128
-colours — cleaner edges compress better. The live estimate in the dialog uses
-constants between those cases and is good to roughly **±50 %**; it exists to
-make the trade visible, not to be precise. The line the dialog prints *after*
-the encode is the real file size and the real bytes-per-pixel.
+A factor of three between two perfectly ordinary scenes — LZW on a smooth sky
+gradient and LZW on tiled concrete are not the same problem. Supersampling
+*helps* the smooth scene (0.092 → 0.063 at 128 colours, cleaner edges compress
+better) and slightly hurts the busy one (0.175 → 0.196). The live estimate uses
+the geometric mean of those two columns, so it is honest to **about a factor of
+2 either way**; it exists to make the trade visible, not to be precise. The line
+the dialog prints *after* the encode is the real file size and the real
+bytes-per-pixel.
 
 A representative export, verified with PIL rather than by eye:
 
@@ -296,8 +299,9 @@ was driven and verified, and it is the only way to script it from outside.
 - **The GIF encode is synchronous on the main thread**, yielding every second
   frame. A 400-frame 960 px export will make the page unresponsive for tens of
   seconds. There is no worker.
-- **`aa: MSAA + 2× supersample`** only affects exports; the interactive viewport
-  uses the context's own MSAA and the pixel-ratio cap.
+- **"export sampling" only affects exports.** The interactive viewport's
+  antialiasing is the WebGL context's own MSAA plus the pixel-ratio cap, and
+  changing that would mean rebuilding the renderer and every compiled program.
 - **Fog colour** follows the horizon, or the background colour when the
   background is solid; it is not independently settable.
 - **The starter scenes' prop placement is eyeballed**, not surveyed — they are

@@ -37,7 +37,8 @@ export function estadoPadrao () {
       exposicao: 1.0,
       sombras: true,
       sombraPx: 2048,
-      aa: 1,                     // 0 none | 1 MSAA | 2 MSAA + 2x supersample on export
+      aa: 2,                     // export supersample factor (1–3); the viewport
+                                 // uses the context's own MSAA, which is fixed
       pixelRatioMax: 2,
     },
     camera: {

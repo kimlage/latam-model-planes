@@ -30,19 +30,21 @@ export const FPS_LEGAIS = [
   { fps: 5, cs: 20, rot: '5 fps — 20 cs' },
 ];
 
-/* Bytes per pixel per frame, by palette size. MEASURED, on two 640×360 12-frame
- * turntables at each palette size (see README §GIF export):
+/* Bytes per pixel per frame, by palette size. MEASURED on 640×360 12-frame
+ * turntables of two scenes, at 2× supersampling because that is the default
+ * (see README §GIF export):
  *
- *   colours              32     64    128    256
- *   "Single hero"      .051   .073   .092   .120   ← smooth sky, one aircraft
- *   "Line-up" (×5)     .103   .145   .175   .200   ← textured concrete, five
+ *   colours                32     64    128    256
+ *   "Single hero"        .035   .050   .063   .082   ← smooth sky, one aircraft
+ *   "Line-up" (×5)       .111   .169   .196   .212   ← textured concrete, five
  *
- * and 0.068 at 128 colours on the hero scene with 2× supersampling on, which is
- * the default: cleaner edges compress better. The constants below sit between
- * those cases, so the live estimate is good to roughly ±50 % — it exists to
- * make resolution-versus-colours a visible trade, not to be precise. The dialog
- * reports the REAL size the moment the encode finishes, and that is measured. */
-const BPP = { 32: 0.068, 64: 0.095, 128: 0.12, 256: 0.145 };
+ * A factor of 3 between two perfectly ordinary scenes: LZW on a 5 m sky
+ * gradient and LZW on tiled concrete are not the same problem. The constants
+ * below are the geometric mean of the two columns, so the estimate is honest to
+ * about a factor of 2 either way. It exists to make resolution-versus-colours a
+ * visible trade, not to be precise — the dialog prints the REAL size the moment
+ * the encode finishes, and that number is a measurement. */
+const BPP = { 32: 0.062, 64: 0.092, 128: 0.111, 256: 0.132 };
 
 export function estimarGif ({ quadros, larg, alt, cores }) {
   const bpp = BPP[cores] ?? 0.29;
