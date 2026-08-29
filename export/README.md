@@ -5,9 +5,10 @@ fleet in formats that open **outside Blender** — primarily **glTF 2.0 binary
 (`.glb`) for three.js**, plus USDZ, FBX and OBJ for everything else.
 
 ```bash
-python3 export_frota.py                    # whole fleet, both LODs  (~4 min)
+python3 export_frota.py                    # whole fleet, every tier  (~6 min)
 python3 export_frota.py B77W A320neo       # just these
 python3 export_frota.py --lod web          # just the light level
+python3 export_frota.py B77W --lod heroi   # the clip tier, one aircraft
 python3 export_frota.py --verificar        # do not export: read back what exists
 python3 export_frota.py --verificar --reimportar   # …and re-open every format
 ```
@@ -84,16 +85,57 @@ model and a CORS error in the console: a `file://` page is not allowed to fetch
 the `.glb` next to it. That is a browser rule, not a fault in the export. The
 CDN import map also means the page needs internet on first load.
 
-## The two levels of detail
+## The three levels of detail
 
-|  | `web` | `alta` |
-|---|---|---|
-| Subdivision | Catmull-Clark capped at **level 1** | as authored (**level 2–3**) |
-| Textures | capped at **2048 px** | native (up to 8192 px) |
-| Mesh compression | **Draco** | none |
-| Roughness | one baked scalar per material | baked **map** |
-| Formats | `.glb`, `.usdz` | `.glb`, `.fbx`, `.obj`+`.mtl` |
-| For | three.js, web, mobile AR | desktop, DCC, Unity/Unreal, offline |
+|  | `web` | `heroi` | `alta` |
+|---|---|---|---|
+| Subdivision | Catmull-Clark capped at **level 1** | capped at **level 2** | as authored (**level 2–3**) |
+| Textures | capped at **2048 px** | capped at **2048 px** | native (up to 8192 px) |
+| Mesh compression | **Draco** | **Draco** | none |
+| Roughness | one baked scalar per material | baked **map**, 1024 | baked **map**, 2048 |
+| Formats | `.glb`, `.usdz` | `.glb` | `.glb`, `.fbx`, `.obj`+`.mtl` |
+| For | catalogues, sixteen aircraft in a scene | **the one or two aircraft a clip is about** | desktop, DCC, Unity/Unreal, offline |
+
+### `heroi`, and why the table below already contained it
+
+The owner watched the studio's first clip and named the **engine**. The cause
+was measured before it was argued about, and it is geometry rather than
+material: the studio loads `web`, where the subdivision cap of 1 takes the 777
+from 326,241 triangles to 47,805. What is lost is not spread evenly — it is
+concentrated where the cage is most curved. The nacelle lip, the fan face and
+the exhaust cone become a plain tube. Both tiers declare and *use* the same 20
+materials, so nothing was missing but resolution.
+
+`alta` is not the answer for a clip. It is 9.13 MB with 43 MP of texture and no
+Draco, against 1.9 MB for the entire GRU field scene. The middle falls straight
+out of the fact that `subsurf` in `LODS` is a **ceiling** and not a value: the
+hull is authored at level 3, so a ceiling of 2 gives the curvature back at a
+quarter of the cost — and the subdivision table below had already measured that
+row (`cap 2`, 170,208 triangles, **0.004 % / 0.013 %** against the authored
+mesh) two rounds before anyone made it a tier.
+
+Measured, on the 777-300ER, in a browser rather than in theory — same scene,
+same camera, 1360×679, `gl.finish()` at both ends of 60 draws:
+
+| tier | triangles | `.glb` | texture | frame cost | cold load (localhost) |
+|---|---:|---:|---:|---:|---:|
+| `web` | 47,805 | 0.64 MB | 5 tex, 17.8 MP | **1.44 ms** | — (in the catalogue already) |
+| `heroi` | **171,105** | **0.93 MB** | 8 tex, 20.2 MP | **4.88 ms** | 756 ms |
+| `alta` | 326,241 | 9.13 MB | 8 tex, 43.0 MP | **14.96 ms** | 710 ms |
+
+The A320neo, for a second data point: `web` 62,456 tri / 1.23 MB, `heroi`
+186,104 tri / 1.63 MB.
+
+Read the load column carefully: **on localhost the download is not the
+argument.** The three files transfer in 6 / 7 / 37 ms and the rest is Draco
+decode against PNG decode plus texture upload. The argument is the other two
+columns — 3× the frame cost and 14× the bytes for `alta`, to gain 1.9× the
+triangles over `heroi` — and the wire, where 9.13 MB is several seconds on a
+phone. On the crop that started this, `heroi` and `alta` are indistinguishable;
+`web` and `heroi` are not (`estudio/qa/motor_labio_zoom.png`).
+
+`heroi` is **byte-reproducible** like the other two: exported twice, `cmp`
+identical, manifest unchanged.
 
 ### Why those two numbers, measured on the 777-300ER
 
@@ -292,16 +334,25 @@ nothing in the export log said so. Reading the file was the only way to know.
 ## What is in git, and what is not
 
 **Committed:** this README, the three scripts, `viewer.html`, `manifest.json`,
-and **`web/*.glb`** — about 0.5 MB per aircraft, so a fresh clone can serve the
-folder and see the fleet immediately.
+**`web/*.glb`** — about 0.5 MB per aircraft, so a fresh clone can serve the
+folder and see the fleet immediately — and **`heroi/*.glb`** for the aircraft
+that have been asked to carry a clip. `heroi` is committed rather than
+regenerated because it is small (0.93 MB for the 777) and because a scene JSON
+that names it must not open with a missing file; it is built per aircraft, on
+demand, not for the whole fleet:
+
+```bash
+python3 export_frota.py B77W A320neo --lod heroi
+```
 
 **Not committed** (see the repository [`.gitignore`](../.gitignore)): `alta/`
 in full and the `.usdz` files. Together they are roughly 400 MB of derived
 binaries that one command regenerates:
 
 ```bash
-python3 export_frota.py             # everything
-python3 export_frota.py --lod alta  # just the heavy variants
+python3 export_frota.py                    # every aircraft, every tier
+python3 export_frota.py --lod alta         # just the heavy variants
+python3 export_frota.py B77W --lod heroi   # one aircraft, the clip tier
 ```
 
 Same rule the repository already applies to `scenario/scl_terrain.blend`: large,

@@ -184,12 +184,12 @@ go stale the day a plate is re-cut.
 
 | Group | What is there |
 |---|---|
-| **Camera** | orbit / pan / dolly (OrbitControls, damped, no going under the tarmac); presets front / side / top / 3-quarter / hero; frame selected (F) and frame all (A); FOV slider; orthographic toggle that keeps the same apparent height; store pose A / pose B |
-| **Object** | click-select in the viewport and in the outliner; shift-click to add to the selection; move / rotate / scale gizmos (W / E / R) with X / Y / Z axis constraints; local/world space (Q); numeric position, rotation and scale fields; translation and rotation snap increments; snap to ground (G); duplicate (Ctrl+D); delete (Del); per-object lock and hide; undo / redo (Ctrl+Z, Ctrl+Shift+Z). The selection read-out adds the asset's field, its licence and its note |
+| **Camera** | orbit / pan / dolly (OrbitControls, damped, no going under the tarmac); presets front / side / top / 3-quarter / hero; frame selected (F) and frame all (A); FOV slider; **numeric position and target**, read back live from the viewport and from the timeline; orthographic toggle that keeps the same apparent height; store pose A / pose B |
+| **Object** | click-select in the viewport and in the outliner; shift-click to add to the selection; move / rotate / scale gizmos (W / E / R) with X / Y / Z axis constraints; local/world space (Q); numeric position, rotation and scale fields; a **detail** tier dropdown built from the export manifest; translation and rotation snap increments; snap to ground (G); duplicate (Ctrl+D); delete (Del); per-object lock and hide; undo / redo (Ctrl+Z, Ctrl+Shift+Z). The selection read-out adds the asset's field, its licence and its note |
 | **Scene** | sun elevation / azimuth / intensity / colour; environment (generated sky, RoomEnvironment, none) and its intensity; background (sky, solid colour, transparent); exponential fog; ground on/off with six materials and a size; grid |
 | **Render** | tone mapping (ACES Filmic, AgX, Khronos Neutral, Reinhard, Linear); exposure; shadows on/off; shadow map 512–4096; export sampling 1–3×; pixel-ratio cap |
 | **Colour grade** | contrast, saturation, black lift, warm/cool, vignette — applied after tone mapping, in display space. **No motion blur**, and there will not be a fake one; see below |
-| **Timeline** | clip length and frame rate; a scrubbable playhead; play / pause / loop (space, ←/→, shift+←/→, Home/End); auto-key; an explicit **key** button (K); per-track mute and delete; per-key easing; draggable keys; `Motion…`, which writes flights and the four old GIF motions. Toggle the dock with **T** |
+| **Timeline** | clip length and frame rate; a scrubbable playhead; play / pause / loop (space, ←/→, shift+←/→, Home/End); auto-key; an explicit **key** button for the selection (K) and a **cam** button for the camera (Shift+K); per-track mute and delete; per-key easing; draggable keys; `Motion…`, which writes flights and the four old GIF motions. Toggle the dock with **T** |
 
 The status line under the viewport reports fps, object count, triangles, draw
 calls and how many bytes of GLB have been fetched.
@@ -200,6 +200,32 @@ with `Object3D.attach()` so world transforms are preserved. Attaching after the
 pivot has moved pins the objects where they already are and the drag silently
 does nothing — that bug was in this file for an hour, which is why the
 bracketing is spelled out in [`js/editor.js`](js/editor.js).
+
+### Detail tier, per object — `web` for the crowd, `heroi` for the subject
+
+`export/manifest.json` carries one row per (aircraft, LOD). The studio used to
+read only the `web` ones; it now keeps every tier on the catalogue entry, and
+**which tier an instance uses is a property of the scene row**, not of the
+catalogue. One 777 can be the hero while five more stay cheap.
+
+The dropdown is built from the manifest, so a tier added to `export_frota.py`
+appears here with its own measured triangles and bytes and no code change. On
+the 777: `web` 47,805 triangles / 0.64 MB, `heroi` 171,105 / 0.93 MB. The note
+under the control states the ratio rather than making you divide.
+
+Two consequences worth knowing:
+
+- **Changing the tier is a rebuild, not a property write.** `heroi` is a
+  different file with a different mesh, so `mundo.sincronizar` drops the
+  instance and re-makes it — and the main-gear measurement, the bounding box
+  and any flight table derived from them are rebuilt with it.
+- **An embed carries only the tiers its own scene uses**, one entry per file.
+  The GRU clip below fetches `B77W_heroi.glb` *and* `B77W_web.glb`, because one
+  777 is the subject and two more are parked on the ramp behind it.
+
+The catalogue tier is still the right default. Sixteen aircraft at `heroi` is
+2.7 million triangles; the point of the tier is that a clip has one or two
+aircraft that anyone actually looks at.
 
 ### Airport scale needed four things fixed, and each was found by looking
 

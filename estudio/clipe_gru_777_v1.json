@@ -35,7 +35,7 @@
       "saturacao": 1.08,
       "elevar": 0.015,
       "temperatura": 0,
-      "vinheta": 0.06
+      "vinheta": 0
     }
   },
   "camera": {
@@ -547,8 +547,8 @@
       "travado": false
     }
   ],
-  "salvo": "2026-08-28T21:34:54.593Z",
-  "gerado": "2026-08-28T21:48:52.290Z",
+  "salvo": "2026-08-28T21:46:09.176Z",
+  "gerado": "2026-08-28T22:00:54.165Z",
   "licencas": [
     {
       "id": "odbl-1.0",

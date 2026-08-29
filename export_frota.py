@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Exporta a frota para fora do Blender - GLB, USDZ, FBX, OBJ.
 
-    python3 export_frota.py                    # frota inteira, os dois LODs
+    python3 export_frota.py                    # frota inteira, os tres LODs
     python3 export_frota.py B77W A320neo       # so estas
     python3 export_frota.py --lod web          # so o nivel leve
+    python3 export_frota.py B77W --lod heroi   # o nivel de clipe, uma aeronave
     python3 export_frota.py --verificar        # nao exporta: so le de volta
 
 Este e o unico script de exportacao na raiz, no mesmo papel que `render_gate.py`
@@ -247,7 +248,7 @@ def main():
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("aeronaves", nargs="*", help="siglas; vazio = todas (%s)"
                     % ", ".join(FROTA))
-    ap.add_argument("--lod", default="todos", help="alta | web | todos")
+    ap.add_argument("--lod", default="todos", help="alta | heroi | web | todos")
     ap.add_argument("--verificar", action="store_true",
                     help="nao exporta: so le de volta o que ja esta em export/")
     ap.add_argument("--reimportar", action="store_true",
