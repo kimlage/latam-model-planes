@@ -384,7 +384,12 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP A319_alta.glb objs=93 tris=314168 mats=28 texs=16 X=34.048 Y=34.100 Z=11.994 minZ=0.0000",
+    "ROUNDTRIP A319_alta.fbx objs=93 tris=314168 mats=28 texs=16 X=34.048 Y=34.100 Z=11.994 minZ=0.0000",
+    "ROUNDTRIP A319_alta.obj objs=93 tris=314168 mats=28 texs=16 X=34.048 Y=34.100 Z=11.994 minZ=-0.0000"
+   ]
   },
   {
    "slug": "A319",
@@ -743,7 +748,11 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP A319_web.glb objs=93 tris=58232 mats=28 texs=9 X=34.048 Y=34.100 Z=11.994 minZ=0.0000",
+    "ROUNDTRIP A319_web.usdz objs=93 tris=58232 mats=28 texs=9 X=34.048 Y=34.100 Z=11.994 minZ=0.0000"
+   ]
   },
   {
    "slug": "A320ceo",
@@ -1100,7 +1109,12 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP A320ceo_alta.glb objs=94 tris=334272 mats=29 texs=16 X=37.778 Y=35.799 Z=11.994 minZ=0.0000",
+    "ROUNDTRIP A320ceo_alta.fbx objs=94 tris=334272 mats=29 texs=16 X=37.778 Y=35.799 Z=11.994 minZ=0.0000",
+    "ROUNDTRIP A320ceo_alta.obj objs=94 tris=334272 mats=29 texs=16 X=37.778 Y=35.799 Z=11.994 minZ=-0.0000"
+   ]
   },
   {
    "slug": "A320ceo",
@@ -1478,7 +1492,11 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP A320ceo_web.glb objs=94 tris=63936 mats=29 texs=9 X=37.778 Y=35.799 Z=11.994 minZ=0.0000",
+    "ROUNDTRIP A320ceo_web.usdz objs=94 tris=63936 mats=29 texs=9 X=37.778 Y=35.799 Z=11.994 minZ=0.0000"
+   ]
   },
   {
    "slug": "A320neo",
@@ -1851,7 +1869,12 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP A320neo_alta.glb objs=94 tris=332792 mats=28 texs=16 X=37.778 Y=35.799 Z=11.994 minZ=0.0000",
+    "ROUNDTRIP A320neo_alta.fbx objs=94 tris=332792 mats=28 texs=16 X=37.778 Y=35.799 Z=11.994 minZ=0.0000",
+    "ROUNDTRIP A320neo_alta.obj objs=94 tris=332792 mats=28 texs=16 X=37.778 Y=35.799 Z=11.994 minZ=-0.0000"
+   ]
   },
   {
    "slug": "A320neo",
@@ -2240,7 +2263,10 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP A320neo_heroi.glb objs=94 tris=186104 mats=28 texs=16 X=37.778 Y=35.799 Z=11.994 minZ=0.0000"
+   ]
   },
   {
    "slug": "A320neo",
@@ -2634,7 +2660,11 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP A320neo_web.glb objs=94 tris=62456 mats=28 texs=9 X=37.778 Y=35.799 Z=11.994 minZ=0.0000",
+    "ROUNDTRIP A320neo_web.usdz objs=94 tris=62456 mats=28 texs=9 X=37.778 Y=35.799 Z=11.994 minZ=0.0000"
+   ]
   },
   {
    "slug": "A321ceo",
@@ -2981,7 +3011,12 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP A321ceo_alta.glb objs=94 tris=348584 mats=29 texs=16 X=44.718 Y=35.799 Z=12.024 minZ=0.0000",
+    "ROUNDTRIP A321ceo_alta.fbx objs=94 tris=348584 mats=29 texs=16 X=44.718 Y=35.799 Z=12.024 minZ=0.0000",
+    "ROUNDTRIP A321ceo_alta.obj objs=94 tris=348584 mats=29 texs=16 X=44.718 Y=35.799 Z=12.024 minZ=-0.0000"
+   ]
   },
   {
    "slug": "A321ceo",
@@ -3349,7 +3384,11 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP A321ceo_web.glb objs=94 tris=66728 mats=29 texs=9 X=44.718 Y=35.799 Z=12.024 minZ=0.0000",
+    "ROUNDTRIP A321ceo_web.usdz objs=94 tris=66728 mats=29 texs=9 X=44.718 Y=35.799 Z=12.024 minZ=0.0000"
+   ]
   },
   {
    "slug": "A321neo",
@@ -3696,7 +3735,12 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP A321neo_alta.glb objs=96 tris=349572 mats=29 texs=16 X=44.718 Y=35.799 Z=12.024 minZ=0.0000",
+    "ROUNDTRIP A321neo_alta.fbx objs=96 tris=349572 mats=29 texs=16 X=44.718 Y=35.799 Z=12.024 minZ=0.0000",
+    "ROUNDTRIP A321neo_alta.obj objs=96 tris=349572 mats=29 texs=16 X=44.718 Y=35.799 Z=12.024 minZ=-0.0000"
+   ]
   },
   {
    "slug": "A321neo",
@@ -4064,7 +4108,11 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP A321neo_web.glb objs=96 tris=67716 mats=29 texs=9 X=44.718 Y=35.799 Z=12.024 minZ=0.0000",
+    "ROUNDTRIP A321neo_web.usdz objs=96 tris=67716 mats=29 texs=9 X=44.718 Y=35.799 Z=12.024 minZ=0.0000"
+   ]
   },
   {
    "slug": "B763",
@@ -4504,7 +4552,12 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP B763_alta.glb objs=116 tris=333005 mats=30 texs=6 X=54.959 Y=50.891 Z=15.747 minZ=-0.0000",
+    "ROUNDTRIP B763_alta.fbx objs=116 tris=333005 mats=30 texs=6 X=54.959 Y=50.891 Z=15.747 minZ=-0.0000",
+    "ROUNDTRIP B763_alta.obj objs=116 tris=333005 mats=30 texs=6 X=54.959 Y=50.891 Z=15.747 minZ=-0.0000"
+   ]
   },
   {
    "slug": "B763",
@@ -4975,7 +5028,11 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP B763_web.glb objs=116 tris=61673 mats=30 texs=4 X=54.958 Y=50.891 Z=15.747 minZ=-0.0000",
+    "ROUNDTRIP B763_web.usdz objs=116 tris=61673 mats=30 texs=4 X=54.958 Y=50.891 Z=15.747 minZ=-0.0000"
+   ]
   },
   {
    "slug": "B77W",
@@ -5277,7 +5334,12 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP B77W_alta.glb objs=100 tris=326241 mats=20 texs=8 X=74.031 Y=64.745 Z=18.508 minZ=-0.0000",
+    "ROUNDTRIP B77W_alta.fbx objs=100 tris=326241 mats=20 texs=8 X=74.031 Y=64.745 Z=18.508 minZ=-0.0000",
+    "ROUNDTRIP B77W_alta.obj objs=100 tris=326241 mats=20 texs=8 X=74.031 Y=64.745 Z=18.508 minZ=-0.0000"
+   ]
   },
   {
    "slug": "B77W",
@@ -5603,7 +5665,10 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP B77W_heroi.glb objs=100 tris=171105 mats=20 texs=8 X=74.031 Y=64.745 Z=18.508 minZ=-0.0000"
+   ]
   },
   {
    "slug": "B77W",
@@ -5934,7 +5999,11 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP B77W_web.glb objs=100 tris=47805 mats=20 texs=5 X=74.031 Y=64.745 Z=18.508 minZ=-0.0000",
+    "ROUNDTRIP B77W_web.usdz objs=100 tris=47805 mats=20 texs=5 X=74.031 Y=64.745 Z=18.508 minZ=-0.0000"
+   ]
   },
   {
    "slug": "B788",
@@ -6206,7 +6275,12 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP B788_alta.glb objs=112 tris=351975 mats=16 texs=6 X=56.739 Y=60.110 Z=16.920 minZ=0.0000",
+    "ROUNDTRIP B788_alta.fbx objs=112 tris=351975 mats=16 texs=6 X=56.739 Y=60.110 Z=16.920 minZ=-0.0000",
+    "ROUNDTRIP B788_alta.obj objs=112 tris=351975 mats=16 texs=6 X=56.739 Y=60.110 Z=16.920 minZ=-0.0000"
+   ]
   },
   {
    "slug": "B788",
@@ -6509,7 +6583,11 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP B788_web.glb objs=112 tris=60423 mats=16 texs=4 X=56.738 Y=60.110 Z=16.920 minZ=0.0000",
+    "ROUNDTRIP B788_web.usdz objs=112 tris=60423 mats=16 texs=4 X=56.738 Y=60.110 Z=16.920 minZ=0.0000"
+   ]
   },
   {
    "slug": "B789",
@@ -6781,7 +6859,12 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP B789_alta.glb objs=112 tris=362167 mats=16 texs=6 X=62.829 Y=60.110 Z=17.020 minZ=0.0000",
+    "ROUNDTRIP B789_alta.fbx objs=112 tris=362167 mats=16 texs=6 X=62.829 Y=60.110 Z=17.020 minZ=-0.0000",
+    "ROUNDTRIP B789_alta.obj objs=112 tris=362167 mats=16 texs=6 X=62.829 Y=60.110 Z=17.020 minZ=-0.0000"
+   ]
   },
   {
    "slug": "B789",
@@ -7084,7 +7167,11 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP B789_web.glb objs=112 tris=62935 mats=16 texs=4 X=62.827 Y=60.110 Z=17.020 minZ=0.0000",
+    "ROUNDTRIP B789_web.usdz objs=112 tris=62935 mats=16 texs=4 X=62.827 Y=60.110 Z=17.020 minZ=0.0000"
+   ]
   },
   {
    "slug": "B763F",
@@ -7539,7 +7626,12 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP B763F_alta.glb objs=115 tris=322393 mats=30 texs=6 X=54.959 Y=50.891 Z=15.747 minZ=-0.0000",
+    "ROUNDTRIP B763F_alta.fbx objs=115 tris=322393 mats=30 texs=6 X=54.959 Y=50.891 Z=15.747 minZ=-0.0000",
+    "ROUNDTRIP B763F_alta.obj objs=115 tris=322393 mats=30 texs=6 X=54.959 Y=50.891 Z=15.747 minZ=-0.0000"
+   ]
   },
   {
    "slug": "B763F",
@@ -8025,7 +8117,11 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP B763F_web.glb objs=115 tris=51061 mats=30 texs=4 X=54.958 Y=50.891 Z=15.747 minZ=-0.0000",
+    "ROUNDTRIP B763F_web.usdz objs=115 tris=51061 mats=30 texs=4 X=54.958 Y=50.891 Z=15.747 minZ=-0.0000"
+   ]
   },
   {
    "slug": "B763BCF",
@@ -8480,7 +8576,12 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP B763BCF_alta.glb objs=115 tris=322393 mats=30 texs=6 X=54.959 Y=50.891 Z=15.747 minZ=-0.0000",
+    "ROUNDTRIP B763BCF_alta.fbx objs=115 tris=322393 mats=30 texs=6 X=54.959 Y=50.891 Z=15.747 minZ=-0.0000",
+    "ROUNDTRIP B763BCF_alta.obj objs=115 tris=322393 mats=30 texs=6 X=54.959 Y=50.891 Z=15.747 minZ=-0.0000"
+   ]
   },
   {
    "slug": "B763BCF",
@@ -8966,7 +9067,11 @@
     "gerador": "Khronos glTF Blender I/O v5.2.39"
    },
    "licenca": "cc-by-4.0",
-   "categoria": "aeronave"
+   "categoria": "aeronave",
+   "reimportacao": [
+    "ROUNDTRIP B763BCF_web.glb objs=115 tris=51061 mats=30 texs=4 X=54.958 Y=50.891 Z=15.747 minZ=-0.0000",
+    "ROUNDTRIP B763BCF_web.usdz objs=115 tris=51061 mats=30 texs=4 X=54.958 Y=50.891 Z=15.747 minZ=-0.0000"
+   ]
   }
  ]
 }
