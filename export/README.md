@@ -360,7 +360,7 @@ python3 export_frota.py --verificar --reimportar
 [`reimportar.py`](reimportar.py) imports each artefact into a factory-fresh
 scene and prints objects, triangles, materials, textures and the bounding box —
 back in Blender's own +Z-up frame, where the length must land in X, the span in
-Y and the height in Z. Across the fleet all 45 artefacts return **identical
+Y and the height in Z. Across the fleet all 55 artefacts return **identical
 object, triangle, material and texture counts and an identical bounding box** to
 their GLB sibling, wheels on `z = 0`.
 
