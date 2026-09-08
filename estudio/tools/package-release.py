@@ -25,7 +25,7 @@ for f in (ROOT/'estudio').rglob('*'):
  if f.name=='cockpit.js' or 'cockpit' in f.name:continue
  if f.name=='LICENSE' or f.suffix in {'.html','.js','.css','.json','.wasm','.svg','.mp4','.png','.txt','.md','.py'}:copy(f,rel)
 for f in (ROOT/'export').rglob('*'):
- if f.is_file() and (f.suffix=='.glb' or f.name in {'manifest.json','README.md'}):copy(f,f.relative_to(ROOT))
+ if f.is_file() and (f.suffix in {'.glb','.txt'} or f.name in {'manifest.json','README.md'}):copy(f,f.relative_to(ROOT))
 for n in ['LICENSE','NOTICE.md']:copy(ROOT/n,n)
 (STAGE/'README.md').write_text((ROOT/'docs/ANIMACOES.md').read_text().replace('(../estudio/', '(estudio/').replace('(../NOTICE.md)', '(NOTICE.md)'))
 copy(ROOT/'docs/ANIMACOES.md','docs/ANIMACOES.md')
