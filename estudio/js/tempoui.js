@@ -9,6 +9,7 @@
 
 import * as THREE from 'three';
 import { h } from './dialogos.js';
+import { planoEm } from './planos.js';
 import {
   CANAIS, EASINGS, FPS_LEGAIS_T, quadros, encaixar, apagarChave, porChave,
   temAnimacao, amostrarTrilha, tabelaDe,
@@ -32,6 +33,8 @@ export class Dock {
     this.tBruto = 0;     // the unsnapped clock the snapping is derived from
     this.tocando = false;
     this.chaveSel = null;          // { trilhaId, t }
+    this.cameraLivre = false;
+    this.planoEditado = null;
     this.aberto = true;
     this.construir();
   }
@@ -49,7 +52,8 @@ export class Dock {
 
     this.campoDur = h('input.num', { type: 'number', min: 0.4, max: 120, step: 0.5, value: l.duracao, title: 'clip length, seconds' });
     this.campoDur.addEventListener('change', () => {
-      const v = THREE.MathUtils.clamp(+this.campoDur.value || 8, 0.4, 120);
+      const fimPlanos = Math.max(0.4, ...(this.linha.planos || []).map(p=>p.fim));
+      const v = THREE.MathUtils.clamp(+this.campoDur.value || 8, fimPlanos, 600);
       this.linha.duracao = +v.toFixed(3);
       this.t = Math.min(this.t, this.linha.duracao);
       this.ctx.aoMudar('clip length');
@@ -84,6 +88,13 @@ export class Dock {
       onclick: () => this.ctx.aoChavearCamera(),
     }, '◆ cam');
     this.btnPreset = h('button.primaria', { title: 'Flight and motion presets — they write keys you can then edit', onclick: () => this.ctx.aoPreset() }, 'Motion…');
+    this.btnDiretor = h('button.primaria', {onclick:()=>this.ctx.aoDiretor()}, 'Câmeras…');
+    this.btnLivre = h('button', {title:'Explorar sem alterar a montagem; ◆ cam grava um enquadramento em edição',onclick:()=>{
+      this.parar(); this.cameraLivre = !this.cameraLivre;
+      if (!this.cameraLivre) this.planoEditado = null;
+      this.desenhar(); this.ctx.aoTempo();
+    }}, 'Câmera livre');
+    this.planoAtual = h('span.plano-atual');
     this.btnLimpar = h('button', { title: 'Remove every track and flight', onclick: () => this.limpar() }, 'clear');
 
     this.leitura = h('span.leitura');
@@ -95,9 +106,9 @@ export class Dock {
       h('label.mini-campo', {}, h('span', {}, 'length'), this.campoDur, h('i', {}, 's')),
       this.campoFps,
       h('span.hud-sep'),
-      this.btnAuto, this.btnChave, this.btnChaveCam, this.btnPreset, this.btnLimpar,
+      this.btnDiretor, this.btnLivre, this.btnAuto, this.btnChave, this.btnChaveCam, this.btnPreset, this.btnLimpar,
       h('span.hud-sep'),
-      this.marcaTempo, this.leitura);
+      this.marcaTempo, this.planoAtual, this.leitura);
 
     this.regua = h('div.tempo-regua');
     this.cabeca = h('div.tempo-cabeca');
@@ -141,6 +152,8 @@ export class Dock {
   alternarTocar () { this.tocando ? this.parar() : this.tocar(); }
   tocar () {
     if (!temAnimacao(this.linha)) return;
+    this.cameraLivre = false; this.planoEditado = null;
+    this.desenhar();
     if (this.t >= this.linha.duracao - 1e-6) this.t = 0;
     this.tBruto = this.t;
     this.tocando = true; this.btnTocar.textContent = '⏸';
@@ -185,6 +198,7 @@ export class Dock {
     const u = l.duracao > 0 ? this.t / l.duracao : 0;
     this.cabeca.style.left = `${(u * 100).toFixed(4)}%`;
     this.marcaTempo.textContent = `${fmtTempo(this.t, l.fps)} / ${l.duracao.toFixed(2)} s`;
+    this.planoAtual.textContent = this.cameraLivre ? (this.planoEditado ? 'Enquadre e grave com ◆ cam' : 'Câmera livre') : planoEm(l,this.t)?.nome || '';
     for (const el of this.el.querySelectorAll('.tempo-cabeca-linha')) {
       el.style.left = `${(u * 100).toFixed(4)}%`;
     }
@@ -212,6 +226,11 @@ export class Dock {
 
   desenhar () {
     const l = this.linha;
+    this.btnLivre.classList.toggle('ativo', this.cameraLivre);
+    this.btnChaveCam.textContent = this.planoEditado ? '◆ Gravar enquadramento' : '◆ cam';
+    this.btnChaveCam.setAttribute('aria-label',this.btnChaveCam.textContent);
+    this.btnChaveCam.disabled = !!l.planos?.length && !this.planoEditado;
+    this.btnChaveCam.title = this.btnChaveCam.disabled ? 'Use Câmeras → Enquadrar início ou fim para editar este plano.' : 'Gravar o enquadramento da viewport';
     this.btnLoop.classList.toggle('ativo', !!l.loop);
     this.btnAuto.classList.toggle('ativo', !!l.autochave);
     this.campoDur.value = l.duracao;
@@ -226,6 +245,15 @@ export class Dock {
     }
 
     this.trilhas.textContent = '';
+    if (l.planos?.length) {
+      const montagem = h('div.montagem',{'aria-label':'Planos da montagem'});
+      for (const p of l.planos) montagem.append(h('button.plano-corte',{
+        style:`left:${100*p.inicio/l.duracao}%;width:${100*(p.fim-p.inicio)/l.duracao}%`,
+        title:`${p.nome}: ${p.inicio}–${p.fim}s; clique para ir ao corte`,
+        onclick:()=>{this.parar();this.cameraLivre=false;this.irPara(p.inicio);},
+        ondblclick:()=>this.ctx.aoDiretor()},p.nome));
+      this.trilhas.append(montagem);
+    }
     const total = quadros(l);
     if (!temAnimacao(l)) {
       this.trilhas.append(h('p.nota.vazio', {},
@@ -384,6 +412,8 @@ export class Dock {
     if (!confirm('Remove every track and every flight from this timeline?')) return;
     this.linha.trilhas = [];
     this.linha.voos = [];
+    this.linha.planos = [];
+    this.planoEditado = null; this.cameraLivre = false;
     this.chaveSel = null;
     this.parar();
     this.ctx.aoMudar('clear timeline');

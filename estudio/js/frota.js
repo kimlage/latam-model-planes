@@ -37,6 +37,7 @@
  */
 
 import * as THREE from 'three';
+import {refinarSuperficie} from './superficies.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
@@ -55,7 +56,7 @@ const ORDEM = ['A319', 'A320ceo', 'A320neo', 'A321ceo', 'A321neo',
    order lives here, because "aircraft first" is an editorial choice and not a
    fact about the data. A category the manifests invent tomorrow falls in at the
    end rather than disappearing. */
-export const ORDEM_CATEGORIAS = ['aeronave', 'estrutura', 'superficie',
+export const ORDEM_CATEGORIAS = ['aeronave', 'ambiente', 'estrutura', 'superficie',
                                  'veiculo', 'adereco'];
 
 /** id -> { nome, url, atribuicao, share_alike, nota }. Filled from the scenery
@@ -168,10 +169,10 @@ export async function carregarManifesto () {
 
 /** The airport tier. Optional: a repository without export/cenarios/ still
  *  runs, it just has no airports. Returns how many assets it added. */
-export async function carregarCenarios () {
+export async function carregarCenarios (pasta = 'cenarios') {
   let m;
   try {
-    const r = await fetch(EXPORT + 'cenarios/manifest.json', { cache: 'no-cache' });
+    const r = await fetch(EXPORT + pasta + '/manifest.json', { cache: 'no-cache' });
     if (!r.ok) throw new Error(`cenarios/manifest.json ${r.status}`);
     m = await r.json();
   } catch (e) {
@@ -195,8 +196,8 @@ export async function carregarCenarios () {
       campo: a.campo,
       nome: a.rotulo || a.slug,
       matricula: (m.campos?.[a.campo]?.rotulo || a.campo || '').split(' - ')[0],
-      arquivo: EXPORT + 'cenarios/' + a.arquivo,
-      rel: 'cenarios/' + a.arquivo,
+      arquivo: EXPORT + pasta + '/' + a.arquivo,
+      rel: pasta + '/' + a.arquivo,
       bytes: a.bytes || 0,
       triangulos: a.triangulos || 0,
       faces: a.faces || 0,
@@ -281,9 +282,30 @@ export function carregarGLB (slug, nivel, aoProgresso) {
            — the surface simply should not be an occluder. */
         const projeta = asset.categoria !== 'superficie';
         raiz.traverse(o => {
+          if (asset.categoria === 'interior' && o.isSpotLight) {
+            // Two central high bays provide contact shadows without twelve shadow maps.
+            o.castShadow = Math.abs(o.position.x-179.82)<1 && o.position.z < -640 && o.position.z > -680;
+            o.shadow.mapSize.set(1024,1024);o.shadow.camera.near=.5;o.shadow.camera.far=60;
+            o.shadow.bias=-.0001;o.shadow.normalBias=.025;
+          }
           if (!o.isMesh) return;
-          o.castShadow = projeta;
-          o.receiveShadow = true;
+          for(const mat of [].concat(o.material||[]))for(const key of ['map','normalMap','roughnessMap'])if(mat[key])mat[key].anisotropy=8;
+          o.material=Array.isArray(o.material)?o.material.map(m=>refinarSuperficie(m,asset,o.name)):refinarSuperficie(o.material,asset,o.name);
+          // Painted wing finish from latam_livery_kit.py (CinzaAsa: roughness .35).
+          // The baked ORM map made it mirror-smooth. Keep its colour/panel texture.
+          const wingFinish=m=>{
+            if(asset.categoria!=='aeronave'||!/^CinzaAsa/.test(m.name))return m;
+            const paint=m.clone();paint.roughnessMap=null;paint.roughness=.35;
+            paint.metalnessMap=null;paint.metalness=0;paint.userData.wingPaint=true;
+            return paint;
+          };
+          o.material=Array.isArray(o.material)?o.material.map(wingFinish):wingFinish(o.material);
+          const superficieContexto = ['ambiente','interior'].includes(asset.categoria) && /Terrain|Ground|Roads|Cropland|CaneSurround|CityTint|Streets|WaterBodies|Watercourses|Floor|YardPads|Hardstanding|Wetland|Markings|Pavement|MownGrass|LaneEdges/.test(o.name);
+          o.castShadow = projeta && !superficieContexto;
+          // Dynamic sun shadows are focused on aircraft. Large facades outside
+          // that frustum developed visible self-shadow stripes; keep them lit
+          // by their normals/environment while floors still receive contact shadows.
+          o.receiveShadow = asset.categoria !== 'ambiente' || superficieContexto;
         });
         // Measure once, here, on the geometry as loaded.
         const caixa = new THREE.Box3().setFromObject(raiz);
@@ -327,7 +349,97 @@ export async function instanciar (slug, nivel, aoProgresso) {
   pivo.userData.tamanho = t.clone();
   pivo.userData.raio = Math.hypot(t.x, t.z) / 2;
   medirTrem(pivo);
+  if (asset?.tipo === 'aeronave') {prepararDirecaoTrem(pivo);prepararFans(pivo,slug);}
   return pivo;
+}
+
+function prepararFans(pivo,slug){
+ const candidates=[];pivo.traverse(o=>{if(o.isMesh&&/Motor.*Fan/.test(o.name))candidates.push(o)});
+ pivo.updateMatrixWorld(true);const nodes=[];
+ for(const node of candidates){
+  const bounds=new THREE.Box3().setFromObject(node),size=bounds.getSize(new THREE.Vector3());
+  // Airbus exports sometimes join both rotors in one mesh. Split its indexed
+  // triangles before assigning axes, otherwise both fans orbit the fuselage.
+  if(size.z>size.y*3&&!Array.isArray(node.material)){
+   const g=node.geometry,positions=g.getAttribute('position'),indices=g.index,halves=[[],[]],mid=bounds.getCenter(new THREE.Vector3()).z;
+   for(let i=0;i<(indices?indices.count:positions.count);i+=3){
+    const ids=[0,1,2].map(j=>indices?indices.getX(i+j):i+j);
+    const z=ids.reduce((v,k)=>v+new THREE.Vector3().fromBufferAttribute(positions,k).applyMatrix4(node.matrixWorld).z,0)/3;
+    halves[z<mid?0:1].push(...ids);
+   }
+   for(let side=0;side<2;side++)if(halves[side].length){
+    const geometry=g.clone();geometry.setIndex(halves[side]);geometry.clearGroups();geometry.boundingBox=new THREE.Box3();
+    for(const i of halves[side])geometry.boundingBox.expandByPoint(new THREE.Vector3().fromBufferAttribute(positions,i));
+    geometry.boundingSphere=geometry.boundingBox.getBoundingSphere(new THREE.Sphere());
+    const part=node.clone();part.name=node.name+'_'+side;part.geometry=geometry;node.parent.add(part);nodes.push(part);
+   }
+   node.removeFromParent();
+  }else nodes.push(node);
+ }
+ pivo.userData.fans=[];pivo.updateMatrixWorld(true);
+ for(const node of nodes){
+  const box=new THREE.Box3().setFromObject(node),pivot=new THREE.Group();
+  if(slug==='B77W')abrirEntrada777(pivo,box);
+  pivot.name='Rotor-'+node.name;pivot.position.copy(box.getCenter(new THREE.Vector3()));
+  pivo.add(pivot);pivo.updateMatrixWorld(true);pivot.attach(node);
+  if(slug==='B77W'||slug==='B788'||slug==='B789')detalharRotor(pivot,node,box,slug==='B77W'?22:20);
+  pivo.userData.fans.push(pivot);
+ }
+}
+
+/** The source revolution builder capped nacelle, lip and duct rings. Remove
+ * only forward-facing triangles inside the measured fan aperture. */
+function abrirEntrada777(root,fanBounds){
+ const center=fanBounds.getCenter(new THREE.Vector3()),size=fanBounds.getSize(new THREE.Vector3()),radius=1.60;
+ root.traverse(node=>{
+  if(!node.isMesh||!/^Motor_(Nacelle|Lip|Duto)_/.test(node.name))return;
+  const g=node.geometry,p=g.getAttribute('position'),idx=g.index,keep=[],A=new THREE.Vector3(),B=new THREE.Vector3(),C=new THREE.Vector3(),normal=new THREE.Vector3(),edge=new THREE.Vector3();let removed=0;
+  for(let i=0;i<(idx?idx.count:p.count);i+=3){
+   const ids=[0,1,2].map(j=>idx?idx.getX(i+j):i+j);
+   A.fromBufferAttribute(p,ids[0]).applyMatrix4(node.matrixWorld);B.fromBufferAttribute(p,ids[1]).applyMatrix4(node.matrixWorld);C.fromBufferAttribute(p,ids[2]).applyMatrix4(node.matrixWorld);
+   normal.subVectors(B,A).cross(edge.subVectors(C,A)).normalize();const x=(A.x+B.x+C.x)/3,y=(A.y+B.y+C.y)/3,z=(A.z+B.z+C.z)/3;
+   if(x<fanBounds.min.x+.02&&Math.abs(normal.x)>.75&&Math.hypot(y-center.y,z-center.z)<radius*.995)removed++;
+   else keep.push(...ids);
+  }
+  if(removed){node.geometry=g.clone();node.geometry.setIndex(keep);node.geometry.clearGroups();node.userData.intakeFacesRemoved=removed;}
+ });
+}
+
+/** Blade count from GE90/Trent 1000 primary specs; swept profile is interpreted. */
+function detalharRotor(pivot,disk,bounds,count){
+ const size=bounds.getSize(new THREE.Vector3()),radius=count===22?1.625:1.4224;
+ disk.visible=false;
+ const backing=new THREE.Mesh(new THREE.RingGeometry(radius*.18,radius,96),new THREE.MeshStandardMaterial({color:0x080b0e,roughness:.92,side:THREE.DoubleSide}));
+ backing.rotation.y=Math.PI/2;backing.name='Fan-backing';pivot.add(backing);
+ const points=[],indices=[],front=-size.x/2-.018;
+ for(let blade=0;blade<count;blade++){
+  const start=points.length/3;
+  for(let ring=0;ring<=6;ring++){
+   const u=ring/6,r=radius*(.21+.76*u),sweep=.27*u*u;
+   for(const edge of [0,1]){
+    const angle=blade*Math.PI*2/count+sweep+(edge-.5)*Math.PI*2/count*.72;
+    points.push(front-.045*Math.sin(u*Math.PI)+(edge-.5)*.028,r*Math.cos(angle),r*Math.sin(angle));
+   }
+  }
+  for(let ring=0;ring<6;ring++){const a=start+ring*2;indices.push(a,a+2,a+1,a+1,a+2,a+3)}
+ }
+ const geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(points,3));geometry.setIndex(indices);geometry.computeVertexNormals();
+ const material=new THREE.MeshStandardMaterial({color:count===22?0x343b40:0x50565c,metalness:.65,roughness:.43,side:THREE.DoubleSide});
+ const blades=new THREE.Mesh(geometry,material);blades.name='Fan-blades-'+count;blades.castShadow=true;blades.receiveShadow=true;pivot.add(blades);
+}
+
+function prepararDirecaoTrem(pivo) {
+  const nos = [];
+  pivo.traverse(o=>{if(o.isMesh && o.name.startsWith('TremNariz')) nos.push(o);});
+  if(!nos.length) return;
+  const caixa = new THREE.Box3();
+  nos.forEach(o=>caixa.expandByObject(o));
+  const eixo = new THREE.Group();
+  eixo.name = 'DirecaoTrem';
+  eixo.position.copy(caixa.getCenter(new THREE.Vector3()));
+  pivo.add(eixo); pivo.updateMatrixWorld(true);
+  nos.forEach(o=>eixo.attach(o));
+  pivo.userData.direcaoTrem = eixo;
 }
 
 /* --------------------------------------------------------- landing gear ---

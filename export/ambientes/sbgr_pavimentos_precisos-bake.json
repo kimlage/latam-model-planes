@@ -1,0 +1,54 @@
+{
+  "materiais_achatados": {
+    "SBGR_Shoulder": {
+      "cor": [
+        0.1,
+        0.096,
+        0.085
+      ],
+      "fonte": "diffuse_color",
+      "rugosidade": 0.9,
+      "emissivo": false
+    },
+    "SBGR_MarkingPink": {
+      "cor": [
+        0.48,
+        0.13,
+        0.16
+      ],
+      "fonte": "diffuse_color",
+      "rugosidade": 0.7,
+      "emissivo": false
+    }
+  },
+  "materiais_assados": {
+    "SBGR_Runway_10L28R": {
+      "atlas": "sbgr_pavimentos_precisos",
+      "rugosidade": "escalar medido 0.820"
+    },
+    "SBGR_Runway_10R28L": {
+      "atlas": "sbgr_pavimentos_precisos",
+      "rugosidade": "escalar medido 0.816"
+    },
+    "SBGR_MarkingWhite": {
+      "atlas": "sbgr_pavimentos_precisos",
+      "rugosidade": "herdada do Principled"
+    },
+    "SBGR_TaxiwayAsphalt": {
+      "atlas": "sbgr_pavimentos_precisos",
+      "rugosidade": "herdada do Principled"
+    },
+    "SBGR_MarkingYellow": {
+      "atlas": "sbgr_pavimentos_precisos",
+      "rugosidade": "herdada do Principled"
+    },
+    "SBGR_ApronConcrete": {
+      "atlas": "sbgr_pavimentos_precisos",
+      "rugosidade": "herdada do Principled"
+    },
+    "SBGR_Infield": {
+      "atlas": "sbgr_pavimentos_precisos",
+      "rugosidade": "herdada do Principled"
+    }
+  }
+}

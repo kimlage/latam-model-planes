@@ -1,0 +1,44 @@
+{
+  "materiais_achatados": {
+    "SCL_AsphaltShoulder": {
+      "cor": [
+        0.095,
+        0.093,
+        0.085
+      ],
+      "fonte": "diffuse_color",
+      "rugosidade": 0.88,
+      "emissivo": false
+    }
+  },
+  "materiais_assados": {
+    "SCL_Runway_17L35R": {
+      "atlas": "scl_pavimentos_precisos",
+      "rugosidade": "escalar medido 0.818"
+    },
+    "SCL_Runway_17R35L": {
+      "atlas": "scl_pavimentos_precisos",
+      "rugosidade": "escalar medido 0.712"
+    },
+    "SCL_MarkingWhite": {
+      "atlas": "scl_pavimentos_precisos",
+      "rugosidade": "herdada do Principled"
+    },
+    "SCL_TaxiwayAsphalt": {
+      "atlas": "scl_pavimentos_precisos",
+      "rugosidade": "herdada do Principled"
+    },
+    "SCL_MarkingYellow": {
+      "atlas": "scl_pavimentos_precisos",
+      "rugosidade": "herdada do Principled"
+    },
+    "SCL_Concrete": {
+      "atlas": "scl_pavimentos_precisos",
+      "rugosidade": "herdada do Principled"
+    },
+    "SCL_Soil": {
+      "atlas": "scl_pavimentos_precisos",
+      "rugosidade": "herdada do Principled"
+    }
+  }
+}

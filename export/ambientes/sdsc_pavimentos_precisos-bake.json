@@ -1,0 +1,50 @@
+{
+  "materiais_achatados": {
+    "SDSC_Shoulder": {
+      "cor": [
+        0.105,
+        0.086,
+        0.062
+      ],
+      "fonte": "diffuse_color",
+      "rugosidade": 0.9,
+      "emissivo": false
+    },
+    "SDSC_CropPasture": {
+      "cor": [
+        0.128,
+        0.13,
+        0.058
+      ],
+      "fonte": "diffuse_color",
+      "rugosidade": 0.92,
+      "emissivo": false
+    }
+  },
+  "materiais_assados": {
+    "SDSC_Runway_0220": {
+      "atlas": "sdsc_pavimentos_precisos",
+      "rugosidade": "herdada do Principled"
+    },
+    "SDSC_MarkingWhite": {
+      "atlas": "sdsc_pavimentos_precisos",
+      "rugosidade": "herdada do Principled"
+    },
+    "SDSC_TaxiwayAsphalt": {
+      "atlas": "sdsc_pavimentos_precisos",
+      "rugosidade": "herdada do Principled"
+    },
+    "SDSC_MarkingYellow": {
+      "atlas": "sdsc_pavimentos_precisos",
+      "rugosidade": "herdada do Principled"
+    },
+    "SDSC_Concrete": {
+      "atlas": "sdsc_pavimentos_precisos",
+      "rugosidade": "herdada do Principled"
+    },
+    "SDSC_Infield": {
+      "atlas": "sdsc_pavimentos_precisos",
+      "rugosidade": "herdada do Principled"
+    }
+  }
+}

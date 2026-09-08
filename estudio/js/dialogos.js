@@ -9,7 +9,7 @@
 import {
   FPS_LEGAIS, estimarGif, formatarBytes, exportarGif, exportarPng,
   construirEmbed, documentoParaJson, baixar, nomeArquivo,
-  licencasDaCena, textoAtribuicao, exportarSequencia, urlDoAsset,
+  licencasDaCena, textoAtribuicao, exportarSequencia, exportarMp4, urlDoAsset,
 } from './exportar.js';
 import { acharAsset, NIVEL_PADRAO, nivelDe } from './frota.js';
 import { RECEITAS_VOO, RECEITAS_MOV, aplicarVoo, escreverMovimento, perfilPara } from './presets.js';
@@ -43,18 +43,41 @@ const campo = (rotulo, controle) => h('label.uma', {}, h('span', {}, rotulo), co
 let fecharAtual = null;
 
 export function abrirModal (titulo, corpo) {
+  fecharModal();
   const m = document.getElementById('modal');
   document.getElementById('modal-titulo').textContent = titulo;
   const c = document.getElementById('modal-corpo');
   c.textContent = '';
   c.append(corpo);
   m.hidden = false;
-  fecharAtual = () => { m.hidden = true; c.textContent = ''; fecharAtual = null; };
+  const anterior = document.activeElement;
+  const fundos = ['barra', 'lateral', 'palco', 'inspetor'].map(id => document.getElementById(id));
+  const inertes = fundos.map(el => el.inert);
+  fundos.forEach(el => { el.inert = true; });
+  document.getElementById('modal-fechar').focus();
+  fecharAtual = () => {
+    m.hidden = true; c.textContent = ''; fecharAtual = null;
+    fundos.forEach((el, i) => { el.inert = inertes[i]; });
+    anterior?.focus();
+  };
   return fecharAtual;
 }
-export function fecharModal () { fecharAtual && fecharAtual(); }
+export function fecharModal () {
+  if(document.body.dataset.exportando === 'true') return;
+  fecharAtual && fecharAtual();
+}
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharModal(); });
+document.addEventListener('keydown', e => {
+  if (document.getElementById('modal').hidden) return;
+  if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); fecharModal(); }
+  if (e.key === 'Tab') {
+    const els = [...document.querySelectorAll('#modal button, #modal input, #modal select, #modal textarea, #modal a[href]')]
+      .filter(el => !el.disabled && el.getClientRects().length);
+    const primeiro = els[0], ultimo = els.at(-1);
+    if (e.shiftKey && document.activeElement === primeiro) { e.preventDefault(); ultimo?.focus(); }
+    else if (!e.shiftKey && document.activeElement === ultimo) { e.preventDefault(); primeiro?.focus(); }
+  }
+}, true);
 
 /* -------------------------------------------------------------- licence --- */
 
@@ -122,13 +145,12 @@ export function dlgLicenca (ctx) {
        further notices; no asset in this studio references them.</p>
 
     <h4>What is lost on the way out</h4>
-    <p>The airport materials are procedural node trees — noise, range maps, a
-       haze group — that glTF cannot carry. The exporter flattens each one to a
-       representative colour taken from the material's own
-       <code>diffuse_color</code>, and records that substitution material by
-       material in <code>export/cenarios/manifest.json</code> under
-       <code>materiais_achatados</code>. The pavement is the right grey; it is
-       not the pavement you see in a Cycles render of the field.</p>
+    <p>Airport materials contain procedural node trees that glTF cannot carry.
+       Pavements and selected building cladding are baked to textures; other
+       context materials use representative PBR colours. Conversion records are
+       in <code>export/ambientes/conversao.json</code> and the pavement bake
+       reports. Native area fixtures are approximated with glTF point lights.
+       The web result is not the same as a Cycles render of the master.</p>
 
     <h4>Trademarks</h4>
     <p><b>LATAM</b>, <b>Airbus</b> and <b>Boeing</b> are trademarks of their owners.
@@ -373,6 +395,7 @@ export function dlgExportar (ctx, abaInicial = 'GIF') {
   const painel = h('div');
   const construtores = {
     GIF: () => abaGif(ctx),
+    MP4: () => abaSequencia(ctx, true),
     'PNG seq': () => abaSequencia(ctx),
     Embed: () => abaEmbed(ctx),
     PNG: () => abaPng(ctx),
@@ -543,11 +566,11 @@ function abaGif (ctx) {
 
 /* --- PNG sequence -------------------------------------------------------- */
 
-function abaSequencia (ctx) {
+function abaSequencia (ctx, mp4 = false) {
   const l = ctx.estado.linha;
-  const larg = sel('seq-w', [640, 800, 960, 1280, 1600, 1920].map(v => ({ v, r: `${v} px wide` })), 1280);
+  const larg = sel('seq-w', [640, 800, 960, 1280, 1600, 1920].map(v => ({ v, r: `${v} px wide` })), mp4?960:1280);
   const proporcao = sel('seq-ar', [
-    { v: '16:9', r: '16 : 9' }, { v: '4:3', r: '4 : 3' }, { v: '1:1', r: 'square' }, { v: 'vp', r: 'match the viewport' },
+    { v: '16:9', r: '16 : 9' }, {v:'9:16',r:'9 : 16 · vertical'}, { v: '4:3', r: '4 : 3' }, { v: '1:1', r: 'square' }, { v: 'vp', r: 'match the viewport' },
   ], '16:9');
   const ss = sel('seq-ss', [{ v: 1, r: 'none' }, { v: 2, r: '2×' }, { v: 3, r: '3× (heavy)' }],
     ctx.estado.render.aa || 2);
@@ -555,11 +578,14 @@ function abaSequencia (ctx) {
   const prog = h('div.barra-carga', {}, h('i'));
   const progTxt = h('div.nota', {}, '');
   const caixaProg = h('div', { style: 'display:none' }, prog, progTxt);
+  let controller;
+  const cancelar = h('button',{hidden:true,onclick:()=>controller?.abort()},'Cancelar');
 
   function dims () {
     const w = +larg.value;
     let hh;
     if (proporcao.value === '16:9') hh = Math.round(w * 9 / 16);
+    else if (proporcao.value === '9:16') hh = Math.round(w * 16 / 9);
     else if (proporcao.value === '4:3') hh = Math.round(w * 3 / 4);
     else if (proporcao.value === '1:1') hh = w;
     else hh = Math.round(w * ctx.mundo.altura / ctx.mundo.largura);
@@ -580,35 +606,45 @@ function abaSequencia (ctx) {
   const btn = h('button.primaria', {
     onclick: async () => {
       const [w, hh] = dims();
-      btn.disabled = true; caixaProg.style.display = '';
+      controller = new AbortController();
+      const controles = [...document.querySelectorAll('#modal button,#modal input,#modal select')];
+      const desativados = controles.map(e=>e.disabled);
+      controles.forEach(e=>e.disabled=true);
+      cancelar.disabled=false; cancelar.hidden=false;
+      document.body.dataset.exportando='true';
+      caixaProg.style.display = '';
       try {
         const t0 = performance.now();
-        const r = await exportarSequencia(ctx.mundo, ctx.estado,
-          { larg: w, alt: hh, ss: +ss.value, prefixo: 'quadro' },
+        const r = await (mp4 ? exportarMp4 : exportarSequencia)(ctx.mundo, ctx.estado,
+          { larg: w, alt: hh, ss: +ss.value, prefixo: 'quadro', signal:controller.signal },
           (feito, total, fase) => {
             prog.firstChild.style.width = `${Math.round(100 * feito / total)}%`;
             progTxt.textContent = `${fase} — ${feito}/${total}`;
           });
-        baixar(r.blob, nomeArquivo(ctx.estado.nome, 'zip'));
-        progTxt.innerHTML = `<b>done.</b> ${r.quadros} PNGs, ${formatarBytes(r.bytes)} `
-          + `(${(r.bytes / (r.quadros * w * hh)).toFixed(2)} bytes/pixel/frame), `
-          + `${((performance.now() - t0) / 1000).toFixed(1)} s. Downloaded.`;
+        baixar(r.blob, nomeArquivo(ctx.estado.nome, mp4?'mp4':'zip'));
+        progTxt.textContent = `${mp4?'MP4':'ZIP'} concluído: ${r.quadros} quadros, ${formatarBytes(r.bytes)}, ${((performance.now()-t0)/1000).toFixed(1)} s. Baixado.`;
       } catch (e) {
-        progTxt.innerHTML = `<span style="color:#ff8f8f">${e.message}</span>`;
+        progTxt.textContent = e.name==='AbortError' ? 'Exportação cancelada. O editor foi restaurado.' : e.message;
         console.error(e);
-      } finally { btn.disabled = false; }
+      } finally {
+        document.body.dataset.exportando='false';
+        controles.forEach((e,i)=>e.disabled=desativados[i]); cancelar.hidden=true;
+      }
     },
-  }, 'Render PNG sequence');
+  }, mp4?'Exportar MP4':'Render PNG sequence');
   btn.disabled = !temAnimacao(l);
+  if(mp4) fetch('/api/video').then(r=>r.ok?r.json():{}).then(c=>{
+    if(!c.mp4){btn.disabled=true;progTxt.textContent='MP4 requer o servidor python3 estudio/serve.py com ffmpeg disponível. PNG seq continua disponível.';caixaProg.style.display='';}
+  }).catch(()=>{btn.disabled=true;progTxt.textContent='Servidor MP4 indisponível.';caixaProg.style.display='';});
 
   return h('div', {},
     temAnimacao(l)
       ? h('p.nota', {}, `${quadrosDaLinha(l)} frames over ${l.duracao} s at ${l.fps} fps — `
-        + 'the timeline exactly, one PNG per frame, in one ZIP.')
+        + (mp4?'MP4 H.264 sem áudio, com os movimentos e cortes da timeline.':'the timeline exactly, one PNG per frame, in one ZIP.'))
       : h('div.aviso', { html: 'This scene has no timeline. Open <b>Motion…</b> in the dock '
         + 'and write one — a flight, or one of the four old motions.' }),
     campo('width', larg), campo('aspect', proporcao), campo('supersample', ss),
-    h('div.aviso', { html:
+    mp4 ? h('p.nota',{},'Conversão local: os quadros são enviados ao servidor deste computador. Limite de 512 MB de quadros por exportação. Para um corte vertical, reenquadre as câmeras antes de exportar.') : h('div.aviso', { html:
       'A PNG sequence is the way out to a real video codec, which a browser '
       + 'does not have. Feed it to ffmpeg:<br>'
       + `<code>ffmpeg -framerate ${l.fps} -i quadro_%04d.png -c:v libx264 -pix_fmt yuv420p out.mp4</code>`
@@ -618,7 +654,7 @@ function abaSequencia (ctx) {
       + 'combined with the shadow-catcher ground that is an aeroplane and its '
       + 'shadow over nothing, which is what a composite wants.'),
     caixaProg,
-    h('div.rodape', {}, est, btn));
+    h('div.rodape', {}, est, cancelar, btn));
 }
 
 /* --- embed --------------------------------------------------------------- */
@@ -816,27 +852,31 @@ function abaJson (ctx) {
     const f = arquivo.files[0];
     if (!f) return;
     try {
+      if (f.size > 10 * 1024 * 1024) throw new Error('Scene JSON must be smaller than 10 MB.');
       const doc = JSON.parse(await f.text());
       await ctx.carregarDocumento(doc);
       msg.innerHTML = `<b>loaded</b> “${doc.nome || f.name}”.`;
-    } catch (e) { msg.innerHTML = `<span style="color:#ff8f8f">${e.message}</span>`; }
+    } catch (e) { msg.textContent = e.message; msg.classList.add('aviso'); }
   });
 
   const btn = h('button.primaria', {
     onclick: () => {
       const doc = documentoParaJson(ctx.estado, ctx.mundo,
-        { comAssets: true, baseGlb: '../export/web/', baseCen: '../export/cenarios/' });
+        { comAssets: true, baseGlb: '../export/' });
       baixar(new Blob([JSON.stringify(doc, null, 2)], { type: 'application/json' }),
         nomeArquivo(ctx.estado.nome, 'json'));
     },
   }, 'Download scene JSON');
 
   const btnCopiar = h('button', {
-    onclick: () => {
+    onclick: async () => {
       const doc = documentoParaJson(ctx.estado, ctx.mundo,
-        { comAssets: true, baseGlb: '../export/web/', baseCen: '../export/cenarios/' });
-      navigator.clipboard?.writeText(JSON.stringify(doc, null, 2));
-      msg.textContent = 'copied to the clipboard.';
+        { comAssets: true, baseGlb: '../export/' });
+      try {
+        if (!navigator.clipboard) throw new Error('Clipboard unavailable. Download the JSON instead.');
+        await navigator.clipboard.writeText(JSON.stringify(doc, null, 2));
+        msg.textContent = 'Copied to the clipboard.';
+      } catch (e) { msg.textContent = e.message; }
     },
   }, 'Copy to clipboard');
 

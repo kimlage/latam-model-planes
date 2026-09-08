@@ -73,12 +73,12 @@ export const CENAS_BASE = {
     nome: 'Single hero — 777-300ER',
     vista: 'heroi',
     ambiente: {
-      sol: { elev: 11, azim: 104, intensidade: 3.6, cor: '#ffd7a6' },
+      sol: { elev: 34, azim: 315, intensidade: 2.8, cor: '#fff2df' },
       chao: { ligado: true, tipo: 'apron', tamanho: 800 },
-      grade: false, envIntensidade: 1.0,
+      grade: false, envIntensidade: 1.25,
     },
     render: { exposicao: 1.05, tone: 'aces', sombraPx: 2048 },
-    objetos: [aero('B77W', 'Boeing 777-300ER', 0, 0)],
+    objetos: [{ ...aero('B77W', 'Boeing 777-300ER', 0, 0), nivel: 'heroi' }],
   }),
 
   'familia': () => base({

@@ -15,8 +15,8 @@ answers *what does a scene made of them look like, and how do I ship it*.
 
 ```bash
 # from the repository ROOT, not from estudio/
-python3 -m http.server 8000
-open http://localhost:8000/estudio/
+python3 estudio/serve.py
+open http://127.0.0.1:8137/estudio/
 ```
 
 **It must be served over HTTP, and the server must be rooted at the repository**,
@@ -26,6 +26,53 @@ because the page reads `../export/manifest.json`, `../export/web/*.glb` and
 one documented in [`export/README.md`](../export/README.md). There is no build
 step: three.js, the Draco decoder and the GIF encoder are **vendored** under
 `vendor/`, so the page also needs no internet.
+
+## Workspace recovery and editing
+
+The open session is saved automatically after edits and restored on the next
+visit to the same browser origin. The top bar shows whether that write succeeded.
+**Save scene** (Cmd/Ctrl+S) creates a named copy in the scene library. Replacing a
+named copy requires confirmation; renaming refuses a collision and writes the
+whole library atomically. Opening another scene also keeps a named recovery copy
+of the previous composition. Remove old recovery copies through the library when
+no longer needed. JSON remains the portable backup; browser storage is local to
+this browser and URL, including its port, and clearing site data removes it.
+
+**Library** and **Inspector** toggle the side panels. Below 900 px they become
+one-at-a-time drawers; the 3D viewport keeps the screen width. Search and the
+category selector work together. Cards and scene rows support Enter/Space.
+The timeline starts folded for still scenes and expanded for animated clips.
+Use **frame all** after changing the viewport shape if a saved composition is
+cropped; resizing does not silently rewrite an authored camera.
+
+The Single hero starter now loads the **heroi** B777 geometry with front lighting.
+Other starters retain their configured tiers. Import validates the /1 document,
+transforms, camera, timeline and available assets before replacing the scene.
+A failed asset build keeps the previously rendered scene. Documents over 10 MB,
+more than 2000 objects, and timelines longer than 600 seconds are rejected.
+
+Modals keep keyboard focus and isolate the editor's shortcuts. Deleting a selected
+keyframe has priority over deleting an object. Camera framing, numeric camera edits
+and stored poses participate in undo/redo; switching scene resets the camera mode
+and transform gizmo. Orthographic navigation uses the same persistent driving
+camera as perspective navigation.
+
+### Local verification
+
+With the Studio open, run this in the browser console:
+
+```js
+const results = await (await import('/estudio/tests/regression.js')).run();
+console.table(results);
+if (results.some(r => !r.ok)) throw new Error('Studio regression failed');
+```
+
+The suite exercises real GLBs, all nine starters, both shipped scene documents,
+failed imports, library preservation, keyboard behavior, camera history, asset
+URLs, HTML escaping and actual PNG/GIF encoding. It restores the original open
+document and the two storage keys it touches. Run it in a separate browser test
+session; reload afterwards to refresh the library UI. It needs no package install
+or external service. Findings and remaining work: [REVIEW.md](REVIEW.md).
 
 There is a `.claude/launch.json` at the repository root with the same server
 under the name `estudio`, for tools that read it.
@@ -795,3 +842,16 @@ was driven and verified, and it is the only way to script it from outside.
   side shows through. Compose with the cut faces away from the camera.
 - **No collision, no snapping to another object's face.** "Snap to ground" is
   vertical only; a jetbridge is docked by eye.
+
+## Produções completas e montagem de câmeras
+
+A aba **Scenes** agora inclui quatro produções de GRU e São Carlos, com ambiente,
+operação e câmera. Use **Câmeras…** para montar cortes e reenquadrar os planos.
+**Export… → MP4** converte a timeline localmente com o servidor `serve.py` e ffmpeg;
+GIF, PNG, sequência, JSON e embed permanecem disponíveis.
+
+Veja [PRODUCOES.md](PRODUCOES.md) para usos, formatos, limites, fontes e reprodução.
+
+## Loadings cinematográficos por aeroporto, aeronave e situação
+
+A [biblioteca de loadings](loading/) combina GRU e São Carlos com 777, 787 e A320 em dez produções de decolagem, pátio e reboque. A escolha altera o cenário, a aeronave e os movimentos de câmera/ação. Pode ser aberta no estúdio para editar e exportar. Veja [combinações, integração e limites](loading/README.md). O estudo sem cenário foi preservado em `loading/isolado.html`.

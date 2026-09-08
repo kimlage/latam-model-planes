@@ -6,7 +6,7 @@
  */
 
 import * as THREE from 'three';
-import { estadoPadrao, novoObjeto, clonar, Historico, lerBiblioteca, salvarCena, apagarCena } from './estado.js';
+import { estadoPadrao, novoObjeto, clonar, Historico, lerBiblioteca, salvarCena, apagarCena, renomearCena, nomeLivre, lerSessao, salvarSessao, arquivarSessao } from './estado.js';
 import { carregarManifesto, carregarCenarios, catalogo, miniatura, bytesCarregados,
          acharAsset, LICENCAS, CATEGORIAS, ORDEM_CATEGORIAS, CAMPOS,
          ORDEM_NIVEIS, NIVEL_PADRAO, ROTULOS_NIVEL } from './frota.js';
@@ -14,10 +14,14 @@ import { PROPS, RIGS } from './props.js';
 import { Mundo } from './mundo.js';
 import { Editor } from './editor.js';
 import { CENAS_BASE, ROTULOS_BASE, cenaBase } from './cenas.js';
+import { PRODUCOES, carregarProducao } from './producoes.js';
+import { dlgDiretor, gravarEnquadramento } from './diretor.js';
 import { h, dlgExportar, dlgLicenca, dlgMovimento, dlgVoo, fecharModal } from './dialogos.js';
 import { formatarBytes } from './exportar.js';
 import { linhaPadrao, avaliar, temAnimacao, podar, porChave, acharTrilha, encaixar } from './tempo.js';
 import { Dock } from './tempoui.js';
+import { normalizarDocumento } from './documento.js';
+import { ligarInterface, atalhoBloqueado, avisarUsuario } from './interface.js';
 
 const $ = id => document.getElementById(id);
 
@@ -25,10 +29,41 @@ let estado = estadoPadrao();
 const historico = new Historico();
 let mundo, editor, dock;
 let falhas = [];
+let carregando = false, pronto = false, timerSessao, ultimaSessao = '', protegido = true;
+let permitirSessao = true;
+
+function preservarSessao () {
+  if (!pronto || carregando) return true;
+  const doc = clonar(estado);
+  // A timeline camera is an evaluated frame, never the saved rest camera.
+  if (!estado.linha.trilhas.some(t => t.canal.startsWith('camera.') && t.chaves.length && !t.mudo))
+    doc.camera = mundo.poseAtual(mundo.camP.fov, mundo.cam === mundo.camO);
+  delete doc.vista; delete doc.quadro; delete doc.assentar;
+  const texto = JSON.stringify(doc);
+  if (texto === ultimaSessao) return protegido;
+  protegido = permitirSessao && salvarSessao(doc);
+  const el = $('estado-salvo');
+  el.textContent = protegido ? 'Session saved' : 'Session not saved';
+  el.classList.toggle('erro', !protegido);
+  el.title = protegido ? 'Recovered automatically on this browser. Save scene creates a named library copy.' : 'Browser storage unavailable. Export a JSON backup.';
+  if (protegido) ultimaSessao = texto;
+  return protegido;
+}
+function agendarSessao () {
+  if (!pronto || carregando) return;
+  $('estado-salvo').textContent = 'Saving…';
+  clearTimeout(timerSessao);
+  timerSessao = setTimeout(preservarSessao, 500);
+}
+function registrarCamera (rotulo) {
+  estado.camera = mundo.poseAtual(mundo.camP.fov, mundo.cam === mundo.camO);
+  historico.registrar(rotulo, estado);
+}
 
 /* ------------------------------------------------------------------ boot */
 
 async function iniciar () {
+  ligarInterface();
   mundo = new Mundo($('viewport'));
   editor = new Editor(mundo, estado, historico);
 
@@ -38,7 +73,7 @@ async function iniciar () {
   editor.aoAtalho = atalho;
   editor.aoAutoChave = autoChave;
   editor.aoAutoChaveCanal = autoChaveCanal;
-  historico.aoMudar = atualizarBotoesHistorico;
+  historico.aoMudar = () => { atualizarBotoesHistorico(); agendarSessao(); };
 
   ligarTempo();
   ligarInspetor();
@@ -59,6 +94,7 @@ async function iniciar () {
   /* The airport tier is optional on purpose: a checkout without
      export/cenarios/ still runs, it just has no airports. It never throws. */
   nCen = (await carregarCenarios()).n;
+  nCen += (await carregarCenarios('ambientes')).n;
   $('cnt-frota').textContent =
     `${nAero} aircraft · ${nCen} airport assets · ${Object.keys(PROPS).length} authored props`;
   construirBiblioteca();
@@ -120,7 +156,44 @@ async function iniciar () {
   };
 
   // Open on something worth looking at rather than an empty grid.
-  await carregarDocumento(cenaBase('heroi'));
+  const sessao = lerSessao();
+  if (sessao) {
+    try { await carregarDocumento(sessao); avisarUsuario('Your previous session was restored.'); }
+    catch (e) {
+      permitirSessao = arquivarSessao();
+      avisarUsuario(`Recovery failed: ${e.message} ${permitirSessao ? 'Original session preserved in browser recovery storage.' : 'Original session kept; automatic saving is paused.'}`, true);
+      await carregarDocumento(cenaBase('heroi'));
+    }
+  } else await carregarDocumento(cenaBase('heroi'));
+  pronto = true;
+  preservarSessao();
+  const producaoInicial = new URLSearchParams(location.search).get('producao');
+  if (PRODUCOES.some(p=>p.id===producaoInicial)) {
+    await abrirCena(await carregarProducao(producaoInicial));
+    document.querySelector('[data-alvo="pnl-scenes"]')?.click();
+  }
+  if (new URLSearchParams(location.search).get('loading') === 'cinema') {
+    try {
+      const { criarCenaCinema } = await import('../loading/cenas-cinema.js');
+      const { lerParametros } = await import('../loading/catalogo.js');
+      await abrirCena(await criarCenaCinema(lerParametros()));
+      document.querySelector('[data-alvo="pnl-scenes"]')?.click();
+    } catch(e) { avisarUsuario(e.message, true); }
+  }
+  // Pointer-up captures camera drags, including the final damped pose.
+  mundo.controles.addEventListener('end', () => {
+    if (!temAnimacao(estado.linha)) {
+      estado.camera = mundo.poseAtual(mundo.camP.fov, mundo.cam === mundo.camO);
+      historico.registrar('camera orbit', estado);
+    }
+    agendarSessao();
+  });
+  addEventListener('pagehide', preservarSessao);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) preservarSessao(); });
+  addEventListener('beforeunload', e => {
+    if (!preservarSessao()) { e.preventDefault(); e.returnValue = ''; }
+  });
+  document.addEventListener('input', agendarSessao);
 }
 
 /* ------------------------------------------------------------- timeline --
@@ -138,12 +211,14 @@ function ligarTempo () {
     aoChavear: () => chavearSelecao(),
     aoChavearCamera: () => chavearCamera(),
     aoPreset: () => dlgMovimento(ctxDialogo()),
+    aoDiretor: () => dlgDiretor(ctxDialogo()),
     aoVooPainel: v => dlgVoo(ctxDialogo(), v),
   });
 
   const alt = $('tempo-alternar');
   alt.addEventListener('click', () => alternarDock());
   addEventListener('keydown', e => {
+    if (atalhoBloqueado(e)) return;
     const a = e.target;
     if (a && (a.tagName === 'INPUT' || a.tagName === 'SELECT' || a.tagName === 'TEXTAREA')) return;
     if (e.metaKey || e.ctrlKey) return;
@@ -156,9 +231,9 @@ function ligarTempo () {
     else if (e.key.toLowerCase() === 't') { alternarDock(); }
     else if (e.key === 'Delete' || e.key === 'Backspace') {
       /* A selected KEY wins over a selected object: you just clicked the key. */
-      if (dock.chaveSel && dock.apagarSelecionada()) e.preventDefault();
+      if (dock.chaveSel && dock.apagarSelecionada()) { e.preventDefault(); e.stopImmediatePropagation(); }
     }
-  });
+  }, true);
 }
 
 function alternarDock () {
@@ -181,6 +256,7 @@ function aplicarTempo () {
   if (editor && editor.gizmo && editor.gizmo.dragging) return null;
   if (!temAnimacao(estado.linha)) { dock.mostrarVoo(null); return null; }
   const ov = avaliar(estado, dock.t, id => mundo.contextoVoo(id, estado));
+  if (dock.cameraLivre) ov.camera = null;
   mundo.aplicarTransformacoes(estado);
   mundo.aplicarLinha(estado, ov);
   let info = null;
@@ -241,6 +317,8 @@ function autoChave (ids) {
  *  the hangar behind. Without this button the only way to change it was to
  *  edit the JSON. */
 function chavearCamera () {
+  if (gravarEnquadramento(ctxDialogo())) { avisar('Enquadramento gravado no plano.'); return; }
+  if (estado.linha.planos?.length) { avisar('Abra Câmeras e escolha Enquadrar início ou fim.'); return; }
   const l = estado.linha;
   const t = dock.t;
   porChave(l, 'camera.pos', null, encaixar(l, t),
@@ -390,10 +468,12 @@ function construirBiblioteca () {
 
   /* One filter box over every section. A heading whose whole section is hidden
      hides too, otherwise the sidebar fills with empty titles. */
-  $('busca').addEventListener('input', e => {
-    const q = e.target.value.trim().toLowerCase();
+  for (const c of ordem) $('filtro-categoria').append(h('option', { value: c }, rotuloCategoria(c)));
+  const filtrar = () => {
+    const q = $('busca').value.trim().toLowerCase();
+    const categoria = $('filtro-categoria').value;
     document.querySelectorAll('.card').forEach(cd =>
-      cd.classList.toggle('oculto', !!q && !(cd.dataset.busca || '').includes(q)));
+      cd.classList.toggle('oculto', (!!q && !(cd.dataset.busca || '').includes(q)) || (!!categoria && cd.closest('[data-cat]')?.dataset.cat !== categoria)));
     document.querySelectorAll('#lista-assets .lista-cards').forEach(l => {
       const vivos = [...l.children].filter(cd => !cd.classList.contains('oculto')).length;
       l.classList.toggle('oculto', vivos === 0);
@@ -403,16 +483,27 @@ function construirBiblioteca () {
         t.querySelector('small').textContent = ` ${vivos}`;
       }
     });
-  });
+    $('busca-vazia').hidden = !!document.querySelector('#lista-assets .card:not(.oculto)');
+    $('lista-rigs').previousElementSibling.hidden = !!categoria || !document.querySelector('#lista-rigs .card:not(.oculto)');
+  };
+  $('busca').addEventListener('input', filtrar);
+  $('filtro-categoria').addEventListener('change', filtrar);
 
   desenharCenas();
 }
 
 function desenharCenas () {
+  const producoes = $('lista-producoes');
+  producoes.replaceChildren();
+  for (const p of PRODUCOES) producoes.append(h('button.producao', {
+    onclick: async () => {
+      try { await abrirCena(await carregarProducao(p.id)); }
+      catch(e) { avisarUsuario(e.message, true); }
+    }}, h('strong',{},p.nome), h('span',{},p.descricao), h('small',{},p.uso)));
   const lb = $('lista-cenas-base');
   lb.textContent = '';
   for (const chave of Object.keys(CENAS_BASE)) {
-    lb.append(h('div.linha', { onclick: () => carregarDocumento(cenaBase(chave)) },
+    lb.append(h('div.linha', { onclick: () => abrirCena(cenaBase(chave)) },
       h('span.rot', {}, ROTULOS_BASE[chave]),
       h('span.tag', {}, 'starter')));
   }
@@ -423,11 +514,22 @@ function desenharCenas () {
   const nomes = Object.keys(bib).sort();
   if (!nomes.length) lu.append(h('p.nota', {}, 'Nothing saved yet. “Save scene” puts the current composition here.'));
   for (const nome of nomes) {
-    lu.append(h('div.linha', { onclick: e => { if (e.target.tagName !== 'BUTTON') carregarDocumento(clonar(bib[nome])); } },
+    lu.append(h('div.linha', { onclick: e => { if (e.target.tagName !== 'BUTTON') abrirCena(clonar(bib[nome])); } },
       h('span.rot', { title: `saved ${bib[nome].salvo || '?'}` }, nome),
-      h('button.mini', { title: 'duplicate', onclick: () => { const c = clonar(bib[nome]); c.nome = `${nome} copy`; salvarCena(c); desenharCenas(); } }, '⧉'),
-      h('button.mini', { title: 'rename', onclick: () => { const n = prompt('New name', nome); if (n && n !== nome) { const c = clonar(bib[nome]); c.nome = n; salvarCena(c); apagarCena(nome); desenharCenas(); } } }, '✎'),
-      h('button.mini', { title: 'delete', onclick: () => { if (confirm(`Delete scene “${nome}”?`)) { apagarCena(nome); desenharCenas(); } } }, '✕')));
+      h('button.mini', { title: 'duplicate', onclick: () => { const c = clonar(bib[nome]); c.nome = nomeLivre(`${nome} copy`); if (!salvarCena(c)) avisarUsuario('Could not duplicate scene.', true); desenharCenas(); } }, '⧉'),
+      h('button.mini', { title: 'rename', onclick: () => {
+        const n = prompt('New name', nome)?.trim();
+        if (n && n !== nome) {
+          if (!renomearCena(nome, n)) avisarUsuario('Rename failed: name already exists or storage unavailable.', true);
+          desenharCenas();
+        }
+      } }, '✎'),
+      h('button.mini', { title: 'delete', onclick: () => {
+        if (confirm(`Delete scene “${nome}”?`)) {
+          if (!apagarCena(nome)) avisarUsuario('Could not delete scene.', true);
+          desenharCenas();
+        }
+      } }, '✕')));
   }
 }
 
@@ -440,36 +542,62 @@ function substituirEstado (novo) {
 
 function mostrarCarga (txt, frac) {
   const c = $('carga');
+  document.body.dataset.carregando = 'true';
   c.hidden = false;
   c.querySelector('span').textContent = txt;
   c.querySelector('i').style.width = `${Math.round((frac || 0) * 100)}%`;
 }
-const esconderCarga = () => { $('carga').hidden = true; };
+const esconderCarga = () => { $('carga').hidden = true; document.body.dataset.carregando = 'false'; };
+
+async function abrirCena (doc) {
+  if (pronto && !preservarSessao()) {
+    avisarUsuario('Export a JSON backup before opening another scene: browser storage is unavailable.', true);
+    return;
+  }
+  try { await carregarDocumento(doc); desenharCenas(); }
+  catch (e) { avisarUsuario(e.message, true); }
+}
 
 async function carregarDocumento (doc) {
-  fecharModal();
-  const base = estadoPadrao();
-  // Merge so an older or hand-edited JSON still opens with sane defaults.
-  const novo = {
-    ...base, ...doc,
-    ambiente: { ...base.ambiente, ...(doc.ambiente || {}),
-      sol: { ...base.ambiente.sol, ...(doc.ambiente?.sol || {}) },
-      chao: { ...base.ambiente.chao, ...(doc.ambiente?.chao || {}) },
-      neblina: { ...base.ambiente.neblina, ...(doc.ambiente?.neblina || {}) } },
-    render: { ...base.render, ...(doc.render || {}),
-      correcao: { ...base.render.correcao, ...((doc.render || {}).correcao || {}) } },
-    poses: { ...base.poses, ...(doc.poses || {}) },
-    /* A scene saved before the timeline existed has no `linha` and opens with
-       an empty one — which is why the schema did not have to move. */
-    linha: { ...linhaPadrao(), ...(doc.linha || {}) },
-    objetos: (doc.objetos || []).map(o => ({ ...novoObjeto(o.tipo, o.slug, o.nome), ...o })),
-  };
+  const novo = normalizarDocumento(doc);
+  for (const o of novo.objetos) {
+    const asset = o.tipo === 'prop' ? PROPS[o.slug] : acharAsset(o.slug);
+    if (!asset) throw new Error(`Asset unavailable: ${o.slug}. Your current scene has been kept.`);
+    if (o.nivel && o.tipo !== 'prop' && !asset.niveis?.[o.nivel])
+      throw new Error(`Detail unavailable: ${o.slug} / ${o.nivel}.`);
+  }
+  if (carregando) throw new Error('Please wait for the current scene to finish loading.');
+  if (pronto && (!preservarSessao() || !salvarCena({ ...clonar(estado), nome: nomeLivre(`${estado.nome} — recovery`) })))
+    throw new Error('Could not preserve your current scene. Export a JSON backup before switching.');
+  const anterior = clonar(estado);
+  carregando = true;
+  mostrarCarga('loading assets…', 0);
+  dock.parar();
+  try {
+    // Build all assets before replacing the document or closing the import dialog.
+    await mundo.sincronizar(novo, (f, t, nome) => mostrarCarga(`${nome} — ${f}/${t}`, f / t));
+    fecharModal();
+    await aplicarDocumento(doc, novo);
+  } catch (e) {
+    substituirEstado(anterior);
+    await mundo.sincronizar(estado);
+    mundo.aplicarRender(estado.render); mundo.aplicarAmbiente(estado.ambiente);
+    throw e;
+  } finally {
+    carregando = false; esconderCarga();
+  }
+  if (pronto) { preservarSessao(); desenharCenas(); }
+}
+
+async function aplicarDocumento (doc, novo) {
   substituirEstado(novo);
   podar(estado);
   editor.selecao = [];
   editor.atualizarGizmo();
   dock.parar();
   dock.t = 0;
+  dock.cameraLivre = false;
+  dock.planoEditado = null;
 
   mostrarCarga('loading assets…', 0);
   mundo.aplicarRender(estado.render);
@@ -492,10 +620,12 @@ async function carregarDocumento (doc) {
     editor.atualizarGizmo();      // aoChao attached the gizmo to the temporary selection
   }
 
+  mundo.usarOrto(false);
+  editor.gizmo.camera = mundo.cam;
   mundo.camP.fov = estado.camera.fov || 35;
   mundo.camP.updateProjectionMatrix();
   if (doc.camera && doc.camera.pos) {
-    mundo.aplicarPose(doc.camera);
+    mundo.aplicarPose(estado.camera);
     if (doc.camera.orto) { estado.camera.orto = true; mundo.usarOrto(true); }
   } else {
     /* A starter scene carries a direction, not a position: frame what is here.
@@ -509,6 +639,8 @@ async function carregarDocumento (doc) {
       : (mundo.caixaDe(aeronaves) || mundo.caixaTudo());
     mundo.vista(doc.vista || 'tres-quartos', caixa);
   }
+  editor.gizmo.camera = mundo.cam;
+  estado.camera = mundo.poseAtual(mundo.camP.fov, mundo.cam === mundo.camO);
   $('nome-cena').value = estado.nome;
   mundo.invalidarTerreno();
   sincronizarInspetor();
@@ -520,6 +652,8 @@ async function carregarDocumento (doc) {
      the camera somewhere else entirely, and looks broken until you press play. */
   aplicarTempo();
   historico.iniciar(estado);
+  $('palco').classList.toggle('sem-tempo', !temAnimacao(estado.linha));
+  $('tempo-alternar').textContent = temAnimacao(estado.linha) ? '▾ timeline' : '▴ timeline';
 }
 
 /* ------------------------------------------------------------ operations */
@@ -551,11 +685,14 @@ function posicaoLivre (raioNovo, perto) {
 }
 
 async function adicionar (tipo, slug, nome, ponto) {
+  if (document.body.dataset.carregando === 'true') return;
+  if (tipo === 'prop' ? !Object.hasOwn(PROPS, slug) : !acharAsset(slug)) return;
   const d = novoObjeto(tipo, slug, nome);
   estado.objetos.push(d);
   mostrarCarga(`loading ${nome}…`, 0.4);
-  await mundo.sincronizar(estado);
-  esconderCarga();
+  try { await mundo.sincronizar(estado); }
+  catch (e) { estado.objetos = estado.objetos.filter(o => o.id !== d.id); avisarUsuario(e.message, true); return; }
+  finally { esconderCarga(); }
   const o = mundo.objetos.get(d.id);
   if (o) {
     const b = new THREE.Box3().setFromObject(o);
@@ -619,7 +756,11 @@ function aplicarRig (chave) {
 
 async function aplicarSnapshot (s) {
   if (!s) return;
+  dock.parar();
   substituirEstado(s);
+  mundo.aplicarPose(estado.camera);
+  mundo.usarOrto(!!estado.camera.orto);
+  editor.gizmo.camera = mundo.cam;
   editor.selecao = editor.selecao.filter(id => estado.objetos.some(o => o.id === id));
   mundo.aplicarRender(estado.render);
   await mundo.sincronizar(estado);
@@ -639,24 +780,29 @@ async function aplicarSnapshot (s) {
 }
 
 function atalho (nome) {
+  if (document.body.dataset.carregando === 'true') return;
   switch (nome) {
-    case 'desfazer': aplicarSnapshot(historico.desfazer()); break;
-    case 'refazer': aplicarSnapshot(historico.refazer()); break;
+    case 'desfazer': return aplicarSnapshot(historico.desfazer());
+    case 'refazer': return aplicarSnapshot(historico.refazer());
     case 'duplicar': duplicar(); break;
     case 'apagar': apagar(); break;
     case 'chao': editor.aoChao(); break;
     case 'enquadrar-sel': {
       const b = mundo.caixaDe(editor.selecao);
       mundo.enquadrar(b || mundo.caixaTudo());
+      registrarCamera('frame selection');
       break;
     }
-    case 'enquadrar-tudo': mundo.enquadrar(mundo.caixaTudo()); break;
+    case 'enquadrar-tudo': mundo.enquadrar(mundo.caixaTudo()); registrarCamera('frame all'); break;
   }
 }
 
 /* -------------------------------------------------------------- outliner */
 
 function desenharOutliner () {
+  for (const id of ['btn-dup', 'btn-del', 'btn-chao']) $(id).disabled = !editor.selecionados.length;
+  document.querySelectorAll('#hud-gizmo button[data-modo]').forEach(b => b.classList.toggle('ativo', b.dataset.modo === editor.gizmo.mode));
+  document.querySelector('#hud-gizmo button[data-espaco]').textContent = editor.gizmo.space;
   const el = $('outliner');
   el.textContent = '';
   $('cnt-obj').textContent = `${estado.objetos.length}`;
@@ -704,10 +850,11 @@ function sincronizarTransform () {
     const b = new THREE.Box3().setFromObject(o), s = b.getSize(new THREE.Vector3());
     const a = d.tipo === 'prop' ? null : acharAsset(d.slug);
     const lic = a && LICENCAS[a.licenca];
+    const detalhe = a?.niveis?.[d.nivel || NIVEL_PADRAO] || a;
     $('medidas-sel').textContent =
       `${s.x.toFixed(2)} × ${s.y.toFixed(2)} × ${s.z.toFixed(2)} m (world bbox)`
       + (a ? `\n${a.tipo === 'aeronave' ? a.matricula : (a.campo || '').toUpperCase()} · `
-           + `${a.triangulos.toLocaleString()} tris · ${a.materiais} materials` : '')
+           + `${detalhe.triangulos.toLocaleString()} tris · ${a.materiais} materials` : '')
       + `\nlowest point y = ${b.min.y.toFixed(3)} m`
       + (lic ? `\n${lic.nome}${lic.share_alike ? ' — share-alike' : ''}` : '')
       + (a && a.nota ? `\n${a.nota}` : '');
@@ -755,8 +902,11 @@ async function trocarNivel (nivel) {
   if (nivel === NIVEL_PADRAO) delete d.nivel; else d.nivel = nivel;
   mostrarCarga(`loading ${d.nome} at ${nivel} detail…`, 0.4);
   const t0 = performance.now();
-  await mundo.sincronizar(estado);
-  esconderCarga();
+  try { await mundo.sincronizar(estado); }
+  catch (e) {
+    if (antes === NIVEL_PADRAO) delete d.nivel; else d.nivel = antes;
+    sincronizarTransform(); avisarUsuario(e.message, true); return;
+  } finally { esconderCarga(); }
   mundo.aplicarAmbiente(estado.ambiente);
   /* A hero mesh is a different mesh: the main-gear measurement, the bounding
      box and any flight table derived from them are all stale. */
@@ -777,7 +927,7 @@ function ligarTransform () {
       const d = editor.selecionados[0];
       if (!d) return;
       const v = parseFloat(e.value);
-      if (!isFinite(v)) return;
+      if (!isFinite(v) || (id[0] === 's' && Math.abs(v) < 0.0001)) return;
       const k = id[0] === 't' ? 'pos' : id[0] === 'r' ? 'rot' : 'esc';
       const i = { x: 0, y: 1, z: 2 }[id[1]];
       d[k][i] = v;
@@ -914,12 +1064,17 @@ function ligarInspetor () {
      whole drag collapses into one entry — which is what a user expects. */
   document.querySelectorAll('#inspetor input, #inspetor select').forEach(e => {
     if (e.closest('#campos-transform')) return;
-    e.addEventListener('change', () => historico.registrar('scene setting', estado));
+    e.addEventListener('change', () => {
+      if (['cx', 'cy', 'cz', 'ax', 'ay', 'az', 'fov', 'orto'].includes(e.id))
+        estado.camera = mundo.poseAtual(mundo.camP.fov, mundo.cam === mundo.camO);
+      historico.registrar('scene setting', estado);
+    });
   });
 }
 
 function guardarPose (qual) {
   estado.poses[qual] = mundo.poseAtual(mundo.camP.fov, mundo.cam === mundo.camO);
+  historico.registrar(`store pose ${qual}`, estado);
   $('poses-info').innerHTML =
     `A ${estado.poses.A ? '<b>stored</b>' : '—'} · B ${estado.poses.B ? '<b>stored</b>' : '—'} — `
     + 'the endpoints of the “camera path” GIF.';
@@ -958,6 +1113,10 @@ function sincronizarInspetor () {
 /** Write the live camera into the two numeric rows. Skips whichever field the
  *  user is typing in, the same rule the transform fields use. */
 function sincronizarCamera () {
+  if (document.activeElement !== $('fov')) {
+    $('fov').value = mundo.camP.fov;
+    $('fov-out').textContent = mundo.camP.fov.toFixed(1);
+  }
   const p = mundo.camP.position, a = mundo.controles.target;
   const v = { cx: p.x, cy: p.y, cz: p.z, ax: a.x, ay: a.y, az: a.z };
   for (const [id, n] of Object.entries(v)) {
@@ -986,7 +1145,7 @@ function atualizarBotoesHistorico () {
 function ligarBarra () {
   $('btn-undo').addEventListener('click', () => atalho('desfazer'));
   $('btn-redo').addEventListener('click', () => atalho('refazer'));
-  $('nome-cena').addEventListener('change', e => { estado.nome = e.target.value.trim() || 'untitled scene'; });
+  $('nome-cena').addEventListener('change', e => { estado.nome = e.target.value.trim() || 'untitled scene'; historico.registrar('rename scene', estado); });
   $('btn-salvar').addEventListener('click', () => {
     estado.nome = $('nome-cena').value.trim() || 'untitled scene';
     Object.assign(estado.camera, {
@@ -994,13 +1153,15 @@ function ligarBarra () {
       alvo: mundo.controles.target.toArray().map(n => +n.toFixed(3)),
       fov: mundo.camP.fov, orto: mundo.cam === mundo.camO,
     });
-    const n = salvarCena(estado);
+    const existe = Object.hasOwn(lerBiblioteca(), estado.nome);
+    if (existe && !confirm(`Replace saved scene “${estado.nome}”?`)) return;
+    const n = salvarCena(estado, { substituir: existe });
+    if (n) { preservarSessao(); avisarUsuario('Scene saved to your library.'); }
     desenharCenas();
     document.querySelector('#abas-lateral .aba:nth-child(2)').click();
-    if (!n) alert('Could not save — the browser refused localStorage (private window?).');
+    if (!n) avisarUsuario('Could not save scene. Export a JSON backup.', true);
   });
-  $('btn-exportar').addEventListener('click', () =>
-    dlgExportar({ mundo, estado, editor, carregarDocumento }));
+  $('btn-exportar').addEventListener('click', () => { dock.parar(); dlgExportar({ mundo, estado, editor, carregarDocumento }); });
   /* The licence panel is built FROM the open scene, so it needs the scene. */
   $('btn-sobre').addEventListener('click', () => dlgLicenca({ estado }));
   $('modal-fechar').addEventListener('click', fecharModal);
@@ -1011,7 +1172,12 @@ function ligarBarra () {
       document.querySelectorAll('#lateral .painel').forEach(p => p.classList.toggle('ativo', p.id === b.dataset.alvo));
     }));
 
-  $('btn-cena-nova').addEventListener('click', () => carregarDocumento(estadoPadrao()));
+  $('btn-cena-nova').addEventListener('click', () => abrirCena(estadoPadrao()));
+  addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's' && $('modal').hidden) {
+      e.preventDefault(); $('nome-cena').blur(); $('btn-salvar').click();
+    }
+  });
   $('btn-cena-importar').addEventListener('click', () =>
     dlgExportar({ mundo, estado, editor, carregarDocumento }, 'JSON'));
 }
@@ -1022,6 +1188,7 @@ function ligarHud () {
       if (b.dataset.vista) {
         const alvo = editor.selecao.length ? mundo.caixaDe(editor.selecao) : null;
         mundo.vista(b.dataset.vista, alvo || mundo.caixaTudo());
+        registrarCamera(`camera ${b.dataset.vista}`);
       } else atalho(b.dataset.acao);
     }));
 
@@ -1078,7 +1245,8 @@ function contarQuadro () {
     + (falhas.length ? `\n${falhas.length} asset(s) failed — see the console` : '');
 }
 
-addEventListener('error', e => { falhas.push(e.message); });
+addEventListener('error', e => { falhas.push(e.message); avisarUsuario(e.message, true); });
+addEventListener('unhandledrejection', e => { avisarUsuario(e.reason?.message || 'Operation failed.', true); esconderCarga(); });
 
 iniciar().catch(e => {
   console.error(e);

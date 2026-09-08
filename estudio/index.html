@@ -40,15 +40,20 @@
 <!-- ------------------------------------------------------------------ top -->
 <header id="barra">
   <span class="marca">LATAM fleet <b>Scene&nbsp;Studio</b></span>
+  <button id="alternar-lateral" aria-controls="lateral" aria-expanded="true" title="Show or hide the asset library">Library</button>
   <input id="nome-cena" value="untitled scene" title="scene name" spellcheck="false">
+  <span id="estado-salvo" role="status">Opening…</span>
   <span class="sep"></span>
   <button id="btn-undo" title="Undo (Ctrl+Z)" disabled>↶</button>
   <button id="btn-redo" title="Redo (Ctrl+Shift+Z)" disabled>↷</button>
   <span class="sep"></span>
   <button id="btn-salvar" title="Save this scene to the browser's scene library">Save scene</button>
-  <button id="btn-exportar" class="primaria" title="Export GIF / embed / PNG / JSON">Export…</button>
+  <button id="btn-exportar" class="primaria" title="Export MP4 / GIF / embed / PNG / JSON">Export…</button>
   <button id="btn-sobre" title="About, licence and attribution">Licence</button>
+  <button id="alternar-inspetor" aria-controls="inspetor" aria-expanded="true" title="Show or hide the inspector">Inspector</button>
 </header>
+<button id="painel-fundo" aria-label="Close panel" tabindex="-1"></button>
+<div id="notificacao" role="status" aria-live="polite" hidden></div>
 
 <!-- ----------------------------------------------------------------- left -->
 <aside id="lateral">
@@ -58,16 +63,22 @@
   </div>
 
   <div class="painel ativo" id="pnl-assets">
-    <input id="busca" placeholder="filter assets…" spellcheck="false">
+    <input id="busca" aria-label="Search assets" placeholder="Search aircraft, airport, equipment…" spellcheck="false">
+    <select id="filtro-categoria" aria-label="Asset category"><option value="">All categories</option></select>
     <div id="cnt-frota" class="nota">loading manifests…</div>
     <!-- Sections are built from the two manifests, not written here: a new
          category in export/cenarios/manifest.json appears on its own. -->
     <div id="lista-assets">loading manifest…</div>
+    <p id="busca-vazia" class="nota" hidden>No assets match. Try another name or category.</p>
     <h3>Light rigs</h3>
     <div id="lista-rigs" class="lista-cards"></div>
   </div>
 
   <div class="painel" id="pnl-scenes">
+    <h3>Produções · cenários e animação</h3>
+    <p class="nota">Abra uma sequência, reproduza e ajuste os planos em Câmeras. Exporte em MP4, GIF, quadros PNG ou embed.</p>
+    <div id="lista-producoes"></div>
+    <p class="ajuda"><a href="./loading/">Loadings cinematográficos · aeroporto, aeronave e situação ↗</a></p>
     <h3>Starter scenes</h3>
     <div id="lista-cenas-base" class="lista-linhas"></div>
     <h3>My scenes <small>(this browser)</small></h3>
@@ -76,8 +87,7 @@
       <button id="btn-cena-nova">New empty</button>
       <button id="btn-cena-importar">Import JSON…</button>
     </div>
-    <p class="nota">Scenes live in this browser's localStorage. Export the JSON
-      to move one between machines.</p>
+    <p class="nota">Your session is recovered automatically. Opening a scene keeps a recovery copy of your current work here. Export JSON for a portable backup.</p>
   </div>
 </aside>
 
@@ -181,10 +191,7 @@
       <label class="uma"><span>warm / cool</span><input type="range" id="g-temperatura" min="-0.2" max="0.2" step="0.005" value="0"><output id="g-temperatura-out">0.00</output></label>
       <label class="uma"><span>vignette</span><input type="range" id="g-vinheta" min="0" max="1" step="0.02" value="0"><output id="g-vinheta-out">0.00</output></label>
       <div class="linha-botoes"><button id="g-reset">Reset to identity</button></div>
-      <p class="nota">Applied after tone mapping, in display space. While it is
-        the identity the renderer draws straight to the canvas, with no extra
-        pass. <b>There is no motion blur</b> and there will not be a fake one —
-        see js/mundo.js §colour correction for why.</p>
+      <p class="nota">Adjust the final image. These settings apply to the viewport and exports. Reset restores the original colours.</p>
     </div>
   </section>
 
@@ -268,8 +275,8 @@
 
 <!-- --------------------------------------------------------------- modals -->
 <div id="modal" hidden>
-  <div class="janela">
-    <header><span id="modal-titulo"></span><button id="modal-fechar">✕</button></header>
+  <div class="janela" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+    <header><span id="modal-titulo"></span><button id="modal-fechar" aria-label="Close dialog">✕</button></header>
     <div id="modal-corpo"></div>
   </div>
 </div>

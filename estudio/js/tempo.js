@@ -42,6 +42,7 @@
  * --------------------------------------------------------------------------- */
 
 import * as THREE from 'three';
+import { aplicarPlanos } from './planos.js';
 
 /* Only frame rates whose GIF delay is a whole number of centiseconds — the
  * project's law, stated once in exportar.js and obeyed here so that a timeline
@@ -59,6 +60,7 @@ export const CANAIS = {
   'objeto.esc':      { alvo: 'objeto', dim: 3, rot: 'scale',      unidade: '×' },
   'objeto.visivel':  { alvo: 'objeto', dim: 1, rot: 'visible',    discreto: true },
   'objeto.trem':     { alvo: 'objeto', dim: 1, rot: 'gear down',  discreto: true },
+  'objeto.direcaoTrem': { alvo:'objeto', dim:1, rot:'nose wheel steering', unidade:'°' },
   'camera.pos':      { alvo: 'camera', dim: 3, rot: 'cam position', unidade: 'm' },
   'camera.alvo':     { alvo: 'camera', dim: 3, rot: 'cam target',   unidade: 'm' },
   'camera.fov':      { alvo: 'camera', dim: 1, rot: 'cam FOV',      unidade: '°' },
@@ -86,6 +88,7 @@ export function linhaPadrao () {
     autochave: false,    // auto-key: a move at the playhead writes a key
     trilhas: [],         // keyframe tracks
     voos: [],            // flight behaviours (see §flight)
+    planos: [],          // editorial camera shots; additive to schema /1
   };
 }
 
@@ -105,7 +108,7 @@ export const encaixar = (l, t) =>
   THREE.MathUtils.clamp(Math.round(t * l.fps), 0, quadros(l)) / l.fps;
 
 export const temAnimacao = l =>
-  !!l && ((l.trilhas || []).some(t => t.chaves.length > 0) || (l.voos || []).length > 0);
+  !!l && ((l.trilhas || []).some(t => t.chaves.length > 0) || (l.voos || []).length > 0 || (l.planos || []).length > 0);
 
 /* -------------------------------------------------------- interpolation --- */
 
@@ -503,7 +506,7 @@ export function amostrarVoo (voo, t, ctx) {
 export function avaliar (estado, t, ctxVoo = null) {
   const l = estado.linha;
   if (!temAnimacao(l)) return null;
-  const ov = { objetos: new Map(), camera: null, sol: null, render: null };
+  const ov = { objetos: new Map(), camera: null, sol: null, render: null, tempo:t };
   const obj = id => {
     if (!ov.objetos.has(id)) ov.objetos.set(id, {});
     return ov.objetos.get(id);
@@ -535,6 +538,7 @@ export function avaliar (estado, t, ctxVoo = null) {
     delete o.rot;
     o.voo = a.info;
   }
+  aplicarPlanos(estado, t, ov);
   return ov;
 }
 
@@ -585,4 +589,5 @@ export function podar (estado) {
     return true;
   });
   l.voos = (l.voos || []).filter(v => vivos.has(v.ref));
+  l.planos = (l.planos || []).filter(p => !p.seguir || vivos.has(p.seguir));
 }

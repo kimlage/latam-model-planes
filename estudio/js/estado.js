@@ -126,17 +126,62 @@ export class Historico {
 const CHAVE = 'latam-estudio/cenas/1';
 
 export function lerBiblioteca () {
-  try { return JSON.parse(localStorage.getItem(CHAVE)) || {}; }
+  try {
+    const b = JSON.parse(localStorage.getItem(CHAVE)) || {};
+    if (typeof b !== 'object' || Array.isArray(b)) throw new Error('Invalid library');
+    return b;
+  }
   catch (e) { console.warn('scene library unreadable, starting empty', e); return {}; }
 }
 export function gravarBiblioteca (b) {
-  try { localStorage.setItem(CHAVE, JSON.stringify(b)); return true; }
+  try {
+    // Never overwrite an unreadable library with the empty fallback.
+    const raw = localStorage.getItem(CHAVE);
+    if (raw) {
+      const antiga = JSON.parse(raw);
+      if (!antiga || typeof antiga !== 'object' || Array.isArray(antiga)) return false;
+    }
+    localStorage.setItem(CHAVE, JSON.stringify(b)); return true;
+  }
   catch (e) { console.error('could not save scene', e); return false; }
 }
-export function salvarCena (estado) {
+export function salvarCena (estado, { substituir = false } = {}) {
   const b = lerBiblioteca();
   const nome = estado.nome || 'untitled scene';
-  b[nome] = { ...clonar(estado), nome, salvo: new Date().toISOString() };
+  if (Object.hasOwn(b, nome) && !substituir) return null;
+  Object.defineProperty(b, nome, { value: { ...clonar(estado), nome, salvo: new Date().toISOString() },
+    enumerable: true, configurable: true, writable: true });
   return gravarBiblioteca(b) ? nome : null;
 }
-export function apagarCena (nome) { const b = lerBiblioteca(); delete b[nome]; gravarBiblioteca(b); }
+export function apagarCena (nome) { const b = lerBiblioteca(); delete b[nome]; return gravarBiblioteca(b); }
+
+export function renomearCena (nome, novo) {
+  const b = lerBiblioteca();
+  if (!Object.hasOwn(b, nome) || Object.hasOwn(b, novo)) return false;
+  Object.defineProperty(b, novo, { value: { ...b[nome], nome: novo }, enumerable: true });
+  delete b[nome];
+  return gravarBiblioteca(b);
+}
+
+export function nomeLivre (nome) {
+  const b = lerBiblioteca(); let candidato = nome, i = 2;
+  while (Object.hasOwn(b, candidato)) candidato = `${nome} ${i++}`;
+  return candidato;
+}
+
+export const CHAVE_SESSAO = 'latam-estudio/sessao/1';
+export function lerSessao () {
+  try { return JSON.parse(localStorage.getItem(CHAVE_SESSAO)); }
+  catch { return { schema: 'unreadable-session' }; }
+}
+export function arquivarSessao () {
+  try {
+    const raw = localStorage.getItem(CHAVE_SESSAO);
+    if (raw) localStorage.setItem(`${CHAVE_SESSAO}/recovery/${Date.now()}`, raw);
+    return true;
+  } catch { return false; }
+}
+export function salvarSessao (doc) {
+  try { localStorage.setItem(CHAVE_SESSAO, JSON.stringify(doc)); return true; }
+  catch { return false; }
+}

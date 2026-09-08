@@ -1,0 +1,28 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><title>Cena cinematográfica</title>
+<script type="importmap">{"imports":{"three":"../vendor/three/three.module.js","three/addons/":"../vendor/three/addons/","gifenc":"../vendor/gifenc/gifenc.esm.js"}}</script>
+<style>html,body,#world{margin:0;width:100%;height:100%;overflow:hidden;background:#080a0f}#world{opacity:0;transition:opacity .5s}canvas{display:block}#veil{position:fixed;inset:0;background:#080a0f;pointer-events:none}#status{position:fixed;inset:0;display:grid;place-content:center;color:white;font:14px Arial;padding:30px;text-align:center}#status[hidden]{display:none}</style></head>
+<body><div id="world"></div><div id="veil"></div><div id="status" role="status">Preparando o cenário…</div>
+<script type="module">
+import {opacidadeTransicao} from '../js/transicao.js';
+import {Mundo} from '../js/mundo.js';import {carregarManifesto,carregarCenarios} from '../js/frota.js';import {avaliar} from '../js/tempo.js';import {criarCenaCinema} from './cenas-cinema.js';import {lerParametros} from './catalogo.js';
+let paused=false;const motion=matchMedia('(prefers-reduced-motion:reduce)');
+const send=(type,extra={})=>parent.postMessage({type,...extra},location.origin);
+try{
+ await carregarManifesto();await carregarCenarios('ambientes');const doc=await criarCenaCinema(lerParametros());const m=new Mundo(document.querySelector('#world'));
+ m.aplicarRender(doc.render);m.aplicarAmbiente(doc.ambiente);await m.sincronizar(doc);m.aplicarAmbiente(doc.ambiente);m.aplicarPose(doc.camera);m.controles.enabled=false;
+ let t=0,last=performance.now(),dirty=true;const veil=document.querySelector('#veil');
+ function frame(now=performance.now()){
+  const dt=Math.min(.1,(now-last)/1000);last=now;
+  if((paused||motion.matches||document.hidden)&&!dirty)return;dirty=false;
+  if(!paused&&!motion.matches&&!document.hidden)t=(t+dt)%doc.linha.duracao;
+  m.aplicarTransformacoes(doc);m.aplicarLinha(doc,avaliar(doc,t,id=>m.contextoVoo(id,doc)));m.render();
+  veil.style.opacity=(motion.matches||paused)?'0':String(opacidadeTransicao(doc,t));
+ }
+ frame();document.querySelector('#status').hidden=true;document.querySelector('#world').style.opacity=1;
+ motion.addEventListener('change',()=>{dirty=true;frame()});
+ m.iniciarLoop(frame);send('cinema-ready',{duration:doc.linha.duracao});
+ addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent)return;if(e.data.type==='cinema-pause'){paused=e.data.paused;dirty=true;}if(e.data.type==='cinema-restart'){t=0;dirty=true;frame();}});
+ document.addEventListener('visibilitychange',()=>{last=performance.now();if(document.hidden)m.pausar();else m.retomar();});
+ window.__cinema={mundo:m,doc,get t(){return t},set t(v){t=v;paused=true;dirty=true;frame()},get paused(){return paused}};
+}catch(e){document.querySelector('#status').textContent='Não foi possível abrir o cenário. '+e.message;send('cinema-error',{message:e.message});}
+</script></body></html>

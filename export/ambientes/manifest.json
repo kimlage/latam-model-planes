@@ -1,0 +1,786 @@
+{
+  "licencas": {
+    "odbl-1.0": {
+      "nome": "ODbL 1.0 (Open Database License)",
+      "url": "https://opendatacommons.org/licenses/odbl/1-0/",
+      "atribuicao": "Airport geometry (c) OpenStreetMap contributors, ODbL 1.0",
+      "share_alike": true,
+      "nota": "The aerodrome mesh is generated from OpenStreetMap (building footprints, taxiway centrelines, apron polygons, stand and jetbridge positions). A mesh built from an ODbL database is a derived database: redistributing it requires the attribution above AND share-alike on the derived geodata. The runway survey itself - thresholds, widths, declared distances, marking geometry - comes from AIP/DECEA/DGAC and is quoted as fact."
+    },
+    "cc-by-4.0": {
+      "nome": "CC BY 4.0",
+      "url": "https://creativecommons.org/licenses/by/4.0/",
+      "atribuicao": "LATAM fleet 3D replicas - Kim Lage - CC BY 4.0",
+      "share_alike": false,
+      "nota": "Original geometry from this repository, built from the dimensional documents published by the manufacturers."
+    },
+    "copernicus": {
+      "nome": "Copernicus WorldDEM-30 (Free & Open)",
+      "url": "https://spacedata.copernicus.eu/",
+      "atribuicao": "produced using Copernicus WorldDEM-30 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved",
+      "share_alike": false,
+      "nota": "The organisations in charge of the Copernicus programme by law or by delegation do not incur any liability for any use of the Copernicus WorldDEM-30. NO asset in this export uses Copernicus terrain - the row is here so the studio can show it the day one does."
+    },
+    "copernicus-dem": {
+      "nome": "Copernicus DEM — dados modificados",
+      "url": "https://spacedata.copernicus.eu/collections/copernicus-digital-elevation-model",
+      "atribuicao": "produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved\nThe organisations in charge of the Copernicus programme by law or by delegation do not incur any liability for any use of the Copernicus WorldDEM-30",
+      "share_alike": false,
+      "nota": "Heightfield local modificado: amostragem 60 m e ajuste sob o aeródromo; fonte e avisos no NOTICE.md."
+    }
+  },
+  "categorias": {
+    "ambiente": "ambientes completos",
+    "interior": "interiores de hangar"
+  },
+  "campos": {
+    "scl": {
+      "rotulo": "SCEL - Santiago / Arturo Merino Benitez",
+      "blend": "scenario/scl_field.blend",
+      "datum_z": 0.0
+    },
+    "sdsc": {
+      "rotulo": "SDSC - Sao Carlos / LATAM maintenance base",
+      "blend": "scenario_sdsc/sdsc_field.blend",
+      "datum_z": -2.33
+    },
+    "sbgr": {
+      "rotulo": "SBGR - Guarulhos / Sao Paulo",
+      "blend": "scenario_sbgr/sbgr_field.blend",
+      "datum_z": -4.76
+    }
+  },
+  "assets": [
+    {
+      "slug": "scl_contexto",
+      "rotulo": "Santiago · terminais e base LATAM",
+      "campo": "scl",
+      "categoria": "ambiente",
+      "licenca": "odbl-1.0",
+      "arquivo": "scl_contexto.glb",
+      "bytes": 597048,
+      "fonte": {
+        "blend": "scenario/scl_field.blend",
+        "pecas": [
+          "SCL_FieldSurround",
+          "SCL_Buildings_Windows",
+          "SCL_Buildings_Generic_0",
+          "SCL_Buildings_Generic_1",
+          "SCL_Buildings_Generic_2",
+          "SCL_Buildings_Generic_3",
+          "SCL_Buildings_Canopies",
+          "SCL_Hangars_FACh",
+          "SCL_Hangars_Other",
+          "SCL_Hangar_SkyAirline",
+          "SCL_LATAM_Buildings",
+          "SCL_LATAM_WindowBand",
+          "SCL_LATAM_SignBand",
+          "SCL_LATAM_Wordmark",
+          "SCL_LATAM_Brandmark",
+          "SCL_LATAM_HangarDoors",
+          "SCL_Terminal_Volumes",
+          "SCL_Terminal_Roofs",
+          "SCL_T2_GreenPanels",
+          "SCL_T2_Brise",
+          "SCL_Terminal_Glazing",
+          "SCL_Tower_Shaft",
+          "SCL_Tower_Decks",
+          "SCL_Tower_Cab",
+          "SCL_Tower_Equipment",
+          "SCL_DGAC_Building",
+          "SCL_LightMasts",
+          "SCL_TreeLine_Foliage",
+          "SCL_TreeLine_Trunks",
+          "SCL_ScrubTufts",
+          "SCL_RunwayEdgeLights",
+          "SCL_TaxiSigns",
+          "SCL_TaxiSignPosts",
+          "SCL_Windsocks",
+          "SCL_PAPI"
+        ]
+      },
+      "triangulos": 69945,
+      "materiais": 30,
+      "caixa": {
+        "min": [
+          -7085.0703125,
+          -0.4000000059604645,
+          -8527.740234375
+        ],
+        "max": [
+          7085.0703125,
+          65.80000305175781,
+          8527.75
+        ],
+        "tamanho": [
+          14170.140625,
+          66.20000305771828,
+          17055.490234375
+        ]
+      },
+      "nota": "Cenário completo nas coordenadas da placa de campo. Materiais PBR simplificados; geometria OSM e arquitetura interpretada dos masters."
+    },
+    {
+      "slug": "sbgr_contexto",
+      "rotulo": "GRU · terminais, cidade e entorno",
+      "campo": "sbgr",
+      "categoria": "ambiente",
+      "licenca": "odbl-1.0",
+      "arquivo": "sbgr_contexto.glb",
+      "bytes": 11215704,
+      "fonte": {
+        "blend": "scenario_sbgr/sbgr_field.blend",
+        "pecas": [
+          "SBGR_TerminalBodies",
+          "SBGR_TerminalGlassBand",
+          "SBGR_PeopleMover",
+          "SBGR_Jetbridges",
+          "SBGR_JetbridgeDark",
+          "SBGR_TWR_Shaft",
+          "SBGR_TWR_Galleries",
+          "SBGR_TWR_Cab",
+          "SBGR_TWR_Radome",
+          "SBGR_ServiceBuildings",
+          "SBGR_Tanks",
+          "SBGR_LATAM_Hangar",
+          "SBGR_LATAM_HangarDoors",
+          "SBGR_LATAM_HangarOpenBay",
+          "SBGR_LATAM_HangarFloor",
+          "SBGR_LATAM_HangarTruss",
+          "SBGR_LATAM_HangarBand",
+          "SBGR_LATAM_Hangar_Wordmark",
+          "SBGR_LATAM_Hangar_Brandmark",
+          "SBGR_AA_Hangar",
+          "SBGR_AA_HangarDoors",
+          "SBGR_BASP_Buildings",
+          "SBGR_CargoSheds",
+          "SBGR_Fence",
+          "SBGR_FencePosts",
+          "SBGR_MastsRing",
+          "SBGR_MastsLattice",
+          "SBGR_RunwayEdgeLights",
+          "SBGR_PAPI",
+          "SBGR_ApproachLights",
+          "SBGR_HoldingBoards",
+          "SBGR_HoldingPosts",
+          "SBGR_RoadsPaved",
+          "SBGR_RoadsUnpaved",
+          "SBGR_StreetsMinor",
+          "SBGR_RailBed",
+          "SBGR_RailViaduct",
+          "SBGR_RailPiers",
+          "SBGR_Watercourses",
+          "SBGR_WaterBodies",
+          "SBGR_CityTint_res",
+          "SBGR_CityTint_fav",
+          "SBGR_CityTint_ind",
+          "SBGR_CityTint_com",
+          "SBGR_CityTint_green",
+          "SBGR_CityTint_bare",
+          "SBGR_City_HousesA",
+          "SBGR_City_HousesB",
+          "SBGR_City_HousesBrick",
+          "SBGR_City_RoofsTile",
+          "SBGR_City_RoofsFiber",
+          "SBGR_City_Midrises",
+          "SBGR_City_Sheds",
+          "SBGR_City_Warehouses",
+          "SBGR_Trees",
+          "SBGR_TreesDeep",
+          "SBGR_TreeTrunks",
+          "SBGR_SerraCanopy",
+          "SBGR_GSE_White",
+          "SBGR_GSE_Yellow",
+          "SBGR_GSE_Dark",
+          "SBGR_GSE_Red",
+          "SBGR_GSE_Bus",
+          "SBGR_GSE_Dolly",
+          "SBGR_GSE_Uld"
+        ]
+      },
+      "triangulos": 1535983,
+      "materiais": 51,
+      "caixa": {
+        "min": [
+          -11014.501953125,
+          -27.753812789916992,
+          -9692.955078125
+        ],
+        "max": [
+          8255.529296875,
+          443.2950134277344,
+          6346.740234375
+        ],
+        "tamanho": [
+          19270.03125,
+          471.04882621765137,
+          16039.6953125
+        ]
+      },
+      "nota": "Cenário completo nas coordenadas da placa de campo. Materiais PBR simplificados; geometria OSM e arquitetura interpretada dos masters."
+    },
+    {
+      "slug": "sdsc_contexto",
+      "rotulo": "São Carlos · MRO e entorno, hangar aberto",
+      "campo": "sdsc",
+      "categoria": "ambiente",
+      "licenca": "odbl-1.0",
+      "arquivo": "sdsc_contexto.glb",
+      "bytes": 1799908,
+      "fonte": {
+        "blend": "scenario_sdsc/sdsc_hangar_tow.blend",
+        "pecas": [
+          "SDSC_CaneSurround_Inner",
+          "SDSC_CaneSurround_Outer",
+          "SDSC_Cropland_0",
+          "SDSC_Cropland_1",
+          "SDSC_Cropland_2",
+          "SDSC_Cropland_3",
+          "SDSC_VillageGround",
+          "SDSC_AguaVermelha",
+          "SDSC_FieldSheds",
+          "SDSC_Village_HousesA",
+          "SDSC_Village_HousesB",
+          "SDSC_Village_Roofs",
+          "SDSC_CaneYardPads",
+          "SDSC_CaneStacks",
+          "SDSC_CaneTrailers",
+          "SDSC_MRO_Workshops",
+          "SDSC_MRO_Hangars",
+          "SDSC_Museu_TAM",
+          "SDSC_Hangar9_Wordmark",
+          "SDSC_Hangar9_Brandmark",
+          "SDSC_MRO_HangarBay",
+          "SDSC_MRO_FasciaBand",
+          "SDSC_MRO_HangarDoors",
+          "SDSC_MRO_HangarFloor",
+          "SDSC_MRO_SpaceFrame",
+          "SDSC_MRO_Wordmark",
+          "SDSC_MRO_Brandmark",
+          "SDSC_MRO_PerimeterWall",
+          "SDSC_MRO_PerimeterMesh",
+          "SDSC_MRO_PerimeterPosts",
+          "SDSC_MRO_GuardHouse",
+          "SDSC_MRO_Gate",
+          "SDSC_MRO_Boom",
+          "SDSC_Aeroclube_Buildings",
+          "SDSC_Midfield_Hangar",
+          "SDSC_Midfield_EndPanels",
+          "SDSC_Midfield_Door",
+          "SDSC_Midfield_Tank",
+          "SDSC_Chequer_Shaft",
+          "SDSC_Chequer_Cab",
+          "SDSC_Chequer_Roof",
+          "SDSC_Midfield_AntennaMast",
+          "SDSC_Midfield_Derelict",
+          "SDSC_Midfield_DerelictWindows",
+          "SDSC_WaterTowers",
+          "SDSC_Village_Foliage",
+          "SDSC_Village_Trunks",
+          "SDSC_TreeLine_Foliage",
+          "SDSC_TreeLine_FoliageDry",
+          "SDSC_TreeLine_Trunks",
+          "SDSC_FloodlightMasts",
+          "SDSC_Windsock",
+          "SDSC_RunwayEdgeLights",
+          "SDSC_PAPI",
+          "SDSC_HoldingBoards",
+          "SDSC_HoldingPosts",
+          "SDSC_PowerPoles",
+          "SDSC_PowerCrossarms",
+          "SDSC_PowerConductors",
+          "SDSC_RoadsPaved",
+          "SDSC_RoadsUnpaved",
+          "SDSC_Streams",
+          "SDSC_WaterBodies",
+          "SDSC_Wetland",
+          "SDSC_MRO_Docks",
+          "SDSC_MRO_LooseEngines",
+          "SDSC_MRO_ToolCarts",
+          "SDSC_GSE_White",
+          "SDSC_GSE_Yellow",
+          "SDSC_GSE_Chassis",
+          "SDSC_Containers",
+          "SDSC_ContainersRust",
+          "SDSC_LandsideHardstanding",
+          "SDSC_Cars_Dark",
+          "SDSC_Cars_White",
+          "SDSC_Cars_Red",
+          "SDSC_Cars_Silver",
+          "SDSC_CarGlazing",
+          "SDSC_Hangar9_Shell",
+          "SDSC_Hangar9_Floor",
+          "SDSC_Hangar9_Band",
+          "SDSC_Hangar9_DoorLeaves",
+          "SDSC_Fleet_N2_Motor_Nacelle",
+          "SDSC_Fleet_N2_Motor_Core",
+          "SDSC_Fleet_N2_Motor_Fan",
+          "SDSC_Fleet_N2_Motor_Spinner",
+          "SDSC_Fleet_N2_Motor_Exaustao",
+          "SDSC_Fleet_N2_Motor_Pylon",
+          "SDSC_Fleet_N3_Cowls",
+          "SDSC_Fleet_N4_Cowls"
+        ]
+      },
+      "triangulos": 278220,
+      "materiais": 63,
+      "caixa": {
+        "min": [
+          -12005.78125,
+          -282.5946350097656,
+          -9925.0
+        ],
+        "max": [
+          9750.0,
+          89.37850952148438,
+          10075.0
+        ],
+        "tamanho": [
+          21755.78125,
+          371.97314453125,
+          20000.0
+        ]
+      },
+      "nota": "Cenário completo nas coordenadas da placa de campo. Materiais PBR simplificados; geometria OSM e arquitetura interpretada dos masters."
+    },
+    {
+      "slug": "sdsc_tug_operacional",
+      "rotulo": "Trator de reboque",
+      "campo": "sdsc",
+      "categoria": "veiculo",
+      "licenca": "odbl-1.0",
+      "arquivo": "sdsc_tug_operacional.glb",
+      "bytes": 6276,
+      "fonte": {
+        "blend": "scenario_sdsc/sdsc_hangar_tow.blend",
+        "pecas": [
+          "SDSC_Tug_Beacon",
+          "SDSC_Tug_Body",
+          "SDSC_Tug_Cab",
+          "SDSC_Tug_Glass",
+          "SDSC_Tug_Wheels"
+        ]
+      },
+      "triangulos": 96,
+      "materiais": 5,
+      "caixa": {
+        "min": [
+          -3.7501220703125,
+          0.0,
+          -1.5599365234375
+        ],
+        "max": [
+          3.75,
+          3.5900001525878906,
+          1.55999755859375
+        ],
+        "tamanho": [
+          7.5001220703125,
+          3.5900001525878906,
+          3.11993408203125
+        ]
+      },
+      "nota": "Cenário completo nas coordenadas da placa de campo. Materiais PBR simplificados; geometria OSM e arquitetura interpretada dos masters."
+    },
+    {
+      "slug": "sdsc_barra_reboque",
+      "rotulo": "Barra de reboque",
+      "campo": "sdsc",
+      "categoria": "veiculo",
+      "licenca": "odbl-1.0",
+      "arquivo": "sdsc_barra_reboque.glb",
+      "bytes": 1652,
+      "fonte": {
+        "blend": "scenario_sdsc/sdsc_hangar_tow.blend",
+        "pecas": [
+          "SDSC_Towbar_Mesh"
+        ]
+      },
+      "triangulos": 24,
+      "materiais": 1,
+      "caixa": {
+        "min": [
+          0.0,
+          0.3000030517578125,
+          -0.550018310546875
+        ],
+        "max": [
+          6.2501220703125,
+          0.8600044250488281,
+          0.550018310546875
+        ],
+        "tamanho": [
+          6.2501220703125,
+          0.5600013732910156,
+          1.10003662109375
+        ]
+      },
+      "nota": "Cenário completo nas coordenadas da placa de campo. Materiais PBR simplificados; geometria OSM e arquitetura interpretada dos masters."
+    },
+    {
+      "slug": "sbgr_relevo",
+      "rotulo": "GRU · relevo contínuo da serra",
+      "campo": "sbgr",
+      "categoria": "ambiente",
+      "licenca": "copernicus-dem",
+      "arquivo": "sbgr_relevo.glb",
+      "bytes": 1789100,
+      "triangulos": 500000,
+      "materiais": 1,
+      "caixa": {
+        "min": [
+          -16713.470703125,
+          -96.29978942871094,
+          -15403.259765625
+        ],
+        "max": [
+          13286.5302734375,
+          609.1495971679688,
+          14596.740234375
+        ],
+        "tamanho": [
+          30000.0009765625,
+          705.4493865966797,
+          30000.0
+        ]
+      },
+      "fonte": {
+        "heightfield": "scenario_sbgr/terrain/terrain_sbgr_near_30m.npy",
+        "amostragem_m": 60
+      },
+      "nota": "Relevo contínuo sob a vegetação. Sem reinterpretação da altura das aeronaves ou dos pavimentos."
+    },
+    {
+      "slug": "sbgr_pavimentos_precisos",
+      "rotulo": "SBGR · pistas e pátios de precisão",
+      "categoria": "superficie",
+      "campo": "sbgr",
+      "licenca": "odbl-1.0",
+      "arquivo": "sbgr_pavimentos_precisos.glb",
+      "bytes": 434528,
+      "faces": 27648,
+      "faces_origem": 27648,
+      "decimado": null,
+      "triangulos": 55056,
+      "vertices": 35274,
+      "materiais": 9,
+      "bake": {
+        "classe": "superficie_campo",
+        "tier": "completo",
+        "atlas": [
+          2048,
+          2048
+        ],
+        "m_por_texel": 3.279,
+        "alvo_m_por_texel": 3.5,
+        "area_m2": 15999345.1,
+        "ocupacao": 0.441,
+        "megapixels": 4.194,
+        "rugosidade": "escalar medido: SBGR_Runway_10L28R=0.820, SBGR_Runway_10R28L=0.816",
+        "rugosidade_faixa": {
+          "SBGR_Runway_10L28R": [
+            0.596,
+            0.84
+          ],
+          "SBGR_Runway_10R28L": [
+            0.642,
+            0.84
+          ]
+        },
+        "materiais": [
+          "SBGR_ApronConcrete",
+          "SBGR_Infield",
+          "SBGR_MarkingWhite",
+          "SBGR_MarkingYellow",
+          "SBGR_Runway_10L28R",
+          "SBGR_Runway_10R28L",
+          "SBGR_TaxiwayAsphalt"
+        ],
+        "achatados": [
+          "SBGR_MarkingPink",
+          "SBGR_Shoulder"
+        ]
+      },
+      "caixa": {
+        "min": [
+          -3062.5,
+          -17.617,
+          -2387.5
+        ],
+        "max": [
+          3062.5,
+          66.358,
+          2387.5
+        ],
+        "tamanho": [
+          6125.0,
+          83.975,
+          4775.0
+        ]
+      },
+      "fonte": {
+        "blend": "scenario_sbgr/sbgr_field.blend",
+        "pecas": [],
+        "superficies": [
+          "SBGR_RwyN_Pavement",
+          "SBGR_RwyS_Pavement",
+          "SBGR_RunwayShoulders",
+          "SBGR_RunwayMarkings",
+          "SBGR_TaxiwayPavement",
+          "SBGR_TaxiwayCentrelines",
+          "SBGR_ApronConcrete",
+          "SBGR_ApronLaneEdges",
+          "SBGR_AerodromeGround"
+        ],
+        "regiao": null,
+        "origem_no_campo_m": [
+          1713.47,
+          -403.26
+        ],
+        "datum": "campo",
+        "centrar_em": []
+      },
+      "nota": "Pavimentos nas coordenadas de campo, compressão de posição a 22 bits para preservar as separações de centímetros entre as superfícies.",
+      "ausentes": []
+    },
+    {
+      "slug": "sdsc_pavimentos_precisos",
+      "rotulo": "SDSC · pistas e pátios de precisão",
+      "categoria": "superficie",
+      "campo": "sdsc",
+      "licenca": "odbl-1.0",
+      "arquivo": "sdsc_pavimentos_precisos.glb",
+      "bytes": 871140,
+      "faces": 28942,
+      "faces_origem": 28942,
+      "decimado": null,
+      "triangulos": 32861,
+      "vertices": 90237,
+      "materiais": 8,
+      "bake": {
+        "classe": "superficie_campo",
+        "tier": "completo",
+        "atlas": [
+          2048,
+          2048
+        ],
+        "m_por_texel": 50.567,
+        "alvo_m_por_texel": 3.5,
+        "area_m2": 7602768.2,
+        "ocupacao": 0.052,
+        "megapixels": 4.194,
+        "rugosidade": "herdada do Principled",
+        "rugosidade_faixa": {},
+        "materiais": [
+          "SDSC_Concrete",
+          "SDSC_Infield",
+          "SDSC_MarkingWhite",
+          "SDSC_MarkingYellow",
+          "SDSC_Runway_0220",
+          "SDSC_TaxiwayAsphalt"
+        ],
+        "achatados": [
+          "SDSC_CropPasture",
+          "SDSC_Shoulder"
+        ]
+      },
+      "caixa": {
+        "min": [
+          -1250.0,
+          -103.808,
+          -1475.0
+        ],
+        "max": [
+          1250.0,
+          11.669,
+          1475.0
+        ],
+        "tamanho": [
+          2500.0,
+          115.477,
+          2950.0
+        ]
+      },
+      "fonte": {
+        "blend": "scenario_sdsc/sdsc_field.blend",
+        "pecas": [],
+        "superficies": [
+          "SDSC_RunwayPavement",
+          "SDSC_RunwayShoulders",
+          "SDSC_RunwayMarkings",
+          "SDSC_TaxiwayPavement",
+          "SDSC_TaxiwayCentrelines",
+          "SDSC_ApronConcrete",
+          "SDSC_MownGrass",
+          "SDSC_AerodromeGround"
+        ],
+        "regiao": null,
+        "origem_no_campo_m": [
+          570.18,
+          979.62
+        ],
+        "datum": "campo",
+        "centrar_em": []
+      },
+      "nota": "Pavimentos nas coordenadas de campo, compressão de posição a 22 bits para preservar as separações de centímetros entre as superfícies.",
+      "ausentes": []
+    },
+    {
+      "slug": "sdsc_hangar9_interior",
+      "rotulo": "Hangar 9 · interior MRO",
+      "campo": "sdsc",
+      "categoria": "interior",
+      "licenca": "cc-by-4.0",
+      "arquivo": "sdsc_hangar9_interior.glb",
+      "bytes": 286972,
+      "triangulos": 27160,
+      "materiais": 9,
+      "caixa": {
+        "tamanho": [
+          128,
+          26,
+          94
+        ]
+      },
+      "nota": "Interior interpretado a partir da referência local do MRO. Equipamentos estacionados fora do corredor central; não é levantamento do Hangar 9.",
+      "fonte": {
+        "script": "estudio/tools/modelar_interior.py",
+        "referencia": "scenario_sdsc/refs/mro_centro_tecnologico_2010.jpg"
+      }
+    },
+    {
+      "slug": "scl_pavimentos_precisos",
+      "rotulo": "SCL · pistas e pátios de precisão",
+      "categoria": "superficie",
+      "campo": "scl",
+      "licenca": "odbl-1.0",
+      "arquivo": "scl_pavimentos_precisos.glb",
+      "bytes": 368448,
+      "faces": 5545,
+      "faces_origem": 5545,
+      "decimado": null,
+      "triangulos": 10403,
+      "vertices": 12073,
+      "materiais": 8,
+      "bake": {
+        "classe": "superficie_campo",
+        "tier": "completo",
+        "atlas": [
+          2048,
+          2048
+        ],
+        "m_por_texel": 2.534,
+        "alvo_m_por_texel": 3.5,
+        "area_m2": 11783239.0,
+        "ocupacao": 0.552,
+        "megapixels": 4.194,
+        "rugosidade": "escalar medido: SCL_Runway_17L35R=0.818, SCL_Runway_17R35L=0.712",
+        "rugosidade_faixa": {
+          "SCL_Runway_17L35R": [
+            0.816,
+            0.82
+          ],
+          "SCL_Runway_17R35L": [
+            0.57,
+            0.797
+          ]
+        },
+        "materiais": [
+          "SCL_Concrete",
+          "SCL_MarkingWhite",
+          "SCL_MarkingYellow",
+          "SCL_Runway_17L35R",
+          "SCL_Runway_17R35L",
+          "SCL_Soil",
+          "SCL_TaxiwayAsphalt"
+        ],
+        "achatados": [
+          "SCL_AsphaltShoulder"
+        ]
+      },
+      "caixa": {
+        "min": [
+          -1085.07,
+          0.0,
+          -2527.745
+        ],
+        "max": [
+          1085.07,
+          0.12,
+          2527.745
+        ],
+        "tamanho": [
+          2170.14,
+          0.12,
+          5055.49
+        ]
+      },
+      "fonte": {
+        "blend": "scenario/scl_field.blend",
+        "pecas": [],
+        "superficies": [
+          "SCL_RunwayPavement_17L",
+          "SCL_RunwayPavement_17R",
+          "SCL_RunwayShoulders",
+          "SCL_RunwayMarkings",
+          "SCL_TaxiwayPavement",
+          "SCL_TaxiwayCentrelines",
+          "SCL_ApronConcrete",
+          "SCL_AerodromeGround"
+        ],
+        "regiao": {
+          "tipo": "retangulo",
+          "x0": -1760,
+          "x1": 440,
+          "y0": -4010,
+          "y1": 1090
+        },
+        "origem_no_campo_m": [
+          -662.26,
+          -1461.45
+        ],
+        "datum": "campo",
+        "centrar_em": []
+      },
+      "nota": "Pavimentos nas coordenadas de campo, compressão de posição a 22 bits para preservar as separações de centímetros entre as superfícies.",
+      "ausentes": []
+    },
+    {
+      "slug": "scl_relevo",
+      "rotulo": "Santiago · vale e cordilheira",
+      "campo": "scl",
+      "categoria": "ambiente",
+      "licenca": "copernicus-dem",
+      "arquivo": "scl_relevo.glb",
+      "bytes": 1242896,
+      "triangulos": 340992,
+      "materiais": 1,
+      "caixa": {
+        "min": [
+          -109337.7421875,
+          -3147.6455078125,
+          -149541.453125
+        ],
+        "max": [
+          149862.265625,
+          5225.68994140625,
+          148538.546875
+        ],
+        "tamanho": [
+          259200.0078125,
+          8373.33544921875,
+          298080.0
+        ]
+      },
+      "fonte": {
+        "heightfield": "scenario/terrain/terrain_scl_*.npy",
+        "amostragem_m": [
+          120,
+          360,
+          2160
+        ]
+      },
+      "nota": "Dados locais Copernicus modificados: três malhas com máscaras internas e ajuste sob o aeródromo. Cor por altitude interpretada."
+    }
+  ]
+}

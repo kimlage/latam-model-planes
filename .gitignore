@@ -211,3 +211,11 @@ scenario_sbgr/checks/
 scenario_sbgr/sbgr_terrain.blend
 scenario_sbgr/*.blend1
 scenario_sbgr/*.log
+
+# Local browser QA captures and ephemeral Playwright session logs
+/output/playwright/
+/.playwright-cli/
+
+# Reproducible release archives and browser capture intermediates
+/dist/
+/output/release-*/

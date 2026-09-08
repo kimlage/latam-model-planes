@@ -1,3 +1,4 @@
+import { opacidadeTransicao } from './transicao.js';
 /* exportar.js — the four ways out of the studio.
  *
  *   1. animated GIF   — client-side, gifenc, 25 fps by law (see below)
@@ -123,7 +124,7 @@ export class Capturador {
   }
 
   /** One frame. Returns { data: Uint8ClampedArray RGBA, larg, alt }. */
-  quadro (fundoOpaco = null) {
+  quadro (fundoOpaco = null, fade = 0) {
     const m = this.mundo;
     m.render();
     this.ctx.clearRect(0, 0, this.larg, this.alt);
@@ -134,10 +135,20 @@ export class Capturador {
     // Same task as the render call, and preserveDrawingBuffer is on: this read
     // is safe on every driver we have seen.
     this.ctx.drawImage(m.renderer.domElement, 0, 0, this.larg, this.alt);
+    if(fade>0){this.ctx.save();this.ctx.globalAlpha=fade;this.ctx.fillStyle='#080a0f';this.ctx.fillRect(0,0,this.larg,this.alt);this.ctx.restore();}
     return this.ctx.getImageData(0, 0, this.larg, this.alt);
   }
 
-  blobPNG () { return new Promise(r => this.lona.toBlob(r, 'image/png')); }
+  async blobPNG () {
+    // Chromium defers toBlob() to idle tasks: measured ~1000 ms per frame in
+    // a background tab versus ~8 ms for toDataURL at 720p. Encode synchronously
+    // here, then the sequence's MessageChannel yield returns control each frame.
+    // This also avoids unfinished PNG promises when the tab loses foreground.
+    const encoded = this.lona.toDataURL('image/png').split(',')[1];
+    const raw = atob(encoded), bytes = new Uint8Array(raw.length);
+    for(let i=0;i<raw.length;i++) bytes[i]=raw.charCodeAt(i);
+    return new Blob([bytes],{type:'image/png'});
+  }
 
   terminar () {
     const m = this.mundo, s = this.salvo;
@@ -293,7 +304,7 @@ export async function exportarGif (mundo, estado, cfg, selId, aoProgresso = () =
     const amostras = [];
     for (const t of [0, 0.25, 0.5, 0.75]) {
       mov.passo(t);
-      const q = cap.quadro(matte);
+      const q = cap.quadro(matte, cfg.modo === 'linha' ? opacidadeTransicao(estado, t * estado.linha.duracao) : 0);
       // Every 7th pixel: enough colour statistics, a fraction of the work.
       const passoAm = 7 * 4;
       for (let i = 0; i < q.data.length; i += passoAm) amostras.push(q.data[i], q.data[i + 1], q.data[i + 2], 255);
@@ -303,8 +314,9 @@ export async function exportarGif (mundo, estado, cfg, selId, aoProgresso = () =
     /* Pass 2 — render, index against the palette, write. */
     const gif = GIFEncoder();
     for (let i = 0; i < N; i++) {
+      if (cfg.signal?.aborted) throw new DOMException('Exportação cancelada.', 'AbortError');
       mov.passo(i / N);
-      const q = cap.quadro(matte);
+      const q = cap.quadro(matte, cfg.modo === 'linha' ? opacidadeTransicao(estado, i / N * estado.linha.duracao) : 0);
       const idx = applyPalette(q.data, paleta, 'rgb565');
       gif.writeFrame(idx, cfg.larg, cfg.alt, {
         palette: i === 0 ? paleta : undefined,
@@ -407,7 +419,10 @@ export function zipArmazenado (entradas) {
 /** Render every frame of the timeline as a PNG and pack them into one ZIP. */
 export async function exportarSequencia (mundo, estado, cfg, aoProgresso = () => {}) {
   const l = estado.linha;
-  const N = cfg.quadros || quadros(l);
+  const total=quadros(l),range=cfg.intervaloQuadros;
+  if(range&&(!Array.isArray(range)||range.length!==2||!range.every(Number.isInteger)||range[0]<0||range[1]<=range[0]||range[1]>total))throw new Error('Intervalo de quadros inválido.');
+  const start=range?range[0]:0,N=range?range[1]-range[0]:cfg.quadros||total;
+  const tempoNormalizado=i=>range?(start+i)/total:i/N;
   const mov = construirMovimento(mundo, estado, { modo: 'linha' }, null);
   const cap = new Capturador(mundo);
   const matte = estado.ambiente.fundo === 'transparente' ? (cfg.matte || null) : null;
@@ -416,16 +431,21 @@ export async function exportarSequencia (mundo, estado, cfg, aoProgresso = () =>
   cap.iniciar(cfg.larg, cfg.alt, cfg.ss || 1);
   try {
     for (let i = 0; i < N; i++) {
-      mov.passo(i / N);
-      cap.quadro(matte);
+      if (cfg.signal?.aborted) throw new DOMException('Exportação cancelada.', 'AbortError');
+      mov.passo(tempoNormalizado(i));
+      cap.quadro(matte, opacidadeTransicao(estado, tempoNormalizado(i) * l.duracao));
       const blob = await cap.blobPNG();
       const dados = new Uint8Array(await blob.arrayBuffer());
       bytes += dados.length;
+      if(bytes > (cfg.maxBytes || 512*1024*1024)) throw new Error('Sequência excedeu 512 MB. Reduza a resolução ou a duração.');
       entradas.push({ nome: `${cfg.prefixo || 'quadro'}_${String(i).padStart(4, '0')}.png`, dados });
       aoProgresso(i + 1, N, 'rendering');
       await ceder();
     }
     aoProgresso(N, N, 'zipping');
+    const cod = new TextEncoder();
+    entradas.push({nome:'ATRIBUICAO.txt',dados:cod.encode(textoAtribuicao(estado))},
+      {nome:'sequencia.json',dados:cod.encode(JSON.stringify({fps:l.fps,quadros:N,quadroInicio:start,quadrosOriginais:total,largura:cfg.larg,altura:cfg.alt}))});
     const zip = zipArmazenado(entradas);
     return { blob: zip, bytes: zip.size, brutos: bytes, quadros: N };
   } finally {
@@ -433,6 +453,17 @@ export async function exportarSequencia (mundo, estado, cfg, aoProgresso = () =>
     mov.restaurar();
     mundo.render();
   }
+}
+
+/** Local video encoder uses the same deterministic frames as the PNG sequence. */
+export async function exportarMp4(mundo, estado, cfg, aoProgresso=()=>{}) {
+  const r=await exportarSequencia(mundo,estado,{...cfg,prefixo:'quadro'},aoProgresso);
+  aoProgresso(r.quadros,r.quadros,'codificando MP4');
+  const response=await fetch(`/api/video?fps=${estado.linha.fps}`,{
+    method:'POST',headers:{'Content-Type':'application/zip','X-Latam-Studio':'1'},body:r.blob,signal:cfg.signal});
+  if(!response.ok){let erro;try{erro=await response.json();}catch{}throw new Error(erro?.error||'O servidor local não oferece MP4. Inicie com python3 estudio/serve.py.');}
+  const blob=await response.blob();
+  return {blob,bytes:blob.size,quadros:r.quadros};
 }
 
 /* --------------------------------------------------------------- JSON --- */
@@ -541,6 +572,13 @@ export function urlDoAsset (fonte, baseGlb) {
  *             'url'      — everything under an absolute base URL
  */
 export function construirEmbed (estado, mundo, cfg) {
+  if (cfg.modo === 'url') {
+    for (const valor of [cfg.baseEstudio, cfg.baseGlb]) {
+      const u = new URL(valor);
+      if (!['http:', 'https:'].includes(u.protocol) || /[<>'"\\]/.test(valor))
+        throw new Error('Use an HTTP(S) base URL without quotes or markup.');
+    }
+  }
   const baseEstudio = cfg.modo === 'url' ? cfg.baseEstudio.replace(/\/?$/, '/')
                     : cfg.modo === 'irmao' ? 'estudio/'
                     : './';
@@ -552,7 +590,7 @@ export function construirEmbed (estado, mundo, cfg) {
                 : '../export/';
 
   const doc = documentoParaJson(estado, mundo, { comAssets: true, baseGlb });
-  const titulo = (estado.nome || 'LATAM fleet scene').replace(/[<&]/g, '');
+  const titulo = (estado.nome || 'LATAM fleet scene').replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
   const lics = licencasDaCena(estado);
   const escapar = t => String(t).replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
 
@@ -609,7 +647,7 @@ ${lics.map(l => `       ${l.atribuicao}\n         ${l.url}${l.share_alike ? '   
 </script>
 <script type="module">
 import { montar } from '${baseEstudio}js/embed.js';
-const doc = ${JSON.stringify(doc, null, 1)};
+const doc = ${JSON.stringify(doc, null, 1).replace(/</g, '\\u003c')};
 montar(document.getElementById('cena'), doc, {
   autoGirar: ${cfg.autoGirar ? 'true' : 'false'},
   velocidadeGiro: ${(cfg.velocidadeGiro ?? 0.4).toFixed(2)},
@@ -618,8 +656,7 @@ montar(document.getElementById('cena'), doc, {
   tocar: ${cfg.tocar !== false},
   transporte: ${cfg.transporte !== false}
 }).catch(e => {
-  document.getElementById('cena').innerHTML =
-    '<p style="padding:20px;color:#ff8f8f;font-family:monospace">' + e.message + '</p>';
+  document.getElementById('cena').textContent = 'Could not load scene: ' + e.message;
 });
 </script>
 </body></html>

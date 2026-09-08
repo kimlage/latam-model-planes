@@ -85,6 +85,7 @@ export async function montar (el, doc, opc = {}) {
       tBruto += dt;
       if (tBruto >= linha.duracao) {
         tBruto = linha.loop === false ? linha.duracao : tBruto % linha.duracao;
+        if (linha.loop === false) tocando = false;
       }
       /* Snapped to the frame grid, so the embed shows the same frames the GIF
          contains rather than in-between poses that were never exported. */
@@ -94,7 +95,7 @@ export async function montar (el, doc, opc = {}) {
     /* While the camera track is running the controls do not get a turn, or
        OrbitControls.update() overwrites the pose the track just set. Pause the
        clip and the viewer gets the scene back, from wherever the camera is. */
-    if (!(ov && ov.camera && tocando)) c.update();
+    if (!(ov && ov.camera)) c.update();
     m.render();
   });
 

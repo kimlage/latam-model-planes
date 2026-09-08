@@ -1,0 +1,978 @@
+[
+  {
+    "id": "sbgr-A319-patio",
+    "aeroporto": "sbgr",
+    "situacao": "patio",
+    "aeronave": "A319",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-A320ceo-patio",
+    "aeroporto": "sbgr",
+    "situacao": "patio",
+    "aeronave": "A320ceo",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-A320neo-patio",
+    "aeroporto": "sbgr",
+    "situacao": "patio",
+    "aeronave": "A320neo",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-A321ceo-patio",
+    "aeroporto": "sbgr",
+    "situacao": "patio",
+    "aeronave": "A321ceo",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-A321neo-patio",
+    "aeroporto": "sbgr",
+    "situacao": "patio",
+    "aeronave": "A321neo",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-B763-patio",
+    "aeroporto": "sbgr",
+    "situacao": "patio",
+    "aeronave": "B763",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-B77W-patio",
+    "aeroporto": "sbgr",
+    "situacao": "patio",
+    "aeronave": "B77W",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-B788-patio",
+    "aeroporto": "sbgr",
+    "situacao": "patio",
+    "aeronave": "B788",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-B789-patio",
+    "aeroporto": "sbgr",
+    "situacao": "patio",
+    "aeronave": "B789",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-B763F-patio",
+    "aeroporto": "sbgr",
+    "situacao": "patio",
+    "aeronave": "B763F",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-B763BCF-patio",
+    "aeroporto": "sbgr",
+    "situacao": "patio",
+    "aeronave": "B763BCF",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-A319-sobrevoo",
+    "aeroporto": "sbgr",
+    "situacao": "sobrevoo",
+    "aeronave": "A319",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-A320ceo-sobrevoo",
+    "aeroporto": "sbgr",
+    "situacao": "sobrevoo",
+    "aeronave": "A320ceo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-A320neo-sobrevoo",
+    "aeroporto": "sbgr",
+    "situacao": "sobrevoo",
+    "aeronave": "A320neo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-A321ceo-sobrevoo",
+    "aeroporto": "sbgr",
+    "situacao": "sobrevoo",
+    "aeronave": "A321ceo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-A321neo-sobrevoo",
+    "aeroporto": "sbgr",
+    "situacao": "sobrevoo",
+    "aeronave": "A321neo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-B763-sobrevoo",
+    "aeroporto": "sbgr",
+    "situacao": "sobrevoo",
+    "aeronave": "B763",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-B77W-sobrevoo",
+    "aeroporto": "sbgr",
+    "situacao": "sobrevoo",
+    "aeronave": "B77W",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-B788-sobrevoo",
+    "aeroporto": "sbgr",
+    "situacao": "sobrevoo",
+    "aeronave": "B788",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-B789-sobrevoo",
+    "aeroporto": "sbgr",
+    "situacao": "sobrevoo",
+    "aeronave": "B789",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-B763F-sobrevoo",
+    "aeroporto": "sbgr",
+    "situacao": "sobrevoo",
+    "aeronave": "B763F",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-B763BCF-sobrevoo",
+    "aeroporto": "sbgr",
+    "situacao": "sobrevoo",
+    "aeronave": "B763BCF",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-A319-aproximacao",
+    "aeroporto": "sbgr",
+    "situacao": "aproximacao",
+    "aeronave": "A319",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-A320ceo-aproximacao",
+    "aeroporto": "sbgr",
+    "situacao": "aproximacao",
+    "aeronave": "A320ceo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-A320neo-aproximacao",
+    "aeroporto": "sbgr",
+    "situacao": "aproximacao",
+    "aeronave": "A320neo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-A321ceo-aproximacao",
+    "aeroporto": "sbgr",
+    "situacao": "aproximacao",
+    "aeronave": "A321ceo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-A321neo-aproximacao",
+    "aeroporto": "sbgr",
+    "situacao": "aproximacao",
+    "aeronave": "A321neo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-B763-aproximacao",
+    "aeroporto": "sbgr",
+    "situacao": "aproximacao",
+    "aeronave": "B763",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-B77W-aproximacao",
+    "aeroporto": "sbgr",
+    "situacao": "aproximacao",
+    "aeronave": "B77W",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-B788-aproximacao",
+    "aeroporto": "sbgr",
+    "situacao": "aproximacao",
+    "aeronave": "B788",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-B789-aproximacao",
+    "aeroporto": "sbgr",
+    "situacao": "aproximacao",
+    "aeronave": "B789",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-B763F-aproximacao",
+    "aeroporto": "sbgr",
+    "situacao": "aproximacao",
+    "aeronave": "B763F",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-B763BCF-aproximacao",
+    "aeroporto": "sbgr",
+    "situacao": "aproximacao",
+    "aeronave": "B763BCF",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sbgr-A319-decolagem",
+    "aeroporto": "sbgr",
+    "situacao": "decolagem",
+    "aeronave": "A319",
+    "duration": 7.95,
+    "fps": 20
+  },
+  {
+    "id": "sbgr-A320ceo-decolagem",
+    "aeroporto": "sbgr",
+    "situacao": "decolagem",
+    "aeronave": "A320ceo",
+    "duration": 7.95,
+    "fps": 20
+  },
+  {
+    "id": "sbgr-A320neo-decolagem",
+    "aeroporto": "sbgr",
+    "situacao": "decolagem",
+    "aeronave": "A320neo",
+    "duration": 7.95,
+    "fps": 20
+  },
+  {
+    "id": "sbgr-A321ceo-decolagem",
+    "aeroporto": "sbgr",
+    "situacao": "decolagem",
+    "aeronave": "A321ceo",
+    "duration": 7.95,
+    "fps": 20
+  },
+  {
+    "id": "sbgr-A321neo-decolagem",
+    "aeroporto": "sbgr",
+    "situacao": "decolagem",
+    "aeronave": "A321neo",
+    "duration": 7.95,
+    "fps": 20
+  },
+  {
+    "id": "sbgr-B763-decolagem",
+    "aeroporto": "sbgr",
+    "situacao": "decolagem",
+    "aeronave": "B763",
+    "duration": 7.95,
+    "fps": 20
+  },
+  {
+    "id": "sbgr-B77W-decolagem",
+    "aeroporto": "sbgr",
+    "situacao": "decolagem",
+    "aeronave": "B77W",
+    "duration": 7.95,
+    "fps": 20
+  },
+  {
+    "id": "sbgr-B788-decolagem",
+    "aeroporto": "sbgr",
+    "situacao": "decolagem",
+    "aeronave": "B788",
+    "duration": 7.95,
+    "fps": 20
+  },
+  {
+    "id": "sbgr-B789-decolagem",
+    "aeroporto": "sbgr",
+    "situacao": "decolagem",
+    "aeronave": "B789",
+    "duration": 7.95,
+    "fps": 20
+  },
+  {
+    "id": "sbgr-B763F-decolagem",
+    "aeroporto": "sbgr",
+    "situacao": "decolagem",
+    "aeronave": "B763F",
+    "duration": 7.95,
+    "fps": 20
+  },
+  {
+    "id": "sbgr-B763BCF-decolagem",
+    "aeroporto": "sbgr",
+    "situacao": "decolagem",
+    "aeronave": "B763BCF",
+    "duration": 7.95,
+    "fps": 20
+  },
+  {
+    "id": "sdsc-A319-patio",
+    "aeroporto": "sdsc",
+    "situacao": "patio",
+    "aeronave": "A319",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-A320ceo-patio",
+    "aeroporto": "sdsc",
+    "situacao": "patio",
+    "aeronave": "A320ceo",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-A320neo-patio",
+    "aeroporto": "sdsc",
+    "situacao": "patio",
+    "aeronave": "A320neo",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-A321ceo-patio",
+    "aeroporto": "sdsc",
+    "situacao": "patio",
+    "aeronave": "A321ceo",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-A321neo-patio",
+    "aeroporto": "sdsc",
+    "situacao": "patio",
+    "aeronave": "A321neo",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B763-patio",
+    "aeroporto": "sdsc",
+    "situacao": "patio",
+    "aeronave": "B763",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B77W-patio",
+    "aeroporto": "sdsc",
+    "situacao": "patio",
+    "aeronave": "B77W",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B788-patio",
+    "aeroporto": "sdsc",
+    "situacao": "patio",
+    "aeronave": "B788",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B789-patio",
+    "aeroporto": "sdsc",
+    "situacao": "patio",
+    "aeronave": "B789",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B763F-patio",
+    "aeroporto": "sdsc",
+    "situacao": "patio",
+    "aeronave": "B763F",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B763BCF-patio",
+    "aeroporto": "sdsc",
+    "situacao": "patio",
+    "aeronave": "B763BCF",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-A319-sobrevoo",
+    "aeroporto": "sdsc",
+    "situacao": "sobrevoo",
+    "aeronave": "A319",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-A320ceo-sobrevoo",
+    "aeroporto": "sdsc",
+    "situacao": "sobrevoo",
+    "aeronave": "A320ceo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-A320neo-sobrevoo",
+    "aeroporto": "sdsc",
+    "situacao": "sobrevoo",
+    "aeronave": "A320neo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-A321ceo-sobrevoo",
+    "aeroporto": "sdsc",
+    "situacao": "sobrevoo",
+    "aeronave": "A321ceo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-A321neo-sobrevoo",
+    "aeroporto": "sdsc",
+    "situacao": "sobrevoo",
+    "aeronave": "A321neo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B763-sobrevoo",
+    "aeroporto": "sdsc",
+    "situacao": "sobrevoo",
+    "aeronave": "B763",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B77W-sobrevoo",
+    "aeroporto": "sdsc",
+    "situacao": "sobrevoo",
+    "aeronave": "B77W",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B788-sobrevoo",
+    "aeroporto": "sdsc",
+    "situacao": "sobrevoo",
+    "aeronave": "B788",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B789-sobrevoo",
+    "aeroporto": "sdsc",
+    "situacao": "sobrevoo",
+    "aeronave": "B789",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B763F-sobrevoo",
+    "aeroporto": "sdsc",
+    "situacao": "sobrevoo",
+    "aeronave": "B763F",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B763BCF-sobrevoo",
+    "aeroporto": "sdsc",
+    "situacao": "sobrevoo",
+    "aeronave": "B763BCF",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-A319-aproximacao",
+    "aeroporto": "sdsc",
+    "situacao": "aproximacao",
+    "aeronave": "A319",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-A320ceo-aproximacao",
+    "aeroporto": "sdsc",
+    "situacao": "aproximacao",
+    "aeronave": "A320ceo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-A320neo-aproximacao",
+    "aeroporto": "sdsc",
+    "situacao": "aproximacao",
+    "aeronave": "A320neo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-A321ceo-aproximacao",
+    "aeroporto": "sdsc",
+    "situacao": "aproximacao",
+    "aeronave": "A321ceo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-A321neo-aproximacao",
+    "aeroporto": "sdsc",
+    "situacao": "aproximacao",
+    "aeronave": "A321neo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B763-aproximacao",
+    "aeroporto": "sdsc",
+    "situacao": "aproximacao",
+    "aeronave": "B763",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B77W-aproximacao",
+    "aeroporto": "sdsc",
+    "situacao": "aproximacao",
+    "aeronave": "B77W",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B788-aproximacao",
+    "aeroporto": "sdsc",
+    "situacao": "aproximacao",
+    "aeronave": "B788",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B789-aproximacao",
+    "aeroporto": "sdsc",
+    "situacao": "aproximacao",
+    "aeronave": "B789",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B763F-aproximacao",
+    "aeroporto": "sdsc",
+    "situacao": "aproximacao",
+    "aeronave": "B763F",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B763BCF-aproximacao",
+    "aeroporto": "sdsc",
+    "situacao": "aproximacao",
+    "aeronave": "B763BCF",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B789-reboque",
+    "aeroporto": "sdsc",
+    "situacao": "reboque",
+    "aeronave": "B789",
+    "duration": 16,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-A319-manutencao",
+    "aeroporto": "sdsc",
+    "situacao": "manutencao",
+    "aeronave": "A319",
+    "duration": 14,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-A320ceo-manutencao",
+    "aeroporto": "sdsc",
+    "situacao": "manutencao",
+    "aeronave": "A320ceo",
+    "duration": 14,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-A320neo-manutencao",
+    "aeroporto": "sdsc",
+    "situacao": "manutencao",
+    "aeronave": "A320neo",
+    "duration": 14,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-A321ceo-manutencao",
+    "aeroporto": "sdsc",
+    "situacao": "manutencao",
+    "aeronave": "A321ceo",
+    "duration": 14,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-A321neo-manutencao",
+    "aeroporto": "sdsc",
+    "situacao": "manutencao",
+    "aeronave": "A321neo",
+    "duration": 14,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B763-manutencao",
+    "aeroporto": "sdsc",
+    "situacao": "manutencao",
+    "aeronave": "B763",
+    "duration": 14,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B77W-manutencao",
+    "aeroporto": "sdsc",
+    "situacao": "manutencao",
+    "aeronave": "B77W",
+    "duration": 14,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B788-manutencao",
+    "aeroporto": "sdsc",
+    "situacao": "manutencao",
+    "aeronave": "B788",
+    "duration": 14,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B789-manutencao",
+    "aeroporto": "sdsc",
+    "situacao": "manutencao",
+    "aeronave": "B789",
+    "duration": 14,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B763F-manutencao",
+    "aeroporto": "sdsc",
+    "situacao": "manutencao",
+    "aeronave": "B763F",
+    "duration": 14,
+    "fps": 25
+  },
+  {
+    "id": "sdsc-B763BCF-manutencao",
+    "aeroporto": "sdsc",
+    "situacao": "manutencao",
+    "aeronave": "B763BCF",
+    "duration": 14,
+    "fps": 25
+  },
+  {
+    "id": "scl-A319-patio",
+    "aeroporto": "scl",
+    "situacao": "patio",
+    "aeronave": "A319",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "scl-A320ceo-patio",
+    "aeroporto": "scl",
+    "situacao": "patio",
+    "aeronave": "A320ceo",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "scl-A320neo-patio",
+    "aeroporto": "scl",
+    "situacao": "patio",
+    "aeronave": "A320neo",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "scl-A321ceo-patio",
+    "aeroporto": "scl",
+    "situacao": "patio",
+    "aeronave": "A321ceo",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "scl-A321neo-patio",
+    "aeroporto": "scl",
+    "situacao": "patio",
+    "aeronave": "A321neo",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "scl-B763-patio",
+    "aeroporto": "scl",
+    "situacao": "patio",
+    "aeronave": "B763",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "scl-B77W-patio",
+    "aeroporto": "scl",
+    "situacao": "patio",
+    "aeronave": "B77W",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "scl-B788-patio",
+    "aeroporto": "scl",
+    "situacao": "patio",
+    "aeronave": "B788",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "scl-B789-patio",
+    "aeroporto": "scl",
+    "situacao": "patio",
+    "aeronave": "B789",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "scl-B763F-patio",
+    "aeroporto": "scl",
+    "situacao": "patio",
+    "aeronave": "B763F",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "scl-B763BCF-patio",
+    "aeroporto": "scl",
+    "situacao": "patio",
+    "aeronave": "B763BCF",
+    "duration": 12,
+    "fps": 25
+  },
+  {
+    "id": "scl-A319-sobrevoo",
+    "aeroporto": "scl",
+    "situacao": "sobrevoo",
+    "aeronave": "A319",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "scl-A320ceo-sobrevoo",
+    "aeroporto": "scl",
+    "situacao": "sobrevoo",
+    "aeronave": "A320ceo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "scl-A320neo-sobrevoo",
+    "aeroporto": "scl",
+    "situacao": "sobrevoo",
+    "aeronave": "A320neo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "scl-A321ceo-sobrevoo",
+    "aeroporto": "scl",
+    "situacao": "sobrevoo",
+    "aeronave": "A321ceo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "scl-A321neo-sobrevoo",
+    "aeroporto": "scl",
+    "situacao": "sobrevoo",
+    "aeronave": "A321neo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "scl-B763-sobrevoo",
+    "aeroporto": "scl",
+    "situacao": "sobrevoo",
+    "aeronave": "B763",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "scl-B77W-sobrevoo",
+    "aeroporto": "scl",
+    "situacao": "sobrevoo",
+    "aeronave": "B77W",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "scl-B788-sobrevoo",
+    "aeroporto": "scl",
+    "situacao": "sobrevoo",
+    "aeronave": "B788",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "scl-B789-sobrevoo",
+    "aeroporto": "scl",
+    "situacao": "sobrevoo",
+    "aeronave": "B789",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "scl-B763F-sobrevoo",
+    "aeroporto": "scl",
+    "situacao": "sobrevoo",
+    "aeronave": "B763F",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "scl-B763BCF-sobrevoo",
+    "aeroporto": "scl",
+    "situacao": "sobrevoo",
+    "aeronave": "B763BCF",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "scl-A319-aproximacao",
+    "aeroporto": "scl",
+    "situacao": "aproximacao",
+    "aeronave": "A319",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "scl-A320ceo-aproximacao",
+    "aeroporto": "scl",
+    "situacao": "aproximacao",
+    "aeronave": "A320ceo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "scl-A320neo-aproximacao",
+    "aeroporto": "scl",
+    "situacao": "aproximacao",
+    "aeronave": "A320neo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "scl-A321ceo-aproximacao",
+    "aeroporto": "scl",
+    "situacao": "aproximacao",
+    "aeronave": "A321ceo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "scl-A321neo-aproximacao",
+    "aeroporto": "scl",
+    "situacao": "aproximacao",
+    "aeronave": "A321neo",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "scl-B763-aproximacao",
+    "aeroporto": "scl",
+    "situacao": "aproximacao",
+    "aeronave": "B763",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "scl-B77W-aproximacao",
+    "aeroporto": "scl",
+    "situacao": "aproximacao",
+    "aeronave": "B77W",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "scl-B788-aproximacao",
+    "aeroporto": "scl",
+    "situacao": "aproximacao",
+    "aeronave": "B788",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "scl-B789-aproximacao",
+    "aeroporto": "scl",
+    "situacao": "aproximacao",
+    "aeronave": "B789",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "scl-B763F-aproximacao",
+    "aeroporto": "scl",
+    "situacao": "aproximacao",
+    "aeronave": "B763F",
+    "duration": 24,
+    "fps": 25
+  },
+  {
+    "id": "scl-B763BCF-aproximacao",
+    "aeroporto": "scl",
+    "situacao": "aproximacao",
+    "aeronave": "B763BCF",
+    "duration": 24,
+    "fps": 25
+  }
+]

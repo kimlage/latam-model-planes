@@ -15,6 +15,44 @@ payoff is that the model is **reconstructible**: each aircraft's
 `spec_<type>.json` holds the complete engineering specification, and the scripts
 rebuild from it.
 
+## Loadings cinematográficos e Scene Studio
+
+A biblioteca reúne **11 aeronaves, três bases e 122 combinações de câmera e animação**. Inclui pátio, sobrevoo, passagem próxima, decolagem em Guarulhos e manutenção em São Carlos. O reboque está calibrado para o 787-9 em São Carlos. As câmeras permanecem no exterior da aeronave.
+
+**[Baixar o pacote completo de animações (.zip)](https://github.com/kimlage/latam-model-planes/releases/download/scene-studio-2026-09-08/latam-animacoes-completo-2026-09-08.zip)** · [Conteúdo e instruções](docs/ANIMACOES.md)
+
+O pacote contém 122 MP4s em 720p, 122 cenas JSON editáveis, os modelos GLB das 11 aeronaves e dos aeroportos, o Studio e suas dependências web locais. Os MP4s contêm as cenas; a marca e o progresso de loading são sobreposições da interface. O terreno, a vegetação e parte dos edifícios ainda têm simplificações visíveis: esta versão não é apresentada como fotorrealista.
+
+### Interface em funcionamento
+
+Seleção de aeroporto e situação, com a cena em movimento:
+
+![Biblioteca de loadings: Santiago e interior do hangar em São Carlos](docs/previews/studio-loading.gif)
+
+Câmeras, planos e reprodução pela timeline no editor:
+
+![Scene Studio reproduzindo os dois planos do interior do hangar](docs/previews/studio-editor.gif)
+
+### Vídeos em destaque
+
+| Base | Aeronave | Situação | Vídeo |
+|---|---|---|---|
+| Santiago | Boeing 787-9 | Passagem próxima | [MP4](estudio/loading/media/cinema/scl-b789-aproximacao.mp4) |
+| Guarulhos | Boeing 777-300ER | Passagem próxima | [MP4](estudio/loading/media/cinema/gru-b77w-aproximacao.mp4) |
+| São Carlos | Airbus A320neo | Sobrevoo | [MP4](estudio/loading/media/cinema/sdsc-a320-sobrevoo.mp4) |
+| São Carlos | Boeing 787-9 | Interior do hangar | [MP4](estudio/loading/media/cinema/sdsc-b789-interior.mp4) |
+| São Carlos | Boeing 787-9 | Reboque | [MP4](estudio/loading/media/cinema/sdsc-reboque.mp4) |
+| Guarulhos | Airbus A320neo | Pátio | [MP4](estudio/loading/media/cinema/gru-a320-patio.mp4) |
+| Guarulhos | Boeing 777-300ER | Decolagem | [MP4](estudio/loading/media/cinema/gru-decolagem.mp4) |
+
+Para executar a interface localmente:
+
+```sh
+python3 estudio/serve.py
+```
+
+Abra <http://127.0.0.1:8137/estudio/loading/>. O navegador precisa de WebGL2; exportar novos MP4s requer `ffmpeg` instalado. Os vídeos do pacote já podem ser reproduzidos diretamente. [Guia do Studio](estudio/README.md) · [Revisão de realismo e limites](estudio/loading/REALISMO.md).
+
 ## The fleet
 
 The whole LATAM passenger fleet — nine types — plus both halves of the cargo
@@ -168,10 +206,10 @@ the 901 widebody row — with Bonsucesso and the forested serra behind.*
 
 [`estudio/`](estudio/) is a browser page that loads the exported fleet **and the
 three airports**, lets you **compose a scene** from them, and gets the result
-back out four ways: an animated GIF, a navigable 3D embed you can drop into
-another page, a scene JSON that round-trips, and a PNG still.
+back out five ways: an animated GIF, a PNG sequence, a navigable 3D embed, a scene
+JSON that round-trips, and a PNG still.
 
-57 GLB assets in five categories — 11 aircraft, 22 airport structures, 7 ground
+66 assets (57 GLBs and 9 authored props) in five categories — 11 aircraft, 22 airport structures, 7 ground
 and surface pieces, 14 vehicles and GSE, 12 props — with **per-asset licensing**:
 the aircraft are CC BY 4.0, the airport geometry is an OpenStreetMap derivative
 under ODbL 1.0 with share-alike, and the studio's Licence panel lists whichever
@@ -220,8 +258,8 @@ for the whole catalogue.** They are an OpenStreetMap derivative and therefore
 carries in its own manifest row and in its own `.glb` copyright string. Formats,
 LOD trade-offs and licensing: [`export/README.md`](export/README.md).
 
-The airports are **not** exported. They are OpenStreetMap derivatives under
-share-alike ODbL, a different obligation from the models' CC BY 4.0.
+The exported airport pieces are OpenStreetMap derivatives under share-alike
+ODbL, with attribution carried per asset; the aircraft retain CC BY 4.0.
 
 ## Building an aircraft
 
@@ -291,3 +329,7 @@ them, and `--verificar` is the gate to run before committing.
 respective owners. This is an independent, non-commercial project with **no
 affiliation, sponsorship or endorsement** from any of them. Details and excluded
 third-party material: [`NOTICE.md`](NOTICE.md).
+
+### Scene Studio: produções e câmeras
+
+O [guia de produções](estudio/PRODUCOES.md) e a [biblioteca de animações](docs/ANIMACOES.md) descrevem as câmeras, os planos editáveis, a cobertura de GRU, São Carlos e Santiago e a exportação MP4 local.

@@ -1,0 +1,306 @@
+{
+  "scl_contexto": {
+    "materiais_achatados": {
+      "SCL_Farmland": {
+        "cor": [
+          0.17,
+          0.14,
+          0.08
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.95,
+        "emissivo": false
+      },
+      "SCL_Glass": {
+        "cor": [
+          0.03,
+          0.045,
+          0.05
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.16,
+        "emissivo": false
+      },
+      "SCL_WallLight": {
+        "cor": [
+          0.3,
+          0.298,
+          0.288
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.8,
+        "emissivo": false
+      },
+      "SCL_RoofSteelCool": {
+        "cor": [
+          0.195,
+          0.202,
+          0.205
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.66,
+        "emissivo": false
+      },
+      "SCL_WallGrey": {
+        "cor": [
+          0.17,
+          0.172,
+          0.175
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.82,
+        "emissivo": false
+      },
+      "SCL_RoofSteelDark": {
+        "cor": [
+          0.118,
+          0.122,
+          0.126
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.72,
+        "emissivo": false
+      },
+      "SCL_WallTan": {
+        "cor": [
+          0.245,
+          0.205,
+          0.15
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.82,
+        "emissivo": false
+      },
+      "SCL_RoofSteelWarm": {
+        "cor": [
+          0.218,
+          0.208,
+          0.188
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.68,
+        "emissivo": false
+      },
+      "SCL_WallPale": {
+        "cor": [
+          0.36,
+          0.345,
+          0.3
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.78,
+        "emissivo": false
+      },
+      "SCL_RoofLight": {
+        "cor": [
+          0.33,
+          0.335,
+          0.33
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.72,
+        "emissivo": false
+      },
+      "SCL_RoofNavy": {
+        "cor": [
+          0.02,
+          0.03,
+          0.075
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.65,
+        "emissivo": false
+      },
+      "SCL_RoofNavyDark": {
+        "cor": [
+          0.014,
+          0.021,
+          0.055
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.68,
+        "emissivo": false
+      },
+      "SCL_RoofBrick": {
+        "cor": [
+          0.098,
+          0.03,
+          0.038
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.75,
+        "emissivo": false
+      },
+      "SCL_RoofRibbedWhite": {
+        "cor": [
+          0.29,
+          0.294,
+          0.288
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.58,
+        "emissivo": false
+      },
+      "SCL_LATAM_LitWindows": {
+        "cor": [
+          0.33,
+          0.31,
+          0.26
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.3,
+        "emissivo": true
+      },
+      "SCL_LATAM_SignBand": {
+        "cor": [
+          0.021,
+          0.02,
+          0.048
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.45,
+        "emissivo": false
+      },
+      "SCL_LATAM_White": {
+        "cor": [
+          0.7,
+          0.705,
+          0.72
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.4,
+        "emissivo": false
+      },
+      "SCL_LATAM_Coral": {
+        "cor": [
+          0.847,
+          0.008,
+          0.082
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.45,
+        "emissivo": false
+      },
+      "SCL_LATAM_DoorPanels": {
+        "cor": [
+          0.19,
+          0.192,
+          0.195
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.62,
+        "emissivo": false
+      },
+      "SCL_T2Roof": {
+        "cor": [
+          0.275,
+          0.28,
+          0.285
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.5,
+        "emissivo": false
+      },
+      "SCL_T2PanelGreen": {
+        "cor": [
+          0.185,
+          0.29,
+          0.15
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.72,
+        "emissivo": false
+      },
+      "SCL_T2Brise": {
+        "cor": [
+          0.36,
+          0.115,
+          0.03
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.62,
+        "emissivo": false
+      },
+      "SCL_TowerConcrete": {
+        "cor": [
+          0.185,
+          0.182,
+          0.176
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.8,
+        "emissivo": false
+      },
+      "SCL_SteelLight": {
+        "cor": [
+          0.33,
+          0.34,
+          0.35
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.42,
+        "emissivo": false
+      },
+      "SCL_MastWhite": {
+        "cor": [
+          0.52,
+          0.525,
+          0.53
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.5,
+        "emissivo": false
+      },
+      "SCL_Foliage": {
+        "cor": [
+          0.052,
+          0.07,
+          0.028
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.9,
+        "emissivo": false
+      },
+      "SCL_TreeTrunk": {
+        "cor": [
+          0.048,
+          0.038,
+          0.026
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.9,
+        "emissivo": false
+      },
+      "SCL_Scrub": {
+        "cor": [
+          0.062,
+          0.062,
+          0.03
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.95,
+        "emissivo": false
+      },
+      "SCL_EdgeLightFitting": {
+        "cor": [
+          0.42,
+          0.4,
+          0.33
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.45,
+        "emissivo": false
+      },
+      "SCL_SignYellow": {
+        "cor": [
+          0.52,
+          0.34,
+          0.02
+        ],
+        "fonte": "diffuse_color",
+        "rugosidade": 0.55,
+        "emissivo": false
+      }
+    }
+  }
+}

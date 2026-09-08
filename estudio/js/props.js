@@ -161,10 +161,9 @@ export function faixaPista (comprimento = 600) {
  * Sampling convention (three.js): u = atan2(z, -x)/2π + 0.5, v = asin(y)/π + 0.5,
  * and a CanvasTexture is flipY by default, so canvas row j carries v = 1 - j/H.
  */
-export function texturaCeu (elevGraus, azimGraus, corSol = '#fff2df', W = 512, H = 256) {
-  const c = canvas(W, H), ctx = c.getContext('2d');
-  const img = ctx.createImageData(W, H);
-  const d = img.data;
+export function texturaCeu (elevGraus, azimGraus, corSol = '#fff2df', W = 1024, H = 512) {
+  // Radiance stays linear and HDR: Canvas/sRGB encoded these linear colours twice.
+  const d = new Float32Array(W*H*4);
 
   const el = THREE.MathUtils.degToRad(elevGraus);
   const az = THREE.MathUtils.degToRad(azimGraus);
@@ -200,25 +199,25 @@ export function texturaCeu (elevGraus, azimGraus, corSol = '#fff2df', W = 512, H
         const alinha = Math.max(0, dir.dot(sol));
         tmp.lerp(quente, baixo * t * Math.pow(alinha, 1.5) * 0.55);
         // Sun glow and disc.
-        const g = Math.pow(alinha, 220) * 1.0 + Math.pow(alinha, 14) * 0.16;
+        const g = Math.pow(alinha, 1000) * 1.0 + Math.pow(alinha, 14) * 0.16;
         tmp.lerp(cor, THREE.MathUtils.clamp(g, 0, 1));
-        if (alinha > 0.99985) tmp.copy(cor).multiplyScalar(1.0);
+        if (alinha > 0.999989) tmp.copy(cor).multiplyScalar(16.0);
       } else {
         // Below the horizon: haze fading into ground over ~25°, not a hard line.
         const t = THREE.MathUtils.clamp(-y * 2.4, 0, 1);
         tmp.copy(horiz).lerp(solo, Math.pow(t, 0.7));
       }
       const k = (j * W + i) * 4;
-      d[k]     = Math.min(255, tmp.r * 255);
-      d[k + 1] = Math.min(255, tmp.g * 255);
-      d[k + 2] = Math.min(255, tmp.b * 255);
-      d[k + 3] = 255;
+      d[k]     = tmp.r;
+      d[k + 1] = tmp.g;
+      d[k + 2] = tmp.b;
+      d[k + 3] = 1;
     }
   }
-  ctx.putImageData(img, 0, 0);
-  const t = new THREE.CanvasTexture(c);
+  const t = new THREE.DataTexture(d,W,H,THREE.RGBAFormat,THREE.FloatType);
+  t.flipY=true;t.minFilter=THREE.LinearFilter;t.magFilter=THREE.LinearFilter;t.needsUpdate=true;
   t.mapping = THREE.EquirectangularReflectionMapping;
-  t.colorSpace = THREE.SRGBColorSpace;
+  t.colorSpace = THREE.LinearSRGBColorSpace;
   return t;
 }
 

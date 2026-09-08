@@ -9,7 +9,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { instanciar, NIVEL_PADRAO } from './frota.js';
+import { instanciar, NIVEL_PADRAO, acharAsset } from './frota.js';
 import { instanciarProp, materialChao, faixaPista, texturaCeu, direcaoSol } from './props.js';
 
 const TONE = {
@@ -131,7 +131,9 @@ export class Mundo {
   usarOrto (v) {
     this.atualizarOrto();
     this.cam = v ? this.camO : this.camP;
-    this.controles.object = this.cam;
+    // The orthographic camera is derived from camP on every render. Orbiting
+    // camO directly was immediately overwritten, making ortho navigation inert.
+    this.controles.object = this.camP;
     this.controles.update();
   }
 
@@ -301,8 +303,14 @@ export class Mundo {
   }
 
   aplicarChao (a) {
+    const chave = JSON.stringify(a.chao);
+    if (chave === this._chaoKey) return;
+    this._chaoKey = chave;
     if (this.chao) { this.raizAmbiente.remove(this.chao); this.chao.geometry.dispose(); this.chao = null; }
-    if (this.pista) { this.raizAmbiente.remove(this.pista); this.pista.geometry.dispose(); this.pista = null; }
+    if (this.pista) {
+      this.raizAmbiente.remove(this.pista); this.pista.geometry.dispose();
+      this.pista.material.map?.dispose(); this.pista.material.dispose(); this.pista = null;
+    }
     if (!a.chao.ligado) return;
 
     const { material, metros } = materialChao(a.chao.tipo);
@@ -324,7 +332,13 @@ export class Mundo {
   }
 
   aplicarGrade (a) {
-    if (this.grade) { this.raizAmbiente.remove(this.grade); this.grade.geometry.dispose(); this.grade = null; }
+    const chave = `${a.grade}|${a.chao.tamanho}`;
+    if (chave === this._gradeKey) return;
+    this._gradeKey = chave;
+    if (this.grade) {
+      this.raizAmbiente.remove(this.grade); this.grade.geometry.dispose();
+      this.grade.material.dispose(); this.grade = null;
+    }
     if (!a.grade) return;
     const tam = Math.max(200, a.chao.tamanho);
     const g = new THREE.GridHelper(tam, Math.round(tam / 20), 0x4b5468, 0x252a36);
@@ -338,47 +352,37 @@ export class Mundo {
 
   /** Add/remove three objects until they match estado.objetos. */
   async sincronizar (estado, aoProgresso) {
-    const querem = new Set(estado.objetos.map(o => o.id));
-    for (const [id, obj] of [...this.objetos]) {
-      if (querem.has(id)) continue;
-      this.raizObjetos.remove(obj);
-      this.objetos.delete(id);
-    }
-    /* A DETAIL TIER CHANGE IS A REBUILD, not a property write: `heroi` is a
-       different GLB with a different mesh, so the instance has to be dropped
-       and re-made. Comparing against the tier the instance actually carries
-       (frota.js sets `userData.nivel`) rather than against a remembered
-       document value means an undo, a scene load and a manual edit all take
-       the same path. */
-    for (const d of estado.objetos) {
-      const obj = this.objetos.get(d.id);
-      if (!obj || d.tipo === 'prop') continue;
-      const querNivel = d.nivel || NIVEL_PADRAO;
-      if ((obj.userData.nivel || NIVEL_PADRAO) === querNivel) continue;
-      this.raizObjetos.remove(obj);
-      this.objetos.delete(d.id);
-    }
-    const faltando = estado.objetos.filter(o => !this.objetos.has(o.id));
+    if (this.contatoInterior) this.contatoInterior.visible=false;
+    this._sombraAerea=false;this._sombraProtagonista=null;
+    const revisao = this._sincronia = (this._sincronia || 0) + 1;
+    const proximos = new Map();
     let feitos = 0;
-    for (const d of faltando) {
-      let obj;
-      try {
-        /* Anything that is not an authored prop comes from a GLB: 'aeronave'
-           from export/manifest.json, 'cenario' from export/cenarios/. Both go
-           through the same pivot wrapper, so a hangar and a 777 obey the same
-           rule — origin at the X/Z bbox centre, base on y = 0. */
-        obj = d.tipo === 'prop' ? instanciarProp(d.slug)
-                                : await instanciar(d.slug, d.nivel || NIVEL_PADRAO);
-      } catch (e) {
-        console.error('could not instantiate', d, e);
-        continue;
+    for (const d of estado.objetos) {
+      let obj = this.objetos.get(d.id);
+      if (!obj || obj.userData.slugDocumento !== d.slug ||
+          obj.userData.tipoDocumento !== d.tipo ||
+          (obj.userData.nivel || NIVEL_PADRAO) !== (d.nivel || NIVEL_PADRAO)) {
+        try {
+          obj = d.tipo === 'prop' ? instanciarProp(d.slug) : await instanciar(d.slug, d.nivel || NIVEL_PADRAO);
+          if (!obj) throw new Error('Unknown asset');
+        } catch (e) { throw new Error(`Could not load ${d.nome}: ${e.message}`); }
       }
+      if (revisao !== this._sincronia) return;
       obj.name = d.nome;
       obj.userData.id = d.id;
-      this.objetos.set(d.id, obj);
-      this.raizObjetos.add(obj);
-      aoProgresso && aoProgresso(++feitos, faltando.length, d.nome);
+      obj.userData.slugDocumento = d.slug;
+      obj.userData.tipoDocumento = d.tipo;
+      proximos.set(d.id, obj);
+      aoProgresso?.(++feitos, estado.objetos.length, d.nome);
     }
+    // Commit only after every asset loaded. A failure keeps the old world intact.
+    for (const [id, obj] of this.objetos) {
+      if (proximos.get(id) !== obj) this.raizObjetos.remove(obj);
+    }
+    for (const obj of proximos.values()) {
+      if (obj.parent !== this.raizObjetos) this.raizObjetos.add(obj);
+    }
+    this.objetos = proximos;
     this.aplicarTransformacoes(estado);
   }
 
@@ -390,11 +394,13 @@ export class Mundo {
       o.rotation.set(...d.rot.map(THREE.MathUtils.degToRad));
       o.scale.fromArray(d.esc);
       o.visible = d.visivel;
+      if (o.userData.direcaoTrem) o.userData.direcaoTrem.rotation.y = 0;
       /* The rest pose has the gear DOWN. Without this reset a gear-up key would
          leave the wheels hidden for the rest of the session the moment the
          playhead moved past it — a state the document never records and no undo
          would ever put back. */
       this.tremVisivel(o, true);
+      for(const fan of o.userData.fans||[])fan.rotation.x=0;
       o.updateMatrixWorld(true);
     }
   }
@@ -418,8 +424,16 @@ export class Mundo {
       if (v.esc) o.scale.fromArray(v.esc);
       if (v.visivel !== undefined) o.visible = !!v.visivel;
       if (v.trem !== undefined) this.tremVisivel(o, !!v.trem);
+      if (v.direcaoTrem !== undefined && o.userData.direcaoTrem)
+        o.userData.direcaoTrem.rotation.y = THREE.MathUtils.degToRad(v.direcaoTrem);
       o.updateMatrixWorld(true);
     }
+    this.atualizarContatoInterior(estado);
+    this._sombraAerea=['sobrevoo','aproximacao'].includes(estado.producao?.cinema?.situacao);
+    this._sombraProtagonista = estado.producao?.cinema
+      ? this.objetos.get(estado.objetos.find(o=>o.tipo==='aeronave')?.id) : null;
+    if(this._sombraAerea)for(const o of this.objetos.values())for(const fan of o.userData.fans||[])fan.rotation.x=(ov.tempo||0)*24;
+    if(this._sombraProtagonista && !ov.sol) this.aplicarSol(estado.ambiente.sol);
     if (ov.camera) {
       if (ov.camera.pos) this.camP.position.fromArray(ov.camera.pos);
       if (ov.camera.alvo) {
@@ -447,6 +461,32 @@ export class Mundo {
     }
   }
 
+  /** Small contact-occlusion approximation for the parked indoor aircraft.
+   * Derived from actual tyre bounds, never from a guessed fuselage footprint. */
+  atualizarContatoInterior(estado) {
+    const active=estado.producao?.cinema?.situacao==='manutencao';
+    if(!active){if(this.contatoInterior)this.contatoInterior.visible=false;return;}
+    const aircraft=this.objetos.get(estado.objetos.find(o=>o.tipo==='aeronave')?.id);
+    if(!aircraft)return;
+    if(!this.contatoInterior){
+      this.contatoInterior=new THREE.Group();this.contatoInterior.name='oclusao-contato-interior';
+      this.cena.add(this.contatoInterior);
+      this._contatoGeo=new THREE.PlaneGeometry(1,1);
+      this._contatoMat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,
+        vertexShader:'varying vec2 v; void main(){v=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+        fragmentShader:'varying vec2 v; void main(){vec2 p=(v-.5)*2.;float a=exp(-dot(p,p)*4.)*.38;gl_FragColor=vec4(0.,0.,0.,a);}',
+        polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
+    }
+    const group=this.contatoInterior;group.visible=true;
+    const wheels=(aircraft.userData.nosTrem||[]).filter(o=>o.name.includes('Roda'));
+    while(group.children.length<wheels.length){const q=new THREE.Mesh(this._contatoGeo,this._contatoMat);q.rotation.x=-Math.PI/2;group.add(q);}
+    group.children.forEach((q,i)=>{
+      const wheel=wheels[i];q.visible=!!wheel&&wheel.visible;if(!q.visible)return;
+      const b=new THREE.Box3().setFromObject(wheel),c=b.getCenter(new THREE.Vector3()),size=b.getSize(new THREE.Vector3());
+      q.position.set(c.x,b.min.y+.012,c.z);q.scale.set(size.x+.65,size.z+.65,1);
+    });
+  }
+
   /** The light alone — no sky rebuild, no ground rebuild. Cheap enough to run
    *  every frame of a 200-frame time-of-day clip. */
   aplicarSol (sol) {
@@ -461,6 +501,8 @@ export class Mundo {
     s.left = -raio * 1.3; s.right = raio * 1.3;
     s.top = raio * 1.3; s.bottom = -raio * 1.3;
     s.near = 1; s.far = raio * 6 + 900;
+    this.sol.shadow.bias = this._sombraAerea ? -0.001 : this._sombraProtagonista ? -0.00003 : -0.0006;
+    this.sol.shadow.normalBias = this._sombraAerea ? .08 : this._sombraProtagonista ? 0.08 : 0.6;
     s.updateProjectionMatrix();
   }
 
@@ -498,7 +540,12 @@ export class Mundo {
    *  clamping there would fly the aeroplane 0.39 m above its own runway. */
   sondaTerreno (excluirId, estado) {
     const outros = [...this.objetos.entries()]
-      .filter(([k, v]) => k !== excluirId && v.visible).map(([, v]) => v);
+      .filter(([k, v]) => {
+        const d = estado?.objetos.find(o=>o.id===k);
+        const categoria = d && acharAsset(d.slug)?.categoria;
+        return k !== excluirId && v.visible && d?.tipo !== 'aeronave' && !['ambiente','interior'].includes(categoria)
+          && categoria !== 'estrutura' && categoria !== 'veiculo';
+      }).map(([, v]) => v);
     const ray = new THREE.Raycaster();
     const abaixo = new THREE.Vector3(0, -1, 0);
     const temChao = !!(estado && estado.ambiente.chao.ligado);
@@ -573,9 +620,11 @@ export class Mundo {
 
   /** Where the shadow map should spend its texels, and how wide. */
   focoSombra () {
-    const b = this.caixaPequenos() || this.caixaTudo();
+    const b = this._sombraProtagonista
+      ? new THREE.Box3().setFromObject(this._sombraProtagonista)
+      : this.caixaPequenos() || this.caixaTudo();
     const centro = b.getCenter(new THREE.Vector3());
-    centro.y = 0;
+    centro.y = this._sombraProtagonista ? b.min.y : 0;
     const raio = THREE.MathUtils.clamp(
       b.getSize(new THREE.Vector3()).length() / 2, 60, 800);
     return { centro, raio };
@@ -615,7 +664,7 @@ export class Mundo {
     this.enquadrar(caixa, dirs[nome] || dirs['tres-quartos']);
   }
 
-  poseAtual (fov, orto) {
+  poseAtual (fov = this.camP.fov, orto = this.cam === this.camO) {
     return {
       pos: this.camP.position.toArray().map(n => +n.toFixed(3)),
       alvo: this.controles.target.toArray().map(n => +n.toFixed(3)),
@@ -639,24 +688,14 @@ export class Mundo {
   pausar () { this.renderer.setAnimationLoop(null); }
   retomar () { if (this._loop) this.renderer.setAnimationLoop(this._loop); }
 
-  /** near/far from where the camera actually IS.
-   *
-   *  Pinning them at "frame this box" was fine while every scene was aircraft.
-   *  With a 6 km field plate, framing it gave near = 55 m and the next aircraft
-   *  you flew up to vanished into the near plane. Deriving them from the orbit
-   *  distance instead keeps the ratio near 5000:1 at every zoom level, which a
-   *  24-bit depth buffer handles without fighting — and it survives the
-   *  orthographic toggle, which a logarithmic depth buffer would not (ortho has
-   *  w = 1, so the log-depth chunk flattens). */
+  /** Reserve depth precision for the actual camera-to-subject distance.
+   * A near plane at 1% of that distance caused distant roofs to z-fight.
+   * Keep conventional depth so contact decals and hangar spotlights agree. */
   ajustarProfundidade () {
     const d = this.camP.position.distanceTo(this.controles.target);
-    /* The RATIO is what a 24-bit depth buffer cares about, and it has to stay
-       near 3000:1 at every zoom: a 3 cm gap between an apron slab and the
-       ground plane z-fights visibly at 20000:1, which the first version of this
-       function produced at 60 m out. near tracks the orbit distance (1%, so
-       nothing you can be looking at is ever clipped) and far stays as tight as
-       the scene allows. */
-    const perto = THREE.MathUtils.clamp(d * 0.01, 0.2, 8);
+    // Near follows the inspection distance; far retains the complete terrain.
+    // Ten percent remains in front of the subject while improving precision 10x.
+    const perto = THREE.MathUtils.clamp(d * 0.1, 0.2, 8);
     const longe = Math.max(1500, d * 3 + (this._raioCena || 200) * 3);
     if (Math.abs(perto - this.camP.near) > this.camP.near * 0.02 ||
         Math.abs(longe - this.camP.far) > this.camP.far * 0.02) {

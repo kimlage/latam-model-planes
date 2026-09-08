@@ -13,6 +13,7 @@
 
 import * as THREE from 'three';
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
+import { atalhoBloqueado } from './interface.js';
 
 export class Editor {
   constructor (mundo, estado, historico) {
@@ -86,6 +87,8 @@ export class Editor {
   }
 
   alternar (id) {
+    const d = this.docDe(id);
+    if (!d || d.travado || !d.visivel) return;
     if (this.selecao.includes(id)) this.selecao = this.selecao.filter(i => i !== id);
     else this.selecao = [...this.selecao, id];
     this.atualizarGizmo();
@@ -205,6 +208,7 @@ export class Editor {
   /* ----------------------------------------------------------- keyboard */
   ligarTeclado () {
     addEventListener('keydown', e => {
+      if (atalhoBloqueado(e)) return;
       const alvo = e.target;
       if (alvo && (alvo.tagName === 'INPUT' || alvo.tagName === 'SELECT' || alvo.tagName === 'TEXTAREA')) return;
       const cmd = e.metaKey || e.ctrlKey;

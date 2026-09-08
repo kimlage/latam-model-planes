@@ -1,0 +1,16 @@
+{
+  "videos": 122,
+  "scenes": 122,
+  "bases": {
+    "sbgr": 44,
+    "sdsc": 45,
+    "scl": 33
+  },
+  "decodedWithoutErrors": 122,
+  "visualContactSheetSamples": 366,
+  "headless": true,
+  "packagedSceneChecks": 122,
+  "externalRequests": 0,
+  "zipBytes": 879449954,
+  "zipSha256": "5530181d9a37bd59ca6e27c18f4b34dc5736857e03542ffdee76eb0b67a15239"
+}

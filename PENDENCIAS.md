@@ -5,6 +5,11 @@ isoladas** — cada rodada ataca o item mais alto que estiver destravado, e os
 itens micro só entram anexados a uma rodada maior que já re-renderize o que
 eles tocam.
 
+**Interface web — retomada de 2026-09-04:** revisão e melhorias locais do
+Scene Studio, com 22 regressões funcionais e revisão visual. Diagnóstico,
+evidências e próximos itens de interface em [`estudio/REVIEW.md`](estudio/REVIEW.md).
+Esta rodada não fecha as pendências de modelagem abaixo.
+
 ## Em andamento — programa de aprofundamento (ordem do dono, 2026-08-27:
 ## "continuar atacando os próximos aviões e detalhes, o mais realista possível")
 
@@ -218,3 +223,16 @@ polo de valência 32 da CAUDA (~3 cm, sub-visível), zona do cone da APU dos
 A320 (0,1-0,2 acima do desenho, cota AP ambígua), título do A319 enterrado
 pela cunha, proporção do símbolo, portas de capô autorais no SDSC, stand MID
 fora do solver, docks dimensionados pelo proxy nominal.
+
+### Estúdio web — cenários e direção (2026-09-04, trabalho local)
+
+- [x] Integrar contextos completos de GRU/São Carlos e hangar 9 aberto aos clipes web.
+- [x] Coordenar 787, trator, barra e direção do trem usando a sequência nativa.
+- [x] Montagem de planos com cortes, acompanhamento, FOV e reenquadramento pela viewport.
+- [x] Corrigir precisão dos pavimentos e sobreposição de grama/concreto no pátio de São Carlos.
+- [x] MP4 local por ffmpeg, cancelamento de captura e limite de memória; PNG com metadados/créditos.
+- [ ] Exportação longa por envio incremental de quadros, evitando manter o ZIP inteiro em memória.
+- [ ] Refinar trator/rodas, vegetação, interiores e materiais para planos mais próximos.
+- [ ] Validar a arquitetura interpretada contra referências atualizadas; não tratar os masters como levantamento atual.
+
+Guia: `estudio/PRODUCOES.md`. Este registro não indica commit, push ou publicação.

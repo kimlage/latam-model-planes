@@ -174,9 +174,11 @@ studio refused to export any of it on the belief that ODbL and CC BY 4.0
 file** — so an aircraft `.glb` still contains nothing but the aeroplane, and the
 airport pieces are separate assets with a separate licence.
 
-**Copernicus terrain is not redistributed.** No exported asset references the
-height fields; anything you build from them carries the two Copernicus notices
-above.
+**Copernicus-derived terrain:** `export/ambientes/sbgr_relevo.glb` and `export/ambientes/scl_relevo.glb` contain
+a resampled and airport-graded derivative of the local WorldDEM-30 height field.
+Its separate manifest licence and `export/ambientes/COPERNICUS.txt` carry the two
+notices above; GRU and Santiago cinematic exports also carry those notices. The raw height
+fields are not bundled in this GLB.
 
 ## What the models contain
 
